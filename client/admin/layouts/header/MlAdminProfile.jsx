@@ -6,7 +6,7 @@ import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import { createContainer } from 'meteor/react-meteor-data';
 var FontAwesome = require('react-fontawesome');
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage"
 
 class  MlAdminProfileApp extends Component {
   constructor(props) {
@@ -92,7 +92,7 @@ class  MlAdminProfileApp extends Component {
           {/*<img className="pull-left home" src="/images/home_icon.png"/>*/}
         </a>
         <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
-          <img className="logo" src="/images/logo.png" />
+          <CDNImage className="logo" src="/images/logo.png" />
         </a>
         <div className="ml_profile" role="navigation">
           <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}

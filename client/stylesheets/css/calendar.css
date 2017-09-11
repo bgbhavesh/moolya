@@ -27,7 +27,7 @@
   text-shadow: none;
   /*font-size: 13px;*/
 }
-.calender_switch{display: inline-block;width: 18px;height: 42px;background: url(/images/cal_switch.png);position: fixed;  right: 89px;  top: 43%;z-index: 3;}
+.calender_switch{display: inline-block;width: 18px;height: 42px;background: url(https://d1mkj567hbikgo.cloudfront.net/images/cal_switch.png);position: fixed;  right: 89px;  top: 43%;z-index: 3;}
 .calender_switch .fa{    color: #fff;  margin: 14px 0px 0px 4px;  font-size: 13px;}
 .calender_switch.cH{right: 2px;}
 #calendar {

@@ -175,7 +175,7 @@ export default class MlInternalSubChapterAccess extends React.Component {
               {/*<div className="pull-right block_action" onClick={that.addAccessControl.bind(that, id)}><img*/}
               {/*src="/images/add.png"/></div>) : (<div className="pull-right block_action"*/}
               {/*onClick={that.removeAccessControl.bind(that, id)}>*/}
-              {/*<img src="/images/remove.png"/></div>)}*/}
+              {/*<CDNImage src="/images/remove.png"/></div>)}*/}
               {/*</div>*/}
               <div className="panel-heading">
                 Internal SubChapter Access

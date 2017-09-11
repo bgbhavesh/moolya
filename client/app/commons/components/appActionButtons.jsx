@@ -4,7 +4,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import _ from "lodash";
 import StarRatings from "./StarRatings";
 var FontAwesome = require('react-fontawesome');
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 export default class AppActionButtons extends React.Component {
 
@@ -170,7 +170,7 @@ export default class AppActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
@@ -182,7 +182,7 @@ export default class AppActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
@@ -194,7 +194,7 @@ export default class AppActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>

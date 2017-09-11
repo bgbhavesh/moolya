@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class CalenderHead extends React.Component{
   componentDidMount()
   {
@@ -18,7 +18,7 @@ export default class CalenderHead extends React.Component{
         <ul className="users_list well well-sm">
           <li>
             <a href="#">
-              <img src="/images/p_5.jpg" /><br />
+              <CDNImage src="/images/p_5.jpg" /><br />
               <div className="tooltiprefer">
                 <span>All</span>
               </div>

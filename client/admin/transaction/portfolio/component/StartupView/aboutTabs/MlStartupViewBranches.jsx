@@ -7,6 +7,7 @@ import { render } from 'react-dom';
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 
 
 export default class MlStartupViewBranches extends React.Component {
@@ -115,7 +116,8 @@ export default class MlStartupViewBranches extends React.Component {
                 return(
                   <div className="col-lg-4 col-md-6 col-sm-6" key={idx}>
                     <div className="branch_block shadow_block">
-                      <img src={details.logo&&details.logo.fileUrl?details.logo.fileUrl:"/images/headquarters_img.png"}/>
+                      {/*<img src={details.logo&&details.logo.fileUrl?details.logo.fileUrl:"/images/headquarters_img.png"}/>*/}
+                      {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} /> : <CDNImage src="/images/headquarters_img.png" /> }
                       <h3>
                         {details.branchName} <br />
                       </h3>

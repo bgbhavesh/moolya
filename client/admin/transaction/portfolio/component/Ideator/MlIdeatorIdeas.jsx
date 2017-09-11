@@ -7,6 +7,7 @@ import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlIdeatorIdeas extends React.Component{
   constructor(props, context){
@@ -154,7 +155,11 @@ export default class MlIdeatorIdeas extends React.Component{
     let that = this;
     const showLoader = this.state.loading;
     let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
-    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
+    var CDNUrl = "";
+    if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+      CDNUrl = Meteor.settings.public.CDNUrl;
+    }
+    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:CDNUrl+"/images/images.png";
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (

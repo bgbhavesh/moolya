@@ -8,7 +8,7 @@ import MoolyaSelect from '../../../commons/components/MlAdminSelectWrapper'
 import {fetchOfficePackageHandler, updateOfficePackageHandler} from '../actions/officePackageHandler'
 
 import _ from 'lodash'
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 class MlEditOfficePackage extends Component{
   constructor(props){
     super(props)
@@ -341,7 +341,7 @@ class MlEditOfficePackage extends Component{
                   </div>
                   <div className="panel-body uploaded_files_swiper">
                     <ul className="swiper-wrapper">
-                      <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
+                      <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><CDNImage src="/images/sub_default.jpg"/></li>
                     </ul>
                   </div>
                 </div>
@@ -358,7 +358,7 @@ class MlEditOfficePackage extends Component{
                     <input type="file" className="upload" />
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src="/images/ideator_01.png"/>
+                    <CDNImage src="/images/ideator_01.png"/>
                   </div>
                 </div>
                 <div className="clearfix"/>

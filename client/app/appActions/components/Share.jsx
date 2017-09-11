@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class SharePopOver extends React.Component {
 
   constructor(props) {
@@ -40,9 +40,9 @@ export default class SharePopOver extends React.Component {
 
           <h1>Select Content</h1>
           <ul className="doc_upload">
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
           </ul>
 
           <div className="clearfix" />
@@ -56,9 +56,9 @@ export default class SharePopOver extends React.Component {
           </div>
 
           <ul className="img_upload ul-hide">
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+            <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
           </ul>
 
           <div className="clearfix" />

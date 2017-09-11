@@ -5,6 +5,7 @@ import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import Select from 'react-select';
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignClustersToRoles extends React.Component {
   constructor(props){
       super(props);
@@ -237,7 +238,7 @@ export default class MlAssignClustersToRoles extends React.Component {
           let communityOption={options: { variables: {clusterId:assignCluster.cluster, chapterId:assignCluster.chapter, subChapterId:assignCluster.subChapter}}};
           return(
             <div className="panel panel-default" key={id}>
-                <div className="panel-heading">Assign Role{id==0?(<div className="pull-right block_action" onClick={that.AssignassignRoleToClusters.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveAssignassignRoleToClusters.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>
+                <div className="panel-heading">Assign Role{id==0?(<div className="pull-right block_action" onClick={that.AssignassignRoleToClusters.bind(that,id)}><CDNImage src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveAssignassignRoleToClusters.bind(that,id)}><CDNImage src="/images/remove.png"/></div>)}</div>
 
                 <div className="panel-body">
 

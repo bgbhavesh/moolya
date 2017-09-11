@@ -10,7 +10,7 @@ import moment from "moment";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
 let FontAwesome = require('react-fontawesome');
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignChapterBackendUserRoles extends React.Component {
   constructor(props) {
     super(props)
@@ -328,7 +328,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
               let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName}}`;
               return (
                 <div className="panel panel-default" key={id}>
-                  <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"
+                  <div className="panel-heading">Assign Role <CDNImage src="/images/add.png" className="pull-right"
                                                                   onClick={that.addRoleComponent.bind(that, id)}/>
                   </div>
                   {department.isAvailiable ? (

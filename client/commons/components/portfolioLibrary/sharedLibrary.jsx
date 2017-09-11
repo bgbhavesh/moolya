@@ -8,7 +8,7 @@
 /**
  * Imports libs and components
  */
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 import React from 'react';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -201,7 +201,7 @@ export default class  SharedLibrary extends React.Component {
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentpop"
              onClick={that.randomDocument.bind(that, show.file.url, id)}>
-            <img src="/images/doc.png"/></a>
+            <CDNImage src="/images/doc.png"/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -265,7 +265,7 @@ export default class  SharedLibrary extends React.Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
-            <img src="/images/video_1.jpg"/>
+            <CDNImage src="/images/video_1.jpg"/>
           </ModalBody>
         </Modal>
         <div className="modal fade bs-example-modal-sm library-popup imagepop"

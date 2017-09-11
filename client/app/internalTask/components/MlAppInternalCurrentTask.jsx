@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import {fetchInternalTask} from '../actions/fetchInternalTasks';
 import MlAppInternalTaskItem from './MlAppInternalTaskItem';
 import MlAppInternalAssignTaskItem from './MlAppInternalAssignTaskItem';
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlAppInternalCurrentTask extends React.Component{
 
   constructor(props){
@@ -101,7 +101,7 @@ export default class MlAppInternalCurrentTask extends React.Component{
                         </div>
                         <h3>{task.ownerName ? task.ownerName : "" }</h3>
                         <div className="list_icon">
-                          <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                          <CDNImage src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
                         </div>
                         <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
                         <div className="block_footer">
@@ -129,7 +129,7 @@ export default class MlAppInternalCurrentTask extends React.Component{
                           </div>
                           <h3>{task.ownerName ? task.ownerName : "" }</h3>
                           <div className="list_icon">
-                            <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                            <CDNImage src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
                           </div>
                           <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
                           <div className="block_footer">

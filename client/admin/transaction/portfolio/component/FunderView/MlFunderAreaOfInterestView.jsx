@@ -4,7 +4,7 @@ import ScrollArea from "react-scrollbar";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData'
-
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlFunderAreaOfInterestView extends React.Component {
   constructor(props, context) {
@@ -107,7 +107,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                       {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
                         return (<div className="col-lg-2 col-md-3 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
                           <div className="list_block list_block_intrests notrans">
-                            <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                            <div className="hex_outer"><CDNImage src="/images/def_profile.png"/></div>
                             <h3>{say.industryTypeName}</h3>
                           </div>
                         </div>)
@@ -128,7 +128,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                           return (<li key={value} className="active">
                             <div className="list_block list_block_intrests notrans"
                                  onClick={that.viewDetails.bind(that, value)}>
-                              <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                              <div className="hex_outer"><CDNImage src="/images/def_profile.png"/></div>
                               <h3>{say.industryTypeName}</h3>
                             </div>
                           </li>)

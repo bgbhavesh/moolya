@@ -155,7 +155,7 @@ export default class MlInstitutionCompanyReview extends React.Component{
               <div className="office-members-detail">
 
                 <div className="form_inner_block">
-                  {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
+                  {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><CDNImage src="/images/add.png"/></div>*/}
 
                   <div className="col-lg-12 col-md-12 col-sm-10">
                     <div className="row">
@@ -185,7 +185,7 @@ export default class MlInstitutionCompanyReview extends React.Component{
 
                   return(<div className="form_inner_block">
 
-                    {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
+                    {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><CDNImage src="/images/remove.png"/></div>*/}
                     <div className="col-lg-12 col-md-12 col-sm-10">
                       <div className="row">
                         <div className="form-group col-lg-6  col-md-6 col-sm-6">

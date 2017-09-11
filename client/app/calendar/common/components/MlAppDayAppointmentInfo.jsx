@@ -5,7 +5,7 @@ let FontAwesome = require('react-fontawesome');
 import React, { Component } from 'react';
 import {fetctOfficeDayAppointmentActionHandler} from './../actions/fetchDayAppointmenstInfo';
 import ScrollArea from 'react-scrollbar';
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlAppDayAppointmentInfo extends Component {
 
   constructor(props) {
@@ -85,17 +85,17 @@ export default class MlAppDayAppointmentInfo extends Component {
             <ul className="cal_tabs act_tab">
               <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >
                 <span className={ that.state.shift === "morning" ? "act_tab" : ''} >
-                  <img src="/images/mor_icon.png"/> Morning
+                  <CDNImage src="/images/mor_icon.png"/> Morning
                 </span>
               </li>
               <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{cursor: "pointer"}} >
                 <span className={ that.state.shift === "afternoon" ? "act_tab" : ''} >
-                  <img src="/images/aft_icon.png"/> Afternoon
+                  <CDNImage src="/images/aft_icon.png"/> Afternoon
                 </span>
               </li>
               <li className="col-md-4 nopadding-right"  onClick={() => that.updateShift('evening') } style={{cursor: "pointer"}} >
                 <span className={ that.state.shift === "evening" ? "act_tab" : ''} >
-                  <img src="/images/eve_icon.png"/> Evening
+                  <CDNImage src="/images/eve_icon.png"/> Evening
                 </span>
               </li>
             </ul>

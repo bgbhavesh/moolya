@@ -12,6 +12,7 @@ import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
 import { fetchOfficeActionHandler, fetchMyConnectionActionHandler } from '../actions/fetchOffices';
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 let FontAwesome = require('react-fontawesome');
 
 export default class MlAppChooseTeam extends React.Component{
@@ -338,7 +339,9 @@ export default class MlAppChooseTeam extends React.Component{
                         return (
                          <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                             <a href="">
-                              <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                              {user.profileImage ? <img src={user.profileImage}  /> : <CDNImage src="/images/def_profile.png" />}
+                              <br />
+
                               <div className="tooltiprefer">
                                 <span>{user.name}</span>
                               </div>

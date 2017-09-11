@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import StarRatings from '../../commons/components/StarRatings';
 import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 export default class MlCustomActionButtons extends React.Component {
 
@@ -176,7 +176,7 @@ export default class MlCustomActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
@@ -188,7 +188,7 @@ export default class MlCustomActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
@@ -200,7 +200,7 @@ export default class MlCustomActionButtons extends React.Component {
               <li>
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src="/images/p_6.jpg" className="media-object"/>
+                    <CDNImage src="/images/p_6.jpg" className="media-object"/>
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>

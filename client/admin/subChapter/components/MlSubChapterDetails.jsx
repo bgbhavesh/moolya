@@ -16,6 +16,7 @@ import gql from "graphql-tag";
 // import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+import CDNImage from "../../../commons/components/CDNImage/CDNImage.js";
 
 class MlSubChapterDetails extends React.Component {
   constructor(props) {
@@ -339,9 +340,8 @@ class MlSubChapterDetails extends React.Component {
                           <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
-                          <img
-                            src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
-                          {/*<img src="/images/ideator_01.png"/>*/}
+                          {this.state.data && this.state.data.subChapterImageLink ? <img src={this.state.data.subChapterImageLink}/> : <CDNImage src='/images/def_profile.png' /> }
+                          {/*<CDNImage src="/images/ideator_01.png"/>*/}
                         </div>
                       </div>
                       <br className="brclear"/>
@@ -398,8 +398,7 @@ class MlSubChapterDetails extends React.Component {
                           <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
-                          <img
-                            src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
+                          {this.state.data && this.state.data.subChapterImageLink ? <img src={this.state.data.subChapterImageLink} /> : <CDNImage src='/images/def_profile.png' /> }
                         </div>
                       </div>
 

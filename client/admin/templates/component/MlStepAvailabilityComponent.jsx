@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage.js";
 export default class MlStepAvailabilityComponent extends React.Component {
   constructor(props){
     super(props);
@@ -110,8 +110,8 @@ export default class MlStepAvailabilityComponent extends React.Component {
           let templateOptions = {options: { variables: {id:subProcessId,stepName:stepAvailability.stepName}}};
           return(
             <div className="panel panel-default" key={idx}>
-              <div className="panel-heading"> Assign Step{idx==0&&(<div className="pull-right block_action" onClick={that.AssignStep.bind(that)}><img src="/images/add.png"/></div>)}
-                {idx>0&&(<div className="pull-right block_action" onClick={that.RemovestepAvailability.bind(that,idx)}><img src="/images/remove.png"/></div>)}
+              <div className="panel-heading"> Assign Step{idx==0&&(<div className="pull-right block_action" onClick={that.AssignStep.bind(that)}><CDNImage src="/images/add.png"/></div>)}
+                {idx>0&&(<div className="pull-right block_action" onClick={that.RemovestepAvailability.bind(that,idx)}><CDNImage src="/images/remove.png"/></div>)}
               </div>
               <div className="panel-body">
                 <div className="form-group">

@@ -16,6 +16,7 @@ import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
 import {client} from '../../core/apolloConnection';
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 var _ = require('lodash');
 
 
@@ -266,7 +267,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                           <div className="col-lg-4 col-md-6 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                             <div className="list_block provider_block">
                               <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
-                              <div className="provider_mask"><img src="/images/funder_bg.png"/> <img
+                              <div className="provider_mask"><CDNImage src="/images/funder_bg.png"/> <CDNImage
                                 className="user_pic" src="/images/def_profile.png"/></div>
                               <h3>Assign <br/> Backend Users</h3>
                             </div>
@@ -293,7 +294,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                               <input type="file" className="upload" ref="profilePic"/>
                             </div>
                             <div className="previewImg ProfileImg">
-                              <img src="/images/def_profile.png"/>
+                              <CDNImage src="/images/def_profile.png"/>
                             </div>
                           </div>
                           <br className="brclear"/>

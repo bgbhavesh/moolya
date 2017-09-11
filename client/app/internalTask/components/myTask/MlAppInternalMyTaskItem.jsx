@@ -19,6 +19,7 @@ let FontAwesome = require('react-fontawesome');
 import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -373,12 +374,11 @@ class MlAppInternalMyTaskItem extends React.Component{
           </div>
 
           {that.state.teamData.map(function (team, index) {
-            return (
-              <div className="col-md-12 nopadding-left" key={index}>
-                <div className="panel panel-default cal_view_task">
-                  <div className="panel-heading">
-                    Select Users
-                    <span className="see-more pull-right">
+            return (<div className="col-md-12 nopadding-left" key={index } >
+            <div className="panel panel-default cal_view_task">
+              <div className="panel-heading">
+                Select Users
+              <span className="see-more pull-right">
                     { that.state.offices && that.state.offices.length > 1 ?
                       (index == 0 ?
                         <a href="" onClick={()=>that.addTeam()}>
@@ -393,36 +393,36 @@ class MlAppInternalMyTaskItem extends React.Component{
 
                   </span>
                   </div>
-                  <div className="panel-body sug_teams">
-                    <div className="col-md-12 nopadding">
-                      <div className="col-md-6 nopadding-right">
-                        <form>
-                          <div className="form-group">
-                            <span className="placeHolder active">Choose team Type</span>
-                            <select defaultValue="chooseTeam" value={ team.resourceId } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
-                              <option value="chooseTeam" disabled="disabled">Choose team Type</option>
-                              {that.state.offices.map(function (office , index) {
-                                return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
-                              })}
-                            </select>
-                          </div>
-                        </form>
+              <div className="panel-body sug_teams">
+                <div className="col-md-12 nopadding">
+                  <div className="col-md-6 nopadding-right">
+                    <form>
+                      <div className="form-group">
+                        <span className="placeHolder active">Choose team Type</span>
+                        <select defaultValue="chooseTeam" value={ team.resourceId } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)} >
+                          <option value="chooseTeam" disabled="disabled" >Choose team Type</option>
+                          { that.state.offices.map(function (office , index) {
+                            return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                          })}
+                        </select>
                       </div>
-                    </div>
-                    <div className="col-md-12">
-                      <input type="text" name="search" className="search_field" placeholder="Search.."/>
-                    </div>
-                    <div className="col-md-12 nopadding att_members" >
-                      <ul className="users_list">
-                        {team.users.map(function (user, userIndex) {
-                          return (
-                            <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
-                              <a href="">
-                                <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
-                                <div className="tooltiprefer">
-                                  <span>{user.name}</span>
-                                </div>
-                                <span className="member_status">
+                    </form>
+                  </div>
+                </div>
+                <div className="col-md-12">
+                  <input type="text" name="search" className="search_field" placeholder="Search.."/>
+                </div>
+                <div className="col-md-12 nopadding att_members" >
+                  <ul className="users_list">
+                    {team.users.map(function (user, userIndex) {
+                      return (
+                        <li className={ user.isAdded ? "checkedClass" : "" }key={userIndex} onClick={() => that.addUser(index,userIndex)} >
+                          <a href="">
+                            {user.profileImage ?<img src={user.profileImage } /> : <CDNImage src= "/images/def_profile.png" />}<br />
+                            <div className="tooltiprefer">
+                              <span>{user.name}</span>
+                            </div>
+                            <span className="member_status" >
                                 { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
                               </span>
                               </a>

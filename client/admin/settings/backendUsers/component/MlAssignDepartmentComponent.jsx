@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignDepartmentComponent extends React.Component {
   constructor(props){
     super(props);
@@ -99,8 +99,8 @@ export default class MlAssignDepartmentComponent extends React.Component {
            let subDepartmentOptions = {options: { variables: {id:assignDepartmentForm.department}}};
          return(
          <div className="panel panel-default" key={idx}>
-           <div className="panel-heading"> Assign Departments{idx==0&&(<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><img src="/images/add.png"/></div>)}
-             {idx>0&&(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
+           <div className="panel-heading"> Assign Departments{idx==0&&(<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><CDNImage src="/images/add.png"/></div>)}
+             {idx>0&&(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><CDNImage src="/images/remove.png"/></div>)}
            </div>
            <div className="panel-body">
                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />

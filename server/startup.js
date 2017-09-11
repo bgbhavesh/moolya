@@ -7,6 +7,7 @@ import MlAuthorization from './mlAuthorization/mlAuthorization'
 import MlDBController from './commons/mlDBController'
 import MlAuditLog from './commons/mlAuditLog'
 import MlEmailNotification from './mlNotifications/mlEmailNotifications/mlEMailNotification'
+import {WebApp} from "meteor/webapp";
 Meteor.startup(function ()
 {
     // console.log("Insider SSL start!!!!");

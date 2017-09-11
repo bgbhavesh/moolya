@@ -3,6 +3,7 @@
  */
 import React, {Component} from "react";
 import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 let FontAwesome = require('react-fontawesome');
 import Days from "./Days.jsx";
 
@@ -111,17 +112,17 @@ export default class MlAppFunderCalendarSlots extends Component {
           <ul className="cal_tabs act_tab">
             <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >
                   <span className={ that.state.shift === "morning" ? "act_tab" : ''} >
-                    <img src="/images/mor_icon.png"/> Morning
+                    <CDNImage src="/images/mor_icon.png"/> Morning
                   </span>
             </li>
             <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{cursor: "pointer"}} >
                   <span className={ that.state.shift === "afternoon" ? "act_tab" : ''} >
-                    <img src="/images/aft_icon.png"/> Afternoon
+                    <CDNImage src="/images/aft_icon.png"/> Afternoon
                   </span>
             </li>
             <li className="col-md-4 nopadding-right"  onClick={() => that.updateShift('evening') } style={{cursor: "pointer"}} >
                   <span className={ that.state.shift === "evening" ? "act_tab" : ''} >
-                    <img src="/images/eve_icon.png"/> Evening
+                    <CDNImage src="/images/eve_icon.png"/> Evening
                   </span>
             </li>
           </ul>

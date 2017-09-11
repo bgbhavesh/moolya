@@ -8,7 +8,7 @@
 /**
  * Imports libs and components
  */
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 import React from 'react';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -753,10 +753,10 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
                 </ul>
               </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop"
@@ -832,10 +832,10 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
                 </ul>
               </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop"
@@ -900,10 +900,10 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
                 </ul>
               </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".videopop"
@@ -939,7 +939,7 @@ import SharedLibrary from './sharedLibrary'
             {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show,id)} name='lock'/> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show,id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
             <a href="" data-toggle="modal" data-target=".documentpop"
-               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png"/></a>
+               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><CDNImage src="/images/doc.png"/></a>
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )
@@ -970,15 +970,15 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
                 </ul>
               </div>
               {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
-                <img src="/images/doc.png"/></a> :
+                <CDNImage src="/images/doc.png"/></a> :
                 <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                   src={show.fileUrl}/></a>}
               <div id="templates" className="title">{show.fileName}</div>
@@ -1327,7 +1327,7 @@ import SharedLibrary from './sharedLibrary'
           <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
             <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
             <ModalBody>
-              <img src="/images/video_1.jpg"/>
+              <CDNImage src="/images/video_1.jpg"/>
             </ModalBody>
           </Modal>
           <div className="modal fade bs-example-modal-sm library-popup imagepop"

@@ -389,7 +389,7 @@ export default class MlFunderAbout extends React.Component {
                           <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
                         {/*<div className="previewImg ProfileImg">*/}
-                          {/*<img src="/images/def_profile.png"/>*/}
+                          {/*<CDNImage src="/images/def_profile.png"/>*/}
                         {/*</div>*/}
                       </div>
                       <div className="clearfix"></div>

@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlCreateDiscussInternalTask extends React.Component {
 
   constructor(props){
@@ -127,9 +127,9 @@ export default class MlCreateDiscussInternalTask extends React.Component {
       <div className="popover-lg">
         <h1>Attached Documents <a href="#" className="pull-right">Add</a></h1>
         <ul className="doc_upload">
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
+          <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
+          <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
+          <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/></li>
         </ul>
 
         <div className="clearfix" />
@@ -163,7 +163,8 @@ export default class MlCreateDiscussInternalTask extends React.Component {
               });
               return (
                 <li key={index}>
-                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name}</span>
+                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/>
+                  {user.profileImage ? <img src={user.profileImage} /> : <CDNImage src="/images/def_profile.png"/>  }<span>{user.name}</span>
                 </li>
               )
             })}

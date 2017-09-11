@@ -12,6 +12,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfolioServiceProviderDetails";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlServiceProviderAwards extends Component {
@@ -329,8 +330,9 @@ export default class MlServiceProviderAwards extends Component {
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"
                             checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                              {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png" /> }
+                            </div>
                             <h3>{details.awardName ? details.awardName : ""}</h3>
                           </div>
                         </a>

@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlContactFormComponent extends React.Component {
   constructor(props){
     super(props);
@@ -91,8 +92,8 @@ export default class MlContactFormComponent extends React.Component {
         {that.state.contactForm.map(function(contactForm, idx){
           return(
             <div className="panel panel-default" key={idx}>
-              <div className="panel-heading"> Contact Number Details{idx==0&& (<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><img src="/images/add.png"/></div>)}
-                { idx>0&& (<div className="pull-right block_action" onClick={that.RemoveAssignContactForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
+              <div className="panel-heading"> Contact Number Details{idx==0&& (<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><CDNImage src="/images/add.png"/></div>)}
+                { idx>0&& (<div className="pull-right block_action" onClick={that.RemoveAssignContactForm.bind(that,idx)}><CDNImage src="/images/remove.png"/></div>)}
               </div>
               <div className="panel-body">
                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.contactNumberType} placeholder="Select Contact Number Type" queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectNumberType.bind(that,idx)} />

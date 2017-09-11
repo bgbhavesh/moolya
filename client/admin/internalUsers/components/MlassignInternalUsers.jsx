@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 import MlRoleAssignComponent from './MlRoleAssignComponent'
 export default class MlAsignInternalUsers extends React.Component{
   constructor(props){
@@ -62,7 +63,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name1<br />
                         USA</h3>
                     </div>
@@ -70,7 +71,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name2<br />
                         USA</h3>
                     </div>
@@ -78,7 +79,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name3<br />
                         USA</h3>
                     </div>
@@ -86,7 +87,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name4<br />
                         USA</h3>
                     </div>
@@ -94,7 +95,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name5<br />
                         USA</h3>
                     </div>
@@ -102,7 +103,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>user Name6<br />
                         USA</h3>
                     </div>
@@ -110,7 +111,7 @@ export default class MlAsignInternalUsers extends React.Component{
                   <div className="col-md-4 col-sm-4">
                     <div className="list_block provider_block">
                       <div className="cluster_status active_cl" />
-                      <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                      <div className="provider_mask"> <CDNImage src="/images/funder_bg.png" /> <CDNImage className="user_pic" src="/images/def_profile.png" /> </div>
                       <h3>User Name7<br />
                         USA</h3>
                     </div>

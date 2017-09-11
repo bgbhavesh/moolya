@@ -4,6 +4,7 @@ import  Select from 'react-select';
 import ScrollArea from 'react-scrollbar';
 import FontAwesome from 'react-fontawesome';
 import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 export default class SessionDetails extends Component {
   constructor(props) {
@@ -31,7 +32,8 @@ export default class SessionDetails extends Component {
       userList.push(
         <li key={user.userId}>
           <a href="">
-            <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+            {user.profileImage ? <img src={user.profileImage} /> : <CDNImage src="/images/def_profile.png"/> }
+            <br />
             <div className="tooltiprefer">
               <span>{user.name}</span>
             </div>

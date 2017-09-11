@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
+import CDNImage from "../../commons/components/CDNImage/CDNImage";
 
 export default class MlLogout extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class MlLogout extends Component {
     return (
       <div className="logout">
         <div className="login_bg" style={{textAlign: "center"}}>
-          <img className="logo" src="/images/moolya_logo.png"/>
+          <CDNImage className="logo" src="/images/moolya_logo.png"/>
           <div className="clearfix"/>
           <div className="logout_message">
             <h3>You have been logged out...</h3>

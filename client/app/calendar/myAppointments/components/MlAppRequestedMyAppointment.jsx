@@ -1,7 +1,7 @@
 /**
  * Created by pankaj on 24/7/17.
  */
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 import React from 'react';
 import {requestedAppointmentActionHandler} from '../actions/fetchRequestedAppointments';
 export default class MlAppRequestedMyAppointment extends React.Component {
@@ -41,7 +41,7 @@ export default class MlAppRequestedMyAppointment extends React.Component {
           return (
             <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
               <div className="list_block list_block_intrests notrans">
-                <div className="hex_outer"><img src="/images/valuation.png"/></div>
+                <div className="hex_outer"><CDNImage src="/images/valuation.png"/></div>
                 <div className="task-status pending"></div>
                 <h3>{appointment.displayName ? appointment.displayName : 'Bespoke Service'}</h3>
               </div>

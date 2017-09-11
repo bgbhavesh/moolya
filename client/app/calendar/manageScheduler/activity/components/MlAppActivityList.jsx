@@ -4,6 +4,7 @@
 import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchActivitiesActionHandler} from '../actions/activityActionHandler';
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlAppActivityList extends React.Component{
 
@@ -68,9 +69,9 @@ export default class MlAppActivityList extends React.Component{
                       <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                       <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
-                      {activity.imageLink ?
-                        <img className="c_image" src={activity.imageLink ? activity.imageLink : "/images/activity_1.jpg"}/>
-                        : <i className="c_image ml my-ml-Ideator"></i>
+                      {
+                        activity.imageLink ? <img src={activity.imageLink} /> : <CDNImage src="/images/activity_1.jpg" />
+                        activity.imageLink : "" : <i className="c_image ml my-ml-Ideator"></i>
                       }
                       <div className="clearfix"></div>
                       <span className="price">{activity.duration ? `${activity.duration.hours ? activity.duration.hours : 0} Hrs ${activity.duration.minutes ? activity.duration.minutes : 0} Mins` : ''}</span>

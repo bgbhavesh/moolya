@@ -326,7 +326,7 @@ this.bookDetails(data)
                       {/*<ul className="users_list">*/}
                         {/*<li>*/}
                           {/*<a href="#">*/}
-                            {/*<img src="/images/p_3.jpg" /><br />*/}
+                            {/*<CDNImage src="/images/p_3.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Venu<br/>Rs.3000</span>*/}
                             {/*</div>*/}
@@ -334,7 +334,7 @@ this.bookDetails(data)
                         {/*</li>*/}
                         {/*<li>*/}
                           {/*<a href="#">*/}
-                            {/*<img src="/images/p_34.jpg" /><br />*/}
+                            {/*<CDNImage src="/images/p_34.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Ramya<br/>Rs.5000</span>*/}
                             {/*</div>*/}
@@ -342,7 +342,7 @@ this.bookDetails(data)
                         {/*</li>*/}
                         {/*<li>*/}
                           {/*<a href="#">*/}
-                            {/*<img src="/images/p_13.jpg" /><br />*/}
+                            {/*<CDNImage src="/images/p_13.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Sameer<br/>Rs.8000</span>*/}
                             {/*</div>*/}
@@ -350,7 +350,7 @@ this.bookDetails(data)
                         {/*</li>*/}
                         {/*<li>*/}
                           {/*<a href="#">*/}
-                            {/*<img src="/images/p_1.jpg" /><br />*/}
+                            {/*<CDNImage src="/images/p_1.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Usha<br/>Rs.6000</span>*/}
                             {/*</div>*/}

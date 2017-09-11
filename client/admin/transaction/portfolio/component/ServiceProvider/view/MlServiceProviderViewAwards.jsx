@@ -6,7 +6,7 @@ import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDet
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 var FontAwesome = require('react-fontawesome');
-
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlServiceProviderViewAwards extends React.Component {
   constructor(props) {
@@ -140,7 +140,7 @@ export default class MlServiceProviderViewAwards extends React.Component {
             {awardsArray && awardsArray.map(function (details, idx) {
               return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                 <div className="team-block">
-                  <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                  {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} />: <CDNImage src="/images/def_profile.png" className="team_img"/> }
                   <h3>
                     {details.awardName && details.awardName}
                   </h3>

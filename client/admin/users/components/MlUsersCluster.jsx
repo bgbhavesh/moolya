@@ -72,7 +72,7 @@ export default class MlUsersCluster extends Component {
               <div className="premium"><span>{prop.accountType}</span></div>
               <h3>{prop.firstName}&nbsp; {prop.lastName}</h3>
               <div className="list_icon"><span className={icon}></span></div>
-              {/*<img src="/images/ideator_01.png" className="c_image"/>*/}
+              {/*<CDNImage src="/images/ideator_01.png" className="c_image"/>*/}
               <div className="block_footer">
                 <span>{prop.chapterName}</span>
               </div>

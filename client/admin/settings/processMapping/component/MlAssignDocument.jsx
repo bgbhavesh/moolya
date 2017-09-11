@@ -5,6 +5,7 @@ import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignDocument extends React.Component {
   constructor(props){
     super(props);
@@ -122,7 +123,7 @@ export default class MlAssignDocument extends React.Component {
           return(
 
                     <div className="panel panel-default" key={id}>
-                      <div className="panel-heading">Type of Document{id==0?(<div className="pull-right block_action" onClick={that.assignDocumentsState.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>
+                      <div className="panel-heading">Type of Document{id==0?(<div className="pull-right block_action" onClick={that.assignDocumentsState.bind(that,id)}><CDNImage src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><CDNImage src="/images/remove.png"/></div>)}</div>
                       <div className="panel-body">
 
                         <div className="form-group">

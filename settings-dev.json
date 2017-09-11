@@ -6,7 +6,9 @@
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"
-    }
+    },
+    "CDNUrl":"https://d1mkj567hbikgo.cloudfront.net",
+    "CDNBucket":"smart-public-images"
   },
   "private": {
       "subChapterName":"Moolya",

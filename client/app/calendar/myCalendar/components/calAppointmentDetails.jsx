@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import CalenderHead from './calendarHead';
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 export default class CalCreateAppointmentView extends React.Component{
   componentDidMount()
@@ -119,9 +120,9 @@ export default class CalCreateAppointmentView extends React.Component{
                   </div></span>
                 </div>
                 <div className="panel-body">
-                  <div className="thumbnail"><FontAwesome name='trash-o'/><img src="/images/ppt.png"/><div className="title">Document</div></div>
-                  <div className="thumbnail"><FontAwesome name='trash-o'/><img src="/images/doc.png"/><div className="title">Document</div></div>
-                  <div className="thumbnail"><FontAwesome name='trash-o'/><img src="/images/pdf.png"/><div className="title">Document</div></div>
+                  <div className="thumbnail"><FontAwesome name='trash-o'/><CDNImage src="/images/ppt.png"/><div className="title">Document</div></div>
+                  <div className="thumbnail"><FontAwesome name='trash-o'/><CDNImage src="/images/doc.png"/><div className="title">Document</div></div>
+                  <div className="thumbnail"><FontAwesome name='trash-o'/><CDNImage src="/images/pdf.png"/><div className="title">Document</div></div>
                 </div>
               </div>
             </div>
@@ -169,7 +170,7 @@ export default class CalCreateAppointmentView extends React.Component{
                   <ul className="users_list">
                     <li>
                       <a href="#">
-                        <img src="/images/p_3.jpg" /><br />
+                        <CDNImage src="/images/p_3.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Venu<br/>Rs.3000</span>
                         </div>
@@ -177,7 +178,7 @@ export default class CalCreateAppointmentView extends React.Component{
                     </li>
                     <li>
                       <a href="#">
-                        <img src="/images/p_34.jpg" /><br />
+                        <CDNImage src="/images/p_34.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Ramya<br/>Rs.5000</span>
                         </div>
@@ -185,7 +186,7 @@ export default class CalCreateAppointmentView extends React.Component{
                     </li>
                     <li>
                       <a href="#">
-                        <img src="/images/p_13.jpg" /><br />
+                        <CDNImage src="/images/p_13.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Sameer<br/>Rs.8000</span>
                         </div>
@@ -193,7 +194,7 @@ export default class CalCreateAppointmentView extends React.Component{
                     </li>
                     <li>
                       <a href="#">
-                        <img src="/images/p_1.jpg" /><br />
+                        <CDNImage src="/images/p_1.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Usha<br/>Rs.6000</span>
                         </div>

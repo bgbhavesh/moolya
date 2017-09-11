@@ -7,6 +7,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -163,7 +164,10 @@ export default class MlFunderAboutView extends React.Component{
                             {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                             {/*</div>*/}
                             <div className="previewImg ProfileImg">
-                              <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/def_profile.png"}/>
+                              {/*<img src={this.state.data.profilePic?this.state.data.profilePic:"/images/def_profile.png"}/>*/}
+                              {
+                                this.state.data.profilePic?<img src={this.state.data.profilePic} /> : <CDNImage src={this.state.data.profilePic} />
+                              }
                             </div>
                           </div>
                           <div className="clearfix"></div>

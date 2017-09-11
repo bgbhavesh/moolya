@@ -12,7 +12,7 @@ import {findSubDepartmentActionHandler} from '../actions/findSubDepartment';
 import {findDepartmentActionHandler } from '../actions/findDepartment';
 import {updateGenericActionAndStatusActionHandler} from '../actions/updateGenericActionsAndStatuses';
 import Select from 'react-select';
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 class MlSearchDepartmentContainer extends React.Component{
   constructor(props){
     super(props);
@@ -270,8 +270,8 @@ class MlSearchDepartmentContainer extends React.Component{
                   <div className="panel panel-default" key={i}>
                     <div className="panel-heading">
                       Panel Heading
-                      {i==0&&(<div className="pull-right block_action"><img src="/images/add.png" onClick={()=>that.addOerations()} /></div>)}
-                      {i>0&&(<div className="pull-right block_action"><img src="/images/remove.png" onClick={(e)=>that.removeOerations(e, i)} /></div>)}
+                      {i==0&&(<div className="pull-right block_action"><CDNImage src="/images/add.png" onClick={()=>that.addOerations()} /></div>)}
+                      {i>0&&(<div className="pull-right block_action"><CDNImage src="/images/remove.png" onClick={(e)=>that.removeOerations(e, i)} /></div>)}
                     </div>
                     <div className="panel-body">
                       <div className="col-md-6 nopadding-left">

@@ -10,6 +10,7 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import 'react-responsive-tabs/styles.css'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -133,7 +134,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/ideator_01.png"}/>
+                            {this.state.data && this.state.data.profilePic ? <img src={this.state.data.profilePic} /> : <CDNImage src="/images/ideator_01.png"/> }
                           </div>
                         </div>
                         <br className="brclear"/>

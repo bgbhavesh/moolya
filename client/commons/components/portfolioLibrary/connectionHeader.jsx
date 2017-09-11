@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {getSharedConnectionsActionHandler} from "../../actions/mlLibraryActionHandler";
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlConnectionHeader extends Component {
   constructor(props) {
     super(props)
@@ -61,7 +61,7 @@ export default class MlConnectionHeader extends Component {
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
             <a href="#" onClick={()=>that.resetWithAll()}>
-              <img src="/images/def_profile.png"/><br />
+              <CDNImage src="/images/def_profile.png"/><br />
               <div className="tooltiprefer">
                 <span>Me</span>
               </div>
@@ -72,7 +72,8 @@ export default class MlConnectionHeader extends Component {
               <span key={idx}>
                 <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
                   <a href="#" onClick={()=>that.changeProfile(profile.userId, idx)}>
-                    <img src={profile.profilePic ? profile.profilePic : "/images/def_profile.png"}/><br />
+                    {profile.profilePic ? <img src={profile.profilePic} /> : <CDNImage src="/images/def_profile.png"/> }
+                    <br />
                     <div className="tooltiprefer">
                       <span>{profile.displayName ? profile.displayName : "All"}</span>
                     </div>

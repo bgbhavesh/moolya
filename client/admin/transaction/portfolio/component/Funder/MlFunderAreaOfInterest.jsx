@@ -10,6 +10,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admi
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderAreaOfInterest extends React.Component {
@@ -248,7 +249,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                                 <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                                  <div className="hex_outer"><CDNImage src="/images/def_profile.png"/></div>
                                 </div>
                                 <h3>{details.industryTypeName}</h3>
                               </div>

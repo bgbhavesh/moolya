@@ -14,6 +14,7 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAccordion from "../../commons/components/MlAccordion";
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 
 class MlAppMyProfile extends Component {
@@ -341,7 +342,7 @@ class MlAppMyProfile extends Component {
                         <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profileImage?this.state.profileImage:"/images/def_profile.png"}/>
+                        {this.state.profileImage ? <img src={this.state.profileImage} /> : <CDNImage src="/images/def_profile.png" />}
                       </div>
                     </div>
                     <br className="brclear"/>

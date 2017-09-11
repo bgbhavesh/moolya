@@ -22,7 +22,7 @@ $menuTrans:all 0.5s linear;
 		img{margin-top: 14px;}
 		}
 		.app_menu.show_menu, .app_menu.show_menu .profile_pic_in_menu{width: 300px;}
-		.app_menu:after{width: 100%;height:100%; background-image:url(/images/menu_bg.jpg);background-size:cover;position:absolute;top:0px;content: "";opacity: 0.6;}
+		.app_menu:after{width: 100%;height:100%; background-image:url(https://d1mkj567hbikgo.cloudfront.net/images/menu_bg.jpg);background-size:cover;position:absolute;top:0px;content: "";opacity: 0.6;}
 		.app_main_wrap{width: 100%;}
 		.app_menu ul{padding: 20px 0px 0px 0px;}
 		.app_menu ul .menu_item.active_menu{background-color: rgba(0,0,0,0.4);}

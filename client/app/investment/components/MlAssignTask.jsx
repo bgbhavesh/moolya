@@ -7,7 +7,7 @@ import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignTask extends React.Component {
 
   constructor(props){
@@ -147,7 +147,7 @@ export default class MlAssignTask extends React.Component {
     let documents = that.state.docs || []
     let documentsUploaded =  documents.map(function(docsToView, index){
       return(
-        <li><a><FontAwesome name='minus'onClick={that.deleteDocs.bind(that, index)}/></a><img src="/images/pdf.png"/></li>
+        <li><a><FontAwesome name='minus'onClick={that.deleteDocs.bind(that, index)}/></a><CDNImage src="/images/pdf.png"/></li>
       )
     })
     return documentsUploaded;
@@ -195,7 +195,8 @@ export default class MlAssignTask extends React.Component {
               });
               return (
                 <li key={index}>
-                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name}</span>
+                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/>
+                  {user.profileImage ? <img src={user.profileImage} /> : <CDNImage src="/images/def_profile.png"/>  }<span>{user.name}</span>
                 </li>
               )
             })}

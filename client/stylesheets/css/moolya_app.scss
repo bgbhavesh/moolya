@@ -89,7 +89,7 @@ $menuTrans:all 0.5s linear;
 .app_menu ul li.menu_item:last-child:after{display: none;}
 .app_menu ul li.menu_item:last-child .menu_item_in{height: 30px;margin-top: -15px;}
 .app_menu ul li.menu_item:last-child .menu_item_in:after{display: none;}
-.app_main_wrap{width:calc(100% - 94px);float: left;position: relative;background:#fff url(/images/bg.png);
+.app_main_wrap{width:calc(100% - 94px);float: left;position: relative;background:#fff url(https://d1mkj567hbikgo.cloudfront.net/images/bg.png);
   h2{color: #ef4747;padding-bottom: 8px;border-bottom: 2px solid #ef4647;margin: 5px 0px 8px 0px;font-size: 20px;}
   .app_padding_wrap{padding:10px 0px 0px 0px;}
   form{margin-top: 20px;}
@@ -437,7 +437,7 @@ background:$mlBlue; width: 100%;position:absolute;bottom:0px;overflow-x: auto; o
     .community_icons a .fa.ml{display: inherit;}
     .community_icons a.active_community .ml{border: 2px solid #ef4647;background-color: #ef4647;color: #fff;}
     .community_icons a{text-decoration: none;}
-    .ideator_mask{position: relative;width: 103px;height: 139px;background: url(../images/ideator_bg.png);top: 35px;left: 50%; transform: translateX(-50%); }
+    .ideator_mask{position: relative;width: 103px;height: 139px;background: url(..https://d1mkj567hbikgo.cloudfront.net/images/ideator_bg.png);top: 35px;left: 50%; transform: translateX(-50%); }
     .ideator_mask img{border: 0px;top: 5px;left: 5px;border-radius: 50%;width: 93px;height: 93px;}
     .provider_mask{position: relative;width: 138px;height: 138px;top: 35px;left: 50%;transform: translateX(-50%);background: #ddd;}
     .provider_block img{border: 0px;top: 0px;left: 0px;width: 138px;height: 138px;z-index: 2;}
@@ -872,7 +872,7 @@ h3{font-size:40px; text-shadow:none;font-weight: bold;}
 .save_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlBlue;top: 0px;}
 .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlBlue transparent transparent;top: 0px;}
 }
-.email-bg{background-image: url(/images/email_bg.jpg); background-position:fixed; background-repeat:no-repeat; background-size:cover; position:fixed; width: 100%; height: 100%; padding-top:7%; text-shadow:none;text-align:center;}
+.email-bg{background-image: url(https://d1mkj567hbikgo.cloudfront.net/images/email_bg.jpg); background-position:fixed; background-repeat:no-repeat; background-size:cover; position:fixed; width: 100%; height: 100%; padding-top:7%; text-shadow:none;text-align:center;}
 .email-body{
   font-size: 16px;
   h2{color:$mlBlue;padding:0;border:none;margin:15px 0;font-size:42px;font-weight:bold;}
@@ -934,7 +934,7 @@ p{margin-top:10px;}
   /* h3{margin-top: 20px;} */
 }
 .new-ideas3{
-  background:url(/images/myoffice3.png) $mlBlue no-repeat; color: $mlWhite; height: 250px; text-shadow: none; border-radius: 10px; padding: 10px 10px 0px 10px; margin-top: 10%; /* background-size: cover; */ background-position: center left;
+  background:url(https://d1mkj567hbikgo.cloudfront.net/images/myoffice3.png) $mlBlue no-repeat; color: $mlWhite; height: 250px; text-shadow: none; border-radius: 10px; padding: 10px 10px 0px 10px; margin-top: 10%; /* background-size: cover; */ background-position: center left;
   .subscription{background: rgb(255, 255, 255); border-radius: 10px; color: #000; padding: 0px 0 10px 0;
     ul{
       li{float: left;font-size:18px;
@@ -955,7 +955,7 @@ p{margin-top:10px;}
   /* h3{margin-top: 20px;} */
 }
 .new-ideas2{
-  background:url(/images/myoffice.png) $mlBlue; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 85px 10px 0px 10px;margin-top:10%;background-size: cover;background-position: center left;
+  background:url(https://d1mkj567hbikgo.cloudfront.net/images/myoffice.png) $mlBlue; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 85px 10px 0px 10px;margin-top:10%;background-size: cover;background-position: center left;
   img{width: 215px; margin-top: -90px;}
 h3{font-size:28px;}
 p{margin-top:10px;}
@@ -1195,7 +1195,7 @@ p{margin-top:10px;}
   }
 }
 .panel-heading{
-  input{background: url(/images/search_icon_red.png) center right no-repeat;border: 0px;}
+  input{background: url(https://d1mkj567hbikgo.cloudfront.net/images/search_icon_red.png) center right no-repeat;border: 0px;}
 }
 .btn_wrap{text-align: left;background: #f5f5f5;border: 1px solid #ddd;border-radius: 4px;padding: 8px;margin-bottom: 7px;}
 .cal_tabs li{
@@ -1240,7 +1240,7 @@ p{margin-top:10px;}
       color: $mlRed !important;
     }
     .day_icon{
-      background: url(/images/mor_icon.png);
+      background: url(https://d1mkj567hbikgo.cloudfront.net/images/mor_icon.png);
     }
 }
 .cal_afternoon{
@@ -1251,7 +1251,7 @@ p{margin-top:10px;}
       color: $mlRed;
     }
     .day_icon{
-      background: url(/images/aft_icon.png);
+      background: url(https://d1mkj567hbikgo.cloudfront.net/images/aft_icon.png);
     }
 }
 .cal_evening{
@@ -1262,7 +1262,7 @@ p{margin-top:10px;}
       color: $mlBlue !important;
     }
     .day_icon{
-      background: url(/images/eve_icon.png);
+      background: url(https://d1mkj567hbikgo.cloudfront.net/images/eve_icon.png);
     }
 }
 .day_tab_content { margin-top: 10px;
@@ -1547,7 +1547,7 @@ p{margin-top:10px;}
 
 
 .calendar_access{
-  background:url(/images/cal_right.png) $mlRed right top no-repeat; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 40px 10px 0px 10px;margin-top:8%;
+  background:url(https://d1mkj567hbikgo.cloudfront.net/images/cal_right.png) $mlRed right top no-repeat; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 40px 10px 0px 10px;margin-top:8%;
   img{    width: 200px; margin-top: -31px; margin-left: -75px;}
 h3{    font-size: 28px;line-height: 36px;
   b{

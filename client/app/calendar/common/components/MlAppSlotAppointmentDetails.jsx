@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import {fetchSlotAppointmentsDetailsActionHandler} from './../actions/fetchSlotAppointmentsDetails';
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlAppSlotAppointmentDetails extends Component {
   constructor(props){
@@ -60,7 +61,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
                   <div className="panel-body">
                     <div className="col-md-12 nopadding">
                       <div className="col-md-3 nopadding text-center">
-                        <img src={user.profileImage?user.profileImage:'/images/img2.png'} className="image" />
+                        {user.profileImage ? <img src={user.profileImage} className="image"/> : <CDNImage src='/images/img2.png' className="image"/> }
                         <div className="">
                           <span>{`${user.firstName} ${user.lastName}`}</span>
                         </div>
@@ -86,7 +87,8 @@ export default class MlAppSlotAppointmentDetails extends Component {
                           return(
                             <li>
                               <a href="">
-                                <img src={info.profileImage? info.profileImage : "/images/img2.png"}/><br />
+                                {info.profileImage ? <img src={info.profileImage} /> : <CDNImage src='/images/img2.png'/> }
+                                <br />
                                 <div className="tooltiprefer">
                                   <span>{`${info.firstName} ${info.lastName}`}</span>
                                 </div>

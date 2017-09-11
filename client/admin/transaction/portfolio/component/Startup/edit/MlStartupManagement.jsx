@@ -16,6 +16,7 @@ var Select = require('react-select');
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -354,7 +355,9 @@ export default class MlStartupManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"} className="p_image"/></div>
+                          <div className="hex_outer">
+                            {user.logo && user.logo.fileUrl ? <img src={user.logo.fileUrl} className="p_image" /> : <CDNImage src="/images/def_profile.png" className="p_image" />}
+                          </div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>

@@ -4,7 +4,7 @@
 import React from "react";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchTasksActionHandler} from "../actions/fetchTasks";
-
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlAppTaskList extends React.Component{
   constructor(props){

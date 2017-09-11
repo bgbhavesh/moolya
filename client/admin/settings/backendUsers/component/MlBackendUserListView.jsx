@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import backendUserRoute from "../actions/routesBackendUserLIst";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 let FontAwesome = require('react-fontawesome');
 
 export default class MlBackendUserListView extends Component {
@@ -36,9 +37,8 @@ export default class MlBackendUserListView extends Component {
             {prop.profile.isMoolya?<div className="list-moolya-icon"><span className="ml ml-moolya-symbol"></span></div>:<span></span>}
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">
-                <img src="/images/funder_bg.png"/>
-                <img className="user_pic"
-                     src={prop.profile.profileImage ? prop.profile.profileImage : '/images/def_profile.png'}/>
+                <CDNImage src="/images/funder_bg.png"/>
+                {prop.profile.profileImage ? <img src={prop.profile.profileImage} className="user_pic" /> : <CDNImage src='/images/def_profile.png' className="user_pic"/> }
               </div>
             </a>
             <h3>{username} <br />

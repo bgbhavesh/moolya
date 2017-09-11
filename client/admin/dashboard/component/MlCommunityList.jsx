@@ -5,6 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {fetchCommunityUsersHandler} from '../actions/fetchCommunityUsersActions'
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlCommunityList extends Component {
 
   constructor(props){
@@ -106,7 +107,7 @@ export default class MlCommunityList extends Component {
             <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>Active</span></div>
             <h3>{prop.name}</h3>
             {/*<span className={`ml2 ml-${icon}`}></span>*/}
-            <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
+            {prop.profile&&prop.profile.profileImage? <img src={prop.profile.profileImage} className="c_image" /> : <CDNImage src="/images/ideator_01.png" className="c_image" />}
             <div className="block_footer">
               <span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>
             </div>

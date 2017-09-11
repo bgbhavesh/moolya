@@ -11,6 +11,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInstitutionDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 const KEY = "awardsRecognition"
@@ -319,8 +320,9 @@ export default class MlInstitutionEditAwards extends React.Component{
                           <div className="list_block">
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                              {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png"/> }
+                            </div>
                             <h3>{details.awardName?details.awardName:""}</h3>
                           </div>
                         </a>

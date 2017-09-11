@@ -12,7 +12,7 @@ var Select = require('react-select');
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
-
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 const KEY = 'management';
 export default class MlInstitutionEditManagement extends React.Component{
   constructor(props, context){
@@ -338,7 +338,8 @@ export default class MlInstitutionEditManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"}/></div>
+                          <div className="hex_outer">
+                            {user.logo && user.logo.fileUrl ? <img src={user.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png"/> }</div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>

@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
 import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 
 export default class DocumentViewer extends React.Component{
@@ -134,7 +134,7 @@ export default class DocumentViewer extends React.Component{
            <div className="panel-body uploaded_files_swiper">
 
            <ul className="swiper-wrapper">
-           <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
+           <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><CDNImage src="/images/sub_default.jpg"/></li>
              {docFiles.map((file,fIndex)=>{
                      return (<li key={file.fileId} className="doc_card" data-toggle="modal"  data-placement="bottom" title={file.fileName}
                                  onClick={this.showModal.bind(this,fIndex)}>
@@ -169,7 +169,7 @@ export default class DocumentViewer extends React.Component{
             </div>
             <div className="panel-body uploaded_files_swiper" onClick={this.addDocument.bind(this)}>
               <ul className="swiper-wrapper">
-                <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><a id="createDocument" data-placement="top" data-class="large_popover" onClick={this.addDocument.bind(this)}><img src="/images/sub_default.jpg" onClick={this.addDocument.bind(this)}/></a></li>
+                <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><a id="createDocument" data-placement="top" data-class="large_popover" onClick={this.addDocument.bind(this)}><CDNImage src="/images/sub_default.jpg" onClick={this.addDocument.bind(this)}/></a></li>
               </ul>
             </div>
           </div>

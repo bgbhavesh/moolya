@@ -10,6 +10,7 @@ import moment from "moment";
 import MlAccordion from "../../commons/components/MlAccordion";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 class MlAppInternalAssignTaskItem extends React.Component {
 
@@ -210,7 +211,8 @@ class MlAppInternalAssignTaskItem extends React.Component {
                         <li key={index}>
                           <a href="#">
                             <span></span>
-                            <img src={ user.profileUrl ? user.profileUrl : "/images/def_profile.png"} /><br />
+                            {user.profileUrl ? <img src={user.profileUrl} /> : <CDNImage src="/images/def_profile.png"/> }
+                            <br />
                             <div className="tooltiprefer">
                               <span>{user.name}</span>
                             </div>

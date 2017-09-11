@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 
 export default class MlCalendarHead extends Component {
   constructor(props) {
@@ -75,7 +76,8 @@ export default class MlCalendarHead extends Component {
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
             <a href="" onClick={()=>that.resetWithAll()}>
-              <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
+              {that.state.profilePic ? <img src={that.state.profilePic} /> : <CDNImage src="/images/def_profile.png"/> }
+              <br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}
                 <span ref={(node) => {

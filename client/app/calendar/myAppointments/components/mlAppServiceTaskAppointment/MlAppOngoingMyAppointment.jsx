@@ -63,7 +63,7 @@ export default class MlAppOngoingMyAppointment extends React.Component {
               return (
                 <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
                   <div className="list_block list_block_intrests notrans" onClick={()=>that.viewAppointment(appointment)}>
-                    <div className="hex_outer"><img src="/images/valuation.png"/></div>
+                    <div className="hex_outer"><CDNImage src="/images/valuation.png"/></div>
                     <div className="task-status pending"></div>
                     <h3>{ appointment.appointmentInfo ?  appointment.appointmentInfo.serviceName : ''}</h3>
                   </div>

@@ -9,7 +9,7 @@ let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateSettings} from '../actions/addSettingsAction';
 import {findMyProfileActionHandler} from '../actions/getProfileDetails'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage"
 
 
 //import ContactDetails from '../../transaction/requested/component/contactDetails';
@@ -234,11 +234,11 @@ export default class MyProfileSettings extends React.Component{
         </div>
         {/*<span className="actions_switch"></span>*/}
         {/*<div className="bottom_actions_block">*/}
-          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>*/}
-          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>*/}
-          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>*/}
-          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>*/}
-          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <CDNImage src="/images/edit_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <CDNImage src="/images/act_add_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <CDNImage src="/images/act_logout_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <CDNImage src="/images/act_progress_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <CDNImage src="/images/act_select_icon.png"/> </a></div>*/}
         {/*</div>*/}
         {isExternaluser ? <div></div> :
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

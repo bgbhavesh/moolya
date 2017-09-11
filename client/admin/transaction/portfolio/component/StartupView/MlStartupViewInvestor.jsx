@@ -5,6 +5,7 @@ import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import NoData from '../../../../../commons/components/noData/noData'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 const KEY = 'investor'
@@ -125,7 +126,7 @@ export default class MlStartupViewInvestor extends React.Component {
               {investorArray && investorArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                   <div className="team-block">
-                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                    {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} className="team_img" /> : <CDNImage src="/images/def_profile.png" className="team_img"/> }
                     <h3>
                       {details.investorName} <br /><b>Investor</b>
                     </h3>

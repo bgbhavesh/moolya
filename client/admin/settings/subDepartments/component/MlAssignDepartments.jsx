@@ -150,7 +150,7 @@ export default class MlAssignDepartments extends React.Component {
           let subChapterOption={options: { variables: {id:options.chapter}}}
           return(
             <div className="panel panel-default" key={id}>
-              <div className="panel-heading">Assign Department{/*<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><img src="/images/remove.png"/></div>*/}</div>
+              <div className="panel-heading">Assign Department{/*<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><CDNImage src="/images/remove.png"/></div>*/}</div>
               <div className="panel-body">
 
                 <div className="form-group" >

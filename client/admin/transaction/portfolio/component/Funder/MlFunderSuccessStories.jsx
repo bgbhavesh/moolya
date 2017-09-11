@@ -10,6 +10,7 @@ import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDeta
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData'
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderSuccessStories extends React.Component {
@@ -296,8 +297,9 @@ export default class MlFunderSuccessStories extends React.Component {
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                               </div>
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                              <div className="" onClick={that.onTileClick.bind(that, idx)}><img
-                                src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              <div className="" onClick={that.onTileClick.bind(that, idx)}>
+                                {details.logo && details.logo.fileUrl ? <img src={details.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png"/> }
+                              </div>
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
@@ -345,7 +347,7 @@ export default class MlFunderSuccessStories extends React.Component {
                                        onChange={this.onLogoFileUpload.bind(this)}/>
                               </div>
                               {/*<div className="previewImg ProfileImg">*/}
-                              {/*<img src="/images/ideator_01.png"/>*/}
+                              {/*<CDNImage src="/images/ideator_01.png"/>*/}
                               {/*</div>*/}
                             </div> : <div></div>
                           }

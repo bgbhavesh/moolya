@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlProcessSetupDetailsComponent extends React.Component {
@@ -266,7 +267,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
           </div>
           <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
             <div className="panel panel-default">
-              <div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
+              <div className="panel-heading">Add Stages<CDNImage className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
               <div className="panel-body">
                 {that.state.stages.map(function (stage, sIdx) {
                    return(
@@ -294,7 +295,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                          {stage.stageActions.map(function (action, aIdx) {
                            return(
                              <div className="form_inner_block col-md-4" key={aIdx}>
-                               <div className="add_form_block"><img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
+                               <div className="add_form_block"><CDNImage src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
                                <div className="form-group">
                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
                                                valueKey={'value'}

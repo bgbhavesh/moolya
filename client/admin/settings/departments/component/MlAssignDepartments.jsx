@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignDepartments extends React.Component {
   constructor(props) {
     super(props);
@@ -139,10 +140,10 @@ export default class MlAssignDepartments extends React.Component {
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Department{id == 0 ? (
-                <div className="pull-right block_action" onClick={that.AssignDepartmentAvailability.bind(that, id)}><img
+                <div className="pull-right block_action" onClick={that.AssignDepartmentAvailability.bind(that, id)}><CDNImage
                   src="/images/add.png"/></div>) : (<div className="pull-right block_action"
                                                          onClick={that.RemoveAssignDepartmentAvailability.bind(that, id)}>
-                <img src="/images/remove.png"/></div>)}</div>
+                <CDNImage src="/images/remove.png"/></div>)}</div>
               <div className="panel-body">
                 <div className="form-group" disabled="true">
                   <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label"

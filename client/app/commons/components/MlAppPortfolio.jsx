@@ -14,6 +14,7 @@ import InteractionsCounter from "../../commons/components/InteractionsCounter";
 import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
 import {requestPortfolioForGoLive} from "../actions/fetchUserDetails";
 import {appClient} from "../../core/appConnection";
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 class MlAppPortfolio extends Component{
   constructor(props){
@@ -375,7 +376,9 @@ class MlAppPortfolio extends Component{
                   <ul id="comments-list" className="comments-list">
                     <li>
                       <div className="comment-main-level">
-                        <div className="comment-avatar"><img src={annotationDetails.profileImage?annotationDetails.profileImage:"/images/def_profile.png"} alt=""/></div>
+                        <div className="comment-avatar">
+                          {annotationDetails.profileImage ? <img src={annotationDetails.profileImage} /> : <CDNImage src="/images/def_profile.png"/> }
+                        </div>
                         <div className="comment-box">
                           <div style={{marginTop:'8px'}} className="annotate">1</div>
                           <div style={{paddingLeft:'50px'}} className="comment-head">
@@ -415,7 +418,7 @@ class MlAppPortfolio extends Component{
                         {that.state.commentsData.map(function (options, key) {
                           return(<li key={key}>
                             <div className="comment-avatar">
-                              <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
+                              {options.profileImage ? <img src={options.profileImage} /> : <CDNImage src="/images/def_profile.png" /> }
                             </div>
                             <div className="comment-box">
                               <div className="comment-head">

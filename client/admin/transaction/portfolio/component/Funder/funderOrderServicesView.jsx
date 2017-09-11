@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class FunderOrderServicesView extends Component {
@@ -70,13 +71,13 @@ export default class FunderOrderServicesView extends Component {
         <div className="col-md-12 nopadding">
           <ul className="cal_tabs act_tab">
             <li className="col-md-4 nopadding-left">
-              <span><img src="/images/mor_icon.png"/> Morning</span>
+              <span><CDNImage src="/images/mor_icon.png"/> Morning</span>
             </li>
             <li className="col-md-4 nopadding">
-              <span className="act_tab"><img src="/images/aft_icon.png"/> Afternoon</span>
+              <span className="act_tab"><CDNImage src="/images/aft_icon.png"/> Afternoon</span>
             </li>
             <li className="col-md-4 nopadding-right">
-              <span><img src="/images/eve_icon.png"/> Evening</span>
+              <span><CDNImage src="/images/eve_icon.png"/> Evening</span>
             </li>
           </ul>
         </div>
@@ -158,7 +159,7 @@ export default class FunderOrderServicesView extends Component {
                     </div>
                     <div className="panel-body uploaded_files_swiper">
                       <ul className="swiper-wrapper">
-                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
+                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><CDNImage
                           src="/images/sub_default.jpg"/></li>
                       </ul>
                       <p className="show-information" style={{'display': 'none'}}>text</p>
@@ -176,7 +177,7 @@ export default class FunderOrderServicesView extends Component {
                     </div>
                     <div className="panel-body uploaded_files_swiper">
                       <ul className="swiper-wrapper">
-                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
+                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><CDNImage
                           src="/images/sub_default.jpg"/></li>
                       </ul>
                       <p className="show-information" style={{'display': 'none'}}>text</p>

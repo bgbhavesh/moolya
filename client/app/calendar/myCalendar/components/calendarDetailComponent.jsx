@@ -66,13 +66,13 @@ export default class AppCalendarDayView extends React.Component{
           <div className="col-md-12">
             {/*<ul className="cal_tabs act_tab">*/}
               {/*<li className="col-md-4 nopadding-left">*/}
-                {/*<span><img src="/images/mor_icon.png"/> Morning</span>*/}
+                {/*<span><CDNImage src="/images/mor_icon.png"/> Morning</span>*/}
               {/*</li>*/}
               {/*<li className="col-md-4 nopadding">*/}
-                {/*<span className="act_tab"><img src="/images/aft_icon.png"/> Afternoon</span>*/}
+                {/*<span className="act_tab"><CDNImage src="/images/aft_icon.png"/> Afternoon</span>*/}
               {/*</li>*/}
               {/*<li className="col-md-4 nopadding-right">*/}
-                {/*<span><img src="/images/eve_icon.png"/> Evening</span>*/}
+                {/*<span><CDNImage src="/images/eve_icon.png"/> Evening</span>*/}
               {/*</li>*/}
             {/*</ul>*/}
             <br className="brclear"/>

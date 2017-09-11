@@ -11,6 +11,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {pick} from 'lodash'
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 export default class MlUsersAbout extends Component {
   constructor(props) {
@@ -340,7 +341,7 @@ export default class MlUsersAbout extends Component {
 
                       <div className="form-group steps_pic_upload">
                         <div className="previewImg ProfileImg">
-                          <img src={regInfo.profileImage ? regInfo.profileImage : "/images/ideator_01.png"}/>
+                          {regInfo.profileImage ? <img src={regInfo.profileImage} /> : <CDNImage src="/images/ideator_01.png" /> }
                         </div>
                       </div>
                       <br className="brclear"/>

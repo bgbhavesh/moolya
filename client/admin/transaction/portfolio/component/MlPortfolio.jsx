@@ -22,7 +22,7 @@ import MlLoader from "../../../../commons/components/loader/loader";
 import _ from "lodash";
 import {client} from "../../../core/apolloConnection";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 class MlPortfolio extends React.Component {
   constructor(props) {
     super(props)
@@ -384,7 +384,7 @@ class MlPortfolio extends React.Component {
                 <ul id="comments-list" className="comments-list">
                   <li>
                     <div className="comment-main-level">
-                      <div className="comment-avatar"><img src="/images/def_profile.png" alt="No image available"/>
+                      <div className="comment-avatar"><CDNImage src="/images/def_profile.png" alt="No image available"/>
                       </div>
                       <div className="comment-box">
                         <div style={{marginTop: '8px'}} className="annotate">1</div>
@@ -419,7 +419,7 @@ class MlPortfolio extends React.Component {
                       {that.state.commentsData.map(function (options, key) {
                         return (<li key={key}>
                           <div className="comment-avatar">
-                            <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
+                            {options.profileImage ? <img src={options.profileImage} /> : <CDNImage src="/images/def_profile.png"/> }
                           </div>
                           <div className="comment-box">
                             <div className="comment-head">

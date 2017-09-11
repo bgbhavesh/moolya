@@ -2,7 +2,7 @@
  * Created by pankaj on 28/8/17.
  */
 import React, {Component} from "react";
-
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage"
 export default class MlAppCalendarHeader extends Component {
 
   render(){
@@ -16,7 +16,8 @@ export default class MlAppCalendarHeader extends Component {
             return(
               <li key={index} className={ selectedUser == user._id ? 'active_user' : ''}>
                 <a href="" onClick={()=>selectUser(user)}>
-                  <img src={ user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                  {user.profileImage ? <img src={ user.profileImage} /> : <CDNImage src="/images/def_profile.png"/>}
+                  <br />
                   <div className="tooltiprefer">
                     <span>{user.name}</span>
                   </div>

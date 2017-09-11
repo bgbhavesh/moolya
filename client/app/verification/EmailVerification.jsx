@@ -2,6 +2,7 @@ import React from 'react';
 import {verifyEmailHandler,verifyMobileNumberHandler} from '../../commons/verificationActionHandler';
 import MlLoader from '../../commons/components/loader/loader'
 import {appClient} from '../core/appConnection';
+import CDNImage from "../../commons/components/CDNImage/CDNImage";
 export default class EmailVerification extends React.Component{
 
   constructor(props){
@@ -85,7 +86,7 @@ export default class EmailVerification extends React.Component{
           <div className="email-body">
             {!mobileNumberVerificationSuccess&&emailVerificationSuccess&&
               <div>
-              <img src="../images/success_icon.png" /><br />
+              <CDNImage src="/images/success_icon.png" /><br />
               <h2 style={{'marginBottom':'20px'}}>Congratulations!!</h2>
              {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
                 Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
@@ -103,14 +104,14 @@ export default class EmailVerification extends React.Component{
               </div>
             }
             {!emailVerificationSuccess&&<div>
-              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
+              <CDNImage src="/images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
               <p style={{'fontSize':'24px'}}>Your verification link has expired.<br/>Please contact us at <a style={{'color':'#ef4647'}} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
               {/*<a href="/login" className="save_btn" >Login</a>*/}
              </div>}
 
             {mobileNumberVerificationSuccess&&
               <div>
-                <img src="../images/success_icon.png" /><br />
+                <CDNImage src="/images/success_icon.png" /><br />
                 <h2>Congratulations</h2>
                 You have successfully verified your account. You will be notified once your profile is activated<br /><br />
                 <a href="/login" className="save_btn" >Login</a>

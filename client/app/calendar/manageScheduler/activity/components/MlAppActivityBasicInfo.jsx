@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 /**
  * Initialize conversation types
@@ -408,7 +409,7 @@ export default class MlAppBasicInfo extends React.Component{
                 />
 
                 {/*<div className="previewImg ProfileImg">
-                  <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/def_profile.png'}/>
+                  {that.state.basicData.imageLink ? <img src={that.state.basicData.imageLink} /> : <CDNImage src='/images/def_profile.png'/> }
                 </div>*/}
                 <div className="form-group">
                   {/*<div className="fileUpload mlUpload_btn">

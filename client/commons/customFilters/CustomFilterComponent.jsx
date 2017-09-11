@@ -8,6 +8,7 @@ import moment from "moment";
 import {initalizeFloatLabel} from '../utils/formElemUtil';
 import _ from 'lodash';
 import _underscore from 'underscore'
+import CDNImage from "../../commons/components/CDNImage/CDNImage";
 export default class MlCustomFilterComponent extends Component {
   constructor(props){
     super(props);
@@ -378,7 +379,7 @@ export default class MlCustomFilterComponent extends Component {
 
 
         </div>
-        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
+        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><CDNImage src="/images/filter_icon.png"/></div>
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class CalendarSlotDetail extends React.Component{
@@ -34,7 +35,7 @@ export default class CalendarSlotDetail extends React.Component{
               <div className="panel-body">
                 <div className="col-md-12 nopadding">
                   <div className="col-md-3 nopadding text-center">
-                    <img src={data.userImage?data.userImage:'/images/img2.png'} className="image" />
+                    {data.userImage ? <img src={data.userImage}  className="image"/> : <CDNImage src='/images/img2.png' className="image"/> }
                   </div>
                   <div className="col-md-9">
                     <br />
@@ -52,7 +53,8 @@ export default class CalendarSlotDetail extends React.Component{
                       return(
                         <li>
                           <a href="">
-                            <img src={info.profileImage? info.profileImage : "/images/img2.png"}/><br />
+                            {info.profileImage ? <img src={info.profileImage} /> : <CDNImage src="/images/img2.png"/> }
+                            <br />
                             <div className="tooltiprefer">
                               <span>{`${info.firstName} ${info.lastName}`}</span>
                             </div>

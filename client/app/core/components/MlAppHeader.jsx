@@ -6,6 +6,7 @@ import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 
 class MlAppProfileHeader extends Component {
@@ -97,7 +98,7 @@ class MlAppProfileHeader extends Component {
         {/*{showLoader===true?(<MlLoader/>):(*/}
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
-          <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
+          <a href="/app/dashboard"> <CDNImage className="moolya_app_logo" src="/images/logo.png"/></a>
           <MlAppNotificationsConfig />
 
 
@@ -128,7 +129,7 @@ class MlAppProfileHeader extends Component {
                 <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
-                <a href="/app/task"><img className="profile-img" src="/images/7.png" /></a>
+                <a href="/app/task"><CDNImage className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
                 <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>

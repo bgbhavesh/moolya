@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlAssignTask extends React.Component {
 
   constructor(props){
@@ -118,7 +118,7 @@ export default class MlAssignTask extends React.Component {
               <li>
                 <ul className="comments-list reply-list">
                   <li>
-                    <div className="comment-avatar"><img src="/images/p_2.jpg" alt=""/></div>
+                    <div className="comment-avatar"><CDNImage src="/images/p_2.jpg" alt=""/></div>
                     <div className="comment-box">
                       <div className="comment-head">
                         <h6 className="comment-name">Pavani</h6>
@@ -130,7 +130,7 @@ export default class MlAssignTask extends React.Component {
                     </div>
                   </li>
                   <li>
-                    <div className="comment-avatar"><img src="/images/p_3.jpg" alt=""/></div>
+                    <div className="comment-avatar"><CDNImage src="/images/p_3.jpg" alt=""/></div>
                     <div className="comment-box">
                       <div className="comment-head">
                         <h6 className="comment-name">Agustin Ortiz</h6>
@@ -142,7 +142,7 @@ export default class MlAssignTask extends React.Component {
                     </div>
                   </li>
                   <li>
-                    <div className="comment-avatar"><img src="/images/p_4.jpg" alt=""/></div>
+                    <div className="comment-avatar"><CDNImage src="/images/p_4.jpg" alt=""/></div>
                     <div className="comment-box">
                       <div className="comment-head">
                         <h6 className="comment-name">Agustin Ortiz</h6>
@@ -170,25 +170,25 @@ export default class MlAssignTask extends React.Component {
           <div className="comments-container cus_scroll">
             <ul className="pop-questions">
               <li>
-                <img src="/images/add.png"/>
+                <CDNImage src="/images/add.png"/>
                 <div className="form-group">
                   <textarea placeholder="Add question" className="form-control float-label" id=""></textarea>
                 </div>
               </li>
               <li>
-                <img src="/images/remove.png"/>
+                <CDNImage src="/images/remove.png"/>
                 <p>
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 </p>
               </li>
               <li>
-                <img src="/images/remove.png"/>
+                <CDNImage src="/images/remove.png"/>
                 <p>
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 </p>
               </li>
               <li>
-                <img src="/images/remove.png"/>
+                <CDNImage src="/images/remove.png"/>
                 <p>
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 </p>
@@ -207,16 +207,16 @@ export default class MlAssignTask extends React.Component {
           <div className="clearfix" />
           <div className="col-md-6">
             <ul className="img_upload">
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
             </ul>
           </div>
           <div className="col-md-6">
             <ul className="img_upload">
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-              <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
+              <li><FontAwesome name='minus'/><CDNImage src="/images/data_balance.jpg"/><span>test text here</span></li>
             </ul>
           </div>
           <div className="clearfix" />

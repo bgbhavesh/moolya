@@ -12,6 +12,7 @@ var Select = require('react-select');
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
+import CDNImage from "../../../../../../commons/components/CDNImage/CDNImage";
 
 const KEY = "partners"
 
@@ -323,7 +324,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                                  onClick={that.onPartnerTileClick.bind(that, idx)}>
                               <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
+                              {principal.logo && principal.logo.fileUrl ? <img src={principal.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png"/> }
                               <div>
                                 <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                               <div className="ml_icon_btn">
@@ -356,7 +357,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                                 <input type="file" className="upload" onChange={this.onPartnerLogoFileUpload.bind(this)}/>
                               </div>
                               <div className="previewImg ProfileImg">
-                                <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
+                                {this.state.data && this.state.data.logo && this.state.logo.fileUrl ? <img src={this.state.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png"/>}
                               </div>
                             </div>:<div></div>
                           }

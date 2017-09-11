@@ -4,7 +4,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import _ from 'lodash';
 
 import {render} from 'react-dom';
-
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class MlAppMapMarker extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +35,7 @@ export default class MlAppMapMarker extends Component {
       <div>
         <div className="map_profiles">
           <span className={`ml ${status}`}></span>
-          <img src="/images/def_profile.png" />
+          <CDNImage src="/images/def_profile.png" />
         </div>
       </div>
     );

@@ -107,7 +107,7 @@
 //           return (
 //             <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
 //               <div className="list_block img_list_block notrans" onClick={()=>that.viewMode(index,services._id, services.profileId)}>
-//                 <img src="/images/activity_1.jpg"/>
+//                 <CDNImage src="/images/activity_1.jpg"/>
 //                 <h3>{services.displayName}</h3>
 //               </div>
 //             </div>)})}
@@ -115,7 +115,7 @@
 //           return (
 //             <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
 //               <div className="list_block img_list_block notrans" onClick={()=>that.viewModeBeSpoke(index,services._id, services.profileId)}>
-//                 <img src="/images/activity_1.jpg"/>
+//                 <CDNImage src="/images/activity_1.jpg"/>
 //                 <h3>{services.displayName}</h3>
 //               </div>
 //             </div>)})}

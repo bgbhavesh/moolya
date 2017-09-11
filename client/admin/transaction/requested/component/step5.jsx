@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
 import _underscore from 'underscore'
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 //import formHandler from '../../../../commons/containers/MlFormHandler';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import DocumentViewer from './DocumentViewer';
@@ -527,7 +528,7 @@ export default class Step5 extends React.Component {
                          </div>
                         <div className="panel-body uploaded_files_swiper" onClick={that.addDocument.bind(that,key)}>
                           <ul className="swiper-wrapper">
-                            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><a id={"kyc"+key} data-placement="top" data-class="large_popover"><img src="/images/sub_default.jpg"/></a></li>
+                            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><a id={"kyc"+key} data-placement="top" data-class="large_popover"><CDNImage src="/images/sub_default.jpg"/></a></li>
                           </ul>
                         </div>
                       </div>
@@ -567,13 +568,13 @@ export default class Step5 extends React.Component {
                           <div className="clearfix"></div>
 
                           <ul className="popover_doc_scroll">
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                            <li><img src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
+                            <li><CDNImage src="/images/sub_default.jpg"/><br/>One</li>
                           </ul>*/}
 
                           <div className="clearfix"></div>

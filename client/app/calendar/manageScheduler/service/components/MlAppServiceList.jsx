@@ -6,7 +6,7 @@
 
 // import NPM module(s)
 import React, { Component } from 'react';
-
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 // import custom method(s) and component(s)
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import { fetchServicesActionHandler } from '../actions/MlServiceActionHandler';

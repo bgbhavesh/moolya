@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom'
 import _ from 'lodash';
 import {fetchInteractionsCountActionHandler} from '../actions/fetchInteractionCountActionHandler';
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 export default class InteractionsCounter extends React.Component{
   constructor(props){
@@ -83,6 +84,10 @@ export default class InteractionsCounter extends React.Component{
             <span className="fa fa-angle-left fa-2x"/>
           </a>
           <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}>
+            {props && props.portfolioImage ? <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
+                                                  data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
+                                                  data-placement="right"/> : <CDNImage src="/images/ideator_01.png" data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
+                                                                                       data-placement="right"/>}
             <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
                  data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
                  data-placement="right"/>

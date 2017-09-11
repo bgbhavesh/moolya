@@ -669,10 +669,10 @@
 //   //           <FontAwesome name='times' style={{'display':'none'}}/>
 //   //           <div className="show_details" style={{'display':'none'}}>
 //   //             <ul className="list-group">
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
 //   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop"
@@ -752,10 +752,10 @@
 //   //           <FontAwesome name='times' style={{'display':'none'}}/>
 //   //           <div className="show_details" style={{'display':'none'}}>
 //   //             <ul className="list-group">
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
 //   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop"
@@ -823,10 +823,10 @@
 //   //           <FontAwesome name='times' style={{'display':'none'}}/>
 //   //           <div className="show_details" style={{'display':'none'}}>
 //   //             <ul className="list-group">
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
 //   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".videopop"
@@ -864,7 +864,7 @@
 //   //           <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='unlock'/> : "" }
 //   //         {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
 //   //         <a href="" data-toggle="modal" data-target=".documentpop"
-//   //            onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png"/></a>
+//   //            onClick={that.randomDocument.bind(that, show.fileUrl, id)}><CDNImage src="/images/doc.png"/></a>
 //   //         <div id="images" className="title">{show.fileName}</div>
 //   //       </div>
 //   //     )
@@ -895,15 +895,15 @@
 //   //           <FontAwesome name='times' style={{'display':'none'}}/>
 //   //           <div className="show_details" style={{'display':'none'}}>
 //   //             <ul className="list-group">
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-//   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+//   //               <li className="list-group-item"><span className="task_with"><CDNImage src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
 //   //           {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
 //   //                                      onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
-//   //             <img src="/images/doc.png"/></a> :
+//   //             <CDNImage src="/images/doc.png"/></a> :
 //   //             <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
 //   //               src={show.fileUrl}/></a>}
 //   //           <div id="templates" className="title">{show.fileName}</div>

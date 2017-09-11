@@ -8,7 +8,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {createLibrary, fetchLibrary, getAllowableDocumentFormats} from '../../../../../app/ideators/actions/ideatorActionHandler'
 import MlVideoPlayer from  '../../../../../commons/videoPlayer/MlVideoPlayer'
-
+import CDNImage from "../../../../../commons/components/CDNImage/CDNImage";
 
 export default class PortfolioLibrary extends React.Component{
 
@@ -375,7 +375,7 @@ export default class PortfolioLibrary extends React.Component{
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
-            <img src="/images/video_1.jpg"/>
+            <CDNImage src="/images/video_1.jpg"/>
           </ModalBody>
         </Modal>
         <div className="modal fade bs-example-modal-sm library-popup imagepop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -409,7 +409,7 @@ export default class PortfolioLibrary extends React.Component{
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
-                <div className="img_scroll"><img src="/images/zomato-bs.png"/></div>
+                <div className="img_scroll"><CDNImage src="/images/zomato-bs.png"/></div>
               </div>
             </div>
           </div>
@@ -437,8 +437,8 @@ export default class PortfolioLibrary extends React.Component{
 
         {/*</div>*/}
         {/*<div className="panel-body">*/}
-        {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
-        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
+        {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><CDNImage src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
+        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><CDNImage src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
         {/*</div>*/}
         {/*</div>*/}
         {/*</div>*/}
@@ -508,7 +508,7 @@ export default class PortfolioLibrary extends React.Component{
         {/*<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={this.TemplateUpload.bind(this)} /></span>*/}
         {/*</div>*/}
         {/*<div className="panel-body">*/}
-        {/*<div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_1.jpg"/><div className="title">Template</div></div>*/}
+        {/*<div className="thumbnail"><FontAwesome name='lock'/><CDNImage src="/images/template_1.jpg"/><div className="title">Template</div></div>*/}
         {/*</div>*/}
         {/*<ul>*/}
         {/*<li>*/}

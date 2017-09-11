@@ -4,6 +4,7 @@ import StarRatings from '../../../app/commons/components/StarRatings';
 import {reviewActionHandler,fetchReviewsActionHandler} from "../actions/reviewActionHandler";
 var FontAwesome = require('react-fontawesome');
 import moment from "moment";
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 export default class Review extends React.Component {
 
   constructor(props) {
@@ -94,7 +95,7 @@ export default class Review extends React.Component {
                return (<li className="click_full" key={id}>
                  <div className="media">
                    <div className="media-left media-top">
-                     <img src={review.userProfileImage||"/images/img2.png"} className="media-object" />
+                     {review.userProfileImage ? <img src={review.userProfileImage} />: <CDNImage src="/images/img2.png" /> }
                    </div>
                    <div className="media-body rating_xs">
                      <h4 className="media-heading">{review.userName}<span>{review.createdOn&& moment(review.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>
@@ -112,7 +113,7 @@ export default class Review extends React.Component {
             <li className="click_full">
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src={this.state.selectedReview.userProfileImage||"/images/img2.png"} className="media-object" />
+                    {this.state.selectedReview && this.state.selectedReview.userProfileImage ? <img src={this.state.selectedReview.userProfileImage} className="media-object"/> : <CDNImage src="/images/img2.png" className="media-object"/>}
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">{this.state.selectedReview.userName}<span>{this.state.selectedReview.createdOn&& moment(this.state.selectedReview.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>

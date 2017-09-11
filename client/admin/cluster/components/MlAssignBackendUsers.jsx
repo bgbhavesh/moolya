@@ -15,6 +15,7 @@ import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {findClusterTypeActionHandler} from "../actions/findCluster";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import MlLoader from '../../../commons/components/loader/loader'
@@ -266,7 +267,7 @@ class MlAssignBackendUsers extends React.Component {
                     <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                       <div className="list_block provider_block">
                         <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
-                        <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
+                        <div className="provider_mask"><CDNImage src="/images/funder_bg.png"/> <CDNImage className="user_pic"
                                                                                                src="/images/def_profile.png"/>
                         </div>
                         <h3>Assign <br/> Backend Users</h3>
@@ -293,7 +294,7 @@ class MlAssignBackendUsers extends React.Component {
                         <input type="file" className="upload" ref="profilePic"/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src="/images/def_profile.png"/>
+                        <CDNImage src="/images/def_profile.png"/>
                       </div>
                     </div>
                     <br className="brclear"/>

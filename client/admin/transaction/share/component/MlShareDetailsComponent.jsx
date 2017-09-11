@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlShareDetailsComponent extends React.Component {
@@ -139,7 +140,7 @@ export default class MlShareDetailsComponent extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ user.profilePic ? user.profilePic : "/images/data_balance.jpg"}/>
+                          {user.profilePic ? <img src={user.profilePic}/> : <CDNImage src="/images/data_balance.jpg" /> }
                           <span>{user.displayName}</span>
                         </li>
                       )
@@ -160,7 +161,7 @@ export default class MlShareDetailsComponent extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ file.url ? file.url : "/images/data_balance.jpg"}/>
+                          {file.url ? <img src={file.url} /> : <CDNImage src="/images/data_balance.jpg" /> }
                         </li>
                       )
                     })

@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
+import CDNImage from "../../commons/components/CDNImage/CDNImage";
+
 
 MlLoginLayout = React.createClass({
   render(){
@@ -63,7 +65,8 @@ MlLoginContent = React.createClass({
               <source src="/images/bg_video.mp4"/>
             </video>*/}
             <div className="video_bg"></div>
-            <img className="logo" src="/images/login_logo.png"/>
+            {/*<img className="logo" src="/images/login_logo.png"/>*/}
+            <CDNImage src="/images/moolya_logo.png" className="logo" />
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>
             </div>

@@ -3,6 +3,7 @@
  */
 import React from "react";
 import {render} from "react-dom";
+import CDNImage from "../../../../commons/components/CDNImage/CDNImage";
 var Select = require('react-select');
 var options = [
   {value: 'role', label: 'User Type 1'},
@@ -133,9 +134,9 @@ export default class MlAppOfficeMembersDetails extends React.Component {
             <div className="office-members-detail">
 
               <div className="form_inner_block">
-                <div className="add_form_block"><img src="/images/add.png"/></div>
+                <div className="add_form_block"><CDNImage src="/images/add.png"/></div>
                 <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="/images/img2.png"/></div>
+                  <div className="team-block marb0"><CDNImage src="/images/img2.png"/></div>
                 </div>
                 <div className="col-lg-10 col-md-10 col-sm-9">
                   <div className="row">
@@ -163,9 +164,9 @@ export default class MlAppOfficeMembersDetails extends React.Component {
               </div>
 
               <div className="form_inner_block">
-                <div className="add_form_block"><img src="/images/remove.png"/></div>
+                <div className="add_form_block"><CDNImage src="/images/remove.png"/></div>
                 <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="/images/img2.png"/></div>
+                  <div className="team-block marb0"><CDNImage src="/images/img2.png"/></div>
                 </div>
                 <div className="col-lg-10 col-md-10 col-sm-9">
                   <div className="row">

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
+import CDNImage from "../../../commons/components/CDNImage/CDNImage";
 
 
 export default class MlAppDocumentViewer extends Component {
@@ -111,8 +112,8 @@ export default class MlAppDocumentViewer extends Component {
           <div className="panel-body uploaded_files_swiper">
 
             <ul className="swiper-wrapper">
-              <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
-                src="/images/sub_default.jpg"/></li>
+              <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name">
+                <CDNImage src="/images/sub_default.jpg"/></li>
               {docFiles.map((file, fIndex)=> {
                 return (<li key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom"
                             title={file.fileName}>

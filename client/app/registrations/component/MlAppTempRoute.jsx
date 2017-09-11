@@ -31,22 +31,38 @@ export default class MlAppTempRoute extends Component {
   }
   render() {
     let that = this
+    let icon;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12 ideators_list">
             <div className="row">
               {this.state.register.map(function (reg, idx) {
+                if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Ideators")
+                  icon = "ml my-ml-Ideator"
+                else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Investors")
+                  icon = "ml my-ml-Investors"
+                else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Startups")
+                  icon = "ml my-ml-Startups"
+                else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Companies")
+                  icon = "ml my-ml-Company"
+                else if(reg&&reg.registrationInfo&&reg.data.registrationInfo.communityName == "Service Providers")
+                  icon = "Service-Providers"
+                else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Institutions")
+                  icon = "ml my-ml-Institutions"
+                console.log(icon)
                 return (
                   <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
                     {/*<a href={ideatorListRoutes.ideatorDetailsRoute("ideator",ideator.ideas[0].portfolioId)}>*/}
                     <a href='' onClick={that.fillRegistration.bind(that, reg.registrationId)}>
                       <div className="ideators_list_block">
                         <div className="premium">
-                          <span>{reg.registrationInfo?reg.registrationInfo.communityName:''}</span>
+                          <span>{reg&&reg.registrationInfo&&reg.registrationInfo.communityName?reg.registrationInfo.communityName:''}</span>
                         </div>
+                        <h3>{reg&&reg.registrationInfo&&reg.registrationInfo.clusterName? reg.registrationInfo.clusterName : ''}</h3>
+                        <div className="list_icon"><span className={icon}></span></div>
                         <div className="block_footer">
-                          <span>{reg.registrationInfo?reg.registrationInfo.email:''}</span>
+                          <span>{reg&&reg.registrationInfo&&reg.registrationInfo.email?reg.registrationInfo.email:''}</span>
                         </div>
                       </div>
 

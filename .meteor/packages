@@ -53,3 +53,4 @@ dispatch:mocha-browser
 practicalmeteor:sinon
 practicalmeteor:chai
 jparker:crypto-sha256
+meteorhacks:fast-render

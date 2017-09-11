@@ -391,6 +391,8 @@ let BackEndUser = `
       addressState      :  String
       addressCountry : String
       addressPinCode : String
+      latitude:Float,
+      longitude:Float
     }
     
     input SocialLinkInfo{

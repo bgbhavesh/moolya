@@ -101,6 +101,7 @@ export default class step1 extends React.Component{
       registrationDetails:details,
       registrationId:details.registrationId,
       country :details.countryId,
+      countryCode: details.countryCode,
       selectedCity : details.cityId,
       registrationType : details.registrationType,
       subscription: details.accountType,
@@ -116,8 +117,7 @@ export default class step1 extends React.Component{
       transactionId : this.props.registrationData.transactionId,
       selectedAccountsType:details.accountType,
       registrationDate:details.registrationDate,
-      isOfficeBearer : isOFB,
-      isUpdate: false
+      isOfficeBearer : isOFB
           });
     //this.settingIdentity(details.identityType);
 
@@ -137,13 +137,18 @@ export default class step1 extends React.Component{
 
     }
     this.fetchSubChapterDetails()
+    let isVerifiedUser = _.find(this.props.emailDetails, {verified : true})
+    if(isVerifiedUser&&isVerifiedUser.verified){
+      this.setState({"emailVerified" : true})
+    }else if(!isVerifiedUser.verified){
+      this.setState({"emailVerified" : false})
+    }
 
   }
   optionsBySelectCountry(value, callback, label){
     this.setState({
       country: value,
-      countryCode: label.code,
-      isUpdate: true
+      countryCode: label.code
     })
   }
   optionsBySelectCluster(value){
@@ -246,12 +251,12 @@ export default class step1 extends React.Component{
 
   async updateregistrationInfo() {
     let ret = mlFieldValidations(this.refs)
-    let {countryCode, isUpdate} = this.state;
+    let {countryCode} = this.state;
     let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
     let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     if (ret) {
       toastr.error(ret);
-    } else if (isUpdate && !isValidPhoneNumber) {
+    } else if (countryCode && !isValidPhoneNumber) {
       toastr.error('Please enter a valid contact number');
     } else {
 
@@ -564,13 +569,14 @@ export default class step1 extends React.Component{
     console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     let countryOption = {options: { variables: {countryId:this.state.country}}};
-    let referedActive='',institutionAssociationActive=''
+    let referedActive='',institutionAssociationActive='',isVerified=''
     if(this.state.refered){
       referedActive='active'
     }
     if(this.state.institutionAssociation){
       institutionAssociationActive='active'
     }
+
     return (
 
       <div>
@@ -748,7 +754,7 @@ export default class step1 extends React.Component{
                      <div className="panel-body button-with-icon">
                      <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
                      <span className="btn-label"><FontAwesome name='key'/></span>Re Send OTP</button>
-                     <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
+                     <button type="button" className={`btn btn-labeled btn-success ${this.state.emailVerified?"post_verify":"pre_verify"}`} onClick={this.sendEmailVerification.bind(this)}>
                      <span className="btn-label"><span className="ml ml-email"></span></span>Re Send Email</button>
                     {/* <button type="button" className="btn btn-labeled btn-success" >
                      <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*/}

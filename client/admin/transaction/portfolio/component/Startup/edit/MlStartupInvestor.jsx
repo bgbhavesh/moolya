@@ -65,7 +65,7 @@ export default class MlStartupInvestor extends React.Component{
     }else{
       this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
     }
-    this.startupInvestorServer = response
+    this.startupInvestorServer = response && response.investor?response.investor:[]
   }
   addInvestor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -105,8 +105,8 @@ export default class MlStartupInvestor extends React.Component{
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.startupInvestorServer && this.startupInvestorServer[selIndex]?this.startupInvestorServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
     var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
     var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     _.each(keys, function (pf) {
@@ -368,5 +368,6 @@ export default class MlStartupInvestor extends React.Component{
   }
 }
 MlStartupInvestor.contextTypes = {
-  startupPortfolio: PropTypes.object
+  startupPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

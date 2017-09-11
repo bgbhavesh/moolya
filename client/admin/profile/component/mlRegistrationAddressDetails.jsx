@@ -9,7 +9,7 @@ import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'
 import gql from 'graphql-tag';
-
+import __ from "lodash";  // double underscore
 
 export default class AddressDetails extends React.Component{
   constructor(props){
@@ -56,7 +56,9 @@ export default class AddressDetails extends React.Component{
         addressCity : {$set: this.refs["addressCity"+index].value},
         addressState : {$set: this.refs["addressState"+index].value},
         addressCountry : {$set: this.refs["addressCountry"+index].value},
-        addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+        addressPinCode : {$set: this.refs["addressPinCode"+index].value},
+        latitude : {$set: this.refs["latitude"+index].value},
+        longitude : {$set: this.refs["longitude"+index].value}
       });
 
       let newData = update(this.state.addressDetails, {
@@ -85,8 +87,9 @@ export default class AddressDetails extends React.Component{
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
     if(response){
       this.setState({loading:false,addressDetails:response.addressInfo});
-      this.findRegistration();
-      this.props.registrationDetails();
+      // this.findRegistration();
+      // this.props.registrationDetails();
+      this.props.addressUpdated()
       this.setState({activeTab : "active"});
     }
   }
@@ -114,11 +117,12 @@ export default class AddressDetails extends React.Component{
         //this.props.getRegistrationContactInfo();
         if(!response.success){
           toastr.error(response.result);
-          this.findRegistration();
-          this.props.registrationDetails();
+          // this.findRegistration();
+          // this.props.registrationDetails();
+          this.props.addressUpdated()
         }else{
-          this.findRegistration();
-          this.props.registrationDetails();
+          // this.findRegistration();
+          // this.props.registrationDetails();
           this.refs["name"].value=""
           this.refs["phoneNumber"].value = "";
           this.refs["addressFlat"].value = "";
@@ -130,6 +134,9 @@ export default class AddressDetails extends React.Component{
           this.refs["addressCountry"].value = "";
           this.refs["addressPinCode"].value = "";
           this.setState({selectedValue : "",selectedAddressLabel : ""});
+
+          this.props.addressUpdated()
+          toastr.success("Saved Successfully")
         }
       }
   }
@@ -147,8 +154,9 @@ export default class AddressDetails extends React.Component{
       }
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
-        this.findRegistration();
-        this.props.registrationDetails();
+        this.props.addressUpdated()
+        // this.findRegistration();
+        // this.props.registrationDetails();
       }else{
         let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.addressDetails[index].addressTypeName;
         let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.addressDetails[index].addressType;
@@ -164,25 +172,37 @@ export default class AddressDetails extends React.Component{
           addressCity : {$set: this.refs["addressCity"+index].value},
           addressState : {$set: this.refs["addressState"+index].value},
           addressCountry : {$set: this.refs["addressCountry"+index].value},
-          addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+          addressPinCode : {$set: this.refs["addressPinCode"+index].value},
+          latitude : {$set: this.refs["latitude"+index].value},
+          longitude : {$set: this.refs["longitude"+index].value}
         });
 
         let newData = update(this.state.addressDetails, {
           $splice: [[index, 1, updatedComment]]
         });
-
-
+        newData = __.cloneDeep(newData);
+        let newArr = [];
+        _.each(newData, function (item) {
+          for (var propName in item) {
+            if (propName == "__typename") {
+              delete item[propName];
+            }
+          }
+          newArr.push(item)
+        })
+        newData = newArr
         const response = await updateContactDetails(newData,detailsType);
         if(response){
           if(!response.success){
             toastr.error(response.result);
+          }else{
+            toastr.success(response.result);
           }
-          this.findRegistration();
-          this.props.registrationDetails();
+          // this.findRegistration();
+          // this.props.registrationDetails();
+          this.props.addressUpdated()
         }
       }
-
-
     }
   }
   componentWillMount(){
@@ -192,8 +212,6 @@ export default class AddressDetails extends React.Component{
   async findRegistration(){
     const response = await getContactDetails();
     this.setState({loading:false,addressDetails:response.addressInfo});
-     //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
-    //return response;
   }
 
 
@@ -335,7 +353,15 @@ export default class AddressDetails extends React.Component{
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
-                           className="form-control float-label" id="" valueKey={options.addressPinCode}/>
+                           className="form-control float-label" id="" defaultValue={options.addressPinCode}/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref={'latitude' + key} placeholder="Latitude" name ={'latitude'}
+                           className="form-control float-label" id="" defaultValue={options.latitude}/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref={'longitude' + key} placeholder="Longitude" name ={'longitude'}
+                           className="form-control float-label" id="" defaultValue={options.longitude}/>
                   </div>
 
                   <div className="ml_icon_btn">

@@ -600,19 +600,42 @@ if (Meteor.isServer) {
                   "subMenusId" : "users_cluster",
                   "subMenuMappingId" : "users_library"
                 },
+                // {
+                //   "link": "/admin/users/history",
+                //   "name": "History",
+                //   "uniqueId": "users_History",
+                //   "isLink": true,
+                //   "isMenu": true,
+                //   "image": "",
+                //   "dynamicLink": true,
+                //   "dynamicLinkHandler": "",
+                //   "subMenusId": "users_cluster",
+                //   "subMenuMappingId": "users_History"
+                // }
+
+              ]
+            },
+
+            {
+              "link": "/admin/users/history",
+              "name": "History",
+              "uniqueId": "users_History",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "subMenu": [
                 {
-                  "link": "/admin/users/history",
-                  "name": "History",
-                  "uniqueId": "users_History",
+                  "link": "/admin/documents/history",
+                  "name": "List Clusters",
+                  "uniqueId": "users_HistoryList",
+                  "subMenuMappingId": "users_HistoryList",
+                  "subMenusId": "users_cluster",
+                  "dynamicLink" : true,
+                  "dynamicLinkHandler" : "",
                   "isLink": true,
                   "isMenu": true,
-                  "image": "",
-                  "dynamicLink": true,
-                  "dynamicLinkHandler": "",
-                  "subMenusId": "users_cluster",
-                  "subMenuMappingId": "users_History"
+                  "image": ""
                 }
-
               ]
             },
 

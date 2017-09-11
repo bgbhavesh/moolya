@@ -282,11 +282,14 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   if (args.registrationId) {
     var id = args.registrationId;
     response = MlRegistration.findOne({"_id": id});
+    var countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
+    let country = countryId ? mlDBController.findOne('MlCountries', {_id: countryId}, context) : {};
+    response.registrationInfo.countryCode = country ? country.countryCode : ""
     if (response && response.registrationInfo && response.registrationInfo.clusterId && response.registrationInfo.chapterId && response.registrationInfo.subChapterId) {
       return response;
     } else(response && response.registrationInfo && !response.registrationInfo.clusterId && !response.registrationInfo.chapterId && response.registrationInfo.subChapterId)
     {
-      let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
+      // let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
       let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
       let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context)
       let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context)

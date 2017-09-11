@@ -11,7 +11,7 @@ import  ContactDetails from './MlMyProfileContactDetails';
 import AddressDetails from './mlRegistrationAddressDetails'
 import EmailDetails from './mlRegistrationEmailDetails';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class Step3 extends React.Component{
 
@@ -25,15 +25,12 @@ export default class Step3 extends React.Component{
       registrationDetails:" ",
       clusterId : " "
     }
-    //this.getContents.bind(this);
-
     return this;
   }
     componentWillMount(){
       let res = getAdminUserContext();
       this.setState({clusterId:res.clusterId})
-      //this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
-      // this.setState({'registrationDetails':this.props.registrationData});
+
       const response = this.getContents();
       return response;
   }
@@ -60,73 +57,77 @@ export default class Step3 extends React.Component{
 
 
   }
-  /* componentWillReceiveProps(nextProps){
-   this.getRegistrationContactInfo();
-   }*/
-  async getRegistrationContactInfo(){
 
-   // const resp=this.props.getRegistrationContactDetails();
-   //this.setState({'registrationDetails':this.props.registrationData});
+  async getRegistrationContactInfo(){
     const resp = this.getContents();
     return resp;
   }
 
+  addressUpdated(){
+    this.setState({loading:true});
+    this.getContents();
+  }
+
   render(){
+    const showLoader=this.state.loading;
     return (
-<div className="admin_main_wrap">
+      <div className="admin_main_wrap">
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="admin_padding_wrap">
+            <h2>My Contact Details</h2>
+            <div className="col-lg-6 ">
+              <div className="form_bg left_wrap">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  {/*registrationDetails={this.getRegistrationContactDetails(this)}*/}
+                  <form>
+                    <div className="panel panel-default new_profile_tabs">
+                      <div className="panel-heading">
+                        Contact Numbers
+                      </div>
 
-    <h2>My Contact Details</h2>
-    <div className="col-lg-6 ">
-      <div className="form_bg left_wrap">
-      <ScrollArea
-        speed={0.8}
-        className="left_wrap"
-        smoothScrolling={true}
-        default={true}
-      >
-      {/*registrationDetails={this.getRegistrationContactDetails(this)}*/}
-          <form>
-            <div className="panel panel-default new_profile_tabs">
-              <div className="panel-heading">
-                Contact Numbers
+                      <ContactDetails registerId={this.state.registerId}
+                                      registrationInfo={this.state.registrationDetails}
+                                      clusterId={this.state.clusterId}/>
+                    </div>
+                    <div className="panel panel-default new_profile_tabs">
+                      <div className="panel-heading">
+                        Email Id
+                      </div>
+                      <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}
+                                    clusterId={this.state.clusterId}/>
+                    </div>
+                  </form>
+                </ScrollArea>
               </div>
-
-              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
             </div>
-            <div className="panel panel-default new_profile_tabs">
-              <div className="panel-heading">
-                Email Id
+            <div className="col-lg-6 ">
+              <div className="form_bg left_wrap">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <form>
+                    <div className="panel panel-default new_profile_tabs">
+                      <div className="panel-heading">
+                        Addresses
+                      </div>
+                      <AddressDetails registerId={this.state.registerId}
+                                      registrationInfo={this.state.registrationDetails} clusterId={this.state.clusterId}
+                                      addressUpdated={this.addressUpdated.bind(this)}/>
+                    </div>
+                  </form>
+                </ScrollArea>
               </div>
-              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
             </div>
-          </form>
-      </ScrollArea>
+          </div>)}
       </div>
-    </div>
-    <div className="col-lg-6 ">
-      <div className="form_bg left_wrap">
-      <ScrollArea
-        speed={0.8}
-        className="left_wrap"
-        smoothScrolling={true}
-        default={true}
-      >
-      <form>
-      <div className="panel panel-default new_profile_tabs">
-      <div className="panel-heading">
-      Addresses
-      </div>
-      <AddressDetails registerId={this.state.registerId}  registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
-  </div>
-    </form>
-      </ScrollArea>
-      </div>
-    </div>
-
-</div>
-
-
-
-  )
+    )
   }
 };

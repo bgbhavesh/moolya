@@ -162,7 +162,7 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"DEPARTMENT"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"SUBDEPARTMENT"}))._id, actions:readPermissions, isActive:true},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATES"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATE"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"ROLES"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"HIERARCHY"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:readPermissions, isActive:true},

@@ -42,6 +42,11 @@ export async function fetchPortfolioDetails() {
           portfolioId : _id
           communityType
           communityCode
+          portfolioImage
+          portfolioUserName
+          portfolioImage
+          transactionCreatedDate
+          transactionUpdatedDate
         }
       }
         `,
@@ -100,5 +105,5 @@ export async function findDefaultProfile() {
 export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)
   mlConversationUtils.getNotifications(cb)
-  //mlConversationUtils.ackNotification(cb)
+  //mlConversationUtils.ackNotification(payload, cb)
 }

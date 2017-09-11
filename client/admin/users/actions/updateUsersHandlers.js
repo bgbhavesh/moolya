@@ -48,3 +48,23 @@ export async function deActivateUserProfileByContextHandler(userProfiles) {
   const returnData = result.data.deActivateUserProfileByContext;
   return returnData;
 }
+
+export async function showOnMapActionHandler(userId, isShowOnMap) {
+  const result = await client.mutate({
+    mutation:gql`
+      mutation($userId: String, $isShowOnMap: Boolean){
+        updateUserShowOnMap(userId: $userId, isShowOnMap:$isShowOnMap){
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables:{
+      userId,
+      isShowOnMap
+    }
+  })
+  const resp = result.data.updateUserShowOnMap
+  return resp
+}

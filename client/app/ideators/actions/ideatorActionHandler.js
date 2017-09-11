@@ -43,6 +43,8 @@ export async function fetchIdeaActionHandler(portfolioId) {
                       fileUrl
                       fileName
                     }
+                    createdAt
+                    updatedAt
                 }
             }
         `,
@@ -148,6 +150,8 @@ export async function fetchPortfolioImageHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchPortfolioImage(portfoliodetailsId: $portfoliodetailsId) {
                   portfolioImage
+                  portfolioUserName
+                  communityType
             }
           }
       `,

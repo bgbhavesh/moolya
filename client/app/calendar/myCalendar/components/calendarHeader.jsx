@@ -4,14 +4,20 @@ import {getUserProfileActionHandler} from "../../manageScheduler/activity/action
 
 export default class MlCalendarHead extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    let profileId = FlowRouter.getQueryParam('profile');
     this.state = {
       profile: [],
       profilePic: "",
       displayName: "",
       profileDisplay: false,
       subMenu: false,
-      isAll: true
+      isAll: profileId ? false : true,
+      selectedProfileId: profileId ? profileId : ''
+    };
+    if(profileId){
+      let communityName = FlowRouter.getQueryParam("community");
+      props.headerManagement(profileId, communityName);
     }
     this.getUserProfiles.bind(this)
   }
@@ -32,12 +38,17 @@ export default class MlCalendarHead extends Component {
   }
 
   resetWithAll() {
+    FlowRouter.setQueryParams({
+      profile: null,
+      community: null
+    });
     this.setState({selectedProfileId: '', isAll: true});
     this.props.componentToLoad('calendar');
     this.props.getAllAppointments(true);
   }
 
   changeProfile(profileId, communityName){
+    FlowRouter.setQueryParams({profile:profileId, community: communityName});
     this.props.headerManagement(profileId, communityName);
     this.setState({selectedProfileId: profileId, isAll: false});
   };
@@ -63,7 +74,7 @@ export default class MlCalendarHead extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="#" onClick={()=>that.resetWithAll()}>
+            <a href="" onClick={()=>that.resetWithAll()}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}

@@ -32,12 +32,12 @@ export default class MlIdeatorRelatedIdeas extends React.Component {
     return (
       <div className="related_buttons">
         <ul>
-          {that.state.ideas.map(function (idea, idx) {
+          {(that.state.ideas && that.state.ideas.length > 0) ? that.state.ideas.map(function (idea, idx) {
             return (
               <li onClick={that.selectedIdea.bind(that, idea._id, idea.portfolioId)} key={idx}><a href=""><span
                 className="ml flaticon-ml-handshake"></span><br />{idea.title}</a></li>
             )
-          })}
+          }):<li style={{'width':'95%'}}><div className="notext">No Related Data Available</div></li> }
         </ul>
       </div>
     )

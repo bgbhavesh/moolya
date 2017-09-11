@@ -51,15 +51,16 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp= this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.intrapreneurRecognition)
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.intrapreneurRecognition) {
+      if (response && response.intrapreneurRecognition && response.intrapreneurRecognition.length>0) {
         this.setState({loading: false, institutionIntrapreneur: response.intrapreneurRecognition, institutionIntrapreneurList: response.intrapreneurRecognition});
       }else{
         this.setState({loading:false})
@@ -67,6 +68,7 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
     }else{
       this.setState({loading: false, institutionIntrapreneur: that.context.institutionPortfolio.intrapreneurRecognition, institutionIntrapreneurList: that.context.institutionPortfolio.intrapreneurRecognition});
     }
+    this.institutionIntrapreneurServer = response && response.intrapreneurRecognition?response.intrapreneurRecognition:[]
   }
   addIntrapreneur(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -88,14 +90,34 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen)});
-    setTimeout(function () {
+    this.setState({selectedIndex:index, data:details,
+                   selectedObject : index,
+                   popoverOpen : !(this.state.popoverOpen)},()=>{
+                        this.lockPrivateKeys(index)
+                  });
+    /*setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
   }
-
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionIntrapreneurServer && this.institutionIntrapreneurServer[selIndex] ? this.institutionIntrapreneurServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
   onLockChange(fiedName, field, e){
     var isPrivate = false
     let details = this.state.data||{};
@@ -109,9 +131,14 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+   /* var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
     this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })*/
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -381,4 +408,5 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
 }
 MlInstitutionEditIntrapreneur.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

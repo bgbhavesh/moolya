@@ -25,15 +25,14 @@ class MlEditLookingForType extends React.Component{
     const resp=this.findLookingForType();
     return resp;
   }
-  componentDidMount(){
-    /*if(this.state.data.isActive){
-     $('#status').prop('checked', true);
-     }*/
-  }
   componentDidUpdate()
   {
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
+  }
+  componentDidMount(){
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
   onCommunitySelect(val) {
     if(val){

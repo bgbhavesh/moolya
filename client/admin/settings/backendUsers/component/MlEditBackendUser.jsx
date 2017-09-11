@@ -79,7 +79,7 @@ class MlEditBackendUser extends React.Component{
   }
   componentDidMount(){
     setTimeout(function(){
-      initalizeFloatLabel();
+    initalizeFloatLabel();
     },1000);
   }
 

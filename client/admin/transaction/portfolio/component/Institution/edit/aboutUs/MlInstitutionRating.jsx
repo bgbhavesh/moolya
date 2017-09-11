@@ -80,7 +80,7 @@ export default class MlInstitutionRating extends React.Component{
     this.props.getInstitutionRating(data, this.state.privateKey);
   }
   render(){
-    let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:0);
+    let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:4);
     return (
     <div className="requested_input">
       <div className="col-lg-12">

@@ -103,7 +103,7 @@ export default class MlCompanyViewManagement extends React.Component {
       this.setState({managementList: response.management});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 

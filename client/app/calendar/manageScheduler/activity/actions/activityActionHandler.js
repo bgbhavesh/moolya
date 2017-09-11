@@ -151,6 +151,10 @@ export async function fetchActivitiesActionHandler (profileId) {
         displayName
         profileId
         imageLink
+        isInternal
+        isExternal
+        isServiceCardEligible
+        isActive
         mode
         _id
         duration {
@@ -164,6 +168,9 @@ export async function fetchActivitiesActionHandler (profileId) {
             userId
             profileId
           }
+        }
+        payment{
+          derivedAmount
         }
       }
     }

@@ -34,8 +34,8 @@ let registrationSchema = `
         addressCountry : String
         addressCountryId : String
         addressPinCode : String
-        latitude        :  Int
-        longitude       :  Int
+        latitude        :  Float
+        longitude       :  Float
         isDefaultAddress:Boolean
      }
      
@@ -103,8 +103,8 @@ let registrationSchema = `
       addressCountry : String
       addressCountryId : String
       addressPinCode : String
-      latitude        :  Int
-      longitude       :  Int
+      latitude        :  Float
+      longitude       :  Float
       isDefaultAddress:Boolean
     }
     
@@ -218,6 +218,7 @@ let registrationSchema = `
          firstName : String
          profileImage : String
          headerCommunityDisplay : String
+         isShowOnMap : Boolean
     }
     
    

@@ -728,6 +728,8 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
           if(idea){
+            idea.createdAt = portfolio?portfolio.createdAt:null;
+            idea.updatedAt = portfolio?portfolio.transactionUpdatedDate:null;
             ideas.push(idea);
           }
     })
@@ -741,9 +743,7 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) => {
   if(_.isEmpty(args))
       return;
-
   var key = args.key;
-  var portfoliodetailsId = args.portfoliodetailsId
   var ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
   if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty(key)) {
     var object = ideatorPortfolio[key];
@@ -762,7 +762,7 @@ MlResolver.MlQueryResolver['validateUserForAnnotation'] = (obj, args, context, i
         if(portfolio.userId == context.userId){
           return true;
         }
-        if(user.profile.isInternaluser){
+        if(user && user.profile &&user.profile.isInternaluser){
           return true;
         }
         return false;

@@ -34,10 +34,15 @@ class MlAppMyProfile extends Component {
     this.findUserDetails.bind(this);
     this.onfoundationDateSelection.bind(this);
   }
+  componentDidMount() {
+  setTimeout(function(){
+  $('.float-label').jvFloat();
+  },1000);
+}
   componentDidUpdate() {
-    $(function () {
+    /*$(function () {
       $('.float-label').jvFloat();
-    });
+    });*/
     // this.initializeSwiper();
   }
   // componentDidUpdate(){
@@ -65,7 +70,7 @@ class MlAppMyProfile extends Component {
         userDetails: response,
         firstName:response.profile.firstName,
         lastName:response.profile.lastName,
-        displayName:response.profile.firstName+" "+response.profile.lastName,
+        displayName:response.profile.email,
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,

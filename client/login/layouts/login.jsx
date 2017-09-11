@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
+import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 
 MlLoginLayout = React.createClass({
   render(){
@@ -36,7 +37,11 @@ MlLoginContent = React.createClass({
         // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
     }
   },
-
+  componentDidMount() {
+    var WinHeight = $(window).height();
+    $('.login_bg').height(WinHeight);
+    initalizeFloatLabel();
+  },
   onValueChange(event){
     if (event.target.name == 'userName')
       this.setState(Object.assign({userNameErr: ""}))
@@ -54,11 +59,11 @@ MlLoginContent = React.createClass({
       <div>
         <div>
           <div className="login_bg" style={{textAlign: "center"}}>
-            <video poster="" id="bgvid" autoPlay muted loop playsInline>
+            {/*<video poster="" id="bgvid" autoPlay muted loop playsInline>
               <source src="/images/bg_video.mp4"/>
-            </video>
+            </video>*/}
             <div className="video_bg"></div>
-            <img className="logo" src="/images/moolya_logo.png"/>
+            <img className="logo" src="/images/login_logo.png"/>
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>
             </div>
@@ -66,10 +71,10 @@ MlLoginContent = React.createClass({
               <div className="login_block login_block_in">
                 <form className="form-signin" onChange={this.onValueChange} onKeyPress={this.handleKeyPress}>
                   <span ref="userName">{this.state.userNameErr}</span>
-                  <input name="userName" ref="username" type="text" className="form-control" placeholder="Email"
+                  <input name="userName" ref="username" type="text" className="form-control float-label" placeholder="Email"
                          required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
                   <span ref="Password">{this.state.passwordErr}</span>
-                  <input name="Password" ref="password" type="password" className="form-control"
+                  <input name="Password" ref="password" type="password" className="form-control float-label"
                          placeholder="Password" required defaultValue={this.state.password}
                          onBlur={this.validationCheck}/>
 
@@ -79,6 +84,9 @@ MlLoginContent = React.createClass({
                   <p><a href="/forgot-password">Forgot Password</a> | <a href="https://www.moolya.in/register">Register</a></p>
                 </form>
               </div>
+            </div>
+            <div className="app_msg">
+              <p>‘<span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> is best experienced in the following resolutions: 1920 x 1080 and 1280 x 720 on the following browsers: Google Chrome, MS Edge, Mozilla Firefox and Safari.</p>
             </div>
           </div>
         </div>

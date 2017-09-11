@@ -73,9 +73,26 @@ export default class Calender extends Component {
     }
   }
 
-  dateHeader(data){
+  dateHeader(data) {
+    let today = new Date();
+    today.setHours(0,0,0,0);
+    let calDate = new Date(this.state.date);
+    calDate.setHours(0,0,0,0);
+    let dayDate = new Date(data.date);
+    dayDate.setHours(0,0,0,0);
     let event = this.props.dateHeaderEvent ? this.props.dateHeaderEvent.bind(this, data.date) : data.onDrillDown;
-    return <a href="" onClick={(evt)  => event(evt)}>{data.label}</a>;
+    return (
+      <a ref={(node) => {
+        if (node) {
+          if(today.getTime() === dayDate.getTime() ){
+            node.style.setProperty("color", "#EF4647", "important");
+          } else if(calDate.getMonth() !== dayDate.getMonth() ) {
+            node.style.setProperty("color", "#B9C5CC", "important");
+          }
+
+        }}} href="" onClick={(evt)  => event(evt)}>
+        {data.label}
+      </a>);
   }
 
   onNavigate(date){

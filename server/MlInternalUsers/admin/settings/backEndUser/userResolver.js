@@ -533,6 +533,10 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 }
 
 //todo://generic way of checking platform admin
+/**
+ * Users left Nav
+ * @Note: "updateUserShowOnMap" both have to be merged
+ * */
 MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {
   // MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
   var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);
@@ -1196,37 +1200,71 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
         contactTypes.push(args.addressBook.contactInfo[0]);
       id = mlDBController.update('users', context.userId, {"profile.contactInfo": contactTypes}, {$set: true}, context)
     } else if (args.type == "ADDRESSTYPE") {
-        let addressTypes = []
+        var addressTypes = [];
         addressTypes = user.profile.addressInfo?user.profile.addressInfo:[];
 
-        // Fetching Lat Lng from Address
-        let city = args.addressBook.addressInfo[0].addressCity
-        let area = args.addressBook.addressInfo[0].addressArea
-        let locality = args.addressBook.addressInfo[0].addressLocality
-        let pin =args.addressBook.addressInfo[0].addressPinCode
-        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
-          if(err){
-            throw new Error("Invalid Locality selection "+e);
-          }
-          args.addressBook.addressInfo[0].latitude = data.results[0].geometry.location.lat;
-          args.addressBook.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+        if(args.addressBook.addressInfo.length==1 && !args.addressBook.addressInfo[0].latitude || args.addressBook.addressInfo[0].latitude == null || args.addressBook.addressInfo[0].latitude == undefined){
+            // Fetching Lat Lng from Address
+            let city = args.addressBook.addressInfo[0].addressCity
+            let area = args.addressBook.addressInfo[0].addressArea
+            let locality = args.addressBook.addressInfo[0].addressLocality
+            let pin =args.addressBook.addressInfo[0].addressPinCode
+            geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+                if(err){
+                    throw new Error("Invalid Locality selection "+e);
+                }
+                if(data.results.length==0){
+                    throw new Error("Invalid Locality selection");
+                }
+                args.addressBook.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+                args.addressBook.addressInfo[0].longitude = data.results[0].geometry.location.lng;
 
-          try{
-            // let id = MlClusters.insert(cluster);
-            addressTypes.push(args.addressBook.addressInfo[0]);
-            let id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+                try{
+                    addressTypes.push(args.addressBook.addressInfo[0]);
+                    id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
 
-            if(id){
-              let code = 200;
-              let result = {addressId: id}
-              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              return response
+                    if(id){
+                      let code = 200;
+                      let result = {addressId: id}
+                      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                      return response
+                    }
+                }catch(e){
+                    throw new Error("Error while updating address "+e);
+                }
+
+            }),{key:Meteor.settings.private.googleApiKey});
+
+        }else{
+            for(let i=0;i<args.addressBook.addressInfo.length;i++){
+                // Finding selected address type object from Address array
+                var selectedAddressIndex = null;
+                var selectedAddress = _.find(addressTypes, function (obj, index) {
+                    if(obj.addressTypeName == args.addressBook.addressInfo[i].addressTypeName){
+                        selectedAddressIndex = index;
+                        return obj
+                    }
+                })
+                if(!selectedAddress){
+                    addressTypes.push(args.addressBook.addressInfo[i]);
+                }else{
+                    addressTypes.splice(selectedAddressIndex, 1);
+                    addressTypes.splice(selectedAddressIndex, 0, args.addressBook.addressInfo[i]);
+                }
             }
-          }catch(e){
-            throw new Error("Error while updating address "+e);
-          }
+            try{
+                id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
 
-        }),{key:Meteor.settings.private.googleApiKey});
+                if(id){
+                  let code = 200;
+                  let result = {addressId: id}
+                  let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                  return response
+                }
+            }catch(e){
+                throw new Error("Error while updating address "+e);
+            }
+        }
 
     } else if (args.type == "EMAILTYPE") {
         let emailTypes = []

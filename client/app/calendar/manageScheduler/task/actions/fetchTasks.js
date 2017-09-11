@@ -12,6 +12,18 @@ export async function fetchTasksActionHandler (profileId) {
         taskId : _id
         displayName
         profileId
+        noOfSession
+        duration {
+          hours
+          minutes
+        }
+        payment{
+          derivedAmount
+        }
+        isActive
+        isServiceCardEligible
+        isInternal
+        isExternal
       }
     }
     `,

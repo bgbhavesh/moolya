@@ -31,10 +31,15 @@ export default class MlInstitutionViewChart extends React.Component{
   }
 
   componentWillMount(){
-    this.fetchPortfolioInstitutionChartDetails();
+    const resp = this.fetchPortfolioInstitutionChartDetails();
+    return resp
+  }
+
+  componentDidUpdate(){
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
@@ -304,7 +309,7 @@ export default class MlInstitutionViewChart extends React.Component{
         },
         {
           field:"Liablity",
-          name:"Liablity"
+          name:"Liability"
         }
       ],
       prlX = function(d) {
@@ -316,7 +321,7 @@ export default class MlInstitutionViewChart extends React.Component{
 
       xScale = 'ordinal',
       yTicks = [1, "%"],
-      prlXLabel = "Profit, Revenue & Liablity",
+      prlXLabel = "Profit, Revenue & Liability",
       prlYLabel = "Value",
 
       reviewTitle = "Review of Company",

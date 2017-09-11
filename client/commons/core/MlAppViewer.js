@@ -26,6 +26,7 @@ const MlAppViewer = class {
     this.header = options.header;
     this.headerComponents = options.headerComponents;
     this.perPageLimit = options.perPageLimit;
+    this.isApp = true;
   }
 };
 

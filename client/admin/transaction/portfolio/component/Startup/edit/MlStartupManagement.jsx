@@ -64,13 +64,12 @@ export default class MlStartupManagement extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
 
+    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
-    }
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -207,7 +206,7 @@ export default class MlStartupManagement extends React.Component{
         this.fetchOnlyImages()
 
       }else{
-        this.setState({lodaing:false})
+        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
@@ -339,7 +338,7 @@ export default class MlStartupManagement extends React.Component{
         {showLoader === true ? (<MlLoader/>) : (
           <div>
             <h2>Management</h2>
-            <div className="tab_wrap_scroll">
+            <div className="main_wrap_scroll">
 
               <div className="col-lg-12">
                 <div className="row">
@@ -354,8 +353,8 @@ export default class MlStartupManagement extends React.Component{
                   {managementArr.map(function (user, index) {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
-                        <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"}/></div>
+                        <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
+                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"} className="p_image"/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>

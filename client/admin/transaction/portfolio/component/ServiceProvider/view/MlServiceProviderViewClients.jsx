@@ -24,8 +24,10 @@ export default class MlServiceProviderViewClients extends React.Component {
 
   componentDidMount() {
     //this.initalizeAnnotaor()
+    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    // $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.'+className).outerHeight(true)));
 
     $("#show").click(function(){
       $("#details-div").show();
@@ -181,103 +183,64 @@ export default class MlServiceProviderViewClients extends React.Component {
     let clientsArray = that.state.serviceProviderClientsList || [];
 
     return (
-/*
-      <div id="annotatorContent">
-        <h2>Clients</h2>
-        <div className="col-lg-12" >
-          <div className="row">
-            {clientsArray && clientsArray.map(function (details, idx) {
-              return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
-                  <h3>
-                    {details.companyName&&details.companyName} <br />
-                  </h3>
-                </div>
-              </div>)
-            })}
-          </div>
-        </div>
-      </div>*/
-
-      <div className="app_main_wrap" id="annotatorContent">
-        <div className="app_padding_wrap">
-         <div className="col-lg-12" id="show">
-            <div className="row">
-              {clientsArray && clientsArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-4 col-sm-4"  key={idx} onClick={that.onChangeIndex.bind(that)}>
-                  <div className="list_block">
-                    <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
-                    <h3>{details.companyName&&details.companyName}</h3>
-                  </div>
-                </div>)
-              })}
-            </div>
-          </div>
-          <div id="details-div" style={{display:'none'}}>
-            <div className="col-lg-12">
+      <div className="" id="annotatorContent">
+        <div className="main_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="main_wrap_scroll"
+            smoothScrolling={true}
+            default={true}>
+          <div className="">
+           <div className="col-lg-12" id="show">
               <div className="row">
-                <div className="top_block_scroller" id="centered">
-                  <ul className="topscroll_listblock">
-               {/*     <li>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/client_13.png"/></div>
-                        <h3>Zoom</h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/client_14.png"/></div>
-                        <h3>Flipkart</h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/client_15.png"/></div>
-                        <h3>Moolya</h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/client_08.png"/></div>
-                        <h3>Pizza hut</h3>
-                      </div>
-                    </li>*/}
-                    {clientsArray && clientsArray.map(function (details, idx) {
-                      let description = details.clientDescription?details.clientDescription:""
-                      let index = details.index?details.index:""
-                      return(<li key={idx}>
-                        <div className="list_block list_block_intrests notrans" onClick={that.onChangeAbout.bind(that,description,idx)}>
-                          <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
-                          <h3>{details.companyName&&details.companyName}</h3>
-                        </div>
-                      </li>)
-                    })}
-
-                  </ul>
-                </div>
+                {clientsArray && clientsArray.map(function (details, idx) {
+                  return(<div className="col-lg-2 col-md-4 col-sm-4"  key={idx} onClick={that.onChangeIndex.bind(that)}>
+                    <div className="list_block">
+                      <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
+                      <h3>{details.companyName&&details.companyName}</h3>
+                    </div>
+                  </div>)
+                })}
               </div>
             </div>
-            <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll"smoothScrolling={true} default={true} >
+              <div id="details-div" style={{display:'none'}}>
                 <div className="col-lg-12">
                   <div className="row">
-                    <div className="investement-view-content">
-                      <div className="panel panel-default panel-form-view">
-                        <div className="panel-body">
-                          <p>{that.state.selectedAbout?that.state.selectedAbout:""}</p>
-                        </div>
-                      </div>
+                    <div className="top_block_scroller" id="centered">
+                      <ul className="topscroll_listblock">
+                        {clientsArray && clientsArray.map(function (details, idx) {
+                          let description = details.clientDescription?details.clientDescription:""
+                          let index = details.index?details.index:""
+                          return(<li key={idx}>
+                            <div className="list_block list_block_intrests notrans" onClick={that.onChangeAbout.bind(that,description,idx)}>
+                              <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
+                              <h3>{details.companyName&&details.companyName}</h3>
+                            </div>
+                          </li>)
+                        })}
+
+                      </ul>
                     </div>
                   </div>
                 </div>
-              </ScrollArea>
-            </div>
+                <div className="">
+                    <div className="col-lg-12">
+                      <div className="row">
+                        <div className="investement-view-content">
+                          <div className="panel panel-default panel-form-view">
+                            <div className="panel-body">
+                              <p>{that.state.selectedAbout?that.state.selectedAbout:""}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <br className="brclear"/>
           </div>
-
-
-          <br className="brclear"/>
-        </div>
+            </ScrollArea>
+          </div>
       </div>
     )
   }

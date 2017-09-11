@@ -16,6 +16,7 @@ import _ from 'lodash'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
 import {findClusterTypeActionHandler} from '../../../cluster/actions/findCluster'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 var diff = require('deep-diff').diff;
 
 export default class AddressDetails extends React.Component{
@@ -48,6 +49,9 @@ export default class AddressDetails extends React.Component{
     return this;
   }
 
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
 
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});
@@ -598,13 +602,13 @@ export default class AddressDetails extends React.Component{
                            placeholder="Colony/Street/Locality" className="form-control float-label" id=""
                            defaultValue={options.addressLocality} data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                   </div>
-                  <div className="form-group mandatory">
+                  <div className="form-group">
                     <input type="text" ref={'addressLandmark' + key} placeholder="Landmark" name ={'addressLandmark'}
-                           className="form-control float-label" id="" defaultValue={options.addressLandmark} data-required={true} data-errMsg="Landmark is required"/>
+                           className="form-control float-label" id="" defaultValue={options.addressLandmark}/>
                   </div>
-                  <div className="form-group mandatory">
+                  <div className="form-group">
                     <input type="text" ref={'addressArea' + key} placeholder="Area" name ={'addressArea'}
-                           className="form-control float-label" id="" defaultValue={options.addressArea} data-required={true} data-errMsg="Area is required"/>
+                           className="form-control float-label" id="" defaultValue={options.addressArea}/>
                   </div>
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}

@@ -72,7 +72,7 @@ export default class MlCompanyRating extends React.Component{
     this.props.getRating(data, this.state.privateKey)
   }
   render(){
-    let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:0);
+    let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:4);
     return (
     <div className="requested_input">
       <div className="col-lg-12">
@@ -81,7 +81,7 @@ export default class MlCompanyRating extends React.Component{
           <div className="panel panel-default panel-form">
             <div className="panel-body">
               <div className="form-group nomargin-bottom">
-                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "isRatingPrivate")}/>
+                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "rating", "isRatingPrivate")}/>
                 <div className="star_ratings">
                   <Rating
                     empty="fa fa-star-o empty"

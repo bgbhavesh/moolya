@@ -24,7 +24,9 @@ const MlAppViewer = class {
     this.graphQlQuery = options.graphQlQuery;
     this.queryOptions=options.queryOptions;
     this.header = options.header;
+    this.headerComponents = options.headerComponents;
     this.perPageLimit = options.perPageLimit;
+    this.isApp = true;
   }
 };
 

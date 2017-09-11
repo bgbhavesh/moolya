@@ -52,7 +52,7 @@ class MlResourceConfigRepo{
         }
         resourceConfig['resourceCode'] = resourceCode
         resourceConfig["isActive"] = true
-        MlResourceConfig.update({resourceCode:resourceCode}, {$set:resourceConfig}, {upsert:true})
+        MlResourceConfig.update({resourceCode:resourceCode, "community.communityCode":communityCode}, {$set:resourceConfig}, {upsert:true})
       }
     })
   }

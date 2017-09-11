@@ -2,20 +2,22 @@
  * Created by kanwarjeet on 9/8/17.
  */
 
-async function findPortFolioDetails(idPortFolio,pathName) {
+async function findPortFolioDetails(idPortFolio, pathName) {
+
+  //Default Values
   let portFolio = {
     profilePic: '',
     firstName: '',
     clusterName: '',
     chapterName: '',
     listView: [],
-    pathName:pathName,
-    aboutDiscription:'',
+    pathName: pathName,
+    aboutDiscription: '',
     management: [],
-    lookingForDescription:''
+    lookingForDescription: ''
 
   }
-  if(!idPortFolio){
+  if (!idPortFolio) {
     return portFolio
   }
   let query = {
@@ -23,7 +25,7 @@ async function findPortFolioDetails(idPortFolio,pathName) {
   }
   let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
 
-                                                        // Store portfolio information.
+  // Store portfolio information.
   if (resultParentPortFolio) {
     portFolio.clusterName = resultParentPortFolio.clusterName
     portFolio.chapterName = resultParentPortFolio.chapterName
@@ -35,26 +37,39 @@ async function findPortFolioDetails(idPortFolio,pathName) {
     'portfolioDetailsId': idPortFolio
   }
 
-  let dynamicLinks = {
-    'About': '/about?id=' + idPortFolio + '',
-    'Awards': '/awards?id=' + idPortFolio + '',
-    'Looking_For': '/looking_for?id=' + idPortFolio + '',
-    'Social_Links': '/social_links?id=' + idPortFolio + '',
-    'Keywords': '' +
-    '/keywords?id=' + idPortFolio + '',
-    'Branches': '/branches?id=' + idPortFolio + '',
-    'Management': '/management?id=' + idPortFolio + ''
 
-  }
 
-  let defaultListView = [{name: 'About', link: dynamicLinks.About,}, {name: 'Management', link: dynamicLinks.Management}, {name: 'Branches', link: dynamicLinks.Branches}, {name: 'Looking For', link: dynamicLinks.Looking_For}, {name: 'Social Links', link: dynamicLinks.Social_Links}, {name: 'Keywords', link: dynamicLinks.Keywords}];
+  const dynamicLinks = getDynamicLinks(idPortFolio);
+  let defaultListMenu = getDefaultMenu(dynamicLinks);
+
   let dynamicListMenu = {
-    'IDE': [{'name': 'About', 'link': dynamicLinks.About}, {name: 'Awards', link: dynamicLinks.Awards}, {name: 'Looking For', link: dynamicLinks.Looking_For  }, {name: 'Social Links', link: dynamicLinks.Social_Links}, {name: 'Keywords', link: dynamicLinks.Keywords}],
-    'STU': defaultListView,
-    'FUN': [{name: 'About', link: dynamicLinks.About}, {name: 'Management', link: dynamicLinks.Management}, {name: 'Branches',      link:  dynamicLinks.Branches   }, {name: 'Awards', link: dynamicLinks.Awards}, {name: 'Looking For', link: dynamicLinks.Looking_For}, {name: 'Social Links', link: dynamicLinks.Social_Links}, {name: 'Keywords', link: dynamicLinks.Keywords}],
-    'SPS': [{name: 'About', link: dynamicLinks.About}, {name: 'Management', link: dynamicLinks.Management}, {name: 'Branches', link:  dynamicLinks.Branches   }, {name: 'Looking For', link: dynamicLinks.Looking_For}, {name: 'Social Links', link: dynamicLinks.Social_Links}],
-    'CMP': defaultListView,
-    'INS': defaultListView
+    'IDE': [
+            {name: 'About', link: dynamicLinks.About},
+            {name: 'Awards', 'link': dynamicLinks.Awards},
+            {name: 'Looking For', link: dynamicLinks.Looking_For},
+            {name: 'Social Links', link: dynamicLinks.Social_Links},
+            {name: 'Keywords', link: dynamicLinks.Keywords}
+          ],
+    'STU': defaultListMenu,
+    'FUN': [
+      {name: 'About', link: dynamicLinks.About},
+      { name: 'Management', link: dynamicLinks.Management},
+      {name: 'Branches', link: dynamicLinks.Branches},
+      {name: 'Awards', link: dynamicLinks.Awards    },
+      {name: 'Looking For', link: dynamicLinks.Looking_For},
+      {name: 'Social Links', link: dynamicLinks.Social_Links},
+      {name: 'Keywords', link: dynamicLinks.Keywords}
+      ],
+
+    'SPS': [
+      {name: 'About', link: dynamicLinks.About},
+      {name: 'Management', link: dynamicLinks.Management},
+      {name: 'Branches', link: dynamicLinks.Branches},
+      {name: 'Looking For', link: dynamicLinks.Looking_For},
+      {name: 'Social Links', link: dynamicLinks.Social_Links}
+      ],
+    'CMP': defaultListMenu,
+    'INS': defaultListMenu
   }
   let communityCode = ''
   if (resultParentPortFolio) {
@@ -95,144 +110,176 @@ async function findPortFolioDetails(idPortFolio,pathName) {
   }
 }
 
-async function IDE(portFolio, query) {
-
-  let resultIdeatorPortfolio = await mlDBController.findOne('MlIdeatorPortfolio', query)
-  if (resultIdeatorPortfolio) {
-    portFolio.communityType = resultIdeatorPortfolio.communityType.replace(/s$/, ''); // Replacing trailing 's'
-    let portfolioIdeatorDetails = resultIdeatorPortfolio.portfolioIdeatorDetails;
+// Ideator Portfolio
+function IDE(portFolio, query) {
+  let resultIDEPortfolio = getResultPortFolio('MlIdeatorPortfolio', query);
+  if (resultIDEPortfolio) {
+    portFolio.communityType = getCommunityType(resultIDEPortfolio) // Replacing trailing 's'
+    let portfolioIdeatorDetails = resultIDEPortfolio.portfolioIdeatorDetails;
     if (portfolioIdeatorDetails) {
-      profileInfo(portFolio, portfolioIdeatorDetails)
+      getProfileInfo(portFolio, portfolioIdeatorDetails)
     }
-    portFolio.aboutDiscription = resultIdeatorPortfolio.ideatorabout ? resultIdeatorPortfolio.ideatorabout.description : '';
-    portFolio.lookingForDescription = resultIdeatorPortfolio.lookingFor ? resultIdeatorPortfolio.lookingFor.lookingForDescription :'';
+    portFolio.aboutDiscription = resultIDEPortfolio.ideatorabout ? resultIDEPortfolio.ideatorabout.description : '';
+    //Get LookingFor Description
+    getLookingForDescription(portFolio, resultIDEPortfolio);
     return portFolio
   }
 }
-
-async function STU(portFolio, query) {
-  let resultStartUpPortFolio = await mlDBController.findOne('MlStartupPortfolio', query)
+// StartUp Portfolio
+function STU(portFolio, query) {
+  let resultStartUpPortFolio = getResultPortFolio('MlStartupPortfolio', query);
   if (resultStartUpPortFolio) {
-    portFolio.communityType = resultStartUpPortFolio.communityType.replace(/s$/, ''); // Replacing trailing 's'
+    portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs
       portFolio.firstName = aboutUs.title ? aboutUs.title : '_________';
-      portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl:''
+      portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.description
     }
-    let managementPortFolio = []
-    let managementStartup = resultStartUpPortFolio.management
-    if(managementStartup){
-      managementStartup.forEach(function (management) {
-        managementPortFolio.push({
-          logo:management.logo ? management.logo.fileUrl : '',
-          firstName: management.firstName,
-          lastName:management.lastName,
-          designation:management.designation
-        })
-      })
-
-    }
-
-    portFolio.management = managementPortFolio
-    portFolio.lookingForDescription = resultStartUpPortFolio.lookingFor ? resultStartUpPortFolio.lookingFor[0].lookingDescription :''
-    return portFolio
+    getManagementInfo(portFolio, resultStartUpPortFolio);
+    getLookingForDescription(portFolio, resultStartUpPortFolio);
   }
+  return portFolio;
 }
 
-
-async function FUN(portFolio, query) {
-  let resultFunderPortfolio = await mlDBController.findOne('MlFunderPortfolio', query)
+// Funder/Investor Portfolio
+function FUN(portFolio, query) {
+  let resultFunderPortfolio = getResultPortFolio('MlFunderPortfolio', query);
   if (resultFunderPortfolio) {
-    portFolio.communityType = resultFunderPortfolio.communityType.replace(/s$/, ''); // Replacing trailing 's'
+    portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
     if (resultFunderPortfolio.funderAbout) {
-      profileInfo(portFolio, resultFunderPortfolio.funderAbout);
-      portFolio.aboutDiscription = resultFunderPortfolio.successStories ? resultFunderPortfolio.successStories.description : ''
+      getProfileInfo(portFolio, resultFunderPortfolio.funderAbout);
+
     }
-    return portFolio
+    portFolio.aboutDiscription = resultFunderPortfolio.successStories ? resultFunderPortfolio.successStories.description : ''
+    getLookingForDescription(portFolio, resultFunderPortfolio);
   }
+  return portFolio
 }
 
-async function ServiceProviderPortFolio(portFolio, query) {
-  let resultServicePortFolio = await mlDBController.findOne('MlServiceProviderPortfolio', query)
+// ServiceProvider Portfolio
+function ServiceProviderPortFolio(portFolio, query) {
+  let resultServicePortFolio = getResultPortFolio('MlServiceProviderPortfolio', query);
   if (resultServicePortFolio) {
-    portFolio.communityType = resultServicePortFolio.communityType.replace(/s$/, ''); // Replacing trailing 's'
+    portFolio.communityType = getCommunityType(resultServicePortFolio)// Replacing trailing 's'
+
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about
       portFolio.firstName = aboutUs.title ? aboutUs.title : '_______'
       portFolio.profilePic = aboutUs.aboutImages ? aboutUs.aboutImages[0].fileUrl : '_______';
       portFolio.aboutDiscription = aboutUs.aboutDescription;
+
     }
-    return portFolio
+    getLookingForDescription(portFolio, resultServicePortFolio);
   }
+  return portFolio;
 }
 
-async function CMP(portFolio, query) {
-  let resultCompanyPortFolio = await mlDBController.findOne('MlCompanyPortfolio', query)
+//Company PortFolio
+function CMP(portFolio, query) {
+  let resultCompanyPortFolio = getResultPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
-    portFolio.communityType = resultCompanyPortFolio.communityType
+    portFolio.communityType = resultCompanyPortFolio.communityType;
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.firstName = aboutUs.title ? aboutUs.title : '__________'
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
-
-    let managementPortFolio = []
-    let managementCompany = resultCompanyPortFolio.management;
-    if(managementCompany){
-      managementCompany.forEach(function (management) {
-        managementPortFolio.push({
-          logo:management.logo ? management.logo.fileUrl : '',
-          firstName: management.firstName,
-          lastName:management.lastName,
-          designation:management.designation
-        })
-      })
-
-    }
-    portFolio.management = managementPortFolio
-    return portFolio
+    getManagementInfo(portFolio, resultCompanyPortFolio);
+    getLookingForDescription(portFolio, resultCompanyPortFolio);
   }
+  return portFolio
 }
 
+//Institution PortFolio
+function INS(portFolio, query) {
 
-async function INS(portFolio, query) {
-  let resultServicePortFolio = await mlDBController.findOne('MlInstitutionPortfolio', query)
-  if (resultServicePortFolio) {
-    portFolio.communityType = resultServicePortFolio.communityType.replace(/s$/, ''); // Replacing trailing 's'
-    if (resultServicePortFolio.aboutUs) {
-      let aboutUs = resultServicePortFolio.aboutUs
+  let resultINSPortFolio = getResultPortFolio('MlInstitutionPortfolio', query);
+  if (resultINSPortFolio) {
+    portFolio.communityType = getCommunityType(resultINSPortFolio)
+    if (resultINSPortFolio.aboutUs) {
+      let aboutUs = resultINSPortFolio.aboutUs
       portFolio.firstName = aboutUs.title ? aboutUs.title : '____________'
-      portFolio.profilePic = aboutUs.logo ?aboutUs.logo[0].fileUrl:''
+      portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
-    let managementPortFolio = []
-    let managementInstitution = resultServicePortFolio.management;
-    if(managementInstitution){
-      managementInstitution.forEach(function (management) {
-        managementPortFolio.push({
-          logo:management.logo ? management.logo.fileUrl : '',
-          firstName: management.firstName,
-          lastName:management.lastName,
-          designation:management.designation
-        })
-      })
 
-    }
-
-    portFolio.management = managementPortFolio
-    portFolio.lookingForDescription = resultServicePortFolio.lookingFor ? resultServicePortFolio.lookingFor[0].lookingDescription :'';
-
-    return portFolio
+    getManagementInfo(portFolio, resultINSPortFolio);
+    getLookingForDescription(portFolio, resultINSPortFolio);
   }
+  return portFolio
 }
 
-function profileInfo(portFolio, portFolioProfileInfo) {
+function getProfileInfo(portFolio, portFolioProfileInfo) {
   portFolio.firstName = portFolioProfileInfo.firstName;
   portFolio.lastName = portFolioProfileInfo.lastName;
   portFolio.profilePic = portFolioProfileInfo.profilePic;
   return portFolio;
+}
+
+
+function getLookingForDescription(portFolio, resultPortFolioDescription) {
+  portFolio.lookingForDescription = resultPortFolioDescription.lookingFor ? resultPortFolioDescription.lookingFor[0].lookingDescription : '';
+  return portFolio
+}
+
+function getManagementInfo(portFolio, managementInfo) {
+  let managementPortFolio = []
+  let managementInstitution = managementInfo.management;
+  if (managementInstitution) {
+    managementInstitution.forEach(function (management) {
+      managementPortFolio.push({
+        logo: management.logo ? management.logo.fileUrl : '',
+        firstName: management.firstName,
+        lastName: management.lastName,
+        designation: management.designation
+      })
+    })
+
+  }
+  portFolio.management = managementPortFolio
+  return portFolio;
+}
+
+function getCommunityType(resultPortfolio) {
+  let communityType = resultPortfolio.communityType;
+  return communityType.replace(/s$/, '');  // Replacing trailing 's'
+}
+
+
+async function getResultPortFolio(collectionName, query) {
+  return await mlDBController.findOne(collectionName, query);
+}
+
+function getDefaultMenu(dynamicLinks) {
+  let defaultListView =
+    [
+      {name: 'About', link: dynamicLinks.About,},
+      {name: 'Management', link: dynamicLinks.Management},
+      {name: 'Branches', link: dynamicLinks.Branches},
+      {name: 'Looking For', link: dynamicLinks.Looking_For},
+      {name: 'Social Links', link: dynamicLinks.Social_Links},
+      {name: 'Keywords', link: dynamicLinks.Keywords}
+    ];
+  return defaultListView
+}
+
+
+function getDynamicLinks(idPortFolio) {
+  const dynamicLinks = {
+    'About': '/about?id=' + idPortFolio + '',
+    'Awards': '/awards?id=' + idPortFolio + '',
+    'Looking_For': '/looking_for?id=' + idPortFolio + '',
+    'Social_Links': '/social_links?id=' + idPortFolio + '',
+    'Keywords': '' +
+    '/keywords?id=' + idPortFolio + '',
+    'Branches': '/branches?id=' + idPortFolio + '',
+    'Management': '/management?id=' + idPortFolio + ''
+
+  }
+
+  return dynamicLinks;
 }
 
 export  default  findPortFolioDetails;

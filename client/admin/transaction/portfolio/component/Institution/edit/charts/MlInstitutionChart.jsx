@@ -56,7 +56,7 @@ export default class MlInstitutionChart extends React.Component{
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Profit,Revenu & Liability",
+        title: "Profit,Revenue & Liability",
         component: <MlInstitutionProfitRevenue key="2" client={client} isAdmin={true}
                                     getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
@@ -75,7 +75,7 @@ export default class MlInstitutionChart extends React.Component{
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Employee Breakup/Dept",
+        title: "Employee Breakup At Department",
         component: <MlInstitutionEmployeeBreakup key="4" client={client} isAdmin={true}
                                       getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}

@@ -2,6 +2,8 @@ import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
 import MlAppCompanyListView from "../components/MlAppCompaniesListView";
 import React from "react";
 import gql from "graphql-tag";
+import MlAppFilterContainer from "../../../commons/filter/MlAppFilterContainer";
+import filterData from '../../../commons/config/exploreFilterConfig';
 
 export const mlAppCompanyConfig = new MlAppViewer({
   name: "Company List",
@@ -15,6 +17,16 @@ export const mlAppCompanyConfig = new MlAppViewer({
   perPageLimit: 20,
   viewComponent: <MlAppCompanyListView />,
   showActionComponent: true,
+  header: true,
+  headerComponents:{
+    filter: true,
+    filterComponent: <MlAppFilterContainer />,
+    filterData: filterData,
+    alphabeticSearch: true,
+    alphabeticSearchField: "aboutUs.companyDescription",
+    search: true,
+    searchFields: ["aboutUs.companyDescription", "firstName", "lastName", "chapterName", "accountType", "communityType"]
+  },
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {

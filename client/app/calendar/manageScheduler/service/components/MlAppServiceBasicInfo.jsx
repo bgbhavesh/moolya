@@ -137,6 +137,7 @@ class MlAppServiceBasicInfo extends Component {
                   </label>
                 </div>
                 <div className="form-group" id="date-time">
+                  <span className={`placeHolder ${data.validTill ? 'active' : ''}`}>Valid Till</span>
                   <Datetime dateFormat={"DD-MM-YYYY"}
                             timeFormat={false}
                             inputProps={{placeholder: "Valid Till", disabled: this.props.viewMode}}
@@ -165,12 +166,12 @@ class MlAppServiceBasicInfo extends Component {
                          onChange={(event) => onChangeFormField(event)}
                          disabled={this.props.viewMode}/>
                 </div>
-                <span className="placeHolder active">Renewal Frequency</span>
                 <div className="form-group">
+                  <span className={`placeHolder ${data.sessionFrequency ? 'active' : ''}`}>Renewal Frequency</span>
                   <Select name="form-field-name"
                           options={options}
                           value={data.sessionFrequency}
-                          placeholder='Frequency Type'
+                          placeholder='Renewal Frequency'
                           onChange={(value) => setSessionFrequency(value.value)}
                           disabled={this.props.viewMode}/>
                 </div>

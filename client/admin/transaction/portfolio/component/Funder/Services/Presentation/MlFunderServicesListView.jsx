@@ -25,33 +25,49 @@ export default class  MlFunderServicesListView extends Component {
   servicesListView(){
     let that = this;
     return(
-      <div className="app_main_wrap" style={{'overflow':'auto'}}>
-        <div className="app_padding_wrap">
-          <div className="col-lg-12" id="show">
-            {!this.state.myPortfolio? <div className="col-lg-2 col-md-4 col-sm-4">
+      <div>
+        <div>
+          <div  id="show">
+            {!this.state.myPortfolio? <div className="col-lg-2 col-md-3 col-sm-4">
               <a href=" " onClick={() => that.props.componentToView('createBeSpoke')}>
                 <div className="list_block notrans">
                   <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                  <h3>Create a BeSpoke</h3>
+                  <h3>Request BeSpoke</h3>
                 </div>
               </a>
             </div>:<div></div>}
-            {this.props.services.map(function (services, index) {
+            {this.props.services.map(function (service, index) {
               return (
-                <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                  <div className="list_block img_list_block notrans" onClick={()=>that.props.viewMode(index,services._id, services.profileId)}>
-                    <img src="/images/activity_1.jpg"/>
-                    <h3>{services.displayName}</h3>
-                  </div>
-                </div>)})}
-            {this.props.beSpokeServices.map(function (services, index) {
+              <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                <div className="card_block"  onClick={()=>that.props.viewMode(index,service._id, service.profileId)}><h3>{service.displayName}</h3>
+                  <div className="clearfix"></div>
+                  <div className="list_icon mart0">
+                    <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                    <span className="price pull-right">{service.status ? 'TRUE' : 'FALSE'}</span>
+                    <div className="clearfix"></div>
+                    <i className="c_image ml my-ml-Ideator"></i>
+                    <div className="clearfix"></div>
+                    <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
+                    <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>
+                  </div><div className="block_footer"><span>{(service.termsAndCondition && service.termsAndCondition.isCancelable) ? 'CAN BE CANCELLED' : 'NON - CANCELLABLE'}</span></div></div>
+              </div>
+              )})}
+            {this.props.beSpokeServices.map(function (service, index) {
               return (
-                <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                  <div className="list_block img_list_block notrans" onClick={()=>that.props.viewModeBeSpoke(index,services._id, services.profileId)}>
-                    <img src="/images/activity_1.jpg"/>
-                    <h3>{services.displayName}</h3>
-                  </div>
-                </div>)})}
+              <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                <div className="card_block"  onClick={()=>that.props.viewModeBeSpoke(index, service._id, service.profileId)}><h3>{service.displayName}</h3>
+                  <div className="clearfix"></div>
+                  <div className="list_icon mart0">
+                   {/*<span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>*/}
+                    <button className={`btn ${service.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{service.mode}</button>
+                    <div className="clearfix"></div>
+                    <i className="c_image ml my-ml-Ideator"></i>
+                    <div className="clearfix"></div>
+                    <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
+                    <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>
+                  </div><div className="block_footer"><span>{'BeSpoke'}</span></div></div>
+              </div>
+              )})}
           </div>
         </div>
       </div>

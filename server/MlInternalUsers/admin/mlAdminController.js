@@ -434,6 +434,27 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
               });
               break;
             }
+            case "PORTFOLIO_IDEA_IMG":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                let ideaImage={fileUrl: resp, fileName:file.name};
+                if(data.isCreate){
+                  MlResolver.MlMutationResolver['createIdea'](null,{
+                      idea:{
+                        title: data.idea.title,
+                        ideaDescription: data.idea.ideaDescription,
+                        isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
+                        isIdeaPrivate: data.idea.isIdeaTitlePrivate,
+                        isActive: data.idea.isIdeaTitlePrivate,
+                        ideaImage:ideaImage
+                      },
+                    }, context, null);
+                }else{
+                  MlResolver.MlMutationResolver['updateIdea'](null,{idea:{ideaImage:ideaImage}, portfolioId:data.portfolioId, ideaId:data.ideaId}, context, null);
+                }
+              });
+              break;
+            }
           }
 
           if (imageUploaderPromise) {

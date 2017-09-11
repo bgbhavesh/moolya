@@ -8,7 +8,8 @@ import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
-
+import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
   if (args && context && context.userId) {
     var resp = null;
@@ -35,7 +36,16 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
         let response = new MlRespPayload().errorPayload('Invalid User', code);
         return response;
       }
+
+      //fix for Issue: MOOLYA-2508
+      var updateCount = mlDBController.update('MlReviews',{resourceId: args.resourceId,resourceType: args.resourceType,userId: fromuser._id},{resourceId: args.resourceId},{$set:true,upsert:false}, context);
+      if(updateCount==1){
+        let response = new MlRespPayload().errorPayload('Limit exceeded for adding review', 401);
+        return response;
+      }
+
       //todo:set Active through admin
+
       let review = {
         resourceId: args.resourceId,
         resourceType: args.resourceType,
@@ -55,6 +65,7 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
         mlInteractionService.createTransactionRequest(toUser._id,'review', args.resourceId, resp, fromuser._id, fromUserType );
         MlEmailNotification.reviewRecieved(fromuser,toUser)
         MlNotificationController.onReviewReceived(fromuser,toUser);
+        sendSMSForReviewRecvd(fromuser, args.resourceId, context)
       }
 
     } catch (e) {
@@ -96,3 +107,39 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
     }
   }
 
+
+sendSMSForReviewRecvd = (fromUser, portfolioId, context) => {
+  var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
+  if(portfolioDetails){
+    var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+    var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+    var from = new MlUserContext().userProfileDetails(fromUser._id)
+    if(countryCode && defaultProfile && from){
+      var mobileNumber = defaultProfile.mobileNumber;
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var msg = 'You have received a review from '+from.firstName+' '+from.lastName +' on moolya on '+updatedDateTime+'. Login now to view to it.'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+}
+
+sendSMSForReviewReject = (fromUser, portfolioId, context) => {
+  var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
+  if(portfolioDetails){
+    var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+    var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+    var from = new MlUserContext().userProfileDetails(fromUser._id)
+    if(countryCode && defaultProfile && from){
+      var mobileNumber = defaultProfile.mobileNumber
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var msg = 'Your review from '+from.firstName+' '+from.lastName +'was rejected by the admin.'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+}

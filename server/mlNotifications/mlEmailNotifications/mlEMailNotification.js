@@ -1,5 +1,6 @@
 var noData = "not mentioned";
 var fromEmail = Meteor.settings.private.fromEmailAddr;
+var bugReportEmail = Meteor.settings.private.bugReportEmailAddr;
 import NotificationTemplateEngine from "../../commons/mlTemplateEngine"
 import MlAccounts from "../../commons/mlAccounts"
 const MlEmailNotification= class MlEmailNotification {
@@ -800,6 +801,18 @@ const MlEmailNotification= class MlEmailNotification {
         });
       }, 2 * 1000);
     }
+
+  static sendBugReportToAdmin(bugDetails){
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: (bugDetails||{}).emailId,
+        to: bugReportEmail,
+        subject:'Bug Report',
+        html : (bugDetails||{}).details
+      });
+    }, 2 * 1000);
+  }
+
 }
 
 export default MlEmailNotification;

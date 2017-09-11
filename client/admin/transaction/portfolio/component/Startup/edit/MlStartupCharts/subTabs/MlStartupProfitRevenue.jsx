@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 //import Moolyaselect from "../../../admin/commons/components/MlAdminSelectWrapper";
 var Select = require('react-select');
 import ScrollArea from "react-scrollbar";
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
 
 export default class MlStartupProfitRevenue extends React.Component{
   constructor(props, context){
@@ -25,7 +26,6 @@ export default class MlStartupProfitRevenue extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
-
 
   handleFromYearChange(index,e){
     let details =this.state.data;
@@ -153,6 +153,9 @@ export default class MlStartupProfitRevenue extends React.Component{
     }*/
   }
 
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
   fetchDetails(){
     let that = this;
     //let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -175,8 +178,14 @@ export default class MlStartupProfitRevenue extends React.Component{
     let details =this.state.data;
     details=_.omit(details,["prlEntityType"]);
     details=_.extend(details,{["prlEntityType"]: val.value});
+    let revenueArray = this.state.revenuList;
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" :  val.value})
+      if(revenueArray && index==revenueArray.length){
+        this.setState({"selectedVal" :  val.value})
+      }else{
+        revenueArray[index].prlEntityType=val.value;
+        this.setState({"revenuList" :  revenueArray})
+      }
       this.sendDataToParent(index)
     })
   }
@@ -204,10 +213,18 @@ export default class MlStartupProfitRevenue extends React.Component{
       {value: 'Revenue', label: 'Revenue'},
       {value: 'Liability', label: 'Liability'},
     ];
+    let selectedEntityTypesActive='';
+    if(this.state.selectedVal){
+      selectedEntityTypesActive='active';
+    }
     let valueTypes = [
       {value: 'Percentage', label: 'Percentage'},
       {value: 'Amount', label: 'Amount'}
     ];
+    let selectedvalueTypesActive='';
+    if(this.state.selectedValType){
+      selectedvalueTypesActive='active';
+    }
     return(<div>
       <div className="main_wrap_scroll">
         <ScrollArea
@@ -235,6 +252,7 @@ export default class MlStartupProfitRevenue extends React.Component{
                                     selectedValue={this.state.selectedVal} queryType={"graphql"}
                                     query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
                                     isDynamic={true}/>*/}
+                      <span className={`placeHolder ${selectedEntityTypesActive}`}>Select Entity Type</span>
                       <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
                               value={this.state.selectedVal}
                               onChange={this.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}  className="float-label"/>
@@ -267,6 +285,7 @@ export default class MlStartupProfitRevenue extends React.Component{
                     </div>
 
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <span className={`placeHolder ${selectedvalueTypesActive}`}>Select Value Type</span>
                       <Select name="form-field-name" placeholder="Select Value Type" options={valueTypes}
                               value={this.state.selectedValType}
                               onChange={this.optionsBySelectTypeOfValue.bind(this,defaultIndex)}  className="float-label"/>

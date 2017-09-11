@@ -158,9 +158,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
           }
           this.libraryAction(fileObjectStructure)
         }
-          if(result.success){
-              this.fetchOnlyImages();
-          }
+        if(result.success){
+            this.fetchOnlyImages();
+        }
       }
   }
 
@@ -198,15 +198,17 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
               <div className="row requested_input">
+                <div className="col-md-12"><h2>Problems and Solutions</h2></div>
                 <div className="col-lg-6">
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Problems
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "problemStatement", "isProblemPrivate")}/>
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={problemStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "problemStatement", "isProblemPrivate")}/>
+
                       </div>
                     </div>
                   </div>
@@ -231,11 +233,12 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Solutions
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "solutionStatement", "isSolutionPrivate")}/>
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" defaultValue={solutionStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "solutionStatement", "isSolutionPrivate")}/>
+
                       </div>
                     </div>
                   </div>

@@ -17,6 +17,7 @@ import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
 import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
 import MlAppSlotAppointmentDetails from "./../../common/components/MlAppSlotAppointmentDetails";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
+import MlAppCalenderAppointmentInfo from "./../../common/components/MlAppCalenderAppointmentInfo";
 
 export default class MLAppMyCalendar extends Component {
 
@@ -39,6 +40,7 @@ export default class MLAppMyCalendar extends Component {
     this.eventsData.bind(this);
     this.getAllAppointments.bind(this);
     this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
+    this.appointmentView = this.appointmentView.bind(this);
   }
 
   onNavigate(date) {
@@ -216,6 +218,26 @@ export default class MLAppMyCalendar extends Component {
     });
   }
 
+  appointmentView(appointment){
+
+    let data = {
+      _id: appointment._id,
+      appointmentType: appointment.appointmentType,
+      appointmentId: appointment.appointmentId,
+      seeker: appointment.client,
+      provider: appointment.provider,
+      resourceId: appointment.appointmentInfo.resourceId,
+      serviceName: appointment.appointmentInfo.serviceName,
+      sessionId: appointment.appointmentInfo.sessionId,
+      startDate: appointment.startDate,
+      endDate: appointment.endDate
+    };
+    this.setState({
+      selectedAppointment: data,
+      componentToLoad: "bookAppointmentDetails"
+    });
+  }
+
   render() {
     const {appointmentDate} = this.state;
     const that = this;
@@ -332,12 +354,37 @@ export default class MLAppMyCalendar extends Component {
                   />
                   <MlAppSlotAppointmentDetails
                     appointmentIds={ this.state.exploreAppointmentIds }
+                    isView={true}
+                    viewEvent = {this.appointmentView}
                   />
                 </div>
               </div>
             </div>
           </div>
         )
+      break;
+      case "bookAppointmentDetails":
+        return (
+          <div className="app_main_wrap" style={{'overflow': 'auto'}}>
+            <div className="app_padding_wrap">
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <div className="app_main_wrap">
+                <div className="app_padding_wrap">
+                  <MlAppInfiniteCalendarSidebar
+                    startDate={that.state.appointmentDate}
+                    onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
+                  />
+                  <div className="app_main_wrap" style={{'overflow': 'auto'}}>
+                    <div className="app_padding_wrap">
+                      <MlAppCalenderAppointmentInfo selectedAppointment={that.state.selectedAppointment} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      break;
     }
   }
 }

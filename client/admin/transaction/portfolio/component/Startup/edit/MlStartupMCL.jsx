@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {fetchStartupPortfolioMemberships, fetchStartupPortfolioLicenses, fetchStartupPortfolioCompliances} from '../../../actions/findPortfolioStartupDetails'
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
 import _ from 'lodash';
@@ -39,6 +39,7 @@ export default class MlStartupMCL extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   updateprivateFields(){
@@ -234,7 +235,7 @@ export default class MlStartupMCL extends React.Component{
                   <div className="panel-heading">Membership </div>
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="membershipDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.memberships&&this.state.data.memberships.membershipDescription?this.state.data.memberships.membershipDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
+                      <textarea placeholder="Describe..." name="membershipDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.memberships&&this.state.data.memberships.membershipDescription?this.state.data.memberships.membershipDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
                     </div>
                   </div>
@@ -248,7 +249,7 @@ export default class MlStartupMCL extends React.Component{
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="complianceDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.compliances&&this.state.data.compliances.complianceDescription?this.state.data.compliances.complianceDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
+                      <textarea placeholder="Describe..." name="complianceDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.compliances&&this.state.data.compliances.complianceDescription?this.state.data.compliances.complianceDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
                       <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate" onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
                     </div>
                   </div>
@@ -260,7 +261,7 @@ export default class MlStartupMCL extends React.Component{
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.licenses&&this.state.data.licenses.licenseDescription?this.state.data.licenses.licenseDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
+                      <textarea placeholder="Describe..." name="licenseDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.licenses&&this.state.data.licenses.licenseDescription?this.state.data.licenses.licenseDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
                       <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate" onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
                     </div>
                   </div>

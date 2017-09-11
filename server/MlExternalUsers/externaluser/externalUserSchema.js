@@ -138,7 +138,6 @@ let externalUser = `
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,
-        isActive:Boolean,
         optional:Boolean,
         userType :String,
         identityType:String,
@@ -187,8 +186,8 @@ let externalUser = `
       addressCountry : String
       addressCountryId : String
       addressPinCode : String
-      latitude        :  Int
-      longitude       :  Int
+      latitude        :  Float
+      longitude       :  Float
       isDefaultAddress:Boolean
     }
     
@@ -219,6 +218,7 @@ let externalUser = `
       switchExternalProfile(profileId:String!):response
       updateUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
       deActivateUserProfileByContext(userProfiles:userProfiles, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
+      updateUserShowOnMap(userId: String, isShowOnMap: Boolean):response
     }
     
     type Query{
@@ -226,6 +226,7 @@ let externalUser = `
         findAddressBook:externalUserAdditionalInfoSchema
         fetchUserProfiles:[externalUserProfiles]
         fetchMapCenterCordsForExternalUser(module:String, id:String):mapCenterCords
+        findDefaultUserProfile:externalUserProfiles
     }
 `
 
@@ -234,6 +235,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
 let supportedApi = [
     {api:'fetchMapCenterCordsForExternalUser', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'findDefaultUserProfile', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
@@ -242,7 +244,8 @@ let supportedApi = [
     {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-     {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'updateUserShowOnMap', actionName:'UPDATE', moduleName:"USERS"},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

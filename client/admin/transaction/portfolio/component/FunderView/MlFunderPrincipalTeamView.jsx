@@ -163,7 +163,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     let selectedPrincipal = that.state.funderPrincipalList[PIndex] || {};
     let TIndex = that.state.TIndex
     let selectedTeam = that.state.funderTeamList[TIndex] || {};
-    if(_.isEmpty(selectedPrincipal)){
+    if(_.isEmpty(selectedPrincipal) && _.isEmpty(selectedTeam)){
       return (
         showLoader === true ? (<MlLoader/>) :
           <div className="portfolio-main-wrap">
@@ -197,7 +197,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
-                                    <div><p>{principal.firstName + " " + principal.lastName}</p><p
+                                    <div><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                       className="small">{principal.designation}</p></div>
                                     {/*<div className="ml_icon_btn">*/}
                                       {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
@@ -224,7 +224,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}
                                              className="team_img"/>
                                         <h3>
-                                          {principal.firstName + " " + principal.lastName}<br /><b>{principal.designation}</b>
+                                          {principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}<br /><b>{principal.designation}</b>
                                         </h3>
                                       </div>
                                     </li>
@@ -249,7 +249,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <FontAwesome name='lock'/>
                                           <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                           <img src={selectedPrincipal.logo ? selectedPrincipal.logo.fileUrl : "/images/def_profile.png"}/>
-                                          <div><p>{selectedPrincipal.firstName + " " + selectedPrincipal.lastName}</p><p
+                                          <div><p>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</p><p
                                             className="small">{selectedPrincipal.designation}</p></div>
                                           {/*<div className="ml_icon_btn">*/}
                                             {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
@@ -267,7 +267,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Name" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedPrincipal.firstName + " " + selectedPrincipal.lastName}
+                                                 value={selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/><input
                                           type="checkbox" className="lock_input" id="makePrivate"
@@ -276,7 +276,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Company" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedPrincipal.company ? selectedPrincipal.company : ""}
+                                                 value={selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/>
                                         </div>
@@ -360,13 +360,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
-                                    <div><p>{team.firstName + " " + team.lastName}</p><p
-                                      className="small">{team.designation}</p></div>
-                                    {/*<div className="ml_icon_btn">*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
-                                    {/*</div>*/}
+                                    <div><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
+                                      <p className="small">{team.designation}</p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -386,7 +382,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}
                                              className="team_img"/>
                                         <h3>
-                                          {team.firstName + " " + team.lastName}<br /><b>{team.designation}Founder</b>
+                                          {team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}<br /><b>{team.designation}Founder</b>
                                         </h3>
                                       </div>
                                     </li>
@@ -394,8 +390,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 })}
                               </ul>
                             </div>
-
-
                           </div>
                           <div className="main_wrap_scroll">
                             <ScrollArea
@@ -413,8 +407,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <FontAwesome name='lock'/>
                                           <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                           <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
-                                          <div><p>{selectedTeam.firstName + " " + selectedTeam.lastName}</p><p
-                                            className="small">{selectedTeam.designation}</p></div>
+                                          <div>
+                                            <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>
+                                            <p className="small">{selectedTeam.designation}</p>
+                                          </div>
                                           {/*<div className="ml_icon_btn">*/}
                                             {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
                                             {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
@@ -430,7 +426,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Name" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedTeam.firstName + " " + selectedTeam.lastName}
+                                                 value={selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/><input
                                           type="checkbox" className="lock_input" id="makePrivate"
@@ -440,7 +436,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Company" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedTeam.company ? selectedTeam.company : ""}
+                                                 value={selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/>
                                         </div>
@@ -490,17 +486,15 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     </div>
                                     <div className="form_bg col-md-12">
                                       <form>
-
                                         <div className="form-group">
                                           <input type="text" placeholder="About" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedTeam.aboutPrincipal ? selectedTeam.aboutPrincipal : ""}
+                                                 value={selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/><input
                                           type="checkbox" className="lock_input" id="makePrivate"
-                                          checked={selectedTeam.isAboutPrincipalPrivate}/>
+                                          checked={selectedTeam.isAboutTeamPrivate}/>
                                         </div>
-
                                       </form>
                                     </div>
                                   </div>
@@ -508,7 +502,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               </div>
                             </ScrollArea>
                           </div>
-
                         </div>
                       </div>
                     </div>
@@ -567,26 +560,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         <input type="text" placeholder="About" className="form-control float-label"/>
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Facebook" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="twitter" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Youtube" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Google plus" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                      {/*</div>*/}
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
                         <a href="#" className="save_btn">Save</a>
                       </div>

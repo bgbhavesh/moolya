@@ -19,6 +19,8 @@ export async function getContactDetails() {
       addressState
       addressCountry
       addressPinCode
+      latitude
+      longitude
     }
     emailInfo {
       emailIdType

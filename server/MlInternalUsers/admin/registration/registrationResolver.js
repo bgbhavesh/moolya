@@ -12,7 +12,9 @@ import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import {getCommunityName} from '../../../commons/utils';
-// import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
+import mlSMSConst from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
+import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -547,8 +549,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       if (updateCount === 1 || userId) {
         let code = 200;
         result = {username: userObject.username};
-        // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
         mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
+        /**Creating moolya request*/
+        mlRegistrationRepo.createRegistrationProxy(id, context);
+
         updatedResponse = new MlRespPayload().successPayload(result, code);
         //update transaction with operational area
         // var temp =mlDbController.find('MlRegistration',id,{"registrationInfo.userId": userId},context ).fetch()
@@ -754,7 +758,9 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       // let regRecord = MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
       MlEmailNotification.onKYCApprove(regRecord);
-      MlNotificationController.onKYCApprove(regRecord);
+      MlNotificationController.onUserApproval(regRecord);
+      sendSMSonKYCApproved(regRecord)
+      // mlSmsController
 
       let portfolioDetails = {
         "transactionType": "portfolio",
@@ -880,6 +886,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
 
             let code = 200;
             let result = {registrationId: response}
+            MlNotificationController.onKYCApprove(user);
             updatedResponse = new MlRespPayload().successPayload(result, code);
 
           }
@@ -919,6 +926,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
           if (response) {
             MlEmailNotification.onKYCDecline(user);
             MlNotificationController.onKYCDecline(user);
+            sendSMSonKYCDeclined(user)
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -1633,6 +1641,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, in
       users = mlDBController.findOne('users', userId, context)
       response.externalUserProfiles = users.profile.externalUserProfiles
       response.isActive = users.profile.isActive
+      response.isShowOnMap = users.profile.isShowOnMap
     }
     return response;
   }
@@ -1652,4 +1661,20 @@ headerCommunityDisplay = (registrationInfo, context) => {
   if (!isMoolya)
     returnName = subChapterName + '/' + chapterName + '/' + registrationInfo.communityName
   return returnName
+}
+
+sendSMSonKYCApproved = (regRecord) => {
+    var mobileNumber = regRecord.registrationInfo.contactNumber;
+    var countryCode =  regRecord.registrationInfo.countryId;
+    var obj = _.find(mlSMSConst, 'KYC_APPROVED')
+    var msg= obj.KYC_APPROVED
+    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+}
+
+sendSMSonKYCDeclined = (regRecord) => {
+  var mobileNumber = regRecord.registrationInfo.contactNumber;
+  var countryCode =  regRecord.registrationInfo.countryId;
+  var obj = _.find(mlSMSConst, 'KYC_DECLINED')
+  var msg= obj.KYC_DECLINED
+  mlSmsController.sendSMS(msg, countryCode, mobileNumber)
 }

@@ -16,7 +16,9 @@ import {fetchMasterTasks} from '../../actions/fetchMasterInternalTask';
 import {createSelfInternalTask} from '../../actions/createSelfInternalTask';
 import { fetchOfficeActionHandler, getTeamUsersActionHandler } from '../../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
-
+import MlAccordion from "../../../commons/components/MlAccordion";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -26,7 +28,7 @@ let valid = function( current ){
 /**
  * Initialize conversation types
  */
-export default class MlAppInternalMyTaskItem extends React.Component{
+class MlAppInternalMyTaskItem extends React.Component{
 
   /**
    * Constructor
@@ -41,7 +43,9 @@ export default class MlAppInternalMyTaskItem extends React.Component{
       },
       taskList:[],
       offices:[],
-      users:[]
+      users:[],
+      teamData: [{users: []}],
+
     };
   }
 
@@ -135,11 +139,11 @@ export default class MlAppInternalMyTaskItem extends React.Component{
    * @param userIndex :: Integer :: Index of specific user
    * @returns Void
    */
-  addUser(userIndex){
-    let users = this.state.users;
-    users[userIndex].isAdded = true;
+  addUser(teamIndex, userIndex){
+    let teamData = this.state.teamData;
+    teamData[teamIndex].users[userIndex].isAdded = teamData[teamIndex].users[userIndex].isAdded ? false : true;
     this.setState({
-      users: users
+      teamData: teamData
     });
   }
 
@@ -170,9 +174,18 @@ export default class MlAppInternalMyTaskItem extends React.Component{
 
   async saveDetails(){
     let dataToInsert = this.state.basicData;
-    let users = this.state.users.filter( (user) => {
-     return user.isAdded
-    }).map( (user) => {
+    let users =  this.state.teamData.reduce((assignees, team) => {
+      let users = team.users ? team.users : [] ;
+      users.map((user) => {
+        if(user.isAdded){
+          let isfind = assignees.find( (assignee) => { return assignee.profileId === user.profileId } );
+          if(!isfind){
+            assignees.push(user)
+          }
+        }
+      });
+      return assignees;
+    }, []).map( (user) => {
       return { userId: user.userId, profileId: user.profileId }
     });
 
@@ -204,13 +217,95 @@ export default class MlAppInternalMyTaskItem extends React.Component{
   }
 
   /**
+   * Method :: addTeam
+   * Desc   :: add new team in activity
+   * @returns Void
+   */
+  addTeam() {
+    let teamData = this.state.teamData;
+    teamData.push({users:[]});
+    this.setState({
+      teamData : teamData
+    });
+  }
+
+  /**
+   * Method :: addTeam
+   * Desc   :: remove new team in activity
+   * @returns Void
+   */
+  removeTeam(index) {
+    let teamData = this.state.teamData;
+    teamData.splice(index, 1);
+    this.setState({
+      teamData: teamData
+    });
+  }
+
+  /**
+   * Method :: chooseTeamType
+   * Desc   :: update team type in specific team
+   * @param evt   :: Object  :: javascript event object
+   * @param index :: Integer :: Index of specific team
+   * @returns Void
+   */
+  async chooseTeamType(evt, index){
+
+    let teamData = this.state.teamData;
+    let officeId = evt.target.value;
+    teamData[index].resourceType="office";
+    teamData[index].resourceId=evt.target.value;
+    const resp = await getTeamUsersActionHandler(officeId);
+    if(resp){
+      teamData[index].users = resp.map(function (user) {
+        return {
+          name: user.name,
+          profileId: user.profileId,
+          profileImage: user.profileImage,
+          userId: user.userId
+        }
+      });
+    }
+    this.setState({
+      teamData:teamData
+    });
+  }
+
+
+  /**
    * Render
    * Desc   :: Render the HTML for this component
    * @returns {HTML}
    */
   render() {
     const that = this;
-
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.saveDetails.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => that.props.handler(that.props.updateType.bind(this, 'list'))
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'mytask', resourceType: 'mytask'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     /**
      * Return the html to render
      */
@@ -234,6 +329,7 @@ export default class MlAppInternalMyTaskItem extends React.Component{
                 </div>
 
                 <div className="form-group">
+                  <span className={`placeHolder ${this.state.basicData && this.state.basicData.dueDate ? 'active' : ''}`}>Due Date</span>
                   <Datetime dateFormat="DD-MM-YYYY"
                             isValidDate={valid}
                             timeFormat={false}
@@ -276,67 +372,135 @@ export default class MlAppInternalMyTaskItem extends React.Component{
             </div>
           </div>
 
-          <div className="col-md-12 nopadding-left" hidden={ that.state.offices && that.state.offices.length ? false : true } >
-            <div className="panel panel-default cal_view_task">
-              <div className="panel-heading">
-                Select Users
-              </div>
-              <div className="panel-body sug_teams">
-                <div className="col-md-12 nopadding">
-                  <div className="col-md-6 nopadding-right">
-                    <form>
-                      <div className="form-group">
-                        <span className="placeHolder active">Choose team Type</span>
-                        <select defaultValue="0" className="form-control" onChange={(evt)=>that.getUsers(evt)} >
-                          <option selected="true" disabled="disabled" value="0">Select Office Team</option>
-                          { that.state.offices.map(function (office , index) {
-                            return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
-                          })}
-                        </select>
-                      </div>
-                    </form>
+          {that.state.teamData.map(function (team, index) {
+            return (
+              <div className="col-md-12 nopadding-left" key={index}>
+                <div className="panel panel-default cal_view_task">
+                  <div className="panel-heading">
+                    Select Users
+                    <span className="see-more pull-right">
+                    { that.state.offices && that.state.offices.length > 1 ?
+                      (index == 0 ?
+                        <a href="" onClick={()=>that.addTeam()}>
+                          <FontAwesome name='plus'/>
+                        </a>
+                        :
+                        <a href="" onClick={()=>that.removeTeam(index)}>
+                          <FontAwesome name='minus'/>
+                        </a>)
+                      : ''
+                    }
+
+                  </span>
                   </div>
-                </div>
-                {/*<div className="col-md-12">*/}
-                  {/*<input type="text" name="search" className="search_field" placeholder="Search.."/>*/}
-                {/*</div>*/}
-                <div className="col-md-12 nopadding att_members" >
-                  <ul className="users_list">
-                    {that.state.users.map(function (user, userIndex) {
-                      return (
-                        <li key={userIndex} onClick={() => that.toggleUser(userIndex)} >
-                          <a href="">
-                            <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
-                            <div className="tooltiprefer">
-                              <span>{user.name}</span>
-                            </div>
-                            <span className="member_status" >
+                  <div className="panel-body sug_teams">
+                    <div className="col-md-12 nopadding">
+                      <div className="col-md-6 nopadding-right">
+                        <form>
+                          <div className="form-group">
+                            <span className="placeHolder active">Choose team Type</span>
+                            <select defaultValue="chooseTeam" value={ team.resourceId } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
+                              <option value="chooseTeam" disabled="disabled">Choose team Type</option>
+                              {that.state.offices.map(function (office , index) {
+                                return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                              })}
+                            </select>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div className="col-md-12">
+                      <input type="text" name="search" className="search_field" placeholder="Search.."/>
+                    </div>
+                    <div className="col-md-12 nopadding att_members" >
+                      <ul className="users_list">
+                        {team.users.map(function (user, userIndex) {
+                          return (
+                            <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
+                              <a href="">
+                                <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                                <div className="tooltiprefer">
+                                  <span>{user.name}</span>
+                                </div>
+                                <span className="member_status">
                                 { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
                               </span>
-                          </a>
-                          {/*<div className="input_types">*/}
-                            {/*<br />*/}
-                            {/*<input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />*/}
-                            {/*<label htmlFor={"mandatory"+index+userIndex}>*/}
-                              {/*<span><span></span></span>*/}
-                              {/*Mandatory*/}
-                            {/*</label>*/}
-                          {/*</div>*/}
-                        </li>
-                      )
-                    })}
-                  </ul>
+                              </a>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            )
+          })}
+
+          {/*<div className="col-md-12 nopadding-left" hidden={ that.state.offices && that.state.offices.length ? false : true } >*/}
+            {/*<div className="panel panel-default cal_view_task">*/}
+              {/*<div className="panel-heading">*/}
+                {/*Select Users*/}
+              {/*</div>*/}
+              {/*<div className="panel-body sug_teams">*/}
+                {/*<div className="col-md-12 nopadding">*/}
+                  {/*<div className="col-md-6 nopadding-right">*/}
+                    {/*<form>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<span className="placeHolder active">Choose team Type</span>*/}
+                        {/*<select defaultValue="0" className="form-control" onChange={(evt)=>that.getUsers(evt)} >*/}
+                          {/*<option selected="true" disabled="disabled" value="0">Select Office Team</option>*/}
+                          {/*{ that.state.offices.map(function (office , index) {*/}
+                            {/*return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>*/}
+                          {/*})}*/}
+                        {/*</select>*/}
+                      {/*</div>*/}
+                    {/*</form>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
+                {/*/!*<div className="col-md-12">*!/*/}
+                  {/*/!*<input type="text" name="search" className="search_field" placeholder="Search.."/>*!/*/}
+                {/*/!*</div>*!/*/}
+                {/*<div className="col-md-12 nopadding att_members" >*/}
+                  {/*<ul className="users_list">*/}
+                    {/*{that.state.users.map(function (user, userIndex) {*/}
+                      {/*return (*/}
+                        {/*<li key={userIndex} onClick={() => that.toggleUser(userIndex)} >*/}
+                          {/*<a href="">*/}
+                            {/*<img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />*/}
+                            {/*<div className="tooltiprefer">*/}
+                              {/*<span>{user.name}</span>*/}
+                            {/*</div>*/}
+                            {/*<span className="member_status" >*/}
+                                {/*{ user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }*/}
+                              {/*</span>*/}
+                          {/*</a>*/}
+                          {/*/!*<div className="input_types">*!/*/}
+                            {/*/!*<br />*!/*/}
+                            {/*/!*<input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />*!/*/}
+                            {/*/!*<label htmlFor={"mandatory"+index+userIndex}>*!/*/}
+                              {/*/!*<span><span></span></span>*!/*/}
+                              {/*/!*Mandatory*!/*/}
+                            {/*/!*</label>*!/*/}
+                          {/*/!*</div>*!/*/}
+                        {/*</li>*/}
+                      {/*)*/}
+                    {/*})}*/}
+                  {/*</ul>*/}
+                {/*</div>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*</div>*/}
 
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
+        {/*<div className="ml_btn" style={{'textAlign':'center'}}>
           <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Save</a>
           <a href="" className="cancel_btn" onClick={()=>that.props.updateType('list')} >Cancel</a>
-        </div>
+        </div>*/}
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }
 };
+
+export default MlAppInternalMyTaskItem = formHandler()(MlAppInternalMyTaskItem);

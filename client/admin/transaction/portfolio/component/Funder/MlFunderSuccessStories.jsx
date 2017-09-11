@@ -53,7 +53,6 @@ export default class MlFunderSuccessStories extends React.Component {
       });
     }
     this.funderSuccessStoryServer = response
-
   }
 
   handleBlur(e) {
@@ -105,6 +104,7 @@ export default class MlFunderSuccessStories extends React.Component {
     var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
     var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
     var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
     _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -329,11 +329,11 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date"
+                                      inputProps={{placeholder: "Select Date",className: "float-label form-control"}} ref="date"
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
                                       onBlur={this.dateChange.bind(this)}
                                       isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
-                            <FontAwesome name='unlock' className="input_icon un_lock"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isDatePrivate"
                                          onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>
                           <div className="clearfix"></div>

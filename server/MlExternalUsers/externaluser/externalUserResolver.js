@@ -8,6 +8,7 @@ import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlAppUserContext from '../../mlAuthorization/mlAppUserContext'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 var request = require('request');
@@ -444,50 +445,37 @@ MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, co
   }
   return response;
 }
-
-/*************************************** @module ['conversation']************************************************* */
 /**
- * first application Create
+ * Users left nav
+ * @Note: "deActivateUser" both have to be merged
  * */
-// MlResolver.MlMutationResolver['createApplicationAPI'] = (obj, args, context, info) => {
-//   var userId = "qwerty" //need to be send with args
-//   request.post('http://localhost:8081/createApplication', {form: args.applicationDetailsAPI}, function (error, response, body) {
-//     console.log('error:', error); // Print the error if one occurred
-//     console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-//     console.log('body:', body); // Print the HTML for the Google homepage.
-//     var responseData = JSON.parse(body)
-//     console.log(responseData)
-//     var obj = _.extend({userId: userId}, responseData)
-//     // MlConversations.insert(obj)
-//   });
-// }
+MlResolver.MlMutationResolver['updateUserShowOnMap'] = (obj, args, context, info) => {
+  var user = mlDBController.findOne('users', {_id: args.userId}, context)
+  var resp;
+  if (user) {
+    resp = mlDBController.update('users', args.userId, {"profile.isShowOnMap": args.isShowOnMap}, {$set: true}, context)
+    if (resp) {
+      resp = new MlRespPayload().successPayload("User Updated Successfully", 200);
+      return resp
+    } else {
+      resp = new MlRespPayload().errorPayload("Error in update", 400);
+      return resp
+    }
+  }else {
+    return new MlRespPayload().errorPayload("Invalid user", 400);
+  }
+}
 
-/**
- * creating the user wrt application
- * */
-// MlResolver.MlMutationResolver['createUserAPI'] = (obj, args, context, info) => {
-//   var userId = "qwerty"  //need to be send with the args
-//   var conversation = MlConversations.findOne({userId:userId}) || {}
-//   // conversation.apiKey ||
-//   var options = {
-//     url: 'http://localhost:8081/createUser',
-//     headers: {'x-api-key': Meteor.settings.private.apiKey},
-//     method: 'POST',
-//     form: args.userDetailsAPI
-//   };
-//
-//   request(options, function (error, response, body) {
-//     // console.log('error:', error); // Print the error if one occurred
-//     // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-//     // console.log('body:', body); // Print the HTML for the Google homepage.
-//     if (error)
-//       return new MlRespPayload().errorPayload('error in creating user', 409);
-//     else {
-//       var responseData = JSON.parse(body)
-//       if (responseData && responseData.success)
-//         return new MlRespPayload().successPayload(responseData.result, 200);
-//       else
-//         return new MlRespPayload().errorPayload('Can not create user', 409);
-//     }
-//   });
-// }
+MlResolver.MlQueryResolver['findDefaultUserProfile'] = (obj, args, context, info) => {
+  var defaultProfile = {};
+  var user = Meteor.users.findOne({_id:context.userId});
+  if(user && user.profile && user.profile.isExternaluser === true){
+    var user_profiles = user.profile.externalUserProfiles||[];
+    defaultProfile = _.find(user_profiles, {'isDefault': true });
+    if(!defaultProfile){
+      defaultProfile = user_profiles&&user_profiles[0]?user_profiles[0]:{};
+    }
+  }
+  return defaultProfile;
+}
+

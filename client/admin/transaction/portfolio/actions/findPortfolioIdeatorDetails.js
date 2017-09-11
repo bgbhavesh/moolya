@@ -72,14 +72,18 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
               _id
               title
               portfolioId
-              description
-              isIdeasTitlePrivate
-              isIdeasPrivate
+              ideaDescription
+              isIdeaTitlePrivate
+              isIdeaPrivate
               isActive
               privateFields{
                 keyName,
                 booleanKey
                 tabName
+              }
+              ideaImage {
+                fileUrl
+                fileName
               }
             }
           }
@@ -219,19 +223,22 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
   return data
 }
 export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
             data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"lookingFor") {
               lookingFor{
-                lookingForDescription
-                isLookingForPrivate
+                lookingForName,
+                lookingForId,
+                lookingDescription,
+                index
                 privateFields{
-                  keyName,
-                  booleanKey,
+                  keyName
+                  booleanKey
+                  index
                   tabName
                 }
+                makePrivate
               }
             }
           }
@@ -243,10 +250,19 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.data && result.data.data.lookingFor;
-  let data = _.omit(id, '__typename')
-  return data
+  // let data = _.omit(id, '__typename')
+  return id
 }
 
+// lookingFor{
+//   lookingForDescription
+//   isLookingForPrivate
+//   privateFields{
+//     keyName,
+//       booleanKey,
+//       tabName
+//   }
+// }
 export async function findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId) {
 
   const result = await client.query({

@@ -20,20 +20,19 @@ class MlEditProfessionType extends React.Component{
     this.onIndustrySelect.bind(this);
     return this;
   }
-
+  componentDidMount(){
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
+  }
   componentWillMount() {
     const resp=this.findProfessionType();
     return resp;
   }
-  componentDidMount(){
-    /*if(this.state.data.isActive){
-     $('#status').prop('checked', true);
-     }*/
-  }
+
   componentDidUpdate()
   {
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
   }
   onIndustrySelect(val) {
     if(val){

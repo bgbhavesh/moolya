@@ -18,8 +18,21 @@ import {appClient} from "../../core/appConnection";
 class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
-    this.state = {editComponent:'', portfolio:{}, selectedTab:"", privateKeys:[], removePrivateKeys:[],
-      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, backHandlerMethod:"" ,portfolioImage:''}
+    this.state = {
+      editComponent: '',
+      portfolio: {},
+      selectedTab: "",
+      privateKeys: [],
+      removePrivateKeys: [],
+      annotations: [],
+      isOpen: false,
+      annotationData: {},
+      commentsData: [],
+      popoverOpen: false,
+      saveButton: false,
+      backHandlerMethod: "",
+      portfolioDetails: {}
+    }
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -100,7 +113,7 @@ class MlAppPortfolio extends Component{
   async fetchPortfolioImage() {
     var response = await fetchPortfolioImageHandler(this.props.config)
     if(response){
-      this.setState({portfolioImage:response.portfolioImage})
+      this.setState({portfolioDetails:response})
     }
     console.log(response)
   }
@@ -222,7 +235,6 @@ class MlAppPortfolio extends Component{
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
-    // toastr.success(response.result)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
         let idea = this.state.idea
@@ -331,14 +343,17 @@ class MlAppPortfolio extends Component{
 
     let annotations = this.state.annotations;
     let annotationDetails = this.state.annotationData;
-    let isMyPortfolio = this.state.isMyPortfolio
+    // let isMyPortfolio = this.state.isMyPortfolio
     const showLoader=this.state.loading;
     return(
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
             <div className="col-md-12">
-            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} portfolioImage={this.state.portfolioImage}/>
+              <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config}
+                                   interactionAutoId={this.state.interactionAutoId}
+                                   backHandler={this.backHandler.bind(this)}
+                                   portfolioDetails={this.state.portfolioDetails}/>
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}

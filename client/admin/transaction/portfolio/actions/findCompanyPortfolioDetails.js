@@ -366,6 +366,19 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       }
                       makePrivate
                   }
+                  lookingFor{
+                    lookingForName,
+                    lookingForId,
+                    lookingDescription,
+                    index
+                    privateFields{
+                      keyName
+                      booleanKey
+                      index
+                      tabName
+                    }
+                    makePrivate
+                  }
               }
           }
       `,

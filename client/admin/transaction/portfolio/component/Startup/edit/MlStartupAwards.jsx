@@ -12,7 +12,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchStartupDetailsHandler} from "../../../actions/findPortfolioStartupDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+var FontAwesome = require('react-fontawesome')
 
 const KEY = "awardsRecognition"
 
@@ -52,16 +52,17 @@ export default class MlStartupAwards extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp= this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     var awardsRecognition = that.context.startupPortfolio && that.context.startupPortfolio.awardsRecognition
     let empty = _.isEmpty(awardsRecognition)
+    const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.awardsRecognition) {
+      if (response && response.awardsRecognition && response.awardsRecognition.length>0) {
         this.setState({loading: false, startupAwards: response.awardsRecognition, startupAwardsList: response.awardsRecognition});
       }else{
         this.setState({loading:false})
@@ -69,6 +70,7 @@ export default class MlStartupAwards extends React.Component{
     }else{
       this.setState({loading: false, startupAwards: that.context.startupPortfolio.awardsRecognition, startupAwardsList: that.context.startupPortfolio.awardsRecognition});
     }
+    this.startupAwardServer = response
   }
   addAward(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -90,12 +92,30 @@ export default class MlStartupAwards extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({selectedIndex:index,
+      data:details,selectedObject : index,
+      "selectedVal" : details.awardId,
+      popoverOpen : !(this.state.popoverOpen)},() => {
+      this.lockPrivateKeys(index)
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.startupAwardServer && this.startupAwardServer[selIndex]?this.startupAwardServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fiedName, field, e){
@@ -111,9 +131,14 @@ export default class MlStartupAwards extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data:details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -379,4 +404,5 @@ export default class MlStartupAwards extends React.Component{
 }
 MlStartupAwards.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

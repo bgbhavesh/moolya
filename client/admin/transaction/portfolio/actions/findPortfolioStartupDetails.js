@@ -770,7 +770,9 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                       index
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          index
+                          tabName
                       }
                   },
                   

@@ -72,6 +72,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/ideator_01.png";
     return (
       <div>
         {showLoader === true ? ( <MlLoader />) : (
@@ -133,7 +134,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/ideator_01.png"}/>
+                            <img src={this.state.data.profilePic?this.state.data.profilePic:genderImage}/>
                           </div>
                         </div>
                         <br className="brclear"/>

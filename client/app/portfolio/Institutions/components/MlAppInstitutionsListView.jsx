@@ -36,7 +36,7 @@ export default class MlAppInstitutionListView extends Component {
             <h3>{intitution.firstName}</h3>
             <div className="list_icon"><span className="ml my-ml-Institutions"></span></div>
             <div className="block_footer">
-              <span>{intitution.chapterName}-{intitution.communityType}</span>
+              <span>{intitution.chapterName} - {intitution.communityType}</span>
             </div>
           </div>
         </a>

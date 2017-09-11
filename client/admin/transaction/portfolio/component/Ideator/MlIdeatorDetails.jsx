@@ -222,6 +222,8 @@ export default class MlIdeatorDetails extends React.Component{
   }
   render(){
     const showLoader = this.state.loading;
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":this.state.defaultProfilePic;
+
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -288,7 +290,7 @@ export default class MlIdeatorDetails extends React.Component{
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
                         <span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>
-                        <img src={this.state.profilePic?this.state.profilePic:this.state.defaultProfilePic}/>
+                        <img src={this.state.profilePic?this.state.profilePic:genderImage}/>
 
                       </div>
                       <div className="fileUpload mlUpload_btn">

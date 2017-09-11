@@ -21,10 +21,14 @@ class MlAppProfileHeader extends Component {
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
+
+
       $('.ml_app_profile h1').click(function () {
           $(this).parent('.ml_app_profile').toggleClass('profile_open');
         $('.overlay').toggle();
       });
+
+
     $('.overlay').click(function(){
       $('.ml_app_profile').removeClass('profile_open');
       $(this).hide();
@@ -94,6 +98,7 @@ class MlAppProfileHeader extends Component {
         <BugReportWrapper />
 
         <div className="overlay"></div>
+        <div className="filter_overlay"></div>
         {/*{showLoader===true?(<MlLoader/>):(*/}
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>

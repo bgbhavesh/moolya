@@ -21,7 +21,7 @@ export default function MlGenericTransactionAccordion(props) {
     }
     case 'registration': {
       // return <MlAppTransaction config={data}/>
-      return <MlAppRegistrationWizard config={data._id}/>
+      return <MlAppRegistrationWizard config={data._id} isAccodion={true}/>
       break;
     }
     case 'connectionRequest':

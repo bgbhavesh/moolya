@@ -254,7 +254,7 @@ export default class AppContactDetails extends React.Component {
         <div className="ml_tabs">
           <ul className="nav nav-pills">
             <li className={this.state.activeTab}>
-              <a href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
+              <a href="#contactA" data-toggle="tab"><b><FontAwesome name='plus-square'/></b></a>
             </li>
             {details && (details.map(function (options, key) {
               return (

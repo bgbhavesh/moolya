@@ -123,7 +123,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .community_icons{height: 45px;position: absolute; /*position:relative;*/ float:right; top: 0px;right: 10px;background-color:rgba(255,255,255,0.9);border-radius: 0px 0px 6px 6px;padding: 0px 5px 0px 5px;border: 1px solid #ccc;z-index: 3;}
 .community_icons a .ml{font-size: 19px; color: #fff; border-radius: 100%; padding: 5px; margin-right: 5px; text-shadow: none;text-shadow: none;line-height: 40px;border:solid 2px transparent;background-color: #8f9fa9; }
 .community_icons a .fa.ml{display: inherit;}
-.community_icons a.active_community .ml{border: 2px solid #ef4647;background-color: #ef4647;color: #fff;}
+.community_icons a.active_community .ml{border: 2px solid #ef4647;/*background-color: #ef4647;*/color: #fff;}
 .community_icons a{text-decoration: none;}
 .ideator_mask{position: relative;width: 103px;height: 139px;background: url(../images/ideator_bg.png);top: 4px;left: 39px;}
 .ideator_mask img{border: 0px;top: 5px;left: 5px;border-radius: 50%;width: 93px;height: 93px;}
@@ -273,7 +273,7 @@ table{background: #fff;}
 .ml_tabs .tab-content .tab-pane .input_types{margin-right: 0px;font-size: 14px;}
 .ml_tabs .tab-content>.tab-pane .padding_wrap{padding-top: 20px;}
 .ml_tabs.ml_tabs_large .nav-pills>li>a{padding: 8px 16px;}
-.ml_tabs .nav-pills>li>a .fa{margin-right: 8px;}
+.ml_tabs .nav-pills>li>a .fa-minus-square{margin-right: 8px;}
 .ml_tabs.ml_tabs_large .nav-pills>li>a:hover{ background:#B9C5CC}
 .ml_tabs.ml_tabs_large .nav-pills>li{margin-right: 2px;}
 .scrollarea{width: 100%;}

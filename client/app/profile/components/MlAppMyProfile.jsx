@@ -70,7 +70,7 @@ class MlAppMyProfile extends Component {
         userDetails: response,
         firstName:response.profile.firstName,
         lastName:response.profile.lastName,
-        displayName:response.profile.firstName+" "+response.profile.lastName,
+        displayName:response.profile.email,
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
@@ -308,7 +308,7 @@ class MlAppMyProfile extends Component {
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" readOnly="readOnly"
+                      <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.displayName}/>
                     </div>
                     <div className="form-group">

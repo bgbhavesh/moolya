@@ -11,7 +11,8 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProficPic'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
+var Select = require('react-select')
+import CropperModal from '../../../../../commons/components/cropperModal';
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -27,12 +28,17 @@ export default class MlIdeatorDetails extends React.Component{
       profilePic: " ",
       privateKey: {},
       defaultProfilePic: "/images/def_profile.png",
-      privateValues: []
+      privateValues: [],
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
     return this;
   }
 
@@ -176,14 +182,22 @@ export default class MlIdeatorDetails extends React.Component{
       this.props.getIdeatorDetails(data, this.state.privateKey)
   }
 
-  onFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+  onFileUpload(file){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
+    if(file){
+      let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+    } this.setState({
+      uploadingAvatar: false,
+    });
   }
   onFileUploadCallBack(file,resp){
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if(resp){
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -219,6 +233,18 @@ export default class MlIdeatorDetails extends React.Component{
     }else{
       toastr.error("Error in deleting picture")
     }
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onFileUpload(image);
   }
   render(){
     const showLoader = this.state.loading;
@@ -294,8 +320,11 @@ export default class MlIdeatorDetails extends React.Component{
 
                       </div>
                       <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+                        <button onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
+                          <span>Profile Pic</span>
+                        </button>
+
+                        {/*<input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>*/}
                       </div>
 
                     </div>
@@ -328,6 +357,13 @@ export default class MlIdeatorDetails extends React.Component{
                   </form>
                 </div>
           </div>
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="square"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
               </ScrollArea>
         </div>
       </div>)}

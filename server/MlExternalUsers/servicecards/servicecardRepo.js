@@ -528,8 +528,23 @@ class MlServiceCardRepo{
               'fromUserType': fromUserType
             });
             break;
-
+          case "sessionAppointment":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'Session-Appointment',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Purchased',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
         }
+
       }
       catch (e) {
         //console

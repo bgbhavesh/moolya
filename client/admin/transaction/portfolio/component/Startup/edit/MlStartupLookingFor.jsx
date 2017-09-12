@@ -52,9 +52,9 @@ export default class MlStartupLookingFor extends React.Component {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.lookingFor)
+    const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
     if (empty) {
-      const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.lookingFor) {
+      if (response && response.lookingFor && response.lookingFor.length>0) {
         this.setState({
           loading: false,
           startupLookingFor: response.lookingFor,
@@ -70,6 +70,7 @@ export default class MlStartupLookingFor extends React.Component {
         startupLookingForList: that.context.startupPortfolio.lookingFor
       });
     }
+    this.startupLookingForServer = response&&response.lookingFor?response.lookingFor:[]
   }
 
   addLookingFor() {
@@ -92,15 +93,29 @@ export default class MlStartupLookingFor extends React.Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.lookingForId
+      "selectedVal": details.lookingForId,
+      popoverOpen: !(this.state.popoverOpen)},() =>{
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.startupLookingForServer && this.startupLookingForServer[selIndex]?this.startupLookingForServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onSaveAction(e) {
@@ -119,15 +134,22 @@ export default class MlStartupLookingFor extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-
-    var privateKey = {
-      keyName: fieldName,
-      booleanKey: field,
-      isPrivate: isPrivate,
-      index: this.state.selectedIndex,
-      tabName: KEY
-    }
-    this.setState({data: details, privateKey: privateKey}, function () {
+    //
+    // var privateKey = {
+    //   keyName: fieldName,
+    //   booleanKey: field,
+    //   isPrivate: isPrivate,
+    //   index: this.state.selectedIndex,
+    //   tabName: KEY
+    // }
+    // this.setState({data: details, privateKey: privateKey}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName,
+      booleanKey:field, isPrivate:isPrivate,
+      index:this.state.selectedIndex,
+      tabName: this.props.tabName}
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -304,4 +326,5 @@ export default class MlStartupLookingFor extends React.Component {
 }
 MlStartupLookingFor.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

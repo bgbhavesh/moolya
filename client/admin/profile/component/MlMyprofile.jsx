@@ -245,10 +245,10 @@ export default class MlMyProfile extends React.Component {
 
   async genderSelect() {
     //this.setState({genderSelect: e.target.value})
-    if (this.state.genderSelect === "Others") {
+    if (this.state.genderSelect === "others") {
       this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
-    else if (this.state.genderSelect === "Female") {
+    else if (this.state.genderSelect === "female") {
       this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
     else {
@@ -455,7 +455,7 @@ export default class MlMyProfile extends React.Component {
     let isExternaluser = Meteor.user().profile.isExternaluser;
     let profilePic = this.state.uploadedProfilePic;
     if(!profilePic || profilePic == " "){
-      profilePic ="/images/img2.png"
+      profilePic =Meteor.user().profile.genderType==='female'?"/images/female.jpg":"/images/img2.png"
     }
     return (
       <div className="admin_main_wrap">
@@ -491,7 +491,7 @@ export default class MlMyProfile extends React.Component {
 
                       </button>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
+                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>
                     </div>
                   </form>
@@ -543,13 +543,13 @@ export default class MlMyProfile extends React.Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male"   checked={this.state.genderStateMale} /><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="male"   checked={this.state.genderStateMale} /><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female"  checked={this.state.genderStateFemale} /><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        <input id="radio2" type="radio" name="radio" value="female"  checked={this.state.genderStateFemale} /><label htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others"  checked={this.state.genderStateOthers} /><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="others"  checked={this.state.genderStateOthers} /><label htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
                   </form>

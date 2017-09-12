@@ -465,6 +465,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: "$profile.displayName",
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
+                  communityDefName: "$profile.externalUserProfiles.communityDefName",
+                  chapterName: "$profile.externalUserProfiles.chapterName",
                   isActive: "$profile.isActive",
                   externalUserAdditionalInfo: {
                     $filter: {
@@ -485,6 +487,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: 1,
                   communityCode: 1,
+                  communityDefName:1,
+                  chapterName:1,
                   isActive: 1,
                   address: {
                     $filter: {
@@ -505,6 +509,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: 1,
                   communityCode: 1,
+                  communityDefName:1,
+                  chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
                   longitude: "$address.longitude"
@@ -545,6 +551,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                     profileImage:"$profile.profileImage"
                   },
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
+                  communityDefName: "$profile.externalUserProfiles.communityDefName",
+                  chapterName: "$profile.externalUserProfiles.chapterName",
                   isActive: "$profile.isActive",
                   externalUserAdditionalInfo: {
                     $filter: {
@@ -565,6 +573,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: 1,
                   communityCode: 1,
+                  communityDefName:1,
+                  chapterName:1,
                   profile:1,
                   isActive: 1,
                   address: {
@@ -587,6 +597,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   name: 1,
                   profile:1,
                   communityCode: 1,
+                  communityDefName:1,
+                  chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
                   longitude: "$address.longitude"

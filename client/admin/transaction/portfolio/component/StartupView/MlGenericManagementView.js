@@ -30,6 +30,9 @@ export default class MlGenericManagementView extends React.Component {
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
 
   showDetails(id) {

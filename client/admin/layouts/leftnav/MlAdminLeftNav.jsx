@@ -18,7 +18,7 @@ class MlAdminLeftNavScroll extends Component {
         let scrollTo = this.props.scrollTo;
         console.log(scrollTo);
         console.log(this.context.scrollArea);
-        $(".scrollarea-content").css({"margin-top": -scrollTo+"px"});
+        // $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
         this.context.scrollArea.refresh();
         this.context.scrollArea.scrollYTo(scrollTo);
       }.bind(this), 500);

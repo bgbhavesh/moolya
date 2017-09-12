@@ -128,11 +128,12 @@ class MlAppOngoingSelectedMyAppointment extends Component {
    * @returns {XML}
    */
   render() {
-    const status = this.props.status;
+    // const status = this.props.status;
+    let status = FlowRouter.getQueryParam('tab');
     let appActionConfig = [];
     const that = this;
     switch (status) {
-      case 'Pending':
+      case 'pending':
         appActionConfig = [
           {
             showAction: true,
@@ -146,7 +147,7 @@ class MlAppOngoingSelectedMyAppointment extends Component {
           }
         ];
         break;
-      case 'Accepted':
+      case 'current':
         appActionConfig = [
           {
             showAction: true,
@@ -155,7 +156,7 @@ class MlAppOngoingSelectedMyAppointment extends Component {
           }
         ];
         break;
-      case 'Rejected':
+      case 'rejected':
         appActionConfig = [
           {
             showAction: true,

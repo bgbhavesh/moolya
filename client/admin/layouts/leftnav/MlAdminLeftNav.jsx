@@ -16,14 +16,12 @@ class MlAdminLeftNavScroll extends Component {
     if(this.context && this.context.scrollArea) {
       setTimeout( function(){
         let scrollTo = this.props.scrollTo;
-        console.log(scrollTo);
-        console.log(this.context.scrollArea);
-        // $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
+        $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
         this.context.scrollArea.refresh();
         this.context.scrollArea.scrollYTo(scrollTo);
       }.bind(this), 500);
     }
-    console.log('MlAdminLeftNavScroll', this);
+    // console.log('MlAdminLeftNavScroll', this);
   }
 
   render() {

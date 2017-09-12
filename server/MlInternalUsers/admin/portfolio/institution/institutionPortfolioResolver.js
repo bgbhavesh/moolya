@@ -3,7 +3,9 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import portfolioValidationRepo from '../portfolioValidation';
-import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController';
+import MlMasterSettingRepo from '../../settings/globalAndMasterSettings/repository/mlMasterSettingRepo';
+
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, context, info) => {
@@ -201,12 +203,25 @@ MlResolver.MlQueryResolver['fetchInstitutionDetails'] = (obj, args, context, inf
     return;
 
   var key = args.key;
-  var portfoliodetailsId = args.portfoliodetailsId
+  var portfoliodetailsId = args.portfoliodetailsId;
+  var portfolioObject = MlPortfolioDetails.findOne(portfoliodetailsId) || {};
+  let titleValue = new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin({type:"TITLE", hierarchyRefId:portfolioObject.clusterId});
+
   var institutePortfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
   if (institutePortfolio && institutePortfolio.hasOwnProperty(key)) {
     var object = institutePortfolio[key];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
     institutePortfolio[key] = filteredObject
+
+    if (key == 'management') {
+      institutePortfolio[key].map(function(data, index)
+      {
+        // let titleObject = underscore.findWhere(titleValue, {value: data.title});
+        let titleObject = _.find(titleValue, {value: data.title});
+        data.title = titleObject && titleObject.label;
+      }
+      )
+    }
     return institutePortfolio;
   }
   return;

@@ -4,6 +4,7 @@ import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import MlMasterSettingRepo from '../../settings/globalAndMasterSettings/repository/mlMasterSettingRepo';
 var _ = require('lodash')
 
 
@@ -83,11 +84,23 @@ MlResolver.MlQueryResolver['fetchCompanyDetails'] = (obj, args, context, info) =
 
   var key = args.key;
   var portfoliodetailsId = args.portfoliodetailsId
+  var portfolioObject = MlPortfolioDetails.findOne(portfoliodetailsId) || {};
+  let titleValue = new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin({type:"TITLE", hierarchyRefId:portfolioObject.clusterId});
+
   var companyPortfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
   if (companyPortfolio && companyPortfolio.hasOwnProperty(key)) {
     var object = companyPortfolio[key];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
     companyPortfolio[key] = filteredObject
+    if (key == 'management') {
+      companyPortfolio[key].map(function(data, index)
+        {
+          // let titleObject = underscore.findWhere(titleValue, {value: data.title});
+          let titleObject = _.find(titleValue, {value: data.title});
+          data.title = titleObject && titleObject.label;
+        }
+      )
+    }
     return companyPortfolio;
   }
 

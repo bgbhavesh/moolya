@@ -301,7 +301,9 @@ let BackEndUser = `
         alsoAssignedas: String,
         displayName:String,
         userName:String,
-        deActive: Boolean
+        deActive: Boolean,
+        genderType: String,
+        profileImage: String
     }
     
     type contextRoles{

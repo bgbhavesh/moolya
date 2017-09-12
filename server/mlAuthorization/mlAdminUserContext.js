@@ -15,8 +15,8 @@ class MlAdminUserContext
   _userDefaultProfileDetails(userId)
   {
    check(userId, String)
-    let hierarchyLevel =null;
-    let hierarchyCode=null;
+    var hierarchyLevel =null;
+    var hierarchyCode=null;
     let defaultCluster=null;
     var isMoolya = null
     let defaultChapters = [];

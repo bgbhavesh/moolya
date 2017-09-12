@@ -12,7 +12,9 @@ export async function findAdminUserDetails(userId,connection) {
                 alsoAssignedas,
                 displayName,
                 userName,
-                deActive
+                deActive,
+                genderType,
+                profileImage
             }
         }
     `,

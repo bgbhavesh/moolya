@@ -43,7 +43,7 @@ export default class CropperModal extends React.PureComponent {
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
-    this.props.handleImageUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()));
+    this.props.handleImageUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()), this.state.imageEvt);
   }
 
   onChangeImageSrc(evt) {
@@ -58,6 +58,7 @@ export default class CropperModal extends React.PureComponent {
     reader.onload = () => {
       this.setState({
         imageSrc: reader.result,
+        imageEvt: evt,
       });
     };
     reader.readAsDataURL(files[0]);

@@ -71,13 +71,17 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
       ],
       isActive:true
     };
-    officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch()
+    officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch();
+
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
     let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
     if(regData){
       if(!_.isEmpty(officeSC)){  //if office is there and reg approved
         var newArr = _.map(officeSC, function(element) {
-          return _.extend({}, element, {isRegistrationApproved: true});
+          if(element.officeId){
+            let officeName= mlDBController.findOne('MlOffice', {_id: element.officeId}).officeName;
+            return _.extend({}, element, {isRegistrationApproved: true,officeName: officeName});
+          }
         });
         return newArr
       }else{          //if no office and registration is approved

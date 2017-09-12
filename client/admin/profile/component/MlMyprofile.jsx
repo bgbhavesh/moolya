@@ -21,8 +21,6 @@ import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {findMyProfileActionHandler} from '../actions/getProfileDetails'
 import CropperModal from '../../../commons/components/cropperModal';
-import '../../../../node_modules/cropperjs/dist/cropper.min.css';
-import '../../../stylesheets/css/cropper.css';
 
 export default class MlMyProfile extends React.Component {
 
@@ -385,7 +383,6 @@ export default class MlMyProfile extends React.Component {
    * **/
 
   async onFileUpload(imageFile){
-    console.log(imageFile);
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage:" " }}
@@ -423,7 +420,6 @@ export default class MlMyProfile extends React.Component {
   }
 
   handleUploadAvatar(image) {
-    console.log('here');
     this.setState({
       uploadingAvatar: true,
     });

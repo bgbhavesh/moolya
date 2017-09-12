@@ -20,8 +20,7 @@ import passwordSAS_validate from '../../../../lib/common/validations/passwordSAS
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {findMyProfileActionHandler} from '../actions/getProfileDetails'
-import '../../../../node_modules/cropperjs/dist/cropper.min.css';
-import '../../../stylesheets/css/cropper.css';
+import CropperModal from '../../../commons/components/cropperModal';
 
 export default class MlMyProfile extends React.Component {
 
@@ -52,7 +51,7 @@ export default class MlMyProfile extends React.Component {
       PasswordReset:false,
       showChangePassword:true,
       showProfileModal: false,
-
+      uploadingAvatar: false,
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
@@ -72,8 +71,8 @@ export default class MlMyProfile extends React.Component {
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
-    this.onChangeAvatarSrc = this.onChangeAvatarSrc.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
     // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
     // this.firstNameUpdation.bind(this);
@@ -246,10 +245,10 @@ export default class MlMyProfile extends React.Component {
 
   async genderSelect() {
     //this.setState({genderSelect: e.target.value})
-    if (this.state.genderSelect === "Others") {
+    if (this.state.genderSelect === "others") {
       this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
-    else if (this.state.genderSelect === "Female") {
+    else if (this.state.genderSelect === "female") {
       this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
     else {
@@ -420,54 +419,11 @@ export default class MlMyProfile extends React.Component {
     });
   }
 
-  dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-      byteString = atob(dataURI.split(',')[1]);
-    else
-      byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type:mimeString});
-  }
-
-  handleUploadAvatar() {
+  handleUploadAvatar(image) {
     this.setState({
       uploadingAvatar: true,
     });
-    if (!this.state.avatarSrc) {
-      return;
-    }
-    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
-      return;
-    }
-    this.onFileUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()));
-  }
-
-  onChangeAvatarSrc(evt) {
-    if (evt && evt.preventDefault) { evt.preventDefault(); }
-    let files;
-    if (evt.dataTransfer) {
-      files = evt.dataTransfer.files;
-    } else if (evt.target) {
-      files = evt.target.files;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.setState({
-        avatarSrc: reader.result,
-      });
-    };
-    reader.readAsDataURL(files[0]);
+    this.onFileUpload(image);
   }
 
   render(){
@@ -499,7 +455,7 @@ export default class MlMyProfile extends React.Component {
     let isExternaluser = Meteor.user().profile.isExternaluser;
     let profilePic = this.state.uploadedProfilePic;
     if(!profilePic || profilePic == " "){
-      profilePic ="/images/img2.png"
+      profilePic =Meteor.user().profile.genderType==='female'?"/images/female.jpg":"/images/img2.png"
     }
     return (
       <div className="admin_main_wrap">
@@ -535,53 +491,19 @@ export default class MlMyProfile extends React.Component {
 
                       </button>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
+                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>
                     </div>
                   </form>
                 </div>
               </div>
-              <Modal show={this.state.showProfileModal}>
-                <Modal.Header>
-                  Choose your profile picture.
-                </Modal.Header>
-                <Modal.Body>
-                  {this.state.uploadingAvatar ? <MlLoader/> : ''}
-                  <div style={{ width: '100%' }}>
-                    <center>
-                      <label htmlFor="avatar" className="">
-                        <a className="mlUpload_btn">Browse Image</a>
-                      </label>
-                    </center>
-                    <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeAvatarSrc} style={{ display: 'none' }} />
-                    <br />
-                    <br />
-                    <div className="circle-cropper">
-                      <Cropper
-                        zoomTo={1}
-                        viewMode={1}
-                        style={{ height: 350, width: '100%' }}
-                        aspectRatio={1 / 1}
-                        guides={false}
-                        src={this.state.avatarSrc}
-                        ref={(cropper) => { this.cropper = cropper; }}
-                        onChange
-                        center
-                      />
-                    </div>
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <div className="form-group">
-                    <a disabled={this.state.uploadingAvatar} className="mlUpload_btn" onClick={this.toggleModal.bind(this)}>
-                      Close
-                    </a>
-                    <a onClick={this.handleUploadAvatar} disabled={this.state.uploadingAvatar} className="mlUpload_btn" >
-                      Upload
-                    </a>
-                  </div>
-                </Modal.Footer>
-              </Modal>
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="circle"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
               <div className="col-md-6">
                 <div className="form_bg">
                   <form>
@@ -621,13 +543,13 @@ export default class MlMyProfile extends React.Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male"   checked={this.state.genderStateMale} /><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="male"   checked={this.state.genderStateMale} /><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female"  checked={this.state.genderStateFemale} /><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        <input id="radio2" type="radio" name="radio" value="female"  checked={this.state.genderStateFemale} /><label htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others"  checked={this.state.genderStateOthers} /><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="others"  checked={this.state.genderStateOthers} /><label htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
                   </form>

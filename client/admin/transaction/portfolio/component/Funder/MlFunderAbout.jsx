@@ -290,6 +290,7 @@ export default class MlFunderAbout extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":this.state.defaultProfilePic;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
     let personal = null, familyFund= null;
     // temp fix need to remove string compare
@@ -334,7 +335,7 @@ export default class MlFunderAbout extends React.Component {
                       {/*</div>*/}
                       <div className="form-group">
                         <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this,"gender", "isGenderPrivate")}/>
                       </div>
 
                       <div className="form-group">
@@ -380,7 +381,7 @@ export default class MlFunderAbout extends React.Component {
                   <div className="form_bg">
                     <form>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profilePic?this.state.profilePic:this.state.defaultProfilePic}/>
+                        <img src={this.state.profilePic?this.state.profilePic:genderImage}/>
                         {this.state.profilePic?<span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>: " "}
                       </div>
                       <div className="form-group">

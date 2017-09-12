@@ -56,8 +56,10 @@ export default class MlFunderInvestment extends React.Component {
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.investments)
     const response = await fetchfunderPortfolioInvestor(portfolioDetailsId);
     if (empty) {
-      if(response)
+      if(response && response.length)
         this.setState({loading: false, funderInvestment: response, funderInvestmentList: response});
+      else
+        this.setState({loading: false})
     } else {
       this.setState({
         loading: false,

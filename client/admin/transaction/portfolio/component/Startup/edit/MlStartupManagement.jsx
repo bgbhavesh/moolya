@@ -334,6 +334,12 @@ export default class MlStartupManagement extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.startupManagementList || [];
+    let CDNUrl = "";
+    if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+      CDNUrl = Meteor.settings.public.CDNUrl;
+    }
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
+
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -355,9 +361,7 @@ export default class MlStartupManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer">
-                            {user.logo && user.logo.fileUrl ? <img src={user.logo.fileUrl} className="p_image" /> : <CDNImage src="/images/def_profile.png" className="p_image" />}
-                          </div>
+                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : CDNUrl+genderImage} className="p_image"/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>

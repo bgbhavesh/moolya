@@ -60,8 +60,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPrincipalDetails();
-    this.fetchTeamDetails();
+    return [this.fetchPrincipalDetails(),this.fetchTeamDetails()];
     this.fetchClusterId();
   }
   async fetchClusterId() {
@@ -74,38 +73,29 @@ export default class MlFunderPrincipalTeam extends React.Component {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.principal)
+    const response = await fetchfunderPortfolioPrincipal(portfolioDetailsId);
     if (empty) {
-      const response = await fetchfunderPortfolioPrincipal(portfolioDetailsId);
-      if (response) {
+      if(response && response.length)
         this.setState({loading: false, funderPrincipal: response, funderPrincipalList: response});
-        // this.setState({privateKeys:response.privateFields})
-        // _.each(response.privateFields, function (pf) {
-        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        // })
-      }
+      else
+        this.setState({loading: false})
     } else {
-      // var funderPrincipalList = [];
-      // funderPrincipalList.push(that.context.funderPortfolio.principal)
       this.setState({
         loading: false,
         funderPrincipal: that.context.funderPortfolio.principal,
         funderPrincipalList: that.context.funderPortfolio.principal
       });
     }
+    this.funderPrincipalServer = response
   }
   async fetchTeamDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.team)
+    const response = await fetchfunderPortfolioTeam(portfolioDetailsId);
     if (empty) {
-      const response = await fetchfunderPortfolioTeam(portfolioDetailsId);
-      if (response) {
+      if(response)
         this.setState({loading: false, funderTeam: response, funderTeamList: response});
-        _.each(response.privateFields, function (pf) {
-          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        })
-      }
-
     } else {
       this.setState({
         loading: false,
@@ -113,9 +103,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
         funderTeamList: that.context.funderPortfolio.team
       });
     }
+    this.funderTeamServer = response
+
   }
 
-  onLockChange(fieldName, field, e) {
+  onLockChange(fieldName, field,tabName, e) {
     let details = this.state.data || {};
     let key = e.target.id;
     var isPrivate = false;
@@ -128,9 +120,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
       details = _.extend(details, {[key]: false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:this.state.selectedTab}
-    this.setState({privateKey:privateKey})
-    this.setState({data: details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -237,18 +229,34 @@ export default class MlFunderPrincipalTeam extends React.Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpenP: !(this.state.popoverOpenP),
+      popoverOpenP: !(this.state.popoverOpenP)},() => {
+      this.lockPrivateKeys(index,true,"principal")
       // "selectedVal": details.typeOfFundingId
     });
 
-    setTimeout(function () {
+   /* setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
 
 
   }
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex,isPrincipal,tabName) {
+    var privateValues = this.funderPrincipalServer && this.funderPrincipalServer[selIndex]?this.funderPrincipalServer[selIndex].privateFields : []
+    if(!isPrincipal)
+      privateValues = this.funderTeamServer && this.funderTeamServer[selIndex]?this.funderTeamServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.privateKeys, {tabName: tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keyssssssssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   onTeamTileClick(index, e) {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
     let details = cloneArray[index]
@@ -260,9 +268,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpenT: !(this.state.popoverOpenT),
+      popoverOpenT: !(this.state.popoverOpenT)},() => {
+      this.lockPrivateKeys(index,false,"team")
       // "selectedVal": details.typeOfFundingId
     });
+      // "selectedVal": details.typeOfFundingId
+
 
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
@@ -574,7 +585,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.firstName} className="form-control float-label"
                                      id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate","principal")}/>
                             </div>
 
                             <div className="form-group">
@@ -582,21 +593,21 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.lastName} className="form-control float-label"
                                      id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate","principal")}/>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="Designation" name="designation"
                                      defaultValue={this.state.data.designation}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"
-                                           onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate","principal")}/>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="Company Name" name="principalcompanyName"
                                      defaultValue={this.state.data.principalcompanyName}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "principalcompanyName", "isCompanyNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "principalcompanyName", "isCompanyNamePrivate","principal")}/>
 
                             </div>
 
@@ -605,7 +616,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.duration}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                           onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate","principal")}/>
 
                             </div>
                             <div className="form-group">
@@ -613,7 +624,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.yearsOfExperience}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"
-                                           onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate","principal")}/>
 
                             </div>
                             <div className="form-group">
@@ -621,7 +632,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.qualification}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"
-                                           onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate","principal")}/>
 
                             </div>
                             <div className="form-group">
@@ -629,7 +640,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.aboutPrincipal}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"
-                                           onClick={this.onLockChange.bind(this, "aboutPrincipal", "isAboutPrincipalPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "aboutPrincipal", "isAboutPrincipalPrivate","principal")}/>
 
                             </div>
                             {/*<div className="form-group">*/}
@@ -712,7 +723,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.firstName} className="form-control float-label"
                                      id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate","team")}/>
                             </div>
 
                             <div className="form-group">
@@ -720,7 +731,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.lastName} className="form-control float-label"
                                      id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate","team")}/>
                             </div>
 
                             <div className="form-group">
@@ -728,14 +739,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.designation}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
-                                           onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate","team")}/>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="Company Name" name="teamcompanyName"
                                      defaultValue={this.state.data.teamcompanyName}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                           onClick={this.onLockChange.bind(this, "teamcompanyName", "isCompanyNamePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "teamcompanyName", "isCompanyNamePrivate","team")}/>
 
                             </div>
 
@@ -744,7 +755,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.duration}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                           onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate","team")}/>
 
                             </div>
                             <div className="form-group">
@@ -752,7 +763,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.yearsOfExperience}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
-                                           onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate","team")}/>
 
                             </div>
                             <div className="form-group">
@@ -760,7 +771,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.qualification}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
-                                           onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate","team")}/>
 
                             </div>
                             <div className="form-group">
@@ -768,7 +779,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                      defaultValue={this.state.data.aboutTeam}
                                      className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                               <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
-                                           onClick={this.onLockChange.bind(this, "aboutTeam", "isAboutTeamPrivate")}/>
+                                           onClick={this.onLockChange.bind(this, "aboutTeam", "isAboutTeamPrivate","team")}/>
                             </div>
                             {/*<div className="form-group">*/}
                               {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
@@ -814,4 +825,5 @@ export default class MlFunderPrincipalTeam extends React.Component {
 };
 MlFunderPrincipalTeam.contextTypes = {
   funderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

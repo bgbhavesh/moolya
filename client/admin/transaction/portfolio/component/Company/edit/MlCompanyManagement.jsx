@@ -339,6 +339,12 @@ export default class MlCompanyManagement extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.managementList || [];
+    let CDNUrl = "";
+    if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+      CDNUrl = Meteor.settings.public.CDNUrl;
+    }
+    let genderImage = this.state.data && this.state.data.gender==='female'?CDNUrl+"/images/female.jpg":CDNUrl+"/images/def_profile.png";
+
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -360,9 +366,7 @@ export default class MlCompanyManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                           <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                            <div className="hex_outer">
-                              {user.logo && user.logo.fileUrl ? <img src={user.logo.fileUrl} /> : <CDNImage src="/images/def_profile.png" />}
-                            </div>
+                            <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : genderImage}/></div>
                             <h3>{user.firstName?user.firstName:""}</h3>
                           </div>
                       </div>

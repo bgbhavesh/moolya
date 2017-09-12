@@ -84,10 +84,18 @@ class MlAssignBackendUsers extends React.Component {
   {
       const userDetails = await findAdminUserDetails(userId,client);
       if (userDetails){
-          this.setState({selectedBackendUser:userId})
-          this.setState({username:userDetails.userName})
-          this.setState({userDisplayName:userDetails.displayName})
-          this.setState({isActive:userDetails.deActive})
+          // this.setState({selectedBackendUser:userId})
+          // this.setState({username:userDetails.userName})
+          // this.setState({userDisplayName:userDetails.displayName})
+          // this.setState({isActive:userDetails.deActive})
+          this.setState({
+            selectedBackendUser: userId,
+            username: userDetails.userName,
+            userDisplayName: userDetails.displayName,
+            isActive: userDetails.deActive,
+            genderType: userDetails.genderType,
+            profileImage: userDetails.profileImage
+          })
           let alsoAs = userDetails.alsoAssignedas;
           if(alsoAs){
             let alsoArray = _.compact(alsoAs.split(','));
@@ -247,6 +255,8 @@ class MlAssignBackendUsers extends React.Component {
       });
 
       const showLoader = this.state.loading;
+      let gImage = this.state.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
+      let genderImage = (!this.state.profileImage || this.state.profileImage == " "?gImage:this.state.profileImage)
 
     return (
       <div className="admin_main_wrap">
@@ -268,7 +278,7 @@ class MlAssignBackendUsers extends React.Component {
                       <div className="list_block provider_block">
                         <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                         <div className="provider_mask"><CDNImage src="/images/funder_bg.png"/> <CDNImage className="user_pic"
-                                                                                               src="/images/def_profile.png"/>
+                                                                                               src={genderImage}/>
                         </div>
                         <h3>Assign <br/> Backend Users</h3>
                       </div>
@@ -294,7 +304,7 @@ class MlAssignBackendUsers extends React.Component {
                         <input type="file" className="upload" ref="profilePic"/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        <CDNImage src="/images/def_profile.png"/>
+                        <CDNImage src={genderImage}/>
                       </div>
                     </div>
                     <br className="brclear"/>

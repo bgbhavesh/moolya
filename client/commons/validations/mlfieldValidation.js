@@ -1,5 +1,6 @@
 var Select = require('react-select');
-import {isValidNumber, format} from 'libphonenumber-js';
+// import {isValidNumber, format} from 'libphonenumber-js';
+var PhoneNumber = require( 'awesome-phonenumber' );
 
 //import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
@@ -46,7 +47,12 @@ export function mlFieldValidations(elements) {
 export function validatedPhoneNumber(countryCode, contactNumber){
   let isValidPhoneNumber = true;
   if (contactNumber) {
-    isValidPhoneNumber = isValidNumber(format({country: countryCode, phone: contactNumber }, 'International'));
+    // isValidPhoneNumber = isValidNumber(format({country: countryCode, phone: contactNumber }, 'International'));
+    //var pn = new PhoneNumber( `0${contactNumber}`, countryCode);
+    var cCode = PhoneNumber.getCountryCodeForRegionCode(countryCode);
+    var regionCode = PhoneNumber.getRegionCodeForCountryCode(cCode);
+    var pn = new PhoneNumber(contactNumber, regionCode );
+    isValidPhoneNumber = pn.isValid( );
   }
   return isValidPhoneNumber;
 }

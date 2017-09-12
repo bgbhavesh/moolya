@@ -52,14 +52,16 @@ export default class MlFunderLookingFor extends Component {
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.lookingFor)
     const response = await findFunderLookingForActionHandler(portfolioDetailsId);
     if (empty) {
-      if (response) {
+      if(response && response.length){
         this.setState({
           loading: false,
           funderLookingFor: response,
           funderLookingForList: response
         });
-      } else
-        this.setState({loading: false})
+      }else{
+        this.setState({loading:false})
+      }
+
     } else {
       this.setState({
         loading: false,
@@ -67,6 +69,8 @@ export default class MlFunderLookingFor extends Component {
         funderLookingForList: this.context.funderPortfolio.lookingFor
       });
     }
+    this.funderLookingForServer = response
+
   }
 
   addLookingFor() {
@@ -87,14 +91,29 @@ export default class MlFunderLookingFor extends Component {
       data: details,
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.lookingForId
+      "selectedVal": details.lookingForId},() => {
+      this.lockPrivateKeys(index)
     });
 
+/*
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.funderLookingForServer && this.funderLookingForServer[selIndex]?this.funderLookingForServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onSaveAction(e) {

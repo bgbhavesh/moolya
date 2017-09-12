@@ -45,9 +45,10 @@ MlLoginContent = React.createClass({
     initalizeFloatLabel();
   },
   onValueChange(event){
-    if (event.target.name == 'userName')
+    if (event.target.name == 'userName') {
+      event.target.value = event.target.value.trim()
       this.setState(Object.assign({userNameErr: ""}))
-    if (event.target.name == 'Password')
+    } else if (event.target.name == 'Password')
       this.setState(Object.assign({passwordErr: ""}))
   },
 

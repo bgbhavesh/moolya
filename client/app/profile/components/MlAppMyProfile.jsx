@@ -71,7 +71,7 @@ class MlAppMyProfile extends Component {
         userDetails: response,
         firstName:response.profile.firstName,
         lastName:response.profile.lastName,
-        displayName:response.profile.firstName+" "+response.profile.lastName,
+        displayName:response.profile.email,
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
@@ -278,7 +278,13 @@ class MlAppMyProfile extends Component {
           actionOptions={appActionConfig}/>
       }]
   };
-  return (
+    let CDNUrl = "";
+    if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+      CDNUrl = Meteor.settings.public.CDNUrl;
+    }
+    let gImg = this.state.gender==='female'?CDNUrl+"/images/female.jpg":CDNUrl+"/images/def_profile.png";
+    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+    return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
@@ -307,7 +313,7 @@ class MlAppMyProfile extends Component {
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" readOnly="readOnly"
+                      <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.displayName}/>
                     </div>
                     <div className="form-group">
@@ -315,16 +321,16 @@ class MlAppMyProfile extends Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male" checked={this.state.genderStateMale}/><label
+                        <input id="radio1" type="radio" name="radio" value="male" checked={this.state.genderStateMale}/><label
                         htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female"
+                        <input id="radio2" type="radio" name="radio" value="female"
                                checked={this.state.genderStateFemale}/><label
                         htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others"
+                        <input id="radio3" type="radio" name="radio" value="others"
                                checked={this.state.genderStateOthers}/><label
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
@@ -342,7 +348,7 @@ class MlAppMyProfile extends Component {
                         <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        {this.state.profileImage ? <img src={this.state.profileImage} /> : <CDNImage src="/images/def_profile.png" />}
+                        <img src={genderImage}/>
                       </div>
                     </div>
                     <br className="brclear"/>

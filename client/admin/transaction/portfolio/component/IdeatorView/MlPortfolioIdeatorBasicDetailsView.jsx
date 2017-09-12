@@ -73,6 +73,11 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    let CDNUrl = "";
+    if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+      CDNUrl = Meteor.settings.public.CDNUrl;
+    }
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/ideator_01.png";
     return (
       <div>
         {showLoader === true ? ( <MlLoader />) : (
@@ -134,7 +139,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            {this.state.data && this.state.data.profilePic ? <img src={this.state.data.profilePic} /> : <CDNImage src="/images/ideator_01.png"/> }
+                            <img src={this.state.data.profilePic?this.state.data.profilePic:CDNUrl+genderImage}/>
                           </div>
                         </div>
                         <br className="brclear"/>

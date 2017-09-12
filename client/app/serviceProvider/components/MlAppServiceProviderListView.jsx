@@ -29,7 +29,7 @@ export default class MlAppServiceProviderListView extends Component {
             <div className="list_icon"><span className="ml my-ml-Service-Providers"></span></div>
             {/*<CDNImage src="/images/valuation.png" className="c_image"/>*/}
             <div className="block_footer">
-              <span>{provider.chapterName}-{provider.communityType}</span>
+              <span>{provider.chapterName} - {provider.communityType}</span>
             </div>
           </div>
         </a>

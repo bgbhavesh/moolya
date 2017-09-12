@@ -30,6 +30,13 @@ export default class MlBackendUserListView extends Component {
           userStatus = 'inactive'
         }
       }
+      let CDNUrl = "";
+      if(Meteor.settings && Meteor.settings.public && Meteor.settings.public.CDNUrl){
+        CDNUrl = Meteor.settings.public.CDNUrl;
+      }
+      let gImg = prop.profile.genderType==='female'?CDNUrl+"/images/female.jpg":CDNUrl+"/images/def_profile.png"
+      let genderImage = (!prop.profile.profileImage || prop.profile.profileImage==" ")?gImg:prop.profile.profileImage;
+
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
           <div className="list_block provider_block">
@@ -38,7 +45,8 @@ export default class MlBackendUserListView extends Component {
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">
                 <CDNImage src="/images/funder_bg.png"/>
-                {prop.profile.profileImage ? <img src={prop.profile.profileImage} className="user_pic" /> : <CDNImage src='/images/def_profile.png' className="user_pic"/> }
+                <img className="user_pic"
+                     src={genderImage}/>
               </div>
             </a>
             <h3>{username} <br />

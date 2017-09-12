@@ -73,6 +73,7 @@ export default class MlFunderAboutView extends React.Component{
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
     let personal = null, familyFund= null;
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
     if(investmentFrom == "PERSONAL"){
       personal = true;
       familyFund = false;
@@ -164,7 +165,7 @@ export default class MlFunderAboutView extends React.Component{
                             {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                             {/*</div>*/}
                             <div className="previewImg ProfileImg">
-                              {/*<img src={this.state.data.profilePic?this.state.data.profilePic:"/images/def_profile.png"}/>*/}
+                              {/*<img src={this.state.data.profilePic?this.state.data.profilePic:genderImage}/>*/}
                               {
                                 this.state.data.profilePic?<img src={this.state.data.profilePic} /> : <CDNImage src={this.state.data.profilePic} />
                               }

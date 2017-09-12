@@ -44,8 +44,10 @@ export default class MlFunderSuccessStories extends React.Component {
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.successStories)
     const response = await fetchfunderPortfolioSuccess(portfolioDetailsId);
     if (empty) {
-      if(response)
+      if(response && response.length)
         this.setState({loading: false, funderSuccess: response, funderSuccessList: response});
+      else
+        this.setState({loading: false})
     } else {
       this.setState({
         loading: false,

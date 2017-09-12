@@ -32,6 +32,8 @@ export default class MlAppLeftNav extends Component {
         if(WinWidth > 768){
             $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
         }
+        let routeName = FlowRouter.getRouteName();
+        $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );
     }
 
     render(){
@@ -61,7 +63,7 @@ export default class MlAppLeftNav extends Component {
               activeClass = 'inactive_menu'
             }
             return (
-                <li className={`menu_item ${activeClass}`} key={idx}>
+                <li className={`menu_item ${activeClass}`} key={idx} data-toggle={dataItem && dataItem.isDisabled?"tooltip":""} title={dataItem && dataItem.isDisabled?"starting soon..":""} data-placement="right">
                     <a href={dataItem.link} id={dataItem.uniqueId}>
                         <div className={"menu_in"}>
                             <span className={dataItem.image}></span>

@@ -303,7 +303,7 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
 
 
 MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) => {
-  let hierarchy;
+  var hierarchy;
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive && args.roleId) {
@@ -363,6 +363,7 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
                   departmentId:args.departmentId,
                   subDepartmentId:args.subDepartmentId,
                   roleId:args.roleId,
+                  subChapterId:"all",          // as no subChapterId, only moolya users should show.
                   isActive:true,
                 }
               }

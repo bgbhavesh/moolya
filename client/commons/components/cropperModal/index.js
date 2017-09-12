@@ -3,6 +3,9 @@ import { Modal } from 'react-bootstrap';
 import Cropper from 'react-cropper';
 
 import MlLoader from '../../../commons/components/loader/loader';
+import '../../../../node_modules/cropperjs/dist/cropper.min.css';
+import '../../../stylesheets/css/cropper.css';
+
 
 export default class CropperModal extends React.PureComponent {
 

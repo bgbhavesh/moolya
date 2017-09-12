@@ -187,7 +187,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
               </div>
             </div>
           </div>
-          {status !== 'Completed' &&
+          {status !== 'completed' &&
             <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
           }
         </div>

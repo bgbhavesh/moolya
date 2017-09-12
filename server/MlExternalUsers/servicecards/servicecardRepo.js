@@ -6,6 +6,7 @@ import MlRespPayload from '../../commons/mlPayload'
 import _ from 'lodash'
 
 import moment from "moment";
+import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 
 const INITIAL_VERSION = 0.001;
 
@@ -368,6 +369,12 @@ class MlServiceCardRepo{
           return new MlRespPayload().errorPayload(paymentResponse, 400);
         }
         let serviceResponse = mlDBController.update('MlScOrder', service._id, {paymentStatus: 'paid'}, {$set: 1}, context);
+        let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', service.serviceId, context);
+        let toUserId = serviceInfo ? serviceInfo.userId : '';
+        if(toUserId) {
+          this.createTransactionRequest(toUserId, "servicePurchased", orderId, serviceInfo._id, userId, 'user', context);
+        }
+
         if(!serviceResponse){
           return new MlRespPayload().errorPayload("Error In Payment", 400);
         }
@@ -502,9 +509,33 @@ class MlServiceCardRepo{
         return ret
     }
 
-    // createTransactionRequest(){
+    createTransactionRequest(userId, transType, orderId, resourceId, fromUserId, fromUserType, context) {
+      try {
+        let transactionType = transType;
+        switch (transactionType) {
+          case 'servicePurchased':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'Service-Purchased',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Purchased',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
 
-    // }
+        }
+      }
+      catch (e) {
+        //console
+        console.log(e);
+      }
+    }
 }
 
 const mlServiceCardRepo = new MlServiceCardRepo();

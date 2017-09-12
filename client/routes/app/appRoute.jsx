@@ -26,6 +26,9 @@ import MlAppInvestment from "../../app/investment/components/MlAppInvestment";
 import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransaction";
 import {appClient} from '../../app/core/appConnection'
 import MlViews from '../../app/commons/view/MlAppViews'
+import {mlAppClusterDashboardListConfig, mlAppClusterDashboardMapConfig} from '../../app/dashboard/config/mlAppClusterDashboardConfig'
+import {mlAppChapterDashboardListConfig, mlAppChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppChapterDashboardConfig'
+import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppSubChapterDashboardConfig'
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
@@ -113,7 +116,7 @@ appSection.route('/', {
 appSection.route('/dashboard/:isFirst', {
   name: 'dashboard',
   action(params){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
     // mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
   }
 });
@@ -121,8 +124,54 @@ appSection.route('/dashboard/:isFirst', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>})
     // mount(AppLayout,{appContent:<MlAppDashboard/>})
+  }
+});
+
+appSection.route('/dashboard/:clusterId/chapters', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppChapterDashboardMapConfig}
+                           listConfig={mlAppChapterDashboardListConfig} params={params}/>
+    })
+  }
+});
+appSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppSubChapterDashboardMapConfig}
+                           listConfig={mlAppSubChapterDashboardListConfig} params={params}/>
+    })
+  }
+});
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlDashboardMapConfig}
+                           listConfig={mlDashboardListConfig} params={params}/>
+    })
   }
 });
 

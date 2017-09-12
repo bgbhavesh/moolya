@@ -85,6 +85,8 @@ export default class MlGenericManagementView extends React.Component {
     console.log('selected : ', _this.state.viewCurDetail)
     const showLoader = _this.state.loading;
     var arrayList = _this.props.data ? _this.props.data : []
+    let gImg = _this.state.viewCurDetail.gender==='female'?'/images/female.jpg':'/images/ideator_01.png';
+    let genderImage = _this.state.viewCurDetail && _this.state.viewCurDetail.logo && _this.state.viewCurDetail.logo.fileUrl?_this.state.viewCurDetail.logo.fileUrl:gImg;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -167,7 +169,7 @@ export default class MlGenericManagementView extends React.Component {
 
                                 <div className="form-group">
                                   <input type="text" placeholder="Middle name"
-                                         value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}
+                                         value={this.state.viewCurDetail.middleName ? this.state.viewCurDetail.middleName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -175,7 +177,7 @@ export default class MlGenericManagementView extends React.Component {
 
                                 <div className="form-group">
                                   <input type="text" placeholder="Last Name"
-                                         value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}
+                                         value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -228,7 +230,7 @@ export default class MlGenericManagementView extends React.Component {
                               <form>
                                 <div className="form-group">
                                   <div className="previewImg ProfileImg">
-                                    <img src="/images/ideator_01.png"/>
+                                    <img src={genderImage}/>
                                   </div>
                                 </div>
                                 <br className="brclear"/>

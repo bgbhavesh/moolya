@@ -3,6 +3,9 @@ import { Modal } from 'react-bootstrap';
 import Cropper from 'react-cropper';
 
 import MlLoader from '../../../commons/components/loader/loader';
+import '../../../../node_modules/cropperjs/dist/cropper.min.css';
+import '../../../stylesheets/css/cropper.css';
+
 
 export default class CropperModal extends React.PureComponent {
 
@@ -40,7 +43,7 @@ export default class CropperModal extends React.PureComponent {
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
-    this.props.handleImageUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()));
+    this.props.handleImageUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()), this.state.imageEvt);
   }
 
   onChangeImageSrc(evt) {
@@ -55,6 +58,7 @@ export default class CropperModal extends React.PureComponent {
     reader.onload = () => {
       this.setState({
         imageSrc: reader.result,
+        imageEvt: evt,
       });
     };
     reader.readAsDataURL(files[0]);

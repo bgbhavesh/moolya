@@ -51,15 +51,16 @@ export default class MlInstitutionEditRD extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp= this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.researchAndDevelopment)
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.researchAndDevelopment) {
+      if (response && response.researchAndDevelopment && response.researchAndDevelopment.length>0) {
         this.setState({loading: false, institutionRD: response.researchAndDevelopment, institutionRDList: response.researchAndDevelopment});
       }else{
         this.setState({loading:false})
@@ -67,6 +68,7 @@ export default class MlInstitutionEditRD extends React.Component{
     }else{
       this.setState({loading: false, institutionRD: that.context.institutionPortfolio.researchAndDevelopment, institutionRDList: that.context.institutionPortfolio.researchAndDevelopment});
     }
+    this.institutionRAndDServer = response && response.researchAndDevelopment?response.researchAndDevelopment:[]
   }
   addRD(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -88,14 +90,34 @@ export default class MlInstitutionEditRD extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen)});
-    setTimeout(function () {
+    this.setState({selectedIndex:index, data:details,
+                    selectedObject : index,
+                    popoverOpen : !(this.state.popoverOpen)},()=>{
+                    this.lockPrivateKeys(index)
+                 });
+   /* setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
   }
-
+//todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionRAndDServer && this.institutionRAndDServer[selIndex] ? this.institutionRAndDServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
   onLockChange(fiedName, field, e){
     var isPrivate = false
     let details = this.state.data||{};
@@ -109,9 +131,14 @@ export default class MlInstitutionEditRD extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+   /* var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
     this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })*/
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -376,4 +403,5 @@ export default class MlInstitutionEditRD extends React.Component{
 }
 MlInstitutionEditRD.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

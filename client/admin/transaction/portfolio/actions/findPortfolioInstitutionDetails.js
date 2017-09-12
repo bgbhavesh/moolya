@@ -118,6 +118,8 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName
                           booleanKey
+                           index
+                           tabName
                       }
                   }
                   
@@ -133,6 +135,8 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName
                           booleanKey
+                          index
+                          tabName
                       }
                       makePrivate
                   }
@@ -154,7 +158,9 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                     index
                     privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        index,
+                        tabName
                     }
                   }
                   
@@ -272,7 +278,9 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       index
                       privateFields{
                           keyName,
-                          booleanKey
+                          booleanKey,
+                          index,
+                          tabName
                       }
                       makePrivate
                   }
@@ -306,7 +314,9 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                     }
                     privateFields{
                       keyName,
-                      booleanKey
+                      booleanKey,
+                      index,
+                      tabName
                     }
                     makePrivate
                   }

@@ -99,8 +99,9 @@ let myOfficeSchema = `
         availableCommunities:[AvailableCommunities]
         isActive:Boolean,
         isActivated:Boolean,
-        isExpired:Boolean 
-        isRegistrationApproved : Boolean
+        isExpired:Boolean, 
+        isRegistrationApproved : Boolean,
+        officeName : String
     }
     
      type TeamUsers {

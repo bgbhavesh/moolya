@@ -40,6 +40,14 @@ export default class MlAppFilterContainer extends Component {
       $('.filter_table').addClass('filter_hide');
       $(this).hide();
     });
+    $('.save_btn').click(function(){
+      $('.filter_table').addClass('filter_hide');
+      $('.filter_overlay').toggle();
+    });
+    $('.cancel_btn').click(function(){
+      $('.filter_table').addClass('filter_hide');
+      $('.filter_overlay').toggle();
+    });
 
     initalizeFloatLabel();
   }
@@ -98,10 +106,10 @@ export default class MlAppFilterContainer extends Component {
           />
           <div className="ml_icon_btn">
             <a href="#"  className="save_btn" onClick={that.onApplyFilter.bind(this)} >
-              <span className="ml ml-save"></span>
+              <span className="ml my-ml-save"></span>
             </a>
             <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onCancelFilter.bind(this)}>
-              <span className="ml ml-delete"></span>
+              <span className="ml my-ml-cancel"></span>
             </a>
           </div>
         </div>

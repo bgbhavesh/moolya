@@ -49,27 +49,6 @@ if(Meteor.isServer){
         "name" : "Transactions",
         "uniqueId" : "myTransaction"
       },
-
-      {
-        "image":"ml ml-chat",
-        "link": "/app/conversations",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Conversations",
-        "uniqueId" : "conversations",
-        isDisabled:true
-      },
-
-      {
-        "image":"ml my-ml-subscriptions",
-        "link": "#",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "moolya Services",
-        "uniqueId" : "subscriptions",
-        isDisabled:true
-      },
-
       {
         "image":"ml ml-news",
         "link": "/app/news",
@@ -94,6 +73,26 @@ if(Meteor.isServer){
       //   "name" : "Task",
       //   "uniqueId" : "my_task"
       // }
+      {
+        "image":"ml ml-chat",
+        "link": "/app/conversations",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Conversations",
+        "uniqueId" : "conversations",
+        isDisabled:true
+      },
+
+      {
+        "image":"ml my-ml-subscriptions",
+        "link": "#",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "moolya Services",
+        "uniqueId" : "subscriptions",
+        isDisabled:true
+      },
+
     ]
   }})
 }

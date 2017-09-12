@@ -110,6 +110,7 @@ export default class MlAppMyOffice extends Component {
         <div className="swiper-slide office_accounts my-office-main" key={id}
              onClick={that.selectOffice.bind(that, office.officeId)}>
           <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
+          <h2>OfficeName: {office.officeName}</h2>
           <h2>Total: {office.totalusercount}</h2>
           <h3>Principal:{office.principalcount}&nbsp;&nbsp;Team:{office.teamMembercount}</h3>
         </div>

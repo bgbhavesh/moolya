@@ -71,8 +71,9 @@ export default class MlAppActivityList extends React.Component{
                       <div className="clearfix"></div>
                       {
                         activity.imageLink ? <img src={activity.imageLink} /> : <CDNImage src="/images/activity_1.jpg" />
-                        activity.imageLink : "" : <i className="c_image ml my-ml-Ideator"></i>
+
                       }
+                      {activity.imageLink ? "" : <i className="c_image ml my-ml-Ideator"></i>}
                       <div className="clearfix"></div>
                       <span className="price">{activity.duration ? `${activity.duration.hours ? activity.duration.hours : 0} Hrs ${activity.duration.minutes ? activity.duration.minutes : 0} Mins` : ''}</span>
                       <button className={`btn ${activity.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{activity.mode}</button>

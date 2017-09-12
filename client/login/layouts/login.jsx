@@ -66,7 +66,7 @@ MlLoginContent = React.createClass({
             </video>*/}
             <div className="video_bg"></div>
             {/*<img className="logo" src="/images/login_logo.png"/>*/}
-            <CDNImage src="/images/moolya_logo.png" className="logo" />
+            <CDNImage src="/images/login_logo.png" className="logo" />
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>
             </div>

@@ -708,7 +708,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data = MlPortfolioDetails.find(query,findOptions).fetch();
       totalRecords = MlPortfolioDetails.find(query,findOptions).count();
   }
-  if(args.module=="templates"){
+  if(args.module=="template"){
     data= MlTemplates.find(query,findOptions).fetch();
     totalRecords=MlTemplates.find(query,findOptions).count();
   }
@@ -1133,7 +1133,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "documentMapping":resolveType= 'DocumentMapping';break;
       case "transactionTypes":resolveType= 'Transaction';break;
       case "ACCOUNTTYPE":resolveType= 'Account';break;
-      case "templates":resolveType= 'TemplateDetails';break;
+      case "template":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;
       case "roles":resolveType= 'Roles';break;

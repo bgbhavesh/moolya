@@ -9,6 +9,7 @@ import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlRegistrationRepo from "../../registration/mlRegistrationRepo";
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
@@ -355,6 +356,7 @@ MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) =>
 MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
     let portfolioId = ""
     let  user = {}
+    let updateRecord = {}
     if(args && args.idea){
         try{
             let idea = args.idea;
@@ -427,6 +429,10 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     return resp;
                   }
                   idea.portfolioId = resp.result;
+                  if(resp&&resp.result){
+                    mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_KICKOFF');
+                    let updatedResponse = mlDBController.update('MlPortfolioDetails',resp.result,updateRecord, {$set: true}, context)
+                  }
                 }else {
                   let code = 400;
                   let response = new MlRespPayload().errorPayload('User is not approved from Hard registration', code);

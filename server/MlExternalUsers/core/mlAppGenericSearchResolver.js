@@ -147,7 +147,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -185,7 +185,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -223,7 +223,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -295,7 +295,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -334,7 +334,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -371,7 +371,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -451,7 +451,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -534,7 +534,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },

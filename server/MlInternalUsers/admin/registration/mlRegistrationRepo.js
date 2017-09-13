@@ -4,6 +4,7 @@
  */
 import _ from 'lodash';
 import MlStatusRepo from '../../../commons/mlStatus';
+import MlRegistrationPreCondition from "./registrationPreConditions";
 class MlRegistrationRepo{
 
   constructor(){
@@ -15,6 +16,17 @@ class MlRegistrationRepo{
 
   updateStatus(request,code,module){
     return MlStatusRepo.updateStatus(request,code,module);
+  }
+
+  updateEmailStatus(reg){
+    var registration=reg||{};
+    var validation=MlRegistrationPreCondition.validateEmailVerification(registration);
+    if(validation.isValid){
+        this.updateStatus(registration,'REG_EMAIL_P');
+    }else{
+      this.updateStatus(registration,'REG_EMAIL_V');
+    }
+    return registration;
   }
 
 /**

@@ -28,7 +28,17 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
               ]},context)
 
       } else{
-          response= mlDBController.findOne('MlHierarchyAssignments', {
+          if(isDefaultSubChapter){
+            response= mlDBController.findOne('MlHierarchyAssignments', {
+              $and: [
+                {clusterId:{$in:[args.clusterId]}},
+                {parentDepartment:args.departmentId},
+                {parentSubDepartment:args.subDepartmentId},
+                {isDefaultSubChapter:isDefaultSubChapter},
+                {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
+              ]},context)
+          }else{
+            response= mlDBController.findOne('MlHierarchyAssignments', {
               $and: [
                 {clusterId:{$in:[args.clusterId]}},
                 {parentDepartment:args.departmentId},
@@ -37,6 +47,7 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
                 {isDefaultSubChapter:isDefaultSubChapter},
                 {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
               ]},context)
+          }
       }
 
   }
@@ -73,12 +84,23 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
         "isDefaultSubChapter" : isDefaultSubChapter
       }, context)
     }else{
-      response = mlDBController.findOne("MlHierarchyAssignments", {
-        "parentDepartment": args.departmentId,
-        "parentSubDepartment": args.subDepartmentId,
-        "clusterId":args.clusterId,
-        "subChapterId":args.subChapterId
-      }, context)
+      if(isDefaultSubChapter){
+        response = mlDBController.findOne("MlHierarchyAssignments", {
+          "parentDepartment": args.departmentId,
+          "parentSubDepartment": args.subDepartmentId,
+          "clusterId":args.clusterId,
+          "isDefaultSubChapter" : isDefaultSubChapter
+        }, context)
+      }else{
+        response = mlDBController.findOne("MlHierarchyAssignments", {
+          "parentDepartment": args.departmentId,
+          "parentSubDepartment": args.subDepartmentId,
+          "clusterId":args.clusterId,
+          "subChapterId":args.subChapterId,
+          "isDefaultSubChapter" : isDefaultSubChapter
+        }, context)
+      }
+
     }
   }
   return response;
@@ -165,14 +187,27 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
 
     // Show only moolya roles if subchpater(non-moolya) is not selected(!args.subChapterId).
     if(subChapter){
-      hierarchyQuery = {
-        $and: [
-          {parentDepartment:args.departmentId},
-          {parentSubDepartment:args.subDepartmentId},
-          {clusterId:department.isSystemDefined?"All":args.clusterId},
-          {isDefaultSubChapter : subChapter.isDefaultSubChapter}
-        ]
+      if(subChapter.isDefaultSubChapter){
+        hierarchyQuery = {
+          $and: [
+            {parentDepartment:args.departmentId},
+            {parentSubDepartment:args.subDepartmentId},
+            {clusterId:department.isSystemDefined?"All":args.clusterId},
+            {isDefaultSubChapter : subChapter.isDefaultSubChapter}
+          ]
+        }
+      }else{
+        hierarchyQuery = {
+          $and: [
+            {parentDepartment:args.departmentId},
+            {parentSubDepartment:args.subDepartmentId},
+            {clusterId:department.isSystemDefined?"All":args.clusterId},
+            {subChapterId:department.isSystemDefined?"all":args.subChapterId},
+            {isDefaultSubChapter : subChapter.isDefaultSubChapter}
+          ]
+        }
       }
+
     } else{
       let userRole = mlAssignHierarchy.getUserRoles(context.userId);
       let isDefaultSubChapter = true;

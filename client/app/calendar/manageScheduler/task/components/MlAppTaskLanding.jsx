@@ -185,7 +185,7 @@ class MlAppTaskLanding extends Component {
           name: 'Create Task',
           component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>,
-          icon:<span className="ml fa fa-plus-square-o"></span>
+          icon:<span className="ml my-ml-add_tasks"></span>
         },
         {
           name: 'Create Session',

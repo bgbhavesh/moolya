@@ -293,8 +293,9 @@ export default class MlServiceManageSchedule extends Component {
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
+                           stepsNavigation={true}
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

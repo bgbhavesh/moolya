@@ -115,9 +115,9 @@ $menuTrans:all 0.5s linear;
       border: $mlRed solid 2px;background: $mlWhite;
     }
     &.disable{
-      background: $mlGray; border: #929191 solid 2px; cursor: no-drop;
+      /*background: $mlGray; border: #929191 solid 2px; */cursor: no-drop;opacity: 0.4;
       .ml{
-        color:#929191;
+        /*color:#929191;*/
       }
     }
 

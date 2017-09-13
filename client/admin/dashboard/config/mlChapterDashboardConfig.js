@@ -86,9 +86,13 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   fetchZoomHandler:async function(reqParams){
     var zoom=1;
     let loggedInUser = getAdminUserContext();
+    let path = FlowRouter.current().path
+    if (path.indexOf("/chapters") > 0) {
+      return 4
+    }
     if(loggedInUser.hierarchyLevel == 4){
       zoom = 0;
-    }else if(loggedInUser.hierarchyLevel == 3){
+    }else if(loggedInUser.hierarchyLevel == 3 || loggedInUser.hierarchyLevel == 2){
       zoom = 4;
     }else{
       zoom = 10;

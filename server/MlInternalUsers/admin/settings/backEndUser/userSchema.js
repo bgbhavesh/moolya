@@ -106,6 +106,7 @@ let BackEndUser = `
         subChapterName:String,
         communityName:String,
         clusterName : String
+        isAnchor : Boolean
     }
     
     type MoolyaProfile{
@@ -155,6 +156,7 @@ let BackEndUser = `
         departmentName : String,
         subDepartmentId : String,
         subDepartmentName : String
+        isAnchor : Boolean
     }
     
     input userprofiles{
@@ -184,7 +186,7 @@ let BackEndUser = `
         timeZone: String
         dateOfBirth: Date,
         genderType: String
-        
+        isAnchor : Boolean
     }
 
     input InternalUprofile{

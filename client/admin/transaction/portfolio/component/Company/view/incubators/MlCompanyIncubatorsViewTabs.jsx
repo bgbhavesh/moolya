@@ -5,21 +5,22 @@ import MlCompanyViewStartupIncubators from "./MlCompanyViewStartupIncubators";
 import MlCompanyViewSectors from "./MlCompanyViewSectors";
 import MlCompanyViewListOfIncubators from "./MlCompanyViewListOfIncubators";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../core/apolloConnection'
+import {client} from '../../../../../../core/apolloConnection';
+import _ from 'lodash';
 // import {appClient} from '../../../../../../../app/core/appConnection'
 
 export default class MlCompanyIncubatorsViewTabs extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {
+    this.state = {
       tabs: [],
-      portfolioIncubators:{},
-      institutionIncubators:{},
-      sectorsAndServices:{},
-      listOfIncubators:{},
+      portfolioIncubators: {},
+      institutionIncubators: {},
+      sectorsAndServices: {},
+      listOfIncubators: {},
       admin: true,
-    }
-    ;
+      activeTab: 0,
+    };
   }
 
   /**
@@ -80,15 +81,28 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
         getContent: () => tab.component
       }));
     }
+
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      let index = _.findIndex(tabs, function(o) {
+        return o.title == activeTab;
+      });
+      if(index>-1 && index !== this.state.activeTab)
+        this.setState({activeTab:index});
+    }
+
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
     this.setBackTab()
   }
 
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab: tab });
+  }
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} backClickHandler={this.props.backClickHandler}/>
   }
 }
-

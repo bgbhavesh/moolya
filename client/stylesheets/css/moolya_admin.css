@@ -1182,7 +1182,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .team-block{background:#273545;border-radius:8px;text-align:center;margin-bottom:10px;}
 .team-block.active{background:#ef4647;}
 .team-block .team_img{border-radius:50%;border:#17273a solid 2px; margin-top:10px; width: 110px; height: 110px;margin-bottom: 10px;}
-.team-block h3{font-size: 16px;text-shadow:none;color:#273545; padding:10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;    height: 37px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+.team-block h3{font-size: 14px;text-shadow:none;color:#273545; padding:0px 10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;    height: 37px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .team-block h3 b{font-weight: normal;font-size: 12px;padding-top: 5px;display: inline-block;}
 .team-block .ml{background: #B9C5CC; border-radius: 50%;  padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee; font-size: 42px; display: inline-block; border: 2px solid #161e27;  margin: 20px 0;}
 
@@ -1539,7 +1539,7 @@ margin: 0px;
 	top: 111px;
 }
 .app_main_wrap .fixed_icon{
-  top: 62px;
+  top: 64px;
 }
 
 .hanging_btn{display:inline-block;background: #ef4647;border:0px;padding: 2px 0px 4px 0px;line-height:25px;position: absolute;text-decoration: none;font-size: 14px;height: 36px; color: #fff;text-shadow: none;bottom: 0px;right: 105px;}

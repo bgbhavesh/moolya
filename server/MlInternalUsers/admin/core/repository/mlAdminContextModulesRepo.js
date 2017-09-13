@@ -329,10 +329,10 @@ let CoreModules = {
         serverQuery = {'status': {'$in': ['Yet To Start', 'WIP']}};
         break;
       case 'approved':
-        serverQuery = {'status': "Approved"};
+        serverQuery = {'status': "REG_USER_APR"};
         break;
       case 'rejected':
-        serverQuery = {'status': "Rejected"};
+        serverQuery = {'status': {'$in': ['REG_ADM_REJ', 'REG_USER_REJ']}};
         break;
     }
 

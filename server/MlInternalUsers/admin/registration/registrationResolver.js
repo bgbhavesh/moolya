@@ -208,7 +208,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
  /**Validate if User is registered in moolya application (specific business requirement) */
   var registrationExist = MlRegistration.findOne({
     "registrationInfo.email": args.registration.email,
-    status: {$nin: ['Rejected']}
+    status: {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}
   })//MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};
   if (registrationExist || userExist._id) {
@@ -318,7 +318,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
         /**getting if any registration is other than pending or approved state*/
         let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
           "registrationInfo.userName": username,
-          "status": {$nin: ["Approved", 'Rejected']}
+          "status": {$nin: ["REG_USER_APR",'REG_ADM_REJ', 'REG_USER_REJ']}
         })
         if (_lodash.isEmpty(isAllowRegisterAs))
           response.isAllowRegisterAs = true
@@ -434,8 +434,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         "registrationDetails.identityType": details.identityType,
         "registrationDetails.userType": details.userType
       }
-      if(_lodash.isMatch(details, {communityDefCode: 'OFB'}))
-        updateObj.status= 'Approved'
+      //Auto Approve for Office Bearer
+      if(_lodash.isMatch(details, {communityDefCode: 'OFB'})){
+        mlRegistrationRepo.updateStatus(updateObj,'REG_USER_APR');//updateObj.status= 'REG_USER_APR';
+      }
       updatedResponse = mlDBController.update('MlRegistration', id, updateObj, {$set: true}, context)
 
       /** External User Profile Object*/
@@ -639,6 +641,7 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
 
 MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
+  var updateRecord={};
   if (args.registrationId) {
 
     let temp = 0
@@ -689,7 +692,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         return mail.verified == true
       })
       if (emailVerified) {
-        if (registrationRecord && registrationRecord.status != 'Approved') {
+        if (registrationRecord && registrationRecord.status != 'REG_USER_APR') {
           let kycDocuments = registrationRecord.kycDocuments&&registrationRecord.kycDocuments.length>0?registrationRecord.kycDocuments:[]
          if (kycDocuments && kycDocuments.length >= 1) {
             //mandatory doc exist or not
@@ -747,7 +750,9 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
     let updatedResponse;
     if (temp == 1) {
       // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
-      updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Approved"}, {$set: true}, context)
+      //Update the Status
+      mlRegistrationRepo.updateStatus(updateRecord,'REG_USER_APR');
+      updatedResponse = mlDBController.update('MlRegistration', args.registrationId,updateRecord, {$set: true}, context)
 
     }
 
@@ -840,9 +845,13 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
  * */
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {
   if (args.registrationId) {
-    let isRejected = mlDBController.findOne('MlRegistration', {_id:args.registrationId, status: "Rejected"}, context)
+    let isRejected = mlDBController.findOne('MlRegistration', {_id:args.registrationId, status:{'$in': ['REG_ADM_REJ', 'REG_USER_REJ']}}, context)
+    var statusCode=args.regType==="1"?"REG_USER_REJ":"REG_ADM_REJ";
+    var updateRecord={};
+    //Update the Status
+    mlRegistrationRepo.updateStatus(updateRecord,statusCode);
     if(!isRejected){
-      let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
+      let updatedResponse = mlDBController.update('MlRegistration', args.registrationId,updateRecord, {$set: true}, context)
       if (updatedResponse) {
         var resp = mlDBController.update('users', {
           'profile.isInternaluser': false,
@@ -1626,7 +1635,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
-  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved', 'Rejected'] }}, context).fetch() || []
+  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
   return resp;
 }
 

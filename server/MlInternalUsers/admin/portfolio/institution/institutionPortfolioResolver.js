@@ -3,7 +3,8 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import portfolioValidationRepo from '../portfolioValidation';
-import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController';
+
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, context, info) => {
@@ -201,7 +202,7 @@ MlResolver.MlQueryResolver['fetchInstitutionDetails'] = (obj, args, context, inf
     return;
 
   var key = args.key;
-  var portfoliodetailsId = args.portfoliodetailsId
+  var portfoliodetailsId = args.portfoliodetailsId;
   var institutePortfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
   if (institutePortfolio && institutePortfolio.hasOwnProperty(key)) {
     var object = institutePortfolio[key];

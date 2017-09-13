@@ -7,11 +7,6 @@ if(Meteor.isServer){
     },{$set:{
       fields:[
         {
-          name:"portfolioUserName",
-          type:'String',
-          resolverName : " "
-        },
-        {
           name:"clusterId",
           type:'List',
           resolverName : "Gen_Clusters",
@@ -63,6 +58,13 @@ if(Meteor.isServer){
           type:'String',
           resolverName : " "
         },
+        {
+          name:"status",
+          type:'List',
+          resolverName : "Gen_Status",
+          isDynamic:true
+        }
+
       ]
     }});
   }
@@ -129,7 +131,14 @@ if(Meteor.isServer){
           name:"allocation.assignee",
           type:'String',
           resolverName : "",
+        },
+        {
+          name:"status",
+          type:'List',
+          resolverName : "Gen_Status",
+          isDynamic:true
         }
+
 
 
       ]

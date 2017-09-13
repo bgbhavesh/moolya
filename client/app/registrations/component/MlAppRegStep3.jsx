@@ -144,7 +144,7 @@ export default class MlAppRegStep3 extends React.Component {
     return (
       <div className="step_form_wrap step3">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-        <div className="col-lg-6 nopadding-left">
+        <div className="col-lg-6">
 
 
               <form>
@@ -173,7 +173,7 @@ export default class MlAppRegStep3 extends React.Component {
         </div>
 
 
-        <div className="col-lg-6 nopadding-right">
+        <div className="col-lg-6">
 
 
               <form>

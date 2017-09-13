@@ -15,7 +15,7 @@ export default class MlStartupViewInformation extends React.Component {
         <div className="row">
           <h2>Information</h2>
           <div className="panel panel-default panel-form-view">
-            <div className="panel-body">
+            <div className="panel-body panel-body-scroll">
               <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : ""}</p>
             </div>
           </div>

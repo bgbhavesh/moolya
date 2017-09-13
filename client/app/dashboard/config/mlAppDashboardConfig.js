@@ -22,9 +22,16 @@ export const mlDashboardMapConfig=new MlAppViewer({
   fetchCenter:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
+      let queryObj = {
+        clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:config.params&&config.params.userType?config.params.userType:"All"
+      };
 
+      let queryString = JSON.stringify(queryObj);
       return {
-        queryProperty:{query:config.params&&config.params.userType?config.params.userType:"All"}
+        queryProperty:{query:queryString}
       }
   },
   fetchCenterHandler:async function(config){
@@ -122,8 +129,16 @@ export const mlDashboardListConfig=new MlAppViewer({
   // sort:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
+      let queryObj = {
+        clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:config.params&&config.params.userType?config.params.userType:"All"
+      };
+
+      let queryString = JSON.stringify(queryObj);
       return {
-        queryProperty:{query:config.params&&config.params.userType?config.params.userType:"All"}
+        queryProperty:{query:queryString}
       }
   },
   viewComponent:<MlDashboardListView params={this.params}/>,
@@ -136,6 +151,8 @@ export const mlDashboardListConfig=new MlAppViewer({
                           _id,
                           name
                           communityCode
+                          communityDefName
+                          chapterName
                           profile{
                             isActive,
                             profileImage

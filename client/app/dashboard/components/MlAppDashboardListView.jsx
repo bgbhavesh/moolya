@@ -130,7 +130,7 @@ export default class MlCommunityList extends Component {
             <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
             <div className="block_footer">
               {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
-              <span>{prop.communityCode}</span>
+              <span>{prop.chapterName} - {prop.communityDefName}</span>
             </div>
           </div>
         </div>

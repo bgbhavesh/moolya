@@ -17,7 +17,7 @@ let appGenericSearch = `
     scalar JSON
 
     union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | 
-                                  startupPortfolioOutput | Ideator | Users | 
+                                  startupPortfolioOutput | Ideator | Users | Cluster | Chapter | SubChapter |
                                   InstitutionPortfolio | CompanyPortfolio | ConnectedUser |
                                   FavouriteUser | FollowUser | Appointment | Service | InternalTask
    

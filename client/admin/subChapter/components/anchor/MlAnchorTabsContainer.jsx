@@ -8,6 +8,7 @@ import MlAnchorList from './MlAnchorList';
 import MlAnchorObjective from './MlAnchorObjective';
 import MlAnchorContact from './MlAnchorContact';
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
 
 export default class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class MlAnchorTabsContainer extends React.Component {
   }
 
   async updateAnchorDetails() {
-    // const response = await contructData(jsonData)
+    // const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, jsonData)
     //save details action handler
   }
 
@@ -48,7 +49,7 @@ export default class MlAnchorTabsContainer extends React.Component {
       }]
     const steps =
       [
-        {name: 'Anchors', component: <MlAnchorList />, icon: <span className="ml ml-basic-Information"></span>},
+        {name: 'Anchors', component: <MlAnchorList data={this.props}/>, icon: <span className="ml ml-basic-Information"></span>},
         {
           name: 'Objectives',
           component: <MlAnchorObjective getObjectiveDetails={this.getObjectiveDetails}/>,

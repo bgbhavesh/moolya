@@ -294,6 +294,15 @@ export default class MlFilterListRepo{
         })
 
         break;
+      case "Gen_Status":
+        let moduleType = requestParams&&requestParams.moduleType?requestParams.moduleType:""
+        result= MlStatus.find({module: { $in: [moduleType] },"isActive" : true}).fetch()
+        let genStatusResponse=_.each(result,function (option,id) {
+          options.push({"label":option.code,"value":option.code})
+        })
+
+        break;
+
 
 
 

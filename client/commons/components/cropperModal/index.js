@@ -103,7 +103,7 @@ export default class CropperModal extends React.PureComponent {
                 Close
               </a>
               <a onClick={this.onImageUpload} disabled={uploadingImage} className="mlUpload_btn" >
-                Upload
+                {this.props.submitText || 'Upload'}
               </a>
             </div>
           </Modal.Footer>
@@ -120,4 +120,5 @@ CropperModal.propTypes = {
   uploadingImage: React.PropTypes.bool.isRequired,
   cropperStyle: React.PropTypes.oneOf(['circle', 'square', 'any']).isRequired,
   imageSrc: React.PropTypes.string,
+  submitText: React.PropTypes.string,
 };

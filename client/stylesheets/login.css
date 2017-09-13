@@ -26,7 +26,7 @@
 .login_top_in:before{position: absolute;left: -27px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 37px 27px 37px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 
 .login_block_in .form-control{border-bottom: 2px solid #fff;margin-bottom: 20px;height: 36px;color: #fff;padding-top: 0px}
-.login_block_in form{padding-top: 27px;}
+.login_block_in form{padding-top: 27px;overflow: hidden;}
 
 .ml_submit_btn{    height: 42px;background: #ef4647;position: relative;border: 0px;padding: 0px 20px;float: right;margin-right: 15px;color: #fff;}
 .ml_submit_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 21px 0 21px 14px;border-color: transparent transparent transparent #ef4647;top: 0px;}

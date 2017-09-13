@@ -303,7 +303,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
-          "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+          "name":{$concat: [ "$user.profile.firstName", " ", "$user.profile.lastName" ] },
           "accountType": "$port.accountType",
           "clusterId": '$port.clusterId',
           "chapterId": '$port.chapterId',

@@ -59,7 +59,7 @@ const mlAppClusterDashboardMapConfig=new MlAppViewer({
   },
   fetchZoom:true,
   fetchZoomHandler:async function(reqParams){
-    var zoom=1;
+    var zoom=4;
     return zoom;
   },
   viewComponent:<MlAppClusterMapView params={this.params} />,

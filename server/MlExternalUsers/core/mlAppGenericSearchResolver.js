@@ -738,7 +738,16 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Pending", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -756,7 +765,17 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
+
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -774,6 +793,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Completed", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -792,6 +820,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Rejected", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -1093,15 +1130,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "cluster"){
     var activeClusters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
+      // var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
 
-      var clusterIds = _.map(user_profiles, "clusterId");
-      clusterIds = _.uniq(clusterIds);
+      // var clusterIds = _.map(user_profiles, "clusterId");
+      // clusterIds = _.uniq(clusterIds);
 
-      var clusters = mlDBController.find('MlClusters', {_id:{$in:clusterIds}}, context).fetch();
+      var clusters = mlDBController.find('MlClusters', {isActive:true}, context).fetch();
 
       _.each(clusters, function (cluster) {
         let country = mlDBController.findOne('MlCountries', {isActive: true, _id:cluster.countryId}, context, {sort: {country: 1}});
@@ -1109,7 +1146,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           activeClusters.push(cluster);
         }
       })
-    }
+    // }
 
     const data = activeClusters;
     const totalRecords = activeClusters.length
@@ -1117,15 +1154,18 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "chapter"){
     var activeChapters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var chapterIds = _.map(user_profiles, "chapterId");
+    //   chapterIds = _.uniq(chapterIds);
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
-
-      var chapterIds = _.map(user_profiles, "chapterId");
-      chapterIds = _.uniq(chapterIds);
-
-      var chapters = mlDBController.find('MlChapters', {_id:{$in:chapterIds}, isActive:true}, context).fetch();
+      var chapters = mlDBController.find('MlChapters', {clusterId:args.queryProperty.query, isActive:true}, context).fetch();
 
       _.each(chapters, function (chapter) {
         let city = mlDBController.findOne('MlCities', {isActive: true, _id:chapter.cityId}, context, {sort: {country: 1}});
@@ -1133,7 +1173,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           activeChapters.push(chapter);
         }
       })
-    }
+    // }
 
     const data = activeChapters;
     const totalRecords = activeChapters.length
@@ -1141,17 +1181,20 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "subChapter"){
     var activeChapters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var subChapterIds = _.map(user_profiles, "subChapterId");
+    //   subChapterIds = _.uniq(subChapterIds);
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
+      var subChapters = mlDBController.find('MlSubChapters', {chapterId:args.queryProperty.query, isActive:true}, context).fetch();
 
-      var subChapterIds = _.map(user_profiles, "subChapterId");
-      subChapterIds = _.uniq(subChapterIds);
-
-      var subChapters = mlDBController.find('MlSubChapters', {_id:{$in:subChapterIds}, isActive:true}, context).fetch();
-
-    }
+    // }
 
     const data = subChapters;
     const totalRecords = subChapters.length

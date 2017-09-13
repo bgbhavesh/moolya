@@ -6,30 +6,21 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 
+//todo:// floatlabel initialize
 export default class MlAnchorList extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     return this
   }
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
 
-    var mySwiper = new Swiper('.blocks_in_form', {
-      speed: 400,
-      spaceBetween: 25,
-      slidesPerView: 2,
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
+  componentWillMount() {
+    const resp = this.getAnchorUsers()
+    return resp
+  }
+
+  getAnchorUsers() {
+    var data = this.props.data
+    console.log('fetchanchorusers', data)
   }
 
   render() {

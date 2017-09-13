@@ -51,6 +51,7 @@ let Role = `
         isHierarchyAssigned:Boolean
         isSystemDefined:Boolean
         isNonMoolyaAvailable : Boolean
+        isAnchor : Boolean
   }
   
   scalar Date

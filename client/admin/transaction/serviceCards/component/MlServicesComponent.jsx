@@ -256,7 +256,7 @@ export default class MlServiceManageSchedule extends Component {
       {
         name: 'Create',
         component: <MlServiceCardStep1 data={this.state.data}/>,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Select Tasks',
@@ -293,8 +293,9 @@ export default class MlServiceManageSchedule extends Component {
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
+                           stepsNavigation={true}
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

@@ -824,7 +824,7 @@ import SharedLibrary from './sharedLibrary'
             <div className="thumbnail" key={id}>
               <div className="input_types">
                 <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'template')} />
-                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+                <label htmlFor={"checkboxTemp"+id} ><span></span></label>
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
@@ -891,8 +891,8 @@ import SharedLibrary from './sharedLibrary'
           return (
             <div className="thumbnail" key={id}>
               <div className="input_types">
-                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'video')} />
-                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+                <input id={"checkboxVid"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'video')} />
+                <label htmlFor={"checkboxVid"+id} ><span></span></label>
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
@@ -961,8 +961,8 @@ import SharedLibrary from './sharedLibrary'
           return (
             <div className="thumbnail" key={id}>
               <div className="input_types">
-                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'document')} />
-                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+                <input id={"checkboxDoc"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'document')} />
+                <label htmlFor={"checkboxDoc"+id} ><span></span></label>
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
@@ -1393,7 +1393,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
             </div>
           </div>
-          {!that.state.showSharedFiles?<div>
+          {!that.state.showSharedFiles?<div className="col-md-12                                                                                          ">
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">

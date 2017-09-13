@@ -228,7 +228,7 @@ class MlAppActivity extends Component {
         component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
                                    setActivityDetails={that.setActivityDetails}
                                    data={that.state.basicInfo} />,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Choose team',

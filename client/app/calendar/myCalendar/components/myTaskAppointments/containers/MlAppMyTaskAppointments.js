@@ -153,7 +153,7 @@ class MyTaskAppointments extends Component {
                                                selectedTask={selectedTask}
                                                setSessionStep={this.setSessionStep}
                                                selectedTaskId={selectedTaskId} />,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Session',

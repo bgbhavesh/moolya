@@ -256,7 +256,7 @@ export default class MlServiceManageSchedule extends Component {
       {
         name: 'Create',
         component: <MlServiceCardStep1 data={this.state.data}/>,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Select Tasks',

@@ -24,13 +24,16 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async updateAnchorDetails() {
-    // const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, jsonData)
-    //save details action handler
-    console.log('data clicked')
+    const {objective} = this.state
+    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {objective})
+    return response;
   }
 
   getObjectiveDetails(details, tabName) {
     //get tab details
+    this.setState({
+      objective: details,
+    });
     console.log('objective', details)
   }
 

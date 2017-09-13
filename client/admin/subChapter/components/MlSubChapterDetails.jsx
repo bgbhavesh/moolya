@@ -35,6 +35,7 @@ class MlSubChapterDetails extends React.Component {
     this.onStatusChangeBespokeRegistration = this.onStatusChangeBespokeRegistration.bind(this);
     this.findSubChapter.bind(this);
     this.updateSubChapter.bind(this)
+    this.anchorRedirect = this.anchorRedirect.bind(this)
     return this;
   }
 
@@ -191,6 +192,11 @@ class MlSubChapterDetails extends React.Component {
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
   }
 
+  anchorRedirect() {
+    console.log('info hit', this.props)
+    FlowRouter.go('/admin/chapters/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
+  }
+
   async onImageFileUpload(e) {
     if (e.target.files[0].length == 0)
       return;
@@ -318,6 +324,14 @@ class MlSubChapterDetails extends React.Component {
                             defaultValue={this.state.data && this.state.data.aboutSubChapter}
                             className="form-control float-label">
                   </textarea>
+                    </div>
+                    <div onClick={this.anchorRedirect}>
+                      <a href="">
+                        <div className="hanging_btn">
+                          <span className="ml ml-moolya-symbol"></span>
+                          Info
+                        </div>
+                      </a>
                     </div>
                   </form>
                 </ScrollArea>

@@ -121,11 +121,13 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * @returns {XML}
    */
   render() {
-    const status = this.props.status;
+    // const status = this.props.status;
+    let status = FlowRouter.getQueryParam('tab');
+    console.log(status);
     let appActionConfig = [];
     const that = this;
     switch (status) {
-      case 'Pending':
+      case 'pending':
         appActionConfig = [
           {
             showAction: true,
@@ -139,7 +141,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           }
         ];
         break;
-      case 'Accepted':
+      case 'current':
         appActionConfig = [
           {
             showAction: true,
@@ -148,7 +150,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           }
         ];
         break;
-      case 'Rejected':
+      case 'rejected':
         appActionConfig = [
           {
             showAction: true,
@@ -185,7 +187,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
               </div>
             </div>
           </div>
-          {status !== 'Completed' &&
+          {status !== 'completed' &&
             <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
           }
         </div>

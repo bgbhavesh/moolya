@@ -63,30 +63,12 @@ if(Meteor.isServer){
           //   "uniqueId" : "myInvestment"
           // },
           {
-              "image":"ml my-ml-Referral_Invite",
-              "link": "#",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Referral & Invites",
-              "uniqueId" : "referalInvities",
-              isDisabled: true
-          },
-          {
               "image":"ml my-ml-library_3",
               "link": "/app/library",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Library",
               "uniqueId" : "library"
-          },
-          {
-              "image":"ml my-ml-subscriptions",
-              "link": "#",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "My Subscriptions",
-              "uniqueId" : "mySubscriptions",
-              isDisabled:true
           },
           {
             "image":"ml my-ml-service_provider_my_appointments",
@@ -120,6 +102,24 @@ if(Meteor.isServer){
               "name" : "Privacy",
               "uniqueId" : "privacy"
           },
+        {
+          "image":"ml my-ml-Referral_Invite",
+          "link": "#",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "Referral & Invites",
+          "uniqueId" : "referalInvities",
+          isDisabled: true
+        },
+        {
+          "image":"ml my-ml-subscriptions",
+          "link": "#",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "My Subscriptions",
+          "uniqueId" : "mySubscriptions",
+          isDisabled:true
+        },
           // {
           //   "image":"ml ml-moolya-symbol",
           //   "link": "/app/register",

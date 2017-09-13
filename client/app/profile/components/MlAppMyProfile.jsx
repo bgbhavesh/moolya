@@ -364,9 +364,8 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
-                        <button onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
-                            <span>Profile Pic</span>
-                        </button>
+
+                        <span onClick={this.toggleModal.bind(this)}>Profile Pic</span>
                         {/*<input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>*/}
                       </div>
                       <div className="previewImg ProfileImg">

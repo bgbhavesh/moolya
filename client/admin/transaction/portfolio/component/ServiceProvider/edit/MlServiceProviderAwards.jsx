@@ -400,9 +400,7 @@ export default class MlServiceProviderAwards extends Component {
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
-                              <button onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
-                                <span>Upload Logo</span>
-                              </button>
+                                <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
                               {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
                                      onChange={this.onLogoFileUpload.bind(this)}/>*/}
                             </div>

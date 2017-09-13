@@ -123,6 +123,9 @@ class MlRegistrationRepo{
    * creating the registration for moolya in case of
    * 1) non-moolya subchapter
    * 2) transact with moolya enabled
+   * 13-09-2017 ( Discussed with Suresh)
+   *      1) Auto Approve the hard-registration for default subchapter and clone the registration/portfolio
+   *      2) This is triggered once the non-moolya registration and portfolio is approved
    * */
   createRegistrationProxy(registrationId, context) {
     //check the condition if canTransact is enabled in moolya then only follow the steps

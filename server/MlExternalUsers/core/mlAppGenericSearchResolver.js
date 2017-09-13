@@ -147,7 +147,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -185,7 +185,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -223,7 +223,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -295,7 +295,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -334,7 +334,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -371,7 +371,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -451,7 +451,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -534,7 +534,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -738,7 +738,16 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Pending", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -756,7 +765,17 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
+
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -774,6 +793,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Completed", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -792,6 +820,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Rejected", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);

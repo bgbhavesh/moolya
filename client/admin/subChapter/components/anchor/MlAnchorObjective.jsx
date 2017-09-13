@@ -3,19 +3,27 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
 
-export default class MlAnchorObjective extends React.Component {
+export default class MlAnchorObjective extends React.PureComponent {
+
+  constructor() {
+    super();
+    this.state = {
+      objectiveFormArray: [{
+        description: '',
+        status: false,
+      }],
+    };
+    this.renderObjectiveFormArray = this.renderObjectiveFormArray.bind(this);
+    this.changeForm = this.changeForm.bind(this);
+    this.removeObjectiveForm = this.removeObjectiveForm.bind(this);
+    this.addObjectiveForm = this.addObjectiveForm.bind(this);
+    this.updateObjectiveFormArray = this.updateObjectiveFormArray.bind(this);
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
-    });
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
     });
 
     var mySwiper = new Swiper('.blocks_in_form', {
@@ -31,53 +39,66 @@ export default class MlAnchorObjective extends React.Component {
     this.props.getObjectiveDetails(data)
   }
 
+  updateObjectiveFormArray(objectiveFormArray) {
+    this.setState({
+      objectiveFormArray,
+    }, () => {
+      this.sendDataToParent(this.state.objectiveFormArray)
+    });
+  }
+
+  removeObjectiveForm(index) {
+    const objectiveFormArray = [...this.state.objectiveFormArray];
+    objectiveFormArray.splice(index, 1);
+    this.updateObjectiveFormArray(objectiveFormArray);
+  }
+
+  addObjectiveForm() {
+    const objectiveFormArray = [...this.state.objectiveFormArray, { description: '', status: false }];
+    this.updateObjectiveFormArray(objectiveFormArray);
+  }
+
+  changeForm(index, prop, value) {
+    const objectiveFormArray = [...this.state.objectiveFormArray];
+    objectiveFormArray[index][prop] = value;
+    this.updateObjectiveFormArray(objectiveFormArray);
+  }
+
+  renderObjectiveFormArray() {
+    return this.state.objectiveFormArray.map((objectiveForm, index) => {
+      const { description, status } = objectiveForm;
+      return (
+        <div key={index} className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
+          <div className="panel panel-default">
+            <div className="panel-heading">Objective
+              <div className="pull-right block_action">
+                {index === 0 ? <img onClick={this.addObjectiveForm} src="/images/add.png" /> : <img onClick={() => this.removeObjectiveForm(index)} src="/images/remove.png"/>}
+              </div>
+            </div>
+            <div className="panel-body">
+              <div className="form-group">
+                <textarea value={description} onChange={({ target: { value } }) => this.changeForm(index, 'description', value)} placeholder="Enter Text here..." className="form-control float-label"></textarea>
+              </div>
+              <br className="brclear"/>
+              <div className="form-group switch_wrap inline_switch">
+                <label className="">Status</label>
+                <label className={`switch ${status ? 'on' : ''}`}>
+                  <input onClick={() => this.changeForm(index, 'status', !status)} type="checkbox"/>
+                  <div className="slider"></div>
+                </label>
+              </div>
+              <br className="brclear"/>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
+
   render() {
     return (
       <div className="col-md-12 nopadding">
-        <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
-          <div className="panel panel-default">
-            <div className="panel-heading">Objective
-              <div className="pull-right block_action"><img src="../images/add.png"/></div>
-            </div>
-            <div className="panel-body">
-              <div className="form-group">
-                <textarea placeholder="Enter Text here..." className="form-control float-label"></textarea>
-              </div>
-              <br className="brclear"/>
-              <div className="form-group switch_wrap inline_switch">
-                <label className="">Status</label>
-                <label className="switch">
-                  <input type="checkbox"/>
-                  <div className="slider"></div>
-                </label>
-              </div>
-
-              <br className="brclear"/>
-            </div>
-          </div>
-        </div>
-        <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
-          <div className="panel panel-default">
-            <div className="panel-heading">Objective
-              <div className="pull-right block_action"><img src="../images/add.png"/></div>
-            </div>
-            <div className="panel-body">
-              <div className="form-group">
-                <textarea placeholder="Enter Text here..." className="form-control float-label"></textarea>
-              </div>
-              <br className="brclear"/>
-              <div className="form-group switch_wrap inline_switch">
-                <label className="">Status</label>
-                <label className="switch">
-                  <input type="checkbox"/>
-                  <div className="slider"></div>
-                </label>
-              </div>
-
-              <br className="brclear"/>
-            </div>
-          </div>
-        </div>
+        {this.renderObjectiveFormArray()}
       </div>
     )
   }

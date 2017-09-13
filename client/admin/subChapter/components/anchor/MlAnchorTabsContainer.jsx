@@ -24,10 +24,12 @@ export default class MlAnchorTabsContainer extends React.Component {
   async updateAnchorDetails() {
     // const response = await contructData(jsonData)
     //save details action handler
+    console.log('data clicked')
   }
 
   getObjectiveDetails(details, tabName) {
     //get tab details
+    console.log('objective', details)
   }
 
   getContactDetails(details, tabName) {

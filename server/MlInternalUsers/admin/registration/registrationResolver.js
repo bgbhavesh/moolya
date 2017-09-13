@@ -497,7 +497,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         username: details.email,
         password: details.password,
         profile: profile,
-        emails: registerDetails && registerDetails.emails ? registerDetails.emails : []
+        emails: registerDetails && registerDetails.emails ? registerDetails.emails : [],
+        otps:registerDetails && registerDetails.otps ? registerDetails.otps : []
       }
       /** Check for User record, if it exists, update the profile of user*/
       var existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
@@ -547,7 +548,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             {
               $set: {
                 'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
-                'emails': userObject.emails
+                'emails': userObject.emails,
+                otps:userObject.otps
               }
             }, {'blackbox': true}, context);
 
@@ -567,7 +569,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         result = {username: userObject.username};
         mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
         /**Creating moolya request*/
-        mlRegistrationRepo.createRegistrationProxy(id, context);
+        //mlRegistrationRepo.createRegistrationProxy(id, context);
 
         updatedResponse = new MlRespPayload().successPayload(result, code);
         //update transaction with operational area

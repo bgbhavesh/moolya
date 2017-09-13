@@ -64,7 +64,6 @@ const mlAppSubChapterDashboardMapConfig=new MlAppViewer({
   extraFields:[],
   throttleRefresh:true,
   fetchCenter:true,
-  showImage:true,//added for cluster image in map
   queryOptions:true,
   buildQueryOptions:(config)=>{
 
@@ -73,17 +72,13 @@ const mlAppSubChapterDashboardMapConfig=new MlAppViewer({
     }
   },
   fetchCenterHandler:async function(reqParams){
-    let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.clusterId?reqParams.params.clusterId:null};
+    let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.chapterId?reqParams.params.chapterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
   fetchZoom:true,
   fetchZoomHandler:async function(reqParams){
-    var zoom=4;
-    let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel == 4){
-      zoom = 0;
-    }
+    var zoom=10;
     return zoom;
   },
   viewComponent:<MlAppClusterMapView params={this.params} />,

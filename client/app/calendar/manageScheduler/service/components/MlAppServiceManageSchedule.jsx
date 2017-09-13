@@ -1052,7 +1052,8 @@ class MlAppServiceManageSchedule extends Component {
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

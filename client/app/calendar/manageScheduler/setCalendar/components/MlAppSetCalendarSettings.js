@@ -72,7 +72,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
           <div className="col-md-12">
             <div className='step-progress' >
               <div id="root" >
-                <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={false} />
+                <StepZilla steps={steps} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false} />
               </div>
             </div>
           </div>

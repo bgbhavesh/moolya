@@ -8,9 +8,10 @@ import MlAnchorList from './MlAnchorList';
 import MlAnchorObjective from './MlAnchorObjective';
 import MlAnchorContact from './MlAnchorContact';
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
 
-export default class MlAnchorTabsContainer extends React.Component {
+class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
     super(props)
     this.getObjectiveDetails = this.getObjectiveDetails.bind(this)
@@ -75,3 +76,4 @@ export default class MlAnchorTabsContainer extends React.Component {
     )
   }
 };
+export default MlAnchorTabsContainer = formHandler()(MlAnchorTabsContainer);

@@ -102,7 +102,13 @@ let appointment=`
     profileId: String
     count: String
   }
-  
+  type AppointmentWith {
+    userId: String
+    status: String
+    profileId: String
+    displayName: String
+    userProfilePic: String
+  }
   type Appointment {
     _id: String
     appointmentType: String
@@ -110,6 +116,7 @@ let appointment=`
     client: AppointmentUser
     provider: AppointmentUser
     appointmentInfo: AppointmentInfo
+    appointmentWith: AppointmentWith
     startDate: Date
     endDate: Date
   }

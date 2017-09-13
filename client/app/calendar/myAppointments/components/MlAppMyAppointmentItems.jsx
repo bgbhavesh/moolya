@@ -74,6 +74,7 @@ export default class MlAppMyAppointmentItems extends Component{
   }
 
   getAppointmentComponentToLoad() {
+    console.log(this.props);
     const {selectedAppointment} = this.state;
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':

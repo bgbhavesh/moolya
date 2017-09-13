@@ -258,6 +258,7 @@ export default class MlCustomFilterComponent extends Component {
                 let select = '';
                 let selectedValue = '';
                 let zz =  options.fieldList|| [];
+                let moduleType = that.props.module?that.props.module:""
                 var fieldListDataArray=_.map(zz, function (row) {
                   let val= _.omit(row, ['__typename']);
                   return val;
@@ -278,14 +279,14 @@ export default class MlCustomFilterComponent extends Component {
                   listSelect = true
                   select =  "selectedOption_"+options.fieldName;
                   selectedValue = that.state[select];
-                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter],$fieldActive:String!){
-                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId,fieldActive:$fieldActive) {
+                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter],$fieldActive:String!,$moduleType:String!){
+                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId,fieldActive:$fieldActive,moduleType:$moduleType) {
                      label
                       value
                     }
                   }`;
 
-                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries,fieldActive:fieldActive}}}
+                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries,fieldActive:fieldActive,moduleType:moduleType}}}
 
 
 

@@ -71,8 +71,8 @@ class  MlAdminProfileApp extends Component {
     //   profilePic: this.refs.upload.value};
     let user = Meteor.user();
     let genderImage = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/ideator_01.png";
-    let fullName = user.profile.firstName + '' + user.profile.lastName;
-    let profileImage = (!user.profile.profileImage || user.profile.profileImage === " ") ? genderImage : user.profile.profileImage;
+    let fullName = user && (user.profile.firstName + '' + user.profile.lastName);
+    let profileImage = user && (!user.profile.profileImage || user.profile.profileImage === " ") ? genderImage : user.profile.profileImage;
     this.setState({firstName : fullName,
       profilePic: profileImage //response.profile.profileImage
     });

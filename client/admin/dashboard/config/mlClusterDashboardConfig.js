@@ -59,8 +59,12 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   fetchZoomHandler:async function(reqParams){
     var zoom=1;
     let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel != 4){
+    if(loggedInUser.hierarchyLevel == 4){
+      zoom = 0;
+    }else if(loggedInUser.hierarchyLevel == 3){
       zoom = 4;
+    }else{
+      zoom = 10;
     }
     return zoom;
   },

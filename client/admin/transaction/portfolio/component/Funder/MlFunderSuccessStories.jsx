@@ -380,6 +380,8 @@ export default class MlFunderSuccessStories extends React.Component {
                               {/*</div>*/}
                             </div> : <div></div>
                           }
+                          <br />
+                          <br className="brclear" />
                           <div className="form-group">
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                               name="storyTitle" defaultValue={this.state.data.storyTitle}

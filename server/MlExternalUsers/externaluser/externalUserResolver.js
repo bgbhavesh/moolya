@@ -406,8 +406,24 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
 }
 
 MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, context, info) => {
-  var clusterId=args.id||null;
 
+  if(args.module == "subChapter" || args.module == "externalUsers"){
+      var chapterId = args.id||null;
+      if(!chapterId){
+        let user= mlDBController.findOne('users',{_id:context.userId});
+        var externalProfile = _.find(user.profile.externalUserProfiles, {'isDefault':true});
+        if(!externalProfile){
+          externalProfile = user.profile.externalUserProfiles[0];
+        }
+        chapterId=externalProfile.chapterId;
+      }
+      let chapterDetails = MlChapters.findOne(chapterId);
+      if (chapterDetails && chapterDetails.latitude && chapterDetails.longitude) {
+        return {lat: chapterDetails.latitude, lng: chapterDetails.longitude};
+      }
+  }
+
+  var clusterId=args.id||null;
   if(!clusterId){
     let user= mlDBController.findOne('users',{_id:context.userId});
     var externalProfile = _.find(user.profile.externalUserProfiles, {'isDefault':true});

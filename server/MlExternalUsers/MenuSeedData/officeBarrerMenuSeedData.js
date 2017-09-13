@@ -30,6 +30,22 @@ if(Meteor.isServer){
         "uniqueId" : "myTransaction"
       },
       {
+        "image":"ml ml-news",
+        "link": "/app/news",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "News",
+        "uniqueId" : "news"
+      },
+      {
+        "image":"ml my-ml-settings_new",
+        "link": "/app/news",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "settings"
+      },
+      {
         "image":"ml ml-chat",
         "link": "/app/conversations",
         "isLink" : true,
@@ -47,22 +63,6 @@ if(Meteor.isServer){
         "uniqueId" : "subscriptions",
         isDisabled:true
       },
-      {
-        "image":"ml ml-news",
-        "link": "/app/news",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "News",
-        "uniqueId" : "news"
-      },
-      {
-        "image":"ml my-ml-settings_new",
-        "link": "/app/news",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Settings",
-        "uniqueId" : "settings"
-      }
     ]
   }});
 }

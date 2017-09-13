@@ -328,7 +328,7 @@ export default class MlServiceProviderClients extends Component {
                       <a href="" id={"create_client" + idx}>
                         <div className="list_block">
                           {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
-                          <FontAwesome name='unlock' className="input_icon un_lock" id={"makePrivate" + idx}
+                          <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
                             <img src={details.logo && details.logo.fileUrl}/></div>

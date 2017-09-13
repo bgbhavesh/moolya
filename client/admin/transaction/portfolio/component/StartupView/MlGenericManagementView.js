@@ -8,17 +8,27 @@ import ScrollArea from "react-scrollbar";
 import {find} from "lodash"
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper'
+import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio'
+import gql from 'graphql-tag'
+
 var FontAwesome = require('react-fontawesome');
 
 export default class MlGenericManagementView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewCurDetail: {}
+      viewCurDetail: {},
+      clusterId:''
     }
     this.handleChange = this.handleChange.bind(this);
     this.showDetails.bind(this)
     return this
+  }
+
+  componentWillMount(){
+    const resp = this.fetchClusterId();
+    return resp
   }
 
   componentDidUpdate(){
@@ -30,6 +40,9 @@ export default class MlGenericManagementView extends React.Component {
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
 
   showDetails(id) {
@@ -61,6 +74,13 @@ export default class MlGenericManagementView extends React.Component {
     this.viewDetails(id)
   }
 
+  async fetchClusterId() {
+    const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      this.setState({loading: false, clusterId: response.clusterId});
+    }
+  }
+
   viewDetails(id, e) {
     let data = this.props.data;
     var getData = data[id]
@@ -79,9 +99,19 @@ export default class MlGenericManagementView extends React.Component {
 
   render() {
     var _this = this
-    console.log('selected : ', _this.state.viewCurDetail)
+    console.log('selected : ', _this.state.viewCurDetail);
+    let titleQuery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.state.clusterId}}};
     const showLoader = _this.state.loading;
     var arrayList = _this.props.data ? _this.props.data : []
+    let gImg = _this.state.viewCurDetail.gender==='female'?'/images/female.jpg':'/images/ideator_01.png';
+    let genderImage = _this.state.viewCurDetail && _this.state.viewCurDetail.logo && _this.state.viewCurDetail.logo.fileUrl?_this.state.viewCurDetail.logo.fileUrl:gImg;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -147,11 +177,17 @@ export default class MlGenericManagementView extends React.Component {
                           <div className="col-md-6 nopadding-left">
                             <div className="form_bg">
                               <form>
+                                {/*<div className="form-group">*/}
+                                  {/*<input type="text" placeholder="Title"*/}
+                                         {/*className="form-control float-label"*/}
+                                         {/*value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}*/}
+                                         {/*onChange={_this.handleChange}/>*/}
+                                  {/*<FontAwesome name='unlock' className="password_icon"/>*/}
+                                {/*</div>*/}
                                 <div className="form-group">
-                                  <input type="text" placeholder="Title"
-                                         className="form-control float-label"
-                                         value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}
-                                         onChange={_this.handleChange}/>
+                                  <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                                selectedValue={this.state.viewCurDetail.title} queryType={"graphql"} query={titleQuery}  queryOptions={titleOption}
+                                                onSelect={function () {}} isDynamic={true} isDisabled={true}/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
@@ -164,7 +200,7 @@ export default class MlGenericManagementView extends React.Component {
 
                                 <div className="form-group">
                                   <input type="text" placeholder="Middle name"
-                                         value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}
+                                         value={this.state.viewCurDetail.middleName ? this.state.viewCurDetail.middleName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -172,7 +208,7 @@ export default class MlGenericManagementView extends React.Component {
 
                                 <div className="form-group">
                                   <input type="text" placeholder="Last Name"
-                                         value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}
+                                         value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -225,7 +261,7 @@ export default class MlGenericManagementView extends React.Component {
                               <form>
                                 <div className="form-group">
                                   <div className="previewImg ProfileImg">
-                                    <img src="/images/ideator_01.png"/>
+                                    <img src={genderImage}/>
                                   </div>
                                 </div>
                                 <br className="brclear"/>

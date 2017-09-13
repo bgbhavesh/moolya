@@ -38,30 +38,12 @@ if(Meteor.isServer){
         "uniqueId" : "myConnections"
       },
       {
-        "image":"ml my-ml-Referral_Invite",
-        "link": "#",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Referal & Invities",
-        "uniqueId" : "referalInvities",
-        isDisabled: true
-      },
-      {
         "image":"ml my-ml-library_3",
         "link": "/app/library",
         "isLink" : true,
         "isMenu" : true,
         "name" : "Library",
         "uniqueId" : "library"
-      },
-      {
-        "image":"ml my-ml-subscriptions",
-        "link": "#",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "My Subscriptions",
-        "uniqueId" : "mySubscriptions",
-        isDisabled:true
       },
       {
         "image":"ml my-ml-settings_new",
@@ -94,6 +76,24 @@ if(Meteor.isServer){
         "isMenu" : true,
         "name" : "Registration",
         "uniqueId" : "registeras"
+      },
+      {
+        "image":"ml my-ml-subscriptions",
+        "link": "#",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "My Subscriptions",
+        "uniqueId" : "mySubscriptions",
+        isDisabled:true
+      },
+      {
+        "image":"ml my-ml-Referral_Invite",
+        "link": "#",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Referal & Invities",
+        "uniqueId" : "referalInvities",
+        isDisabled: true
       },
     ]
   }})

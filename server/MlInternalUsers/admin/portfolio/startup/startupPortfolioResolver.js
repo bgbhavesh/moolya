@@ -4,8 +4,6 @@ import MlEmailNotification from "../../../../mlNotifications/mlEmailNotification
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import portfolioValidationRepo from '../portfolioValidation'
-import MlMasterSettingRepo from '../../settings/globalAndMasterSettings/repository/mlMasterSettingRepo';
-import underscore from 'underscore'
 var _ = require('lodash')
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -302,22 +300,11 @@ MlResolver.MlQueryResolver['fetchStartupDetails'] = (obj, args, context, info) =
 
     var key = args.key;
     var portfoliodetailsId = args.portfoliodetailsId
-    var portfolioObject = MlPortfolioDetails.findOne(portfoliodetailsId) || {};
-    let titleValue = new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin({type:"TITLE", hierarchyRefId:portfolioObject.clusterId});
-
-  var startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+    var startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
     if (startupPortfolio && startupPortfolio.hasOwnProperty(key)) {
       var object = startupPortfolio[key];
       var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
       startupPortfolio[key] = filteredObject
-      if (key == 'management') {
-        startupPortfolio[key].map(function(data, index)
-          {
-            let titleObject = underscore.findWhere(titleValue, {value: data.title});
-            data.titleName = titleObject && titleObject.label;
-          }
-        )
-      }
       return startupPortfolio;
     }
 

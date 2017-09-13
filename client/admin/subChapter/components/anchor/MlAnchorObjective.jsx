@@ -25,7 +25,10 @@ export default class MlAnchorObjective extends React.Component {
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
+  }
 
+  sendDataToParent(data){
+    this.props.getObjectiveDetails(data)
   }
 
   render() {

@@ -34,16 +34,16 @@ export const mlDashboardMapConfig=new MlAppViewer({
         queryProperty:{query:queryString}
       }
   },
-  fetchCenterHandler:async function(config){
-    let mapDetailsQuery = {moduleName: config.module,id:null};
+  fetchCenterHandler:async function(reqParams){
+    let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.chapterId?reqParams.params.chapterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
-  // fetchZoom:true,
-  // fetchZoomHandler:async function(reqParams){
-  //   var zoom=4;
-  //   return zoom;
-  // },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=10;
+    return zoom;
+  },
   viewComponent:<MlDashboardMapView params={this.params}/>,
     mapMarkerComponent:<MlAppMapMarker/>,
 

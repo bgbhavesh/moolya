@@ -3,6 +3,7 @@
  * Created by mohammed.mohasin on 30/04/17.
  */
 import _ from 'lodash';
+import MlStatusRepo from '../../../commons/mlStatus';
 class MlRegistrationRepo{
 
   constructor(){
@@ -10,6 +11,10 @@ class MlRegistrationRepo{
       MlRegistrationRepo.instance = this;
     }
       return MlRegistrationRepo.instance;
+  }
+
+  updateStatus(request,code,module){
+    return MlStatusRepo.updateStatus(request,code,module);
   }
 
 /**

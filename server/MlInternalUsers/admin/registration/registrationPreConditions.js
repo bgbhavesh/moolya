@@ -123,7 +123,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
   }
   static  validateEmail(registration) {
     // let clusterInfo=MlClusters.findOne({countryId:args.registration.countryId})
-    var validate = MlRegistration.findOne({"registrationInfo.email":registration.email,status: { $nin: [ 'Rejected' ] }})
+    var validate = MlRegistration.findOne({"registrationInfo.email":registration.email,status: { $nin: [ 'REG_USER_REJ','REG_ADM_REJ' ] }})
     if(validate){
       /* var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
        if(validate){*/
@@ -136,7 +136,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
   }
   static  validateMobile(registration) {
     var validate = MlRegistration.findOne({"registrationInfo.contactNumber":registration.contactNumber})
-    if(validate && validate.status != 'Rejected'){
+    if(validate && (validate.status != 'REG_ADM_REJ'||validate.status != 'REG_USER_REJ')){
       let code = 409;
       let message ="Registration Exist with the Mobile Number"
       let errResp = new MlRespPayload().errorPayload(message, code);

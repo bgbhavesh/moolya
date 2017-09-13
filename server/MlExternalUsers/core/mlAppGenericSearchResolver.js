@@ -312,7 +312,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
-          "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+          "name":{$concat: [ "$user.profile.firstName", " ", "$user.profile.lastName" ] },
           "accountType": "$port.accountType",
           "clusterId": '$port.clusterId',
           "chapterId": '$port.chapterId',
@@ -1093,15 +1093,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "cluster"){
     var activeClusters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
+      // var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
 
-      var clusterIds = _.map(user_profiles, "clusterId");
-      clusterIds = _.uniq(clusterIds);
+      // var clusterIds = _.map(user_profiles, "clusterId");
+      // clusterIds = _.uniq(clusterIds);
 
-      var clusters = mlDBController.find('MlClusters', {_id:{$in:clusterIds}}, context).fetch();
+      var clusters = mlDBController.find('MlClusters', {isActive:true}, context).fetch();
 
       _.each(clusters, function (cluster) {
         let country = mlDBController.findOne('MlCountries', {isActive: true, _id:cluster.countryId}, context, {sort: {country: 1}});
@@ -1109,7 +1109,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           activeClusters.push(cluster);
         }
       })
-    }
+    // }
 
     const data = activeClusters;
     const totalRecords = activeClusters.length
@@ -1117,15 +1117,18 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "chapter"){
     var activeChapters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var chapterIds = _.map(user_profiles, "chapterId");
+    //   chapterIds = _.uniq(chapterIds);
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
-
-      var chapterIds = _.map(user_profiles, "chapterId");
-      chapterIds = _.uniq(chapterIds);
-
-      var chapters = mlDBController.find('MlChapters', {_id:{$in:chapterIds}, isActive:true}, context).fetch();
+      var chapters = mlDBController.find('MlChapters', {clusterId:args.queryProperty.query, isActive:true}, context).fetch();
 
       _.each(chapters, function (chapter) {
         let city = mlDBController.findOne('MlCities', {isActive: true, _id:chapter.cityId}, context, {sort: {country: 1}});
@@ -1133,7 +1136,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           activeChapters.push(chapter);
         }
       })
-    }
+    // }
 
     const data = activeChapters;
     const totalRecords = activeChapters.length
@@ -1141,17 +1144,20 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "subChapter"){
     var activeChapters = [];
-    var user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var subChapterIds = _.map(user_profiles, "subChapterId");
+    //   subChapterIds = _.uniq(subChapterIds);
 
-      var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
+      var subChapters = mlDBController.find('MlSubChapters', {chapterId:args.queryProperty.query, isActive:true}, context).fetch();
 
-      var subChapterIds = _.map(user_profiles, "subChapterId");
-      subChapterIds = _.uniq(subChapterIds);
-
-      var subChapters = mlDBController.find('MlSubChapters', {_id:{$in:subChapterIds}, isActive:true}, context).fetch();
-
-    }
+    // }
 
     const data = subChapters;
     const totalRecords = subChapters.length

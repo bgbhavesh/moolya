@@ -13,6 +13,8 @@ export default MlStatusRepo= class MlStatusRepo{
     var status=MlStatusRepo.getStatusDefinition(code,module);
     request.status = status.code;
     request.statusDesc= status.description;
+    return request;
   };
 
 }
+

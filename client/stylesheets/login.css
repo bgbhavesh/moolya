@@ -1,6 +1,7 @@
 .brclear{clear: both;}
 .login_bg video{    position: fixed;top: 50%;left: 50%;min-width: 100%;min-height: 100%;width: auto;height: auto;z-index: -100;transform: translateX(-50%) translateY(-50%);background-size: cover;transition: 1s opacity;}
-.login_bg img{position: absolute;z-index: 1;top: -2px;left: calc(50% - 265px);/*transform: translateX(-50%);*/}
+.login_bg img.login_logo{position: absolute;z-index: 1;top: -2px;left: calc(50% - 265px);}
+.login_bg img.logout_logo{position: absolute;z-index: 1;top: 10px;left: calc(50% - 142px);}
 .login_block{height: 214px;width: 356px;background: #FFC20E;z-index: 2;position: absolute;top: 250px;left: 50%;transform: translateX(-50%);}
 .login_block:after{position:absolute;right:-50px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 107px 0 107px 50px;border-color: transparent transparent transparent #FFC20E;top: 0px;}
 .login_block:before{position:absolute;left:-50px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 107px 50px 107px 0px;border-color: transparent #FFC20E transparent transparent;top: 0px;}

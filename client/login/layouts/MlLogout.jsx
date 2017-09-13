@@ -56,7 +56,7 @@ export default class MlLogout extends Component {
     return (
       <div className="logout">
         <div className="login_bg" style={{textAlign: "center"}}>
-          <img className="logo" src="/images/moolya_logo.png"/>
+          <img className="logout_logo" src="/images/moolya_logo.png"/>
           <div className="clearfix"/>
           <div className="logout_message">
             <h3>You have been logged out...</h3>

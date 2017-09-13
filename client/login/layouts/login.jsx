@@ -64,7 +64,7 @@ MlLoginContent = React.createClass({
               <source src="/images/bg_video.mp4"/>
             </video>*/}
             <div className="video_bg"></div>
-            <img className="logo" src="/images/login_logo.png"/>
+            <img className="login_logo" src="/images/login_logo.png"/>
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>
             </div>

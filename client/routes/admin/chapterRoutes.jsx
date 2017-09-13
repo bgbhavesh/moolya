@@ -52,16 +52,6 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterNam
   }
 });
 
-adminSection.route('/chapters/anchorView', {
-  name: 'chapter_anchorInfo',
-  action(params){
-    mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'chapter'}}/>,
-      adminContent: <MlAnchorInfoView />
-    })
-  }
-});
-
 adminSection.route('/chapters/:clusterId/:chapterId/createSubChapter', {
   name: 'chapter_AddSubChapter',
   action(params){

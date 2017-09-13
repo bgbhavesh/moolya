@@ -78,7 +78,7 @@ class MlAppOngoingSelectedMyAppointment extends Component {
         component: <MlAppOngoingMyAppointmentInfo
           service={service}
           appointment={appointment}/>,
-        icon: <span className="ml my-ml-information_3"></span>
+        icon: <span className="ml my-ml-info"></span>
       }
 
     ];

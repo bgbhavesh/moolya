@@ -67,6 +67,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                       communityName,
                       communityCode,
                       communityHierarchyLevel
+                      isAnchor
                     }
                   }
                     

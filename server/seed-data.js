@@ -264,6 +264,7 @@ var roleclusteranchor = {
   assignRoles: assignRolesAnchor,
   modules: modulesclusteranchor,
   isActive: true,
+  isAnchor : true,
   isSystemDefined: true
 }
 MlRoles.update({roleName: "clusteranchor"}, {$set: roleclusteranchor}, {upsert: true})
@@ -297,6 +298,7 @@ let rolechapteranchor = {
   assignRoles: assignRolesAnchor,
   modules: moduleschapteranchor,
   isActive: true,
+  isAnchor : true,
   isSystemDefined: true
 }
 MlRoles.update({roleName: "chapteranchor"}, {$set: rolechapteranchor}, {upsert: true})
@@ -336,6 +338,7 @@ let rolesubchapteranchor = {
   assignRoles: assignRolesAnchor,
   modules: modulessubchapteranchor,
   isActive: true,
+  isAnchor : true,
   isNonMoolyaAvailable: true,
   isSystemDefined: true
 }
@@ -369,6 +372,7 @@ let roleCommunityAnchor = {
   assignRoles: assignRolesAnchor,
   modules: modulesCommunityAnchor,
   isActive: true,
+  isAnchor : true,
   isNonMoolyaAvailable: true,
   isSystemDefined: true
 }

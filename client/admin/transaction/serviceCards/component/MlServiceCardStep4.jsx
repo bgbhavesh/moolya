@@ -180,12 +180,12 @@ export default class MlServiceCardStep4 extends React.Component{
               </div>
             </form>
           </div>
+          <div className="ml_btn" style={{'textAlign':'center'}}>
+            <div className="save_btn" onClick={() => saveServicePaymentDetails('saved')}>Save</div>
+            <div className="save_btn" onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
+            <div className="cancel_btn" onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
+          </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveServicePaymentDetails('saved')}>Save</div>
-          <div className="save_btn" onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
-          <div className="cancel_btn" onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
-        </div>
       </div>
     )
   }

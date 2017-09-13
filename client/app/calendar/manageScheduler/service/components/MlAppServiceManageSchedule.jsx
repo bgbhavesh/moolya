@@ -164,7 +164,7 @@ class MlAppServiceManageSchedule extends Component {
                                           viewMode={this.props.viewMode}
                                           setSessionFrequency={this.setSessionFrequency}
                                           onChangeFormField={this.onChangeFormField}/>,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: !this.props.viewMode?'Select Tasks':'Tasks',
@@ -1052,7 +1052,8 @@ class MlAppServiceManageSchedule extends Component {
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

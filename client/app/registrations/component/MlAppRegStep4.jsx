@@ -338,7 +338,7 @@ export default class MlAppRegStep4 extends React.Component {
       <div className="step_form_wrap step4">
         {showLoader === true ? ( <MlLoader/>) : (<div>
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-            <div className="col-md-6 nopadding-left">
+            <div className="col-md-6">
               <form>
 <div className="panel panel-default">
               <div className="panel-heading">
@@ -422,7 +422,7 @@ export default class MlAppRegStep4 extends React.Component {
               </form>
 
             </div>
-            <div className="col-md-6 nopadding-right">
+            <div className="col-md-6">
               <div className="form_bg">
                 <form>
                   <div className="form-group steps_pic_upload">

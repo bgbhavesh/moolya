@@ -9,7 +9,6 @@ var FontAwesome = require('react-fontawesome');
 export default class MlAnchorList extends React.Component {
   constructor(props){
     super(props)
-    this.anchorView = this.anchorView.bind(this)
     return this
   }
   componentDidMount() {
@@ -33,11 +32,6 @@ export default class MlAnchorList extends React.Component {
     });
   }
 
-  anchorView(){
-    console.log('anchorInfo')
-    FlowRouter.go('/admin/chapters/anchorView')
-  }
-
   render() {
     return (
       <div>
@@ -50,7 +44,7 @@ export default class MlAnchorList extends React.Component {
                 speed={0.8}
                 className="left_wrap"
               >
-                <div className="col-md-4 col-sm-6" onClick={this.anchorView}>
+                <div className="col-md-4 col-sm-6">
                   <div className="list_block provider_block">
                     <div className="provider_mask"><img src="/images/funder_bg.png"/>
                       <span className="ml ml-plus "></span>

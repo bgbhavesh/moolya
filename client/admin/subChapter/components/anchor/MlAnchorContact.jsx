@@ -18,15 +18,10 @@ export default class MlAnchorContact extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+  }
 
-    var mySwiper = new Swiper('.blocks_in_form', {
-      speed: 400,
-      spaceBetween: 25,
-      slidesPerView: 2,
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
-
+  sendDataToParent(data) {
+    this.props.getContactDetails(data)
   }
 
   render() {

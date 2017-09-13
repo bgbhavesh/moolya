@@ -336,7 +336,7 @@ export default class step1 extends React.Component{
   async updateRejectUser(){
     if(!_.find(this.props.emailDetails, {verified : true})){
       let registrationId = this.props.registrationData._id
-      const response = await rejectStatusForUser(registrationId);
+      const response = await rejectStatusForUser(registrationId,'0');
       if (response && response.success) {
         toastr.success(response.result)
       }else if (response && !response.success){

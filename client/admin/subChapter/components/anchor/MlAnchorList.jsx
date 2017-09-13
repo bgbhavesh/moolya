@@ -4,12 +4,18 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
+import CDNImage from '../../../../commons/components/CDNImage/CDNImage'
 var FontAwesome = require('react-fontawesome');
 
 //todo:// floatlabel initialize
 export default class MlAnchorList extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      loading: true,
+      data: []
+    }
     return this
   }
 
@@ -17,94 +23,43 @@ export default class MlAnchorList extends React.Component {
     const resp = this.getAnchorUsers()
     return resp
   }
-
-  getAnchorUsers() {
+  handleUserClick(id,event){
+    console.log('on user Click', id)
+  }
+  async getAnchorUsers() {
     var data = this.props.data
-    console.log('fetchanchorusers', data)
+    var response = await findAnchorUserActionHandler(data)
+    console.log('anchor user list', response)
+    this.setState({data: response})
+    return response
   }
 
   render() {
+    const _this = this
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
           <div className="row">
-            {/*<h3>Users List</h3>*/}
             <div className="left_wrap left_user_blocks">
 
               <ScrollArea
                 speed={0.8}
                 className="left_wrap"
               >
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/>
-                      <span className="ml ml-plus "></span>
+                {_this.state.data.map(function (value, say) {
+                  return (<div className="col-md-4 col-sm-6" key={say}>
+                    <div className="list_block provider_block" onClick={_this.handleUserClick.bind(_this, value.userId)}>
+                      <div className="provider_mask">
+                        <CDNImage className="user_pic" src={value.profileImage?value.profileImage:"/images/def_profile.png"}/>
+                      </div>
+                      <h3>{value.displayName}</h3>
                     </div>
-                    <h3>Add New</h3>
-                  </div>
-                </div>
-
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_1.jpg"/></div>
-                    <h3>User Name1</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_2.jpg"/></div>
-                    <h3>User Name2</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_3.jpg"/></div>
-                    <h3>User Name3</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_4.jpg"/></div>
-                    <h3>User Name4</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_5.jpg"/></div>
-                    <h3>User Name5</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_6.jpg"/></div>
-                    <h3>user Name6</h3>
-                  </div>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <div className="list_block provider_block">
-                    <div className="cluster_status active_cl"></div>
-                    <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                           src="/images/p_7.jpg"/></div>
-                    <h3>User Name7</h3>
-                  </div>
-                </div>
+                  </div>)
+                })}
               </ScrollArea>
             </div>
           </div>
         </div>
-
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
 
           {/*<h3>User Details</h3>*/}

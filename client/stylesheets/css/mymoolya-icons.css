@@ -14,6 +14,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.my-ml-pending_registrations:before {
+  content: "\e9f5";
+}
+.my-ml-add_tasks:before {
+  content: "\e9f6";
+}
+.my-ml-register_as:before {
+  content: "\e9f7";
+}
+.my-ml-anchor:before {
+  content: "\e9f0";
+}
+.my-ml-info:before {
+  content: "\e9f1";
+}
+.my-ml-objectives:before {
+  content: "\e9f2";
+}
+.my-ml-process:before {
+  content: "\e9f3";
+}
+.my-ml-sessions:before {
+  content: "\e9f4";
+}
 .my-ml-i_follow:before {
   content: "\e9ec";
 }

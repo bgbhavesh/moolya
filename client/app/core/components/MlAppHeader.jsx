@@ -140,8 +140,8 @@ class MlAppProfileHeader extends Component {
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Registration"} data-placement="right">
-                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Pending Registration"} data-placement="right">
+                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
@@ -150,7 +150,7 @@ class MlAppProfileHeader extends Component {
                 </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
+                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-register_as"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}

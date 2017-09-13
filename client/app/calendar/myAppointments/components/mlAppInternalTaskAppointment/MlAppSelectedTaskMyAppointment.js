@@ -61,21 +61,21 @@ class MlAppSelectedTaskMyAppointment extends Component {
         component: <MlAppTaskMyAppointmentBasicInfo
           task={task}
           appointment={appointment} />,
-        icon: <span className=""></span>
+        icon: <span className="ml fa fa-list-alt"></span>
       },
       {
         name: 'Sessions',
         component: <MlAppTaskMyAppointmentSession
           task={task}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml my-ml-sessions"></span>
       },
       {
         name: 'Info',
         component: <MlAppTaskMyAppointmentTermAndCondition
           task={task}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml my-ml-info"></span>
       }
 
     ];
@@ -183,7 +183,8 @@ class MlAppSelectedTaskMyAppointment extends Component {
               <div id="root">
                 <StepZilla steps={this.setTaskSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

@@ -62,7 +62,6 @@ const mlAppChapterDashboardMapConfig=new MlAppViewer({
   extraFields:[],
   throttleRefresh:true,
   fetchCenter:true,
-  showImage:true,//added for cluster image in map
   queryOptions:true,
   buildQueryOptions:(config)=>{
 

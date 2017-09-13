@@ -1378,7 +1378,7 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
 }
 
 
-MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
+/*MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.token) {
     let updateRecord = {}
@@ -1417,7 +1417,7 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       return response;
     }
   }
-}
+}*/
 
 MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info) => {
   // TODO : Authorization

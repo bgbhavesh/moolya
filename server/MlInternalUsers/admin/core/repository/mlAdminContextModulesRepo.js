@@ -332,7 +332,7 @@ let CoreModules = {
         serverQuery = {'status': "Approved"};
         break;
       case 'rejected':
-        serverQuery = {'status': "Rejected"};
+        serverQuery = {'status': {'$in': ['REG_ADM_REJ', 'REG_USER_REJ']}};
         break;
     }
 

@@ -120,7 +120,7 @@ export default class MlCompanyViewManagement extends React.Component {
       <div id="annotatorContent">
         <h2>Management</h2>
         <div className="col-lg-12">
-          <MlGenericManagementView data={managementArray} isAdmin={this.props.isAdmin}/>
+          <MlGenericManagementView data={managementArray} isAdmin={this.props.isAdmin} portfolioDetailsId={this.props.portfolioDetailsId}/>
           {/*<div className="row">*/}
             {/*{managementArray && managementArray.map(function (details, idx) {*/}
               {/*return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>*/}

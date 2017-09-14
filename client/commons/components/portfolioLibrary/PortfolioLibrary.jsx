@@ -1381,6 +1381,7 @@ class Library extends React.Component {
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
+                Header Here
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
               </div>
@@ -1511,7 +1512,7 @@ class Library extends React.Component {
                     <a href="javascript:void(0);">
                       {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
                         <span className="ml ml-upload" onClick={this.toggleModal1.bind(this)}>
-                          {/* <input type="file" className="upload_file upload" name="image_source" 
+                          {/* <input type="file" className="upload_file upload" name="image_source"
                           id="template_upload" onChange={that.TemplateUpload.bind(that)} />*/}
                         </span> :
                         <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, TemplateDetails)}></span>}

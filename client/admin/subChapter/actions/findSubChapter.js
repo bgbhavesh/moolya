@@ -51,6 +51,10 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
               canTransact
             }
           }
+          objective {
+            description
+            status
+          }
         }
     }
     `,

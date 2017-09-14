@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { findSubChapterActionHandler } from '../../actions/findSubChapter'
 
 export default class MlAnchorObjective extends React.PureComponent {
 
@@ -21,6 +22,16 @@ export default class MlAnchorObjective extends React.PureComponent {
     this.updateObjectiveFormArray = this.updateObjectiveFormArray.bind(this);
   }
 
+  async componentWillMount() {
+    const { clusterId, chapterId, subChapterId } = this.props;
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    objective = response && response.objective && response.objective.map((ob) => ({
+      description: ob.description,
+      status: ob.status,
+    }));
+    this.updateObjectiveFormArray(objective);
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
@@ -33,6 +44,7 @@ export default class MlAnchorObjective extends React.PureComponent {
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
+
   }
 
   sendDataToParent(data){
@@ -83,7 +95,7 @@ export default class MlAnchorObjective extends React.PureComponent {
               <div className="form-group switch_wrap inline_switch">
                 <label className="">Status</label>
                 <label className={`switch ${status ? 'on' : ''}`}>
-                  <input onClick={() => this.changeForm(index, 'status', !status)} type="checkbox"/>
+                  <input checked={status} onClick={() => this.changeForm(index, 'status', !status)} type="checkbox"/>
                   <div className="slider"></div>
                 </label>
               </div>

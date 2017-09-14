@@ -5,7 +5,12 @@ export async function updateSubChapterActionHandler(ClusterId, ChapterId, subCha
   let clusterId = ClusterId;
   let chapterId = ChapterId;
   let subChapterId = subChapterDetails.subChapterId;
-  let subChapter = subChapterDetails;
+  let subChapter = _.omit(subChapterDetails, 'subChapterId');
+  subChapter.objective = subChapter.objective && subChapter.objective.map(({ description, status }) => {
+    return {
+      description, status
+    }
+  });
 
   subChapter.moolyaSubChapterAccess = _.omit(subChapter.moolyaSubChapterAccess,'__typename');
   subChapter.moolyaSubChapterAccess.externalUser=_.omit(subChapter.moolyaSubChapterAccess.externalUser,'__typename');

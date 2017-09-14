@@ -894,11 +894,18 @@ h3{font-size:40px; text-shadow:none;font-weight: bold;}
   .form-control.sendotp{width: 65%; font-size: 22px;  margin: 0 auto; text-align: center; border-bottom: none; background: $mlRed; color: #fff; border-radius: 5px; }
   .form-group.sendotp{
     width:80%;margin:0 auto;
-    .resendotp{float:right;text-decoration:underline;color:$mlWhite;font-size:12px;}
+    .resendotp{float:right;text-decoration:underline;color:#ef4647;font-size:12px;}
   }
 .save_btn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 0px 0px 0px;color: $mlWhite;text-shadow: none;text-align: center;}
 .save_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlRed;top: 0px;}
 .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
+  .terms {
+    label {font-weight: normal;font-size: 16px;
+      a {color:#ef4647; font-size: 14px;
+        &:hover {color:#ef4647;}
+      }
+    }
+  }
 }
 .idea_details .portfolio-main-wrap .panel{display: none;}
 

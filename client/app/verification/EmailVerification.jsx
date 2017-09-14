@@ -1,5 +1,5 @@
 import React from 'react';
-import {verifyEmailHandler,verifyMobileNumberHandler} from '../../commons/verificationActionHandler';
+import {verifyEmailHandler,verifyMobileNumberHandler, resendSmsOtpHandler} from '../../commons/verificationActionHandler';
 import MlLoader from '../../commons/components/loader/loader'
 import {appClient} from '../core/appConnection';
 export default class EmailVerification extends React.Component{
@@ -15,6 +15,7 @@ export default class EmailVerification extends React.Component{
     }
     //this.verifyEmail.bind(this);
     this.verifyMobileNumber.bind(this);
+    this.resendSmsOTP.bind(this);
   }
 
    /*
@@ -60,14 +61,22 @@ export default class EmailVerification extends React.Component{
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;
     let otp=this.refs.otpValue.value;
-    const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
-    let resp=null;
-    if(response.success){
-      resp = JSON.parse(response.result);
-      this.setState({mobileNumberVerified:resp.mobileNumberVerified});
-    }else{
-      this.setState({mobileNumberVerified:false});
+    let isTermsChecked= this.refs.isTermsChecked.checked;
+    if(isTermsChecked && otp) {
+      const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
+      let resp=null;
+      if(response.success){
+        resp = JSON.parse(response.result);
+        this.setState({mobileNumberVerified:resp.mobileNumberVerified});
+      }else{
+        this.setState({mobileNumberVerified:false});
+      }
+      return response;
     }
+  }
+  async resendSmsOTP(){
+    let mobileNumber=this.state.mobileNumber;
+    const response=await resendSmsOtpHandler(mobileNumber, appClient);
     return response;
   }
 
@@ -86,7 +95,7 @@ export default class EmailVerification extends React.Component{
             {!mobileNumberVerificationSuccess&&emailVerificationSuccess&&
               <div>
               <img src="../images/success_icon.png" /><br />
-              <h2 style={{'marginBottom':'20px'}}>Congratulations!!</h2>
+              <h3 style={{'marginBottom':'20px'}}>Congratulations!!</h3>
              {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
                 Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
                 <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
@@ -97,8 +106,11 @@ export default class EmailVerification extends React.Component{
               </div>
               <div className="form-group sendotp">
                 <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
-                <a href="#" className="resendotp">Resend OTP</a>
+                <a href="#" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
               </div><br />
+                <div className="terms">
+                  <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a href="moolya.global/terms-of-usage" target="_blank">Terms and Conditions</a> and <a href="moolya.global/privacy-policy" target="_blank"> 'Privacy Policy'</a></label>
+                </div>
               <a href="#" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
               </div>
             }

@@ -53,6 +53,8 @@ import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/com
 import MlShareList from '../../admin/transaction/share/component/MlShareList'
 import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
+import MlAppointmentsList from '../../admin/transaction/appointments/component/MlAppointmentsList';
+
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
@@ -478,5 +480,12 @@ adminSection.route('/transactions/serviceCardsList', {
   name: 'Service_Cards',
   action(params){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'serviceCard'}} />, adminContent:<MlserviceCardsList/>})
+  }
+});
+
+adminSection.route('/transactions/appointments', {
+  name: 'appointments',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'appointments'}} />, adminContent:<MlAppointmentsList />})
   }
 });

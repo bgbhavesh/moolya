@@ -44,7 +44,7 @@ export default class MlAppStartupListView extends Component {
       </div>
     );
 
-    return (<div className="row ideators_list">
+    return (<div className="ideators_list">
       <div className="col-md-12"> <h2>Startup</h2></div>
       {list}
       </div>);

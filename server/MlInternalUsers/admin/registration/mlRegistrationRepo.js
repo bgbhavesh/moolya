@@ -87,8 +87,8 @@ class MlRegistrationRepo{
           mlDBController.update('users', {username:userName,'emails': {$elemMatch: {'address': userName,'verified':false}}},
             {$set: {'emails.$':emailRec},$push:{'services.email.verificationTokens':emailVerificationTokens}},{'blackbox': true}, context);
 
-          mlDBController.update('users', {username:userName,'otps': {$elemMatch: {'mobileNumber':mobileNumber,'verified':false}}},
-            {$set: {'otps.$.verified':(otpRec||{}).verified||false}},{'blackbox': true}, context);
+          mlDBController.update('users', {username:userName,'mobileNumbers': {$elemMatch: {'mobileNumber':mobileNumber,'verified':false}}},
+            {$set: {'mobileNumbers.$.verified':(otpRec||{}).verified||false}},{'blackbox': true}, context);
 
           break;
 

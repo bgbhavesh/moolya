@@ -35,7 +35,8 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "News",
-        "uniqueId" : "news"
+        "uniqueId" : "news",
+        isDisabled:true
       },
       {
         "image":"ml my-ml-settings_new",
@@ -43,7 +44,8 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "Settings",
-        "uniqueId" : "settings"
+        "uniqueId" : "settings",
+        isDisabled:true
       },
       {
         "image":"ml ml-chat",

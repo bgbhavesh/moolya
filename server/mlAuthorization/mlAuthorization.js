@@ -225,6 +225,7 @@ class MlAuthorization
           case "OFFICE":              /*adding office for others five admin */
           case "SHARE":
           case "HIERARCHY":
+          case "APPOINTMENT":
           case "PROCESSSETUP": {
             if(!userProfileDetails.isMoolya){
               return this.validateNonMoolyaChapterSubChapterCommunity(userProfileDetails, variables, actionName);

@@ -6,7 +6,9 @@ var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations';
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 import _ from 'lodash'
 
 const MEMBERKEY = 'memberships'
@@ -22,8 +24,8 @@ export default class MlStartupViewMCL extends React.Component {
       licenses:{},
       data:{},
       annotations:[],
-      content:{}
-
+      content:{},
+      loading: true
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -58,7 +60,7 @@ export default class MlStartupViewMCL extends React.Component {
     if (responseL) {
       this.setState({licenses: responseL.licenses});
     }
-
+    this.setState({loading: false});
     data = {
       memberships:this.state.memberships,
       licenses: this.state.licenses,
@@ -136,17 +138,22 @@ export default class MlStartupViewMCL extends React.Component {
   }
 
   render(){
-
+    const showLoader = this.state.loading;
     return (
-        <div className="portfolio-main-wrap" id="annotatorContent">
-          <h2>MCL</h2>
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
+            <div className="portfolio-main-wrap" id="annotatorContent">
+              <h2>MCL</h2>
 
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Membership </div>
+                  <div className="panel-heading">Membership</div>
                   <div className="panel-body ">
 
-                    {this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""}
+                    {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription :
+                      <div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>}
 
                   </div>
                 </div>
@@ -161,25 +168,32 @@ export default class MlStartupViewMCL extends React.Component {
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
 
-                    {this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""}
+                    {this.state.compliances && this.state.compliances.complianceDescription ? this.state.compliances.complianceDescription :
+                      <div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>}
 
                   </div>
                 </div>
                 <div className="clearfix"></div>
                 <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Licenses </div>
+                  <div className="panel-heading">Licenses</div>
                   <div className="panel-body ">
 
-                    {this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""}
+                    {this.state.licenses && this.state.licenses.licenseDescription ? this.state.licenses.licenseDescription :
+                      <div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>}
 
                   </div>
                 </div>
 
 
-          </div>
-        </div>
-
-
+              </div>
+            </div>
+          )
+        }
+      </div>
     )
   }
 }

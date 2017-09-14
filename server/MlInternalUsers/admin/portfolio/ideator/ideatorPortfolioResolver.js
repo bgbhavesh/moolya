@@ -384,7 +384,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                 }
             }
             if(isCreatePortfolioRequest) {
-                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "Approved"}, context) //|| {"registrationInfo": {}};
+                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "REG_USER_APR"}, context) //|| {"registrationInfo": {}};
                 let createdName
                 if(Meteor.users.findOne({_id : context.userId}))
                 {

@@ -26,6 +26,7 @@ let transactionsSchema = `
         departmentId        : String
         subDepartment       : String
         subDepartmentId     : String
+        allocationStatus    : String
     }
     
     type userAgent{
@@ -135,6 +136,7 @@ let transactionsSchema = `
         departmentId        : String
         subDepartment       : String
         subDepartmentId     : String
+        allocationStatus    : String
     }
     input TransactionsInput{
        status                   : String

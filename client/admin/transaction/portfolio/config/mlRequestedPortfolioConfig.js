@@ -41,6 +41,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {dataField: "source", title: "Source",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
+    {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
     {dataField: "assignedUser", title: "Assign",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -141,7 +142,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           chapterId
                           subChapterId
                           communityId
-                          
+                          allocationStatus
                      }
                       }
               }

@@ -144,20 +144,6 @@ let startupPortfolioSchema = `
         isCompanyDescriptionPrivate : Boolean
         privateFields:[PrivateKeys]
     }
-    
-    type awardsRecognitionOutput{
-          awardName:String
-          awardId:String
-          isAwardPrivate:Boolean
-          year:String
-          isYearPrivate:Boolean
-          awardsDescription:String
-          isAwardsDescriptionPrivate:Boolean
-          logo:imagesTypeSchema,
-          makePrivate:Boolean,
-          index: Int
-          privateFields:[PrivateKeys]
-    }
 
     type membershipsOutput{
         membershipsDescription:String, 
@@ -663,4 +649,18 @@ MlResolver.MlModuleResolver.push(supportedApi)
  * Note: graphql schema to be used multiple times hence using only onces
  * @lookingFor  : startup
  * @lookingForOutput : startup
+ * @awardsRecognitionOutput : startup
  * */
+// type awardsRecognitionOutput{
+//   awardName:String
+//   awardId:String
+//   isAwardPrivate:Boolean
+//   year:String
+//   isYearPrivate:Boolean
+//   awardsDescription:String
+//   isAwardsDescriptionPrivate:Boolean
+//   logo:imagesTypeSchema,
+//     makePrivate:Boolean,
+//     index: Int
+//   privateFields:[PrivateKeys]
+// }

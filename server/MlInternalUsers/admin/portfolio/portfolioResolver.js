@@ -250,9 +250,10 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         else{
           privateFields = args.privateFields || [];
         }
-        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'REG_PORT_PEND', transactionUpdatedDate:new Date()}, {$set:true}, context)
+       // let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP', transactionUpdatedDate:new Date()}, {$set:true}, context)
         mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_PEND');
-        detailsUpdate = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
+        updateRecord.transactionUpdatedDate=new Date();
+       var detailsUpdate = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
         if(privateFields){
           detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
         }

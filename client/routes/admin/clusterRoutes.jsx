@@ -18,6 +18,7 @@ import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlClusterCommunityDetails from '../../admin/cluster/components/MlClusterCommunityDetails'
 import MlAuditHistory from '../../admin/auditHistory/components/MlHistoryList'
+import MlAnchorTabsContainer from "../../admin/subChapter/components/anchor/MlAnchorTabsContainer"
 
 adminSection.route('/clusters', {
   name: 'cluster',
@@ -83,7 +84,18 @@ adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'cluster_chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />, adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />, adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId} subChapterName={params.subChapterName}/>})
+  }
+});
+
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/anchorDetails', {
+  name: 'cluster_chapter_anchorDetails',
+  action(params){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'chapter'}}/>,
+      adminContent: <MlAnchorTabsContainer subChapterId={params.subChapterId} clusterId={params.clusterId}
+                                           chapterId={params.chapterId}/>
+    })
   }
 });
 

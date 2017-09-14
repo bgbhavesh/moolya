@@ -816,7 +816,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         "createdAt": new Date(),
         "source": "self",
         "createdBy": "admin",
-        "status": "Yet To Start",
+        "status": "REG_PORT_KICKOFF",
         "isPublic": false,
         "isGoLive": false,
         "isActive": false,
@@ -1760,7 +1760,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
-  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
+  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'REG_USER_APR','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
   return resp;
 }
 

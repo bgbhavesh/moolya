@@ -45,6 +45,12 @@ class MlAppPortfolio extends Component{
     this.assignActionHandlerProxy.bind(this);
     return this;
   }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   console.log('======');
+  //   console.log(nextProps);
+  //   console.log(this.props);
+  //   return !isEqual( this.props.appContent , nextProps.appContent );
+  // }
 
   toggle() {
     this.setState({

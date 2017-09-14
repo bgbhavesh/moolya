@@ -5,7 +5,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'react-responsive-tabs/styles.css'
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent"
 import MyConnections from './MyConnections';
 import MyFavourites from './MyFavourites';
 import MyWishlist from './MyWishlist';
@@ -16,12 +15,14 @@ import {mlAppMyConnectionConfig} from '../../config/mlAppMyConnectionsConfig';
 import {mlAppMyFavouritesConfig} from '../../config/mlAppMyFavouritesConfig';
 import {mlAppMyFollowersConfig} from '../../config/mlAppMyFollowersConfig';
 import {mlAppMyFollowingsConfig} from '../../config/mlAppMyFollowingsConfig';
-
+import Tabs from 'react-responsive-tabs';
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 export default class MyList extends React.Component{
   constructor(props){
     super(props)
     this.state =  {
       tabs: [],
+      activeTab:'My Connections',
     };
   }
 
@@ -33,8 +34,13 @@ export default class MyList extends React.Component{
         tabClassName: 'horizon-item '+tab.tabClassName?tab.tabClassName:"", // Optional
         panelClassName: 'panel1',
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
+    }
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
     }
     this.setState({tabs:getTabs() ||[]});
   }
@@ -60,17 +66,22 @@ export default class MyList extends React.Component{
     ]
     return tabs;
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
   render(){
     let tabs = this.state.tabs;
+    console.log()
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12">
-            <MlTabComponent tabs={tabs}/>
+            <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
           </div>
         </div>
       </div>
     )
   }
 };
+

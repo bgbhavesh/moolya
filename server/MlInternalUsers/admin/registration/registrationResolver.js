@@ -1575,9 +1575,8 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) => 
 MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   if (args.token) {
     var updateRecord={};
-    /*var context = {"url":Meteor.absoluteUrl("/"),browser:"system"};
     let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
-    context.userId = user._id;*/
+    context.userId = user._id;context.url=Meteor.absoluteUrl("");context.browser="server";
     var result = MlAccounts.verifyEmail(args.token, context);
     if (result && result.error) {
       let response = new MlRespPayload().errorPayload(result.reason || "", result.code);
@@ -1586,7 +1585,8 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       //update the registration status on success.
       var recordId = result.recordId;
       mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
-      MlRegistration.update({_id:recordId},{$set: updateRecord});
+      mlDBController.update('MlRegistration',recordId,updateRecord, {$set: true}, context);
+      //MlRegistration.update({_id:recordId},{$set: updateRecord});
 
       return new MlRespPayload().successPayload(result, 200);
     }

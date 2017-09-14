@@ -19,8 +19,10 @@ export default class MlAnchorInfoView extends React.Component {
     });
   }
   changePath(){
-    // FlowRouter.go('')
-    console.log('change path')
+    console.log(this.props)
+    var queryParams = this.props.queryParams && this.props.queryParams.viewMode
+    queryParams = JSON.parse(queryParams)
+    FlowRouter.go('/admin/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
   }
 
   render() {
@@ -202,7 +204,10 @@ export default class MlAnchorInfoView extends React.Component {
               </ScrollArea>
             </div>
           </div>
-          <a onClick={this.changePath.bind(this)}>enter to subchapter</a>
+          <div>
+            <a onClick={this.changePath.bind(this)} href="">enter to subchapter</a>
+          </div>
+
         </div>
       </div>
     )

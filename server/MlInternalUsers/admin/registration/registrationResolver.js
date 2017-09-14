@@ -795,7 +795,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         "createdAt": new Date(),
         "source": "self",
         "createdBy": "admin",
-        "status": "Yet To Start",
+        "status": "REG_PORT_KICKOFF",
         "isPublic": false,
         "isGoLive": false,
         "isActive": false,

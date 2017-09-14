@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
     officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch();
 
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-    let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
+    let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'REG_USER_APR'})
     if(regData){
       if(!_.isEmpty(officeSC)){  //if office is there and reg approved
         var newArr = _.map(officeSC, function(element) {
@@ -403,7 +403,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status:{$ne: "Rejected"}});
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
     if (isUserExist || isUserRegExist) {
       let pipeline = [
@@ -457,7 +457,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
     let registrationId = mlDBController.insert('MlRegistration', {
       registrationInfo: finalRegData,
-      status: "Yet To Start",
+      status: "REG_EMAIL_P",
       emails: emails,
       transactionId :finalRegData.registrationId
     }, context)

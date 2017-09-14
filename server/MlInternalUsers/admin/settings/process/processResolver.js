@@ -584,7 +584,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
 
   //checking for the email exist or not
-  let user = MlRegistration.find({"$and": [{"registrationInfo.email": email}, {"status": "Approved"}]}).fetch();
+  let user = MlRegistration.find({"$and": [{"registrationInfo.email": email}, {"status": "REG_USER_APR"}]}).fetch();
   if (user && user.length > 0) {
     let ApprovedKyc = [];
     let kycDoc = null;

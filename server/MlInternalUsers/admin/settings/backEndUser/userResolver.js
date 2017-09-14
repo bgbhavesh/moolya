@@ -27,6 +27,22 @@ MlResolver.MlQueryResolver['fetchExternalUserDetails'] = (obj, args, context, in
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user
+
+  if(args.module == "subChapter" || args.module == "users"){
+    var chapterId = args.id||null;
+
+    if(!chapterId){
+      let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
+      if(userProfile&&userProfile.defaultChapters&&userProfile.defaultChapters!==null) {
+        chapterId=userProfile.defaultChapters;
+      }
+    }
+    let chapterDetails = MlChapters.findOne(chapterId);
+    if (chapterDetails && chapterDetails.latitude && chapterDetails.longitude) {
+      return {lat: chapterDetails.latitude, lng: chapterDetails.longitude};
+    }
+  }
+
   var clusterId=args.id||null;
 
   if(!clusterId){
@@ -285,6 +301,7 @@ MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
                     contextRole["subDepartmentName"] = item.subDepartmentName;
                     contextRole["hierarchyLevel"] = item.hierarchyLevel;
                     contextRole["hierarchyCode"] = item.hierarchyCode;
+                    contextRole["isAnchor"] = item.isAnchor;
                     if(item.roleName == "chapteradmin")
                         contextRole["isChapterAdmin"] = true;
                     else
@@ -1654,4 +1671,27 @@ MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context,
   //   let response = new MlRespPayload().errorPayload('Not a valid user', code);
   //   return response;
   // }
+}
+
+MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
+  var query = []
+  if (args.clusterId && args.chapterId && args.subChapterId) {
+    query.push({
+      '$match': {
+        '$and': [{'profile.isInternaluser': true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isAnchor': true}],
+        '$or': [{'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': args.clusterId},
+          {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': args.chapterId},
+          {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId': args.subChapterId}]
+      }
+    })
+  }
+  query.push({
+    "$project": {
+      _id: 1, "displayName": {$concat: ["$profile.firstName", " ", "$profile.lastName"]},
+      "userName": "$username",
+      "profileImage": "$profile.profileImage"
+    }
+  })
+  var response = mlDBController.aggregate('users', query, context)
+  return response
 }

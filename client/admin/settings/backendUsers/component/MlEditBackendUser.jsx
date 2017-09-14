@@ -215,7 +215,8 @@ class MlEditBackendUser extends React.Component{
               communityName: userRole[j].communityName,
               communityId: userRole[j].communityId,
               communityCode : userRole[j].communityCode,
-              communityHierarchyLevel : userRole[j].communityHierarchyLevel
+              communityHierarchyLevel : userRole[j].communityHierarchyLevel,
+              isAnchor : userRole[j].isAnchor
             }
             userRolesDetails.push(json)
           }
@@ -304,7 +305,8 @@ class MlEditBackendUser extends React.Component{
             subDepartmentName:userRole[j].subDepartmentName,
             communityId:userRole[j].communityId,
             communityCode : userRole[j].communityCode,
-            communityHierarchyLevel : userRole[j].communityHierarchyLevel
+            communityHierarchyLevel : userRole[j].communityHierarchyLevel,
+            isAnchor : userRole[j].isAnchor
           }
           userRolesDetails.push(json)
         }

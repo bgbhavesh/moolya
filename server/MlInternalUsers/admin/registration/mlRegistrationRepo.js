@@ -4,6 +4,7 @@
  */
 import _ from 'lodash';
 import MlStatusRepo from '../../../commons/mlStatus';
+import MlRegistrationPreCondition from "./registrationPreConditions";
 class MlRegistrationRepo{
 
   constructor(){
@@ -15,6 +16,17 @@ class MlRegistrationRepo{
 
   updateStatus(request,code,module){
     return MlStatusRepo.updateStatus(request,code,module);
+  }
+
+  updateEmailStatus(reg){
+    var registration=reg||{};
+    var validation=MlRegistrationPreCondition.validateEmailVerification(registration);
+    if(validation.isValid){
+        this.updateStatus(registration,'REG_EMAIL_P');
+    }else{
+      this.updateStatus(registration,'REG_EMAIL_V');
+    }
+    return registration;
   }
 
 /**
@@ -32,6 +44,7 @@ class MlRegistrationRepo{
       var emails=null;
       var emailRec=null;
       var otps=null;
+      var otpRec=null;
       var mobileNumber=null;
       switch(type){
 
@@ -66,11 +79,16 @@ class MlRegistrationRepo{
             return e.address==userName;
           });
 
+          /**fetch the verified otp of user from otps array*/
+          otpRec = _.find(otps || [], function (e) {
+            return e.verified==true;
+          });
+
           mlDBController.update('users', {username:userName,'emails': {$elemMatch: {'address': userName,'verified':false}}},
             {$set: {'emails.$':emailRec},$push:{'services.email.verificationTokens':emailVerificationTokens}},{'blackbox': true}, context);
 
-          mlDBController.update('users', {username:userName,'otps': {$elemMatch: {'verified':false}}},
-            {$set: {'otps':otps}},{'blackbox': true}, context);
+          mlDBController.update('users', {username:userName,'otps': {$elemMatch: {'mobileNumber':mobileNumber,'verified':false}}},
+            {$set: {'otps.$.verified':(otpRec||{}).verified||false}},{'blackbox': true}, context);
 
           break;
 

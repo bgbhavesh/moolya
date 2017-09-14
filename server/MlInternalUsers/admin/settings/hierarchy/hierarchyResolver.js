@@ -93,7 +93,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
     }
   }
 
-  let hierarchy = mlDBController.findOne("MlHierarchyAssignments", hirarchyQuery, context)
+  var hierarchy = mlDBController.findOne("MlHierarchyAssignments", hirarchyQuery, context)
   var roleIds = [];
   if (hierarchy) {
     var teamStructure = _.filter(hierarchy.teamStructureAssignment, {isAssigned: true});

@@ -25,13 +25,22 @@ class MlHierarchyAssignment {
         Works for Platform admin self assignment of a transaction
       */
     if(subChapterId && subChapterId != "all"){
-      var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-        parentDepartment: departmentId,
-        parentSubDepartment: subDepartmentId,
-        clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
-        subChapterId: roleDetails.isSystemDefined ? "all" : subChapterId,
-        isDefaultSubChapter:isDefaultSubChapter,
-      }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+      if(isDefaultSubChapter){
+        var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+          parentDepartment: departmentId,
+          parentSubDepartment: subDepartmentId,
+          clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
+          isDefaultSubChapter:isDefaultSubChapter,
+        }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+      }else{
+        var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+          parentDepartment: departmentId,
+          parentSubDepartment: subDepartmentId,
+          clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
+          subChapterId: roleDetails.isSystemDefined ? "all" : subChapterId,
+          isDefaultSubChapter:isDefaultSubChapter,
+        }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+      }
     }else{
       var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
         parentDepartment: departmentId,
@@ -454,14 +463,25 @@ class MlHierarchyAssignment {
             isDefaultSubChapter = subChapter.isDefaultSubChapter
           }
           let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
-          let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-            parentDepartment: role.departmentId,
-            parentSubDepartment: role.subDepartmentId,
-            clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
-            subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
-            isDefaultSubChapter: isDefaultSubChapter,
-            "finalApproval.role":role.roleId
-          }, context)
+          if(isDefaultSubChapter){
+            var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+              parentDepartment: role.departmentId,
+              parentSubDepartment: role.subDepartmentId,
+              clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+              isDefaultSubChapter: isDefaultSubChapter,
+              "finalApproval.role":role.roleId
+            }, context)
+          }else{
+            var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+              parentDepartment: role.departmentId,
+              parentSubDepartment: role.subDepartmentId,
+              clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+              subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
+              isDefaultSubChapter: isDefaultSubChapter,
+              "finalApproval.role":role.roleId
+            }, context)
+          }
+
           if(hierarchy&&hierarchy._id){
               if(hierarchy.finalApproval.role == role.roleId ){
                 finalApprover = true;

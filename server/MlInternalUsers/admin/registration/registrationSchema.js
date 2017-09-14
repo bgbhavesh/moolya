@@ -270,6 +270,7 @@ let registrationSchema = `
         transactionId   :   String
         assignedUserId    :   String,
         createdBy       :   String,
+        allocationStatus :  String
         
     }
     

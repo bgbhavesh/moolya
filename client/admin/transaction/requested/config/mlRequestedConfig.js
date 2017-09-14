@@ -37,7 +37,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
     'assignedUser': 'registrationInfo.assignedUser',
     'subChapterName': 'registrationInfo.subChapterName',
     'email':'registrationInfo.email',
-    'registrationId':'registrationInfo.registrationId'
+    'registrationId':'registrationInfo.registrationId',
+    'allocationStatus':'registrationInfo.allocationStatus'
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -50,7 +51,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {dataField: "communityName", title: "Community",dataSort:true},
     {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
-    // {dataField: "contactNumber", title: "ContactNo",dataSort:true},
+    {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -119,6 +120,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       				registrationDate
                               transactionId                              
                               assignedUserId
+                              allocationStatus
                               createdBy
                           }
                       }

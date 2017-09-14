@@ -18,6 +18,10 @@ export default class MlAnchorInfoView extends React.Component {
       }
     });
   }
+  changePath(){
+    // FlowRouter.go('')
+    console.log('change path')
+  }
 
   render() {
     return (
@@ -198,6 +202,7 @@ export default class MlAnchorInfoView extends React.Component {
               </ScrollArea>
             </div>
           </div>
+          <a onClick={this.changePath.bind(this)}>enter to subchapter</a>
         </div>
       </div>
     )

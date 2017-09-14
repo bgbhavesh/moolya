@@ -70,13 +70,46 @@ export async function resendSmsOtpHandler(mobileNumber,connection){
   return result&&result.data&&result.data.resendSmsVerification?result.data.resendSmsVerification:{};
 }
 
-export async function smsOtpHandler(mobileNumber,connection){
+export async function smsUserOtpHandler(connection){
   var connection=connection||{};
   const result = await connection.mutate({
     mutation: gql`
-    mutation($userId:String){
-        sendSmsVerification(
-          userId :$userId
+    mutation{
+        sendUserSmsVerification{
+            success,
+            code,
+            result
+         } 
+      }
+    `
+  });
+  //console.log(result);
+  return result&&result.data&&result.data.sendUserSmsVerification?result.data.sendUserSmsVerification:{};
+}
+export async function resendUserSmsOtpHandler(connection){
+  var connection=connection||{};
+  const result = await connection.mutate({
+    mutation: gql`
+    mutation{
+        resendUserSmsVerification{
+            success,
+            code,
+            result
+         } 
+      }
+    `
+  });
+  //console.log(result);
+  return result&&result.data&&result.data.resendUserSmsVerification?result.data.resendUserSmsVerification:{};
+}
+export async function verifyUserMobileNumberHandler(mobileNumber,otp,connection){
+  var connection=connection||{};
+  const result = await connection.mutate({
+    mutation: gql`
+    mutation($mobileNumber:String,$otp:Int){
+        verifyUserMobileNumber(
+          mobileNumber :$mobileNumber,
+          otp:$otp
         ){
             success,
             code,
@@ -85,9 +118,10 @@ export async function smsOtpHandler(mobileNumber,connection){
       }
     `,
     variables: {
-      userId:""
+      mobileNumber:mobileNumber,
+      otp:otp
     }
   });
   //console.log(result);
-  return result&&result.data&&result.data.sendSmsVerification?result.data.sendSmsVerification:{};
+  return result&&result.data&&result.data.verifyUserMobileNumber?result.data.verifyUserMobileNumber:{};
 }

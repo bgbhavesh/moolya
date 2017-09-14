@@ -194,7 +194,11 @@ class MlSubChapterDetails extends React.Component {
 
   anchorRedirect() {
     console.log('info hit', this.props)
-    FlowRouter.go('/admin/chapters/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
+    var basePath = 'chapters'
+    var locationIndex = window.location.pathname.indexOf('chapters')
+    if (locationIndex < 0)
+      basePath = "clusters"
+    FlowRouter.go('/admin/' + '/' + basePath + '/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
   }
 
   async onImageFileUpload(e) {

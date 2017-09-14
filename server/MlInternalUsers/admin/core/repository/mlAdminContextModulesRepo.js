@@ -356,6 +356,7 @@ let CoreModules = {
       if (doc.allocation) {
         object.assignedUser = doc.allocation.assignee
         object.assignedUserId = doc.allocation.assigneeId
+          object.allocationStatus = doc.allocation.allocationStatus
       }
       /*else{
        object.assignedUser = "Un Assigned"
@@ -396,6 +397,7 @@ let CoreModules = {
       if (doc.allocation) {
         doc.assignedUser = doc.allocation.assignee
         doc.assignedUserId = doc.allocation.assigneeId
+        doc.allocationStatus = doc.allocation.allocationStatus
       }
     });
     return {totalRecords: totalRecords, data: data};

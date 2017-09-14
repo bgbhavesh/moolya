@@ -5,6 +5,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
+import {findBackendUserActionHandler} from '../../../transaction/internalRequests/actions/findUserAction'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage'
 var FontAwesome = require('react-fontawesome');
 
@@ -14,7 +15,8 @@ export default class MlAnchorList extends React.Component {
     super(props)
     this.state = {
       loading: true,
-      data: []
+      data: [],
+      userData: {}
     }
     return this
   }
@@ -24,8 +26,18 @@ export default class MlAnchorList extends React.Component {
     return resp
   }
   handleUserClick(id,event){
-    console.log('on user Click', id)
+    console.log('on user Click', id);
+    const resp = this.getAnchorUserDetails(id);
+    return resp;
+
   }
+
+  async getAnchorUserDetails(id) {
+    var response = await findBackendUserActionHandler(id);
+    this.setState({userData: response});
+    return response;
+  }
+
   async getAnchorUsers() {
     var data = this.props.data
     var response = await findAnchorUserActionHandler(data)
@@ -36,6 +48,8 @@ export default class MlAnchorList extends React.Component {
 
   render() {
     const _this = this
+    let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType=='female'?'/images/female.jpg':'/images/def_profile.png';
+    let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage?this.state.userData.profile.profileImage:profilePic;
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
@@ -75,24 +89,29 @@ export default class MlAnchorList extends React.Component {
                     <input type="file" className="upload"/>
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src="/images/ideator_01.png"/>
+                    <img src={Img}/>
                   </div>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
                   <input type="text" placeholder="First Name" className="form-control float-label" id="fname"
-                         defaultValue="Lorem Ipsum"/>
+                         value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName}/>
 
                 </div>
                 <div>
                   <div className="form-group">
-                    <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"/>
+                    <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"
+                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Last Name" className="form-control float-label" id="dName"/>
+                    <input type="text" placeholder="Last Name" className="form-control float-label" id="dName"
+                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Display Name" className="form-control float-label" id="uName"/>
+                    <input type="text" placeholder="Display Name" className="form-control float-label" id="uName"
+                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
+                           this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.displayName?
+                             this.state.userData.profile.InternalUprofile.moolyaProfile.displayName:""}/>
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" className="form-control float-label"></textarea>

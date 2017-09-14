@@ -482,14 +482,14 @@ export default class MlMyProfile extends React.Component {
                       <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onBlur={this.lastNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <button onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
+                      <span onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
 
                         {/*isExternaluser ? '' :
                           <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>*/
                         }
 
-                      </button>
+                      </span>
                       <div className="previewImg ProfileImg">
                         <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>

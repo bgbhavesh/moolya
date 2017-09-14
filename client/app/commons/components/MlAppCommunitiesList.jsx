@@ -102,7 +102,7 @@ export default class MlAppCommunitiesList extends Component {
       let communities = await fetchCommunitiesHandlerReg();
         let userCommunity=this.state.communityId
       let status=this.state.status
-      if(status=="Approved"){
+      if(status=="REG_USER_APR"){
         if(userCommunity=="CMP"){
           let communitilist= _.filter(communities, function(community) {
             return community.code==="CMP"

@@ -9,13 +9,17 @@ import MlAnchorObjective from './MlAnchorObjective';
 import MlAnchorContact from './MlAnchorContact';
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
+import { updateSubChapterActionHandler } from '../../actions/updateSubChapter'
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      objective: [],
+    }
     this.getObjectiveDetails = this.getObjectiveDetails.bind(this)
     this.getContactDetails = this.getContactDetails.bind(this)
+    this.updateAnchorDetails = this.updateAnchorDetails.bind(this)
     return this
   }
 
@@ -24,16 +28,29 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async updateAnchorDetails() {
-    // const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, jsonData)
-    //save details action handler
+    const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
+    const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
+    const { subChapterId } = this.props
+    const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
+      if (ob.description) {
+        return ob
+      }
+    });
+    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {subChapterId, objective, contactDetails})
+    return response;
   }
 
   getObjectiveDetails(details, tabName) {
     //get tab details
+    this.setState({
+      objective: details,
+    });
   }
 
   getContactDetails(details, tabName) {
-    //get tab deatails
+    this.setState({
+      contactDetails: details,
+    });
   }
 
   render() {
@@ -53,12 +70,12 @@ class MlAnchorTabsContainer extends React.Component {
         {name: 'Anchors', component: <MlAnchorList data={this.props}/>, icon: <span className="ml ml-basic-Information"></span>},
         {
           name: 'Objectives',
-          component: <MlAnchorObjective getObjectiveDetails={this.getObjectiveDetails}/>,
+          component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails}/>,
           icon: <span className="ml ml-additional-Information"></span>
         },
         {
           name: 'Contact',
-          component: <MlAnchorContact getContactDetails={this.getContactDetails}/>,
+          component: <MlAnchorContact {...this.props} getContactDetails={this.getContactDetails}/>,
           icon: <span className="ml flaticon-ml-agenda"></span>
         }
       ]

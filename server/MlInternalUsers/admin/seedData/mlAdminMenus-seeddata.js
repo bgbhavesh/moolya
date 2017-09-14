@@ -51,8 +51,21 @@ if (Meteor.isServer) {
                   "subMenusId": "dashboard",
                   "isLink": true,
                   "isMenu": true,
-                  "image": ""
-
+                  "image": "",
+                  "subMenu": [
+                    {
+                      "link": "/admin/dashboard/anchorDetails",
+                      "name": "Anchor Details",
+                      "uniqueId": "dashboard_specSubChapters_anchorInfoView",
+                      "isLink": true,
+                      "isMenu": false,
+                      "image": "",
+                      "dynamicLink": true,
+                      "dynamicLinkHandler": "",
+                      "subMenusId": "dashboard",
+                      "subMenuMappingId": "dashboard_specSubChapters"
+                    }
+                  ]
                 }]
             },
             {
@@ -125,7 +138,21 @@ if (Meteor.isServer) {
                   "dynamicLink": true,
                   "dynamicLinkHandler": "",
                   "subMenusId": "cluster_chapters",
-                  "subMenuMappingId": "cluster_chapter_subChapterDetails"
+                  "subMenuMappingId": "cluster_chapter_subChapterDetails",
+                  "subMenu": [
+                    {
+                      "link": "/admin/clusters/subChapters/anchorDetails",
+                      "name": "Anchor Details",
+                      "uniqueId": "cluster_chapter_anchorDetails",
+                      "isLink": true,
+                      "isMenu": false,
+                      "image": "",
+                      "dynamicLink": true,
+                      "dynamicLinkHandler": "",
+                      "subMenusId": "cluster_chapters",
+                      "subMenuMappingId": "cluster_chapter_subChapterDetails"
+                    }
+                  ]
                 },
                 {
                   "link": "/admin/clusters/subChapters/communities",
@@ -291,9 +318,9 @@ if (Meteor.isServer) {
                   "subMenuMappingId": "chapter_subChapterDetails",
                   "subMenu": [
                     {
-                      "link": "/admin/chapters/subChapters/anchors",
+                      "link": "/admin/chapters/subChapters/anchorDetails",
                       "name": "Anchor Details",
-                      "uniqueId": "chapter_anchor",
+                      "uniqueId": "chapter_anchorDetails",
                       "isLink": true,
                       "isMenu": false,
                       "image": "",

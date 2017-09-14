@@ -34,7 +34,9 @@ export default class MlCommunitySubChapterList extends Component {
         )
     });
 
-    return (<div className="row">{list}</div>);
+    return (<div className="row">
+      <h2>Community</h2>
+      {list}</div>);
 
   }
 

@@ -36,7 +36,6 @@ export default class VerticalBreadCrum extends Component {
     let breadCrum = null;
     if(this.props  && this.props.breadcrum){
       breadCrum = this.props.breadcrum;
-      console.log(breadCrum)
       if(breadCrum.type === 'hierarchy'){
         let params = FlowRouter.current().params;
         getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
@@ -64,6 +63,11 @@ export default class VerticalBreadCrum extends Component {
           breadCrumObject
         );
       }
+    }else{
+      let breadCrumObject = StaticBreadCrumListHandlerWithNoBredcum();
+      this.setBreadCrumHierarchyCallback(
+        breadCrumObject
+      );
     }
   }
 
@@ -254,12 +258,47 @@ function StaticBreadCrumListHandler(list, breadCrum, menu){
         }
       });
     }
+    let path = Object.assign(FlowRouter._current.path);
+    var module = breadCrum.subModule || breadCrum.module;
+    let pathHierarchy = path.split('/');
+    for (let each of pathHierarchy){
+      if(each.startsWith('edit')){
+        let link = path.split('edit')[0]+module+'List';
+        list[list.length-1].linkUrl=link;
+        list.push({
+          linkName : 'Edit '+list[list.length-1].linkName,
+          linkUrl:''
+        });
+      } else if(each.startsWith('add')){
+        let link = path.split('add')[0]+module+'List';
+        list[list.length-1].linkUrl=link;
+        list.push({
+          linkName : 'Add '+list[list.length-1].linkName,
+          linkUrl:''
+        });
+      } else if(each.startsWith('create')){
+        let link = path.split('create')[0]+module+'List';
+        list[list.length-1].linkUrl=link;
+        list.push({
+          linkName : 'Create '+list[list.length-1].linkName,
+          linkUrl:''
+        });
+      }
+    }
     // if(breadCrum.sub)
+  }else{
+
   }
 
   return list;
 }
 
+function StaticBreadCrumListHandlerWithNoBredcum() {
+  let list=[];
+
+
+  return list;
+}
 
 VerticalBreadCrum.contextTypes = {
   menu: React.PropTypes.object

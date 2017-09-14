@@ -207,7 +207,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       year
                       isYearPrivate
                       awardsDescription
-                      isAwardsDescriptionPrivate
+                      isDescriptionPrivate
                       logo{
                         fileName,
                         fileUrl
@@ -350,6 +350,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   intrapreneurRecognition{
                       intrapreneurName

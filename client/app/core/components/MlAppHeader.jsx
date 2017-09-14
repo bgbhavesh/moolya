@@ -20,7 +20,6 @@ class MlAppProfileHeader extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.breadcrumbClicked);
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));

@@ -143,7 +143,9 @@ componentDidUpdate(){
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap portfolio-main-wrap">
+          <div className="col-md-12">
           <h2>Switch Profile</h2>
+          </div>
 
           { profileExists?
           <div id="location_div">

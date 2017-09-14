@@ -734,6 +734,11 @@ button:focus{outline: 0;}
 #btn-search::-moz-placeholder { /* Firefox 19+ */color: transparent;}
 #btn-search:-ms-input-placeholder { /* IE 10+ */color: transparent;}
 #btn-search:-moz-placeholder { /* Firefox 18- */color: transparent;}
+
+#btn-search:focus::-webkit-input-placeholder { /* Chrome/Opera/Safari */color: #aaa;}
+#btn-search:focus::-moz-placeholder { /* Firefox 19+ */color: #aaa;}
+#btn-search:focus:-ms-input-placeholder { /* IE 10+ */color: #aaa;}
+#btn-search:focus:-moz-placeholder { /* Firefox 18- */color: #aaa;}
 .admin_padding_wrap #btn-search{position: absolute;right: 20px;}
 #btn-search {border: none; background: url(../images/search_icon_red.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; /*position: absolute;  right: 27px;  top: 15px;*/}
 #btn-search:hover {cursor: pointer; }
@@ -1513,7 +1518,8 @@ button.close {
 margin: 0px;
 }
 .show-information{position: absolute; background: rgba(51, 51, 51, 0.76); width: 100%; top: 0; left: 0; height: 100%; z-index: 9; color: #fff; padding: 10px;border-radius: 0 0 4px 4px;text-align: center; line-height:27px;font-size: 14px;text-shadow: none;}
-.uploaded_files .panel-body{position: relative;height: 158px; /*overflow: auto;*/}
+.uploaded_files .panel-body{position: relative;height: 158px; overflow: auto;}
+.uploaded_files .panel-body .thumbnail img{width: 100%;height: 100%;}
 .full_user_block .form_inner_block {width: 100%;}
 .full_user_block .ml{	font-size: 32px;}
 

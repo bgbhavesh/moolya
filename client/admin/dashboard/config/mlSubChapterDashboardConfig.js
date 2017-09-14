@@ -92,7 +92,8 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
         }
 
         if(data.module == 'subChapter')
-          FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+          // FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+        FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/anchorInfoView?viewMode=true');
       }
     }
   ],

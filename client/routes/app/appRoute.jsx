@@ -32,6 +32,8 @@ import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} f
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
+import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
+//todo :// "MlAnchorInfoView" make this component in the commons
 
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
@@ -172,6 +174,16 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities', {
     mount(AppLayout, {
       appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlDashboardMapConfig}
                            listConfig={mlDashboardListConfig} params={params}/>
+    })
+  }
+});
+
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAnchorInfoView subChapterId={params.subChapterId} clusterId={params.clusterId}
+                                      chapterId={params.chapterId} queryParams={queryParams}/>
     })
   }
 });

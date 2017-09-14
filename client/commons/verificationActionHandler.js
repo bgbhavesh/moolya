@@ -69,3 +69,25 @@ export async function resendSmsOtpHandler(mobileNumber,connection){
   //console.log(result);
   return result&&result.data&&result.data.resendSmsVerification?result.data.resendSmsVerification:{};
 }
+
+export async function smsOtpHandler(mobileNumber,connection){
+  var connection=connection||{};
+  const result = await connection.mutate({
+    mutation: gql`
+    mutation($userId:String){
+        sendSmsVerification(
+          userId :$userId
+        ){
+            success,
+            code,
+            result
+         } 
+      }
+    `,
+    variables: {
+      userId:""
+    }
+  });
+  //console.log(result);
+  return result&&result.data&&result.data.sendSmsVerification?result.data.sendSmsVerification:{};
+}

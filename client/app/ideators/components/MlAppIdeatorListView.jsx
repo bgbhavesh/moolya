@@ -35,9 +35,10 @@ export default class MlAppIdeatorListView extends Component {
     const data = this.props.data || [];
     return (
       <div>
-        <div className="col-md-12 ideators_list">
-          <div className="row">
+        <div className="ideators_list">
+          <div className="col-md-12">
             <h2>Ideators</h2>
+          </div>
             {data.map(function (ideator, idx) {
               return (
                 <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
@@ -57,7 +58,7 @@ export default class MlAppIdeatorListView extends Component {
                 </div>
               )
             })}
-          </div>
+
         </div>
       </div>
     )

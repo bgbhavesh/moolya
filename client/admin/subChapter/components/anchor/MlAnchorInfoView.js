@@ -3,7 +3,10 @@
  */
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
-import { findSubChapterActionHandler } from '../../actions/findSubChapter'
+import { findSubChapterActionHandler } from '../../actions/findSubChapter';
+import UserGrid from '../../../../commons/components/usergrid';
+import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction';
+import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 
 export default class MlAnchorInfoView extends React.Component {
 
@@ -12,7 +15,10 @@ export default class MlAnchorInfoView extends React.Component {
     this.state = {
       objective: [],
       contactDetails: [],
+      data:[],
     };
+    this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
   }
 
   componentDidMount() {
@@ -28,8 +34,33 @@ export default class MlAnchorInfoView extends React.Component {
     });
   }
 
+  handleUserClick(id) {
+    console.log('on user Click', id);
+    const resp = this.getAnchorUserDetails(id);
+    return resp;
+
+  }
+
+  async getAnchorUserDetails(id) {
+    var response = await findBackendUserActionHandler(id);
+    this.setState({ userData: response });
+    console.log(response);
+    return response;
+  }
+
+  async getAnchorUsers() {
+    var { clusterId, chapterId, subChapterId } = this.props;
+    var response = await findAnchorUserActionHandler({ clusterId, chapterId, subChapterId })
+    console.log('anchor user list', response)
+    this.setState({ data: response })
+    return response
+  }
+
   async componentWillMount() {
     const { clusterId, chapterId, subChapterId } = this.props;
+    console.log(this.props);
+    console.log('In this file');
+    await this.getAnchorUsers();
     const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
     const objective = response && response.objective && response.objective.map((ob) => ({
       description: ob.description,
@@ -102,6 +133,7 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                 </ul>
+
               </div>
             </div>
           </div>
@@ -109,76 +141,76 @@ export default class MlAnchorInfoView extends React.Component {
             <div className="row">
               {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
+                <UserGrid users={this.state.data} clickHandler={this.handleUserClick}/>
+                {/*<ScrollArea*/}
+                  {/*speed={0.8}*/}
+                  {/*className="left_wrap"*/}
+                {/*>*/}
 
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                >
-
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_1.jpg"/>
-                      </div>
-                      <h3>User Name1</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_2.jpg"/>
-                      </div>
-                      <h3>User Name2</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_3.jpg"/>
-                      </div>
-                      <h3>User Name3</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_4.jpg"/>
-                      </div>
-                      <h3>User Name4</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_5.jpg"/>
-                      </div>
-                      <h3>User Name5</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_6.jpg"/>
-                      </div>
-                      <h3>user Name6</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_7.jpg"/>
-                      </div>
-                      <h3>User Name7</h3>
-                    </div>
-                  </div>
-                </ScrollArea>
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_1.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name1</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_2.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name2</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_3.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name3</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_4.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name4</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_5.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name5</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_6.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>user Name6</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                  {/*<div className="col-md-6 col-sm-6">*/}
+                    {/*<div className="list_block provider_block">*/}
+                      {/*<div className="cluster_status active_cl"></div>*/}
+                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
+                                                                                             {/*src="/images/p_7.jpg"/>*/}
+                      {/*</div>*/}
+                      {/*<h3>User Name7</h3>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
+                {/*</ScrollArea>*/}
               </div>
             </div>
           </div>

@@ -332,7 +332,7 @@ export default class MlAppStep1ExternalUser extends Component {
           <div className="step_form_wrap step1">
 
             <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-            <div className="col-md-6 nopadding-left">
+            <div className="col-md-6">
 
 
                 <div className="form_bg">
@@ -511,7 +511,7 @@ export default class MlAppStep1ExternalUser extends Component {
                 </div>
 
             </div>
-            <div className="col-md-6 nopadding-right">
+            <div className="col-md-6">
 
                 <div className="form_bg">
                   <form>

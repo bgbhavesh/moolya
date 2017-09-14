@@ -58,6 +58,9 @@ export default class  BeSpokeView extends Component {
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
+                <div className="form-group">
+                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" defaultValue={this.props.data.displayName} onChange={(e)=>this.props.dataToSet(e.target.value,"displayName")} ></input>
+                </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label">Online
                   </span>
@@ -97,9 +100,7 @@ export default class  BeSpokeView extends Component {
                                 selectedValue={this.props.data ? this.props.data.industryId : ""}
                                 />
                 </div>
-                <div className="form-group">
-                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" defaultValue={this.props.data.displayName} onChange={(e)=>this.props.dataToSet(e.target.value,"displayName")} ></input>
-                </div>
+
                 <div className="form-group">
                   <Select
                     name="form-field-name"

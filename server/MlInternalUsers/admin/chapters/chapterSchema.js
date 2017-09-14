@@ -63,6 +63,30 @@ let chapterSchema = `
       canView:Boolean,
       canTransact:Boolean
     }
+    
+    type objectiveOutput {
+      description: String
+      status: Boolean
+    }
+    
+    type contactDetailsOutput{
+      contactPersonRole: String,
+      addressType: String,
+      contactNumber: String
+      emailId: String,
+      buildingNumber: String,
+      street: String,
+      landmark: String,
+      area: String,
+      town: String,
+      stateId: String,
+      countryId: String,
+      pincode: Int,
+      latitude: String,
+      longitude: String,
+      status: Boolean,
+    }
+  
     type SubChapter{
         _id:String
         clusterId:String
@@ -88,6 +112,8 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         moolyaSubChapterAccess:moolyaSubChapterAccess
         associatedObj : [relatedSubChaptersOutput]
+        objective: [objectiveOutput]
+        contactDetails: [contactDetailsOutput]
     }
     
     input moolyaSubChapterAccessObject{
@@ -97,6 +123,29 @@ let chapterSchema = `
       canSearch:Boolean,
       canView:Boolean,
       canTransact:Boolean
+    }
+    
+    input objectiveInput {
+     description : String
+     status : Boolean
+    }
+    
+    input contactDetailsInput {
+      contactPersonRole: String,
+      addressType: String,
+      contactNumber: String
+      emailId: String,
+      buildingNumber: String,
+      street: String,
+      landmark: String,
+      area: String,
+      town: String,
+      stateId: String,
+      countryId: String,
+      pincode: Int,
+      latitude: String,
+      longitude: String,
+      status: Boolean,
     }
     
     input subChapterObject{
@@ -125,6 +174,8 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
+        objective : [objectiveInput]
+        contactDetails: [contactDetailsInput]
     }
     
     input relatedSubChaptersInput {

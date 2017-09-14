@@ -418,28 +418,28 @@ adminSection.route('/transactions/office', {
 adminSection.route('/templates/templateList', {
   name: 'templates_List',
   action(){
-    mount(AdminLayout,{adminContent:<MlAssignedTemplatesList/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'template'}} />, adminContent:<MlAssignedTemplatesList/>})
   }
 });
 
 adminSection.route('/templates/history', {
   name: 'templates_History',
   action(){
-    mount(AdminLayout,{adminContent:<MlTemplatesTabHistoryList/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'history'}} />, adminContent:<MlTemplatesTabHistoryList/>})
   }
 });
 
 adminSection.route('/templates/assignTemplate/', {
   name: 'templates_assignment',
   action(){
-    mount(AdminLayout,{adminContent:<MlAssignTemplate />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'assignTemplate'}} />, adminContent:<MlAssignTemplate />})
   }
 });
 
 adminSection.route('/templates/assignTemplate/:id', {
   name: 'templates_assignment_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<MlEditAssignTemplate config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'assignTemplate'}} />, adminContent:<MlEditAssignTemplate config={params.id} />})
   }
 });
 

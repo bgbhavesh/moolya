@@ -115,9 +115,9 @@ $menuTrans:all 0.5s linear;
       border: $mlRed solid 2px;background: $mlWhite;
     }
     &.disable{
-      background: $mlGray; border: #929191 solid 2px; cursor: no-drop;
+      /*background: $mlGray; border: #929191 solid 2px; */cursor: no-drop;opacity: 0.4;
       .ml{
-        color:#929191;
+        /*color:#929191;*/
       }
     }
 
@@ -140,7 +140,7 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile.profile_open>ol>li .my-ml-exit_or_logoff{ margin: 7px 0 0 4px; font-size: 18px; }
 
   .header_search{/* position: absolute;right: 90px; */}
-  .notification{/* position: absolute;right: 55px;float:right */margin-right: 55px;margin-left:10px; margin-top:0px;}
+  .notification{/* position: absolute;right: 55px;float:right */margin-right: 56px;margin-left:10px; margin-top:0px;}
   .notification .noti_count{color: $mlBlack;background: $mlYellow; border-radius: 100%; width: 15px; height: 15px; font-size: 10px; /* padding: 5px; */ line-height: 15px; position: absolute; margin-left: 8px; top: 7px; right: 0px;}
   .app_header {
       .ml{text-shadow:none;}
@@ -721,7 +721,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
       border-radius:10px;
     }
     .team_img{
-      width: 60%;height: 60%;
+      width: 70px;height: 70px;
     }
   }
   li.active{
@@ -2165,7 +2165,7 @@ p{margin-top:10px;}
   position: relative;
   margin-bottom: 15px;
   text-shadow: none;
-  margin-top:15px;
+  /*margin-top:15px;*/
 }
 .card_block .active, .card_block .inactive{
   width: 20px;
@@ -2256,7 +2256,7 @@ p{margin-top:10px;}
 .appointment_card .date{ text-align: center;
   background: none;
   font-size: 12px;
-  width: 100%;}
+  width: 100%; height: auto;}
 .card_block.appointment_card .active{    top: 40px;
   right: 5px;}
 .card_block.appointment_card .profile-text {

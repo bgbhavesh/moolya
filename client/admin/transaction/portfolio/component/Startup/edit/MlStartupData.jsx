@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchStartupPortfolioData} from '../../../actions/findPortfolioStartupDetails'
+
 
 
 export default class MlStartupData extends React.Component{
@@ -12,7 +14,9 @@ export default class MlStartupData extends React.Component{
     super(props)
     this.state={uploadedData: {balanceSheet : [],profitAndLoss:[],quaterlyReport:[],yearlyReport:[],halfYearlyReport:[],annualReport:[],cashFlow:[],
       shareHoldings:[],ratio:[],capitalStructure:[]}};
-    this.loopingTheUploadedData.bind(this)
+    this.loopingTheUploadedData.bind(this);
+    this.libraryAction = this.libraryAction.bind(this);
+
   }
 
   async componentWillMount() {
@@ -65,6 +69,20 @@ export default class MlStartupData extends React.Component{
     let that = this;
     let data = this.state.uploadedData;
     if (resp && type) {
+
+      //save to library
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure);
+      }
+
       var link = $.parseJSON(resp).result;
       if( data && data[`${type}`] ) {
         data[`${type}`].push({fileUrl:link,fileName:file.name})
@@ -77,6 +95,12 @@ export default class MlStartupData extends React.Component{
         that.props.getDataDetails(this.state.uploadedData, 'data')
       });
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   loopingTheUploadedData(type) {

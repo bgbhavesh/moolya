@@ -362,13 +362,13 @@ export default class MlServiceProviderAwards extends Component {
                                       isValidDate={ valid }/>
                           </div>
                           <div className="form-group">
-                            <input type="text" name="awardDescription" placeholder="About"
-                                   className="form-control float-label" defaultValue={this.state.data.awardDescription}
+                            <input type="text" name="awardsDescription" placeholder="About"
+                                   className="form-control float-label" defaultValue={this.state.data.awardsDescription}
                                    onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                         id="isAwardDescriptionPrivate"
-                                         defaultValue={this.state.data.isAwardDescriptionPrivate}
-                                         onClick={this.onLockChange.bind(this, "awardDescription", "isAwardDescriptionPrivate")}/>
+                                         id="isDescriptionPrivate"
+                                         defaultValue={this.state.data.isDescriptionPrivate}
+                                         onClick={this.onLockChange.bind(this, "awardDescription", "isDescriptionPrivate")}/>
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">

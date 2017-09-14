@@ -319,6 +319,7 @@ class MlServiceCardRepo{
           isActive: false,
           isExpired: false,
           paymentStatus: 'unpaid',
+          status: 'pending',
           createdAt: new Date(),
           tasks: service.tasks
         }

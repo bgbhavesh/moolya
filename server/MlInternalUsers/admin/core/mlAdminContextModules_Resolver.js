@@ -175,7 +175,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case 'share':
       requestParams=args.context || {};
       result=CoreModulesRepo.MlShareTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
-      break
+      break;
+    case "appointment":
+      requestParams=args.context || {};
+      result=CoreModulesRepo.MlAppointmentsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -215,6 +219,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "clusterHierarchy":resolveType='Cluster';break;
       case "hierarchyDepartments":resolveType='DepartmentAndSubDepartmentDetails';break;
       case "userTransaction":resolveType='myTransaction';break;
+      case "appointment":resolveType='AppointmentAdmin';break;
     }
 
     if(resolveType){

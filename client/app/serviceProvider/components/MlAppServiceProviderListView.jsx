@@ -36,8 +36,8 @@ export default class MlAppServiceProviderListView extends Component {
       </div>
     );
 
-    return (<div className="row ideators_list">
-      <div className="col-md-12"><h2>Service Provider</h2></div>
+    return (<div className="ideators_list">
+      <div className="col-md-12"><h2>Service Providers</h2></div>
       {list}
       </div>);
 

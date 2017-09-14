@@ -73,6 +73,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
   }
   componentDidUpdate(){
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
     $('.list_block').click(function(){
       $('#details-div').show();
       $('.top-content').hide();
@@ -130,7 +131,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     });
 
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(120+$('.app_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-($('.' + className).outerHeight(true) + 120));
 
   }
 

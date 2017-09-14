@@ -10,18 +10,25 @@ export default class MlTabComponent extends React.Component {
         this.onActivate.bind(this)
     }
 
-  componentWillMount() {
-    if (this.props.selectedTabKey !== undefined) {
-      if (!FlowRouter.getQueryParam('tab')) {
-        let value = this.state.tabs[0].title || this.state.tabs[0].name;
-        FlowRouter.setQueryParams({tab: value});
+  componentWillMount(){
+    if(this.props.selectedTabKey !== undefined){
+      if(!FlowRouter.getQueryParam('tab')){
+        let value='';
+        if(this.state.tabs[0].title && typeof this.state.tabs[0].title ==='string'){
+          value =this.state.tabs[0].title;
+        }
+        else if( this.state.tabs[0].name){
+          value = this.state.tabs[0].name;
+        }
+        else{
+          value=this.state.tabs[0].key;
+        }
+        FlowRouter.setQueryParams({ tab:value});
       }
-
       this.context.breadCrum.updateBreadCrum();
-
-      if (this.props.tabs[0].tabClassName === 'moolya_btn') {
-        if (!FlowRouter.getQueryParam('subtab'))
-          FlowRouter.setQueryParams({subtab: this.props.tabs[0].title});
+      if(this.props.tabs[0].tabClassName === 'moolya_btn'){
+        if(!FlowRouter.getQueryParam('subtab'))
+          FlowRouter.setQueryParams({ subtab: this.props.tabs[0].title });
       }
     }
   }

@@ -77,7 +77,10 @@ export default class MlAnchorInfoView extends React.Component {
     console.log(this.props)
     var queryParams = this.props.queryParams && this.props.queryParams.viewMode
     queryParams = JSON.parse(queryParams)
-    FlowRouter.go('/admin/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
+    if(this.props.isAdmin)
+      FlowRouter.go('/admin/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
+    else
+      FlowRouter.go('/app/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
   }
 
   render() {

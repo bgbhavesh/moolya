@@ -457,7 +457,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
     let registrationId = mlDBController.insert('MlRegistration', {
       registrationInfo: finalRegData,
-      status: "Yet To Start",
+      status: "REG_EMAIL_P",
       emails: emails,
       transactionId :finalRegData.registrationId
     }, context)

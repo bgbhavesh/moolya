@@ -400,7 +400,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     "subChapterId" :regRecord.registrationInfo.subChapterId,
                     "source" : "self",
                     "createdBy" : createdName,
-                    "status" : "Yet To Start",
+                    "status" : "REG_PORT_KICKOFF",
                     "isPublic": false,
                     "isGoLive" : false,
                     "isActive" : false,

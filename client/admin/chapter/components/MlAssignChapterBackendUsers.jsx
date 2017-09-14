@@ -315,12 +315,12 @@ class MlAssignChapterBackendUsers extends React.Component {
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName"
-                                     defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
+                                     value={userDisplayName} className="form-control float-label" id="dName"/>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="User Name" readOnly="true"
                                      className="form-control float-label" id="userName" ref="userName"
-                                     defaultValue={username}/>
+                                     value={username}/>
                             </div>
                             <br className="brclear"/>
                           </div>

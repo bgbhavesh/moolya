@@ -24,6 +24,10 @@ export default function MlGenericTransactionAccordion(props) {
       return <MlAppRegistrationWizard config={data._id} isAccodion={true}/>
       break;
     }
+    case 'share':
+      //<MlShareCalendar/> to be used here
+      return <MlConnectionRequest data={data}/>
+      break;
     case 'connectionRequest':
     case 'interaction': {
       return <MlConnectionRequest data={data}/>

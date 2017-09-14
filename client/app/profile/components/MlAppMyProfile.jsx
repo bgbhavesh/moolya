@@ -15,6 +15,9 @@ import Datetime from "react-datetime";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAccordion from "../../commons/components/MlAccordion";
 import CropperModal from '../../../commons/components/cropperModal';
+import {appClient} from '../../core/appConnection';
+import {smsOtpHandler, verifyMobileNumberHandler, resendSmsOtpHandler} from '../../../commons/verificationActionHandler';
+import _ from "lodash";
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -30,6 +33,8 @@ class MlAppMyProfile extends Component {
       showChangePassword:true,
       showProfileModal: false,
       uploadingAvatar: false,
+      getOTPClicked:false,
+      mobileNumber : ""
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
@@ -38,6 +43,9 @@ class MlAppMyProfile extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
     this.onImageFileUpload = this.onImageFileUpload.bind(this);
+    this.verifyMobileNumber.bind(this);
+    this.resendSmsOtp.bind(this);
+    this.sendSmsOtp.bind(this);
   }
   componentDidMount() {
   setTimeout(function(){
@@ -70,6 +78,12 @@ class MlAppMyProfile extends Component {
   async findUserDetails() {
     const response = await fetchUserDetails();
     if (response) {
+      if(response.profile && response.profile.externalUserProfiles && response.profile.externalUserProfiles.length>0){
+        var externalProfile = _.find(response.profile.externalUserProfiles, {isDefault:true});
+        if(!externalProfile){
+          externalProfile = response.profile.externalUserProfiles[0]
+        }
+      }
       this.setState({
         loading: false,
         userDetails: response,
@@ -79,7 +93,8 @@ class MlAppMyProfile extends Component {
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
-        userId:response._id
+        userId:response._id,
+        mobileNumber:externalProfile&&externalProfile.mobileNumber?externalProfile.mobileNumber:""
       });
       this.genderSelect()
     }else {
@@ -268,6 +283,37 @@ class MlAppMyProfile extends Component {
     });
     this.onImageFileUpload(image);
   }
+  async resendSmsOtp(){
+    this.setState({getOTPClicked:true});
+    if(this.state.canResend){
+      const resp = await resendSmsOtpHandler(mobileNumber, appClient);
+      return resp
+    }
+  }
+
+  async sendSmsOtp(){
+    this.setState({getOTPClicked:true});
+    setTimeout(function(){
+      this.setState({canResend:true})
+    }.bind(this),30000)
+    let mobileNumber=this.state.mobileNumber;
+    const response=await smsOtpHandler(mobileNumber, appClient);
+    return response;
+  }
+
+  async verifyMobileNumber(){
+    let mobileNumber=this.state.mobileNumber;
+    let otp=this.refs.enteredOTP.value;
+      const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
+      let resp=null;
+      if(response.success){
+        resp = JSON.parse(response.result);
+        this.setState({mobileNumberVerified:resp.mobileNumberVerified});
+      }else{
+        this.setState({mobileNumberVerified:false});
+      }
+      return response;
+  }
 
   render(){
     const _this = this;
@@ -304,6 +350,14 @@ class MlAppMyProfile extends Component {
   };
     let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
     let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+
+    let isMobileVerified = false;
+    if(this.state.userDetails&&this.state.userDetails.mobileNumbers){
+      obj = _.find(this.state.userDetails.mobileNumbers, {mobileNumber:this.state.mobileNumber, verified:true});
+      if(obj)
+        isMobileVerified = obj.verified;
+    }
+
     return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
@@ -355,6 +409,46 @@ class MlAppMyProfile extends Component {
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
+                    <br className="brclear" />
+                    <div className="form-group">
+                      <input type="text" placeholder="Mobile Number" className="form-control float-label" readOnly="readOnly"
+                             defaultValue={this.state.mobileNumber}/>
+
+                      {isMobileVerified?
+
+                        <div className="email_notify">
+                          <div className="input_types">
+                            <input ref="isEmailNotified" type="checkbox" name="checkbox" checked={true}/>
+                            <label htmlFor="checkbox1"><span> </span>Verified</label>
+                          </div>
+                        </div>
+                        :<div></div>}
+
+                    </div>
+                    {
+                      isMobileVerified||(this.state.mobileNumber=="")?<div></div>:
+                        <div className="form-group">
+                          <a href="" className="mlUpload_btn" onClick={this.sendSmsOtp.bind(this)}>Get OTP</a>
+                        </div>
+                    }
+                    {
+                      this.state.getOTPClicked?
+                        <div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Enter OTP" ref="enteredOTP" className="form-control float-label" />
+                          </div>
+                          <div className="ml_btn">
+                            <a href="" className="cancel_btn" onClick={this.verifyMobileNumber.bind(this)}>Submit</a>
+                            <a href="" className="cancel_btn" onClick={this.resendSmsOtp.bind(this)}>Resend</a>
+                            <a href="" className="save_btn" onClick={this.sendSmsOtp.bind(this)}>Cancel</a>
+
+                        </div>
+
+                        </div>
+                        :
+                        <div></div>
+                    }
+
                   </form>
                 </div>
               </div>

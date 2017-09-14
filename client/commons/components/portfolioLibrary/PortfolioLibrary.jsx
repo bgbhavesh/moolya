@@ -1122,15 +1122,19 @@ class Library extends React.Component {
       return false;
     });
 
-    $(".information").unbind("click").click(function () {
-      if ($(this).hasClass('ml-information')) {
-        $(this).removeClass('ml-information').addClass('ml-delete');
-      } else {
-        $(this).removeClass('ml-delete').addClass('ml-information');
-      }
-      $(this).parents('.panel').find(".show-information").toggle(200);
-    });
-  }
+      $(".information").unbind("click").click(function(){
+        if($(this).hasClass('ml-information')){
+          $(this).removeClass('ml-information').addClass('ml-delete');
+          $(this).parents('.panel').find('.panel-body').css({'overflow': 'hidden'});
+
+        }else{
+          $(this).removeClass('ml-delete').addClass('ml-information');
+          $(this).parents('.panel').find('.panel-body').css({'overflow': 'auto'});
+        }
+        $(this).parents('.panel').find(".show-information").toggle(200);
+      });
+
+    }
 
   componentDidUpdate() {
     $(".icon_count").click(function () {

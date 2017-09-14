@@ -1488,6 +1488,19 @@ if (Meteor.isServer) {
                 // }
               ]
             },
+
+            {
+              "link": "/admin/transactions/appointments",
+              "name": "Appointments",
+              "uniqueId": "appointments",
+              "subMenusId": "transaction",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "subMenu": [
+
+              ]
+            },
             //       "subMenu":[
             //
           ]

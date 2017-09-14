@@ -18,7 +18,6 @@ import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlChapterTabHistoryList from '../../admin/chapter/chapterAuditLog/components/MlChapterTabHistoryList'
-import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',

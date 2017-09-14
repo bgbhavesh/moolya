@@ -46,14 +46,6 @@ if(Meteor.isServer){
         "uniqueId" : "library"
       },
       {
-        "image":"ml my-ml-settings_new",
-        "link": "/app/settings",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Settings",
-        "uniqueId" : "settings"
-      },
-      {
         "image":"ml my-ml-terms_and_conditions",
         "link": "/app/termsConditions",
         "isLink" : true,
@@ -93,6 +85,15 @@ if(Meteor.isServer){
         "isMenu" : true,
         "name" : "Referal & Invities",
         "uniqueId" : "referalInvities",
+        isDisabled: true
+      },
+      {
+        "image":"ml my-ml-settings_new",
+        "link": "/app/settings",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "settings",
         isDisabled: true
       },
     ]

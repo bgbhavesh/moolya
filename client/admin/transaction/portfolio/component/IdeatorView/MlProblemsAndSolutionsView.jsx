@@ -153,50 +153,39 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
         <div className="tab_wrap_scroll">
 
-        <div id="psContent" className="ml_tabs">
-          <ul  className="nav nav-pills">
-            <li className="active">
-              <a  href="#1a" data-toggle="tab">Problems</a>
-            </li>
-            <li><a href="#2a" data-toggle="tab">Solutions</a>
-            </li>
-          </ul>
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+            <div className="panel panel-default">
+              <div className="panel-heading"> Problems </div>
+              <div className="panel-body">
+                <p>
 
-          <div className="tab-content clearfix">
-            <div className="tab-pane active" id="1a">
-              <div className="col-lg-12 col-sm-12">
-                <div className="row">
-                  <div className="panel panel-default panel-form-view">
-
-                    <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.problemStatement}
-                      {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
-                        return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
-                      })}
-                    </div>
-                  </div>
-                </div>
+                  {this.state.portfolioIdeatorInfo.problemStatement}
+                  <br className="brclear" />
+                  {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
+                    return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
+                  })}
+                </p>
               </div>
             </div>
-            <div className="tab-pane" id="2a">
-              <div className="col-lg-12 col-sm-12">
-                <div className="row">
-                  <div className="panel panel-default panel-form-view">
-
-                    <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.solutionStatement}
-                      {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
-                        return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
-                      })}
-                    </div>
-                  </div></div>
+          </div>
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+            <div className="panel panel-default">
+              <div className="panel-heading"> Solutions </div>
+              <div className="panel-body">
+                <p>
+                  {this.state.portfolioIdeatorInfo.solutionStatement}
+                  <br className="brclear" />
+                  {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
+                    return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
+                  })}
+                </p>
               </div>
             </div>
-
-
           </div>
 
-        </div>
+
+
+
         </div>
           {/*<a href="#" id="annotationss">one</a>*/}
       </div>

@@ -16,4 +16,6 @@ Meteor.startup(function () {
   MlStatus.update({code:"PORT_REVIEW_INPRO"}, {$set:{'module':['portfolio'],isActive:true,description:" Portfolio Edited - After being Approved"}}, {upsert:true});
   MlStatus.update({code:"PORT_GO_LIVE_PEND"}, {$set:{'module':['portfolio'],isActive:true,description:" Portfolio - Go Live Pending"}}, {upsert:true});
   MlStatus.update({code:"PORT_LIVE_NOW"}, {$set:{'module':['portfolio'],isActive:true,description:" Go Live Completed"}}, {upsert:true});
+  MlStatus.update({code:"ADM_ASSIGN_PEND"}, {$set:{'module':['allocation'],isActive:true,description:"Assignment Pending"}}, {upsert:true});
+  MlStatus.update({code:"ADM_ASSIGN_COMP"}, {$set:{'module':['allocation'],isActive:true,description:" Assignment Completed"}}, {upsert:true});
 });

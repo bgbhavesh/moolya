@@ -61,12 +61,6 @@ const defaultServerConfig = {
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
   about: '/about',
-  awards: '/awards',
-  management: '/management',
-  branches: '/branches',
-  social_links: '/social_links',
-  keywords: '/keywords',
-  looking_for: '/looking_for',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -120,50 +114,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res) {
       const pathName = req.url;
+      const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+      console.log(fullUrl)
       const idPortFolio = req.query.id;
-      const portFolio = await findPortFolioDetails(idPortFolio,pathName);
+      const portFolio = await findPortFolioDetails(idPortFolio,pathName,fullUrl);
       res.render('about', portFolio)
     }
   )
-  graphQLServer.get(defaultServerConfig.awards, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('awards', portFolio)
-
-  })
-
-  graphQLServer.get(defaultServerConfig.management, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('management', portFolio)
-  })
-
-  graphQLServer.get(defaultServerConfig.branches, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('branches', portFolio)
-  })
-  graphQLServer.get(defaultServerConfig.social_links, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('awards', portFolio)
-  })
-  graphQLServer.get(defaultServerConfig.keywords, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('awards', portFolio)
-  })
-  graphQLServer.get(defaultServerConfig.looking_for, async function (req, res) {
-    const pathName = req.url;
-    const idPortFolio = req.query.id;
-    const portFolio = await findPortFolioDetails(idPortFolio,pathName);
-    res.render('awards', portFolio)
-  })
 
   graphQLServer.use(config.path, parseBody, graphqlExpress(async (req, res) => {
     try {

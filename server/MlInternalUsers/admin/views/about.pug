@@ -1,14 +1,55 @@
-
-
 doctype html
 html
+  mixin space()
+    | !{' '}
   head
+    -var title = firstName + " " +lastName +" "+ communityType+ " on moolya / " + chapterName + " / "+ clusterName
+    -var desc = aboutDiscription?aboutDiscription.substr(0,160):''
+
     meta(charset='utf-8')
-    title Untitled Document
+    title #{title}
+    meta(name='description', content=desc)
+    meta(name='keywords', content=keywords)
+    link(rel='canonical', href='https://moolya.global')
+    link(rel='publisher', href='moolya')
+
+    meta(property='og:locale', content='en_US')
+    meta(property='og:type', content='website')
+    meta(property='og:title', content=title)
+    meta(property='og:description', content=desc)
+    meta(property='og:url', content=currentUrl)
+    meta(property='og:site_name', content='')
+
+    meta(name='twitter:card', content='summary')
+    meta(name='twitter:description', content=desc)
+    meta(name='twitter:title', content=title)
+    meta(name='twitter:site', content=twitterHandle)
+    meta(name='twitter:creator', content='moolya')
+
     link(href='css/ms_styles.css', type='text/css', media='all', rel='stylesheet')
+    link(href='css/font-awesome.css', type='text/css', media='all', rel='stylesheet')
+    link(href='css/swiper.min.css', type='text/css', media='all', rel='stylesheet')
   body
-    mixin space()
-      | !{' '}
+    script.
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: '328947447490953',
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: 'v2.10'
+        });
+        FB.AppEvents.logPageView();
+      };
+      (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
     .ms_main_wrap
       .ms_header
         .header_left
@@ -17,20 +58,36 @@ html
         .header_right
           img(src='images/ecosystem.png')
           img(src='images/patent.png')
-          span.web_url
-            a(href='http://www.moolya.global')
-              | www.
-              span.m_red m
-              span.m_yel oo
-              span.m_red lya
-              | .global
+          .ms_social_wrap
+            span.web_url
+              a(href='http://www.moolya.global')
+                | www.
+                span.m_red m
+                span.m_yel oo
+                span.m_red lya
+                | .global
+            .ms_socialNetworks
+              label share this profile
+              ul
+                li
+                  a(href='#' onclick='facebookShare("' + currentUrl + '",this)')
+                    i.fa.fa-facebook(aria-hidden='true')
+                li
+                  a(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'&text=caption"', title='Twitter share', target='_blank')
+                    i.fa.fa-twitter(aria-hidden='true')
+                li
+                  a(href='#')
+                    i.fa.fa-linkedin(aria-hidden='true')
+                li
+                  a(href='#')
+                    i.fa.fa-google-plus(aria-hidden='true')
       .ms_content_wrap
         .content_left
           .profile_pic
             img(src=profilePic)
         .content_right
           h2
-            | #{firstName} #{lastName} an '#{communityType}' on #{space}
+            | #{firstName} #{lastName} is '#{communityType}' on #{space}
             span.m_red m
             span.m_yel oo
             span.m_red lya
@@ -38,20 +95,53 @@ html
           ul.ms_menu
             each list, i in listView
               li
-                -if (pathName == list.link )
-                 a.ms_btn_ye.active_menu(href= list.link) #{list.name}
-                -else
-                 a.ms_btn_ye(href= list.link) #{list.name}
+                a.ms_btn_ye(href='#' onclick='something("' + list.className + '",this)') #{list.name}
             li
-          p
-             | #{aboutDiscription}
-          h3 Past winners have included:
-          .img_list
-            img(src='images/list_img_01.png')
-            img(src='images/list_img_01.png')
-            img(src='images/list_img_01.png')
-            img(src='images/list_img_01.png')
-            img(src='images/list_img_01.png')
+          .pages
+            .pageManagement
+              p
+                include management
+            .pageAwards
+              if(!privateFields.awardsDescription)
+                p
+                  include awards
+              else
+                h2 Private Content
+            .pageBranches
+              if(!privateFields.branches)
+                p
+                  include branches
+              else
+                h2 Private Content
+            .pageLookingFor
+              p
+              if(!privateFields.lookingForDescription)
+                include looking_for
+                h3 Past winners have included:
+                  .img_list
+                    img(src='images/list_img_01.png')
+                    img(src='images/list_img_01.png')
+                    img(src='images/list_img_01.png')
+                    img(src='images/list_img_01.png')
+                    img(src='images/list_img_01.png')
+              else
+                h2 Private Content
+            .pageAboutDiscription
+              if(!privateFields.aboutDiscription)
+                p
+                  | #{aboutDiscription}
+                  h3 Past winners have included:
+                    .img_list
+                      img(src='images/list_img_01.png')
+                      img(src='images/list_img_01.png')
+                      img(src='images/list_img_01.png')
+                      img(src='images/list_img_01.png')
+                      img(src='images/list_img_01.png')
+              else
+                 h2 Private Content
+
+
+
           .register_block
             p
               strong
@@ -66,3 +156,60 @@ html
               span.m_red m
               span.m_yel oo
               span.m_red lya
+          script.
+            $('.pages').children().css('display', 'none');
+            $('.pageAboutDiscription').css('display', 'block');
+            $($('.ms_btn_ye')[0]).addClass('active_menu')
+            $(event).addClass('active_menu')
+            var something = function (linkName,event) {
+              $('.ms_btn_ye').removeClass('active_menu');
+              $(event).addClass('active_menu')
+              $('.pages').children().css('display','none')
+              $('.' + linkName).css('display', 'block')
+            }
+
+            var facebookShare = function (linkName, event) {
+              console.log('facebookShare')
+              FB.ui({
+                method: 'share',
+                display: 'popup',
+                href: linkName,
+              }, function (response) {
+              });
+            }
+
+          script.
+            script().
+              (function ($) {
+                /**
+                 * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
+                 *
+                 * @param  {[object]} e           [Mouse event]
+                 * @param  {[integer]} intWidth   [Popup width defalut 500]
+                 * @param  {[integer]} intHeight  [Popup height defalut 400]
+                 * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
+                 */
+                $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
+                  // Prevent default anchor event
+                  e.preventDefault();
+                  // Set values for window
+                  intWidth = intWidth || '500';
+                  intHeight = intHeight || '400';
+                  strResize = (blnResize ? 'yes' : 'no');
+                  // Set title and open popup with focus on it
+                  var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
+                    strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
+                    objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
+                }
+                /* ================================================== */
+                $(document).ready(function ($) {
+                  $('.customer.share').on("click", function (e) {
+                    $(this).customerPopup(e);
+                  });
+                });
+              }(jQuery));
+
+
+
+
+

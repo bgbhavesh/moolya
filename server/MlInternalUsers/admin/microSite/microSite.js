@@ -1,20 +1,25 @@
 /**
  * Created by kanwarjeet on 9/8/17.
  */
-
-async function findPortFolioDetails(idPortFolio, pathName) {
+import _ from 'lodash'
+async function findPortFolioDetails(idPortFolio, pathName,fullUrl) {
 
   //Default Values
   let portFolio = {
     profilePic: '',
     firstName: '',
+    lastName: '',
     clusterName: '',
     chapterName: '',
     listView: [],
+    communityType: '',
     pathName: pathName,
     aboutDiscription: '',
     management: [],
-    lookingForDescription: ''
+    lookingForDescription: '',
+    privateFields:{},
+    currentUrl:fullUrl,
+    twitterHandle:'@kanwar00733'
 
   }
   if (!idPortFolio) {
@@ -24,7 +29,12 @@ async function findPortFolioDetails(idPortFolio, pathName) {
     '_id': idPortFolio
   }
   let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
-
+  let privateFieldsObjects = resultParentPortFolio.privateFields;
+  let privateFields ={}
+  _.forEach(privateFieldsObjects, function(value) {
+    privateFields[value.keyName] = true
+  });
+  portFolio.privateFields = privateFields
   // Store portfolio information.
   if (resultParentPortFolio) {
     portFolio.clusterName = resultParentPortFolio.clusterName
@@ -36,38 +46,34 @@ async function findPortFolioDetails(idPortFolio, pathName) {
   query = {
     'portfolioDetailsId': idPortFolio
   }
-
-
-
-  const dynamicLinks = getDynamicLinks(idPortFolio);
-  let defaultListMenu = getDefaultMenu(dynamicLinks);
-
+  let dynamicLinksClasses = getDynamicLinksClasses()
+  let defaultListMenu = getDefaultMenu(dynamicLinksClasses);
   let dynamicListMenu = {
     'IDE': [
-            {name: 'About', link: dynamicLinks.About},
-            {name: 'Awards', 'link': dynamicLinks.Awards},
-            {name: 'Looking For', link: dynamicLinks.Looking_For},
-            {name: 'Social Links', link: dynamicLinks.Social_Links},
-            {name: 'Keywords', link: dynamicLinks.Keywords}
-          ],
+      {name: 'About', className: dynamicLinksClasses.About},
+      {name: 'Awards', className: dynamicLinksClasses.Awards},
+      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
+      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+    ],
     'STU': defaultListMenu,
     'FUN': [
-      {name: 'About', link: dynamicLinks.About},
-      { name: 'Management', link: dynamicLinks.Management},
-      {name: 'Branches', link: dynamicLinks.Branches},
-      {name: 'Awards', link: dynamicLinks.Awards    },
-      {name: 'Looking For', link: dynamicLinks.Looking_For},
-      {name: 'Social Links', link: dynamicLinks.Social_Links},
-      {name: 'Keywords', link: dynamicLinks.Keywords}
-      ],
+      {name: 'About', className: dynamicLinksClasses.About},
+      {name: 'Management', className: dynamicLinksClasses.Management},
+      {name: 'Branches', className: dynamicLinksClasses.Branches},
+      {name: 'Awards', className: dynamicLinksClasses.Awards},
+      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
+      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+    ],
 
     'SPS': [
-      {name: 'About', link: dynamicLinks.About},
-      {name: 'Management', link: dynamicLinks.Management},
-      {name: 'Branches', link: dynamicLinks.Branches},
-      {name: 'Looking For', link: dynamicLinks.Looking_For},
-      {name: 'Social Links', link: dynamicLinks.Social_Links}
-      ],
+      {name: 'About', className: dynamicLinksClasses.About},
+      {name: 'Management', className: dynamicLinksClasses.Management},
+      {name: 'Branches', className: dynamicLinksClasses.Branches},
+      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+      {name: 'Social Links', className: dynamicLinksClasses.Social_Links}
+    ],
     'CMP': defaultListMenu,
     'INS': defaultListMenu
   }
@@ -81,7 +87,8 @@ async function findPortFolioDetails(idPortFolio, pathName) {
 
   switch (communityCode) {
     case 'IDE': {
-      return IDE(portFolio, query)
+
+      return IDE(portFolio, query);
     }
       break;
 
@@ -94,6 +101,7 @@ async function findPortFolioDetails(idPortFolio, pathName) {
     }
       break;
     case "SPS": {
+
       return ServiceProviderPortFolio(portFolio, query)
     }
       break;
@@ -111,8 +119,8 @@ async function findPortFolioDetails(idPortFolio, pathName) {
 }
 
 // Ideator Portfolio
-function IDE(portFolio, query) {
-  let resultIDEPortfolio = getResultPortFolio('MlIdeatorPortfolio', query);
+async function IDE(portFolio, query) {
+  let resultIDEPortfolio = await getResultPortFolio('MlIdeatorPortfolio', query);
   if (resultIDEPortfolio) {
     portFolio.communityType = getCommunityType(resultIDEPortfolio) // Replacing trailing 's'
     let portfolioIdeatorDetails = resultIDEPortfolio.portfolioIdeatorDetails;
@@ -122,91 +130,100 @@ function IDE(portFolio, query) {
     portFolio.aboutDiscription = resultIDEPortfolio.ideatorabout ? resultIDEPortfolio.ideatorabout.description : '';
     //Get LookingFor Description
     getLookingForDescription(portFolio, resultIDEPortfolio);
+    appendKeywords(portFolio);
     return portFolio
   }
 }
 // StartUp Portfolio
-function STU(portFolio, query) {
-  let resultStartUpPortFolio = getResultPortFolio('MlStartupPortfolio', query);
+async function STU(portFolio, query) {
+  let resultStartUpPortFolio = await getResultPortFolio('MlStartupPortfolio', query);
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : '_________';
+      portFolio.firstName = aboutUs.title ? aboutUs.title : '';
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
-      portFolio.aboutDiscription = aboutUs.description
+      portFolio.aboutDiscription = aboutUs.startupDescription
     }
     getManagementInfo(portFolio, resultStartUpPortFolio);
     getLookingForDescription(portFolio, resultStartUpPortFolio);
+    appendKeywords(portFolio);
   }
   return portFolio;
 }
 
 // Funder/Investor Portfolio
-function FUN(portFolio, query) {
-  let resultFunderPortfolio = getResultPortFolio('MlFunderPortfolio', query);
+async function FUN(portFolio, query) {
+  let resultFunderPortfolio = await getResultPortFolio('MlFunderPortfolio', query);
   if (resultFunderPortfolio) {
     portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
     if (resultFunderPortfolio.funderAbout) {
       getProfileInfo(portFolio, resultFunderPortfolio.funderAbout);
 
     }
-    portFolio.aboutDiscription = resultFunderPortfolio.successStories ? resultFunderPortfolio.successStories.description : ''
+    if (resultFunderPortfolio.successStories)
+      portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
+    getManagementInfo(portFolio, resultFunderPortfolio);
     getLookingForDescription(portFolio, resultFunderPortfolio);
+    appendKeywords(portFolio);
   }
   return portFolio
 }
 
 // ServiceProvider Portfolio
-function ServiceProviderPortFolio(portFolio, query) {
-  let resultServicePortFolio = getResultPortFolio('MlServiceProviderPortfolio', query);
+async function ServiceProviderPortFolio(portFolio, query) {
+  let resultServicePortFolio = await getResultPortFolio('MlServiceProviderPortfolio', query);
   if (resultServicePortFolio) {
     portFolio.communityType = getCommunityType(resultServicePortFolio)// Replacing trailing 's'
 
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about
-      portFolio.firstName = aboutUs.title ? aboutUs.title : '_______'
-      portFolio.profilePic = aboutUs.aboutImages ? aboutUs.aboutImages[0].fileUrl : '_______';
+      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
+      portFolio.profilePic = aboutUs.aboutImages ? aboutUs.aboutImages[0].fileUrl : '';
       portFolio.aboutDiscription = aboutUs.aboutDescription;
 
     }
+    getManagementInfo(portFolio, resultServicePortFolio);
     getLookingForDescription(portFolio, resultServicePortFolio);
+    appendKeywords(portFolio);
   }
   return portFolio;
 }
 
 //Company PortFolio
-function CMP(portFolio, query) {
-  let resultCompanyPortFolio = getResultPortFolio('MlCompanyPortfolio', query);
+async function CMP(portFolio, query) {
+  let resultCompanyPortFolio = await getResultPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
-    portFolio.communityType = resultCompanyPortFolio.communityType;
+    portFolio.communityType = 'a Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : '__________'
+      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
     getManagementInfo(portFolio, resultCompanyPortFolio);
     getLookingForDescription(portFolio, resultCompanyPortFolio);
+    appendKeywords(portFolio);
   }
   return portFolio
 }
 
 //Institution PortFolio
-function INS(portFolio, query) {
+async function INS(portFolio, query) {
 
-  let resultINSPortFolio = getResultPortFolio('MlInstitutionPortfolio', query);
+  let resultINSPortFolio = await getResultPortFolio('MlInstitutionPortfolio', query);
   if (resultINSPortFolio) {
     portFolio.communityType = getCommunityType(resultINSPortFolio)
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : '____________'
+      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
 
     getManagementInfo(portFolio, resultINSPortFolio);
     getLookingForDescription(portFolio, resultINSPortFolio);
+    appendKeywords(portFolio);
   }
   return portFolio
 }
@@ -220,8 +237,10 @@ function getProfileInfo(portFolio, portFolioProfileInfo) {
 
 
 function getLookingForDescription(portFolio, resultPortFolioDescription) {
-  portFolio.lookingForDescription = resultPortFolioDescription.lookingFor ? resultPortFolioDescription.lookingFor[0].lookingDescription : '';
-  return portFolio
+  if (resultPortFolioDescription.lookingFor) {
+    portFolio.lookingForDescription = resultPortFolioDescription.lookingFor[0].lookingDescription ? resultPortFolioDescription.lookingFor[0].lookingDescription : '';
+  }
+
 }
 
 function getManagementInfo(portFolio, managementInfo) {
@@ -244,42 +263,64 @@ function getManagementInfo(portFolio, managementInfo) {
 
 function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
-  return communityType.replace(/s$/, '');  // Replacing trailing 's'
+  communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
+  if (checkVowel(communityType.charAt(0))) {
+    communityType = 'an ' + communityType;
+  } else {
+    communityType = 'a ' + communityType;
+  }
+  return communityType
 }
 
-
+function checkVowel(c) {
+  return ['a', 'e', 'i', 'o', 'u'].indexOf(c.toLowerCase()) !== -1
+}
 async function getResultPortFolio(collectionName, query) {
-  return await mlDBController.findOne(collectionName, query);
+  let result = await
+    mlDBController.findOne(collectionName, query);
+  return result
 }
 
-function getDefaultMenu(dynamicLinks) {
+function getDefaultMenu(dynamicLinksClasses) {
   let defaultListView =
     [
-      {name: 'About', link: dynamicLinks.About,},
-      {name: 'Management', link: dynamicLinks.Management},
-      {name: 'Branches', link: dynamicLinks.Branches},
-      {name: 'Looking For', link: dynamicLinks.Looking_For},
-      {name: 'Social Links', link: dynamicLinks.Social_Links},
-      {name: 'Keywords', link: dynamicLinks.Keywords}
+      {name: 'About', className: dynamicLinksClasses.About},
+      {name: 'Management', className: dynamicLinksClasses.Management},
+      {name: 'Branches', className: dynamicLinksClasses.Branches},
+      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
+      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
     ];
   return defaultListView
 }
 
 
-function getDynamicLinks(idPortFolio) {
-  const dynamicLinks = {
-    'About': '/about?id=' + idPortFolio + '',
-    'Awards': '/awards?id=' + idPortFolio + '',
-    'Looking_For': '/looking_for?id=' + idPortFolio + '',
-    'Social_Links': '/social_links?id=' + idPortFolio + '',
-    'Keywords': '' +
-    '/keywords?id=' + idPortFolio + '',
-    'Branches': '/branches?id=' + idPortFolio + '',
-    'Management': '/management?id=' + idPortFolio + ''
+function getDynamicLinksClasses() {
+  let dynamicLinksClasses = {
+    'About': 'pageAboutDiscription',
+    'Awards': 'pageAwards',
+    'Looking_For': 'pageLookingFor',
+    'Social_Links': 'pageSocialLinks',
+    'Keywords': 'pageKeywords',
+    'Branches': 'pageBranches',
+    'Management': 'pageManagement'
 
   }
 
-  return dynamicLinks;
+  return dynamicLinksClasses;
 }
 
+
+function appendKeywords(portFolio) {
+
+  let keywords = portFolio.firstName + ', ' + portFolio.lastName + ',' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityType;
+  if (portFolio.chapterName.trim() != '')
+    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.chapterName;
+  if (portFolio.clusterName.trim() != '')
+    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.clusterName;
+  if (portFolio.communityType.trim() != '')
+    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.communityType;
+  portFolio.keywords = keywords;
+  return portFolio
+}
 export  default  findPortFolioDetails;

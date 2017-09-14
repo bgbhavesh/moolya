@@ -25,10 +25,13 @@ export default class MlAnchorObjective extends React.PureComponent {
   async componentWillMount() {
     const { clusterId, chapterId, subChapterId } = this.props;
     const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
-    objective = response && response.objective && response.objective.map((ob) => ({
+    let objective = response && response.objective && response.objective.map((ob) => ({
       description: ob.description,
       status: ob.status,
     }));
+    if (!objective || !objective.length) {
+      objective = [{ description: '', status: false }]
+    }
     this.updateObjectiveFormArray(objective);
   }
 

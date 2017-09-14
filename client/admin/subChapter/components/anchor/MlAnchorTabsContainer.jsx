@@ -28,10 +28,15 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async updateAnchorDetails() {
-    const {objective} = this.state
+    const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
+    const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
     const { subChapterId } = this.props
-    console.log(this.props);
-    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {subChapterId, objective})
+    const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
+      if (ob.description) {
+        return ob
+      }
+    });
+    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {subChapterId, objective, contactDetails})
     return response;
   }
 
@@ -40,11 +45,12 @@ class MlAnchorTabsContainer extends React.Component {
     this.setState({
       objective: details,
     });
-    console.log('objective', details)
   }
 
   getContactDetails(details, tabName) {
-    //get tab deatails
+    this.setState({
+      contactDetails: details,
+    });
   }
 
   render() {
@@ -69,7 +75,7 @@ class MlAnchorTabsContainer extends React.Component {
         },
         {
           name: 'Contact',
-          component: <MlAnchorContact getContactDetails={this.getContactDetails}/>,
+          component: <MlAnchorContact {...this.props} getContactDetails={this.getContactDetails}/>,
           icon: <span className="ml flaticon-ml-agenda"></span>
         }
       ]

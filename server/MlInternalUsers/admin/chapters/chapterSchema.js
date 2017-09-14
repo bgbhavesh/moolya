@@ -130,6 +130,24 @@ let chapterSchema = `
      status : Boolean
     }
     
+    input contactDetailsInput {
+      contactPersonRole: String,
+      addressType: String,
+      contactNumber: String
+      emailId: String,
+      buildingNumber: String,
+      street: String,
+      landmark: String,
+      area: String,
+      town: String,
+      stateId: String,
+      countryId: String,
+      pincode: Int,
+      latitude: String,
+      longitude: String,
+      status: Boolean,
+    }
+    
     input subChapterObject{
         subChapterId:String,
         isDefaultSubChapter:Boolean,
@@ -157,6 +175,7 @@ let chapterSchema = `
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
         objective : [objectiveInput]
+        contactDetails: [contactDetailsInput]
     }
     
     input relatedSubChaptersInput {

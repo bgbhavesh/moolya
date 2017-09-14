@@ -11,6 +11,7 @@ export async function updateSubChapterActionHandler(ClusterId, ChapterId, subCha
       description, status
     }
   });
+  subChapter.contactDetails = subChapter.contactDetails && subChapter.contactDetails.map((det) => _.omit(det, '__typename'))
 
   subChapter.moolyaSubChapterAccess = _.omit(subChapter.moolyaSubChapterAccess,'__typename');
   subChapter.moolyaSubChapterAccess.externalUser=_.omit(subChapter.moolyaSubChapterAccess.externalUser,'__typename');

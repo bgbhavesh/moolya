@@ -6,6 +6,7 @@ import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
+import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 
 
 class MlAppProfileHeader extends Component {
@@ -14,10 +15,12 @@ class MlAppProfileHeader extends Component {
     this.state={profilePic:""}
     this.regStatus = false;
     this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
+
     return this;
   }
 
   componentDidMount() {
+    console.log(this.props.breadcrumbClicked);
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
@@ -101,6 +104,11 @@ class MlAppProfileHeader extends Component {
       FlowRouter.go("/app/register/");
   }
 
+
+  breadcrumbClicked(){
+    this.props.breadcrumbClicked();
+  }
+
   render() {
     const {data} = this.state
     let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
@@ -111,10 +119,16 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
+
+        <VerticalBreadCrum breadcrumbClicked={this.breadcrumbClicked.bind(this)} />
+
         {/*{showLoader===true?(<MlLoader/>):(*/}
+
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
+
+
           <MlAppNotificationsConfig />
 
 
@@ -166,6 +180,7 @@ class MlAppProfileHeader extends Component {
 export default MlAppHeader = createContainer(props => {
   return {
     user: Meteor.user(),
+    breadcrumbClicked : props.breadcrumbClicked
   };
 }, MlAppProfileHeader);
 

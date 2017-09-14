@@ -4,7 +4,8 @@ import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfoli
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
+import NoData from '../../../../../../commons/components/noData/noData';
 var FontAwesome = require('react-fontawesome');
 
 
@@ -132,24 +133,32 @@ export default class MlServiceProviderViewAwards extends React.Component {
   render() {
     let that = this;
     let awardsArray = that.state.serviceProviderAwardsList || [];
-    return (
-      <div id="annotatorContent">
-        <h2>Awards</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {awardsArray && awardsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
-                  <h3>
-                    {details.awardName && details.awardName}
-                  </h3>
-                </div>
-              </div>)
-            })}
+    if(_.isEmpty(awardsArray)){
+      return (
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName} />
+        </div>
+      )
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Awards</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {awardsArray && awardsArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                    <h3>
+                      {details.awardName && details.awardName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

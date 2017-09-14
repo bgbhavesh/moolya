@@ -18,6 +18,8 @@ import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'lodash'
 import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
+import CropperModal from '../../../../commons/components/cropperModal';
+
 
 export default class Step4 extends React.Component{
   constructor(props) {
@@ -28,16 +30,17 @@ export default class Step4 extends React.Component{
       selectedTab: false,
       selectedAddressLabel: null,
       selectedValue: null,
-
+      showProfileModal: false,
       socialLinkObject : {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
       socialLinkArray :[],
       uploadedProfilePic : "/images/ideator_01.png",
       activeTab: "active",
-
+      uploadingProfilePic: false,
 
 
     }
-
+    this.toggleProfileModal = this.toggleProfileModal.bind(this);
+    this.handleProfileUpload = this.handleProfileUpload.bind(this);
   }
   /* componentWillMount() {
    const resp=this.findRegistration();
@@ -216,8 +219,7 @@ export default class Step4 extends React.Component{
         }
     }
   }
-  onFileUpload(value){
-    let file=document.getElementById("profilePic").files[0];
+  onFileUpload(file){
     let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
     //this.props.onFileUpload(file,documentId);
@@ -228,7 +230,7 @@ export default class Step4 extends React.Component{
       // this.setState({registrationDocuments:resp})
       //refresh the registration data in the pare
       //this.props.getRegistrationKYCDetails();
-      this.setState({"uploadedProfilePic" : resp.result})
+      this.setState({"uploadedProfilePic" : resp.result, uploadingProfilePic: !this.state.uploadingProfilePic, showProfileModal: !this.state.showProfileModal})
       this.props.getRegistrationSocialLinks();
 
 
@@ -253,6 +255,18 @@ export default class Step4 extends React.Component{
 
   }
 
+  toggleProfileModal() {
+    this.setState({
+      showProfileModal: !this.state.showProfileModal,
+    });
+  }
+
+  handleProfileUpload(file) {
+    this.setState({
+      uploadingProfilePic: !this.state.uploadingProfilePic,
+    });
+    this.onFileUpload(file);
+  }
 
   render(){
     let MlActionConfig
@@ -361,8 +375,14 @@ export default class Step4 extends React.Component{
                     <img src={this.props.uploadedProfileImg}/>
                   </div>
                   <div className="fileUpload mlUpload_btn">
-                    <span>Profile Pic</span>
-                    <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+                    <span onClick={this.toggleProfileModal}>Profile Pic</span>
+                    <CropperModal
+                      toggleShow={this.toggleProfileModal}
+                      show={this.state.showProfileModal}
+                      uploadingImage={this.state.uploadingProfilePic}
+                      handleImageUpload={this.handleProfileUpload}
+                      cropperStyle={'circle'}
+                    />
                   </div>
 
                 </div>

@@ -17,7 +17,8 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
     super(props)
     this.state = {
       tabs: [], admin: true,
-      client: client
+      client: client,
+      activeTab: 0,
     }
     ;
   }
@@ -114,14 +115,24 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
       }));
     }
 
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      let index = _.findIndex(tabs, function(o) {
+        return o.title == activeTab;
+      });
+      if(index>-1)
+        this.setState({activeTab:index});
+    }
     this.setState({tabs: getTabs() || []});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab: tab });
+  }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} />
   }
 }
-

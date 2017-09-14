@@ -33,6 +33,7 @@ export default class MlAnchorObjective extends React.PureComponent {
       objective = [{ description: '', status: false }]
     }
     this.updateObjectiveFormArray(objective);
+
   }
 
   componentDidMount() {
@@ -40,14 +41,8 @@ export default class MlAnchorObjective extends React.PureComponent {
       $('.float-label').jvFloat();
     });
 
-    var mySwiper = new Swiper('.blocks_in_form', {
-      speed: 400,
-      spaceBetween: 25,
-      slidesPerView: 2,
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
-
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
 
   sendDataToParent(data){
@@ -71,6 +66,8 @@ export default class MlAnchorObjective extends React.PureComponent {
   addObjectiveForm() {
     const objectiveFormArray = [...this.state.objectiveFormArray, { description: '', status: false }];
     this.updateObjectiveFormArray(objectiveFormArray);
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
 
   changeForm(index, prop, value) {

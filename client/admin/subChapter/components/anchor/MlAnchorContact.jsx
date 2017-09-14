@@ -132,8 +132,8 @@ export default class MlAnchorContact extends React.Component {
                         <div className="cluster_status active_cl"></div>
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
                           <img className="user_pic"
-                               src={user.picURL} /></div>
-                        <h3>{user.name}</h3>
+                               src={user.picURL || "/images/p_1.jpg"} /></div>
+                        <h3>{user.name || "Name not provided"}</h3>
                       </div>
                     </div>
                   ))

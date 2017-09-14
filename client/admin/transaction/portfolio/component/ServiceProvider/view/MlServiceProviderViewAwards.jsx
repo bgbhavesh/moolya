@@ -6,6 +6,7 @@ import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDet
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlGenericAwardsView from '../../StartupView/MlGenericAwardsView';
 var FontAwesome = require('react-fontawesome');
 
 
@@ -144,18 +145,19 @@ export default class MlServiceProviderViewAwards extends React.Component {
         <div id="annotatorContent">
           <h2>Awards</h2>
           <div className="col-lg-12">
-            <div className="row">
-              {awardsArray && awardsArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
-                    <h3>
-                      {details.awardName && details.awardName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
-            </div>
+            <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}/>
+            {/*<div className="row">*/}
+            {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
+            {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
+            {/*<div className="team-block">*/}
+            {/*<img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>*/}
+            {/*<h3>*/}
+            {/*{details.awardName && details.awardName}*/}
+            {/*</h3>*/}
+            {/*</div>*/}
+            {/*</div>)*/}
+            {/*})}*/}
+            {/*</div>*/}
           </div>
         </div>
       )

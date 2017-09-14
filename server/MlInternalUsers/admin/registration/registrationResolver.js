@@ -642,6 +642,27 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
         'kycDocuments': {$elemMatch: {'documentId': args.documentId, 'docTypeId': args.docTypeId}}
       }, {"kycDocuments.$.status": "Pending Verification"}, {$set: true}, context)
       if (statusResponse) {
+        let allManditoryKYCuploaded;
+        let registrationDetails = MlRegistration.findOne(args.registrationId)
+        let registrationKYCDocs = registrationDetails && registrationDetails.kycDocuments && registrationDetails.kycDocuments.length ? registrationDetails.kycDocuments : []
+        for(let i=0; i < registrationKYCDocs.length; i++){
+          if (registrationKYCDocs[i] && registrationKYCDocs[i].isMandatory) {
+            if (registrationKYCDocs[i] && registrationKYCDocs[i].docFiles && registrationKYCDocs[i].docFiles.length) {
+              allManditoryKYCuploaded = true
+            } else {
+              allManditoryKYCuploaded = false
+              break;
+            }
+          }
+        }
+        let updateRecord = {}
+        if(allManditoryKYCuploaded){
+          mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_U_PEND');
+          let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+        }else if(!allManditoryKYCuploaded){
+          mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_U_KOFF');
+          let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+        }
         return updatedResponse;
       }
     }
@@ -913,6 +934,28 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
             let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
             */
+            let allManditoryKYCuploaded;
+            let registrationDetails = MlRegistration.findOne(args.registrationId)
+            let registrationKYCDocs = registrationDetails && registrationDetails.kycDocuments && registrationDetails.kycDocuments.length ? registrationDetails.kycDocuments : []
+            for(let i=0; i < registrationKYCDocs.length; i++){
+              if (registrationKYCDocs[i] && registrationKYCDocs[i].isMandatory) {
+                if (registrationKYCDocs[i]  && registrationKYCDocs[i].status == "Approved") {
+                  allManditoryKYCuploaded = true
+                }else if(registrationKYCDocs[i]  && registrationKYCDocs[i].status == "Rejected"){
+                  allManditoryKYCuploaded = false
+                  break;
+                }
+              }
+            }
+            let updateRecord = {}
+            if(allManditoryKYCuploaded){
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
+              let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+            }else if(!allManditoryKYCuploaded){
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
+              let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+            }
+
             let code = 200;
             let result = {registrationId: response}
             MlNotificationController.onKYCApprove(user);
@@ -954,6 +997,27 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
+            let allManditoryKYCuploaded;
+            let registrationDetails = MlRegistration.findOne(args.registrationId)
+            let registrationKYCDocs = registrationDetails && registrationDetails.kycDocuments && registrationDetails.kycDocuments.length ? registrationDetails.kycDocuments : []
+            for(let i=0; i < registrationKYCDocs.length; i++){
+              if (registrationKYCDocs[i] && registrationKYCDocs[i].isMandatory) {
+                if (registrationKYCDocs[i]  && registrationKYCDocs[i].status == "Approved") {
+                  allManditoryKYCuploaded = true
+                }else if(registrationKYCDocs[i]  && registrationKYCDocs[i].status == "Rejected"){
+                  allManditoryKYCuploaded = false
+                  break;
+                }
+              }
+            }
+            let updateRecord = {}
+            if(allManditoryKYCuploaded){
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
+              let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+            }else if(!allManditoryKYCuploaded){
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
+              let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+            }
           /*
             mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
             let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
@@ -1021,6 +1085,33 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
             }
           }
         }
+
+
+        let allManditoryKYCuploaded;
+        let registrationDetails = MlRegistration.findOne(args.registrationId)
+        let registrationKYCDocs = registrationDetails && registrationDetails.kycDocuments && registrationDetails.kycDocuments.length ? registrationDetails.kycDocuments : []
+        for(let i=0; i < registrationKYCDocs.length; i++){
+          if (registrationKYCDocs[i] && registrationKYCDocs[i].isMandatory) {
+            if (registrationKYCDocs[i] && registrationKYCDocs[i].docFiles && registrationKYCDocs[i].docFiles.length) {
+              allManditoryKYCuploaded = true
+            } else{
+              allManditoryKYCuploaded = false
+              break;
+            }
+          }
+        }
+        let updateRecord = {}
+        let existingStatus = registrationDetails&&registrationDetails.status?registrationDetails.status:"REG_KYC_U_KOFF"
+        if(allManditoryKYCuploaded){
+          mlRegistrationRepo.updateStatus(updateRecord,existingStatus);
+          let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+        }else if(!allManditoryKYCuploaded){
+          mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_U_KOFF');
+          let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+        }
+
+
+
         let code = 200;
         let result = {registrationId: response}
         updatedResponse = new MlRespPayload().successPayload(result, code);

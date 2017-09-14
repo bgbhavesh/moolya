@@ -350,6 +350,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   intrapreneurRecognition{
                       intrapreneurName

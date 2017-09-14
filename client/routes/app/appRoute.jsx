@@ -38,6 +38,7 @@ import MlAppRegistrationWizard from "../../../client/app/registrations/component
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MLAppMyCalendar from "../../app/calendar/myCalendar/components/calendarParentComponent";
+import ShareCalendar from "../../app/calendar/shareCalendar/components/shareCalendar"
 
 /**
  * Activities Routes
@@ -513,6 +514,14 @@ appSection.route('/calendar', {
   name: 'mycalendar',
   action(){
     mount(AppLayout, {appContent: <MLAppMyCalendar />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/clientCalendar', {
+  name: 'calendar_client',
+  action(){
+    mount(AppLayout,{appContent: <ShareCalendar />, isCalenderMenu: true})
+    // mount(AppLayout,{appContent:<MlAppDashboard/>})
   }
 });
 

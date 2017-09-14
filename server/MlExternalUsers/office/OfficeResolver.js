@@ -403,7 +403,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status:{$ne: "Rejected"}});
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
     if (isUserExist || isUserRegExist) {
       let pipeline = [

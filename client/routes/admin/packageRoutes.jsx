@@ -19,20 +19,20 @@ import MlEditOfficePackage from "../../admin/packages/office/component/MlEditOff
 adminSection.route('/packages/officeList', {
   name:'packages_ListOffice',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'packages','showBreadCrum':true,'module':'officePackages'}} />, adminContent:<MlOfficePackageList/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'packages','showBreadCrum':true,'module':'office'}} />, adminContent:<MlOfficePackageList/>})
   }
 });
 
 adminSection.route('/packages/addOffice', {
   name: 'packages_AddOffice',
   action(params){
-    mount(AdminLayout,{adminContent:<MlAddOfficePackage/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'packages','showBreadCrum':true,'module':'office'}} />,adminContent:<MlAddOfficePackage/>})
   }
 });
 
 adminSection.route('/packages/editOffice/:officeId', {
   name: 'packages_EditOffice',
   action(params){
-    mount(AdminLayout,{adminContent:<MlEditOfficePackage config={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'packages','showBreadCrum':true,'module':'office'}} />,adminContent:<MlEditOfficePackage config={params}/>})
   }
 });

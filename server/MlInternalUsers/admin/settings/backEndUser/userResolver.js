@@ -27,6 +27,22 @@ MlResolver.MlQueryResolver['fetchExternalUserDetails'] = (obj, args, context, in
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user
+
+  if(args.module == "subChapter" || args.module == "users"){
+    var chapterId = args.id||null;
+
+    if(!chapterId){
+      let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
+      if(userProfile&&userProfile.defaultChapters&&userProfile.defaultChapters!==null) {
+        chapterId=userProfile.defaultChapters;
+      }
+    }
+    let chapterDetails = MlChapters.findOne(chapterId);
+    if (chapterDetails && chapterDetails.latitude && chapterDetails.longitude) {
+      return {lat: chapterDetails.latitude, lng: chapterDetails.longitude};
+    }
+  }
+
   var clusterId=args.id||null;
 
   if(!clusterId){

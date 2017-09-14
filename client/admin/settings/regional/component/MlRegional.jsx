@@ -42,7 +42,7 @@ class MlRegional extends React.Component{
     initalizeFloatLabel();
     OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   componentWillMount() {
     const resp=this.findRegional();
@@ -259,6 +259,11 @@ class MlRegional extends React.Component{
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Regional</h2>
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}>
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
@@ -344,6 +349,7 @@ class MlRegional extends React.Component{
                   </ScrollArea>
                 </div>
               </div>
+                </ScrollArea>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>
           </div>

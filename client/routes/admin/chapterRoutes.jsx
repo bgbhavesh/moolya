@@ -42,7 +42,7 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterNam
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/anchorDetails', {
-  name: 'chapter_anchor',
+  name: 'chapter_anchorDetails',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'chapter'}}/>,

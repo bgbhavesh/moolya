@@ -9,6 +9,7 @@ import GoogleMap from 'google-map-react';
 import ClusterMarker from './ClusterMarker';
 import MapMarkers from './mapMarkers'
 import supercluster from 'points-cluster';
+import { fitBounds } from 'google-map-react/utils';
 
 export const gMap = ({
   style, hoverDistance, options,
@@ -59,6 +60,50 @@ const markerDataConfig = lifecycle({
     }
   }
 });
+
+
+getZoomFromMarkers= (zoom,mapContext) => {
+  try{
+    console.log("Deciding zoom based on clusters");
+    let locPoints=[];
+    if(zoom>=4){
+      return zoom+2;
+    }
+    _.forEach(mapContext.data.data,function (cluster) {
+      if(cluster.lat && cluster.lng)
+        locPoints.push({lat:cluster.lat,lng:cluster.lng});
+    })
+
+    const bounds = getBoundsFromPoints(locPoints);
+
+    const size = {
+      width: 1240, // Map width in pixels
+      height: 502, // Map height in pixels
+    };
+
+    return fitBounds(bounds, size).zoom;
+  } catch(e){
+    return zoom+2
+  }
+
+
+}
+
+var clusterMap;
+
+getBoundsFromPoints= (points) => {
+  var boundObj = new google.maps.LatLngBounds();
+  for(i=0;i<points.length;i++) {
+    boundObj.extend(points[i]);
+  }
+  let bounds = {
+    ne: boundObj.getNorthEast().toJSON(),
+    sw: boundObj.getSouthWest().toJSON()
+  };
+
+  return bounds;
+
+}
 
 
 const mapClusterHOC =compose(
@@ -456,11 +501,11 @@ const mapClusterHOC =compose(
       onChildMouseEnter: ({setHoveredMarkerId}) => (hoverKey, {id}) => {
         setHoveredMarkerId(id);
       },
-      onChildClick: ({setMapProps}) => (evt, loc, zoom, centerPoint) => {
+      onChildClick: ({setMapProps,mapContext}) => (evt, loc, zoom, centerPoint) => {
         let center = {
           lat: loc.lat, lng: loc.lng
         };
-        let myzoom={zoom:(zoom|| 0)+1};
+        let myzoom={zoom: getZoomFromMarkers(zoom,mapContext)};
         if( parseFloat(center.lat).toFixed(4) != parseFloat(centerPoint.lat).toFixed(4) || parseFloat(center.lng).toFixed(4) != parseFloat(centerPoint.lng).toFixed(4)){
           setMapProps({center,zoom}, function () {
             setMapProps(myzoom);
@@ -469,6 +514,7 @@ const mapClusterHOC =compose(
           setMapProps(myzoom);
         }
       },
+
         //console.log(map, location, this);
       onChildMouseLeave: ({setHoveredMarkerId}) => (/* hoverKey, childProps */) => {
         setHoveredMarkerId(-1);
@@ -491,23 +537,26 @@ const mapClusterHOC =compose(
     // get clusters specific for current bounds and zoom
     withPropsOnChange(
       ['mapProps', 'getCluster'],
-      ({mapProps, getCluster}) => ({
-        clusters: mapProps.bounds
-          ? getCluster(mapProps)
-          .map(({wx, wy, numPoints, points}) => ({
-            lat: parseFloat(wy),
-            lng: parseFloat(wx),
-            text: numPoints,
-            numPoints,
-            id: `${numPoints}_${points[0]._id}`,
-            recordId: points[0]._id,
-            isActive: points[0].isActive,
-            status: points[0].status,
-            desc:points[0].text,
-
-          }))
-          : [],
-      })
+      ({mapProps, getCluster}) => {
+        let mapBounds = [];
+        if(mapProps.bounds){
+          clusterMap = getCluster(mapProps);
+          mapBounds =  clusterMap.map(({wx, wy, numPoints, points}) => ({
+              lat: parseFloat(wy),
+              lng: parseFloat(wx),
+              text: numPoints,
+              numPoints,
+              id: `${numPoints}_${points[0]._id}`,
+              recordId: points[0]._id,
+              isActive: points[0].isActive,
+              status: points[0].status,
+              desc: points[0].text
+            }))
+        }
+        return {
+          clusters: mapBounds
+        }
+      }
     ),
     // set hovered
     withPropsOnChange(

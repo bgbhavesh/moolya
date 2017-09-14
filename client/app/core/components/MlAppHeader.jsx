@@ -6,6 +6,7 @@ import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
+import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 
 
 class MlAppProfileHeader extends Component {
@@ -14,10 +15,12 @@ class MlAppProfileHeader extends Component {
     this.state={profilePic:""}
     this.regStatus = false;
     this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
+
     return this;
   }
 
   componentDidMount() {
+    console.log(this.props.breadcrumbClicked);
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
@@ -101,6 +104,11 @@ class MlAppProfileHeader extends Component {
       FlowRouter.go("/app/register/");
   }
 
+
+  breadcrumbClicked(){
+    this.props.breadcrumbClicked();
+  }
+
   render() {
     const {data} = this.state
     let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
@@ -111,10 +119,16 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
+
+        <VerticalBreadCrum breadcrumbClicked={this.breadcrumbClicked.bind(this)} />
+
         {/*{showLoader===true?(<MlLoader/>):(*/}
+
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
+
+
           <MlAppNotificationsConfig />
 
 
@@ -126,8 +140,8 @@ class MlAppProfileHeader extends Component {
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Registration"} data-placement="right">
-                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Pending Registration"} data-placement="right">
+                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
@@ -136,7 +150,7 @@ class MlAppProfileHeader extends Component {
                 </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
+                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-register_as"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
@@ -166,6 +180,7 @@ class MlAppProfileHeader extends Component {
 export default MlAppHeader = createContainer(props => {
   return {
     user: Meteor.user(),
+    breadcrumbClicked : props.breadcrumbClicked
   };
 }, MlAppProfileHeader);
 

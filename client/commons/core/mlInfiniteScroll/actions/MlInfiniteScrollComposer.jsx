@@ -53,13 +53,13 @@ export default class MlInfiniteScrollComposer extends Component {
       if(config.sort) {
         options.variables.queryProperty['sortBy'] = props.defaultSortBy;
       }
-      // let hasQueryOptions=config.queryOptions?true:false;
-      // if(hasQueryOptions){
-      //   let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};
-      //
-      //   let extendedQueryVar=_.extend(queryOptions.variables,dynamicQueryOptions);
-      //   queryOptions["variables"]=extendedQueryVar;
-      // }
+      let hasQueryOptions=config.queryOptions?true:false;
+      if(hasQueryOptions){
+        let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};
+
+        let extendedQueryVar=_.extend(queryOptions.variables,dynamicQueryOptions);
+        queryOptions["variables"]=extendedQueryVar;
+      }
       const Composer = graphql(config.graphQlQuery, {
         options: props => (queryOptions),
         props: ({data: {loading, data, fetchMore}}) => ({

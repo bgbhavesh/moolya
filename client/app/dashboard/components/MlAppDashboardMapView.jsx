@@ -26,9 +26,9 @@ export default class MlDashboardMapView extends Component {
   async componentWillMount() {
     let that = this;
     let zoom = 1;
-    let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel != 4){
-      zoom = 4;
+    let hasZoom=that.props.config.fetchZoom||false;
+    if(hasZoom){
+      zoom= await that.props.config.fetchZoomHandler(that.props)||zoom;
     }
     let hasCenter=that.props.config.fetchCenter||false;
     if(hasCenter){

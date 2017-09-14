@@ -70,6 +70,15 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
         break;
       default:
         return 'Generic';
+      case "CLUSTER":
+        return "Cluster";
+        break;
+      case "CHAPTER":
+        return "Chapter";
+        break;
+      case "SUBCHAPTER":
+        return "SubChapter";
+        break;
     }
   }
 };
@@ -138,7 +147,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -176,7 +185,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -214,7 +223,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -286,7 +295,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -303,7 +312,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
-          "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+          "name":{$concat: [ "$user.profile.firstName", " ", "$user.profile.lastName" ] },
           "accountType": "$port.accountType",
           "clusterId": '$port.clusterId',
           "chapterId": '$port.chapterId',
@@ -325,7 +334,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -362,7 +371,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -392,40 +401,37 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module === "externalUsers"){
-    // if(args.offset && args.offset >0){   // `offset` may be `null`
-    //   findOptions.skip=args.queryProperty.offset;
-    // };
-    //
-    // if (args.limit&&args.limit > 0) { // `limit` may be `null`
-    //   findOptions.limit = args.queryProperty.limit;
+
+    // var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
+
+    var query = JSON.parse(args.queryProperty.query);
+
+    var clusterId = query.clusterId?query.clusterId:"";
+    var chapterId = query.chapterId?query.chapterId:"";
+    var subChapterId = query.subChapterId?query.subChapterId:"";
+
+    var userType = query.userType;
+
+    // let loggedInUser = mlDBController.findOne('users', {'_id':context.userId}, context);
+    // var externalProfile = _.find(loggedInUser.profile.externalUserProfiles, {'isDefault':true});
+    // if(!externalProfile){
+    //   externalProfile = loggedInUser.profile.externalUserProfiles[0];
     // }
+
+    //   // TODO: Add Browser condition
     //
-    // let userFilterQuery={}; //'filter' applied by user
-    // if (args.fieldsData){
-    //   userFilterQuery = getQuery.searchFunction(args);
-    // }
-
-    var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
-
-    let loggedInUser = mlDBController.findOne('users', {'_id':context.userId}, context);
-    var externalProfile = _.find(loggedInUser.profile.externalUserProfiles, {'isDefault':true});
-    if(!externalProfile){
-      externalProfile = loggedInUser.profile.externalUserProfiles[0];
-    }
-
-      // TODO: Add Browser condition
-
-    var clusterId = externalProfile.clusterId;
-    var chapterId = externalProfile.chapterId;
-    var subChapterId = externalProfile.subChapterId;
-    var communityCode = externalProfile.communityDefName;
+    // var clusterId = externalProfile.clusterId;
+    // var chapterId = externalProfile.chapterId;
+    // var subChapterId = externalProfile.subChapterId;
+    // var communityCode = externalProfile.communityDefName;
 
     // Generic search query object for EXTERNAL Users
     var queryObj = {isActive: true};
 
     var users = [];
 
-    if(clusterId != "" && chapterId != "" && subChapterId != "" && communityCode != ""){
+    // if(clusterId != "" && chapterId != "" && subChapterId != "" && communityCode != ""){
+    if(clusterId != "" && chapterId != "" && subChapterId != ""){
       let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
       let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context)
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
@@ -445,7 +451,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -528,7 +534,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -732,7 +738,16 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Pending", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -750,7 +765,17 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
+
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -768,6 +793,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Completed", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -786,6 +820,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Rejected", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -1084,6 +1127,78 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
+  }
+  else if(args.module === "cluster"){
+    var activeClusters = [];
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+
+      // var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
+
+      // var clusterIds = _.map(user_profiles, "clusterId");
+      // clusterIds = _.uniq(clusterIds);
+
+      var clusters = mlDBController.find('MlClusters', {isActive:true}, context).fetch();
+
+      _.each(clusters, function (cluster) {
+        let country = mlDBController.findOne('MlCountries', {isActive: true, _id:cluster.countryId}, context, {sort: {country: 1}});
+        if(country){
+          activeClusters.push(cluster);
+        }
+      })
+    // }
+
+    const data = activeClusters;
+    const totalRecords = activeClusters.length
+    return {totalRecords: totalRecords, data: data};
+  }
+  else if(args.module === "chapter"){
+    var activeChapters = [];
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var chapterIds = _.map(user_profiles, "chapterId");
+    //   chapterIds = _.uniq(chapterIds);
+
+      var chapters = mlDBController.find('MlChapters', {clusterId:args.queryProperty.query, isActive:true}, context).fetch();
+
+      _.each(chapters, function (chapter) {
+        let city = mlDBController.findOne('MlCities', {isActive: true, _id:chapter.cityId}, context, {sort: {country: 1}});
+        if(city){
+          activeChapters.push(chapter);
+        }
+      })
+    // }
+
+    const data = activeChapters;
+    const totalRecords = activeChapters.length
+    return {totalRecords: totalRecords, data: data};
+  }
+  else if(args.module === "subChapter"){
+    var activeChapters = [];
+    // var user = Meteor.users.findOne({_id:context.userId});
+    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+    //
+    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
+    //
+    //   if(!user_profiles)
+    //     throw new Error('Profile Not Found');
+    //
+    //   var subChapterIds = _.map(user_profiles, "subChapterId");
+    //   subChapterIds = _.uniq(subChapterIds);
+
+      var subChapters = mlDBController.find('MlSubChapters', {chapterId:args.queryProperty.query, isActive:true}, context).fetch();
+
+    // }
+
+    const data = subChapters;
+    const totalRecords = subChapters.length
+    return {totalRecords: totalRecords, data: data};
   }
 
   else {

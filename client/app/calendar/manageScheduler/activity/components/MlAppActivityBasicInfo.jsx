@@ -18,6 +18,8 @@ let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
 
+import CropperModal from '../../../../../commons/components/cropperModal';
+
 /**
  * Initialize conversation types
  */
@@ -51,7 +53,12 @@ export default class MlAppBasicInfo extends React.Component{
         imageLink             : '',
         conversation          : []
       },
+      showProfileModal: false,
+      uploadingAvatar: false,
     };
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
   }
 
   /**
@@ -182,14 +189,14 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc   :: Upload img on server and set response data in state
    * @returns Void
    */
-  async onFileUpload() {
+  async onFileUpload(file) {
     const that = this;
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage: " "}}
       }
     };
-    let file = document.getElementById("upload_hex").files[0];
+    // let file = document.getElementById("upload_hex").files[0];
     if (file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user};
 
@@ -198,6 +205,10 @@ export default class MlAppBasicInfo extends React.Component{
        */
       let response = await multipartASyncFormHandler(data, file, 'registration', function (res) {
         res = JSON.parse(res);
+        that.setState({
+          uploadingAvatar: false,
+          showProfileModal: false
+        });
         if(res.success){
           let data = that.state.basicData;
           data.imageLink = res.result;
@@ -209,6 +220,10 @@ export default class MlAppBasicInfo extends React.Component{
         }
       });
       return response;
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
     }
   }
 
@@ -297,6 +312,18 @@ export default class MlAppBasicInfo extends React.Component{
       }
     });
     this.props.getActivityDetails();
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onFileUpload(image);
   }
 
   /**
@@ -417,8 +444,8 @@ export default class MlAppBasicInfo extends React.Component{
                   </div>
                   <br className="brclear"/>*/}
                   <div className="upload_hex">
-                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah" width="105" height="auto"/>
-                    <input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>
+                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah"  onClick={this.toggleModal.bind(this)} width="105" height="auto"/>
+                    {/*<input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>*/}
                   </div>
                 </div>
                 <div className="form-group">
@@ -433,6 +460,13 @@ export default class MlAppBasicInfo extends React.Component{
               </form>
             </div>
           </div>
+          <CropperModal
+            uploadingImage={this.state.uploadingAvatar}
+            handleImageUpload={this.handleUploadAvatar}
+            cropperStyle="square"
+            show={this.state.showProfileModal}
+            toggleShow={this.toggleModal}
+          />
           <br className="brclear"/>
           {that.state.basicData.deliverable.map(function (data, index) {
             return (

@@ -9,6 +9,8 @@
 
 // import NPM module(s)
 import React, {Component} from 'react';
+import FontAwesome from 'react-fontawesome';
+import Moment from 'moment';
 import MlAppOngoingSelectedMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingSelectedMyAppointment';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppSelectedSelfTaskMyAppointment';
@@ -74,6 +76,7 @@ export default class MlAppMyAppointmentItems extends Component{
   }
 
   getAppointmentComponentToLoad() {
+    console.log(this.props);
     const {selectedAppointment} = this.state;
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':
@@ -93,7 +96,9 @@ export default class MlAppMyAppointmentItems extends Component{
   render() {
     const that = this;
     let appointments = this.props.data || [];
-    console.log("Props", this.props.data);
+    console.log('----appointments---', appointments, ' / ', status);
+    let status = (appointments && appointments.length > 0) ? appointments[0].appointmentWith.status : '';
+    let activeClassName = (status === 'Completed' || status === 'Rejected') ? 'warning' : ''
     const {selectedAppointment, isSelectedAppointment} = this.state;
     return (
       <div>
@@ -102,18 +107,60 @@ export default class MlAppMyAppointmentItems extends Component{
           :
           <div className="tab_wrap_scroll ideators_list">
             {appointments.map(function (appointment, index) {
+              let startDate, currenDate, days, startMsg, hours, minutes;
+              if (appointment.startDate) {
+                startDate = new Moment(appointment.startDate);
+                currenDate = new Moment();
+                days = startDate.diff(currenDate, 'days');
+                hours = startDate.diff(currenDate, 'hours');
+                minutes = startDate.diff(currenDate, 'minutes');
+                if (days > 1) {
+                  startMsg = `Starts in ${days} Days`;
+                } else if (hours >= 0 && minutes >= 0) {
+                  startMsg = `Starts in ${hours > 0 ? `${hours} Hrs :` : ''}  ${minutes} Mins`;
+                }
+              }
               return (
-                <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index}>
-                  <div className="ideators_list_block" onClick={()=>that.viewAppointment(appointment)}>
-                    <div className="inactive"><span>inactive</span></div>
-                    <h3>{ (appointment.appointmentInfo && appointment.appointmentType === 'SERVICE-TASK') ?
-                      appointment.appointmentInfo.serviceName : appointment.appointmentInfo.taskName}</h3>
-                    <img src="/images/valuation.png" className="c_image"/>
-                    <div className="block_footer">
-                      <span></span>
+
+                  <div className="col-lg-2 col-md-4 col-sm-4">
+                    <div className="card_block appointment_card" onClick={()=>that.viewAppointment(appointment)}>
+                      <h3>{appointment.appointmentWith && appointment.appointmentWith.displayName}</h3>
+                      <div className={`active ${activeClassName}`}>
+                        {status === 'Completed' &&
+                          <FontAwesome name='check'/>
+                        }
+                        {status === 'Rejected' &&
+                         <FontAwesome name='times'/>
+                        }
+                      </div>
+                      <div className="clearfix"></div>
+                      <div className="list_icon mart0">
+                        <span className="profile-text">With</span>
+                        <div className="clearfix"></div>
+                        {(appointment.appointmentWith && appointment.appointmentWith.userProfilePic) ?
+                          <img className="c_image" src={appointment.appointmentWith.userProfilePic}/>
+                          : <i className="c_image ml my-ml-Ideator"></i>
+                        }
+                        <br />
+                        <div className="clearfix"></div>
+                        {status === 'Completed' &&
+                          <span className="date">{`Completed on ${new Moment(appointment.endDate).format('DD-MMM-YYYY')}`}</span>
+                        }
+                        {(status === 'Accepted' || status === 'Pending') &&
+                          <span className="date">{new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT </span>
+                        }
+                        {status === 'Rejected' &&
+                          <span className="date">CANCELLED</span>
+                        }
+                        {(status !== 'Rejected' && status !== 'Completed') &&
+                          <span className="date">{startMsg}</span>
+                        }
+                      </div>
+                      <div className="block_footer"><span>{ (appointment.appointmentInfo && appointment.appointmentType === 'SERVICE-TASK') ?
+                        appointment.appointmentInfo.serviceName : appointment.appointmentInfo.taskName}</span></div>
                     </div>
                   </div>
-                </div>
+
               )
             })}
           </div>

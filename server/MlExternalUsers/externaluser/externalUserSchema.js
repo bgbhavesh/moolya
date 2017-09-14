@@ -19,6 +19,8 @@ let externalUser = `
         name: String,
         clusterName:String,
         communityCode : String,
+        communityDefName:String,
+        chapterName:String,
         profile:Profile,
         isActive:Boolean
     }

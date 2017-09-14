@@ -326,13 +326,13 @@ let CoreModules = {
     switch (type) {
       //custom restriction for registration
       case 'requested':
-        serverQuery = {'status': {'$in': ['Yet To Start', 'WIP']}};
+        serverQuery = {'status': {'$nin': ['REG_USER_APR', 'REG_ADM_REJ','REG_USER_REJ']}};
         break;
       case 'approved':
-        serverQuery = {'status': "Approved"};
+        serverQuery = {'status': "REG_USER_APR"};
         break;
       case 'rejected':
-        serverQuery = {'status': "Rejected"};
+        serverQuery = {'status': {'$in': ['REG_ADM_REJ', 'REG_USER_REJ']}};
         break;
     }
 
@@ -373,13 +373,14 @@ let CoreModules = {
     switch (type) {
       //custom restriction for registration
       case 'requested':
-        serverQuery = {'status': {'$in': ['WIP', 'Yet To Start', 'Go Live']}};
+        //serverQuery = {'status': {'$in': ['WIP', 'Yet To Start', 'Go Live']}};
+        serverQuery = {'status': {'$nin': ['PORT_LIVE_NOW']}};
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'createdAt': -1}
         }
         break;
       case 'approved':
-        serverQuery = {'status': "gone live"};
+        serverQuery = {'status': "PORT_LIVE_NOW"};
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'transactionUpdatedDate': -1}
         }

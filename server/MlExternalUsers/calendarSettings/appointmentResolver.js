@@ -9,6 +9,7 @@ import MlResolver from '../../commons/mlResolverDef';
 import MlRespPayload from '../../commons/mlPayload';
 import MlUserContext from '../../MlExternalUsers/mlUserContext';
 import MlAppointment from './appointment';
+import mlServiceCardRepo from '../servicecards/servicecardRepo'
 
 MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info) => {
   let userId = context.userId;
@@ -260,6 +261,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       };
       resp = mlDBController.insert('MlAppointmentMembers', providerData, context);
 
+      mlServiceCardRepo.createTransactionRequest(service.userId, 'sessionAppointment', orderId, SCOrderDetails.serviceId, SCOrderDetails.userId, 'user', context)
       let code = 200;
       let response = new MlRespPayload().successPayload("Appointment book successfully", code);
       return response;

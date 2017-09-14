@@ -1,5 +1,6 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
 import ScrollArea from "react-scrollbar";
 
@@ -11,6 +12,8 @@ export default class MlInstitutionEditData extends React.Component{
       shareHoldings:[],ratio:[],capitalStructure:[]}};
     this.loopingTheUploadedData.bind(this)
     this.fetchInstitutionPortfolioData.bind(this)
+    this.libraryAction = this.libraryAction.bind(this);
+
   }
 
 
@@ -83,6 +86,19 @@ export default class MlInstitutionEditData extends React.Component{
     let that = this;
     let data = this.state.uploadedData;
     if (resp && type) {
+
+      //save to library
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure);
+      }
       var link = $.parseJSON(resp).result;
       if( data && data[`${type}`] ) {
         data[`${type}`].push({fileUrl:link,fileName:file.name})
@@ -95,6 +111,12 @@ export default class MlInstitutionEditData extends React.Component{
         that.props.getDataDetails(this.state.uploadedData, 'data')
       });
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   loopingTheUploadedData(type) {

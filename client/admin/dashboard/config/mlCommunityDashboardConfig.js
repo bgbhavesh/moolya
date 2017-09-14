@@ -84,8 +84,8 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
   },
   fetchCenterHandler:async function(config){
     let userDefaultObj = getAdminUserContext();
-    let clusterId = config&&config.params&&config.params.clusterId?config.params.clusterId:userDefaultObj.clusterId;
-    let mapDetailsQuery = {moduleName: config.module,id: clusterId?clusterId:null};
+    let chapterId = config&&config.params&&config.params.chapterId?config.params.chapterId:userDefaultObj.chapterId;
+    let mapDetailsQuery = {moduleName: config.module,id: chapterId?chapterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
@@ -93,9 +93,13 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
   fetchZoomHandler:async function(reqParams){
     var zoom=1;
     let loggedInUser = getAdminUserContext();
+    let path = FlowRouter.current().path
+    if (path.indexOf("/communities") > 0) {
+      return 10
+    }
     if(loggedInUser.hierarchyLevel == 4){
       zoom = 0;
-    }else if(loggedInUser.hierarchyLevel == 3){
+    }else if(loggedInUser.hierarchyLevel == 3 || loggedInUser.hierarchyLevel == 2){
       zoom = 4;
     }else{
       zoom = 10;

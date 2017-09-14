@@ -23,7 +23,8 @@ import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/Po
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []},
+      activeTab:'About'};
     this.getChildContext.bind(this)
   }
 
@@ -228,10 +229,14 @@ export default class MlAppCompaniesEditTabs extends Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
   }
 
@@ -251,9 +256,14 @@ export default class MlAppCompaniesEditTabs extends Component {
       return resp
     }
   }
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
+
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
   }
 }
 

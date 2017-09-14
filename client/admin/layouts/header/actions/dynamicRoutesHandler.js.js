@@ -110,6 +110,13 @@ export default function dynamicLinkHandler(path,params,queryParams){
       }
     },
 
+    chapter_anchor: function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "subChapterId")) {
+        return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/anchorDetails`;
+      }
+    },
+
     "chapter_communities":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"subChapterId")){
@@ -188,10 +195,10 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/community/${dynamicParams.communityId}/history`;
       }
     },
+
     /**
      * users dynamic routes handler
      * */
-
     "users_about": function (params, queryParams) {
       let dynamicParams = params || {};
       if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {

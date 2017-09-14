@@ -99,6 +99,11 @@ let chapterSchema = `
       canTransact:Boolean
     }
     
+    input objectiveInput {
+     description : String
+     status : Boolean
+    }
+    
     input subChapterObject{
         subChapterId:String,
         isDefaultSubChapter:Boolean,
@@ -125,6 +130,7 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
+        objective : [objectiveInput]
     }
     
     input relatedSubChaptersInput {

@@ -192,7 +192,7 @@ export default class Step5 extends React.Component {
   }
   async updateRejectUser(){
     let registrationId = this.props.registrationData._id
-    const response = await rejectStatusForUser(registrationId);
+    const response = await rejectStatusForUser(registrationId,'1');
     if (response) {
       this.props.getRegistrationKYCDetails();
       toastr.success("User Rejected Successfully")

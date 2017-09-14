@@ -18,7 +18,9 @@ export default class MlAppSubChapterList extends Component {
       <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
-          <a href={dashboardRoutes.communityListRoute(prop.clusterId,prop.chapterId,prop._id, v)}> <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div></a>
+          <a href={dashboardRoutes.subChapterAnchorRoute(prop.clusterId,prop.chapterId,prop._id, v)}>
+            <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div>
+          </a>
           <h3>{prop.subChapterDisplayName} </h3>
         </div>
       </div>
@@ -30,8 +32,7 @@ export default class MlAppSubChapterList extends Component {
         {list}
       </div>
     );
-
   }
-
 }
 
+// <a href={dashboardRoutes.communityListRoute(prop.clusterId,prop.chapterId,prop._id, v)}>

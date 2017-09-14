@@ -104,7 +104,7 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoVie
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
       adminContent: <MlAnchorInfoView subChapterId={params.subChapterId} clusterId={params.clusterId}
-                                      chapterId={params.chapterId} queryParams={queryParams}/>
+                                      chapterId={params.chapterId} queryParams={queryParams} isAdmin={true}/>
     })
   }
 });

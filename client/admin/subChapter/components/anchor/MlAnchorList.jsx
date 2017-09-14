@@ -2,11 +2,11 @@
  * Created by vishwadeep on 12/9/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
-import {findBackendUserActionHandler} from '../../../transaction/internalRequests/actions/findUserAction'
-import CDNImage from '../../../../commons/components/CDNImage/CDNImage'
+import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
+import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction'
+import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
+import UserGrid from '../../../../commons/components/usergrid';
 var FontAwesome = require('react-fontawesome');
 
 //todo:// floatlabel initialize
@@ -17,7 +17,9 @@ export default class MlAnchorList extends React.Component {
       loading: true,
       data: [],
       userData: {}
-    }
+    };
+    this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
     return this
   }
 
@@ -25,7 +27,7 @@ export default class MlAnchorList extends React.Component {
     const resp = this.getAnchorUsers()
     return resp
   }
-  handleUserClick(id,event){
+  handleUserClick(id, event) {
     console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
     return resp;
@@ -34,7 +36,7 @@ export default class MlAnchorList extends React.Component {
 
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
-    this.setState({userData: response});
+    this.setState({ userData: response });
     return response;
   }
 
@@ -42,20 +44,21 @@ export default class MlAnchorList extends React.Component {
     var data = this.props.data
     var response = await findAnchorUserActionHandler(data)
     console.log('anchor user list', response)
-    this.setState({data: response})
+    this.setState({ data: response })
     return response
   }
 
   render() {
     const _this = this
-    let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType=='female'?'/images/female.jpg':'/images/def_profile.png';
-    let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage?this.state.userData.profile.profileImage:profilePic;
+    let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
+    let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
           <div className="row">
             <div className="left_wrap left_user_blocks">
-
+              <UserGrid users={_this.state.data} classnames="col-md-4 col-sm-6" clickHandler={_this.handleUserClick} />
+              { /*
               <ScrollArea
                 speed={0.8}
                 className="left_wrap"
@@ -64,13 +67,13 @@ export default class MlAnchorList extends React.Component {
                   return (<div className="col-md-4 col-sm-6" key={say}>
                     <div className="list_block provider_block" onClick={_this.handleUserClick.bind(_this, value.userId)}>
                       <div className="provider_mask">
-                        <CDNImage className="user_pic" src={value.profileImage?value.profileImage:"/images/def_profile.png"}/>
+                        <CDNImage className="user_pic" src={value.profileImage ? value.profileImage : "/images/def_profile.png"} />
                       </div>
                       <h3>{value.displayName}</h3>
                     </div>
                   </div>)
                 })}
-              </ScrollArea>
+              </ScrollArea> */}
             </div>
           </div>
         </div>
@@ -86,43 +89,43 @@ export default class MlAnchorList extends React.Component {
                 <div className="form-group">
                   <div className="fileUpload mlUpload_btn">
                     <span>Upload Pic</span>
-                    <input type="file" className="upload"/>
+                    <input type="file" className="upload" />
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src={Img}/>
+                    <img src={Img} />
                   </div>
                 </div>
-                <br className="brclear"/>
+                <br className="brclear" />
                 <div className="form-group">
                   <input type="text" placeholder="First Name" className="form-control float-label" id="fname"
-                         value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName}/>
+                    value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName} />
 
                 </div>
                 <div>
                   <div className="form-group">
                     <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"
-                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}/>
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName} />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Last Name" className="form-control float-label" id="dName"
-                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName}/>
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName} />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" className="form-control float-label" id="uName"
-                           value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
-                           this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.displayName?
-                             this.state.userData.profile.InternalUprofile.moolyaProfile.displayName:""}/>
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
+                        this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.displayName ?
+                        this.state.userData.profile.InternalUprofile.moolyaProfile.displayName : ""} />
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" className="form-control float-label"></textarea>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Contact Number" className="form-control float-label" id="uName"/>
-                    <FontAwesome name='lock' className="input_icon"/>
+                    <input type="text" placeholder="Contact Number" className="form-control float-label" id="uName" />
+                    <FontAwesome name='lock' className="input_icon" />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email Id" className="form-control float-label" id="uName"/>
-                    <FontAwesome name='lock' className="input_icon"/>
+                    <input type="text" placeholder="Email Id" className="form-control float-label" id="uName" />
+                    <FontAwesome name='lock' className="input_icon" />
                   </div>
 
                   <div className="panel panel-default new_profile_tabs">
@@ -135,13 +138,13 @@ export default class MlAnchorList extends React.Component {
                       <div className="ml_tabs">
                         <ul className="nav nav-pills">
                           <li className="active">
-                            <a href="#3a" data-toggle="tab">Home&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                            <a href="#3a" data-toggle="tab">Home&nbsp;<b><FontAwesome name='minus-square' /></b></a>
                           </li>
                           <li>
-                            <a href="#4a" data-toggle="tab">Office&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                            <a href="#4a" data-toggle="tab">Office&nbsp;<b><FontAwesome name='minus-square' /></b></a>
                           </li>
                           <li>
-                            <a href="#" className="add-contact"><FontAwesome name='plus-square'/> Add Email</a>
+                            <a href="#" className="add-contact"><FontAwesome name='plus-square' /> Add Email</a>
                           </li>
                         </ul>
 
@@ -154,7 +157,7 @@ export default class MlAnchorList extends React.Component {
                               </select>
                             </div>
                             <div className="form-group">
-                              <input type="text" placeholder="Enter URL" className="form-control float-label" id=""/>
+                              <input type="text" placeholder="Enter URL" className="form-control float-label" id="" />
                             </div>
                           </div>
                           <div className="tab-pane" id="2a">
@@ -165,7 +168,7 @@ export default class MlAnchorList extends React.Component {
                               </select>
                             </div>
                             <div className="form-group">
-                              <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
+                              <input type="text" placeholder="Email Id" className="form-control float-label" id="" />
                             </div>
                             <div className="ml_btn">
                               <a href="#" className="save_btn">Save</a>
@@ -177,11 +180,11 @@ export default class MlAnchorList extends React.Component {
                     </div>
                   </div>
                 </div>
-                <br className="brclear"/>
+                <br className="brclear" />
                 <div className="form-group switch_wrap inline_switch">
                   <label className="">Status</label>
                   <label className="switch">
-                    <input type="checkbox"/>
+                    <input type="checkbox" />
                     <div className="slider"></div>
                   </label>
                 </div>

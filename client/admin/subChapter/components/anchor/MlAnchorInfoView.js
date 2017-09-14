@@ -2,10 +2,19 @@
  * Created by vishwadeep on 12/9/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import { findSubChapterActionHandler } from '../../actions/findSubChapter'
 
 export default class MlAnchorInfoView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      objective: [],
+      contactDetails: [],
+    };
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
@@ -18,6 +27,21 @@ export default class MlAnchorInfoView extends React.Component {
       }
     });
   }
+
+  async componentWillMount() {
+    const { clusterId, chapterId, subChapterId } = this.props;
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    const objective = response && response.objective && response.objective.map((ob) => ({
+      description: ob.description,
+      status: ob.status,
+    }));
+    const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
+    this.setState({
+      objective: objective || [],
+      contactDetails: contactDetails || []
+    })
+  }
+
   changePath(){
     // FlowRouter.go('')
     console.log('change path')
@@ -166,18 +190,15 @@ export default class MlAnchorInfoView extends React.Component {
                 >
                   <h3>Objectives :</h3>
                   <ul className="list-info">
-                    <li>Zomato Internet Private Limited is a Private incorporated on 08 October 2015. It is classified
-                      as Non-govt company and is registered at Registrar of Companies, Delhi. Its authorized share
-                      capital is Rs. 100,000 and its paid up capital is Rs. 100,000.It is inolved in Business activities
-                      n.e.c.
-                    </li>
-                    <li>Zomato Internet Private Limited's Annual General Meeting (AGM) was last held on 14 June 2016 and
-                      as per records from Ministry of Corporate Affairs (MCA), its balance sheet was last filed on 31
-                      March 2016.
-                    </li>
-                    <li>Zomato acquired Seattle-based food portal Urbanspoon for an undisclosed sum in January 2015.
-                    </li>
-                    <li>Zomato acquired Delhi based startup MapleGraph that built MaplePOS.</li>
+                    {
+                      this.state.objective.map((ob, index) => {
+                        const { status, description } = ob;
+                        if (status) {
+                          return <li key={`${description}index`}>{description}</li>;
+                        }
+                        return <span key={index}></span>
+                      })
+                    }
                   </ul>
                 </ScrollArea>
               </div>
@@ -191,14 +212,19 @@ export default class MlAnchorInfoView extends React.Component {
                 className="left_wrap"
               >
                 <h3>Contact Us:</h3>
-                <p>
-                  raksan consulting private limited
-                  #1002, 10th floor, the platina, gachibowli, hyderabad, telangana, india - 500032
-                  <br />
-                  Tel : +91 40 95518300
-                  <br />
-                  Email : raksan@mymoolya.com
-                </p>
+                {
+                  this.state.contactDetails.map((cd, index) => {
+                    const { emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber } = cd;
+                    return (
+                      <p key={index}>
+                        {buildingNumber}, {street}, {area}, {landmark}, {town}, {stateId}, {countryId}-{pincode}`
+                        <br />
+                        Tel: {contactNumber}
+                        <br />
+                        Email: {emailId}
+                      </p>);
+                  })
+                }
               </ScrollArea>
             </div>
           </div>

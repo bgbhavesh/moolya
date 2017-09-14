@@ -9,6 +9,9 @@ export default class  MlMapViewComposer extends Component {
   }
   render () {
     let config=this.props;
+    if(this.props && this.props.config){
+      config=this.props.config;
+    }
     //note: params are mandatory,if not data will not be fetched
     let queryOptions={
       forceFetch: true,

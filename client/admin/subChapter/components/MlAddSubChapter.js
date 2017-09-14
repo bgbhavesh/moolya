@@ -16,6 +16,7 @@ import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 // import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
+import CropperModal from "../../../../client/commons/components/cropperModal";
 // import gql from "graphql-tag";
 // var Select = require('react-select');
 // var FontAwesome = require('react-fontawesome');
@@ -30,7 +31,9 @@ class MlAddSubChapter extends React.Component {
       moolyaSubChapterAccess: {},
       backendUser: {},
       externalUser: {},
-      data: {}
+      data: {},
+      showAddPicModal: false,
+      uploadingPic: false,
     };
     this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
     this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
@@ -38,6 +41,9 @@ class MlAddSubChapter extends React.Component {
     this.onStatusBespokeWorkFlow = this.onStatusBespokeWorkFlow.bind(this);
     this.onStatusChangeBespokeRegistration = this.onStatusChangeBespokeRegistration.bind(this);
     this.findChapterDetails.bind(this);
+    this.toggleAddPicModal = this.toggleAddPicModal.bind(this);
+    this.onPicUpload = this.onPicUpload.bind(this);
+    this.onImageFileUpload = this.onImageFileUpload.bind(this);
     // this.findChapterActionHandler.bind(this);
     // this.updateSubChapter.bind(this)
     return this;
@@ -203,9 +209,9 @@ class MlAddSubChapter extends React.Component {
   }
 
   async onImageFileUpload(e) {
-    if (e.target.files[0].length == 0)
+    if (e.target && e.target.files[0].length == 0)
       return;
-    let file = e.target.files[0];
+    let file = e.target ? e.target.files[0] : e;
     if (file) {
       let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId: ''}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
@@ -220,9 +226,22 @@ class MlAddSubChapter extends React.Component {
         let dataDetails = this.state.data
         let cloneBackUp = _.cloneDeep(dataDetails);
         cloneBackUp['subChapterImageLink'] = result.result
-        this.setState({data: cloneBackUp});
+        this.setState({data: cloneBackUp, uploadingPic: false, showAddPicModal: false});
       }
     }
+  }
+
+  toggleAddPicModal() {
+    this.setState({
+      showAddPicModal: !this.state.showAddPicModal,
+    });
+  }
+
+  onPicUpload(image) {
+    this.setState({
+      uploadingPic: true,
+    });
+    this.onImageFileUpload(image);
   }
 
   render() {
@@ -319,9 +338,17 @@ class MlAddSubChapter extends React.Component {
                   <form>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
-                        <span>Add Pic</span>
-                        <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
+                        <button type="button" onClick={this.toggleAddPicModal} className="fileUpload mlUpload_btn">Add Pic</button>
+
+                        { /* <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/> */}
                       </div>
+                      <CropperModal
+                        toggleShow={this.toggleAddPicModal}
+                        show={this.state.showAddPicModal}
+                        cropperStyle="square"
+                        uploadingImage={this.state.uploadingPic}
+                        handleImageUpload={this.onPicUpload}
+                      />
                       <div className="previewImg ProfileImg">
                         <img
                           src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>

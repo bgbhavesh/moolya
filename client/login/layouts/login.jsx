@@ -43,9 +43,10 @@ MlLoginContent = React.createClass({
     initalizeFloatLabel();
   },
   onValueChange(event){
-    if (event.target.name == 'userName')
+    if (event.target.name == 'userName') {
+      event.target.value = event.target.value.trim()
       this.setState(Object.assign({userNameErr: ""}))
-    if (event.target.name == 'Password')
+    } else if (event.target.name == 'Password')
       this.setState(Object.assign({passwordErr: ""}))
   },
 
@@ -63,7 +64,7 @@ MlLoginContent = React.createClass({
               <source src="/images/bg_video.mp4"/>
             </video>*/}
             <div className="video_bg"></div>
-            <img className="logo" src="/images/login_logo.png"/>
+            <img className="login_logo" src="/images/login_logo.png"/>
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>
             </div>

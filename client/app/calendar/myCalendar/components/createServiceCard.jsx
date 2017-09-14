@@ -290,7 +290,7 @@ class MlAppServiceManageSchedule extends Component {
           appointmentDate={this.props.appointmentDate}
           activeComponent={this.activeComponent.bind(this)}
         />,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name:'Tasks',

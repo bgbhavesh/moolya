@@ -320,19 +320,28 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
 
   _.remove(roles, {roleName: 'platformadmin'})
   if (levelCode == 'CLUSTER') {
-    if (!userhierarchy.isParent)
+    if (!userhierarchy.isParent){
       _.remove(roles, {roleName: 'clusteradmin'})
+      _.remove(roles, {roleName: 'clusteranchor'})
+    }
     _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'subchapteradmin'})
     _.remove(roles, {roleName: 'communityadmin'})
+    _.remove(roles, {roleName: 'chapteranchor'})
+    _.remove(roles, {roleName: 'subchapteranchor'})
+    _.remove(roles, {roleName: 'communityanchor'})
   }
 
   else if (levelCode == 'SUBCHAPTER') {
     _.remove(roles, {roleName: 'clusteradmin'})
     _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'communityadmin'})
+    _.remove(roles, {roleName: 'clusteranchor'})
+    _.remove(roles, {roleName: 'chapteranchor'})
+    _.remove(roles, {roleName: 'communityanchor'})
     if (!userhierarchy.isParent && userhierarchy.code != "CLUSTER" && userhierarchy.code != "CHAPTER") {
       _.remove(roles, {roleName: 'subchapteradmin'})
+      _.remove(roles, {roleName: 'subchapteranchor'})
     }
   }
 
@@ -340,8 +349,12 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     _.remove(roles, {roleName: 'clusteradmin'})
     _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'subchapteradmin'})
+    _.remove(roles, {roleName: 'clusteranchor'})
+    _.remove(roles, {roleName: 'chapteranchor'})
+    _.remove(roles, {roleName: 'subchapteranchor'})
     if (!userhierarchy.isParent && (userhierarchy.code == "COMMUNITY")) {
       _.remove(roles, {roleName: 'communityadmin'})
+      _.remove(roles, {roleName: 'communityanchor'})
     }
   }
   return roles;

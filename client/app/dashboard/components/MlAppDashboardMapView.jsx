@@ -26,9 +26,9 @@ export default class MlDashboardMapView extends Component {
   async componentWillMount() {
     let that = this;
     let zoom = 1;
-    let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel != 4){
-      zoom = 4;
+    let hasZoom=that.props.config.fetchZoom||false;
+    if(hasZoom){
+      zoom= await that.props.config.fetchZoomHandler(that.props)||zoom;
     }
     let hasCenter=that.props.config.fetchCenter||false;
     if(hasCenter){
@@ -111,16 +111,16 @@ export default class MlDashboardMapView extends Component {
     const communityIconList=
       <div className="community_icons">
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
-          <span className="ml my-ml-browser_5 br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+          <span className="ml ml-select-all br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>
         <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE " data-filter="ideator">
           <span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
         </a>
-        <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN" data-filter="funder">
-          <span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
-        </a>
         <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU" data-filter="startup">
           <span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
+        </a>
+        <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN" data-filter="funder">
+          <span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
         <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
           <span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>

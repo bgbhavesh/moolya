@@ -15,7 +15,8 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
-import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
+import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio';
+import CropperModal from '../../../../../../commons/components/cropperModal';
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -37,7 +38,9 @@ export default class MlStartupManagement extends React.Component{
       clusterId:'',
       // arrIndex:"",
       managementIndex:"",
-      responseImage:""
+      responseImage:"",
+      showProfileModal: false,
+      uploadingAvatar: false,
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -45,6 +48,9 @@ export default class MlStartupManagement extends React.Component{
     this.onSelectUser.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -252,18 +258,30 @@ export default class MlStartupManagement extends React.Component{
     // let indexArray = this.state.indexArray;
     this.props.getManagementDetails(startupManagement, this.state.privateKey)
   }
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  onLogoFileUpload(file){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let name = 'logo';
+    let fileName = file.name;
+    if(file){
+      let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
   onFileUploadCallBack(name,file, resp){
     let that = this;
     let details =this.state.data;
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if(resp){
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -317,6 +335,19 @@ export default class MlStartupManagement extends React.Component{
     }
   }
 
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image);
+  }
+
   render(){
     let titlequery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -333,6 +364,8 @@ export default class MlStartupManagement extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.startupManagementList || [];
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
+
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -354,7 +387,7 @@ export default class MlStartupManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"} className="p_image"/></div>
+                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : genderImage} className="p_image"/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>
@@ -441,8 +474,8 @@ export default class MlStartupManagement extends React.Component{
                     <form>
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
-                          <span>Upload Icon</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                          <span onClick={this.toggleModal.bind(this)}>Upload Icon</span>
+                          {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/!*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                         </div>
                         <div className="previewImg ProfileImg">
                           <img src={this.state.data && this.state.data.logo?this.state.data.logo.fileUrl:this.state.responseImage?this.state.responseImage:" "}/>
@@ -484,6 +517,13 @@ export default class MlStartupManagement extends React.Component{
                   </div>
 
                 </div>
+                <CropperModal
+                  uploadingImage={this.state.uploadingAvatar}
+                  handleImageUpload={this.handleUploadAvatar}
+                  cropperStyle="square"
+                  show={this.state.showProfileModal}
+                  toggleShow={this.toggleModal}
+                />
                 <br className="brclear"/>
               </div>
             </div>

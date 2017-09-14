@@ -19,7 +19,7 @@ export default class MlCompanyViewEvolution extends React.Component {
       data:{},
       annotations:[],
       content:{}
-
+  
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -134,6 +134,15 @@ export default class MlCompanyViewEvolution extends React.Component {
   }
 
   render(){
+    let that = this;
+    let achievements = that.state.evolution || {};
+    if(_.isEmpty(achievements)){
+      return (
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName} />
+        </div>
+      )
+    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -148,5 +157,6 @@ export default class MlCompanyViewEvolution extends React.Component {
           </div>
         </div>
       )
+    }
   }
 }

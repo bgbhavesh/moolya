@@ -234,6 +234,7 @@ let registrationSchema = `
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
+        countryCode     :   String,
         countryName     :   String,
         contactNumber   :   String,
         email           :   String,
@@ -443,7 +444,7 @@ let registrationSchema = `
          RejectedStatusOfDocuments(documentId:[String],docTypeId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
          RemoveFileFromDocuments(fileId:String,docTypeId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
          ApprovedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
-         RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
+         RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!,regType:String):response
          sendEmailVerificationForRegistration(registrationId:String):response
          sendSmsVerificationForRegistration(registrationId:String):response
          sendEmailVerification(userId:String):response

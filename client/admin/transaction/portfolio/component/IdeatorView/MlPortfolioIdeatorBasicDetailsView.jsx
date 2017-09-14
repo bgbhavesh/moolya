@@ -72,6 +72,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/ideator_01.png";
     return (
       <div>
         {showLoader === true ? ( <MlLoader />) : (
@@ -103,7 +104,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label"  disabled="disabled"/>
+                          <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"/>
                         </div>
 
@@ -133,7 +134,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/ideator_01.png"}/>
+                            <img src={this.state.data.profilePic?this.state.data.profilePic:genderImage}/>
                           </div>
                         </div>
                         <br className="brclear"/>

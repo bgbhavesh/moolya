@@ -18,7 +18,8 @@ export default class MlAppStartupEditTabs extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}
+    , activeTab:'About'};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -106,7 +107,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         title: "Awards",
         component: <MlStartupAwards client={appClient} isAdmin={false} key="6"
                                     getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                    portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
         tabClassName: 'tab',
@@ -127,7 +128,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Looking For",
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
 
 
@@ -243,16 +244,23 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
     // return  <MlVerticalTabComponent/>
   }
 

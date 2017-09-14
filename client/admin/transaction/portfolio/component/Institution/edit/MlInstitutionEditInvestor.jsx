@@ -46,15 +46,16 @@ export default class MlInstitutionEditInvestor extends React.Component{
     this.imagesDisplay()
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp= this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.investor)
+    let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.investor);
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.investor) {
+      if (response && response.investor && response.investor.length>0) {
         this.setState({loading: false, institutionInvestor: response.investor, institutionInvestorList: response.investor});
       }
       else{
@@ -63,6 +64,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     }else{
       this.setState({loading: false, institutionInvestor: that.context.institutionPortfolio.investor, institutionInvestorList:that.context.institutionPortfolio.investor});
     }
+    this.institutionInvestorServer = response && response.investor?response.investor:[]
   }
   addInvestor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -79,15 +81,38 @@ export default class MlInstitutionEditInvestor extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex: index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.fundingTypeId});
+    this.setState({selectedIndex: index, 
+                   data:details,
+                   "selectedVal" : details.fundingTypeId,
+                   selectedObject : index,
+                   popoverOpen : !(this.state.popoverOpen)},()=>{
+                       this.lockPrivateKeys(index)
+                 });
 
-    setTimeout(function () {
+    /*setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
+    
   }
-
+//todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionInvestorServer && this.institutionInvestorServer[selIndex] ? this.institutionInvestorServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {
+      tabName: this.props.tabName,
+      index: selIndex
+    })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
 
   onLockChange(fieldName, field, e){
     var isPrivate = false;
@@ -101,9 +126,14 @@ export default class MlInstitutionEditInvestor extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+   /* var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
     this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })*/
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -343,5 +373,6 @@ export default class MlInstitutionEditInvestor extends React.Component{
   }
 }
 MlInstitutionEditInvestor.contextTypes = {
-  institutionPortfolio: PropTypes.object
+  institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

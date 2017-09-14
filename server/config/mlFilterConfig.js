@@ -91,6 +91,14 @@ if(Meteor.isServer){
           "fieldResolverName" : "null",
           "isActive":true
         },
+        {
+          "fieldName" : "status",
+          "displayName" : "Status",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Status",
+          "isActive":true
+        },
 
       ]
     }});
@@ -107,14 +115,14 @@ if(Meteor.isServer){
       "isActive" : true,
       "moduleName" : "portfolio",
       "filterFields" : [
-        {
+        /*{
           "fieldName" : "portfolioUserName",
           "displayName" : "User Name",
           "isDynamic" : null,
           "fieldType" : "String",
           "fieldResolverName" : null,
           "isActive":true
-        },
+        },*/
         {
           "fieldName" : "clusterId",
           "displayName" : "Cluster",
@@ -181,6 +189,14 @@ if(Meteor.isServer){
           "fieldType" : "String",
           "fieldResolverName" : null,
         },
+        {
+          "fieldName" : "status",
+          "displayName" : "Status",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Status",
+          "isActive":true
+        }
       ]
     }});
   }

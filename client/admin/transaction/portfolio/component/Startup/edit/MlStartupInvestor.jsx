@@ -11,6 +11,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchStartupDetailsHandler} from "../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import CropperModal from '../../../../../../commons/components/cropperModal';
 var FontAwesome = require('react-fontawesome');
 
 const KEY = 'investor'
@@ -27,12 +28,17 @@ export default class MlStartupInvestor extends React.Component{
       selectedIndex:-1,
       startupInvestorList:[],
       selectedVal:null,
-      selectedObject:"default"
+      selectedObject:"default",
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -65,7 +71,7 @@ export default class MlStartupInvestor extends React.Component{
     }else{
       this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
     }
-    this.startupInvestorServer = response
+    this.startupInvestorServer = response && response.investor?response.investor:[]
   }
   addInvestor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -105,8 +111,8 @@ export default class MlStartupInvestor extends React.Component{
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.startupInvestorServer && this.startupInvestorServer[selIndex]?this.startupInvestorServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
     var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
     var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     _.each(keys, function (pf) {
@@ -195,16 +201,28 @@ export default class MlStartupInvestor extends React.Component{
     this.props.getInvestorDetails(startupInvestor, this.state.privateKey);
 
   }
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  onLogoFileUpload(file){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let name = 'logo';
+    let fileName = file.name;
+    if(file){
+      let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
   onFileUploadCallBack(name,file, resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -261,6 +279,18 @@ export default class MlStartupInvestor extends React.Component{
       let cloneBackUpList = _.cloneDeep(listDetails);
       this.setState({loading: false, startupInvestor:cloneBackUp,startupInvestorList:cloneBackUpList});
     }
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image);
   }
 
   render(){
@@ -345,8 +375,8 @@ export default class MlStartupInvestor extends React.Component{
                       </div>
                       {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">
-                          <span>Upload Logo</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                          <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+                          {/*  <input type="file" name="logo" id="logo" className="upload"  accept="image/!*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                         </div>
                       </div>:""}
                       <div className="clearfix"></div>
@@ -361,6 +391,13 @@ export default class MlStartupInvestor extends React.Component{
                 </div>
               </PopoverContent>
             </Popover>
+            <CropperModal
+              uploadingImage={this.state.uploadingAvatar}
+              handleImageUpload={this.handleUploadAvatar}
+              cropperStyle="square"
+              show={this.state.showProfileModal}
+              toggleShow={this.toggleModal}
+            />
           </div>
         </div>)}
       </div>
@@ -368,5 +405,6 @@ export default class MlStartupInvestor extends React.Component{
   }
 }
 MlStartupInvestor.contextTypes = {
-  startupPortfolio: PropTypes.object
+  startupPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

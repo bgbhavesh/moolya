@@ -18,7 +18,7 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
   sort:false,
   fetchCenter:true,
   fetchCenterHandler:async function(reqParams){
-    let mapDetailsQuery = {moduleName: reqParams.module,id:reqParams&&reqParams.params&&reqParams.params.clusterId?reqParams.params.clusterId:null};
+    let mapDetailsQuery = {moduleName: reqParams.module,id:reqParams&&reqParams.params&&reqParams.params.chapterId?reqParams.params.chapterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
@@ -26,8 +26,16 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
   fetchZoomHandler:async function(reqParams){
     var zoom=1;
     let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel != 4){
+    let path = FlowRouter.current().path
+    if (path.indexOf("/subChapters") > 0) {
+      return 10
+    }
+    if(loggedInUser.hierarchyLevel == 4){
+      zoom = 0;
+    }else if(loggedInUser.hierarchyLevel == 3 || loggedInUser.hierarchyLevel == 2){
       zoom = 4;
+    }else{
+      zoom = 10;
     }
     return zoom;
   },

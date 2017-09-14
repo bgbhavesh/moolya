@@ -220,6 +220,166 @@ if(!platformrole){
   }
   MlRoles.update({roleName:"communityadmin"}, {$set:role}, {upsert:true})
 }
+
+
+/**************************************** anchor default roles <START>*************************************************/
+
+var assignRolesAnchor = [{
+  cluster: "all",
+  chapter: "all",
+  subChapter: "all",
+  community: "all",
+  department: dep._id,
+  subDepartment: subDep._id,
+  isActive: true
+}]
+//todo:// identify the transaction related module and remove permission from all anchor roles ["Registration and portfolio"]
+/**clusterAnchor*/
+let modulesclusteranchor = [
+  {moduleId: (_.find(mlModules, {code: "CLUSTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "GLOBALSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TAXATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "DOCUMENTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TEMPLATEASSIGNMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REQUESTTYPE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALAPPROVEDREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "FILTERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSMAPPING"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSSETUP"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SHARE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "OFFICE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SERVICECARD"}))._id, actions: readPermissions, isActive: true},
+]
+var roleclusteranchor = {
+  roleName: "clusteranchor",
+  displayName: "Cluster Anchor",
+  assignRoles: assignRolesAnchor,
+  modules: modulesclusteranchor,
+  isActive: true,
+  isAnchor : true,
+  isSystemDefined: true
+}
+MlRoles.update({roleName: "clusteranchor"}, {$set: roleclusteranchor}, {upsert: true})
+
+/**chapterAnchor*/
+var moduleschapteranchor = [
+  {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "GLOBALSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TAXATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "DOCUMENTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TEMPLATEASSIGNMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REQUESTTYPE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALAPPROVEDREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "FILTERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSMAPPING"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSSETUP"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SHARE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "OFFICE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SERVICECARD"}))._id, actions: readPermissions, isActive: true}
+]
+let rolechapteranchor = {
+  roleName: "chapteranchor",
+  displayName: "Chapter Anchor",
+  assignRoles: assignRolesAnchor,
+  modules: moduleschapteranchor,
+  isActive: true,
+  isAnchor : true,
+  isSystemDefined: true
+}
+MlRoles.update({roleName: "chapteranchor"}, {$set: rolechapteranchor}, {upsert: true})
+
+/**subChapterAnchor*/
+let modulessubchapteranchor = [
+  {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "GLOBALSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TAXATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "DOCUMENTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TEMPLATEASSIGNMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REQUESTTYPE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALAPPROVEDREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "FILTERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSMAPPING"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "DEPARTMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SUBDEPARTMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TEMPLATE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "ROLES"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "HIERARCHY"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "CLUSTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSSETUP"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "OFFICE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SERVICECARD"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SHARE"}))._id, actions: readPermissions, isActive: true},
+]
+let rolesubchapteranchor = {
+  roleName: "subchapteranchor",
+  displayName: "Sub-Chapter Anchor",
+  assignRoles: assignRolesAnchor,
+  modules: modulessubchapteranchor,
+  isActive: true,
+  isAnchor : true,
+  isNonMoolyaAvailable: true,
+  isSystemDefined: true
+}
+MlRoles.update({roleName: "subchapteranchor"}, {$set: rolesubchapteranchor}, {upsert: true})
+
+/**communityAnchor*/
+var modulesCommunityAnchor = [
+  {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: permissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "GLOBALSETTINGS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TAXATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "DOCUMENTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "TEMPLATEASSIGNMENT"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "REQUESTTYPE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "INTERNALAPPROVEDREQUESTS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "FILTERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSMAPPING"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "PROCESSSETUP"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "SHARE"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "OFFICE"}))._id, actions: readPermissions, isActive: true}
+]
+let roleCommunityAnchor = {
+  roleName: "communityanchor",
+  displayName: "Community Anchor",
+  assignRoles: assignRolesAnchor,
+  modules: modulesCommunityAnchor,
+  isActive: true,
+  isAnchor : true,
+  isNonMoolyaAvailable: true,
+  isSystemDefined: true
+}
+MlRoles.update({roleName: "communityanchor"}, {$set: roleCommunityAnchor}, {upsert: true})
+
+/**************************************** anchor default roles <END>***************************************************/
+
 /*********************************** Default Moolya Roles Creation <End> **********************************************/
 
 

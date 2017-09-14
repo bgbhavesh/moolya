@@ -26,6 +26,9 @@ import MlAppInvestment from "../../app/investment/components/MlAppInvestment";
 import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransaction";
 import {appClient} from '../../app/core/appConnection'
 import MlViews from '../../app/commons/view/MlAppViews'
+import {mlAppClusterDashboardListConfig, mlAppClusterDashboardMapConfig} from '../../app/dashboard/config/mlAppClusterDashboardConfig'
+import {mlAppChapterDashboardListConfig, mlAppChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppChapterDashboardConfig'
+import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} from '../../app/dashboard/config/mlAppSubChapterDashboardConfig'
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
@@ -113,7 +116,7 @@ appSection.route('/', {
 appSection.route('/dashboard/:isFirst', {
   name: 'dashboard',
   action(params){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
     // mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
   }
 });
@@ -121,8 +124,54 @@ appSection.route('/dashboard/:isFirst', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>})
     // mount(AppLayout,{appContent:<MlAppDashboard/>})
+  }
+});
+
+appSection.route('/dashboard/:clusterId/chapters', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppChapterDashboardMapConfig}
+                           listConfig={mlAppChapterDashboardListConfig} params={params}/>
+    })
+  }
+});
+appSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlAppSubChapterDashboardMapConfig}
+                           listConfig={mlAppSubChapterDashboardListConfig} params={params}/>
+    })
+  }
+});
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities', {
+  name: 'dashboard',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AppLayout, {
+      appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlDashboardMapConfig}
+                           listConfig={mlDashboardListConfig} params={params}/>
+    })
   }
 });
 
@@ -249,9 +298,15 @@ appSection.route('/myProfile/registerAs', {
 // Ideators
 appSection.route('/ideator', {
   name: 'ideator',
-  action(){
+  action() {
     var listConfig = _.extend(mlAppIdeatorConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout, {
+        appContent:
+          (<div className="app_main_wrap">
+            <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig}/>
+          </div>)
+      }
+    )
   }
 });
 appSection.route('/portfolio/view/:portfolioId/:communityType', {
@@ -295,7 +350,12 @@ appSection.route('/startup', {
   action(){
     // mount(AppLayout, {appContent: <MlViews viewMode={false} showInfinity={false} listConfig={listConfig}/>})
     var listConfig = _.extend(mlAppStartupConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+
+    })
     /**infinite scroll component*/
   }
 });
@@ -311,7 +371,11 @@ appSection.route('/serviceProvider', {
   name: 'provider',
   action(){
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+      })
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
     /**using infinite scroll*/
   }
@@ -329,7 +393,11 @@ appSection.route('/explore/institution', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+          })
   }
 });
 
@@ -345,7 +413,11 @@ appSection.route('/institution', {
   name: 'institutions',
   action(){
     var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+    })
   }
 });
 
@@ -362,7 +434,11 @@ appSection.route('/explore/company', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppCompanyConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div> )
+    })
   }
 });
 
@@ -375,15 +451,19 @@ appSection.route('/explore/company/:portfolioId', {
 });
 
 appSection.route('/company', {
-  name: 'companies',
+  name: 'company',
   action(){
     var listConfig = _.extend(mlAppCompanyConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+      })
   }
 });
 
 appSection.route('/company/:portfolioId', {
-  name: 'companies',
+  name: 'company',
   action(params){
     mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>, isProfileMenu:false})
   }
@@ -411,7 +491,11 @@ appSection.route('/funder', {
   name: 'funder',
   action(){
     var config = _.extend(mlAppFunderConfig2, {isExplore: false});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={config} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={config} />
+      </div>)
+    })
     // var listConfig = _.extend(mlAppFunderConfig, {isExplore: false});
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
   }
@@ -549,7 +633,11 @@ appSection.route('/explore/ideator/', {
   action(params){
     // mount(AppLayout,{appContent:< MlAppIdeatorLanding isExplore={true}/>})
     var listConfig = _.extend(mlAppIdeatorConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+    })
   }
 });
 
@@ -566,7 +654,11 @@ appSection.route('/explore/investor', {
     // var listConfig = _.extend(mlAppFunderConfig, {isExplore: true});
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
     let listConfig = _.extend(mlAppFunderConfig2, {isExplore: true});
-    mount(AppLayout,{appContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+    })
   }
   // isExplore={true}
   /**removing explore menu from left nav*/
@@ -585,7 +677,11 @@ appSection.route('/explore/serviceProvider', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+    })
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
     /**using infinite scroll*/
   }
@@ -603,7 +699,11 @@ appSection.route('/explore/startup', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppStartupConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    mount(AppLayout,{appContent:
+      (<div className="app_main_wrap">
+        <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />
+      </div>)
+    })
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
     /**import of infinite scroll component*/
   }

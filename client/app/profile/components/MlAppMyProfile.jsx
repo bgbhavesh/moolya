@@ -14,7 +14,7 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAccordion from "../../commons/components/MlAccordion";
-
+import CropperModal from '../../../commons/components/cropperModal';
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -27,12 +27,17 @@ class MlAppMyProfile extends Component {
       passwordState: " ",
       passwordValidation: false,
       PasswordReset:false,
-      showChangePassword:true
+      showChangePassword:true,
+      showProfileModal: false,
+      uploadingAvatar: false,
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
     this.findUserDetails.bind(this);
     this.onfoundationDateSelection.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onImageFileUpload = this.onImageFileUpload.bind(this);
   }
   componentDidMount() {
   setTimeout(function(){
@@ -214,19 +219,27 @@ class MlAppMyProfile extends Component {
     }
   }
 
-  async onImageFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
+  async onImageFileUpload(file){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
     let user = {profile: {profileImage:" "}}
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId:this.state.userId, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
       return response;
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
     }
   }
 
   onFileUploadCallBack(resp){
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
@@ -242,6 +255,18 @@ class MlAppMyProfile extends Component {
   cancelResetPassword(){
     $('#password').val("");
     this.setState({PasswordReset:false,showChangePassword:true})
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onImageFileUpload(image);
   }
 
   render(){
@@ -277,7 +302,9 @@ class MlAppMyProfile extends Component {
           actionOptions={appActionConfig}/>
       }]
   };
-  return (
+    let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+    return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
@@ -306,7 +333,7 @@ class MlAppMyProfile extends Component {
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" readOnly="readOnly"
+                      <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.displayName}/>
                     </div>
                     <div className="form-group">
@@ -314,16 +341,16 @@ class MlAppMyProfile extends Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male" checked={this.state.genderStateMale}/><label
+                        <input id="radio1" type="radio" name="radio" value="male" checked={this.state.genderStateMale}/><label
                         htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female"
+                        <input id="radio2" type="radio" name="radio" value="female"
                                checked={this.state.genderStateFemale}/><label
                         htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others"
+                        <input id="radio3" type="radio" name="radio" value="others"
                                checked={this.state.genderStateOthers}/><label
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
@@ -337,11 +364,12 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
+
+                        <span onClick={this.toggleModal.bind(this)}>Profile Pic</span>
+                        {/*<input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>*/}
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profileImage?this.state.profileImage:"/images/def_profile.png"}/>
+                        <img src={genderImage}/>
                       </div>
                     </div>
                     <br className="brclear"/>
@@ -381,7 +409,13 @@ class MlAppMyProfile extends Component {
                   </form>
                 </div>
               </div>
-
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="square"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
             </ScrollArea>
           </div>
           <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />

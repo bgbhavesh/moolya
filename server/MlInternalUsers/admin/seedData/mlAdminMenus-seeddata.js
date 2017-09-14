@@ -288,7 +288,21 @@ if (Meteor.isServer) {
                   "dynamicLink": true,
                   "dynamicLinkHandler": "",
                   "subMenusId": "chapter_chapters",
-                  "subMenuMappingId": "chapter_subChapterDetails"
+                  "subMenuMappingId": "chapter_subChapterDetails",
+                  "subMenu": [
+                    {
+                      "link": "/admin/chapters/subChapters/anchors",
+                      "name": "Anchor Details",
+                      "uniqueId": "chapter_anchor",
+                      "isLink": true,
+                      "isMenu": false,
+                      "image": "",
+                      "dynamicLink": true,
+                      "dynamicLinkHandler": "",
+                      "subMenusId": "chapter_chapters",
+                      "subMenuMappingId": "chapter_subChapterDetails"
+                    }
+                  ]
                 },
                 {
                   "link": "/admin/chapters/subChapters/communities",

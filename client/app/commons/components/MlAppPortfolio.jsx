@@ -45,6 +45,12 @@ class MlAppPortfolio extends Component{
     this.assignActionHandlerProxy.bind(this);
     return this;
   }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   console.log('======');
+  //   console.log(nextProps);
+  //   console.log(this.props);
+  //   return !isEqual( this.props.appContent , nextProps.appContent );
+  // }
 
   toggle() {
     this.setState({
@@ -202,14 +208,14 @@ class MlAppPortfolio extends Component{
       objectName = privateKey.objectName
     }
 
-    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName})
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
     if(keyIndex < 0 && index >= 0){
       keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
     }
     var privateKeys = this.state.privateKeys;
     var removePrivateKeys = this.state.removePrivateKeys;
     if(isPrivate && keyIndex < 0){
-      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
       removePrivateKeys.splice(rIndex, 1);
       privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
       this.setState({privateKeys:privateKeys})

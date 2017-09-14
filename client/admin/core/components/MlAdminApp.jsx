@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {client} from '../apolloConnection';
-import {ApolloProvider} from 'react-apollo';
 import  MlAdminHeader from '../../layouts/header/MlAdminHeader'
 import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
 import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';

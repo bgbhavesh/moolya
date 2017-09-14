@@ -13,6 +13,7 @@ import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfoli
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import CropperModal from '../../../../../../commons/components/cropperModal';
 
 export default class MlServiceProviderAwards extends Component {
   constructor(props, context) {
@@ -26,7 +27,9 @@ export default class MlServiceProviderAwards extends Component {
       serviceProviderAwardsList: [],
       selectedVal: null,
       selectedObject: "default",
-      privateKey:{}
+      privateKey:{},
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
@@ -34,6 +37,9 @@ export default class MlServiceProviderAwards extends Component {
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -202,22 +208,33 @@ export default class MlServiceProviderAwards extends Component {
     this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(e) {
-    if (e.target.files[0].length == 0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
-      portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: {awardsRecognition: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
-    };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+  onLogoFileUpload(file,e) {
+    // if (e.target.files[0].length == 0)
+    //   return;
+    // let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let fileName=file.name;
+    if(file){
+      let data = {
+        moduleName: "PORTFOLIO",
+        actionName: "UPLOAD",
+        portfolioDetailsId: this.props.portfolioDetailsId,
+        portfolio: {awardsRecognition: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+      };
+      let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
 
   onFileUploadCallBack(file,resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -278,7 +295,18 @@ export default class MlServiceProviderAwards extends Component {
       this.setState({loading: false, serviceProviderAwards: cloneBackUp, serviceProviderAwardsList: cloneBackUpList});
     }
   }
-
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image);
+  }
 
   render() {
     var yesterday = Datetime.moment().subtract(0, 'day');
@@ -362,19 +390,19 @@ export default class MlServiceProviderAwards extends Component {
                                       isValidDate={ valid }/>
                           </div>
                           <div className="form-group">
-                            <input type="text" name="awardDescription" placeholder="About"
-                                   className="form-control float-label" defaultValue={this.state.data.awardDescription}
+                            <input type="text" name="awardsDescription" placeholder="About"
+                                   className="form-control float-label" defaultValue={this.state.data.awardsDescription}
                                    onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                         id="isAwardDescriptionPrivate"
-                                         defaultValue={this.state.data.isAwardDescriptionPrivate}
-                                         onClick={this.onLockChange.bind(this, "awardDescription", "isAwardDescriptionPrivate")}/>
+                                         id="isDescriptionPrivate"
+                                         defaultValue={this.state.data.isDescriptionPrivate}
+                                         onClick={this.onLockChange.bind(this, "awardDescription", "isDescriptionPrivate")}/>
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
-                              <span>Upload Logo</span>
-                              <input type="file" name="logo" id="logo" className="upload" accept="image/*"
-                                     onChange={this.onLogoFileUpload.bind(this)}/>
+                                <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+                              {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
+                                     onChange={this.onLogoFileUpload.bind(this)}/>*/}
                             </div>
                           </div> : ""}
                           <div className="clearfix"></div>
@@ -394,6 +422,13 @@ export default class MlServiceProviderAwards extends Component {
                   </div>
                 </PopoverContent>
               </Popover>
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="any"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
             </div>
           </div>)}
       </div>

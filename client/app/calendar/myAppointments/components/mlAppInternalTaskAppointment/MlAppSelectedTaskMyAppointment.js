@@ -183,7 +183,8 @@ class MlAppSelectedTaskMyAppointment extends Component {
               <div id="root">
                 <StepZilla steps={this.setTaskSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

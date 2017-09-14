@@ -20,6 +20,7 @@ var Future = Npm.require('fibers/future');
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck = null;
+  let updateRecord = {}
   if (!args.registration.registrationType) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
@@ -94,12 +95,14 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.createdBy = createdBy ? createdBy : user.username;
   let id = mlDBController.insert('MlRegistration', {
     registrationInfo: args.registration,
-    status: "Yet To Start",
+    status: "REG_EMAIL_P",
     emails: emails,
     transactionId: args.registration.registrationId,
     transactionCreatedDate: transactionCreatedDate
   }, context)
   if (id) {
+    mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');
+    let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: id}, context, info);
     validationCheck = MlRegistrationPreCondition.validateActiveCommunity(id, args.registration);
     if (validationCheck && !validationCheck.isValid) {
@@ -117,6 +120,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 }
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   var validationCheck = null;
+  let updateRecord = {}
   var date = new Date()
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
@@ -173,11 +177,14 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
    args.registration.transactionId = resp.result;*/
   let id = mlDBController.insert('MlRegistration', {
     registrationInfo: registrationInfo,
-    status: "Yet To Start",
+    status: "REG_EMAIL_V",
     emails: emails,
     transactionId: registrationInfo.registrationId
   }, context)
   if (id) {
+    mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
+    let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
+
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
@@ -218,10 +225,10 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return errResp;
   }
   else if (args.registration) {
-    let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@mymoolya.com'}, context) || {};
+    let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
     context.userId = user._id;
     context.browser = 'Registration API'
-    context.url = "https://moolya.in"
+    context.url = Meteor.absoluteUrl("");
     args.registration.userName = args.registration.email;
     var emails = [{address: args.registration.userName, verified: false}];
     orderNumberGenService.assignRegistrationId(args.registration);
@@ -257,11 +264,14 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     response = mlDBController.insert('MlRegistration', {
       registrationInfo: args.registration,
       transactionId: args.registration.registrationId,
-      status: "Yet To Start",
+      status: "REG_EMAIL_P",
       emails: emails,
       registrationDetails: {identityType: args.registration.identityType}
     }, context)
+    var updateRecord = {}
     if (response) {
+      mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');
+      let updatedResponse = mlDBController.update('MlRegistration',response,updateRecord, {$set: true}, context)
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: response}, context, info);
       // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
 
@@ -434,6 +444,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         "registrationDetails.identityType": details.identityType,
         "registrationDetails.userType": details.userType
       }
+      mlRegistrationRepo.updateStatus(updateObj,'REG_SOFT_APR');
       //Auto Approve for Office Bearer
       if(_lodash.isMatch(details, {communityDefCode: 'OFB'})){
         mlRegistrationRepo.updateStatus(updateObj,'REG_USER_APR');//updateObj.status= 'REG_USER_APR';
@@ -486,7 +497,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         username: details.email,
         password: details.password,
         profile: profile,
-        emails: registerDetails && registerDetails.emails ? registerDetails.emails : []
+        emails: registerDetails && registerDetails.emails ? registerDetails.emails : [],
+        otps:registerDetails && registerDetails.otps ? registerDetails.otps : []
       }
       /** Check for User record, if it exists, update the profile of user*/
       var existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
@@ -536,7 +548,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             {
               $set: {
                 'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
-                'emails': userObject.emails
+                'emails': userObject.emails,
+                otps:userObject.otps
               }
             }, {'blackbox': true}, context);
 
@@ -556,7 +569,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         result = {username: userObject.username};
         mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
         /**Creating moolya request*/
-        mlRegistrationRepo.createRegistrationProxy(id, context);
+        //mlRegistrationRepo.createRegistrationProxy(id, context);
 
         updatedResponse = new MlRespPayload().successPayload(result, code);
         //update transaction with operational area
@@ -582,7 +595,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         return validationCheck.validationResponse;
       }
       /**Update the registration Details*/
-      updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
+      var aprvStatus=mlRegistrationRepo.updateStatus({},'REG_SOFT_APR');
+      updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details,status:aprvStatus.status,statusDesc:aprvStatus.statusDesc}, {$set: true}, context);
       /**
        * Updating the User profile details(DateOfBirth an GenderType)
        * Check why user profile is updated here??. User may have multiple registrations
@@ -880,6 +894,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
     let documentList = args.documentId;
     let doctypeList = args.docTypeId
     let updatedResponse;
+    let updateRecord = {}
     if (documentList.length > 0) {
       for (let i = 0; i < documentList.length; i++) {
         // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
@@ -894,8 +909,10 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
           if (response) {
-
-
+           /*
+            mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
+            let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+            */
             let code = 200;
             let result = {registrationId: response}
             MlNotificationController.onKYCApprove(user);
@@ -922,6 +939,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
     let documentList = args.documentId;
     let doctypeList = args.docTypeId
     let updatedResponse;
+    let updateRecord = {}
     if (documentList.length > 0) {
       for (let i = 0; i < documentList.length; i++) {
         // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
@@ -936,6 +954,10 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
+          /*
+            mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
+            let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord, {$set: true}, context)
+          */
             MlEmailNotification.onKYCDecline(user);
             MlNotificationController.onKYCDecline(user);
             sendSMSonKYCDeclined(user)
@@ -1358,20 +1380,23 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
 }
 
 
-MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
+/*MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.token) {
+    let updateRecord = {}
     const result = MlAccounts.verifyEmail(args.token);
     if (result && result.error) {
       let code = 403;
       let response = new MlRespPayload().errorPayload(result.reason || "", result.code);
       return response;
     } else {
+
       let code = 200;
       //check for mobile verification
       var mobileNumber = null;
       var recordId = result.recordId;
-
+      mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
+      let updatedResponse = mlDBController.update('MlRegistration',recordId,updateRecord, {$set: true}, context)
       //requirement by venu
       if (recordId) {
         var reg = mlDBController.findOne('MlRegistration', {'_id': recordId}, context);
@@ -1394,7 +1419,7 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       return response;
     }
   }
-}
+}*/
 
 MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -1549,11 +1574,20 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) => 
 
 MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   if (args.token) {
-    const result = MlAccounts.verifyEmail(args.token, context);
+    var updateRecord={};
+    let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
+    context.userId = user._id;context.url=Meteor.absoluteUrl("");context.browser="server";
+    var result = MlAccounts.verifyEmail(args.token, context);
     if (result && result.error) {
       let response = new MlRespPayload().errorPayload(result.reason || "", result.code);
       return response;
     } else {
+      //update the registration status on success.
+      var recordId = result.recordId;
+      mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
+      mlDBController.update('MlRegistration',recordId,updateRecord, {$set: true}, context);
+      //MlRegistration.update({_id:recordId},{$set: updateRecord});
+
       return new MlRespPayload().successPayload(result, 200);
     }
   } else {
@@ -1635,7 +1669,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
-  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
+  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'REG_USER_APR','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
   return resp;
 }
 

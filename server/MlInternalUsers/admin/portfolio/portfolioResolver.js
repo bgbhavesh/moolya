@@ -309,7 +309,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
     let updateRecord = {}
     let regRecord = mlDBController.findOne('MlPortfolioDetails', {
         _id: args.portfoliodetailsId,
-        status: 'Go Live',
+        status: 'PORT_GO_LIVE_PEND',
       }, context) || {}
     if (!_.isEmpty(regRecord)) {
       mlRegistrationRepo.updateStatus(updateRecord,'PORT_LIVE_NOW');
@@ -391,7 +391,7 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
       //let status = "Go Live";
       //let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
       mlRegistrationRepo.updateStatus(updateRecord,'PORT_GO_LIVE_PEND');
-      let ret = mlDBController.update('MlRegistration',args.portfoliodetailsId,updateRecord, {$set: true}, context)
+      let ret = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
       if (ret) {
         let code = 200;
         let alert =  MlAlertNotification.onGoLiveRequestAdmin()

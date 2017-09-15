@@ -2,7 +2,6 @@
  * Created by vishwadeep on 12/9/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import MlAnchorList from './MlAnchorList';
 import MlAnchorObjective from './MlAnchorObjective';
@@ -11,18 +10,49 @@ import MlActionComponent from "../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
 import {updateBackendUserActionHandler} from '../../../settings/backendUsers/actions/updateBackendUserAction'
+import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       objective: [],
-    }
-    this.getObjectiveDetails = this.getObjectiveDetails.bind(this)
-    this.getContactDetails = this.getContactDetails.bind(this)
-    this.getUserDetails = this.getUserDetails.bind(this)
-    this.updateAnchorDetails = this.updateAnchorDetails.bind(this)
-    return this
+      subChapter: {
+        contactDetails: [],
+      },
+      contactDetailsFormData: {
+        selectedIndex: -1,
+        formData: {
+          contactPersonRole: '',
+          addressType: '',
+          contactNumber: '',
+          emailId: '',
+          buildingNumber: '',
+          street: '',
+          landmark: '',
+          area: '',
+          town: '',
+          stateId: '',
+          countryId: '',
+          pincode: '',
+          latitude: '',
+          longitude: '',
+          status: false,
+        },
+      },
+    };
+    this.getObjectiveDetails = this.getObjectiveDetails.bind(this);
+    this.getContactDetails = this.getContactDetails.bind(this);
+    this.updateAnchorDetails = this.updateAnchorDetails.bind(this);
+    this.onContactChange = this.onContactChange.bind(this);
+    this.getUserDetails = this.getUserDetails.bind(this);
+    return this;
+  }
+
+  async componentDidMount() {
+    const { clusterId, chapterId, subChapterId } = this.props;
+    const resp = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    this.setState({ subChapter: resp });
   }
 
   async handleSuccess(response) {
@@ -37,21 +67,30 @@ class MlAnchorTabsContainer extends React.Component {
     var response = null
     switch (this.state.module) {
       case 'subchapter':
-        const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
+        let stateContactDetails = JSON.parse(JSON.stringify(this.state.subChapter.contactDetails));
+        const { objective: stateObjective } = this.state;
+        if (this.state.contactDetailsFormData.selectedIndex === -1
+          && this.state.contactDetailsFormData.formData.contactNumber) {
+          if (!stateContactDetails) stateContactDetails = [];
+          stateContactDetails.push(this.state.contactDetailsFormData.formData);
+        } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
+          stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
+        }
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
-        const {subChapterId} = this.props
+        const { clusterId, chapterId, subChapterId } = this.props;
         const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
-            if (ob.description) {
-              return ob
-            }
-          });
-        response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
+          if (ob.description) {
+            return ob;
+          }
+        });
+        const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
           subChapterId,
           objective,
-          contactDetails
-        })
-        return response;
-        break
+          contactDetails,
+        });
+        const resp = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+        this.setState({ subChapter: resp });
+      return response;
       case 'users':
         var updateUserObject = {
           //send the update object here
@@ -79,7 +118,7 @@ class MlAnchorTabsContainer extends React.Component {
 
   getContactDetails(details) {
     this.setState({
-      contactDetails: details,
+      contactDetailsFormData: details,
       module: "subchapter"
     });
   }
@@ -89,11 +128,11 @@ class MlAnchorTabsContainer extends React.Component {
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
+        handler: async (event) => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
       }, {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
+        handler: async (event) => {
           window.history.back()
         }
       }
@@ -107,12 +146,17 @@ class MlAnchorTabsContainer extends React.Component {
         },
         {
           name: 'Objectives',
-          component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails}/>,
+          component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails} />,
           icon: <span className="ml ml-additional-Information"></span>
         },
         {
           name: 'Contact',
-          component: <MlAnchorContact {...this.props} getContactDetails={this.getContactDetails}/>,
+          component: <MlAnchorContact
+            contactDetails={this.state.subChapter.contactDetails}
+            selectedIndex={this.state.contactDetailsFormData.selectedIndex}
+            formData={this.state.contactDetailsFormData.formData}
+            onContactChange={this.onContactChange}
+            getContactDetails={this.getContactDetails} />,
           icon: <span className="ml flaticon-ml-agenda"></span>
         }
       ]
@@ -125,7 +169,7 @@ class MlAnchorTabsContainer extends React.Component {
             </div>
           </div>
         </div>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName" />
       </div>
     )
   }

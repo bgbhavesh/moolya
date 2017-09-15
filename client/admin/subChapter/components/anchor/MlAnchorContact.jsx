@@ -92,7 +92,7 @@ export default class MlAnchorContact extends React.Component {
                         <div className="cluster_status active_cl"></div>
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
                           <img className="user_pic"
-                            src={user.picURL || "/images/p_1.jpg"} /></div>
+                            src={user.picURL || "/images/def_profile.png"} /></div>
                         <h3>{user.name || "Name not provided"}</h3>
                       </div>
                     </div>
@@ -176,7 +176,7 @@ export default class MlAnchorContact extends React.Component {
                 </div>
                 <div className="form-group">
                   <input type="number" placeholder="Pincode" className="form-control float-label"
-                         value={this.state.formData.pincode}
+                         value={this.props.formData.pincode}
                          onChange={event => this.onChange('pincode', event.target.value)} />
                 </div>
                 <div className="form-group">

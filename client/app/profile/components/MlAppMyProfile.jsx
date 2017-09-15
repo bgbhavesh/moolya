@@ -16,7 +16,7 @@ import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAccordion from "../../commons/components/MlAccordion";
 import CropperModal from '../../../commons/components/cropperModal';
 import {appClient} from '../../core/appConnection';
-import {smsOtpHandler, verifyMobileNumberHandler, resendSmsOtpHandler} from '../../../commons/verificationActionHandler';
+import {smsUserOtpHandler, verifyUserMobileNumberHandler, resendUserSmsOtpHandler} from '../../../commons/verificationActionHandler';
 import _ from "lodash";
 
 class MlAppMyProfile extends Component {
@@ -286,7 +286,10 @@ class MlAppMyProfile extends Component {
   async resendSmsOtp(){
     this.setState({getOTPClicked:true});
     if(this.state.canResend){
-      const resp = await resendSmsOtpHandler(mobileNumber, appClient);
+      const resp = await resendUserSmsOtpHandler(appClient);
+      if(resp.success){
+        toastr.success("OTP sent successfully");
+      }
       return resp
     }
   }
@@ -297,22 +300,30 @@ class MlAppMyProfile extends Component {
       this.setState({canResend:true})
     }.bind(this),30000)
     let mobileNumber=this.state.mobileNumber;
-    const response=await smsOtpHandler(mobileNumber, appClient);
+    const response=await smsUserOtpHandler(appClient);
+    if(response.success){
+      toastr.success("OTP sent successfully");
+    }
     return response;
   }
 
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;
     let otp=this.refs.enteredOTP.value;
-      const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
+      const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
       let resp=null;
       if(response.success){
         resp = JSON.parse(response.result);
         this.setState({mobileNumberVerified:resp.mobileNumberVerified});
+        toastr.success("Mobile Number Verified");
+        this.setState({getOTPClicked:false});
       }else{
         this.setState({mobileNumberVerified:false});
       }
       return response;
+  }
+  cancelOtpRequest(){
+    this.setState({getOTPClicked:false});
   }
 
   render(){
@@ -440,7 +451,7 @@ class MlAppMyProfile extends Component {
                           <div className="ml_btn">
                             <a href="" className="cancel_btn" onClick={this.verifyMobileNumber.bind(this)}>Submit</a>
                             <a href="" className="cancel_btn" onClick={this.resendSmsOtp.bind(this)}>Resend</a>
-                            <a href="" className="save_btn" onClick={this.sendSmsOtp.bind(this)}>Cancel</a>
+                            <a href="" className="save_btn" onClick={this.cancelOtpRequest.bind(this)}>Cancel</a>
 
                         </div>
 

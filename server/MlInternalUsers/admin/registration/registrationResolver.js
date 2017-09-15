@@ -1462,6 +1462,43 @@ MlResolver.MlMutationResolver['sendSmsVerification'] = (obj, args, context, info
   }
 }
 
+MlResolver.MlMutationResolver['sendUserSmsVerification'] = (obj, args, context, info) => {
+  // TODO : Authorization
+    return MlAccounts.sendUserVerificationSmsOtp(context.userId);
+}
+
+MlResolver.MlMutationResolver['resendUserSmsVerification'] = (obj, args, context, info) => {
+  // TODO : Authorization
+    return MlAccounts.resendUserVerificationSmsOtp(context.userId);
+
+}
+
+MlResolver.MlMutationResolver['verifyUserMobileNumber'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  var user = mlDBController.findOne('users', {_id: context.userId}, context) || {};
+  if(user.profile){
+    if(user.profile && user.profile.externalUserProfiles && user.profile.externalUserProfiles.length>0){
+      var externalProfile = _.find(user.profile.externalUserProfiles, {isDefault:true});
+      if(!externalProfile){
+        externalProfile = user.profile.externalUserProfiles[0]
+      }
+    }
+    var mobileNumber = externalProfile.mobileNumber
+  }
+
+  if (mobileNumber && args.otp) {
+    const result = MlAccounts.verifyUserMobileNumberOtp(context.userId, args.otp);
+    if (result && result.error) {
+      let response = new MlRespPayload().errorPayload(result.reason || "", result.code);
+      return response;
+    } else {
+      let succResp = {mobileNumber: mobileNumber, mobileNumberVerified: true};
+      return new MlRespPayload().successPayload(succResp, 200);
+    }
+  } else {
+    return new MlRespPayload().errorPayload("Mobile Number/Otp is mandatory", 403);
+  }
+}
 
 MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, info) => {
   // TODO : Authorization

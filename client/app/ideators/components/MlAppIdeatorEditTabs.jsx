@@ -25,7 +25,7 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     super(props)
     this.state = {
       tabs: [],
-      activeTab:'About',
+      activeTab:'Ideas',
       ideatorPortfolio: {},
       ideatorId: this.props.config, portfolioKeys: {privateKeys: [], removePrivateKeys: []}
     };

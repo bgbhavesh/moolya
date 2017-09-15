@@ -17,9 +17,23 @@ export default class MlFunderDayComponent extends Component {
   componentWillMount(){
     let that = this;
     let calendarInfo = this.props.dayData ? this.props.dayData : [];
+    let expiry = this.props.dayData ?  this.props.dayData.expiryDate : ''
+    let dayDate = new Date(this.props.calendar.value);
     if(calendarInfo && calendarInfo.length>0){
       calendarInfo.map(function(info){
-        that.setState({status: info.status});
+        let date = new Date(info.date);
+        if( date.getDate() == dayDate.getDate() && date.getMonth() == dayDate.getMonth() ){
+          if(expiry){
+            let expiryDate = new Date(expiry);
+            if( date.getTime() < expiryDate.getTime() ) {
+              that.setState({status: info.status});
+            }
+          } else {
+            console.log('info.status', info.status)
+            that.setState({status: info.status});
+          }
+
+        }
       })
     }
   }

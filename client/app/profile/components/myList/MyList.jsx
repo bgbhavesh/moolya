@@ -34,7 +34,7 @@ export default class MyList extends React.Component{
         tabClassName: 'horizon-item '+tab.tabClassName?tab.tabClassName:"", // Optional
         panelClassName: 'panel1',
         title: tab.title,
-        key: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
@@ -49,30 +49,30 @@ export default class MyList extends React.Component{
     let tabs = [
       {
         tabClassName:'ml flaticon-ml-handshake', title: <b>My Connections</b>,
+        name:"My Connections",
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyConnectionConfig} />
       },
       {
-        tabClassName:'ml my-ml-favourites',title: <b>My Favourites</b>,
+        tabClassName:'ml my-ml-favourites',title: <b>My Favourites</b>,name: "My Favourites",
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFavouritesConfig} />
       },
       {
-        tabClassName:'ml my-ml-my_followers',title: <b>My Followers</b>,
+        tabClassName:'ml my-ml-my_followers',title: <b>My Followers</b>,name: "My Followers",
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFollowersConfig} />
       },
       {
-        tabClassName:'ml my-ml-i_follow',title: <b>I Follow</b>,
+        tabClassName:'ml my-ml-i_follow',title: <b>I Follow</b>,name:"I Follow",
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFollowingsConfig} />
       }
     ]
     return tabs;
   }
   updateTab(index){
-    let tab =  this.state.tabs[index].title;
+    let tab =  this.state.tabs[index].name;
     FlowRouter.setQueryParams({ tab: tab });
   }
   render(){
     let tabs = this.state.tabs;
-    console.log()
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

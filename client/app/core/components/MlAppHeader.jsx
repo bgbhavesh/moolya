@@ -7,6 +7,7 @@ import MlAppNotificationsConfig from '../../commons/components/notifications/MlA
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
 import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
+import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
 
 
 class MlAppProfileHeader extends Component {
@@ -20,7 +21,6 @@ class MlAppProfileHeader extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.breadcrumbClicked);
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
@@ -112,6 +112,8 @@ class MlAppProfileHeader extends Component {
   render() {
     const {data} = this.state
     let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
+    let path = Object.assign(FlowRouter._current.path);
+    let breadcrumType= path.includes('dashboard');
 
     return (
       <div>
@@ -120,7 +122,12 @@ class MlAppProfileHeader extends Component {
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
 
-        <VerticalBreadCrum breadcrumbClicked={this.breadcrumbClicked.bind(this)} />
+        {breadcrumType ?
+          <DynamicBreadcrum/>
+          :
+          <VerticalBreadCrum breadcrumbClicked={this.breadcrumbClicked.bind(this)} />
+        }
+
 
         {/*{showLoader===true?(<MlLoader/>):(*/}
 

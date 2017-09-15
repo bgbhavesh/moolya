@@ -155,6 +155,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          index
+                          tabName
                       }
                   },
                   management{
@@ -217,6 +219,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          index
+                          tabName
                       }
                   },
                   memberships{
@@ -300,6 +304,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                     privateFields{
                       keyName,
                       booleanKey
+                        index
+                        tabName
                     }
                     makePrivate
                   }
@@ -317,6 +323,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   
                   policy{
@@ -364,6 +371,8 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName
                           booleanKey
+                          index
+                          tabName
                       }
                       makePrivate
                   }

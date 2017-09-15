@@ -68,8 +68,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   componentWillMount() {
-    return [this.fetchPrincipalDetails(), this.fetchTeamDetails()];
     this.fetchClusterId();
+    return [this.fetchPrincipalDetails(), this.fetchTeamDetails()];
   }
   async fetchClusterId() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);

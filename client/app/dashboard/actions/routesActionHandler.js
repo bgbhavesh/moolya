@@ -9,6 +9,9 @@ const dashboardRoutes = {
   communityListRoute: (clusterId, chapterId, subChapterId, v, router)=> {
     return `/app/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities?viewMode=${v}`;
   },
+  subChapterAnchorRoute: (clusterId, chapterId, subChapterId, v, router)=> {
+    return `/app/dashboard/${clusterId}/${chapterId}/${subChapterId}/anchorInfoView?viewMode=${v}`;
+  },
 }
 
 export default dashboardRoutes;

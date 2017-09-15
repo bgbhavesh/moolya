@@ -47,16 +47,23 @@ export default class MapMarkers extends Component {
   };
 
   onMouseEnterContent(customHoverHandler) {
+
+    var disableHover =this.props.disableHover?true:false;
+    if(!disableHover){
     this.setState({isHover: true});
     let resp=[];
     if(customHoverHandler){
       customHoverHandler(this.props,this.onMouseEnterHandlerCallback.bind(this));
     }
       return resp;
+    }
   }
 
   onMouseLeaveContent() {
-    this.setState({isHover: false});
+    var disableHover =this.props.disableHover?true:false;
+    if(!disableHover) {
+      this.setState({isHover: false});
+    }
   }
 
  /* markerClickHandler(data)

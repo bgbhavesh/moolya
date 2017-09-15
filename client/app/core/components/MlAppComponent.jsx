@@ -21,7 +21,10 @@ class MlAppComponent extends Component{
     }
 
   shouldComponentUpdate(nextProps,nextState,nextContext){
-
+    let path = Object.assign(FlowRouter._current.path);
+    if(!path.includes('/app/explore')){
+      return true;
+    }
     return !isEqualWith(this.props, nextProps) ||
       !isEqualWith(this.state, nextState) ||
       !isEqualWith(this.context, nextContext);

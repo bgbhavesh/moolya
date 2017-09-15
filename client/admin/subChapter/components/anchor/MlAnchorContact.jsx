@@ -215,7 +215,7 @@ export default class MlAnchorContact extends React.Component {
                          onChange={event => this.onChange('countryId', event.target.value)} />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Pincode" className="form-control float-label"
+                  <input type="number" placeholder="Pincode" className="form-control float-label"
                          value={this.state.formData.pincode}
                          onChange={event => this.onChange('pincode', event.target.value)} />
                 </div>

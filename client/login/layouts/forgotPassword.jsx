@@ -48,7 +48,7 @@ MlForgotPasswordContent = React.createClass({
               <input type="text" className="form-control" style={{'visibility':'hidden'}}/>
               <input type="text" ref="email" className="form-control" placeholder="Email"/>
               <button className="ml_submit_btn" onClick={() => this.submit()} type="button">Submit</button><br className="brclear" />
-              <p><a href="/login">Login</a> | <a href="#">Register</a></p>
+              <p><a href="/login">Login</a> | <a href="https://www.moolya.global/register">Register</a></p>
             </form>
           </div>
         </div>

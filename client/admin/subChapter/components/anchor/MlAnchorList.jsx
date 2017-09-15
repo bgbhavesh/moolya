@@ -105,11 +105,9 @@ export default class MlAnchorList extends React.Component {
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Contact Number" className="form-control float-label" id="uName" />
-                    <FontAwesome name='lock' className="input_icon" />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Email Id" className="form-control float-label" id="uName" />
-                    <FontAwesome name='lock' className="input_icon" />
                   </div>
 
                   <div className="panel panel-default new_profile_tabs">

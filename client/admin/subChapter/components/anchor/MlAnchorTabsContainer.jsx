@@ -25,6 +25,10 @@ class MlAnchorTabsContainer extends React.Component {
 
   async handleSuccess(response) {
     console.log(response)
+    if (response && response.success)
+      toastr.success(response.result)
+    else if (response && !response.success)
+      toastr.error(response.result)
   }
 
   async updateAnchorDetails() {

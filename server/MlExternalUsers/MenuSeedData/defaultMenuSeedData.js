@@ -74,14 +74,6 @@ if(Meteor.isServer){
                 "uniqueId" : "institutions"
             },
             {
-                "image":"ml ml-news",
-                "link": "/app/news",
-                "isLink" : true,
-                "isMenu" : true,
-                "name" : "News",
-                "uniqueId" : "news"
-            },
-            {
               "image":"ml my-ml-transactions",
               "link": "/app/transaction",
               "isLink" : true,
@@ -115,6 +107,15 @@ if(Meteor.isServer){
             "isMenu" : true,
             "name" : "moolya Services",
             "uniqueId" : "subscriptions",
+            isDisabled:true
+          },
+          {
+            "image":"ml ml-news",
+            "link": "/app/news",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "News",
+            "uniqueId" : "news",
             isDisabled:true
           },
 

@@ -84,7 +84,7 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    let gImg = user && user.user && user.user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let gImg = user && user.user && user.user.profile && user.user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
       this.setState({
         profilePic:user.user.profile.profileImage == " "?gImg:user.user.profile.profileImage

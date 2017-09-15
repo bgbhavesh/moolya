@@ -1148,6 +1148,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .library-wrap .thumbnail .fa.fa-unlock{position:absolute;left:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .icon_count{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647;height: 20px; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px; padding: 0px 5px;}
 .library-wrap .thumbnail .icon_count .fa.fa-share-alt{padding-right: 5px;}
+.library-wrap .thumbnail .icon_count_times{position: absolute; left: 0px; top: -6px; color: #FFF; background: #EF4647;height: 20px; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px; padding: 0px 5px;}
+.library-wrap .thumbnail .icon_count_times .fa.fa-clock-o{padding-right: 5px;  position: static;  border-radius: 0;  background: transparent; /* height: 2px; */  width: auto;  line-height: normal;}
 /*.library-wrap .thumbnail .fa.fa-share-alt{position: absolute; right: 30px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}*/
 .library-wrap .thumbnail .fa.fa-minus{position: absolute; right: 6px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-times{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
@@ -1555,6 +1557,10 @@ margin: 0px;
 .hanging_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .hanging_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 
+.hanging_img{    position: absolute; right: 25px; top: 25px;    cursor: pointer;z-index: 9;}
+.hanging_img:hover{-webkit-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);}
 #toast-container > div {
   color: #000;
 }

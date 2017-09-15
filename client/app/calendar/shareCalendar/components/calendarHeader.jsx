@@ -35,6 +35,7 @@ export default class MlCalendarHead extends Component {
   }
 
   resetWithAll() {
+    this.props.calendarHeaderManagement("");
     // FlowRouter.setQueryParams({
     //   profile: null,
     //   community: null

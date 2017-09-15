@@ -343,7 +343,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                         ideaDescription: data.idea.ideaDescription,
                         isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
                         isIdeaPrivate: data.idea.isIdeaTitlePrivate,
-                        isActive: data.idea.isIdeaTitlePrivate,
+                        isActive: true,
                         ideaImage:ideaImage
                       },
                     }, context, null);

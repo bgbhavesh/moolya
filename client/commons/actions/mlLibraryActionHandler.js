@@ -256,16 +256,14 @@ export async function getSharedConnectionsActionHandler() {
 export async function fetchSharedLibraryHandler(userId) {
   const result = await appClient.query({
     query: gql`
-    query{
-  fetchSharedLibrary{
+    query($userId: String){
+  fetchSharedLibrary(userId: $userId){
       file{
       url
       fileName
       fileType
       }
       isDownloadable
-      sharedStartDate
-      sharedEndDate
       daysToExpire
   }
 }`,

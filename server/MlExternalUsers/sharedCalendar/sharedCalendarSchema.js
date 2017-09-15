@@ -42,6 +42,7 @@ let sharedCalendarSchema = `
  type Query{
       getMySharedCalendarConnections: [sharedConnections]
       getSharedCalendar(userId: String, month: Int, year: Int, date: Int): MonthCalendar 
+      fetchSharedCalendarDetails(sharedId:String):SharedOutputAdmin
   }
  
  type Mutation{
@@ -51,6 +52,7 @@ let sharedCalendarSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedCalendarSchema ]);
 
 let supportedApi = [
+  {api:'fetchSharedCalendarDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'getMySharedCalendarConnections', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createSharedCalendar', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true}
 ];

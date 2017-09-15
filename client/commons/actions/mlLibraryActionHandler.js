@@ -264,6 +264,9 @@ export async function fetchSharedLibraryHandler(userId) {
       fileType
       }
       isDownloadable
+      sharedStartDate
+      sharedEndDate
+      daysToExpire
   }
 }`,
     variables: {

@@ -18,7 +18,6 @@ import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlChapterTabHistoryList from '../../admin/chapter/chapterAuditLog/components/MlChapterTabHistoryList'
-import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',
@@ -42,7 +41,7 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterNam
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/anchorDetails', {
-  name: 'chapter_anchor',
+  name: 'chapter_anchorDetails',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'chapter'}}/>,

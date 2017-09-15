@@ -23,6 +23,7 @@ import MlViews from "../../admin/core/components/MlViews";
 import MlAdminHeader from "../../admin/layouts/header/MlAdminHeader";
 import {getAdminUserContext} from "../../commons/getAdminUserContext";
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
+import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
 
 adminSection.route('/dashboard', {
   triggersEnter: [function (context, redirect) {
@@ -96,6 +97,19 @@ adminSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
     })
   }
 });
+
+adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView', {
+  name: 'dashboard_specSubChapters_anchorInfoView',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlAnchorInfoView subChapterId={params.subChapterId} clusterId={params.clusterId}
+                                      chapterId={params.chapterId} queryParams={queryParams} isAdmin={true}/>
+    })
+  }
+});
+
+
 adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities', {
   name: 'dashboard_communities',
   action(params, queryParams){

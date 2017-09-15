@@ -23,7 +23,14 @@ let BackEndUser = `
         _id: String,
         username: String,
         profile:ExternalUserProfile,
+        mobileNumbers:[MobileNumbers]
     }
+    type MobileNumbers{
+        mobileNumber: String,
+        verified: Boolean,
+        countryId: String,
+    }
+    
     type ExternalUserProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
@@ -121,6 +128,7 @@ let BackEndUser = `
         displayName: String,
         email:String,
         contact:[Contacts],
+        socialLinksInfo     : [SocialLinkInfoSchema]
         globalAssignment:Boolean,
         isActive:Boolean,
         userProfiles:[UserProfiles]
@@ -177,6 +185,7 @@ let BackEndUser = `
         email:String,
         contact:[contacts],
         globalAssignment:Boolean,
+        socialLinksInfo    : [SocialLinkInfo]
         isActive:Boolean,
         userProfiles:[userprofiles],
         profileImage:String,
@@ -475,7 +484,7 @@ let BackEndUser = `
        addressInfo        : [AddressInfoSchema]
        emailInfo          : [EmailInfoSchema]
        contactInfo        : [ContactInfoSchema]
-       socialLinkInfo     : [SocialLinkInfoSchema]
+       socialLinksInfo     : [SocialLinkInfoSchema]
        kycDocuments       : [kycDocumentInfoSchema]   
     }
     

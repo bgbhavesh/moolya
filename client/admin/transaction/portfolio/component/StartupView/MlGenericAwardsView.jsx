@@ -5,12 +5,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import {find} from "lodash"
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
-import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper'
-import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio'
-import gql from 'graphql-tag'
 
 var FontAwesome = require('react-fontawesome');
 

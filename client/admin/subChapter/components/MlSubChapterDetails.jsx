@@ -194,7 +194,11 @@ class MlSubChapterDetails extends React.Component {
 
   anchorRedirect() {
     console.log('info hit', this.props)
-    FlowRouter.go('/admin/chapters/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
+    var basePath = 'chapters'
+    var locationIndex = window.location.pathname.indexOf('chapters')
+    if (locationIndex < 0)
+      basePath = "clusters"
+    FlowRouter.go('/admin/' + '/' + basePath + '/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
   }
 
   async onImageFileUpload(e) {
@@ -251,6 +255,7 @@ class MlSubChapterDetails extends React.Component {
 
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
+                  <img src="/images/anchor.png" className="hanging_img"  onClick={this.anchorRedirect} />
             <div className="col-md-6 nopadding-left">
               <div className="form_bg left_wrap">
                 <ScrollArea
@@ -325,14 +330,7 @@ class MlSubChapterDetails extends React.Component {
                             className="form-control float-label">
                   </textarea>
                     </div>
-                    <div onClick={this.anchorRedirect}>
-                      <a href="">
-                        <div className="hanging_btn">
-                          <span className="ml ml-moolya-symbol"></span>
-                          Info
-                        </div>
-                      </a>
-                    </div>
+
                   </form>
                 </ScrollArea>
               </div>

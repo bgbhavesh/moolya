@@ -107,14 +107,17 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                   awardsRecognition{
                       awardName
                       awardId
+                      isAwardPrivate
                       year
+                      isYearPrivate
                       awardsDescription
+                      isDescriptionPrivate
                       logo{
-                        fileName
+                        fileName,
                         fileUrl
-                      }
+                      },
+                      makePrivate,
                       index
-                      makePrivate
                       privateFields{
                           keyName
                           booleanKey

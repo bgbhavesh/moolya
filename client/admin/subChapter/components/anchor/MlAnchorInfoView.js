@@ -2,10 +2,27 @@
  * Created by vishwadeep on 12/9/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import { findSubChapterActionHandler } from '../../actions/findSubChapter';
+import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
+import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction';
+import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 
 export default class MlAnchorInfoView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      objective: [],
+      contactDetails: [],
+      data:[],
+      selectedUser: {},
+    };
+    this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
+    this.clearSelection = this.clearSelection.bind(this);
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
@@ -17,6 +34,59 @@ export default class MlAnchorInfoView extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+  }
+
+  handleUserClick(id) {
+    console.log('on user Click', id);
+    const resp = this.getAnchorUserDetails(id);
+    return resp;
+
+  }
+
+  async getAnchorUserDetails(id) {
+    var response = await findBackendUserActionHandler(id);
+    this.setState({ selectedUser: response });
+    console.log(response);
+    return response;
+  }
+
+  clearSelection(){
+    this.setState({selectedUser: {}});
+  }
+
+  async getAnchorUsers() {
+    var { clusterId, chapterId, subChapterId } = this.props;
+    var response = await findAnchorUserActionHandler({ clusterId, chapterId, subChapterId })
+    console.log('anchor user list', response)
+    this.setState({ data: response })
+    return response
+  }
+
+  async componentWillMount() {
+    const { clusterId, chapterId, subChapterId } = this.props;
+    console.log(this.props);
+    console.log('In this file');
+    await this.getAnchorUsers();
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    const objective = response && response.objective && response.objective.map((ob) => ({
+      description: ob.description,
+      status: ob.status,
+    }));
+    const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
+    this.setState({
+      objective: objective || [],
+      contactDetails: contactDetails || []
+    })
+  }
+
+  changePath(){
+    console.log(this.props)
+    var queryParams = this.props.queryParams && this.props.queryParams.viewMode
+    queryParams = JSON.parse(queryParams)
+    if(this.props.isAdmin)
+      FlowRouter.go('/admin/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
+    else
+      FlowRouter.go('/app/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
   }
 
   render() {
@@ -72,85 +142,28 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                 </ul>
+
               </div>
             </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
-            <div className="row">
-              {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
+                {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
+                {this.state.selectedUser.profile &&
+                <div>
+                  <h3 className="back_btn" onClick={this.clearSelection} alt="Go Back" title="Go Back">
+                    <span className="fa fa-angle-left fa-2x"/> &nbsp;{this.state.selectedUser.profile.firstName}
+                  </h3>
 
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                >
+                  {/*<button onClick={this.clearSelection}>Back</button>*/}
+                  <p>
+                  <br />
+                    <b>Email : </b>{this.state.selectedUser.profile.email}
+                  </p>
 
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_1.jpg"/>
-                      </div>
-                      <h3>User Name1</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_2.jpg"/>
-                      </div>
-                      <h3>User Name2</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_3.jpg"/>
-                      </div>
-                      <h3>User Name3</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_4.jpg"/>
-                      </div>
-                      <h3>User Name4</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_5.jpg"/>
-                      </div>
-                      <h3>User Name5</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_6.jpg"/>
-                      </div>
-                      <h3>user Name6</h3>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-sm-6">
-                    <div className="list_block provider_block">
-                      <div className="cluster_status active_cl"></div>
-                      <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                             src="/images/p_7.jpg"/>
-                      </div>
-                      <h3>User Name7</h3>
-                    </div>
-                  </div>
-                </ScrollArea>
+                </div>
+                }
               </div>
-            </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4">
             <div className="row">
@@ -162,18 +175,18 @@ export default class MlAnchorInfoView extends React.Component {
                 >
                   <h3>Objectives :</h3>
                   <ul className="list-info">
-                    <li>Zomato Internet Private Limited is a Private incorporated on 08 October 2015. It is classified
-                      as Non-govt company and is registered at Registrar of Companies, Delhi. Its authorized share
-                      capital is Rs. 100,000 and its paid up capital is Rs. 100,000.It is inolved in Business activities
-                      n.e.c.
-                    </li>
-                    <li>Zomato Internet Private Limited's Annual General Meeting (AGM) was last held on 14 June 2016 and
-                      as per records from Ministry of Corporate Affairs (MCA), its balance sheet was last filed on 31
-                      March 2016.
-                    </li>
-                    <li>Zomato acquired Seattle-based food portal Urbanspoon for an undisclosed sum in January 2015.
-                    </li>
-                    <li>Zomato acquired Delhi based startup MapleGraph that built MaplePOS.</li>
+                    {
+                      !this.state.objective.length && <p> No objectives added</p>
+                    }
+                    {
+                      this.state.objective.length !== 0 && this.state.objective.map((ob, index) => {
+                        const { status, description } = ob;
+                        if (status) {
+                          return <li key={`${description}index`}>{description}</li>;
+                        }
+                        return <span key={index}></span>
+                      })
+                    }
                   </ul>
                 </ScrollArea>
               </div>
@@ -187,17 +200,38 @@ export default class MlAnchorInfoView extends React.Component {
                 className="left_wrap"
               >
                 <h3>Contact Us:</h3>
-                <p>
-                  raksan consulting private limited
-                  #1002, 10th floor, the platina, gachibowli, hyderabad, telangana, india - 500032
-                  <br />
-                  Tel : +91 40 95518300
-                  <br />
-                  Email : raksan@mymoolya.com
-                </p>
+                {
+                  !this.state.contactDetails.length && <p>No contact details added</p>
+                }
+                {
+                  this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
+                    const { emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber } = cd;
+                    return (
+                      <p key={index}>
+                        {buildingNumber}, {street}, {area}, {landmark}, {town}, {stateId}, {countryId}-{pincode}`
+                        <br />
+                        Tel: {contactNumber}
+                        <br />
+                        Email: {emailId}
+                      </p>);
+                  })
+                }
               </ScrollArea>
             </div>
           </div>
+          <div className="col-md-12 text-center">
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
+            </div>
+            <div className="col-md-4">
+              <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into subchapter</a>
+            </div>
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Get invited</a>*/}
+            </div>
+          </div>
+
+
         </div>
       </div>
     )

@@ -85,7 +85,7 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    let gImg = user && user.user && user.user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let gImg = user && user.user && user.user.profile && user.user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
       this.setState({
         profilePic:user.user.profile.profileImage == " "?gImg:user.user.profile.profileImage
@@ -147,7 +147,7 @@ class MlAppProfileHeader extends Component {
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Pending Registration"} data-placement="right">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"Pending Registration":"Registration"} data-placement="right">
                   <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>

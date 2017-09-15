@@ -29,7 +29,8 @@ export default class MlServiceProviderEditTabs extends Component {
 
   getChildContext() {
     return {
-      serviceProviderPortfolio: this.state.serviceProviderPortfolio
+      serviceProviderPortfolio: this.state.serviceProviderPortfolio,
+      portfolioKeys: this.state.portfolioKeys
     }
   }
 
@@ -63,7 +64,7 @@ export default class MlServiceProviderEditTabs extends Component {
         panelClassName: 'panel',
         title: "Awards and Rewards",
         component: <MlServiceProviderAwards client={client} isAdmin={true} key="2" getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                            portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
         tabClassName: 'tab',
@@ -93,7 +94,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Clients",
         component: <MlServiceProviderClients key="6" client={client}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"/>
       },
       {
         tabClassName: 'tab',
@@ -101,7 +102,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Looking For",
         component: <MlServiceProviderLookingFor key="7" client={client}
                                                 getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       }
     ]
     return tabs;
@@ -126,7 +127,7 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-  getAwardsDetails(details) {
+  getAwardsDetails(details, privateKey) {
     let data = this.state.serviceProviderPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -138,7 +139,7 @@ export default class MlServiceProviderEditTabs extends Component {
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio});
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getServiceProviderMCL(details, privateKey) {
@@ -194,7 +195,21 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
+  }
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
+      return resp
+    }
+  }
   /**
    * tab mounting component
    * */
@@ -224,4 +239,5 @@ export default class MlServiceProviderEditTabs extends Component {
  * */
 MlServiceProviderEditTabs.childContextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

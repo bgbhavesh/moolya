@@ -23,7 +23,6 @@ export default class MlTabComponent extends React.Component {
         }
         FlowRouter.setQueryParams({ tab: value });
       }
-
       this.context.breadCrum.updateBreadCrum();
 
       if (this.props.tabs[0].tabClassName === 'moolya_btn') {
@@ -40,7 +39,6 @@ export default class MlTabComponent extends React.Component {
         const tab = Object.assign(this.state.tabs)[index];
         FlowRouter.setQueryParams({ subtab: tab.title });
       }
-
       this.context.breadCrum.updateBreadCrum();
     }
   }

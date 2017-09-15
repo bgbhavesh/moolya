@@ -69,7 +69,7 @@ export default class MlPortfolioLanding extends Component {
     return (
       <div>
         {showLoader === true? (<MlLoader/>) : (
-          <div>{registrationStatus=="Approved"?<div>
+          <div>{registrationStatus=="REG_USER_APR"?<div>
             {(userCommunity == "Ideators") ?
               <MlAppIdeatorIdeas/> : <MlAppPortfolioRedirect data={this.state.data}/>
             }

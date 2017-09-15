@@ -51,6 +51,27 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
               canTransact
             }
           }
+          objective {
+            description
+            status
+          }
+          contactDetails {
+            contactPersonRole,
+            addressType,
+            contactNumber
+            emailId,
+            buildingNumber,
+            street,
+            landmark,
+            area,
+            town,
+            stateId,
+            countryId,
+            pincode,
+            latitude,
+            longitude,
+            status,
+          }
         }
     }
     `,

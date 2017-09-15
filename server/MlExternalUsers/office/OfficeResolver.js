@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
     officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch();
 
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-    let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
+    let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'REG_USER_APR'})
     if(regData){
       if(!_.isEmpty(officeSC)){  //if office is there and reg approved
         var newArr = _.map(officeSC, function(element) {
@@ -403,7 +403,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status:{$ne: "Rejected"}});
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
     if (isUserExist || isUserRegExist) {
       let pipeline = [
@@ -457,7 +457,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
     let registrationId = mlDBController.insert('MlRegistration', {
       registrationInfo: finalRegData,
-      status: "Yet To Start",
+      status: "REG_EMAIL_P",
       emails: emails,
       transactionId :finalRegData.registrationId
     }, context)
@@ -725,4 +725,75 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 MlResolver.MlQueryResolver['getOfficeType'] = (obj, args, context, info) => {
   var officeTypes = mlDBController.find('MlOfficeType', {}, context).fetch();
   return officeTypes;
-}
+};
+
+
+MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context, info) => {
+  let memberId = args.memberId;
+  let communityCode = args.communityCode;
+  if(memberId && communityCode) {
+    let officeMember =  mlDBController.findOne('MlOfficeMembers', memberId, context);
+    let query = { _id:officeMember.userId, 'profile.externalUserProfiles.communityDefCode': { "$ne" : "OFB" } };
+    let isAlreadyIndependent = mlDBController.findOne('users', query, context);
+    if(!isAlreadyIndependent) {
+
+      var emails = [{address: officeMember.emailId, verified: true }];
+      let randomPassword = orderNumberGenService.generateRandomPassword()
+
+      /**user details who is creating the office member*/
+      var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
+
+      let community = mlDBController.findOne('MlCommunityDefinition', {code: communityCode });
+
+      console.log(community);
+
+      let registrationData = {
+        createdBy: adminUser.username,
+        firstName: officeMember.firstName,
+        lastName: officeMember.lastName,
+        email: officeMember.emailId,
+        userName: officeMember.emailId,
+        contactNumber: officeMember.mobileNumber,
+        communityName: community.name,
+        communityDefCode : community.code,
+        registrationType : community.code,
+        communityDefName : community.name,
+        password: randomPassword,
+        registrationDate :new Date()
+      };
+
+      /**attaching creator details to the office member details in the registration*/
+      let profile = new MlUserContext(context.userId).userProfileDetails(context.userId);
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'countryId']);
+      let finalRegData = _.extend(registrationData, extendObj);
+      orderNumberGenService.assignRegistrationId(finalRegData);
+
+      let registrationId = mlDBController.insert('MlRegistration', {
+      registrationInfo: finalRegData,
+      status: "REG_EMAIL_P",
+      emails: emails,
+      transactionId :finalRegData.registrationId
+      }, context);
+
+      let resp = mlDBController.update('MlOfficeMembers', memberId, {isIndependent : true}, {$set: true}, context);
+
+      let code = 200;
+      let response = new MlRespPayload().successPayload('Go independent requested successfully', code);
+      return response;
+
+    } else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Your is already Independent', code);
+      return response;
+    }
+
+  } else {
+
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('MemberId and Community Code are required', code);
+    return response;
+
+  }
+};
+
+

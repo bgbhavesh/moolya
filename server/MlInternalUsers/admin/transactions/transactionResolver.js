@@ -5,7 +5,7 @@ import mlHierarchyAssignment from '../../admin/genericTransactions/impl/MlHierar
 import MlAdminContextQueryConstructor from '../../admin/core/repository/mlAdminContextQueryConstructor'
 import _ from "underscore";
 import _lodash from 'lodash'
-
+import MlStatusRepo from '../../../../server/commons/mlStatus'
 
 MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) => {
 
@@ -67,6 +67,7 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
     let user = mlDBController.findOne('users', {_id: params.user}, context)
 
     let date=new Date();
+    let allocationObj = MlStatusRepo.getStatusDefinition("ADM_ASSIGN_COMP", "allocation");
     let allocation={
       assignee            : user.profile.InternalUprofile.moolyaProfile.displayName,
       assigneeId          : user._id,
@@ -75,6 +76,7 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
       departmentId        : params.department,
       subDepartment       : params.subDepartment,
       subDepartmentId     : params.subDepartment,
+      allocationStatus    : allocationObj&&allocationObj.code?allocationObj.code:"",
     }
     //find hierarchy
     let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role, params.subChapter)
@@ -83,7 +85,7 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
       if(hierarchy){
         let id =mlDBController.update(collection, {transactionId:trans},
           {allocation:allocation,
-            status:"WIP",
+            // status:"WIP",
             //userId:params.user,
             hierarchy:hierarchy._id,
             transactionUpdatedDate:date}
@@ -186,6 +188,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
     let roles = userProfile.userRoles
     roleDetails = roles[0]
     let date = new Date();
+    let allocationObj = MlStatusRepo.getStatusDefinition("ADM_ASSIGN_COMP", "allocation");
     let allocation = {
       assignee: user.username,
       assigneeId: user._id,
@@ -194,6 +197,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       departmentId: roleDetails.departmentId,
       subDepartment: roleDetails.subDepartmentName,
       subDepartmentId: roleDetails.subDepartmentId,
+      allocationStatus:allocationObj&&allocationObj.code?allocationObj.code:""
     }
     //find hierarchy
     let updateCount = 0
@@ -202,7 +206,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       if(hierarchy){
         let id = mlDBController.update(collection, {transactionId: trans}, {
           allocation: allocation,
-          status: "WIP",
+          // status: "WIP",
           //userId: user._id,
           hierarchy: hierarchy._id,
           transactionUpdatedDate: date
@@ -248,9 +252,10 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
     let updateCount = 0
     transactions.map(function (trans) {
       let date = new Date();
+      let allocationObj = MlStatusRepo.getStatusDefinition("ADM_ASSIGN_PEND", "allocation");
       let id = mlDBController.update(collection, {transactionId:trans}, {
-        allocation: "",
-        status: "Yet To Start",
+        allocation: {allocationStatus:allocationObj&&allocationObj.code?allocationObj.code:""},
+        // status: "Yet To Start",
         //userId: "",
         hierarchy: "",
         transactionUpdatedDate: date

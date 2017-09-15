@@ -130,7 +130,8 @@ const mlAppSubChapterDashboardMapConfig=new MlAppViewer({
         }
 
         if(data.module == 'subChapter')
-          FlowRouter.go('/app/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+          FlowRouter.go('/app/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/anchorInfoView?viewMode=true');
+          // FlowRouter.go('/app/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
       }
     }
   ],

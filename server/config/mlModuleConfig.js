@@ -73,7 +73,8 @@ let modules = [
     'actions',
     'serviceCard',
     'share',
-    'notificationtemplate'
+    'notificationtemplate',
+    "appointment"
   ];
 
 // Meteor.startup(function () {

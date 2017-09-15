@@ -51,14 +51,15 @@ export default class MlCompanyRAndD extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.researchAndDevelopment)
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.researchAndDevelopment) {
         this.setState({loading: false, companyRD: response.researchAndDevelopment, companyRDList: response.researchAndDevelopment});
       }else{
@@ -67,6 +68,7 @@ export default class MlCompanyRAndD extends React.Component{
     }else{
       this.setState({loading: false, companyRD: that.context.companyPortfolio.researchAndDevelopment, companyRDList: that.context.companyPortfolio.researchAndDevelopment});
     }
+    this.CompanyresearchServer = response&&response.researchAndDevelopment?response.researchAndDevelopment:[]
   }
   addRD(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -88,13 +90,32 @@ export default class MlCompanyRAndD extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen)});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({selectedIndex:index,
+      data:details,
+      selectedObject : index,
+      popoverOpen : !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.CompanyresearchServer && this.CompanyresearchServer[selIndex]?this.CompanyresearchServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onLockChange(fiedName, field, e){
     var isPrivate = false
@@ -108,10 +129,15 @@ export default class MlCompanyRAndD extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    //
+    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data:details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -376,4 +402,5 @@ export default class MlCompanyRAndD extends React.Component{
 }
 MlCompanyRAndD.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

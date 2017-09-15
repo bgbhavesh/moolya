@@ -124,6 +124,7 @@ export default class  SharedLibrary extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
             <a href="" data-toggle="modal" data-target=".imagepop"
                                                  onClick={that.random.bind(that, show.file.url, id)}>

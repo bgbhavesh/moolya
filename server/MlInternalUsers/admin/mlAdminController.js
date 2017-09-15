@@ -60,7 +60,7 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  about: '/about',
+  microSite: '/',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -112,13 +112,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
 
   // Serving static pages.
-  graphQLServer.get(config.about, async function (req, res) {
-      const pathName = req.url;
-      const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-      console.log(fullUrl)
-      const idPortFolio = req.query.id;
-      const portFolio = await findPortFolioDetails(idPortFolio,pathName,fullUrl);
-      res.render('about', portFolio)
+
+  // Serving static pages.
+  graphQLServer.get(config.microSite, async function (req, res, next) {
+
+      if (!req.headers.cookie.includes('meteor_login_token')) {
+        const pathName = req.url;
+        const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+        console.log(fullUrl)
+        const idPortFolio = req.query.id;
+        const portFolio = await findPortFolioDetails(idPortFolio, pathName, fullUrl);
+        res.render('about', portFolio)
+      } else {
+        next()
+      }
+
     }
   )
 
@@ -391,23 +399,27 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
               });
               break;
             }
-            case "PORTFOLIO_IDEA_IMG":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
-              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                let ideaImage={fileUrl: resp, fileName:file.name};
-                if(data.isCreate){
-                  MlResolver.MlMutationResolver['createIdea'](null,{
-                      idea:{
-                        title: data.idea.title,
-                        ideaDescription: data.idea.ideaDescription,
-                        isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
-                        isIdeaPrivate: data.idea.isIdeaTitlePrivate,
-                        isActive: data.idea.isIdeaTitlePrivate,
-                        ideaImage:ideaImage
-                      },
-                    }, context, null);
-                }else{
-                  MlResolver.MlMutationResolver['updateIdea'](null,{idea:{ideaImage:ideaImage}, portfolioId:data.portfolioId, ideaId:data.ideaId}, context, null);
+            case "PORTFOLIO_IDEA_IMG": {
+              imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
+              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+                let ideaImage = {fileUrl: resp, fileName: file.name};
+                if (data.isCreate) {
+                  MlResolver.MlMutationResolver['createIdea'](null, {
+                    idea: {
+                      title: data.idea.title,
+                      ideaDescription: data.idea.ideaDescription,
+                      isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
+                      isIdeaPrivate: data.idea.isIdeaTitlePrivate,
+                      isActive: data.idea.isIdeaTitlePrivate,
+                      ideaImage: ideaImage
+                    },
+                  }, context, null);
+                } else {
+                  MlResolver.MlMutationResolver['updateIdea'](null, {
+                    idea: {ideaImage: ideaImage},
+                    portfolioId: data.portfolioId,
+                    ideaId: data.ideaId
+                  }, context, null);
                 }
               });
               break;

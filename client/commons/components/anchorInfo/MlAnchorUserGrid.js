@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import ScrollArea from 'react-scrollbar';
 import CDNImage from '../CDNImage/CDNImage';
 
-export default class UserGrid extends PureComponent {
+export default class MlAnchorUserGrid extends PureComponent {
 
   render() {
     return (
@@ -27,7 +27,7 @@ export default class UserGrid extends PureComponent {
   }
 }
 
-UserGrid.propTypes = {
+MlAnchorUserGrid.propTypes = {
   users: React.PropTypes.array.isRequired,
   clickHandler: React.PropTypes.func,
   classnames: React.PropTypes.string,

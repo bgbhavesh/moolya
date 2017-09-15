@@ -4,7 +4,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
-import UserGrid from '../../../../commons/components/usergrid';
+import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 
@@ -150,7 +150,7 @@ export default class MlAnchorInfoView extends React.Component {
             <div className="row">
               {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
-                {!this.state.selectedUser.profile && <UserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
+                {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
                 {this.state.selectedUser.profile &&
                 <div>
                   <button onClick={this.clearSelection}>Back</button>

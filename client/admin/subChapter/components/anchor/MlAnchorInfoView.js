@@ -147,27 +147,23 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
-            <div className="row">
-              {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
                 {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
                 {this.state.selectedUser.profile &&
                 <div>
-                  <button onClick={this.clearSelection}>Back</button>
-                  <table>
-                    <tr>
-                      <td>Firstname</td>
-                      <td>{this.state.selectedUser.profile.firstName}</td>
-                    </tr>
-                    <tr>
-                      <td>Email</td>
-                      <td>{this.state.selectedUser.profile.email}</td>
-                    </tr>
-                  </table>
+                  <h3 className="back_btn" onClick={this.clearSelection} alt="Go Back" title="Go Back">
+                    <span className="fa fa-angle-left fa-2x"/> &nbsp;{this.state.selectedUser.profile.firstName}
+                  </h3>
+
+                  {/*<button onClick={this.clearSelection}>Back</button>*/}
+                  <p>
+                  <br />
+                    <b>Email : </b>{this.state.selectedUser.profile.email}
+                  </p>
+
                 </div>
                 }
               </div>
-            </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4">
             <div className="row">

@@ -19,6 +19,7 @@ class MlAnchorTabsContainer extends React.Component {
     }
     this.getObjectiveDetails = this.getObjectiveDetails.bind(this)
     this.getContactDetails = this.getContactDetails.bind(this)
+    this.getUserDetails = this.getUserDetails.bind(this)
     this.updateAnchorDetails = this.updateAnchorDetails.bind(this)
     return this
   }
@@ -47,7 +48,9 @@ class MlAnchorTabsContainer extends React.Component {
     })
     return response;
   }
-
+  getUserDetails(details, tabName){
+    //get tab details
+  }
   getObjectiveDetails(details, tabName) {
     //get tab details
     this.setState({
@@ -79,7 +82,7 @@ class MlAnchorTabsContainer extends React.Component {
       [
         {
           name: 'Anchors',
-          component: <MlAnchorList data={this.props}/>,
+          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails}/>,
           icon: <span className="ml ml-basic-Information"></span>
         },
         {

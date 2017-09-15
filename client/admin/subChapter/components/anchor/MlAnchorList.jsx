@@ -48,6 +48,10 @@ export default class MlAnchorList extends React.Component {
     return response
   }
 
+  sendDatatoParent(data){
+    this.props.getUserDetails(data)
+  }
+
   render() {
     const _this = this
     let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';

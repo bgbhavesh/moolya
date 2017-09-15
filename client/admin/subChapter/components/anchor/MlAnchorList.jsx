@@ -20,6 +20,8 @@ export default class MlAnchorList extends React.Component {
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
+    this.updateProfileData = this.updateProfileData.bind(this);
+    this.updateInternalUprofileData = this.updateInternalUprofileData.bind(this);
     return this
   }
 
@@ -34,8 +36,67 @@ export default class MlAnchorList extends React.Component {
 
   }
 
+  updateInternalUprofileData(field, value) {
+    const state = JSON.parse(JSON.stringify(this.state));
+    if (!state.userData) state.userData = {};
+    if (!state.userData.profile) state.userData.profile = {};
+    if (!state.userData.profile.InternalUprofile) state.userData.profile.InternalUprofile = {};
+    if (!state.userData.profile.InternalUprofile.moolyaProfile) {
+      state.userData.profile.InternalUprofile.moolyaProfile = {};
+    }
+    state.userData.profile.InternalUprofile.moolyaProfile[field] = value;
+    this.setState(state, () => {
+      this.sendDatatoParent(this.state.userData);
+    });
+  }
+
+  updateProfileData(field, value) {
+    const state = JSON.parse(JSON.stringify(this.state));
+    if (!state.userData) state.userData = {};
+    if (!state.userData.profile) state.userData.profile = {};
+    state.userData.profile[field] = value;
+    this.setState(state, () => {
+      this.sendDatatoParent(this.state.userData);
+    });
+  }
+
+  deepClone(obj) {
+    if (!obj || obj === true) { // this also handles boolean as true and false
+      return obj;
+    }
+    const objType = typeof (obj);
+    if (objType === 'number' || objType === 'string') { // add your immutables here
+      return obj;
+    }
+    let result = Array.isArray(obj) ? [] : !obj.constructor ? {} : new obj.constructor();
+    if (obj instanceof Map) {
+      for (let key of obj.keys())
+        result.set(key, this.deepClone(obj.get(key)));
+    }
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key) && key !== '__typename'
+      && key !== 'clusterName' && key !== 'chapterName'
+     && key !== 'communityName' && key !== 'subChapterName')
+        result[key] = this.deepClone(obj[key]);
+    }
+    return result;
+  }
+
+  // filterObject(obj, key) {
+  //   for (var i in obj) {
+  //     if (!obj.hasOwnProperty(i)) continue;
+  //     if (typeof obj[i] == 'object') {
+  //       filterObject(obj[i], key);
+  //     } else if (i == key) {
+  //       delete key;
+  //     }
+  //   }
+  //   return obj;
+  // }
+
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
+    response = this.deepClone(response);
     this.setState({ userData: response });
     return response;
   }
@@ -48,7 +109,7 @@ export default class MlAnchorList extends React.Component {
     return response
   }
 
-  sendDatatoParent(data){
+  sendDatatoParent(data) {
     this.props.getUserDetails(data)
   }
 
@@ -85,33 +146,43 @@ export default class MlAnchorList extends React.Component {
                 </div>
                 <br className="brclear" />
                 <div className="form-group">
-                  <input type="text" placeholder="First Name" className="form-control float-label" id="fname"
-                    value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName} />
+                  <input type="text" placeholder="First Name" className="form-control float-label"
+                    value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName}
+                    onChange={event => this.updateProfileData('firstName', event.target.value)} />
 
                 </div>
                 <div>
                   <div className="form-group">
                     <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"
-                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName} />
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}
+                      onChange={event => this.updateProfileData('middleName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Last Name" className="form-control float-label" id="dName"
-                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName} />
+                    <input type="text" placeholder="Last Name" className="form-control float-label"
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName}
+                      onChange={event => this.updateProfileData('lastName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Display Name" className="form-control float-label" id="uName"
+                    <input type="text" placeholder="Display Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
                         this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.displayName ?
-                        this.state.userData.profile.InternalUprofile.moolyaProfile.displayName : ""} />
+                        this.state.userData.profile.InternalUprofile.moolyaProfile.displayName : ""}
+                      onChange={event => this.updateInternalUprofileData('displayName', event.target.value)} />
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" className="form-control float-label"></textarea>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Contact Number" className="form-control float-label" id="uName" />
+                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label"
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
+                        this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.contact
+                        && this.state.userData.profile.InternalUprofile.moolyaProfile.contact.length ?
+                        this.state.userData.profile.InternalUprofile.moolyaProfile.contact[0].number : ""} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email Id" className="form-control float-label" id="uName" />
+                    <input type="text" placeholder="Email Id" className="form-control float-label" disabled
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.email}
+                       />
                   </div>
 
                   <div className="panel panel-default new_profile_tabs">

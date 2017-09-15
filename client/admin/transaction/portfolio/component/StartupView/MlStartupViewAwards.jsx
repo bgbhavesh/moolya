@@ -7,7 +7,8 @@ import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDeta
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import NoData from '../../../../../commons/components/noData/noData'
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 import MlGenericAwardsView from './MlGenericAwardsView';
 
 const KEY = 'awardsRecognition'
@@ -15,7 +16,7 @@ const KEY = 'awardsRecognition'
 export default class MlStartupViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupAwardsList: []};
+    this.state = {startupAwardsList: [],loading:true};
     this.fetchPortfolioStartupDetails.bind(this);
     // this.createAnnotations.bind(this);
     // this.fetchAnnotations.bind(this);
@@ -114,34 +115,41 @@ export default class MlStartupViewAwards extends React.Component {
   render(){
     let that = this;
     let awardsArray = that.state.startupAwardsList || [];
-    if(_.isEmpty(awardsArray)) {
-      return (
-        <div className="portfolio-main-wrap">
-          <NoData tabName={this.props.tabName}/>
-        </div>
-      )
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Awards</h2>
-          <div className="col-lg-12">
-            <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin} portfolioDetailsId={this.props.portfolioDetailsId}/>
-            {/*<div className="row">*/}
-              {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
-                {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
-                  {/*<div className="team-block">*/}
+    let loading = this.state.loading;
+    return (
+        <div>
+          {loading === true ? ( <MlLoader/>) : (
+            <div>
+              {_.isEmpty(awardsArray) ? (
+                <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>) : (
+                <div id="annotatorContent">
+                  <h2>Awards</h2>
+                  <div className="col-lg-12">
+                    <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}
+                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+                    {/*<div className="row">*/}
+                    {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
+                    {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
+                    {/*<div className="team-block">*/}
                     {/*<img src={details.logo&&details.logo.fileUrl} className="team_img" />*/}
                     {/*<h3>*/}
-                      {/*{details&&details.awardName}*/}
+                    {/*{details&&details.awardName}*/}
                     {/*</h3>*/}
-                  {/*</div>*/}
-                {/*</div>)*/}
-              {/*})}*/}
+                    {/*</div>*/}
+                    {/*</div>)*/}
+                    {/*})}*/}
 
-            {/*</div>*/}
+                    {/*</div>*/}
+                  </div>
+                </div>
+              )
+              }
+            </div>
+          )
+          }
           </div>
-        </div>
-      )
-    }
+    )
   }
 }

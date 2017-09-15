@@ -17,7 +17,7 @@ import PortfolioLibrary from '../../../commons/components/portfolioLibrary/Portf
 export default class MlAppFunderViewTabs extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{}};
+    this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{},activeTab:'About'};
   }
 
   componentDidMount(){

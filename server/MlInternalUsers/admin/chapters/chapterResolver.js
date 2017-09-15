@@ -401,8 +401,8 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
       }
       let code = 200;
-      let result = {subChapter: resp}
-      let response = new MlRespPayload().successPayload(result, code);
+      // let result = {subChapter: resp}
+      let response = new MlRespPayload().successPayload("update successfully", code);
       return response
     }
 

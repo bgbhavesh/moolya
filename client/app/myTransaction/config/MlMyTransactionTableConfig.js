@@ -55,6 +55,7 @@ const mlMyTransactionTableConfig = new MlViewer.View({
                                 subChapter
                                 community
                                 transactionType
+                                transactionTypeId
                                 createdby
                                 email
                                 userId

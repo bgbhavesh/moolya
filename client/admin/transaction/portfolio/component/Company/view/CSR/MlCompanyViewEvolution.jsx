@@ -7,7 +7,8 @@ import {findAnnotations} from '../../../../../../../commons/annotator/findAnnota
 import _ from 'lodash'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
-import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 
 const KEY = "evolution"
 
@@ -18,8 +19,8 @@ export default class MlCompanyViewEvolution extends React.Component {
       policy:{},
       data:{},
       annotations:[],
-      content:{}
-
+      content:{},
+      loading:true
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -46,7 +47,7 @@ export default class MlCompanyViewEvolution extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
-      this.setState({evolution: responseM.evolution});
+      this.setState({evolution: responseM.evolution,loading:false});
     }
 
     data = {
@@ -134,19 +135,43 @@ export default class MlCompanyViewEvolution extends React.Component {
   }
 
   render(){
+    let that = this;
+    let achievements = that.state.evolution || {};
+    let loading=this.state.loading
+    if(_.isEmpty(achievements)){
       return (
-        <div className="portfolio-main-wrap" id="annotatorContent">
-          <div className="col-lg-12 col-sm-12">
-            <div className="row">
-              <h2>Evolution</h2>
-              <div className="panel panel-default panel-form-view">
-                <div className="panel-body">
-                  <p>{this.state.evolution&&this.state.evolution.evolutionDescription}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName} />
         </div>
       )
+    } else {
+      return (
+        <div>
+          {loading === true ? ( <MlLoader/>) : (
+            <div>
+              {_.isEmpty(achievements) ? (
+                <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>) : (
+                <div className="portfolio-main-wrap" id="annotatorContent">
+                  <div className="col-lg-12 col-sm-12">
+                    <div className="row">
+                      <h2>Evolution</h2>
+                      <div className="panel panel-default panel-form-view">
+                        <div className="panel-body">
+                          <p>{this.state.evolution && this.state.evolution.evolutionDescription}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+              }
+              </div>
+          )
+          }
+          </div>
+      )
+    }
   }
 }

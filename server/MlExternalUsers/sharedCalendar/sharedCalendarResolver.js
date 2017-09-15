@@ -41,6 +41,7 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
   args.detailsInput.createdBy =  userId;
   args.detailsInput.owner= ownerInfo;
   args.detailsInput.createdAt =  new Date();
+  orderNumberGenService.createShareId(args.detailsInput);
   let usersData = args.detailsInput.users;
   let response;
   usersData.map(function(data){
@@ -58,7 +59,7 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
       // 'docId': portfolioId,
       'transactionDetails': 'sharing',
       'context': context || {},
-      'transactionTypeId': "share",
+      'transactionTypeId': args.detailsInput.sharedId,
       'fromUserType': 'user'
     })
     console.log('transactionEntry', transactionEntry)
@@ -70,6 +71,102 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
     let resp = new MlRespPayload().errorPayload("Error in sharing", code);
     return resp;
   }
+}
+
+MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, info) => {
+
+  let sharedId = args.sharedId;
+
+  let pipeline = [
+    { "$match": { "sharedId": sharedId } },
+    {
+      "$group": {
+        _id: "$sharedId",
+        users: {"$addToSet": "$user"},
+        files: {"$addToSet": "$file"},
+        userId: { "$first": "$owner.userId" },
+        profileId: { "$first": "$owner.profileId" },
+        shareStartDate: { "$first": "$sharedStartDate"},
+        shareEndDate: { "$first": "$sharedEndDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$unwind": "$users" },
+    { "$lookup": { from: "users", localField: "users.userId", foreignField: "_id", as: "usersInfo" } },
+    { "$unwind": "$usersInfo" },
+    { "$project": {
+      "_id": 1,
+      "files": 1,
+      "userId": 1,
+      "profileId": 1,
+      "shareStartDate": 1,
+      "shareEndDate": 1,
+      "isDownloadable": 1,
+      "createdAt": 1,
+      "users": {
+        "userId": 1,
+        "profileId":1,
+        "displayName": "$usersInfo.profile.displayName",
+        "profilePic": "$usersInfo.profile.profileImage"
+      }
+    }
+    },
+    {
+      "$group":{
+        _id: "$_id",
+        users: {"$addToSet": "$users"},
+        files: {"$first": "$files"},
+        userId: { "$first": "$userId" },
+        profileId: { "$first": "$profileId" },
+        sharedStartDate: { "$first": "$shareStartDate"},
+        sharedEndDate: { "$first": "$shareStartDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+    { "$unwind" : "$contactInfo" },
+    { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+    { "$addFields": {
+      "userProfiles": {
+        "$filter": {
+          input: "$userProfiles",
+          as: "userProfile",
+          cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+        }
+      }
+    }
+    },
+    { "$unwind" : "$userProfiles" },
+    {
+      "$project": {
+        _id: 1,
+        users: 1,
+        files: 1,
+        sharedStartDate: 1,
+        sharedEndDate: 1,
+        isDownloadable: 1,
+        createdAt:1,
+        ownerInfo: {
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          name : "$contactInfo.profile.displayName",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+        }
+      }
+    }
+  ];
+
+  let data = mlDBController.aggregate('MlSharedCalendar', pipeline);
+
+  return data && data[0] ? data[0] : {};
+
 }
 
 MlResolver.MlQueryResolver['getSharedCalendar'] = (obj, args, context, info) => {

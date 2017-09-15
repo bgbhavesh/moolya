@@ -4,14 +4,15 @@ import {fetchStartupDetailsHandler} from "../../actions/findPortfolioStartupDeta
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
-import NoData from '../../../../../commons/components/noData/noData'
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 const KEY = 'investor'
 export default class MlStartupViewInvestor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupInvestorList: []};
+    this.state = {startupInvestorList: [],loading:true};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -109,33 +110,39 @@ export default class MlStartupViewInvestor extends React.Component {
   render(){
     let that = this;
     let investorArray = that.state.startupInvestorList || [];
-
-    if(_.isEmpty(investorArray)){
-      return (
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Investor</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {investorArray && investorArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
-                    <h3>
-                      {details.investorName} <br /><b>Investor</b>
-                    </h3>
+    let loading = this.state.loading;
+    return (
+        <div>
+          {loading === true ? ( <MlLoader/>) : (
+            <div>
+              {_.isEmpty(investorArray) ? (
+                <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>) : (
+                <div id="annotatorContent">
+                  <h2>Investor</h2>
+                  <div className="col-lg-12">
+                    <div className="row">
+                      {investorArray && investorArray.map(function (details, idx) {
+                        return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                          <div className="team-block">
+                            <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}
+                                 className="team_img"/>
+                            <h3>
+                              {details.investorName} <br /><b>Investor</b>
+                            </h3>
+                          </div>
+                        </div>)
+                      })}
+                    </div>
                   </div>
-                </div>)
-              })}
+                </div>
+              )
+              }
             </div>
-          </div>
+          )
+          }
         </div>
-      )
-    }
+    )
   }
 }

@@ -529,8 +529,8 @@ appSection.route('/calendar', {
   }
 });
 
-appSection.route('/calendar/clientCalendar', {
-  name: 'calendar_client',
+appSection.route('/calendar/shareCalendar', {
+  name: 'calendar_share',
   action(){
     mount(AppLayout,{appContent: <ShareCalendar />, isCalenderMenu: true})
     // mount(AppLayout,{appContent:<MlAppDashboard/>})

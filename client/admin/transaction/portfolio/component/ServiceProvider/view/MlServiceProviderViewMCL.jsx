@@ -9,7 +9,9 @@ import {
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
+import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 
@@ -24,7 +26,8 @@ export default class MlServiceProviderViewMCL extends Component {
       data: {},
       annotations: [],
       content: {},
-      isUserValidForAnnotation:false
+      isUserValidForAnnotation:false,
+      loading: true
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -61,7 +64,7 @@ export default class MlServiceProviderViewMCL extends Component {
     if (responseL) {
       this.setState({licenses: responseL});
     }
-
+    this.setState({loading: false});
     data = {
       memberships: this.state.memberships,
       licenses: this.state.licenses,
@@ -157,50 +160,64 @@ export default class MlServiceProviderViewMCL extends Component {
 
 
   render() {
-
+    const showLoader = this.state.loading;
     return (
-      <div className="portfolio-main-wrap" id="annotatorContent">
-        <h2>MCL</h2>
-        <div className="main_wrap_scroll" id="annotatorContent">
-          <ScrollArea
-            speed={0.8}
-            className="main_wrap_scroll"
-            smoothScrolling={true}
-            default={true}
-          >
-            <div className="col-md-6 col-sm-6 nopadding-left">
-              <div className="panel panel-default panel-form-view">
-                <div className="panel-heading">Memberships</div>
-                <div className="panel-body ">
+      <div>
+          {showLoader === true ? ( <MlLoader/>) : (
+            <div className="portfolio-main-wrap" id="annotatorContent">
+              <h2>MCL</h2>
+              <div className="main_wrap_scroll" id="annotatorContent">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <div className="col-md-6 col-sm-6 nopadding-left">
+                    <div className="panel panel-default panel-form-view">
+                      <div className="panel-heading">Memberships</div>
+                      <div className="panel-body ">
 
-                  {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription : ""}
+                        {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription :
+                          <div className="portfolio-main-wrap">
+                            <NoData tabName={this.props.tabName}/>
+                          </div>}
 
-                </div>
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div className="col-md-6 col-sm-6 nopadding-right">
+                    <div className="panel panel-default panel-form-view">
+                      <div className="panel-heading">Compliances</div>
+                      <div className="panel-body ">
+
+                        {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription :
+                          <div className="portfolio-main-wrap">
+                            <NoData tabName={this.props.tabName}/>
+                          </div>}
+
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+                    <div className="panel panel-default panel-form-view">
+                      <div className="panel-heading">Licenses</div>
+                      <div className="panel-body ">
+
+                        {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription :
+                          <div className="portfolio-main-wrap">
+                            <NoData tabName={this.props.tabName}/>
+                          </div>}
+
+                      </div>
+                    </div>
+                  </div>
+                </ScrollArea>
               </div>
-              <div className="clearfix"></div>
             </div>
-            <div className="col-md-6 col-sm-6 nopadding-right">
-              <div className="panel panel-default panel-form-view">
-                <div className="panel-heading">Compliances</div>
-                <div className="panel-body ">
-
-                  {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : ""}
-
-                </div>
-              </div>
-              <div className="clearfix"></div>
-              <div className="panel panel-default panel-form-view">
-                <div className="panel-heading">Licenses</div>
-                <div className="panel-body ">
-
-                  {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : ""}
-
-                </div>
-              </div>
-            </div>
-          </ScrollArea>
+          )
+      }
         </div>
-      </div>
     )
   }
 }

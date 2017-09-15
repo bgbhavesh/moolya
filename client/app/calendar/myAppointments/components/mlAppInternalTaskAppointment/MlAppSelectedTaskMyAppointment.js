@@ -61,21 +61,21 @@ class MlAppSelectedTaskMyAppointment extends Component {
         component: <MlAppTaskMyAppointmentBasicInfo
           task={task}
           appointment={appointment} />,
-        icon: <span className=""></span>
+        icon: <span className="ml fa fa-list-alt"></span>
       },
       {
         name: 'Sessions',
         component: <MlAppTaskMyAppointmentSession
           task={task}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml my-ml-sessions"></span>
       },
       {
         name: 'Info',
         component: <MlAppTaskMyAppointmentTermAndCondition
           task={task}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml my-ml-info"></span>
       }
 
     ];
@@ -121,11 +121,13 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * @returns {XML}
    */
   render() {
-    const status = this.props.status;
+    // const status = this.props.status;
+    let status = FlowRouter.getQueryParam('tab');
+    console.log(status);
     let appActionConfig = [];
     const that = this;
     switch (status) {
-      case 'Pending':
+      case 'pending':
         appActionConfig = [
           {
             showAction: true,
@@ -139,7 +141,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           }
         ];
         break;
-      case 'Accepted':
+      case 'current':
         appActionConfig = [
           {
             showAction: true,
@@ -148,7 +150,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           }
         ];
         break;
-      case 'Rejected':
+      case 'rejected':
         appActionConfig = [
           {
             showAction: true,
@@ -181,11 +183,12 @@ class MlAppSelectedTaskMyAppointment extends Component {
               <div id="root">
                 <StepZilla steps={this.setTaskSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>
-          {status !== 'Completed' &&
+          {status !== 'completed' &&
             <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
           }
         </div>

@@ -20,6 +20,7 @@ export default class MlInfiniteScroll extends Component {
 
   render() {
     let config=this.props.config;
+    config.params = this.props.params;
     return (
       <MlInfiniteScrollComposer {...config}/>
     );

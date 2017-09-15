@@ -5,6 +5,34 @@ import ScrollArea from 'react-scrollbar'
 import $ from 'jquery'
 import _ from 'lodash'
 
+class MlAdminLeftNavScroll extends Component {
+
+  constructor(props){
+    super(props);
+    console.log('Props',props);
+  }
+
+  componentDidMount(){
+    if(this.context && this.context.scrollArea) {
+      setTimeout( function(){
+        let scrollTo = this.props.scrollTo;
+        $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
+        this.context.scrollArea.refresh();
+        this.context.scrollArea.scrollYTo(scrollTo);
+      }.bind(this), 500);
+    }
+    // console.log('MlAdminLeftNavScroll', this);
+  }
+
+  render() {
+    return null;
+  }
+}
+
+MlAdminLeftNavScroll.contextTypes = {
+  scrollArea: React.PropTypes.object
+};
+
 export default class MlAdminLeftNav extends Component {
   constructor(props) {
     super(props);
@@ -64,11 +92,19 @@ export default class MlAdminLeftNav extends Component {
       }
     }
 
-    let navOptions = menu.map(function (dataItem) {
-      let activeClass
+    let testFunction =  function (that) {
+      console.log(this ,that);
+    };
+
+    let activeIndex = 0;
+
+    let navOptions = menu.map(function (dataItem, index) {
+      let activeClass;
       if (parentKey == dataItem.uniqueId) {
-        activeClass = 'active_menu'
+        activeClass = 'active_menu';
+        activeIndex = index;
       }
+      console.log(navOptions);
       return (
         <li className={`menu_item ${activeClass} `} key={dataItem.uniqueId}>
           <a href={dataItem.link} id={dataItem.uniqueId}>
@@ -82,6 +118,9 @@ export default class MlAdminLeftNav extends Component {
       )
     });
 
+    let scrollTo = activeIndex*108;
+    console.log(scrollTo, activeIndex);
+
     return (
       <div className="admin_menu">
         <ScrollArea
@@ -89,12 +128,14 @@ export default class MlAdminLeftNav extends Component {
           className="admin_menu"
           smoothScrolling={true}
         >
+          {testFunction(this)}
           <ul>
             {navOptions }
             <li className="menu_item">
               <div className="menu_item menu_item_in"></div>
             </li>
           </ul>
+          <MlAdminLeftNavScroll scrollTo={scrollTo} />
         </ScrollArea>
       </div>
     )
@@ -105,3 +146,5 @@ export default class MlAdminLeftNav extends Component {
 MlAdminLeftNav.contextTypes = {
   menu: React.PropTypes.object
 };
+
+

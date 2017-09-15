@@ -10,6 +10,7 @@ import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config
 import {mlChapterCommunitiesConfig} from '../../admin/chapter/config/mlChapterCommunitiesConfig'
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
+import MlAnchorTabsContainer from "../../admin/subChapter/components/anchor/MlAnchorTabsContainer"
 import MlAddSubChapter from "../../admin/subChapter/components/MlAddSubChapter"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'
 import MlChapterCommunityDetails from '../../admin/chapter/components/MlChapterCommunityDetails'
@@ -35,7 +36,18 @@ adminSection.route('/chapters/:clusterId/:chapterId/subChapters', {
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId} subChapterName={params.subChapterName}/>})
+  }
+});
+
+adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/anchorDetails', {
+  name: 'chapter_anchorDetails',
+  action(params){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'chapter'}}/>,
+      adminContent: <MlAnchorTabsContainer subChapterId={params.subChapterId} clusterId={params.clusterId}
+                                           chapterId={params.chapterId}/>
+    })
   }
 });
 
@@ -72,6 +84,7 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/communities/:c
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
   }
 });
+
 
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/history', {

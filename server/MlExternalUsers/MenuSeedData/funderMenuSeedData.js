@@ -49,7 +49,23 @@ if(Meteor.isServer){
         "name" : "Transactions",
         "uniqueId" : "myTransaction"
       },
-
+      {
+        "image":"ml ml-news",
+        "link": "/app/news",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "News",
+        "uniqueId" : "news",
+        isDisabled:true
+      },
+      // {
+      //   "image":"fa fa-calendar-check-o",
+      //   "link": "/app/task",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Task",
+      //   "uniqueId" : "my_task"
+      // }
       {
         "image":"ml ml-chat",
         "link": "/app/conversations",
@@ -69,31 +85,16 @@ if(Meteor.isServer){
         "uniqueId" : "subscriptions",
         isDisabled:true
       },
-
-      {
-        "image":"ml ml-news",
-        "link": "/app/news",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "News",
-        "uniqueId" : "news"
-      },
       {
         "image":"ml my-ml-settings_new",
         "link": "/app/news",
         "isLink" : true,
         "isMenu" : true,
         "name" : "Settings",
-        "uniqueId" : "settings"
+        "uniqueId" : "settings",
+        isDisabled:true
       },
-      // {
-      //   "image":"fa fa-calendar-check-o",
-      //   "link": "/app/task",
-      //   "isLink" : true,
-      //   "isMenu" : true,
-      //   "name" : "Task",
-      //   "uniqueId" : "my_task"
-      // }
+
     ]
   }})
 }

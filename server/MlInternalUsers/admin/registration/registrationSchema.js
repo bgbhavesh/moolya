@@ -270,6 +270,7 @@ let registrationSchema = `
         transactionId   :   String
         assignedUserId    :   String,
         createdBy       :   String,
+        allocationStatus :  String
         
     }
     
@@ -444,11 +445,14 @@ let registrationSchema = `
          RejectedStatusOfDocuments(documentId:[String],docTypeId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
          RemoveFileFromDocuments(fileId:String,docTypeId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
          ApprovedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
-         RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
+         RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!,regType:String):response
          sendEmailVerificationForRegistration(registrationId:String):response
          sendSmsVerificationForRegistration(registrationId:String):response
          sendEmailVerification(userId:String):response
          sendSmsVerification(userId:String):response
+         sendUserSmsVerification:response
+         resendUserSmsVerification:response
+         verifyUserMobileNumber(mobileNumber:String,otp:Int):response
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
@@ -489,6 +493,9 @@ let supportedApi = [
     {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendUserSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'resendUserSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyUserMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},

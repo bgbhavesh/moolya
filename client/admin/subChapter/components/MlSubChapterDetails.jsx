@@ -35,6 +35,7 @@ class MlSubChapterDetails extends React.Component {
     this.onStatusChangeBespokeRegistration = this.onStatusChangeBespokeRegistration.bind(this);
     this.findSubChapter.bind(this);
     this.updateSubChapter.bind(this)
+    this.anchorRedirect = this.anchorRedirect.bind(this)
     return this;
   }
 
@@ -191,6 +192,15 @@ class MlSubChapterDetails extends React.Component {
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
   }
 
+  anchorRedirect() {
+    console.log('info hit', this.props)
+    var basePath = 'chapters'
+    var locationIndex = window.location.pathname.indexOf('chapters')
+    if (locationIndex < 0)
+      basePath = "clusters"
+    FlowRouter.go('/admin/' + '/' + basePath + '/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
+  }
+
   async onImageFileUpload(e) {
     if (e.target.files[0].length == 0)
       return;
@@ -245,6 +255,7 @@ class MlSubChapterDetails extends React.Component {
 
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
+                  <img src="/images/anchor.png" className="hanging_img"  onClick={this.anchorRedirect} />
             <div className="col-md-6 nopadding-left">
               <div className="form_bg left_wrap">
                 <ScrollArea
@@ -319,6 +330,7 @@ class MlSubChapterDetails extends React.Component {
                             className="form-control float-label">
                   </textarea>
                     </div>
+
                   </form>
                 </ScrollArea>
               </div>

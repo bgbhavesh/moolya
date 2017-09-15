@@ -31,7 +31,8 @@ const mlRegistrationRejectedTableConfig=new MlViewer.View({
     'accountType': 'registrationInfo.accountType',
     'assignedUser': 'registrationInfo.assignedUser',
     'email':'registrationInfo.email',
-    'registrationId':'registrationInfo.registrationId'
+    'registrationId':'registrationInfo.registrationId',
+    'allocationStatus':'registrationInfo.allocationStatus'
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -44,7 +45,7 @@ const mlRegistrationRejectedTableConfig=new MlViewer.View({
     {dataField: "communityName", title: "Community",dataSort:true},
     {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
-    // {dataField: "contactNumber", title: "ContactNo",dataSort:true},
+    {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -95,6 +96,7 @@ const mlRegistrationRejectedTableConfig=new MlViewer.View({
                               assignedUser
               								registrationStatus
                       				registrationDate
+                      				allocationStatus
                       				createdBy
                           }
                       }

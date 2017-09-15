@@ -73,35 +73,6 @@ if(Meteor.isServer){
                 "name" : "Institutions",
                 "uniqueId" : "institutions"
             },
-
-            {
-                "image":"ml ml-chat",
-                "link": "/app/conversations",
-                "isLink" : true,
-                "isMenu" : true,
-                "name" : "Conversations",
-                "uniqueId" : "conversations",
-                 isDisabled:true
-            },
-
-            {
-                "image":"ml my-ml-subscriptions",
-                "link": "#",
-                "isLink" : true,
-                "isMenu" : true,
-                "name" : "moolya Services",
-                "uniqueId" : "subscriptions",
-                isDisabled:true
-            },
-
-            {
-                "image":"ml ml-news",
-                "link": "/app/news",
-                "isLink" : true,
-                "isMenu" : true,
-                "name" : "News",
-                "uniqueId" : "news"
-            },
             {
               "image":"ml my-ml-transactions",
               "link": "/app/transaction",
@@ -118,6 +89,36 @@ if(Meteor.isServer){
             //   "name" : "Task",
             //   "uniqueId" : "my_task"
             // }
+
+          {
+            "image":"ml ml-chat",
+            "link": "/app/conversations",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "Conversations",
+            "uniqueId" : "conversations",
+            isDisabled:true
+          },
+
+          {
+            "image":"ml my-ml-subscriptions",
+            "link": "#",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "moolya Services",
+            "uniqueId" : "subscriptions",
+            isDisabled:true
+          },
+          {
+            "image":"ml ml-news",
+            "link": "/app/news",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "News",
+            "uniqueId" : "news",
+            isDisabled:true
+          },
+
         ]
     }})
 }

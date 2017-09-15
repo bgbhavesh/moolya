@@ -59,20 +59,24 @@ export default class MlServiceProviderClients extends Component {
     //     serviceProviderClientsList: this.context.startupPortfolio.clients
     //   });
     // }
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
 
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.clients)
+    const response = await fetchServiceProviderClients(portfolioDetailsId);
     if (empty) {
-      const response = await fetchServiceProviderClients(portfolioDetailsId);
-      if (response) {
+      if (response && response.length>0) {
         this.setState({loading: false, serviceProviderClients: response, serviceProviderClientsList: response});
         // _.each(response.privateFields, function (pf) {
         //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         // })
+      }
+      else{
+        this.setState({loading:false})
       }
     } else {
       this.setState({
@@ -81,6 +85,7 @@ export default class MlServiceProviderClients extends Component {
         serviceProviderClientsList: that.context.serviceProviderPortfolio.clients
       });
     }
+    this.serviceProviderClientsServer =response?response:[]
   }
 
   addClient() {
@@ -103,16 +108,31 @@ export default class MlServiceProviderClients extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.companyId
+      "selectedVal": details.companyId,
+      popoverOpen: !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.serviceProviderClientsServer && this.serviceProviderClientsServer[selIndex]?this.serviceProviderClientsServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
@@ -126,9 +146,14 @@ export default class MlServiceProviderClients extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
-    this.setState({privateKey:privateKey})
-    this.setState({data: details}, function () {
+    // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data: details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -328,7 +353,7 @@ export default class MlServiceProviderClients extends Component {
                       <a href="" id={"create_client" + idx}>
                         <div className="list_block">
                           {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
-                          <FontAwesome name='unlock' className="input_icon un_lock" id={"makePrivate" + idx}
+                          <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
                             <img src={details.logo && details.logo.fileUrl}/></div>
@@ -366,9 +391,7 @@ export default class MlServiceProviderClients extends Component {
                         </div>
                         {displayUploadButton ? <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
-                            <button onClick={this.toggleModal.bind(this)} name="logo" id="logo" type="button" className="fileUpload mlUpload_btn">
-                              <span>Upload Logo</span>
-                            </button>
+                              <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
 
                             {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
                                    onChange={this.onLogoFileUpload.bind(this)}/>*/}
@@ -405,4 +428,5 @@ export default class MlServiceProviderClients extends Component {
 }
 MlServiceProviderClients.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

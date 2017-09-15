@@ -78,7 +78,7 @@ class MlAppCalendarServiceAppointment extends Component {
         component: <MlAppCalendarServiceAppointmentInfo
           service={service}
           appointment={appointment}/>,
-        icon: <span className="ml my-ml-information_3"></span>
+        icon: <span className="ml my-ml-info"></span>
       }
 
     ];

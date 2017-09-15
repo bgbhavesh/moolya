@@ -326,13 +326,13 @@ let CoreModules = {
     switch (type) {
       //custom restriction for registration
       case 'requested':
-        serverQuery = {'status': {'$in': ['Yet To Start', 'WIP']}};
+        serverQuery = {'status': {'$nin': ['REG_USER_APR', 'REG_ADM_REJ','REG_USER_REJ']}};
         break;
       case 'approved':
-        serverQuery = {'status': "Approved"};
+        serverQuery = {'status': "REG_USER_APR"};
         break;
       case 'rejected':
-        serverQuery = {'status': "Rejected"};
+        serverQuery = {'status': {'$in': ['REG_ADM_REJ', 'REG_USER_REJ']}};
         break;
     }
 
@@ -356,6 +356,7 @@ let CoreModules = {
       if (doc.allocation) {
         object.assignedUser = doc.allocation.assignee
         object.assignedUserId = doc.allocation.assigneeId
+          object.allocationStatus = doc.allocation.allocationStatus
       }
       /*else{
        object.assignedUser = "Un Assigned"
@@ -373,13 +374,14 @@ let CoreModules = {
     switch (type) {
       //custom restriction for registration
       case 'requested':
-        serverQuery = {'status': {'$in': ['WIP', 'Yet To Start', 'Go Live']}};
+        //serverQuery = {'status': {'$in': ['WIP', 'Yet To Start', 'Go Live']}};
+        serverQuery = {'status': {'$nin': ['PORT_LIVE_NOW']}};
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'createdAt': -1}
         }
         break;
       case 'approved':
-        serverQuery = {'status': "gone live"};
+        serverQuery = {'status': "PORT_LIVE_NOW"};
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'transactionUpdatedDate': -1}
         }
@@ -395,6 +397,7 @@ let CoreModules = {
       if (doc.allocation) {
         doc.assignedUser = doc.allocation.assignee
         doc.assignedUserId = doc.allocation.assigneeId
+        doc.allocationStatus = doc.allocation.allocationStatus
       }
     });
     return {totalRecords: totalRecords, data: data};
@@ -924,6 +927,54 @@ let CoreModules = {
 
     var data = result;
     var totalRecords = data.length;
+
+    return {totalRecords: totalRecords, data: data};
+  },
+
+  MlAppointmentsRepo : function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+
+    //let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    //resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+
+    let piplelineQuery = [
+      { "$match": {"transactionTypeId":"appointment"} },
+      { "$lookup": {
+        from: "mlPayment",
+        localField: "docId",
+        foreignField: "resourceId",
+        as: "scOrder"
+      }
+      },
+      { "$unwind": "$scOrder" },
+      { "$project" : {
+        "_id": "$_id",
+        "appointmentId": "$docId",
+        "createdBy": "$userName",
+        "emailId": "$emailId",
+        "source": "",
+        "transactionType": "$activity",
+        "cluster": "$clusterName",
+        "chapter": "$chapterName",
+        "subChapter": "$subChapterName",
+        "community": "$communityName",
+        "createdAt": "$createdAt",
+        "status": "$scOrder.status"
+      } }
+    ];
+
+
+    if (fieldsProj.sort) {
+      piplelineQuery.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      piplelineQuery.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      piplelineQuery.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    let data = mlDBController.aggregate('MlTransactionsLog', piplelineQuery);
+
+    let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId":"appointment"} ).count();
 
     return {totalRecords: totalRecords, data: data};
   }

@@ -63,15 +63,6 @@ if(Meteor.isServer){
           //   "uniqueId" : "myInvestment"
           // },
           {
-              "image":"ml my-ml-Referral_Invite",
-              "link": "#",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Referral & Invites",
-              "uniqueId" : "referalInvities",
-              isDisabled: true
-          },
-          {
               "image":"ml my-ml-library_3",
               "link": "/app/library",
               "isLink" : true,
@@ -80,29 +71,12 @@ if(Meteor.isServer){
               "uniqueId" : "library"
           },
           {
-              "image":"ml my-ml-subscriptions",
-              "link": "#",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "My Subscriptions",
-              "uniqueId" : "mySubscriptions",
-              isDisabled:true
-          },
-          {
             "image":"ml my-ml-service_provider_my_appointments",
             "link": "/app/myAppointment",
             "isLink" : true,
             "isMenu" : true,
             "name" : "My Appointments",
             "uniqueId" : "myAppointment"
-          },
-          {
-              "image":"ml my-ml-settings_new",
-              "link": "/app/settings",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Settings",
-              "uniqueId" : "settings"
           },
           {
               "image":"ml my-ml-terms_and_conditions",
@@ -120,6 +94,33 @@ if(Meteor.isServer){
               "name" : "Privacy",
               "uniqueId" : "privacy"
           },
+        {
+          "image":"ml my-ml-Referral_Invite",
+          "link": "#",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "Referral & Invites",
+          "uniqueId" : "referalInvities",
+          isDisabled: true
+        },
+        {
+          "image":"ml my-ml-subscriptions",
+          "link": "#",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "My Subscriptions",
+          "uniqueId" : "mySubscriptions",
+          isDisabled:true
+        },
+        {
+          "image":"ml my-ml-settings_new",
+          "link": "/app/settings",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "Settings",
+          "uniqueId" : "settings",
+          isDisabled:true
+        },
           // {
           //   "image":"ml ml-moolya-symbol",
           //   "link": "/app/register",

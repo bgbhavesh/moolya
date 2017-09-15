@@ -347,7 +347,7 @@ class MlAssignBackendUsers extends React.Component {
                     <div className="form-group">
                       {/*<input type="text" id="AssignedAs" placeholder="Also Assigned As"*/}
                       Also Assigned As
-                      <ul>F
+                      <ul>
                         {alsoAssignList}
                       </ul>
                     </div>

@@ -27,6 +27,8 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
               privateFields{
                   keyName,
                   booleanKey
+                   index
+                   tabName
                 }
               }
             }
@@ -61,6 +63,8 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
               privateFields{
                   keyName,
                   booleanKey
+                  index
+                  tabName
                 }
               }
             }
@@ -405,6 +409,8 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
                     privateFields{
                       keyName,
                       booleanKey
+                       index
+                       tabName
                     }
                 }
             }

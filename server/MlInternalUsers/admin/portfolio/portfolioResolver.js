@@ -13,7 +13,7 @@ import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
-
+import  MlSiteMapInsertion from '../microSite/MlSiteMapInsertion'
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]

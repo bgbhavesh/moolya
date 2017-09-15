@@ -60,7 +60,7 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  microSite: '/',
+  about: '/',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -112,9 +112,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
 
   // Serving static pages.
-
-  // Serving static pages.
-  graphQLServer.get(config.microSite, async function (req, res, next) {
+  graphQLServer.get(config.about, async function (req, res, next) {
 
       if (!req.headers.cookie.includes('meteor_login_token')) {
         const pathName = req.url;
@@ -124,6 +122,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
         const portFolio = await findPortFolioDetails(idPortFolio, pathName, fullUrl);
         res.render('about', portFolio)
       } else {
+        console.log(req.headers.cookie.includes('meteor_login_token'))
         next()
       }
 

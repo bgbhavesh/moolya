@@ -6,15 +6,14 @@ const MlSiteMapInsertion= class MlSiteMapInsertion {
   static  mlCreateSEOUrl(urlFormationObject,uniqueSeoName) {
     try {
 
-
-
-      const seoUrl =
-      uniquieId = firstName+'_'+lastName
+     let existsSeoName =  MlSitemap.findOne({uniqueSeoName: uniqueSeoName});
+      const seoUrl =urlFormationObject;
 
     } catch (e) {
       console.log("Error"+e);
     }
   }
+
 
 }
 

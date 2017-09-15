@@ -139,7 +139,7 @@ class MlAppProfileHeader extends Component {
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Pending Registration"} data-placement="right">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"Pending Registration":"Registration"} data-placement="right">
                   <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>

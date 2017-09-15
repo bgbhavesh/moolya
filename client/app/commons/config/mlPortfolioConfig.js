@@ -17,10 +17,10 @@ export const GenericPortfolioActionsConfig= [
   {actionName: 'collaborate',actionType:'view',isDisabled:true},
   {actionName: 'favourite',actionType:'view',handleCallBack:handleFavouriteAction},
   {actionName: 'partner',actionType:'view',isDisabled:true},
+  {actionName: 'comment',actionType:'view',target:"comment"},
   {actionName: 'enquire',actionType:'view',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon},
   {actionName: 'follow',actionType:'view',handleCallBack:handleFollowAction},
   {actionName: 'review',actionType:'view',isDisabled:true,hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon},
-  {actionName: 'comment',actionType:'view',target:"comment"},
   {actionName: 'save',actionType:'edit'},
   // {actionName: 'edit',actionType:'edit'},
   {actionName: 'golive',actionType:'edit'}

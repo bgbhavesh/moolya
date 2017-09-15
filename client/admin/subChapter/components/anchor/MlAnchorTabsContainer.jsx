@@ -10,6 +10,7 @@ import MlAnchorContact from './MlAnchorContact';
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
+import {updateBackendUserActionHandler} from '../../../settings/backendUsers/actions/updateBackendUserAction'
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
@@ -33,34 +34,53 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   async updateAnchorDetails() {
-    const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
-    const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
-    const {subChapterId} = this.props
-    const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
-        if (ob.description) {
-          return ob
+    var response = null
+    switch (this.state.module) {
+      case 'subchapter':
+        const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
+        const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
+        const {subChapterId} = this.props
+        const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
+            if (ob.description) {
+              return ob
+            }
+          });
+        response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
+          subChapterId,
+          objective,
+          contactDetails
+        })
+        return response;
+        break
+      case 'users':
+        var updateUserObject = {
+          //send the update object here
         }
-      });
-    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
-      subChapterId,
-      objective,
-      contactDetails
-    })
-    return response;
+        var updateDetails = this.props
+        response = await updateBackendUserActionHandler(updateUserObject, updateDetails)
+        return response;
+        break
+      default :
+        console.log('save type required')
+    }
   }
-  getUserDetails(details, tabName){
+
+  getUserDetails(details){
     //get tab details
+    this.setState({contact: details, module: "users"})
   }
-  getObjectiveDetails(details, tabName) {
+  getObjectiveDetails(details) {
     //get tab details
     this.setState({
       objective: details,
+      module: "subchapter"
     });
   }
 
-  getContactDetails(details, tabName) {
+  getContactDetails(details) {
     this.setState({
       contactDetails: details,
+      module: "subchapter"
     });
   }
 
@@ -101,7 +121,7 @@ class MlAnchorTabsContainer extends React.Component {
         <div className="admin_padding_wrap">
           <div className='step-progress'>
             <div id="root">
-              <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true}/>
+              <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} preventEnterSubmission={true}/>
             </div>
           </div>
         </div>

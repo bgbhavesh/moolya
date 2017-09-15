@@ -2,11 +2,14 @@ import React, { PureComponent } from 'react';
 import ScrollArea from 'react-scrollbar';
 import CDNImage from '../CDNImage/CDNImage';
 
-export default class UserGrid extends PureComponent {
+export default class MlAnchorUserGrid extends PureComponent {
 
   render() {
     return (
       <ScrollArea speed={0.8} className="left_wrap">
+        {
+          !this.props.users.length && <p>No Anchor users found.</p>
+        }
         {
           this.props.users.map((user, index) => (
             <div className={this.props.classNames || "col-md-6 col-sm-6" } key={index}>
@@ -24,7 +27,7 @@ export default class UserGrid extends PureComponent {
   }
 }
 
-UserGrid.propTypes = {
+MlAnchorUserGrid.propTypes = {
   users: React.PropTypes.array.isRequired,
   clickHandler: React.PropTypes.func,
   classnames: React.PropTypes.string,

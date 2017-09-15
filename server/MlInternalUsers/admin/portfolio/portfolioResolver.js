@@ -341,6 +341,17 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
         if(response){
+          const urlFormationObject = {
+            clusterName: regRecord.clusterName,
+            chapterName: regRecord.chapterName,
+            subChapterName: regRecord.subChapterName,
+            communityName: regRecord.communityName
+          }
+          const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
+          const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
+          const uniqueSeoName = firstNameUser+'_'+lastNameUser;
+
+          MlSiteMapInsertion.mlCreateSEOUrl(urlFormationObject,uniqueSeoName);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
           if(response && response.success){

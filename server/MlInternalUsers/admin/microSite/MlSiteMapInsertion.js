@@ -1,10 +1,25 @@
-/**
- * Created by kanwarjeet on 9/15/17.
- */
-/* global Npm */
+var noData = "not mentioned";
 
-export default function ()
-{
-  // Get the token from the header
+
+const MlSiteMapInsertion= class MlSiteMapInsertion {
+
+  static  mlCreateSEOUrl(urlFormationObject,uniqueSeoName) {
+    try {
+
+
+
+      const seoUrl =
+      uniquieId = firstName+'_'+lastName
+
+    } catch (e) {
+      console.log("Error"+e);
+    }
+  }
 
 }
+
+export default MlSiteMapInsertion;
+
+
+
+

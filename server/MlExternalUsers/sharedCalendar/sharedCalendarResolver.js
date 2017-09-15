@@ -4,6 +4,7 @@ import MlUserContext from '../../MlExternalUsers/mlUserContext'
 var _ = require('lodash')
 import MlAppointment from '../../MlExternalUsers/calendarSettings/appointment';
 import mlInteractionService from '../interactions/mlInteractionRepoService';
+import MlTransactionsHandler from '../../../server/commons/mlTransactionsLog';
 
 
 MlResolver.MlQueryResolver['getMySharedCalendarConnections'] = (obj, args, context, info) => {
@@ -47,6 +48,20 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
     response = mlDBController.insert('MlSharedCalendar', args.detailsInput, context);
   })
   if(response){
+    let transactionEntry = new MlTransactionsHandler().recordTransaction({
+      'fromUserId': context.userId,
+      'moduleName': 'share',
+      'activity': 'sharing',
+      'transactionType': 'sharing',
+      'userId': context.userId,
+      // 'activityDocId': resourceId,
+      // 'docId': portfolioId,
+      'transactionDetails': 'sharing',
+      'context': context || {},
+      'transactionTypeId': "share",
+      'fromUserType': 'user'
+    })
+    console.log('transactionEntry', transactionEntry)
     let code = 200;
     let resp = new MlRespPayload().successPayload("Shared successfully", code);
     return resp;

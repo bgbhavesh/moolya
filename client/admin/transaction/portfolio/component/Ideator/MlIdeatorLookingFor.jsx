@@ -66,7 +66,7 @@ export default class MlIdeatorLookingFor extends Component {
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.lookingFor)
     const response = await findIdeatorLookingForActionHandler(portfolioDetailsId);
     if (empty) {
-      if (response) {
+      if (response && response.length>0) {
         this.setState({
           loading: false,
           ideatorLookingFor: response,
@@ -83,6 +83,7 @@ export default class MlIdeatorLookingFor extends Component {
         // this.lockPrivateKeys()
       });
     }
+    this.IdeatorLookingForServer = response?response:[]
   }
 
   // lockPrivateKeys() {
@@ -113,16 +114,30 @@ export default class MlIdeatorLookingFor extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.lookingForId
+      "selectedVal": details.lookingForId,
+      popoverOpen: !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.IdeatorLookingForServer && this.IdeatorLookingForServer[selIndex]?this.IdeatorLookingForServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onSaveAction(e) {
     this.setState({ideatorLookingForList: this.state.ideatorLookingFor, popoverOpen: false})
@@ -140,14 +155,19 @@ export default class MlIdeatorLookingFor extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {
-      keyName: fieldName,
-      booleanKey: field,
-      isPrivate: isPrivate,
-      index: this.state.selectedIndex,
-      tabName: this.props.tabName
-    }
-    this.setState({data: details, privateKey: privateKey}, function () {
+    // var privateKey = {
+    //   keyName: fieldName,
+    //   booleanKey: field,
+    //   isPrivate: isPrivate,
+    //   index: this.state.selectedIndex,
+    //   tabName: this.props.tabName
+    // }
+    // this.setState({data: details, privateKey: privateKey}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }

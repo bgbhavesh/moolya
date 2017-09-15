@@ -123,6 +123,11 @@ export async function fetchUserDetails() {
                   }
               }
           }
+          mobileNumbers{
+            mobileNumber
+            verified
+            countryId
+          }
       }
     }
     `,

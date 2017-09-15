@@ -23,7 +23,14 @@ let BackEndUser = `
         _id: String,
         username: String,
         profile:ExternalUserProfile,
+        mobileNumbers:[MobileNumbers]
     }
+    type MobileNumbers{
+        mobileNumber: String,
+        verified: Boolean,
+        countryId: String,
+    }
+    
     type ExternalUserProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,

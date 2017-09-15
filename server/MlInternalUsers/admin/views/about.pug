@@ -3,7 +3,7 @@ html
   mixin space()
     | !{' '}
   head
-    -var title = firstName + " " +lastName +" "+ communityType+ " on moolya / " + chapterName + " / "+ clusterName
+    -var title = firstName + " " +lastName +" is "+ communityType+ " on moolya / " + chapterName + " / "+ clusterName
     -var desc = aboutDiscription?aboutDiscription.substr(0,160):''
 
     meta(charset='utf-8')
@@ -33,7 +33,7 @@ html
     script.
       window.fbAsyncInit = function () {
         FB.init({
-          appId: '328947447490953',
+          appId: '135597393456581',
           autoLogAppEvents: true,
           xfbml: true,
           version: 'v2.10'
@@ -50,6 +50,15 @@ html
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
+
+    script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
+      api_key: 8146rgyjf4wael
+      authorize: true
+      onLoad: onLinkedInLoad
+
+    script(type = 'in/Login').
+
+
     .ms_main_wrap
       .ms_header
         .header_left
@@ -169,45 +178,73 @@ html
             }
 
             var facebookShare = function (linkName, event) {
-              console.log('facebookShare')
               FB.ui({
                 method: 'share',
                 display: 'popup',
-                href: linkName,
+                href: 'https://stackoverflow.com/questions/26021781/testing-facebook-share-dialog-with-localhost-unable-to-resolve-object-at-url',
               }, function (response) {
+                console.log(response);
               });
+            }
+          script(type='text/javascript').
+            // Setup an event listener to make an API call once auth is complete
+            function onLinkedInLoad() {
+              IN.Event.on(IN, "auth", shareContent);
+            }
+            // Handle the successful return from the API call
+            function onSuccess(data) {
+              console.log(data);
+            }
+            // Handle an error response from the API call
+            function onError(error) {
+              console.log(error);
+            }
+            // Use the API call wrapper to share content on LinkedIn
+            function shareContent() {
+              // Build the JSON payload containing the content to be shared
+              var payload = {
+                "comment": "Check out developer.linkedin.com! http://localhost:3000/about?id=wJSZWvJxeQHRpjRXX",
+                "visibility": {
+                  "code": "anyone"
+                }
+              };
+              IN.API.Raw("/people/~/shares?format=json")
+                .method("POST")
+                .body(JSON.stringify(payload))
+                .result(onSuccess)
+                .error(onError);
             }
 
           script.
-            script().
-              (function ($) {
-                /**
-                 * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
-                 *
-                 * @param  {[object]} e           [Mouse event]
-                 * @param  {[integer]} intWidth   [Popup width defalut 500]
-                 * @param  {[integer]} intHeight  [Popup height defalut 400]
-                 * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
-                 */
-                $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
-                  // Prevent default anchor event
-                  e.preventDefault();
-                  // Set values for window
-                  intWidth = intWidth || '500';
-                  intHeight = intHeight || '400';
-                  strResize = (blnResize ? 'yes' : 'no');
-                  // Set title and open popup with focus on it
-                  var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
-                    strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
-                    objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
-                }
-                /* ================================================== */
-                $(document).ready(function ($) {
-                  $('.customer.share').on("click", function (e) {
-                    $(this).customerPopup(e);
-                  });
-                });
-              }(jQuery));
+//            script().
+//              (function ($) {
+//                /**
+//                 * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
+//                 *
+//                 * @param  {[object]} e           [Mouse event]
+//                 * @param  {[integer]} intWidth   [Popup width defalut 500]
+//                 * @param  {[integer]} intHeight  [Popup height defalut 400]
+//                 * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
+//                 */
+//                $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
+//                  // Prevent default anchor event
+//                  e.preventDefault();
+//                  // Set values for window
+//                  intWidth = intWidth || '500';
+//                  intHeight = intHeight || '400';
+//                  strResize = (blnResize ? 'yes' : 'no');
+//                  // Set title and open popup with focus on it
+//                  var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
+//                    strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
+//                    objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
+//                }
+//                /* ================================================== */
+//                $(document).ready(function ($) {
+//                  $('.customer.share').on("click", function (e) {
+//                    $(this).customerPopup(e);
+//                  });
+//                });
+//              }(jQuery));
 
 
 

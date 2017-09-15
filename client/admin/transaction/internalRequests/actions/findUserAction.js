@@ -39,6 +39,11 @@ export async function findBackendUserActionHandler(userTypeId) {
                     number,
                     isOTPValidated
                   },
+                  socialLinksInfo {
+                    socialLinkTypeName
+                    socialLinkType
+                    socialLinkUrl
+                  }
                   globalAssignment,
                   isActive,
                   userProfiles{

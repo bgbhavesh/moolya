@@ -9,7 +9,7 @@ import MlAnchorObjective from './MlAnchorObjective';
 import MlAnchorContact from './MlAnchorContact';
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import { updateSubChapterActionHandler } from '../../actions/updateSubChapter'
+import {updateSubChapterActionHandler} from '../../actions/updateSubChapter'
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class MlAnchorTabsContainer extends React.Component {
     }
     this.getObjectiveDetails = this.getObjectiveDetails.bind(this)
     this.getContactDetails = this.getContactDetails.bind(this)
+    this.getUserDetails = this.getUserDetails.bind(this)
     this.updateAnchorDetails = this.updateAnchorDetails.bind(this)
     return this
   }
@@ -34,16 +35,22 @@ class MlAnchorTabsContainer extends React.Component {
   async updateAnchorDetails() {
     const {objective: stateObjective, contactDetails: stateContactDetails} = this.state
     const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
-    const { subChapterId } = this.props
+    const {subChapterId} = this.props
     const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
-      if (ob.description) {
-        return ob
-      }
-    });
-    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {subChapterId, objective, contactDetails})
+        if (ob.description) {
+          return ob
+        }
+      });
+    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
+      subChapterId,
+      objective,
+      contactDetails
+    })
     return response;
   }
-
+  getUserDetails(details, tabName){
+    //get tab details
+  }
   getObjectiveDetails(details, tabName) {
     //get tab details
     this.setState({
@@ -58,20 +65,26 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   render() {
-    const MlActionConfig = [{
-      showAction: true,
-      actionName: 'cancel',
-      handler: async(event) => {
-      }
-    },
+    const MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
-      }]
+      }, {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          window.history.back()
+        }
+      }
+    ]
     const steps =
       [
-        {name: 'Anchors', component: <MlAnchorList data={this.props}/>, icon: <span className="ml ml-basic-Information"></span>},
+        {
+          name: 'Anchors',
+          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails}/>,
+          icon: <span className="ml ml-basic-Information"></span>
+        },
         {
           name: 'Objectives',
           component: <MlAnchorObjective {...this.props} getObjectiveDetails={this.getObjectiveDetails}/>,
@@ -96,5 +109,6 @@ class MlAnchorTabsContainer extends React.Component {
       </div>
     )
   }
-};
+}
+;
 export default MlAnchorTabsContainer = formHandler()(MlAnchorTabsContainer);

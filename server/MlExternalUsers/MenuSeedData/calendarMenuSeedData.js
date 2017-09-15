@@ -15,11 +15,11 @@ if(Meteor.isServer){
       },
       {
         "image":"ml my-ml-calendar",
-        "link": "/app/calendar/clientCalendar",
+        "link": "/app/calendar/shareCalendar",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Client Calendar",
-        "uniqueId" : "calendar_client"
+        "name" : "Share Calendar",
+        "uniqueId" : "calendar_share"
       },
 
       {

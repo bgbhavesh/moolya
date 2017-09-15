@@ -16,9 +16,11 @@ export default class MlAnchorInfoView extends React.Component {
       objective: [],
       contactDetails: [],
       data:[],
+      selectedUser: {},
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
+    this.clearSelection = this.clearSelection.bind(this);
   }
 
   componentDidMount() {
@@ -43,9 +45,13 @@ export default class MlAnchorInfoView extends React.Component {
 
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
-    this.setState({ userData: response });
+    this.setState({ selectedUser: response });
     console.log(response);
     return response;
+  }
+
+  clearSelection(){
+    this.setState({selectedUser: {}});
   }
 
   async getAnchorUsers() {
@@ -144,76 +150,22 @@ export default class MlAnchorInfoView extends React.Component {
             <div className="row">
               {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
-                <UserGrid users={this.state.data} clickHandler={this.handleUserClick}/>
-                {/*<ScrollArea*/}
-                  {/*speed={0.8}*/}
-                  {/*className="left_wrap"*/}
-                {/*>*/}
-
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_1.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name1</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_2.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name2</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_3.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name3</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_4.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name4</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_5.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name5</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_6.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>user Name6</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_7.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name7</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                {/*</ScrollArea>*/}
+                {!this.state.selectedUser.profile && <UserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
+                {this.state.selectedUser.profile &&
+                <div>
+                  <button onClick={this.clearSelection}>Back</button>
+                  <table>
+                    <tr>
+                      <td>Firstname</td>
+                      <td>{this.state.selectedUser.profile.firstName}</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>{this.state.selectedUser.profile.email}</td>
+                    </tr>
+                  </table>
+                </div>
+                }
               </div>
             </div>
           </div>
@@ -228,7 +180,10 @@ export default class MlAnchorInfoView extends React.Component {
                   <h3>Objectives :</h3>
                   <ul className="list-info">
                     {
-                      this.state.objective.map((ob, index) => {
+                      !this.state.objective.length && <p> No objectives added</p>
+                    }
+                    {
+                      this.state.objective.length !== 0 && this.state.objective.map((ob, index) => {
                         const { status, description } = ob;
                         if (status) {
                           return <li key={`${description}index`}>{description}</li>;
@@ -250,7 +205,10 @@ export default class MlAnchorInfoView extends React.Component {
               >
                 <h3>Contact Us:</h3>
                 {
-                  this.state.contactDetails.map((cd, index) => {
+                  !this.state.contactDetails.length && <p>No contact details added</p>
+                }
+                {
+                  this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
                     const { emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber } = cd;
                     return (
                       <p key={index}>

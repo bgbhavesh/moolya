@@ -8,6 +8,9 @@ export default class UserGrid extends PureComponent {
     return (
       <ScrollArea speed={0.8} className="left_wrap">
         {
+          !this.props.users.length && <p>No Anchor users found.</p>
+        }
+        {
           this.props.users.map((user, index) => (
             <div className={this.props.classNames || "col-md-6 col-sm-6" } key={index}>
               <div className="list_block provider_block" onClick={() => this.props.clickHandler(user.userId)}>

@@ -223,9 +223,18 @@ export default class MlAnchorInfoView extends React.Component {
               </ScrollArea>
             </div>
           </div>
-          <div>
-            <a onClick={this.changePath.bind(this)} href="">enter to subchapter</a>
+          <div className="col-md-12 text-center">
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
+            </div>
+            <div className="col-md-4">
+              <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into subchapter</a>
+            </div>
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Get invited</a>*/}
+            </div>
           </div>
+
 
         </div>
       </div>

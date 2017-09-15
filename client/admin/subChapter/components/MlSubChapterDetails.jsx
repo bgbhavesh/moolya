@@ -255,14 +255,7 @@ class MlSubChapterDetails extends React.Component {
 
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
-            <div onClick={this.anchorRedirect}>
-              <a href="">
-                <div className="hanging_btn">
-                  <span className="ml ml-moolya-symbol"></span>
-                  Info
-                </div>
-              </a>
-            </div>
+                  <img src="/images/anchor.png" className="hanging_img"  onClick={this.anchorRedirect} />
             <div className="col-md-6 nopadding-left">
               <div className="form_bg left_wrap">
                 <ScrollArea

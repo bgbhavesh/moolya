@@ -116,7 +116,7 @@ export default class MlAnchorList extends React.Component {
 
                   <div className="panel panel-default new_profile_tabs">
                     <div className="panel-heading">
-                      Email ID
+                      Social Links
                     </div>
                     <div className="panel-body">
 
@@ -124,13 +124,13 @@ export default class MlAnchorList extends React.Component {
                       <div className="ml_tabs">
                         <ul className="nav nav-pills">
                           <li className="active">
-                            <a href="#3a" data-toggle="tab">Home&nbsp;<b><FontAwesome name='minus-square' /></b></a>
+                            <a href="#3a" data-toggle="tab">Linkdin&nbsp;<b><FontAwesome name='minus-square' /></b></a>
                           </li>
                           <li>
-                            <a href="#4a" data-toggle="tab">Office&nbsp;<b><FontAwesome name='minus-square' /></b></a>
+                            <a href="#4a" data-toggle="tab">Facebook&nbsp;<b><FontAwesome name='minus-square' /></b></a>
                           </li>
                           <li>
-                            <a href="#" className="add-contact"><FontAwesome name='plus-square' /> Add Email</a>
+                            <a href="#" className="add-contact"><FontAwesome name='plus-square' /> Add Social Links</a>
                           </li>
                         </ul>
 
@@ -149,7 +149,7 @@ export default class MlAnchorList extends React.Component {
                           <div className="tab-pane" id="2a">
                             <div className="form-group">
                               <select className="form-control">
-                                <option>Email Id Type</option>
+                                <option>social link Type</option>
                                 <option>test</option>
                               </select>
                             </div>

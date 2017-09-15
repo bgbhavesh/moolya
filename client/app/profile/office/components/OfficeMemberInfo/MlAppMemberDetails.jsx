@@ -6,7 +6,11 @@ import React from 'react';
 import {fetchOfficeMember} from '../../actions/findOfficeMember';
 import {updateOfficeMemberActionHandler} from '../../actions/updateOfficeMember'
 import {fetchOfficeMemberById} from '../../actions/findOfficeById';
-import moment from 'moment'
+import moment from 'moment';
+import gql from "graphql-tag";
+import Moolyaselect from  '../../../../../commons/containers/select/MlSelectComposer';
+import {appClient} from '../../../../core/appConnection';
+import {setOfficeMemberIndependent} from '../../actions/setOfficeMemberIndependent';
 
 export default class MlAppMemberDetails extends React.Component{
   constructor(props){
@@ -15,9 +19,13 @@ export default class MlAppMemberDetails extends React.Component{
       memberInfo: {},
       office:{
         availableCommunities:[]
-      }
+      },
+      communityCode:'',
+      showCommunityBlock: false
     };
+    this.onCommunitySelect = this.onCommunitySelect.bind(this);
   }
+
   componentDidMount() {
     $(function() {
       $('.float-label').jvFloat();
@@ -69,20 +77,51 @@ export default class MlAppMemberDetails extends React.Component{
     };
     let id = FlowRouter.getParam('memberId');
     let officeId = FlowRouter.getParam('officeId');
-    let response = await updateOfficeMemberActionHandler(officeId, id, update);
+    console.log(id, officeId);
+
+    this.setState({
+      showCommunityBlock: e.target.checked
+    });
+    // let response = await updateOfficeMemberActionHandler(officeId, id, update);
+    // if(response.success){
+    //   toastr.success(response.result);
+    // } else {
+    //   toastr.error(response.result);
+    // }
+  }
+
+  onCommunitySelect(value) {
+    this.setState({
+      communityCode: value
+    });
+  }
+
+  async makeIndependent(){
+    let id = FlowRouter.getParam('memberId');
+    let communityCode = this.state.communityCode;
+    let response = await setOfficeMemberIndependent(id, communityCode);
     if(response.success){
       toastr.success(response.result);
+      this.getMemberDetail();
     } else {
       toastr.error(response.result);
     }
   }
 
-  render(){
+  render() {
     const that = this;
     let community = this.state.office.availableCommunities.find(function (item) {
       return item.communityId == that.state.memberInfo.communityType;
     });
-    let communityName = community ?  community.communityName : '';
+
+    let query = gql`{
+                data:fetchCommunitiesSelect {
+                    value:code
+                    label:name
+                  }
+                }
+              `,
+    communityName = community ?  community.communityName : '';
     communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
     return (
       <div>
@@ -122,10 +161,42 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form-group switch_wrap inline_switch">
                 <label>Show Independent</label>
                 <label className="switch">
-                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} />
+                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} disabled={this.state.memberInfo.isIndependent ? true : false } />
                   <div className="slider"></div>
                 </label>
               </div>
+              <div className="clearfix"></div>
+              {
+                that.state.showCommunityBlock && !that.state.memberInfo.isIndependent
+                  ?
+                  <div>
+                    <div className="form-group">
+                      <Moolyaselect
+                        multiSelect={false}
+                        className="form-control float-label"
+                        valueKey={'value'}
+                        labelKey={'label'}
+                        queryType={"graphql"}
+                        placeholder="Select Community"
+                        selectedValue={this.state.communityCode}
+                        connection={appClient}
+                        query={query}
+                        id={"communityType"}
+                        isDynamic={true}
+                        onSelect={this.onCommunitySelect.bind(this)}
+                        ref="listSelect"
+                        reExecuteQuery={true}
+                        queryOptions={{}}
+                      />
+                    </div>
+                    <div className="clearfix"></div>
+                    <div className="form-group text-right padding10">
+                      <a href="" onClick={()=> that.makeIndependent() } className="mlUpload_btn">Make Independent</a>
+                    </div>
+                  </div>
+                  :
+                  ""
+              }
               <div className="clearfix"></div>
               <div className="form_bg">
                 <form>
@@ -147,9 +218,9 @@ export default class MlAppMemberDetails extends React.Component{
           </div>
         </div>
         <div className="col-md-12 text-right well padding10">
-          <a href="#" onClick={()=>this.updateMemberFlags('isFreeze')} className="mlUpload_btn">Freeze</a>
-          <a href="#" onClick={()=>this.updateMemberFlags('isPrincipal')} className="mlUpload_btn">Make Principal</a>
-          <a href="#" onClick={()=>this.updateMemberFlags('isRetire')} className="mlUpload_btn">Retire</a>
+          <a href="" onClick={()=>this.updateMemberFlags('isFreeze')} className="mlUpload_btn">Freeze</a>
+          <a href="" onClick={()=>this.updateMemberFlags('isPrincipal')} className="mlUpload_btn">Make Principal</a>
+          <a href="" onClick={()=>this.updateMemberFlags('isRetire')} className="mlUpload_btn">Retire</a>
         </div>
       </div>
     )

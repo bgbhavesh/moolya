@@ -3,7 +3,7 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import MlAppServicePurchasedDetail from './MlAppServicePurchasedDetail';
+import MlAppServicePurchasedDetail from './mlAppServicePurchasedDetail/MlAppServicePurchasedDetail';
 
 export default class MlAppointmentsDetailsComponent extends Component {
   render() {

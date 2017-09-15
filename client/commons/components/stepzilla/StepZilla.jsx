@@ -115,40 +115,44 @@ export default class StepZilla extends Component {
 
                 return;
             }
-
-            let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
-          let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
-            if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
+            if(_.isEmpty(this.refs)){
+              this._setNavState(this.state.compState + 1);
+            }else{
+              let validate = this.refs&&this.refs.activeComponent&&this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
+              let isupdated = this.refs&&this.refs.activeComponent&&this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
+              if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
                 if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-                    this.state.compState === (this.props.steps.length - 1)) {
-                    this._setNavState(this.props.steps.length);
+                  this.state.compState === (this.props.steps.length - 1)) {
+                  this._setNavState(this.props.steps.length);
                 }
                 else {
-                    this._setNavState(evt.currentTarget.value);
+                  this._setNavState(evt.currentTarget.value);
                 }
-            }else if(!this.props.dontValidate && !validate){
-              this.setState({
-                maditoryModalOpen: true,
-              });
-              this._setNavState(this.state.compState);
-              return
+              }else if(!this.props.dontValidate && !validate){
+                this.setState({
+                  maditoryModalOpen: true,
+                });
+                this._setNavState(this.state.compState);
+                return
+              }
+
+              if (typeof this.refs.activeComponent.isUpdated == 'undefined' || this.refs.activeComponent.isUpdated() ) {
+                if (evt.currentTarget.value === (this.props.steps.length - 1) &&
+                  this.state.compState === (this.props.steps.length - 1)) {
+                  this._setNavState(this.props.steps.length);
+                }
+                else {
+                  this._setNavState(evt.currentTarget.value);
+                }
+              }else if(!this.props.dontValidate && !isupdated){
+                this.setState({
+                  modalOpen: true,
+                });
+                this._setNavState(this.state.compState);
+                return
+              }
             }
 
-            if (typeof this.refs.activeComponent.isUpdated == 'undefined' || this.refs.activeComponent.isUpdated() ) {
-              if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-                this.state.compState === (this.props.steps.length - 1)) {
-                this._setNavState(this.props.steps.length);
-              }
-              else {
-                this._setNavState(evt.currentTarget.value);
-              }
-            }else if(!this.props.dontValidate && !isupdated){
-              this.setState({
-                modalOpen: true,
-              });
-              this._setNavState(this.state.compState);
-              return
-            }
         }
     }
 
@@ -159,20 +163,24 @@ export default class StepZilla extends Component {
       * If entered manditory fields through update modal
       * */
     // if its a form component, it should have implemeted a public isValidated class. If not then continue
-    let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
-    let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
-    if(!this.props.dontValidate && !validate){
-      this.setState({
-        maditoryModalOpen: true,
-        prevButton:false
-      });
-    }else if(!this.props.dontValidate && !isupdated){
-      this.setState({
-        modalOpen: true,
-        prevButton:false
-      });
-    }else if (this.props.dontValidate || isupdated ) {
+    if(_.isEmpty(this.refs)){
       this._setNavState(this.state.compState + 1);
+    }else {
+      let isupdated = this.refs && this.refs.activeComponent && this.refs.activeComponent.isUpdated ? this.refs.activeComponent.isUpdated() : true;
+      let validate = this.refs && this.refs.activeComponent && this.refs.activeComponent.isValidated ? this.refs.activeComponent.isValidated() : true;
+      if (!this.props.dontValidate && !validate) {
+        this.setState({
+          maditoryModalOpen: true,
+          prevButton: false
+        });
+      } else if (!this.props.dontValidate && !isupdated) {
+        this.setState({
+          modalOpen: true,
+          prevButton: false
+        });
+      } else if (this.props.dontValidate || isupdated) {
+        this._setNavState(this.state.compState + 1);
+      }
     }
   }
   _finish(){
@@ -185,21 +193,25 @@ export default class StepZilla extends Component {
     }
 
     _previous() {
-      let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
-      let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
-      if(!validate){
-        this.setState({
-          maditoryModalOpen: true,
-          prevButton:true
-        });
-      }else if(!isupdated){
-        this.setState({
-          modalOpen: true,
-          prevButton:true
-        });
-      }else if (this.props.dontValidate || isupdated) {
-        if (this.state.compState > 0) {
-          this._setNavState(this.state.compState - 1);
+      if(_.isEmpty(this.refs)){
+        this._setNavState(this.state.compState - 1);
+      }else {
+        let isupdated = this.refs && this.refs.activeComponent && this.refs.activeComponent.isUpdated ? this.refs.activeComponent.isUpdated() : true;
+        let validate = this.refs && this.refs.activeComponent && this.refs.activeComponent.isValidated ? this.refs.activeComponent.isValidated() : true;
+        if (!validate) {
+          this.setState({
+            maditoryModalOpen: true,
+            prevButton: true
+          });
+        } else if (!isupdated) {
+          this.setState({
+            modalOpen: true,
+            prevButton: true
+          });
+        } else if (this.props.dontValidate || isupdated) {
+          if (this.state.compState > 0) {
+            this._setNavState(this.state.compState - 1);
+          }
         }
       }
 

@@ -58,12 +58,13 @@ MlModuleCollectionMap['users'] = 'USERS';
 
 //portfolio
 MlModuleCollectionMap['MlPortfolioDetails'] = 'PORTFOLIO';
-MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';   //IDEATORPORTFOLIO
+MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlIdeas'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlServiceProviderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlInstitutionPortfolio'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlSeo'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
 //hierarchy

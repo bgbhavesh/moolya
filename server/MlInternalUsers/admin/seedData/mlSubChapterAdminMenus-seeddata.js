@@ -54,8 +54,21 @@ if(Meteor.isServer){
                 "subMenusId":"dashboard",
                 "isLink" : true,
                 "isMenu" : true,
-                "image" : ""
-
+                "image" : "",
+                "subMenu": [
+                  {
+                    "link": "/admin/dashboard/anchorDetails",
+                    "name": "Anchor Details",
+                    "uniqueId": "dashboard_specSubChapters_anchorInfoView",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": "",
+                    "dynamicLink": true,
+                    "dynamicLinkHandler": "",
+                    "subMenusId": "dashboard",
+                    "subMenuMappingId": "dashboard_chapters"
+                  }
+                ]
               }]
           },
           {

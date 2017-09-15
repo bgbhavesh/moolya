@@ -428,7 +428,7 @@ export default class MlAppBasicInfo extends React.Component{
                               valueKey={'value'}
                               labelKey={'label'}
                               queryType={"graphql"}
-                              query={industryTypeQuery}
+                              query={industryTypeQuery}Moolyaselect
                               isDynamic={true} placeholder="Select Industry Type"
                               onSelect={that.selectIndustry.bind(that)}
                               selectedValue={that.state.basicData.industryTypes}

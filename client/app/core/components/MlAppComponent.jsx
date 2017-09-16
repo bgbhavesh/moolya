@@ -24,7 +24,7 @@ class MlAppComponent extends Component{
     let path = Object.assign(FlowRouter._current.path);
     let hierarchy = path.split('/app/');
     if(hierarchy[1]){
-      let v= hierarchy[1];
+      let v= hierarchy[1].split('/')[0];
       if(v !== 'explore' && v !== 'startup' && v !== 'funder' && v !== 'serviceProvider' && v !== 'company' && v !== 'institution' && v !== 'ideator' ){
         return true;
       }

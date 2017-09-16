@@ -13,7 +13,7 @@ import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
-import  MlSiteMapInsertion from '../microSite/MlSiteMapInsertion'
+import  MlSiteMapInsertion from '../../../MlExternalUsers/sitemap/microSiteRepo/MlSiteMapInsertion'
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -349,7 +349,8 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
           }
           const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
           const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
-          const uniqueSeoName = firstNameUser + '_' + lastNameUser;
+          let uniqueSeoName = firstNameUser + '_' + lastNameUser;
+          uniqueSeoName = uniqueSeoName.replace(/ /g, "_");
           const portfolio_user_id = {
             userId: regRecord.userId,
             portFolioId: args.portfoliodetailsId

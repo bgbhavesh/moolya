@@ -20,7 +20,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
-import findPortFolioDetails from './microSite/microSite'
+import findPortFolioDetails from '../../MlExternalUsers/sitemap/microSiteRepo/microSite'
 
 let helmet = require('helmet');
 var Tokens = require('csrf')
@@ -61,6 +61,7 @@ const defaultServerConfig = {
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
   about: '/*',
+  view:'/view/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -104,12 +105,25 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
 
   let path = process.env.PWD;                                                 // Core Project Root Path
-  graphQLServer.set('views', path + '/server/MlInternalUsers/admin/views');   // MicroSite View folder that contains static files.
+  graphQLServer.set('views', path + '/server/MlExternalUsers/sitemap/views');   // MicroSite View folder that contains static files.
   graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
 
   var tokens = new Tokens()
   var secret = tokens.secretSync()
 
+
+  graphQLServer.get(config.view, async function (req, res, next) {
+
+          const pathName = req.url;
+          const originalUrl = req.originalUrl.replace('/view','');
+          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+            res.redirect('/login');
+          }
+          res.render('about', portFolio)
+        }
+  )
 
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res, next) {

@@ -17,10 +17,13 @@ export default class MlAnchorInfoView extends React.Component {
       contactDetails: [],
       data:[],
       selectedUser: {},
+      subChapterImageLink:"/images/startup_default.png",
+
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
+    this.getAnchorUsers = this.getAnchorUsers.bind(this)
   }
 
   componentDidMount() {
@@ -37,7 +40,6 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   handleUserClick(id) {
-    console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
     return resp;
 
@@ -57,26 +59,43 @@ export default class MlAnchorInfoView extends React.Component {
   async getAnchorUsers() {
     var { clusterId, chapterId, subChapterId } = this.props;
     var response = await findAnchorUserActionHandler({ clusterId, chapterId, subChapterId })
-    console.log('anchor user list', response)
     this.setState({ data: response })
     return response
   }
 
-  async componentWillMount() {
+  async fetchSubChapterDetails(){
     const { clusterId, chapterId, subChapterId } = this.props;
-    console.log(this.props);
-    console.log('In this file');
-    await this.getAnchorUsers();
     const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
     const objective = response && response.objective && response.objective.map((ob) => ({
-      description: ob.description,
-      status: ob.status,
-    }));
+        description: ob.description,
+        status: ob.status,
+      }));
     const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
     this.setState({
       objective: objective || [],
-      contactDetails: contactDetails || []
+      contactDetails: contactDetails || [],
+      subChapterName : response && response.subChapterName?response.subChapterName:"SubChapter Name",
+      subChapterImageLink : response && response.subChapterImageLink?response.subChapterImageLink:"/images/startup_default.png"
     })
+    this.getAnchorUsers();
+  }
+
+  componentWillMount() {
+    // const { clusterId, chapterId, subChapterId } = this.props;
+    console.log(this.props);
+    // this.getAnchorUsers();
+    const resp = this.fetchSubChapterDetails()
+    return resp
+    // const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    // const objective = response && response.objective && response.objective.map((ob) => ({
+    //   description: ob.description,
+    //   status: ob.status,
+    // }));
+    // const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
+    // this.setState({
+    //   objective: objective || [],
+    //   contactDetails: contactDetails || []
+    // })
   }
 
   changePath(){
@@ -94,10 +113,10 @@ export default class MlAnchorInfoView extends React.Component {
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="panel panel-default">
-            <div className="panel-heading">RakSan Subchapter</div>
+            <div className="panel-heading">{this.state.subChapterName}</div>
             <div className="panel-body nopadding">
               <div className="col-md-2 text-center">
-                <img src="/images/startup_default.png" className="margintop"/>
+                <img src={this.state.subChapterImageLink} className="margintop"/>
               </div>
               <div className="col-md-10 nopadding att_members">
                 <ul className="users_list">

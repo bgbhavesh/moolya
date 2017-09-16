@@ -166,7 +166,7 @@ class MlAppIdeatorAddIdea extends React.Component{
                       <div>
                           <h2>Add Idea</h2>
                           <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
-                              <a href="#" >
+                              <a href="" >
                                   <div className="upload_hex">
                                     <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
                                     <img src="/images/images.png" id="blah" width="105" height="auto"/>

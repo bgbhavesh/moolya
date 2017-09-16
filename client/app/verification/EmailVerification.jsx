@@ -106,12 +106,12 @@ export default class EmailVerification extends React.Component{
               </div>
               <div className="form-group sendotp">
                 <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
-                <a href="#" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
+                <a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
               </div><br />
                 <div className="terms">
                   <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a href="moolya.global/terms-of-usage" target="_blank">Terms and Conditions</a> and <a href="moolya.global/privacy-policy" target="_blank"> 'Privacy Policy'</a></label>
                 </div>
-              <a href="#" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
+              <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
               </div>
             }
             {!emailVerificationSuccess&&<div>

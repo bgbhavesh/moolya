@@ -362,7 +362,7 @@ export default class MlCompanyAwards extends React.Component{
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover" >
+                    <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
                       <div className="list_block notrans" onClick={this.addAward.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addAward.bind(this)}>Add New Awards</h3>
@@ -371,7 +371,7 @@ export default class MlCompanyAwards extends React.Component{
                   </div>
                   {awardsList.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="#" id={"create_client"+idx}>
+                      <a href="" id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}

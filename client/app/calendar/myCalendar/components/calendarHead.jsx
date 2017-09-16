@@ -17,7 +17,7 @@ export default class CalenderHead extends React.Component{
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li>
-            <a href="#">
+            <a href="">
               <img src="/images/p_5.jpg" /><br />
               <div className="tooltiprefer">
                 <span>All</span>
@@ -25,7 +25,7 @@ export default class CalenderHead extends React.Component{
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <span className="icon_bg"> <span className="icon_lg ml my-ml-Investors"></span></span><br />
               <div className="tooltiprefer">
                 <span>Funder</span>
@@ -35,7 +35,7 @@ export default class CalenderHead extends React.Component{
           <li className="sub_list_wrap hidden_list">{/**/}
             <ul className="sub_list">
               <li>
-                <a href="#">
+                <a href="">
                   <span className="icon_bg"><span className="icon_lg fa fa-building-o"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Hyderabad</span>
@@ -45,7 +45,7 @@ export default class CalenderHead extends React.Component{
               <li className="sub_list_wrap hidden_list">{/**/}
                 <ul className="sub_list">
                   <li>
-                    <a href="#">
+                    <a href="">
                       <span className="icon_bg"><span className="icon_lg ml flaticon-ml-active-user"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Naveen</span>
@@ -53,7 +53,7 @@ export default class CalenderHead extends React.Component{
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="">
                       <span className="icon_bg"><span className="icon_lg ml flaticon-ml-active-user"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Vishwadeep</span>
@@ -61,7 +61,7 @@ export default class CalenderHead extends React.Component{
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="">
                       <span className="icon_bg"><span className="icon_lg ml flaticon-ml-active-user"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Balakrishna</span>
@@ -71,7 +71,7 @@ export default class CalenderHead extends React.Component{
                 </ul>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <span className="icon_bg"><span className="icon_lg fa fa-building-o"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Bangalore</span>
@@ -79,7 +79,7 @@ export default class CalenderHead extends React.Component{
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <span className="icon_bg"><span className="icon_lg fa fa-building-o"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Mumbai</span>
@@ -89,7 +89,7 @@ export default class CalenderHead extends React.Component{
             </ul>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <span className="icon_bg"><span className="icon_lg ml my-ml-Ideator"></span></span><br />
               <div className="tooltiprefer">
                 <span>Ideator</span>
@@ -97,7 +97,7 @@ export default class CalenderHead extends React.Component{
             </a>
           </li>
           <li className="pull-right circle-time">
-            <a href="#">
+            <a href="">
               <span className="icon_bg">GMT<br />+03:00</span><br />
               <div className="tooltiprefer">
                 <span>14/06/2017</span>

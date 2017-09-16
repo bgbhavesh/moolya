@@ -318,7 +318,7 @@ export default class MlStartupBranches extends React.Component{
             <div className="col-lg-12">
               <div className="row">
                 <div className="col-lg-2 col-md-3 col-sm-3">
-                  <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover" >
+                  <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
                     <div className="list_block notrans" onClick={this.addBranch.bind(this)}>
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
                       <h3 onClick={this.addBranch.bind(this)}>Add New Branch</h3>
@@ -327,7 +327,7 @@ export default class MlStartupBranches extends React.Component{
                 </div>
                 {branchesArray.map(function (details, idx) {
                   return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                    <a href="#" id={"create_client"+idx}>
+                    <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
@@ -419,7 +419,7 @@ export default class MlStartupBranches extends React.Component{
                           <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div>

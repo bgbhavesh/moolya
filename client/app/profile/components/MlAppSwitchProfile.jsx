@@ -205,18 +205,18 @@ componentDidUpdate(){
 
             <div className="col-md-12 text-center">
               <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
-                <a href="#" id="makeDefault" className="fileUpload mlUpload_btn">Make Default</a>
+                <a href="" id="makeDefault" className="fileUpload mlUpload_btn">Make Default</a>
               </div>
 
               <div className="col-md-4" onClick={this.switchProfile.bind(this)}>
-                <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
+                <a href="" className="fileUpload mlUpload_btn">Switch Profile</a>
               </div>
 
               <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
-                <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
+                <a href="" className="fileUpload mlUpload_btn">Deactivate Profile</a>
               </div>
              {/* <div className="col-md-4" onClick={this.blockUserProfile.bind(this)}>
-                <a href="#" className="fileUpload mlUpload_btn">Block Profile</a>
+                <a href="" className="fileUpload mlUpload_btn">Block Profile</a>
               </div>*/}
             </div>
 

@@ -135,7 +135,7 @@ export default class MlIdeatorIdeas extends React.Component{
     //let name = e.target.name;
     let fileName=file.name;
     if(file){
-      let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:" ", fileName : fileName}}};
+      let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
     }this.setState({
       uploadingAvatar: false,
@@ -167,8 +167,9 @@ export default class MlIdeatorIdeas extends React.Component{
   }
   toggleModal() {
     const that = this;
+    var status = that.state.showProfileModal
     this.setState({
-      showProfileModal: !that.state.showProfileModal
+      showProfileModal: !status
     });
   }
   handleUploadAvatar(image) {
@@ -188,13 +189,16 @@ export default class MlIdeatorIdeas extends React.Component{
       <div>
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
-          <a href="#" >
+          {/*<a href="" >*/}
             <div className="upload_hex">
               {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
-              <img src={image} id="blah"  onClick={this.toggleModal.bind(this)}  width="105" height="auto"/>
+              <img src={image} id="blah" width="105" height="auto"/>
               {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
             </div>
-          </a>
+          {/*</a>*/}
+          <div className="fileUpload mlUpload_btn">
+            <span onClick={this.toggleModal}>Upload Pic</span>
+          </div>
         </div>
         <CropperModal
           uploadingImage={this.state.uploadingAvatar}

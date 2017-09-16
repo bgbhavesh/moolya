@@ -81,7 +81,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex: index, 
+    this.setState({selectedIndex: index,
                    data:details,
                    "selectedVal" : details.fundingTypeId,
                    selectedObject : index,
@@ -94,7 +94,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)*/
-    
+
   }
 //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
@@ -299,7 +299,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover" >
+                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
                         <div className="list_block notrans" onClick={this.addInvestor.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3 onClick={this.addInvestor.bind(this)}>Add New Investor</h3>
@@ -359,7 +359,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                           <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div></div>

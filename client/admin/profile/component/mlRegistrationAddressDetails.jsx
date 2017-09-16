@@ -293,7 +293,7 @@ export default class AddressDetails extends React.Component{
                          className="form-control float-label" id="" />
                 </div>
                 <div className="ml_icon_btn">
-                  <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
+                  <a href="" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
                     className="ml ml-save"></span></a>
                 </div>
               </div>
@@ -365,11 +365,11 @@ export default class AddressDetails extends React.Component{
                   </div>
 
                   <div className="ml_icon_btn">
-                    <a href="#" className="save_btn">Save</a>
-                    <a href="#" onClick={that.onEditAddress.bind(that,key)}
+                    <a href="" className="save_btn">Save</a>
+                    <a href="" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
+                    <a href="" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
             }))}

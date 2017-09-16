@@ -307,7 +307,7 @@ class MlAddBackendUser extends React.Component {
                       <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
                       <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                     </div>
-                  {/*  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>*/}
+                  {/*  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="" className="mlUpload_btn">Send Notification</a> </div>*/}
                     <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>
                 </form>

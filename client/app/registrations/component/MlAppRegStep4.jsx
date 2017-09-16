@@ -380,7 +380,7 @@ export default class MlAppRegStep4 extends React.Component {
                                data-errMsg="URL is required"/>
                       </div>
                       <div className="ml_icon_btn">
-                        <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
+                        <a href="" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
                           className="ml ml-save"></span></a>
                       </div>
                     </div>
@@ -404,10 +404,10 @@ export default class MlAppRegStep4 extends React.Component {
                                  data-errMsg="URL is required"/>
                         </div>
                         <div className="ml_icon_btn">
-                          <a href="#" className="save_btn"
+                          <a href="" className="save_btn"
                              onClick={that.onUpdatingSocialLinkDetails.bind(that, key)}><span
                             className="ml ml-save"></span></a>
-                          <a href="#" className="cancel_btn" onClick={that.onClear.bind(that, key)}><span
+                          <a href="" className="cancel_btn" onClick={that.onClear.bind(that, key)}><span
                             className="ml ml-delete"></span></a>
                         </div>
                       </div>)

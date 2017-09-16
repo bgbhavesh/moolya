@@ -23,6 +23,19 @@ export default class MlAppEditOffice extends React.Component{
     }
   }
   componentWillMount() {
+
+    if( !FlowRouter.getQueryParam('tab') ) {
+      FlowRouter.setQueryParams({ tab: "Principals" });
+    }
+
+    setTimeout(function () {
+      let params = new URL(window.location.href).searchParams;
+      if(!params.get('tab')) {
+        FlowRouter.reload();
+      }
+    },0);
+
+
     const resp = this.officeDetails();
     this.getMyOfficeRole();
     let activeTab = FlowRouter.getQueryParam('tab');

@@ -50,8 +50,8 @@ export default class Connect extends React.Component {
       <div>
         Do you want to connect ?
         <div className="ml_btn">
-          <a href="#" className="save_btn" onClick={this.connectHandler.bind(this)}>Connect</a>
-          <a href="#" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
+          <a href="" className="save_btn" onClick={this.connectHandler.bind(this)}>Connect</a>
+          <a href="" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
         </div>
 
       </div>

@@ -179,7 +179,7 @@ export default class DocumentViewer extends React.Component{
                {/* <div className="col-lg-12">
           <div className="row">
         <div className="col-lg-2 col-md-3 col-sm-3">
-          <a href="#" id="createDocument" data-placement="right" data-class="large_popover" >
+          <a href="" id="createDocument" data-placement="right" data-class="large_popover" >
             <div className="list_block notrans" onClick={this.addDocument.bind(this)}>
               <div className="hex_outer"><span className="ml ml-plus "></span></div>
               <h3 onClick={this.addDocument.bind(this)}>Add New Document</h3>

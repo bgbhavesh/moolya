@@ -2,9 +2,15 @@
  * Created by kanwarjeet on 9/8/17.
  */
 import _ from 'lodash'
-async function findPortFolioDetails(idPortFolio, pathName,fullUrl) {
+async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
 
   //Default Values
+  const existsSeoName = MlSitemap.findOne({seoUrl: originalUrl});
+  if (!existsSeoName) {
+    return 'Next';
+  }
+  let idPortFolio = existsSeoName.portFolioId;
+
   let portFolio = {
     profilePic: '',
     firstName: '',
@@ -17,9 +23,9 @@ async function findPortFolioDetails(idPortFolio, pathName,fullUrl) {
     aboutDiscription: '',
     management: [],
     lookingForDescription: '',
-    privateFields:{},
-    currentUrl:fullUrl,
-    twitterHandle:'@kanwar00733'
+    privateFields: {},
+    currentUrl: fullUrl,
+    twitterHandle: '@kanwar00733'
 
   }
   if (!idPortFolio) {
@@ -29,19 +35,20 @@ async function findPortFolioDetails(idPortFolio, pathName,fullUrl) {
     '_id': idPortFolio
   }
   let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
-  let privateFieldsObjects = resultParentPortFolio.privateFields;
-  let privateFields ={}
-  _.forEach(privateFieldsObjects, function(value) {
-    privateFields[value.keyName] = true
-  });
-  portFolio.privateFields = privateFields
-  // Store portfolio information.
   if (resultParentPortFolio) {
     portFolio.clusterName = resultParentPortFolio.clusterName
     portFolio.chapterName = resultParentPortFolio.chapterName
   } else {
-    return portFolio
+    return 'Redirect_to_login';
   }
+
+  let privateFieldsObjects = resultParentPortFolio.privateFields;
+  let privateFields = {}
+  _.forEach(privateFieldsObjects, function (value) {
+    privateFields[value.keyName] = true
+  });
+  portFolio.privateFields = privateFields
+  // Store portfolio information.
 
   query = {
     'portfolioDetailsId': idPortFolio
@@ -129,7 +136,8 @@ async function IDE(portFolio, query) {
     }
     portFolio.aboutDiscription = resultIDEPortfolio.ideatorabout ? resultIDEPortfolio.ideatorabout.description : '';
     //Get LookingFor Description
-    getLookingForDescription(portFolio, resultIDEPortfolio);
+    portFolio.lookingForDescription = resultIDEPortfolio.lookingFor ? resultIDEPortfolio.lookingFor.lookingForDescription : '';
+
     appendKeywords(portFolio);
     return portFolio
   }
@@ -237,8 +245,15 @@ function getProfileInfo(portFolio, portFolioProfileInfo) {
 
 
 function getLookingForDescription(portFolio, resultPortFolioDescription) {
-  if (resultPortFolioDescription.lookingFor) {
-    portFolio.lookingForDescription = resultPortFolioDescription.lookingFor[0].lookingDescription ? resultPortFolioDescription.lookingFor[0].lookingDescription : '';
+  try {
+
+    if (resultPortFolioDescription.lookingFor) {
+      portFolio.lookingForDescription = resultPortFolioDescription.lookingFor[0].lookingDescription ? resultPortFolioDescription.lookingFor[0].lookingDescription : '';
+
+    }
+
+  } catch (e) {
+
   }
 
 }

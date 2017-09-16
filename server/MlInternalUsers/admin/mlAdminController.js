@@ -60,7 +60,7 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  about: '/',
+  about: '/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -114,15 +114,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res, next) {
 
-      if (!req.headers.cookie.includes('meteor_login_token')) {
-        const pathName = req.url;
-        const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-        console.log(fullUrl)
-        const idPortFolio = req.query.id;
-        const portFolio = await findPortFolioDetails(idPortFolio, pathName, fullUrl);
-        res.render('about', portFolio)
+      if (!(req.url.includes('login') || req.url.includes('registration'))) {
+        if (!req.headers.cookie.includes('meteor_login_token')) {
+          const pathName = req.url;
+          const originalUrl = req.originalUrl;
+          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+            res.redirect('/login');
+          }
+          res.render('about', portFolio)
+        } else {
+          next()
+        }
       } else {
-        console.log(req.headers.cookie.includes('meteor_login_token'))
         next()
       }
 

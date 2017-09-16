@@ -160,7 +160,7 @@ class MlAppProfileHeader extends Component {
                 <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-register_as"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
-              {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
+              {/*<a href=""><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
               <li data-toggle="tooltip" title="Calendar" data-placement="top">
                 <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>

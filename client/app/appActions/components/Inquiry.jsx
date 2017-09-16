@@ -36,8 +36,8 @@ export default class Inquiry extends React.Component {
           <textarea placeholder="message" ref='message' className="form-control float-label"></textarea>
         </div>
         <div className="ml_btn">
-          <a href="#" className="save_btn" onClick={this.inquiryHandler.bind(this)}>Send</a>
-          <a href="#" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
+          <a href="" className="save_btn" onClick={this.inquiryHandler.bind(this)}>Send</a>
+          <a href="" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
         </div>
       </div>
 

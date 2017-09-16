@@ -407,7 +407,7 @@ class MlPortfolio extends React.Component {
                       <textarea ref="comment" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
-                      <a href="#" data-id={annotationDetails.id} className="circle_btn">
+                      <a href="" data-id={annotationDetails.id} className="circle_btn">
                         <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
                       </a>
 

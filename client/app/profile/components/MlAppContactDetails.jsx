@@ -286,9 +286,9 @@ export default class AppContactDetails extends React.Component {
                        data-errMsg="Phone Number is required"/>
               </div>
               <div className="ml_icon_btn">
-                <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
+                <a href="" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
                   className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn" onClick={this.onClear.bind(this,null)}>
+                <a href="" id="cancel_contact" className="cancel_btn" onClick={this.onClear.bind(this,null)}>
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>

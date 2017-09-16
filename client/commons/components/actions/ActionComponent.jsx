@@ -191,15 +191,15 @@ MlActionComponent.PropTypes={
   imagePath:React.PropTypes.string
 }
 
-{/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-plus"></span> </a></div>
-<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-edit"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-delete"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-select-all"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-import"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-export"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-save"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-active"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-share"></span> </a></div>
-  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-annotate"></span> </a></div>*/}
+{/*<div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-plus"></span> </a></div>
+<div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-edit"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-delete"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-select-all"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-import"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-export"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-save"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-active"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-share"></span> </a></div>
+  <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <span className="ml ml-annotate"></span> </a></div>*/}
 
 

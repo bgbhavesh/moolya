@@ -109,7 +109,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Community" defaultValue="Funder" className="form-control float-label" id=""/>
                 </div>
-                <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>
+                <a href="" className="fileUpload mlUpload_btn">Cancel</a> <a href="" className="fileUpload mlUpload_btn">Sign Off</a>
               </div>
 
             </div>
@@ -157,7 +157,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Gender" defaultValue="Male" className="form-control float-label" id=""/>
                 </div>
-                {/*<a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>*/}
+                {/*<a href="" className="fileUpload mlUpload_btn">Cancel</a> <a href="" className="fileUpload mlUpload_btn">Sign Off</a>*/}
               </div>
 
             </div>

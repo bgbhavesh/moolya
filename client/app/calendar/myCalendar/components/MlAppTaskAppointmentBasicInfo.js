@@ -107,7 +107,7 @@ export default class MlAppTaskAppointmentBasicInfo extends Component {
                 {/* Mapping for slot*/}
                 <div className="row funders_list">
                   <div className="col-md-6 col-sm-6 col-lg-5" >
-                    <a href="#">
+                    <a href="">
                       <div className="funders_list_block" onClick={''}>
                         <h3>{'23rd May'}</h3>
                         <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>

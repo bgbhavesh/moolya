@@ -64,7 +64,7 @@ export default class CalendarSlotDetail extends React.Component{
                 </div>
                 {/*<div className="col-md-12 nopadding">*/}
                   {/*<div className="ml_btn">*/}
-                    {/*<a href="#" id="save_contact" className="save_btn">Call</a>*/}
+                    {/*<a href="" id="save_contact" className="save_btn">Call</a>*/}
                     {/*<a href="" id="cancel_contact" className="cancel_btn" onClick={this.clickHandlers.bind(this, 'appointmentDetails')}>View</a>*/}
                   {/*</div>*/}
                 {/*</div>*/}

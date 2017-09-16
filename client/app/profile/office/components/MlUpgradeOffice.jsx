@@ -62,7 +62,7 @@ export default class MlUpgradeOffice extends React.Component{
             <div className="col-lg-12">
               <div className="row">
                 <div className="col-lg-2 col-md-4 col-sm-4">
-                  <a href="#" id="create_client" data-placement="top" data-class="large_popover" >
+                  <a href="" id="create_client" data-placement="top" data-class="large_popover" >
                     <div className="list_block notrans">
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
                       <h3>Bespoke Members</h3>
@@ -271,7 +271,7 @@ export default class MlUpgradeOffice extends React.Component{
                         <input type="text" placeholder="Zip Code" className="form-control float-label" id="cluster_name" />
                       </div>
                       <div className="form-group">
-                        <a href="/app/appMyProfileAddOfficeMembersDetail" className="mlUpload_btn">Next</a> <a href="#" className="mlUpload_btn">Cancel</a>
+                        <a href="/app/appMyProfileAddOfficeMembersDetail" className="mlUpload_btn">Next</a> <a href="" className="mlUpload_btn">Cancel</a>
                       </div>
                     </form>
                   </div>

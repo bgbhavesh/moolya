@@ -16,10 +16,10 @@ function logChange(val) {
   console.log("Selected: " + val);
 }
 function ScheduledBtn(cell, row){
-  return '<a href="#" class="fileUpload mlUpload_btn">Rescheduled</a>';
+  return '<a href="" class="fileUpload mlUpload_btn">Rescheduled</a>';
 };
 function Info(cell, row){
-  return '<a href="#" class="fileUpload mlUpload_btn">i</a>';
+  return '<a href="" class="fileUpload mlUpload_btn">i</a>';
 };
 
 
@@ -95,7 +95,7 @@ class InnerTable extends React.Component {
           </tbody>
         </table>
         <div className="clearfix"></div>
-        <div className="mart20 text-center"><a href="#" className="fileUpload mlUpload_btn">Book</a> <a href="#" className="fileUpload mlUpload_btn">Cancel</a></div>
+        <div className="mart20 text-center"><a href="" className="fileUpload mlUpload_btn">Book</a> <a href="" className="fileUpload mlUpload_btn">Cancel</a></div>
       </div>
 
     );

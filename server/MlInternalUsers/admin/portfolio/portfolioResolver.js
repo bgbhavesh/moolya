@@ -340,23 +340,27 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let code = 200;
         let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
-        if(response){
+        if (response) {
           const urlFormationObject = {
-            clusterName: regRecord.clusterName,
-            chapterName: regRecord.chapterName,
-            subChapterName: regRecord.subChapterName,
-            communityName: regRecord.communityName
+            clusterName: regRecord.clusterName.replace(/ /g, "_"),
+            chapterName: regRecord.chapterName.replace(/ /g, "_"),
+            subChapterName: regRecord.subChapterName.replace(/ /g, "_"),
+            communityName: regRecord.communityName.replace(/ /g, "_")
           }
           const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
           const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
-          const uniqueSeoName = firstNameUser+'_'+lastNameUser;
+          const uniqueSeoName = firstNameUser + '_' + lastNameUser;
+          const portfolio_user_id = {
+            userId: regRecord.userId,
+            portFolioId: args.portfoliodetailsId
+          }
 
-          MlSiteMapInsertion.mlCreateSEOUrl(urlFormationObject,uniqueSeoName);
+            MlSiteMapInsertion.mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
-          if(response && response.success){
+          if (response && response.success) {
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-            var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."
+            var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
             portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
         }

@@ -38,7 +38,7 @@ const mlMyTransactionTableConfig = new MlViewer.View({
     {dataField: "subChapter", title: "Sub Chapter", dataSort: true},
     {dataField: "community", title: "Community", dataSort: true},
     {dataField: "createdAt", title: "Date Time", dataSort: true,useCustomComponent:true,customComponent:dateFormatter},
-    {dataField: "status", title: "status", dataSort: true}
+    {dataField: "status", title: "Status", dataSort: true}
   ],
   tableHeaderClass: 'react_table_head',
   showActionComponent: false,

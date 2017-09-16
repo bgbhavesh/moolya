@@ -82,7 +82,7 @@ export default class MlLogout extends Component {
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a
-                    href="https://www.moolya.in/register">Register</a></p>
+                    href="https://www.moolya.global/register">Register</a></p>
                 </form>
               </div>
             </div>

@@ -60,7 +60,7 @@ export default class MlConnectionHeader extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="#" onClick={()=>that.resetWithAll()}>
+            <a href="" onClick={()=>that.resetWithAll()}>
               <img src="/images/def_profile.png"/><br />
               <div className="tooltiprefer">
                 <span>Me</span>
@@ -71,7 +71,7 @@ export default class MlConnectionHeader extends Component {
             return (
               <span key={idx}>
                 <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
-                  <a href="#" onClick={()=>that.changeProfile(profile.userId, idx)}>
+                  <a href="" onClick={()=>that.changeProfile(profile.userId, idx)}>
                     <img src={profile.profilePic ? profile.profilePic : "/images/def_profile.png"}/><br />
                     <div className="tooltiprefer">
                       <span>{profile.displayName ? profile.displayName : "All"}</span>

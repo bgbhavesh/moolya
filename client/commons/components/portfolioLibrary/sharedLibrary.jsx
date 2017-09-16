@@ -70,6 +70,31 @@ export default class  SharedLibrary extends React.Component {
     })
   }
 
+  componentWillReceiveProps(newProps) {
+    let data = newProps && newProps.data ? newProps.data : [] ;
+    let that = this;
+    let Image = [];
+    let Video = [];
+    let Template = [];
+    let Document = [];
+    data.map(function(fileInfo){
+      let type = fileInfo.file.fileType;
+      if(type === 'image') {
+        Image.push(fileInfo)
+        that.setState({imageDetails: Image})
+      } else if(type === 'video') {
+        Video.push(fileInfo)
+        that.setState({videoDetails: Video})
+      } else if(type === 'document') {
+        Document.push(fileInfo)
+        that.setState({documentDetails: Document})
+      } else {
+        Template.push(fileInfo)
+        that.setState({templateDetails: Template})
+      }
+    })
+  }
+
   /**
    * Method :: toggle
    * Desc   :: toggles the Modal component
@@ -124,6 +149,7 @@ export default class  SharedLibrary extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
             <a href="" data-toggle="modal" data-target=".imagepop"
                                                  onClick={that.random.bind(that, show.file.url, id)}>

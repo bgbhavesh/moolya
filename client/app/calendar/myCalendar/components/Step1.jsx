@@ -325,7 +325,7 @@ this.bookDetails(data)
                     {/*<div className="col-md-8 att_members">*/}
                       {/*<ul className="users_list">*/}
                         {/*<li>*/}
-                          {/*<a href="#">*/}
+                          {/*<a href="">*/}
                             {/*<img src="/images/p_3.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Venu<br/>Rs.3000</span>*/}
@@ -333,7 +333,7 @@ this.bookDetails(data)
                           {/*</a>*/}
                         {/*</li>*/}
                         {/*<li>*/}
-                          {/*<a href="#">*/}
+                          {/*<a href="">*/}
                             {/*<img src="/images/p_34.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Ramya<br/>Rs.5000</span>*/}
@@ -341,7 +341,7 @@ this.bookDetails(data)
                           {/*</a>*/}
                         {/*</li>*/}
                         {/*<li>*/}
-                          {/*<a href="#">*/}
+                          {/*<a href="">*/}
                             {/*<img src="/images/p_13.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Sameer<br/>Rs.8000</span>*/}
@@ -349,7 +349,7 @@ this.bookDetails(data)
                           {/*</a>*/}
                         {/*</li>*/}
                         {/*<li>*/}
-                          {/*<a href="#">*/}
+                          {/*<a href="">*/}
                             {/*<img src="/images/p_1.jpg" /><br />*/}
                             {/*<div className="tooltiprefer">*/}
                               {/*<span>Usha<br/>Rs.6000</span>*/}
@@ -371,7 +371,7 @@ this.bookDetails(data)
                 {/*</div>*/}
                 <div className="pull-right">
                   <div className="ml_btn large_btn">
-                    <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
+                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
                   </div>
                 </div>
                 <br className="brclear"/><br className="brclear"/>

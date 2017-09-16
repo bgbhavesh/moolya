@@ -982,6 +982,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               'in': {
                 "_id": "$$trans._id",
                 "transactionId": "$$trans.transactionId",
+                "transactionTypeId": "$$trans.transactionTypeId",
                 "cluster": "$$trans.clusterName",
                 "chapter": "$$trans.chapterName",
                 "subChapter": "$$trans.subChapterName",

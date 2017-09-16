@@ -43,7 +43,7 @@ export default class FunderOrderServicesView extends Component {
         <ul className="users_list well well-sm">
 
           <li>
-            <a href="#">
+            <a href="">
               <span className="icon_bg"> <span className="icon_lg ml ml-moolya-symbol"></span></span><br />
               <div className="tooltiprefer">
                 <span>Moolya-HYD</span>
@@ -51,7 +51,7 @@ export default class FunderOrderServicesView extends Component {
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <span className="icon_bg"> <span className="icon_lg ml ml-moolya-symbol"></span></span><br />
               <div className="tooltiprefer">
                 <span>Moolya-BNG</span>
@@ -59,7 +59,7 @@ export default class FunderOrderServicesView extends Component {
             </a>
           </li>
           <li className="pull-right circle-time">
-            <a href="#">
+            <a href="">
               <span className="icon_bg">GMT<br />+03:00</span><br />
               <div className="tooltiprefer">
                 <span>14/06/2017</span>
@@ -84,7 +84,7 @@ export default class FunderOrderServicesView extends Component {
         <br />
         <div className="row funders_list">
           <div className="col-md-4 col-sm-4 col-lg-3">
-            <a href="#">
+            <a href="">
               <div className="funders_list_block">
                 <h3>7:30 - 8:30</h3>
                 <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
@@ -96,7 +96,7 @@ export default class FunderOrderServicesView extends Component {
           </div>
 
           <div className="col-md-4 col-sm-4 col-lg-3">
-            <a href="#">
+            <a href="">
               <div className="funders_list_block">
                 <h3>7:30 - 8:30</h3>
                 <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
@@ -108,7 +108,7 @@ export default class FunderOrderServicesView extends Component {
           </div>
 
           <div className="col-md-4 col-sm-4 col-lg-3">
-            <a href="#">
+            <a href="">
               <div className="funders_list_block">
                 <h3>7:30 - 8:30</h3>
                 <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
@@ -141,7 +141,7 @@ export default class FunderOrderServicesView extends Component {
                   </div>
                   <div className="col-md-3 nopadding-right">
                     <div className="ml_btn" style={{'textAlign': 'left'}}>
-                      <a href="#" className="save_btn"><FontAwesome name='pencil'/> &nbsp; Change</a>
+                      <a href="" className="save_btn"><FontAwesome name='pencil'/> &nbsp; Change</a>
                     </div>
                   </div>
                   <div className="clearfix"/>
@@ -211,8 +211,8 @@ export default class FunderOrderServicesView extends Component {
                       <td>&nbsp;</td>
                       <td>
                         <div className="ml_btn" style={{'textAlign': 'left'}}>
-                          <a href="#" className="save_btn">Book</a>
-                          <a href="#" className="cancel_btn">Cancel</a>
+                          <a href="" className="save_btn">Book</a>
+                          <a href="" className="cancel_btn">Cancel</a>
                         </div>
                       </td>
                     </tr>

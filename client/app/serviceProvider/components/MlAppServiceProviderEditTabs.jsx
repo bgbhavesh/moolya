@@ -66,7 +66,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
         panelClassName: 'panel',
         title: "Awards and Rewards",
         component: <MlServiceProviderAwards client={appClient} isAdmin={false} key="2" getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                            portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
         tabClassName: 'tab',
@@ -96,7 +96,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
         title: "Clients",
         component: <MlServiceProviderClients key="6" client={appClient} isAdmin={false}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"/>
       },
       {
         tabClassName: 'tab',
@@ -104,7 +104,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
         title: "Looking For",
         component: <MlServiceProviderLookingFor key="7" client={appClient} isAdmin={false}
                                              getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       }
     ];
     return tabs;

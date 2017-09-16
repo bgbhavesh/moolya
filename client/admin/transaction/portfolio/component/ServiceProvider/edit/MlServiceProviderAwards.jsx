@@ -65,10 +65,13 @@ export default class MlServiceProviderAwards extends Component {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.awardsRecognition)
+    const response = await fetchServiceProviderPortfolioAwards(portfolioDetailsId);
     if (empty) {
-      const response = await fetchServiceProviderPortfolioAwards(portfolioDetailsId);
-      if (response) {
+      if (response && response.length) {
         this.setState({loading: false, serviceProviderAwards: response, serviceProviderAwardsList: response});
+      }
+      else{
+        this.setState({loading:false})
       }
     } else {
       this.setState({
@@ -77,6 +80,7 @@ export default class MlServiceProviderAwards extends Component {
         serviceProviderAwardsList: that.context.serviceProviderPortfolio.awardsRecognition
       });
     }
+    this.serviceProviderAwardServer = response &&response.awardsRecognition?response.awardsRecognition:[]
   }
 
   addAward() {
@@ -103,14 +107,28 @@ export default class MlServiceProviderAwards extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.awardId
+      "selectedVal": details.awardId,
+      popoverOpen: !(this.state.popoverOpen)},() =>{
+      this.lockPrivateKeys(index)
     });
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.serviceProviderAwardServer && this.serviceProviderAwardServer[selIndex]?this.serviceProviderAwardServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e) {
@@ -125,9 +143,14 @@ export default class MlServiceProviderAwards extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex}
-    this.setState({privateKey: privateKey})
-    this.setState({data: details}, function () {
+    // var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex}
+    // this.setState({privateKey: privateKey})
+    // this.setState({data: details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -386,17 +409,16 @@ export default class MlServiceProviderAwards extends Component {
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
                                       defaultValue={this.state.data.year}
-                                      closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}
-                                      isValidDate={ valid }/>
+                                      closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" name="awardDescription" placeholder="About"
-                                   className="form-control float-label" defaultValue={this.state.data.awardDescription}
+                            <input type="text" name="awardsDescription" placeholder="About"
+                                   className="form-control float-label" defaultValue={this.state.data.awardsDescription}
                                    onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                         id="isAwardDescriptionPrivate"
-                                         defaultValue={this.state.data.isAwardDescriptionPrivate}
-                                         onClick={this.onLockChange.bind(this, "awardDescription", "isAwardDescriptionPrivate")}/>
+                                         id="isDescriptionPrivate"
+                                         defaultValue={this.state.data.isDescriptionPrivate}
+                                         onClick={this.onLockChange.bind(this, "awardDescription", "isDescriptionPrivate")}/>
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
@@ -437,4 +459,5 @@ export default class MlServiceProviderAwards extends Component {
 }
 MlServiceProviderAwards.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

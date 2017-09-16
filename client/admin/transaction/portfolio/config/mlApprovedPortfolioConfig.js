@@ -51,6 +51,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
     {dataField: "source", title: "Source",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
+    {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
     {dataField: "assignedTo", title: "Assign",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -114,6 +115,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
                           createdAt
                           status
                           assignedTo
+                          allocationStatus
                      }
                       }
               }

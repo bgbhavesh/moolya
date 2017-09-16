@@ -802,7 +802,7 @@ export default class MlAssignHierarchy extends React.Component {
           </div>
         </div>
         <div className="ml_icon_btn" style={{'textAlign':'center'}}>
-          <a href="#" onClick={that.updatehierarchyAssignments.bind(that)} className="save_btn"><span
+          <a href="" onClick={that.updatehierarchyAssignments.bind(that)} className="save_btn"><span
             className="ml ml-save"></span></a>
         </div>
       </div>

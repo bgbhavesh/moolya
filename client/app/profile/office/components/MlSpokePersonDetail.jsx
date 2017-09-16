@@ -140,7 +140,7 @@ export default class MlSpokePersonDetail extends Component {
                   </div>
                   <div className="form-group">
                     <a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a>
-                    <a href="#" className="mlUpload_btn">Cancel</a>
+                    <a href="" className="mlUpload_btn">Cancel</a>
                   </div>
                 </form>
               </div>

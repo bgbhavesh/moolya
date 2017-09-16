@@ -69,7 +69,7 @@ export default class MlPortfolioLanding extends Component {
     return (
       <div>
         {showLoader === true? (<MlLoader/>) : (
-          <div>{registrationStatus=="Approved"?<div>
+          <div>{registrationStatus=="REG_USER_APR"?<div>
             {(userCommunity == "Ideators") ?
               <MlAppIdeatorIdeas/> : <MlAppPortfolioRedirect data={this.state.data}/>
             }
@@ -92,7 +92,7 @@ export default class MlPortfolioLanding extends Component {
                 <div className="col-md-12 text-center well mart100">
 
                   <div className="col-md-12">
-                    <a href="#">Kindly complete hard registration,to create portfolio</a>
+                    <a href="">Kindly complete hard registration,to create portfolio</a>
                   </div>
 
                 </div>

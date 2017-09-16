@@ -10,7 +10,9 @@ export default class MlAppClusterMapMarker extends Component {
   }
 
   onMouseEnterContent(customHoverHandler) {
+    if(customHoverHandler){
     this.props.onMouseEnterContent(customHoverHandler);
+    }
   }
 
   onMouseLeaveContent() {

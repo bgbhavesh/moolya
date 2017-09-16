@@ -675,10 +675,10 @@
 //   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
-//   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop"
+//   //           {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
 //   //                                      onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
 //   //             src={show.fileUrl}/></a> :
-//   //             <a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
+//   //             <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
 //   //               src={show.fileUrl}/></a>}
 //   //           <div id="images" className="title">{show.fileName}</div>
 //   //         </div>
@@ -720,7 +720,7 @@
 //   //           <FontAwesome onClick={() => that.toggleTemplateLock(id)} name='lock'/> : "" : !that.state.hideLock ?
 //   //           <FontAwesome onClick={() => that.toggleTemplateLock(id)} name='unlock'/> : "" }
 //   //         {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template")}/>}
-//   //         <a href="#" data-toggle="modal" data-target=".templatepop"
+//   //         <a href="" data-toggle="modal" data-target=".templatepop"
 //   //            onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
 //   //         <div id="templates" className="title">{show.fileName}</div>
 //   //       </div>
@@ -758,10 +758,10 @@
 //   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
-//   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop"
+//   //           {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
 //   //                                      onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
 //   //             src={show.fileUrl}/></a> :
-//   //             <a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
+//   //             <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
 //   //               src={show.fileUrl}/></a>}
 //   //           <div id="templates" className="title">{show.fileName}</div>
 //   //         </div>
@@ -829,12 +829,12 @@
 //   //               <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
 //   //             </ul>
 //   //           </div>
-//   //           {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".videopop"
+//   //           {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
 //   //                                      onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
 //   //             <video width="120" height="100" controls>
 //   //               <source src={show.fileUrl} type="video/mp4"></source>
 //   //             </video>
-//   //           </a> : <a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+//   //           </a> : <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
 //   //             <video width="120" height="100" controls>
 //   //               <source src={show.fileUrl} type="video/mp4"></source>
 //   //             </video>

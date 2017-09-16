@@ -25,7 +25,7 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     super(props)
     this.state = {
       tabs: [],
-      activeTab:'About',
+      activeTab:'Ideas',
       ideatorPortfolio: {},
       ideatorId: this.props.config, portfolioKeys: {privateKeys: [], removePrivateKeys: []}
     };
@@ -124,7 +124,8 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     let data = this.state.idea;
     data = details;
     this.setState({idea: data})
-    this.props.getIdeatorIdeaDetails(data, privatekey);
+    let updateItem = _.omit(data, 'ideaImage');
+    this.props.getIdeatorIdeaDetails(updateItem, privatekey);
   }
 
   getProblemSolution(details, privatekey) {

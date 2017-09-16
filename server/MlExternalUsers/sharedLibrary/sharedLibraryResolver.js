@@ -212,9 +212,16 @@ MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
-  let userId =  args.userId;
-  let data = mlDBController.find('MlSharedLibrary',{'user.userId':context.userId}, context).fetch();
+  let userId =  args.userId ? args.userId : context.userId ;
+  let data = mlDBController.find('MlSharedLibrary',{'user.userId':userId}, context).fetch();
+  data.map((info)=>{
+    // new Date(info.sharedStartDate) - new Date(info.sharedEndDate);
+    let expiryDate = Math.floor((Date.UTC(info.sharedEndDate.getFullYear(), info.sharedEndDate.getMonth(), info.sharedEndDate.getDate()) - Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) ) /(1000 * 60 * 60 * 24));
+      info.daysToExpire = expiryDate;
+      if(expiryDate <= 0) {
+        delete info['file'];
+      }
+  })
   return data;
-
 }
 

@@ -65,7 +65,7 @@ export default class InteractionsCounter extends React.Component{
       let actionCount=(_.find(data,{actionName:option.name})||{}).count;
         return (
            <li key={option.name}>
-             <a href="#"><span className={option.iconClass}></span>
+             <a href=""><span className={option.iconClass}></span>
              <b>{actionCount}</b>
              </a>
              <span className="tooltipnew">

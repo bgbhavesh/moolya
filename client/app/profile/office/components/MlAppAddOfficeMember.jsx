@@ -52,7 +52,8 @@ export default class MlAppAddOfficeMember extends React.Component{
       }
     });
   }
-  togglePopover(){
+  togglePopover(evt){
+    evt.preventDefault();
     this.setState({popoverOpen:!this.state.popoverOpen}, function(){
       $('.float-label').jvFloat();
     });
@@ -140,7 +141,7 @@ export default class MlAppAddOfficeMember extends React.Component{
             <div className="col-lg-12">
               <div className="row">
                 <div className="col-lg-2 col-md-4 col-sm-4" hidden={!props.isAdd} disabled={!props.isAdd} >
-                  <a href="#" id="create_client1" onClick={()=>this.togglePopover()} data-class="large_popover" >
+                  <a href="" id="create_client1" onClick={(evt)=>this.togglePopover(evt)} data-class="large_popover" >
                     <div className="list_block notrans">
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
                       <h3>Add New Member</h3>

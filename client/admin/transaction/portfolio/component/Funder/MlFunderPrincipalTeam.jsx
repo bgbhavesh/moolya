@@ -68,8 +68,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   componentWillMount() {
-    return [this.fetchPrincipalDetails(), this.fetchTeamDetails()];
     this.fetchClusterId();
+    return [this.fetchPrincipalDetails(), this.fetchTeamDetails()];
   }
   async fetchClusterId() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
@@ -512,7 +512,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPrincipal.bind(this)}>
-                            <a href="#" id="create_clientPdefault" data-placement="top" data-class="large_popover">
+                            <a href="" id="create_clientPdefault" data-placement="top" data-class="large_popover">
                               <div className="list_block notrans">
                                 <div className="hex_outer"><span className="ml ml-plus "></span></div>
                                 <h3>Add New Principal</h3>
@@ -522,7 +522,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {funderPrincipalList.map(function (principal, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="#" id={"create_clientP" + idx}>
+                                <a href="" id={"create_clientP" + idx}>
                                   <div className="list_block notrans funding_list"
                                     onClick={that.onPrincipalTileClick.bind(that, idx)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
@@ -532,9 +532,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                     </div>
                                     {/*<div className="ml_icon_btn">*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
                                     {/*</div>*/}
                                   </div>
                                 </a>
@@ -552,7 +552,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addTeam.bind(this)}>
-                            <a href="#" id="create_clientTdefault" data-placement="top" data-class="large_popover">
+                            <a href="" id="create_clientTdefault" data-placement="top" data-class="large_popover">
                               <div className="list_block notrans">
                                 <div className="hex_outer"><span className="ml ml-plus "></span></div>
                                 <h3>Add New</h3>
@@ -562,7 +562,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {that.state.funderTeamList.map(function (team, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="#" id={"create_clientT" + idx}>
+                                <a href="" id={"create_clientT" + idx}>
                                   <div className="list_block notrans funding_list"
                                     onClick={that.onTeamTileClick.bind(that, idx)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
@@ -571,9 +571,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>
                                     {/*<div className="ml_icon_btn">*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                    {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                    {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
                                     {/*</div>*/}
                                   </div>
                                 </a>

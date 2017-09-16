@@ -387,11 +387,11 @@ class MlEditAssignTemplate extends React.Component{
                 </div>
                 {/*<span className="actions_switch show_act"></span>
                  <div className="bottom_actions_block show_block">
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
                  </div>*/}
               </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

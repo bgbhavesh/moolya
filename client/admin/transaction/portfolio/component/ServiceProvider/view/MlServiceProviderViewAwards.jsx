@@ -5,15 +5,15 @@ import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
-import NoData from '../../../../../../commons/components/noData/noData';
-import MlGenericAwardsView from '../../StartupView/MlGenericAwardsView';
+import NoData from '../../../../../../commons/components/noData/noData'
+import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 
 export default class MlServiceProviderViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {serviceProviderAwardsList: []};
+    this.state = {serviceProviderAwardsList: [],loading:true};
     this.fetchPortfolioStartupDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -134,33 +134,39 @@ export default class MlServiceProviderViewAwards extends React.Component {
   render() {
     let that = this;
     let awardsArray = that.state.serviceProviderAwardsList || [];
-    if(_.isEmpty(awardsArray)){
-      return (
-        <div className="portfolio-main-wrap">
-          <NoData tabName={this.props.tabName} />
-        </div>
-      )
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Awards</h2>
-          <div className="col-lg-12">
-            <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}/>
-            {/*<div className="row">*/}
-            {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
-            {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
-            {/*<div className="team-block">*/}
-            {/*<img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>*/}
-            {/*<h3>*/}
-            {/*{details.awardName && details.awardName}*/}
-            {/*</h3>*/}
-            {/*</div>*/}
-            {/*</div>)*/}
-            {/*})}*/}
-            {/*</div>*/}
-          </div>
-        </div>
-      )
-    }
+    const showLoader = this.state.loading;
+    return (
+        <div>
+          {showLoader === true ? ( <MlLoader/>) : (
+            <div>
+              {_.isEmpty(awardsArray) ? (
+                <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>) : (
+                <div id="annotatorContent">
+                  <h2>Awards</h2>
+                  <div className="col-lg-12">
+                    <div className="row">
+                      {awardsArray && awardsArray.map(function (details, idx) {
+                        return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                          <div className="team-block">
+                            <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}
+                                 className="team_img"/>
+                            <h3>
+                              {details.awardName && details.awardName}
+                            </h3>
+                          </div>
+                        </div>)
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )
+              }
+            </div>
+          )
+          }
+           </div>
+    )
   }
 }

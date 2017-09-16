@@ -111,8 +111,8 @@ export default class CalendarSharePopOver extends React.Component {
     return current.isAfter(yesterday);
   }
 
-  validTillToggle(){
-    $('#date-time').toggleClass('rdtOpen');
+  validTillToggle(id){
+    $('#'+id).toggleClass('rdtOpen');
   }
 
   isDownloadable(e) {
@@ -233,7 +233,7 @@ export default class CalendarSharePopOver extends React.Component {
         {this.teamMembersData()}
         <div className="clearfix" />
         <div className="col-md-6 nopadding-left">
-          <div className="form-group" id="date-time">
+          <div className="form-group" id="start-time">
             <Datetime dateFormat={"DD-MM-YYYY"}
                       timeFormat={false}
                       inputProps={{placeholder: "Shared Start Date"}}
@@ -243,12 +243,12 @@ export default class CalendarSharePopOver extends React.Component {
             />
             <FontAwesome name="calendar"
                          className="password_icon"
-                         onClick={this.validTillToggle.bind(this)}
+                         onClick={this.validTillToggle.bind(this, "start-time")}
             />
           </div>
         </div>
         <div className="col-md-6 nopadding-right">
-          <div className="form-group" id="date-time">
+          <div className="form-group" id="end-time">
             <Datetime dateFormat={"DD-MM-YYYY"}
                       timeFormat={false}
                       inputProps={{placeholder: "Shared End Date"}}
@@ -259,7 +259,7 @@ export default class CalendarSharePopOver extends React.Component {
                       disabled={this.props.viewMode}/>
             <FontAwesome name="calendar"
                          className="password_icon"
-                         onClick={this.validTillToggle.bind(this)}
+                         onClick={this.validTillToggle.bind(this, "end-time")}
             />
           </div>
         </div>

@@ -73,7 +73,6 @@ export default class MyList extends React.Component{
   }
   render(){
     let tabs = this.state.tabs;
-    console.log()
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

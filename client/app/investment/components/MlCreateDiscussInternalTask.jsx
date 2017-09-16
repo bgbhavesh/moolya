@@ -125,7 +125,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
     const that = this;
     return(
       <div className="popover-lg">
-        <h1>Attached Documents <a href="#" className="pull-right">Add</a></h1>
+        <h1>Attached Documents <a href="" className="pull-right">Add</a></h1>
         <ul className="doc_upload">
           <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
           <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
@@ -135,8 +135,8 @@ export default class MlCreateDiscussInternalTask extends React.Component {
         <div className="clearfix" />
         <h1>
           Set priority of attendes
-          <a href="#" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
-          <a href="#" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
+          <a href="" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
+          <a href="" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
         </h1>
         <div className="clearfix" />
         <div className="" style={ this.state.showAdd ? {'display':'none'} : {}}>
@@ -184,7 +184,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
           <textarea ref="note" placeholder="Notes / Remarks" className="form-control float-label" id=""></textarea>
         </div>
         <div className="clearfix" />
-        <a href="#" onClick={()=>that.submit()} className="save_btn">Assign</a>
+        <a href="" onClick={()=>that.submit()} className="save_btn">Assign</a>
       </div>
     )
   }

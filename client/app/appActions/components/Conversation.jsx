@@ -19,37 +19,37 @@ export default class Conversation extends React.Component {
 
         <ul className="list_style">
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='envelope-o'/><br />
               Mail
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='comment-o'/><br />
               Chat
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='video-camera'/><br />
               Video
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='volume-up'/><br />
               Audio
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='mobile'/><br />
               SMS
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="">
               <FontAwesome name='phone'/><br />
               Call
             </a>

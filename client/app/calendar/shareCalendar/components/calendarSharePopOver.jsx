@@ -267,7 +267,7 @@ export default class CalendarSharePopOver extends React.Component {
         <div className="clearfix" />
         <div className="ml_btn">
           <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Share</a>
-          <a href="#" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
+          <a href="" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
         </div>
       </div>
     )

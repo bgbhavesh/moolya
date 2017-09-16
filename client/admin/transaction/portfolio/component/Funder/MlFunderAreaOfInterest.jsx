@@ -226,7 +226,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
                   <div className="col-lg-12">
                     <div className="row">
                       <div className="col-lg-2 col-md-4 col-sm-4">
-                        <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                        <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
                           <div className="list_block list_block_intrests notrans"
                                onClick={this.addAreaOfInterest.bind(this)}>
                             <div className="hex_outer">
@@ -241,7 +241,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
                       {funderAreaOfInterestList.map(function (details, idx) {
                         return (
                           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                            <a href="#" id={"create_client" + idx}>
+                            <a href="" id={"create_client" + idx}>
                               <div className="list_block list_block_intrests notrans">
                                 <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>

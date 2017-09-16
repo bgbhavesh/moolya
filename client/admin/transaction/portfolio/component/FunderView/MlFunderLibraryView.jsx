@@ -328,7 +328,7 @@ export default class PortfolioLibrary extends React.Component{
       return(
         <div className="thumbnail"key={id}>
           {that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
-          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+          <a href="" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -339,7 +339,7 @@ export default class PortfolioLibrary extends React.Component{
       return(
         <div className="thumbnail"key={id}>
           {that.state.templatesLock[id] ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
-          <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+          <a href="" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -364,7 +364,7 @@ export default class PortfolioLibrary extends React.Component{
     // let data2= this.state.data2 || [];
     // const documents = data2.map(function(show){
     //   return(
-    //     <div className="thumbnail"><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".imagepop"><video width="320" height="240" controls>
+    //     <div className="thumbnail"><FontAwesome name='unlock'/><a href="" data-toggle="modal" data-target=".imagepop"><video width="320" height="240" controls>
     //       <source src="https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/SampleVideo_1280x720_1mb.mp4" type="video/mp4"></source></video></a><div className="title">Video</div></div>
     //   )
     // });
@@ -438,7 +438,7 @@ export default class PortfolioLibrary extends React.Component{
         {/*</div>*/}
         {/*<div className="panel-body">*/}
         {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
-        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
+        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href=""><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
         {/*</div>*/}
         {/*</div>*/}
         {/*</div>*/}

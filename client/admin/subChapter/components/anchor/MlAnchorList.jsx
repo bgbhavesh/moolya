@@ -201,7 +201,7 @@ export default class MlAnchorList extends React.Component {
                             <a href="#4a" data-toggle="tab">Facebook&nbsp;<b><FontAwesome name='minus-square' /></b></a>
                           </li>
                           <li>
-                            <a href="#" className="add-contact"><FontAwesome name='plus-square' /> Add Social Links</a>
+                            <a href="" className="add-contact"><FontAwesome name='plus-square' /> Add Social Links</a>
                           </li>
                         </ul>
 
@@ -228,8 +228,8 @@ export default class MlAnchorList extends React.Component {
                               <input type="text" placeholder="Email Id" className="form-control float-label" id="" />
                             </div>
                             <div className="ml_btn">
-                              <a href="#" className="save_btn">Save</a>
-                              <a href="#" className="cancel_btn">Cancel</a>
+                              <a href="" className="save_btn">Save</a>
+                              <a href="" className="cancel_btn">Cancel</a>
                             </div>
                           </div>
                         </div>

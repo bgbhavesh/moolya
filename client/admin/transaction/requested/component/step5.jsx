@@ -578,7 +578,7 @@ export default class Step5 extends React.Component {
 
                           <div className="clearfix"></div>
                           <div className="ml_btn mart20" style={{'textAlign': 'center'}}>
-                            <a href="#" className="save_btn" onClick={that.onSaveAction.bind(that,key)}>Add</a>&nbsp;&nbsp;&nbsp;<a href="#" className="cancel_btn" onClick={that.onCancelAction.bind(that,key)}>Cancel</a>
+                            <a href="" className="save_btn" onClick={that.onSaveAction.bind(that,key)}>Add</a>&nbsp;&nbsp;&nbsp;<a href="" className="cancel_btn" onClick={that.onCancelAction.bind(that,key)}>Cancel</a>
                           </div>
 
                         </div>

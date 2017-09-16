@@ -63,7 +63,7 @@ export default class MlCalendarHeader extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li>
-            <a href="#" onClick={()=>that.changeProfile("all")}>
+            <a href="" onClick={()=>that.changeProfile("all")}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>{that.state.displayName ? that.state.displayName : "All"}</span>

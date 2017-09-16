@@ -531,10 +531,10 @@ export default class AppAddressDetails extends React.Component {
                 </label>
               </div>
               <div className="ml_icon_btn">
-                <a href="#" className="save_btn"  onClick={this.onSavingAddress.bind(this)}>
+                <a href="" className="save_btn"  onClick={this.onSavingAddress.bind(this)}>
                   <span className="ml ml-save"></span>
                 </a>
-                <a href="#" className="cancel_btn"  onClick={this.onClear.bind(this,null)}>
+                <a href="" className="cancel_btn"  onClick={this.onClear.bind(this,null)}>
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>
@@ -627,11 +627,11 @@ export default class AppAddressDetails extends React.Component {
                   </div>
 
                   <div className="ml_icon_btn">
-                    {/*<a href="#" className="save_btn">Save</a>*/}
-                    <a href="#" onClick={that.onEditAddress.bind(that,key)}
+                    {/*<a href="" className="save_btn">Save</a>*/}
+                    <a href="" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
+                    <a href="" className="cancel_btn" onClick={that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
             }))}

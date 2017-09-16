@@ -54,7 +54,7 @@
 //           {/*<FontAwesome name='lock'/>*/}
 //           {/*<FontAwesome name='unlock'/>*/}
 //           {isExploring ? "" : <FontAwesome name='trash-o' />}
-//           <a href="#" data-toggle="modal" data-target=".imagepop"><img src={show.fileUrl}/></a>
+//           <a href="" data-toggle="modal" data-target=".imagepop"><img src={show.fileUrl}/></a>
 //           <div id="images" className="title">{show.fileName}</div>
 //         </div>
 //       )

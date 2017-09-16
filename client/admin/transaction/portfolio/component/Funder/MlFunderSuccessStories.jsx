@@ -300,7 +300,7 @@ export default class MlFunderSuccessStories extends React.Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-4 col-sm-4">
-                      <a href="#" id="team_listdefault" data-placement="top" data-class="large_popover">
+                      <a href="" id="team_listdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addSuccess.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3 onClick={this.addSuccess.bind(this)}>Add New</h3>
@@ -312,7 +312,7 @@ export default class MlFunderSuccessStories extends React.Component {
                     {funderSuccessList.map(function (details, idx) {
                       return (
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="#" id={"team_list" + idx}>
+                          <a href="" id={"team_list" + idx}>
 
                             <div className="list_block notrans funding_list">
                               <div className="cluster_status inactive_cl">

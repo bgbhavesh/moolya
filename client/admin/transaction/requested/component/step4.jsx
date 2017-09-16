@@ -336,7 +336,7 @@ export default class Step4 extends React.Component{
                       <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id="" data-required={true} data-errMsg="URL is required"/>
                     </div>
                     <div className="ml_icon_btn">
-                      <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
+                      <a href="" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
                         className="ml ml-save"></span></a>
                      </div>
                   </div>
@@ -354,9 +354,9 @@ export default class Step4 extends React.Component{
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl} data-required={true} data-errMsg="URL is required"/>
                       </div>
                       <div className="ml_icon_btn">
-                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
+                        <a href="" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
                           className="ml ml-save"></span></a>
-                        <a href="#" className="cancel_btn" onClick = {that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
+                        <a href="" className="cancel_btn" onClick = {that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
                       </div>
                     </div>)
                   }))}

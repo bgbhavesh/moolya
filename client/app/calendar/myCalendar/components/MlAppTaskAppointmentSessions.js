@@ -129,7 +129,7 @@ export default class MlAppTaskAppointmentSessions extends Component{
                 <br className="brclear" />
                 <ul className="users_list">
                   <li>
-                    <a href="#">
+                    <a href="">
                       <img src="/images/p_3.jpg" /><br />
                       <div className="tooltiprefer">
                         <span>Venu</span>
@@ -137,7 +137,7 @@ export default class MlAppTaskAppointmentSessions extends Component{
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="">
                       <img src="/images/p_34.jpg" /><br />
                       <div className="tooltiprefer">
                         <span>Ramya</span>
@@ -145,7 +145,7 @@ export default class MlAppTaskAppointmentSessions extends Component{
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="">
                       <img src="/images/p_13.jpg" /><br />
                       <div className="tooltiprefer">
                         <span>Sameer</span>
@@ -153,7 +153,7 @@ export default class MlAppTaskAppointmentSessions extends Component{
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="">
                       <img src="/images/p_1.jpg" /><br />
                       <div className="tooltiprefer">
                         <span>Usha</span>

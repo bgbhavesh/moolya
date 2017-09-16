@@ -91,9 +91,6 @@ class ConversationsRepo{
 
     const result = await new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
-        console.log('error', err)
-        console.log('response', res)
-        console.log('body', body)
         if(err){
           reject(err)
         }
@@ -107,7 +104,7 @@ class ConversationsRepo{
     return result;
   }
 
-  async testApi(){
+/*  async testApi(){
     var options = {
       url: "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJKxSwWSZgAUgR0tWM0zAkZBc&key=AIzaSyC53qhhXAmPOsxc34WManoorp7SVN_Qezo"
     }
@@ -122,9 +119,8 @@ class ConversationsRepo{
         }
       })
     })
-    console.log(result)
     return result;
-  }
+  }*/
 }
 
 const mlConversationsRepo = new ConversationsRepo();

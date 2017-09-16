@@ -164,7 +164,7 @@ export default class MlServiceProviderViewAbout extends React.Component {
 
         <div className="media">
           <div className="media-left">
-            <a href="#">
+            <a href="">
               <img className="media-object" src={image}/>
             </a>
           </div>

@@ -145,7 +145,7 @@ export default class Pagination extends Component {
             </a>
           </div>
 
-          {/*<a href="#">
+          {/*<a href="">
            <div className="pageSlider long">
            </div>
            </a>

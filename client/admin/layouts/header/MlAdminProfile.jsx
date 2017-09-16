@@ -70,12 +70,14 @@ class  MlAdminProfileApp extends Component {
     // let Details = {
     //   profilePic: this.refs.upload.value};
     let user = Meteor.user();
-    let genderImage = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/ideator_01.png";
-    let fullName = user && (user.profile.firstName + '' + user.profile.lastName);
-    let profileImage = user && (!user.profile.profileImage || user.profile.profileImage === " ") ? genderImage : user.profile.profileImage;
-    this.setState({firstName : fullName,
-      profilePic: profileImage //response.profile.profileImage
-    });
+    if(user){
+      let genderImage = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/ideator_01.png";
+      let fullName = user && (user.profile.firstName + '' + user.profile.lastName);
+      let profileImage = user && (!user.profile.profileImage || user.profile.profileImage === " ") ? genderImage : user.profile.profileImage;
+      this.setState({firstName : fullName,
+        profilePic: profileImage //response.profile.profileImage
+      });
+    }
   }
 
   componentWillUpdate(){

@@ -420,7 +420,7 @@ class MlAppMyProfile extends Component {
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
-                    <br className="brclear" />
+                    <br className="brclear" /><br/>
                     <div className="form-group">
                       <input type="text" placeholder="Mobile Number" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.mobileNumber}/>

@@ -30,8 +30,6 @@ class MlAppComponent extends Component{
       }
     }
 
-    console.log(nextContext);
-
     return !isEqualWith(this.props, nextProps) ||
       !isEqualWith(this.state, nextState) ||
       !isEqualWith(this.context, nextContext);

@@ -695,15 +695,14 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
   if(args.idea) {
-    // var idea = MlIdeas.findOne({"_id":args.ideaId})
     var idea = mlDBController.findOne('MlIdeas', {_id: args.ideaId}, context)
     var updatedIdea = args.idea;
     if(idea){
-      // let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea})
       let ret = mlDBController.update('MlIdeas', args.ideaId, updatedIdea, {$set:true}, context)
       if (ret) {
+        let ideatoralert = MlAlertNotification.onPortfolioUpdates()
         let code = 200;
-        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        let response = new MlRespPayload().successPayload(ideatoralert, code);
         return response;
       }
     }

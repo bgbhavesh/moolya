@@ -34,7 +34,7 @@ export default class MlTabComponent extends React.Component {
   onActivate(index) {
     if (this.props.selectedTabKey !== undefined) {
       if (!isNumber(index)) {
-        FlowRouter.setQueryParams({ tab: index });
+        FlowRouter.setQueryParams({ tab: index, appointment: null });
       } else {
         const tab = Object.assign(this.state.tabs)[index];
         FlowRouter.setQueryParams({ subtab: tab.title });

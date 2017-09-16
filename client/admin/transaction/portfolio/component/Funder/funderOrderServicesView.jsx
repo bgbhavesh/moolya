@@ -211,7 +211,7 @@ export default class FunderOrderServicesView extends Component {
                       <td>&nbsp;</td>
                       <td>
                         <div className="ml_btn" style={{'textAlign': 'left'}}>
-                          <a href="#" className="save_btn">Book</a>
+                          <a href="" className="save_btn">Book</a>
                           <a href="#" className="cancel_btn">Cancel</a>
                         </div>
                       </td>

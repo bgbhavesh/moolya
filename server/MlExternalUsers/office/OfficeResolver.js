@@ -16,7 +16,7 @@ import MlAccounts from '../../commons/mlAccounts';
 let request = require('request');
 var base64 = require('base64-min');
 let Future = Npm.require('fibers/future');
-
+let CryptoJS = require("crypto-js");
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   let profileId = args.profileId;
@@ -637,12 +637,13 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
 MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, context, info) => {
   let transactionId = args.transactionId;
   let officeTransDetails = mlDBController.findOne('MlOfficeTransaction', {transactionId: transactionId }, context);
+
   if(officeTransDetails){
     let userId = context.userId;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
     officeTransDetails.orderSubscriptionDetails = officeTransDetails.orderSubscriptionDetails ? officeTransDetails.orderSubscriptionDetails : {};
     let paymentData = {
-      paymentMethod: 'Paypal', //later from client only
+      paymentMethod: 'Citrus', //later from client only
       amount: officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0,
       currencyId: 'USD',
       resourceId: officeTransDetails.officeId,
@@ -666,8 +667,92 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
     orderNumberGenService.createPaymentId(paymentData);
 
     let paymentResponse = mlDBController.insert('MlPayment', paymentData, context);
-
     if(paymentResponse){
+      var randomString = require('random-string');
+      console.log(paymentData.paymentId);
+      /*****Generate Signature per payment request generation*****/
+      function generateSignature(merchantTxnId, request) {
+          //Need to replace the last part of URL("your-vanityUrlPart") with your Testing/Live URL
+          var formPostUrl = "https://checkout.citruspay.com/ssl/checkout/"+request.vanityUrl;
+
+          //Need to change with your Secret Key
+          var secret_key = request.secret_key;
+
+          //Need to change with your Vanity URL Key from the citrus panel
+          var vanityUrl = request.vanityUrl;
+
+          //Need to change with your Order Amount
+          var orderAmount = request.orderAmount;
+          var currency = "INR";
+
+          // generate hmac
+          var data = vanityUrl+request.orderAmount+request.merchantTxnId+"INR";
+          console.log(data);
+          var hash = CryptoJS.HmacSHA1(data,secret_key).toString();
+          console.log("hash: ", hash);
+          return hash;
+      }
+
+      let email="citrusdevraksan@raksan.in";
+      let payObj={
+        vanityUrl:"asder234rtx",
+        merchantTxnId:paymentData.paymentId,
+        orderAmount:(officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0).toString(),
+        accesskey:"4KL2VV5NSPDLOHY4CAS1",
+        secret_key:'22b7cc7ea856cd35e42c2ed6a76eff8e2f27a470',
+
+      }
+      let paymentInfo= {
+        //"email": email,
+        //"phoneNumber":'9966408213',
+        "merchantTxnId":payObj.merchantTxnId,
+        "orderAmount": payObj.orderAmount,
+        "currency": "INR",
+        "secSignature": generateSignature(payObj.merchantTxnId,payObj),
+        "returnUrl":Meteor.absoluteUrl()+"moolyaPaymentStatus",
+       // "returnUrl": Meteor.absoluteUrl() +"app/transaction",
+      };
+      let apiRequest = {
+        headers: {'content-type' : 'application/text'},
+        //url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process',
+        url:     'https://checkout.citruspay.com/ssl/checkout/'+payObj.vanityUrl
+        // url:     "http://10.0.2.140:8080/payments/process"
+      };
+      /*let future = new Future();
+
+      let post_req = request.post(apiRequest, function(error, response, body){
+        if(error){
+          //console.log(error);
+          let result = new MlRespPayload().errorPayload(error.message, 400);
+          future.return(result);
+        } else {
+          console.log(paymentInfo);
+          //console.log(response);
+          console.log(response.headers);
+          response.headers = response.headers ? response.headers : {};
+          let result;
+          if(response.headers.url){
+            result = new MlRespPayload().successPayload(apiRequest.url, 200);
+          } else {
+            result = new MlRespPayload().errorPayload("Unable to proceed your payment right now", 400);
+          }
+          result = new MlRespPayload().successPayload(apiRequest.url, 200);
+          future.return(result);
+        }
+      });
+
+
+      let text = base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123');
+
+      post_req.write(text);
+
+      let resposne = future.wait();
+
+      return resposne;*/
+      return new MlRespPayload().successPayload(JSON.stringify({paymentUrl:apiRequest.url,paymentInfo:paymentInfo}), 200);
+    }
+
+    /*if(paymentResponse){
       let paymentInfo = {
         "orderId": officeTransDetails._id,
         "paymentAmount": (officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0).toString(),
@@ -681,7 +766,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
         "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
-
+      // "callBackUrl": "http://103.60.212.114/app/myOffice"
       let apiRequest = {
         headers: {'content-type' : 'application/text'},
         url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
@@ -714,7 +799,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
       let resposne = future.wait();
 
       return resposne;
-    }
+    }*/
 
 
   } else {
@@ -725,4 +810,75 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 MlResolver.MlQueryResolver['getOfficeType'] = (obj, args, context, info) => {
   var officeTypes = mlDBController.find('MlOfficeType', {}, context).fetch();
   return officeTypes;
-}
+};
+
+
+MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context, info) => {
+  let memberId = args.memberId;
+  let communityCode = args.communityCode;
+  if(memberId && communityCode) {
+    let officeMember =  mlDBController.findOne('MlOfficeMembers', memberId, context);
+    let query = { _id:officeMember.userId, 'profile.externalUserProfiles.communityDefCode': { "$ne" : "OFB" } };
+    let isAlreadyIndependent = mlDBController.findOne('users', query, context);
+    if(!isAlreadyIndependent) {
+
+      var emails = [{address: officeMember.emailId, verified: true }];
+      let randomPassword = orderNumberGenService.generateRandomPassword()
+
+      /**user details who is creating the office member*/
+      var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
+
+      let community = mlDBController.findOne('MlCommunityDefinition', {code: communityCode });
+
+      console.log(community);
+
+      let registrationData = {
+        createdBy: adminUser.username,
+        firstName: officeMember.firstName,
+        lastName: officeMember.lastName,
+        email: officeMember.emailId,
+        userName: officeMember.emailId,
+        contactNumber: officeMember.mobileNumber,
+        communityName: community.name,
+        communityDefCode : community.code,
+        registrationType : community.code,
+        communityDefName : community.name,
+        password: randomPassword,
+        registrationDate :new Date()
+      };
+
+      /**attaching creator details to the office member details in the registration*/
+      let profile = new MlUserContext(context.userId).userProfileDetails(context.userId);
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'countryId']);
+      let finalRegData = _.extend(registrationData, extendObj);
+      orderNumberGenService.assignRegistrationId(finalRegData);
+
+      let registrationId = mlDBController.insert('MlRegistration', {
+      registrationInfo: finalRegData,
+      status: "REG_EMAIL_P",
+      emails: emails,
+      transactionId :finalRegData.registrationId
+      }, context);
+
+      let resp = mlDBController.update('MlOfficeMembers', memberId, {isIndependent : true}, {$set: true}, context);
+
+      let code = 200;
+      let response = new MlRespPayload().successPayload('Go independent requested successfully', code);
+      return response;
+
+    } else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Your is already Independent', code);
+      return response;
+    }
+
+  } else {
+
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('MemberId and Community Code are required', code);
+    return response;
+
+  }
+};
+
+

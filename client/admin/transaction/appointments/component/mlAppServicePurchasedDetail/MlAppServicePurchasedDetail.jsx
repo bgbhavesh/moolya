@@ -4,7 +4,7 @@
 
 import React from 'react';
 import AppointmentSes from './appointmentSession';
-import {fetchAdminServiceAppointment} from "../action/fetchAdminServiceAppointment";
+import {fetchAdminServiceAppointment} from "../../action/fetchAdminServiceAppointment";
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 

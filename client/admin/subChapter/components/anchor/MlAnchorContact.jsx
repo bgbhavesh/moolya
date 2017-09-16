@@ -10,9 +10,40 @@ export default class MlAnchorContact extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      selectedContact: -1,
-      contactDetails: [],
+    this.sendDataToParent = this.sendDataToParent.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.selectUser = this.selectContact.bind(this);
+    this.resetFormData = this.resetFormData.bind(this);
+  }
+
+  componentDidMount() {
+    $(function () {
+      $('.float-label').jvFloat();
+    });
+    $('.switch input').change(function () {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      } else {
+        $(this).parent('.switch').removeClass('on');
+      }
+    });
+
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
+  }
+
+  sendDataToParent(data) {
+    this.props.getContactDetails(data);
+  }
+
+  selectContact(index) {
+    // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
+    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });
+  }
+
+  resetFormData() {
+    const data = {
+      selectedIndex: -1,
       formData: {
         contactPersonRole: '',
         addressType: '',
@@ -31,82 +62,11 @@ export default class MlAnchorContact extends React.Component {
         status: false,
       },
     };
-    this.sendDataToParent = this.sendDataToParent.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.selectUser = this.selectContact.bind(this);
-    this.resetFormData = this.resetFormData.bind(this);
-  }
-
-  async componentWillMount() {
-    const { clusterId, chapterId, subChapterId } = this.props;
-    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
-    const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
-    this.setState({ contactDetails: contactDetails || [] });
-  }
-
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
-  }
-  componentDidUpdate() {
-
-  }
-
-  sendDataToParent(data) {
-    this.props.getContactDetails(data)
-  }
-
-  selectContact(index) {
-    this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
-  }
-
-  resetFormData() {
-    this.setState({
-      selectedContact: -1,
-      formData: {
-        contactPersonRole: '',
-        addressType: '',
-        contactNumber: '',
-        emailId: '',
-        buildingNumber: '',
-        street: '',
-        landmark: '',
-        area: '',
-        town: '',
-        stateId: '',
-        countryId: '',
-        pincode: '',
-        latitude: '',
-        longitude: '',
-        status: false,
-      },
-    });
+    this.sendDataToParent(data);
   }
 
   onChange(field, value) {
-    const state = this.state;
-    state.formData[field] = value;
-    let contacts = [];
-    this.setState(state, () => {
-      contacts = [].concat(this.state.contactDetails);
-      if (this.state.selectedContact === -1) {
-        contacts.push(this.state.formData);
-      } else {
-        contacts[this.state.selectedContact] = this.state.formData;
-      }
-      this.sendDataToParent(contacts);
-    });
+    this.props.onContactChange(field, value);
   }
 
   render() {
@@ -126,13 +86,13 @@ export default class MlAnchorContact extends React.Component {
                   </div>
                 </div>
                 {
-                  this.state.contactDetails.map((user, index) => (
+                  this.props.contactDetails && this.props.contactDetails.map((user, index) => (
                     <div key={index} onClick={this.selectContact.bind(this, index)} className="col-md-4 col-sm-6">
                       <div className="list_block provider_block">
                         <div className="cluster_status active_cl"></div>
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
                           <img className="user_pic"
-                               src={user.picURL || "/images/p_1.jpg"} /></div>
+                            src={user.picURL || "/images/def_profile.png"} /></div>
                         <h3>{user.name || "Name not provided"}</h3>
                       </div>
                     </div>
@@ -152,82 +112,82 @@ export default class MlAnchorContact extends React.Component {
 
                 <div className="form-group">
                   <select placeholder="Contact person role" className="form-control float-label"
-                          value={this.state.formData.contactPersonRole}
-                          onChange={event => this.onChange('contactPersonRole', event.target.value)}>
+                    value={this.props.formData.contactPersonRole}
+                    onChange={event => this.onChange('contactPersonRole', event.target.value)}>
                     <option>Role one</option>
                     <option>Role Two</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <select placeholder="Address Type" className="form-control float-label"
-                          value={this.state.formData.addressType}
-                          onChange={event => this.onChange('addressType', event.target.value)}>
+                    value={this.props.formData.addressType}
+                    onChange={event => this.onChange('addressType', event.target.value)}>
                     <option>Type one</option>
                     <option>Type Two</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Contact Number"
-                         value={this.state.formData.contactNumber}
-                         className="form-control float-label"
-                         onChange={event => this.onChange('contactNumber', event.target.value)} />
+                    value={this.props.formData.contactNumber}
+                    className="form-control float-label"
+                    onChange={event => this.onChange('contactNumber', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Email Id" className="form-control float-label"
-                         value={this.state.formData.emailId}
-                         onChange={event => this.onChange('emailId', event.target.value)} />
+                    value={this.props.formData.emailId}
+                    onChange={event => this.onChange('emailId', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Flat/House/floor/Building No"
-                         className="form-control float-label"
-                         value={this.state.formData.buildingNumber}
-                         onChange={event => this.onChange('buildingNumber', event.target.value)} />
+                    className="form-control float-label"
+                    value={this.props.formData.buildingNumber}
+                    onChange={event => this.onChange('buildingNumber', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Colony/Street/Locality "
-                         className="form-control float-label"
-                         value={this.state.formData.street}
-                         onChange={event => this.onChange('street', event.target.value)} />
+                    className="form-control float-label"
+                    value={this.props.formData.street}
+                    onChange={event => this.onChange('street', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Landmark" className="form-control float-label"
-                         value={this.state.formData.landmark}
-                         onChange={event => this.onChange('landmark', event.target.value)} />
+                    value={this.props.formData.landmark}
+                    onChange={event => this.onChange('landmark', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Area" className="form-control float-label"
-                         value={this.state.formData.area}
-                         onChange={event => this.onChange('area', event.target.value)} />
+                    value={this.props.formData.area}
+                    onChange={event => this.onChange('area', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Town ,city" className="form-control float-label"
-                         value={this.state.formData.town}
-                         onChange={event => this.onChange('town', event.target.value)} />
+                    value={this.props.formData.town}
+                    onChange={event => this.onChange('town', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="State" className="form-control float-label"
-                         value={this.state.formData.stateId}
-                         onChange={event => this.onChange('stateId', event.target.value)} />
+                    value={this.props.formData.stateId}
+                    onChange={event => this.onChange('stateId', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Country" className="form-control float-label"
-                         value={this.state.formData.countryId}
-                         onChange={event => this.onChange('countryId', event.target.value)} />
+                    value={this.props.formData.countryId}
+                    onChange={event => this.onChange('countryId', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="number" placeholder="Pincode" className="form-control float-label"
-                         value={this.state.formData.pincode}
+                         value={this.props.formData.pincode}
                          onChange={event => this.onChange('pincode', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Lattitude" className="form-control float-label"
-                         value={this.state.formData.latitude}
-                         onChange={event => this.onChange('latitude', event.target.value)} />
+                    value={this.props.formData.latitude}
+                    onChange={event => this.onChange('latitude', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Longitude" className="form-control float-label"
-                         value={this.state.formData.longitude}
-                         onChange={event => this.onChange('longitude', event.target.value)} />
+                    value={this.props.formData.longitude}
+                    onChange={event => this.onChange('longitude', event.target.value)} />
                 </div>
 
                 <br className="brclear" />
@@ -235,8 +195,8 @@ export default class MlAnchorContact extends React.Component {
                   <label className="">Status</label>
                   <label className="switch">
                     <input type="checkbox"
-                           checked={this.state.formData.status}
-                           onChange={event => this.onChange('status', event.target.checked)} />
+                      checked={this.props.formData.status}
+                      onChange={event => this.onChange('status', event.target.checked)} />
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -248,3 +208,12 @@ export default class MlAnchorContact extends React.Component {
     );
   }
 }
+
+
+MlAnchorContact.propTypes = {
+  contactDetails: React.PropTypes.array.isRequired,
+  selectedIndex: React.PropTypes.number,
+  formData: React.PropTypes.any,
+  onContactChange: React.PropTypes.func,
+  getContactDetails: React.PropTypes.func,
+};

@@ -63,7 +63,7 @@ export default class MlAppLeftNav extends Component {
               activeClass = 'inactive_menu'
             }
             return (
-                <li className={`menu_item ${activeClass}`} key={idx} data-toggle={dataItem && dataItem.isDisabled?"tooltip":""} title={dataItem && dataItem.isDisabled?"starting soon..":""} data-placement="right">
+                <li className={`menu_item ${activeClass}`} key={idx} data-toggle={dataItem && dataItem.isDisabled?"tooltip":""} title={dataItem && dataItem.isDisabled?"coming soon..":""} data-placement="right">
                     <a href={dataItem.link} id={dataItem.uniqueId}>
                         <div className={"menu_in"}>
                             <span className={dataItem.image}></span>

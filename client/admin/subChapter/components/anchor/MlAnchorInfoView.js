@@ -121,7 +121,7 @@ export default class MlAnchorInfoView extends React.Component {
               <div className="col-md-10 nopadding att_members">
                 <ul className="users_list">
                   <li>
-                    <a href="">
+                    <a href="#">
                       <span className="icon_bg"> <span className="icon_lg ml ml-ideator"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Ideator <b>20k</b></span>
@@ -129,7 +129,7 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                   <li>
-                    <a href="">
+                    <a href="#">
                       <span className="icon_bg"> <span className="icon_lg ml ml-startup"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Startup <b>20k</b></span>
@@ -137,7 +137,7 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                   <li>
-                    <a href="">
+                    <a href="#">
                       <span className="icon_bg"> <span className="icon_lg ml ml-company"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Company <b>20k</b></span>
@@ -145,7 +145,7 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                   <li>
-                    <a href="">
+                    <a href="#">
                       <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
                       <div className="tooltiprefer">
                         <span>Funder <b>20k</b></span>
@@ -153,7 +153,7 @@ export default class MlAnchorInfoView extends React.Component {
                     </a>
                   </li>
                   <li>
-                    <a href="">
+                    <a href="#">
                       <span className="icon_bg"> <span className="icon_lg ml ml-users"></span></span><br />
                       <div className="tooltiprefer">
                         <span>SP <b>20k</b></span>
@@ -240,13 +240,13 @@ export default class MlAnchorInfoView extends React.Component {
           </div>
           <div className="col-md-12 text-center">
             <div className="col-md-4">
-              {/*<a href="" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
+              {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
             </div>
             <div className="col-md-4">
               <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into subchapter</a>
             </div>
             <div className="col-md-4">
-              {/*<a href="" className="fileUpload mlUpload_btn">Get invited</a>*/}
+              {/*<a href="#" className="fileUpload mlUpload_btn">Get invited</a>*/}
             </div>
           </div>
 

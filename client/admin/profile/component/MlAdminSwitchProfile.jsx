@@ -212,10 +212,10 @@ export default class MlAdminSwitchProfile extends React.Component{
 
               {loggedInUser&&loggedInUser.hierarchyLevel<4?<div className="col-md-12 text-center">
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
-                  <a href="" className="fileUpload mlUpload_btn">Make Default</a>
+                  <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
                 <div className="col-md-4" onClick={this.switchUserProfile.bind(this)}>
-                  <a href="" className="fileUpload mlUpload_btn">Switch Profile</a>
+                  <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
                 </div>
               </div>:""}
 

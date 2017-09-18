@@ -211,7 +211,7 @@ export default class MlAnchorContact extends React.Component {
 
 
 MlAnchorContact.propTypes = {
-  contactDetails: React.PropTypes.array.isRequired,
+  contactDetails: React.PropTypes.array,
   selectedIndex: React.PropTypes.number,
   formData: React.PropTypes.any,
   onContactChange: React.PropTypes.func,

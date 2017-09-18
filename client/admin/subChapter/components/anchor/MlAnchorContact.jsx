@@ -93,7 +93,7 @@ export default class MlAnchorContact extends React.Component {
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
                           <img className="user_pic"
                             src={user.picURL || "/images/def_profile.png"} /></div>
-                        <h3>{user.name || "Name not provided"}</h3>
+                        <h3>{user.name || user.emailId || 'No email'}</h3>
                       </div>
                     </div>
                   ))

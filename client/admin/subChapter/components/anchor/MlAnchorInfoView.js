@@ -112,11 +112,12 @@ export default class MlAnchorInfoView extends React.Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
+
           <div className="panel panel-default">
             <div className="panel-heading">{this.state.subChapterName}</div>
             <div className="panel-body nopadding">
-              <div className="col-md-2 text-center">
-                <img src={this.state.subChapterImageLink} className="margintop"/>
+              <div className="col-md-2">
+                <img src={this.state.subChapterImageLink} className="margintop" style={{'width':'150px','height':'45px'}}/>
               </div>
               <div className="col-md-10 nopadding att_members">
                 <ul className="users_list">

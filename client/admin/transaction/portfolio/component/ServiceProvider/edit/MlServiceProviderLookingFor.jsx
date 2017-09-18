@@ -285,7 +285,7 @@ export default class MlServiceProviderLookingFor extends Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                      <a id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addLookingFor.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3 onClick={this.addLookingFor.bind(this)}>Add New Looking For</h3>
@@ -294,7 +294,7 @@ export default class MlServiceProviderLookingFor extends Component {
                     </div>
                     {serviceProviderLookingForList.map(function (details, idx) {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                        <a href="" id={"create_client" + idx}>
+                        <a id={"create_client" + idx}>
                           <div className="list_block">
                             <div className="cluster_status">
                               <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>

@@ -96,7 +96,7 @@ if(Meteor.isServer){
           },
         {
           "image":"ml my-ml-Referral_Invite",
-          "link": "#",
+          "link": "",
           "isLink" : true,
           "isMenu" : true,
           "name" : "Referral & Invites",
@@ -105,7 +105,7 @@ if(Meteor.isServer){
         },
         {
           "image":"ml my-ml-subscriptions",
-          "link": "#",
+          "link": "",
           "isLink" : true,
           "isMenu" : true,
           "name" : "My Subscriptions",
@@ -114,7 +114,7 @@ if(Meteor.isServer){
         },
         {
           "image":"ml my-ml-settings_new",
-          "link": "/app/settings",
+          "link": "",//"link": "/app/settings",
           "isLink" : true,
           "isMenu" : true,
           "name" : "Settings",

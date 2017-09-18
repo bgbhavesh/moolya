@@ -30,6 +30,7 @@ html
     meta(name='twitter:title', content=title)
     meta(name='twitter:site', content=twitterHandle)
     meta(name='twitter:creator', content='moolya')
+    meta(name='twitter:image', content=profilePic)
 
     link(href='/css/ms_styles.css', type='text/css', media='all', rel='stylesheet')
     link(href='/css/font-awesome.css', type='text/css', media='all', rel='stylesheet')
@@ -56,12 +57,11 @@ html
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-    //script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
-    //  api_key: 8146rgyjf4wael
-    //  authorize: true
-    //  onLoad: onLinkedInLoad
-    //
-    //script(type = 'in/Login').
+    script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
+      api_key: 8146rgyjf4wael
+      authorize: true
+      onLoad: onLinkedInLoad
+    script(type = 'in/Login').
 
 
     .ms_main_wrap
@@ -87,10 +87,10 @@ html
                   a(href='#' onclick='facebookShare("' + currentUrl + '",this)')
                     i.fa.fa-facebook(aria-hidden='true')
                 li
-                  a(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'&text=caption"', title='Twitter share', target='_blank')
-                    i.fa.fa-twitter(aria-hidden='true')
+                  a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share')
+                   i.fa.fa-twitter(aria-hidden='true')
                 li
-                  a(href='#')
+                  a(href='#' onclick='onLinkedInLoad()')
                     i.fa.fa-linkedin(aria-hidden='true')
                 li
                   a(href='#')
@@ -193,7 +193,7 @@ html
             }
           script(type='text/javascript').
             // Setup an event listener to make an API call once auth is complete
-            function onLinkedInLoad() {
+            var onLinkedInLoad = function () {
               IN.Event.on(IN, "auth", shareContent);
             }
             // Handle the successful return from the API call
@@ -221,35 +221,34 @@ html
             }
 
           script.
-//            script().
-//              (function ($) {
-//                /**
-//                 * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
-//                 *
-//                 * @param  {[object]} e           [Mouse event]
-//                 * @param  {[integer]} intWidth   [Popup width defalut 500]
-//                 * @param  {[integer]} intHeight  [Popup height defalut 400]
-//                 * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
-//                 */
-//                $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
-//                  // Prevent default anchor event
-//                  e.preventDefault();
-//                  // Set values for window
-//                  intWidth = intWidth || '500';
-//                  intHeight = intHeight || '400';
-//                  strResize = (blnResize ? 'yes' : 'no');
-//                  // Set title and open popup with focus on it
-//                  var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
-//                    strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
-//                    objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
-//                }
-//                /* ================================================== */
-//                $(document).ready(function ($) {
-//                  $('.customer.share').on("click", function (e) {
-//                    $(this).customerPopup(e);
-//                  });
-//                });
-//              }(jQuery));
+            (function ($) {
+              /**
+               * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
+               *
+               * @param  {[object]} e           [Mouse event]
+               * @param  {[integer]} intWidth   [Popup width defalut 500]
+               * @param  {[integer]} intHeight  [Popup height defalut 400]
+               * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
+               */
+              $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
+                // Prevent default anchor event
+                e.preventDefault();
+                // Set values for window
+                intWidth = intWidth || '500';
+                intHeight = intHeight || '400';
+                strResize = (blnResize ? 'yes' : 'no');
+                // Set title and open popup with focus on it
+                var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
+                  strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
+                  objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
+              }
+              /* ================================================== */
+              $(document).ready(function ($) {
+                $('.customer.share').on("click", function (e) {
+                  $(this).customerPopup(e);
+                });
+              });
+            }(jQuery));
 
 
 

@@ -127,7 +127,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res, next) {
-
+      console.log('Request Headers and URL',req.headers,req.url);
       if (!(req.url.includes('login') || req.url.includes('registration'))) {
         if (!req.headers.cookie.includes('meteor_login_token')) {
           const pathName = req.url;

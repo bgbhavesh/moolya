@@ -3,7 +3,7 @@ html
   mixin space()
     | !{' '}
   head
-    -var title = firstName + " " +lastName +" is "+ communityType+ " on moolya / " + chapterName + " / "+ clusterName
+    -var title = displayName +" " +  communityType+ " on moolya from " + chapterName + " , "+ clusterName
     -var desc = aboutDiscription?aboutDiscription.substr(0,160):''
 
     meta(charset='utf-8')
@@ -51,22 +51,22 @@ html
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-    script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
-      api_key: 8146rgyjf4wael
-      authorize: true
-      onLoad: onLinkedInLoad
-
-    script(type = 'in/Login').
+    //script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
+    //  api_key: 8146rgyjf4wael
+    //  authorize: true
+    //  onLoad: onLinkedInLoad
+    //
+    //script(type = 'in/Login').
 
 
     .ms_main_wrap
       .ms_header
         .header_left
           .shape1
-          img(src='images/logo.png')
+          img(src='/images/logo.png')
         .header_right
-          img(src='images/ecosystem.png')
-          img(src='images/patent.png')
+          img(src='/images/ecosystem.png')
+          img(src='/images/patent.png')
           .ms_social_wrap
             span.web_url
               a(href='http://www.moolya.global')
@@ -93,14 +93,14 @@ html
       .ms_content_wrap
         .content_left
           .profile_pic
-            img(src=profilePic)
+            img(src=profilePic?profilePic:'/images/no-image.png')
         .content_right
           h2
-            | #{firstName} #{lastName} is '#{communityType}' on #{space}
+            | #{displayName} is #{communityType} on #{space}
             span.m_red m
             span.m_yel oo
             span.m_red lya
-            |  / #{chapterName} / #{clusterName}
+            |  from #{chapterName}, #{clusterName}
           ul.ms_menu
             each list, i in listView
               li
@@ -128,24 +128,24 @@ html
                 include looking_for
                 h3 Past winners have included:
                   .img_list
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
               else
                 h2 Private Content
             .pageAboutDiscription
               if(!privateFields.aboutDiscription)
                 p
-                  | #{aboutDiscription}
+                  | !{aboutDiscription}
                   h3 Past winners have included:
                     .img_list
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
+                      img(src='/images/list_img_01.png')
+                      img(src='/images/list_img_01.png')
+                      img(src='/images/list_img_01.png')
+                      img(src='/images/list_img_01.png')
+                      img(src='/images/list_img_01.png')
               else
                  h2 Private Content
 
@@ -155,7 +155,7 @@ html
             p
               strong
                 | To view more details and to collaborate with #{space}
-                span.m_red #{firstName} #{lastName}
+                span.m_red #{displayName}
             a.ms_btn_re(href='/login') Login
             |  or
             a.ms_btn_re(href='/register') Register

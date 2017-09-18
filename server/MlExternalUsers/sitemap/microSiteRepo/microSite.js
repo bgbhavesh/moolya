@@ -279,9 +279,9 @@ function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
   communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
   if (checkVowel(communityType.charAt(0))) {
-    communityType = 'an ' + communityType;
+    communityType = 'an ' + "\'" +communityType +"\'";
   } else {
-    communityType = 'a ' + communityType;
+    communityType = 'a '  + "\'" +communityType +"\'";
   }
   return communityType
 }

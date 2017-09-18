@@ -51,22 +51,22 @@ html
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-    script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
-      api_key: 8146rgyjf4wael
-      authorize: true
-      onLoad: onLinkedInLoad
-
-    script(type = 'in/Login').
+    //script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
+    //  api_key: 8146rgyjf4wael
+    //  authorize: true
+    //  onLoad: onLinkedInLoad
+    //
+    //script(type = 'in/Login').
 
 
     .ms_main_wrap
       .ms_header
         .header_left
           .shape1
-          img(src='images/logo.png')
+          img(src='/images/logo.png')
         .header_right
-          img(src='images/ecosystem.png')
-          img(src='images/patent.png')
+          img(src='/images/ecosystem.png')
+          img(src='/images/patent.png')
           .ms_social_wrap
             span.web_url
               a(href='http://www.moolya.global')
@@ -96,7 +96,7 @@ html
             img(src=profilePic?profilePic:'/images/no-image.png')
         .content_right
           h2
-            | #{displayName} is '#{communityType}' on #{space}
+            | #{displayName} is #{communityType} on #{space}
             span.m_red m
             span.m_yel oo
             span.m_red lya

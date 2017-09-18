@@ -139,7 +139,7 @@ export default class MlAnchorContact extends React.Component {
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
                           <img className="user_pic"
                             src={user.picURL || "/images/def_profile.png"} /></div>
-                        <h3>{user.name || user.emailId || 'No email'}</h3>
+                        <h3>{user.addressType || 'No address name'}</h3>
                       </div>
                     </div>
                   ))
@@ -157,12 +157,16 @@ export default class MlAnchorContact extends React.Component {
 
 
                 <div className="form-group">
-                  <select placeholder="Contact person role" className="form-control float-label"
+                <input type="text" placeholder="Role Type"
+                    value={this.props.formData.contactPersonRole}
+                    className="form-control float-label"
+                    onChange={event => this.onChange('contactPersonRole', event.target.value)} />
+                  {/* <select placeholder="Contact person role" className="form-control float-label"
                     value={this.props.formData.contactPersonRole}
                     onChange={event => this.onChange('contactPersonRole', event.target.value)}>
                     <option>Role one</option>
                     <option>Role Two</option>
-                  </select>
+                  </select> */}
                 </div>
                 <div className="form-group">
                   <select placeholder="Address Type" className="form-control float-label"

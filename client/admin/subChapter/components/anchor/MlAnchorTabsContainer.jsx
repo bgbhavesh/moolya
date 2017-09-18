@@ -70,7 +70,7 @@ class MlAnchorTabsContainer extends React.Component {
         let stateContactDetails = JSON.parse(JSON.stringify(this.state.subChapter.contactDetails));
         const { objective: stateObjective } = this.state;
         if (this.state.contactDetailsFormData.selectedIndex === -1
-          && this.state.contactDetailsFormData.formData.contactNumber) {
+          && this.state.contactDetailsFormData.formData.addressType) {
           if (!stateContactDetails) stateContactDetails = [];
           stateContactDetails.push(this.state.contactDetailsFormData.formData);
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {

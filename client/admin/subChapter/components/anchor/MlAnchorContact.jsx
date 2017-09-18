@@ -4,7 +4,9 @@
 
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
+import gql from 'graphql-tag';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 
 export default class MlAnchorContact extends React.Component {
 
@@ -14,6 +16,9 @@ export default class MlAnchorContact extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.selectUser = this.selectContact.bind(this);
     this.resetFormData = this.resetFormData.bind(this);
+    this.onOptionSelectedCountry = this.onOptionSelectedCountry.bind(this);
+    this.onOptionSelectedStates = this.onOptionSelectedStates.bind(this);
+    this.onOptionSelectedCities = this.onOptionSelectedCities.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +44,18 @@ export default class MlAnchorContact extends React.Component {
   selectContact(index) {
     // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
     this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });
+  }
+
+  onOptionSelectedCountry(val) {
+    this.onChange("countryId", val);
+  }
+
+  onOptionSelectedStates(val) {
+    this.onChange("stateId", val);
+  }
+
+  onOptionSelectedCities(val) {
+    this.onChange("town", val);
   }
 
   resetFormData() {
@@ -70,6 +87,26 @@ export default class MlAnchorContact extends React.Component {
   }
 
   render() {
+    let countryQuery = gql`query{
+      data:fetchCountries {
+         value:_id
+         label:country
+       }
+     }`
+    let statesQuery = gql`query ($countryId: String) {
+       data: fetchStatesPerCountry(countryId: $countryId) {
+       value: _id
+       label: name
+     }
+   }`;
+    let citiesQuery = gql`query ($stateId: String) {
+       data: fetchCitiesPerState(stateId: $stateId) {
+       value: _id
+       label: name
+     }
+   }`;
+    let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
+    let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
@@ -160,24 +197,36 @@ export default class MlAnchorContact extends React.Component {
                     onChange={event => this.onChange('area', event.target.value)} />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Town ,city" className="form-control float-label"
-                    value={this.props.formData.town}
-                    onChange={event => this.onChange('town', event.target.value)} />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="State" className="form-control float-label"
-                    value={this.props.formData.stateId}
-                    onChange={event => this.onChange('stateId', event.target.value)} />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Country" className="form-control float-label"
+                  {/* <input type="text" placeholder="Country" className="form-control float-label"
                     value={this.props.formData.countryId}
-                    onChange={event => this.onChange('countryId', event.target.value)} />
+                    onChange={event => this.onChange('countryId', event.target.value)} /> */}
+                  <Moolyaselect multiSelect={false} ref="country" className="form-control float-label"
+                    valueKey={'value'} labelKey={'label'} placeholder="Your Country"
+                    selectedValue={this.props.formData.countryId} queryType={"graphql"} query={countryQuery}
+                    isDynamic={true} onSelect={this.onOptionSelectedCountry.bind(this)} />
+                </div>
+                <div className="form-group">
+                  {/* <input type="text" placeholder="State" className="form-control float-label"
+                    value={this.props.formData.stateId}
+                    onChange={event => this.onChange('stateId', event.target.value)} /> */}
+                  <Moolyaselect multiSelect={false} ref="state" className="form-control float-label"
+                    valueKey={'value'} labelKey={'label'} placeholder="State" queryOptions={statesOption}
+                    selectedValue={this.props.formData.stateId} queryType={"graphql"} query={statesQuery}
+                    isDynamic={true} onSelect={this.onOptionSelectedStates.bind(this)} />
+                </div>
+                <div className="form-group">
+                  {/* <input type="text" placeholder="Town ,city" className="form-control float-label"
+                    value={this.props.formData.town}
+                    onChange={event => this.onChange('town', event.target.value)} /> */}
+                  <Moolyaselect multiSelect={false} ref="town" className="form-control float-label"
+                    valueKey={'value'} labelKey={'label'} placeholder="Town/City" queryOptions={citiesOption}
+                    selectedValue={this.props.formData.town} queryType={"graphql"} query={citiesQuery}
+                    isDynamic={true} onSelect={this.onOptionSelectedCities.bind(this)} />
                 </div>
                 <div className="form-group">
                   <input type="number" placeholder="Pincode" className="form-control float-label"
-                         value={this.props.formData.pincode}
-                         onChange={event => this.onChange('pincode', event.target.value)} />
+                    value={this.props.formData.pincode}
+                    onChange={event => this.onChange('pincode', event.target.value)} />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Lattitude" className="form-control float-label"

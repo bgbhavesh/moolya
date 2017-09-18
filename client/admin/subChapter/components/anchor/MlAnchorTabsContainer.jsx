@@ -164,6 +164,7 @@ class MlAnchorTabsContainer extends React.Component {
             selectedIndex={this.state.contactDetailsFormData.selectedIndex}
             formData={this.state.contactDetailsFormData.formData}
             onContactChange={this.onContactChange}
+            {...this.props}
             getContactDetails={this.getContactDetails} />,
           icon: <span className="ml flaticon-ml-agenda"></span>
         }

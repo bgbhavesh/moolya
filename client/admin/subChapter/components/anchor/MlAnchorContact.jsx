@@ -91,11 +91,22 @@ export default class MlAnchorContact extends React.Component {
     this.sendDataToParent(data);
   }
 
+  onOptionSelectedAddressType(val) {
+    this.props.onContactChange('addressType', val);
+  }
+
   onChange(field, value) {
     this.props.onContactChange(field, value);
   }
 
   render() {
+    let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
     let countryQuery = gql`query{
       data:fetchCountries {
          value:_id
@@ -116,6 +127,8 @@ export default class MlAnchorContact extends React.Component {
    }`;
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
+    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
+    console.log(this.props.clusterId);
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
@@ -169,12 +182,16 @@ export default class MlAnchorContact extends React.Component {
                   </select> */}
                 </div>
                 <div className="form-group">
-                  <select placeholder="Address Type" className="form-control float-label"
-                    value={this.props.formData.addressType}
-                    onChange={event => this.onChange('addressType', event.target.value)}>
-                    <option>Type one</option>
-                    <option>Type Two</option>
-                  </select>
+                  <Moolyaselect multiSelect={false} ref="addressType" className="form-control float-label"
+                    valueKey={'value'} labelKey={'label'} placeholder="Address Type" queryOptions={addressTypeOption}
+                    selectedValue={this.props.formData.addressType} queryType="graphql" query={addressTypeQuery}
+                    isDynamic={true} onSelect={this.onOptionSelectedAddressType.bind(this)}/>
+                  {/*<select placeholder="Address Type" className="form-control float-label"*/}
+                    {/*value={this.props.formData.addressType}*/}
+                    {/*onChange={event => this.onChange('addressType', event.target.value)}>*/}
+                    {/*<option>Type one</option>*/}
+                    {/*<option>Type Two</option>*/}
+                  {/*</select>*/}
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Contact Number"

@@ -281,6 +281,7 @@ let ideatorPortfolioSchema = `
         isIdeaPrivate:Boolean,
         isActive:Boolean
         ideaImage : imagesTypeSchema
+        privateFields:[PrivateKeys]
         createdAt: Date
         updatedAt: Date
     }

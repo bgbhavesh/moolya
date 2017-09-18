@@ -43,6 +43,12 @@ export async function fetchIdeaActionHandler(portfolioId) {
                       fileUrl
                       fileName
                     }
+                    privateFields{
+                      keyName
+                      booleanKey
+                      index
+                      tabName
+                    }
                     createdAt
                     updatedAt
                 }

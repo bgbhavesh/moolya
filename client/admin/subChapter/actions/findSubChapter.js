@@ -64,7 +64,7 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
             street,
             landmark,
             area,
-            town,
+            cityId,
             stateId,
             countryId,
             pincode,

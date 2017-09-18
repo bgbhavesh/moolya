@@ -26,8 +26,8 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     lookingForDescription: '',
     privateFields: {},
     currentUrl: fullUrl,
-    twitterHandle: '@kanwar00733'
-
+    twitterHandle: '@kanwar00733',
+    branches:[]
   }
 
   let userObject  = await mlDBController.findOne('users', {'_id': userID});

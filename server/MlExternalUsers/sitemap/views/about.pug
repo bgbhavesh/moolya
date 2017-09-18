@@ -18,7 +18,12 @@ html
     meta(property='og:title', content=title)
     meta(property='og:description', content=desc)
     meta(property='og:url', content=currentUrl)
+    meta(property='og:image:secure_url', content=profilePic)
+    meta(property='og:image:alt', content=displayName)
+
     meta(property='og:site_name', content='')
+    meta(property='fb:app_id', content='328947447490953')
+
 
     meta(name='twitter:card', content='summary')
     meta(name='twitter:description', content=desc)
@@ -33,7 +38,7 @@ html
     script.
       window.fbAsyncInit = function () {
         FB.init({
-          appId: '135597393456581',
+          appId: '328947447490953',
           autoLogAppEvents: true,
           xfbml: true,
           version: 'v2.10'
@@ -93,7 +98,7 @@ html
       .ms_content_wrap
         .content_left
           .profile_pic
-            img(src=profilePic?profilePic:'/images/no-image.png')
+            img(src=profilePic?profilePic:'/images/no-image.png' alt=displayName)
         .content_right
           h2
             | #{displayName} is #{communityType} on #{space}

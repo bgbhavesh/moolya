@@ -48,14 +48,23 @@ export default class MlAnchorContact extends React.Component {
 
   onOptionSelectedCountry(val) {
     this.onChange("countryId", val);
+    setTimeout(() => {
+      this.onChange("stateId", "")
+    }, 10);
+    setTimeout(() => {
+      this.onChange("cityId", "");
+    }, 20);
   }
 
   onOptionSelectedStates(val) {
     this.onChange("stateId", val);
+    setTimeout(() => {
+      this.onChange("cityId", "");
+    }, 10);
   }
 
   onOptionSelectedCities(val) {
-    this.onChange("town", val);
+    this.onChange("cityId", val);
   }
 
   resetFormData() {
@@ -70,7 +79,7 @@ export default class MlAnchorContact extends React.Component {
         street: '',
         landmark: '',
         area: '',
-        town: '',
+        cityId: '',
         stateId: '',
         countryId: '',
         pincode: '',
@@ -215,12 +224,12 @@ export default class MlAnchorContact extends React.Component {
                     isDynamic={true} onSelect={this.onOptionSelectedStates.bind(this)} />
                 </div>
                 <div className="form-group">
-                  {/* <input type="text" placeholder="Town ,city" className="form-control float-label"
-                    value={this.props.formData.town}
-                    onChange={event => this.onChange('town', event.target.value)} /> */}
-                  <Moolyaselect multiSelect={false} ref="town" className="form-control float-label"
+                  {/* <input type="text" placeholder="cityId ,city" className="form-control float-label"
+                    value={this.props.formData.cityId}
+                    onChange={event => this.onChange('cityId', event.target.value)} /> */}
+                  <Moolyaselect multiSelect={false} ref="cityId" className="form-control float-label"
                     valueKey={'value'} labelKey={'label'} placeholder="Town/City" queryOptions={citiesOption}
-                    selectedValue={this.props.formData.town} queryType={"graphql"} query={citiesQuery}
+                    selectedValue={this.props.formData.cityId} queryType={"graphql"} query={citiesQuery}
                     isDynamic={true} onSelect={this.onOptionSelectedCities.bind(this)} />
                 </div>
                 <div className="form-group">

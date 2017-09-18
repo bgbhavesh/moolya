@@ -31,7 +31,7 @@ class MlAnchorTabsContainer extends React.Component {
           street: '',
           landmark: '',
           area: '',
-          town: '',
+          cityId: '',
           stateId: '',
           countryId: '',
           pincode: '',

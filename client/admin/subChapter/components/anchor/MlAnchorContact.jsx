@@ -93,8 +93,9 @@ export default class MlAnchorContact extends React.Component {
   }
 
   onOptionSelectedAddressType(val, callback, label) {
-    this.props.onContactChange('addressTypeId', val);
-    this.props.onContactChange('addressTypeName', label.label);
+    this.props.onContactChange('addressTypeId', val), function () {
+      this.props.onContactChange('addressTypeName', label.label);
+    };
   }
 
   onChange(field, value) {
@@ -130,7 +131,7 @@ export default class MlAnchorContact extends React.Component {
     let statesOption = { options: { variables: { countryId: this.props.formData.countryId } } };
     let citiesOption = { options: { variables: { stateId: this.props.formData.stateId } } };
     let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
-    console.log(this.props.clusterId);
+    console.log(this.props.formData.addressTypeId);
     return (
       <div className="main_wrap_scroll">
         <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>

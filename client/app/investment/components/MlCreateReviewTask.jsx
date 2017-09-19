@@ -164,7 +164,7 @@ export default class MlAssignTask extends React.Component {
             <textarea placeholder="Write your Comment" className="form-control float-label" id=""></textarea>
           </div>
           <div className="clearfix" />
-          <a href="#" className="save_btn add-question">Add Question </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" className="save_btn">Submit</a>
+          <a href="" className="save_btn add-question">Add Question </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" className="save_btn">Submit</a>
         </div>
         <div className="pop_review_question" style={{'display':'none'}}>
           <div className="comments-container cus_scroll">
@@ -220,7 +220,7 @@ export default class MlAssignTask extends React.Component {
             </ul>
           </div>
           <div className="clearfix" />
-          <a href="#" className="save_btn send-btn">Send </a>
+          <a href="" className="save_btn send-btn">Send </a>
         </div>
       </div>
     )

@@ -333,7 +333,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPartner.bind(this)}>
-                      <a href="#" id="create_clientPdefault" data-placement="top" data-class="large_popover">
+                      <a href="" id="create_clientPdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans">
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3>Add New Partner</h3>
@@ -343,7 +343,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                     {that.state.partnersList.map(function (principal, idx) {
                       return (
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="#" id={"create_clientP" + idx}>
+                          <a href="" id={"create_clientP" + idx}>
                             <div className="list_block notrans funding_list"
                                  onClick={that.onPartnerTileClick.bind(that, idx)}>
                               <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
@@ -352,9 +352,9 @@ export default class MlInstitutionEditPartners extends React.Component {
                               <div>
                                 <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                               <div className="ml_icon_btn">
-                                <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
+                                <a href="" className="save_btn"><FontAwesome name='facebook'/></a>
+                                <a href="" className="save_btn"><FontAwesome name='twitter'/></a>
+                                <a href="" className="save_btn"><FontAwesome name='linkedin'/></a>
                               </div>
                             </div>
                           </a>

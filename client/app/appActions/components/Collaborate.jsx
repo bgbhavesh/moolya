@@ -18,8 +18,8 @@ export default class Collaborate extends React.Component {
       <div>
         Do you want to connect ?
         <div className="ml_btn">
-          <a href="#" className="save_btn" >Connect</a>
-          <a href="#" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
+          <a href="" className="save_btn" >Connect</a>
+          <a href="" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
         </div>
 
       </div>

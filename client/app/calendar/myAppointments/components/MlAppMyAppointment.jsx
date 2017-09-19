@@ -99,7 +99,7 @@ export default class MlAppMyAppointment extends React.Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
-        key: MlTab.name,
+        key: MlTab.name.toLowerCase(),
         getContent: () => MlTab.tabContent,
       }));
     }

@@ -122,9 +122,12 @@ export default class MlIdeaView extends React.Component {
         }
       })
       this.setState({portfolioIdeatorInfo: currentIdea, loading:false})
+      _.each(currentIdea.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
     }
   }
-
 
   render() {
     const showLoader = this.state.loading;
@@ -169,7 +172,7 @@ export default class MlIdeaView extends React.Component {
 <br /><br />
                     <p><b>Title:</b>{this.state.portfolioIdeatorInfo.title}</p>
                     <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                 id="isIdeasTitlePrivate"/><input
+                                 id="isIdeaTitlePrivate"/><input
                     type="checkbox" className="lock_input" id="makePrivate"
                     checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>
 
@@ -181,7 +184,7 @@ export default class MlIdeaView extends React.Component {
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
                             readOnly="true"></textarea>*/}
                 <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                             id="isIdeasPrivate"/>
+                             id="isIdeaPrivate"/>
                 <input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>
               </div>
             </div>

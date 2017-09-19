@@ -14,7 +14,6 @@ var generateConnectionCode=function(u1,u2){
   return connectionCode;
 }
 MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info) => {
-  console.log("....................")
   var counterList = [];
   var actionsList=args.actionNames||[];
   var resourceId=args.resourceId;

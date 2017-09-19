@@ -4,7 +4,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
-import UserGrid from '../../../../commons/components/usergrid';
+import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 
@@ -16,9 +16,14 @@ export default class MlAnchorInfoView extends React.Component {
       objective: [],
       contactDetails: [],
       data:[],
+      selectedUser: {},
+      subChapterImageLink:"/images/startup_default.png",
+
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
+    this.clearSelection = this.clearSelection.bind(this);
+    this.getAnchorUsers = this.getAnchorUsers.bind(this)
   }
 
   componentDidMount() {
@@ -35,7 +40,6 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   handleUserClick(id) {
-    console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
     return resp;
 
@@ -43,34 +47,55 @@ export default class MlAnchorInfoView extends React.Component {
 
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
-    this.setState({ userData: response });
+    this.setState({ selectedUser: response });
     console.log(response);
     return response;
+  }
+
+  clearSelection(){
+    this.setState({selectedUser: {}});
   }
 
   async getAnchorUsers() {
     var { clusterId, chapterId, subChapterId } = this.props;
     var response = await findAnchorUserActionHandler({ clusterId, chapterId, subChapterId })
-    console.log('anchor user list', response)
     this.setState({ data: response })
     return response
   }
 
-  async componentWillMount() {
+  async fetchSubChapterDetails(){
     const { clusterId, chapterId, subChapterId } = this.props;
-    console.log(this.props);
-    console.log('In this file');
-    await this.getAnchorUsers();
     const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
     const objective = response && response.objective && response.objective.map((ob) => ({
-      description: ob.description,
-      status: ob.status,
-    }));
+        description: ob.description,
+        status: ob.status,
+      }));
     const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
     this.setState({
       objective: objective || [],
-      contactDetails: contactDetails || []
+      contactDetails: contactDetails || [],
+      subChapterName : response && response.subChapterName?response.subChapterName:"SubChapter Name",
+      subChapterImageLink : response && response.subChapterImageLink?response.subChapterImageLink:"/images/startup_default.png"
     })
+    this.getAnchorUsers();
+  }
+
+  componentWillMount() {
+    // const { clusterId, chapterId, subChapterId } = this.props;
+    console.log(this.props);
+    // this.getAnchorUsers();
+    const resp = this.fetchSubChapterDetails()
+    return resp
+    // const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    // const objective = response && response.objective && response.objective.map((ob) => ({
+    //   description: ob.description,
+    //   status: ob.status,
+    // }));
+    // const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
+    // this.setState({
+    //   objective: objective || [],
+    //   contactDetails: contactDetails || []
+    // })
   }
 
   changePath(){
@@ -87,11 +112,12 @@ export default class MlAnchorInfoView extends React.Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
+
           <div className="panel panel-default">
-            <div className="panel-heading">RakSan Subchapter</div>
+            <div className="panel-heading">{this.state.subChapterName}</div>
             <div className="panel-body nopadding">
-              <div className="col-md-2 text-center">
-                <img src="/images/startup_default.png" className="margintop"/>
+              <div className="col-md-2">
+                <img src={this.state.subChapterImageLink} className="margintop" style={{'width':'150px','height':'45px'}}/>
               </div>
               <div className="col-md-10 nopadding att_members">
                 <ul className="users_list">
@@ -141,81 +167,23 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
-            <div className="row">
-              {/*<h3>Users List</h3>*/}
               <div className="left_wrap left_user_blocks">
-                <UserGrid users={this.state.data} clickHandler={this.handleUserClick}/>
-                {/*<ScrollArea*/}
-                  {/*speed={0.8}*/}
-                  {/*className="left_wrap"*/}
-                {/*>*/}
+                {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
+                {this.state.selectedUser.profile &&
+                <div>
+                  <h3 className="back_btn" onClick={this.clearSelection} alt="Go Back" title="Go Back">
+                    <span className="fa fa-angle-left fa-2x"/> &nbsp;{this.state.selectedUser.profile.firstName}
+                  </h3>
 
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_1.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name1</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_2.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name2</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_3.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name3</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_4.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name4</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_5.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name5</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_6.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>user Name6</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                  {/*<div className="col-md-6 col-sm-6">*/}
-                    {/*<div className="list_block provider_block">*/}
-                      {/*<div className="cluster_status active_cl"></div>*/}
-                      {/*<div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"*/}
-                                                                                             {/*src="/images/p_7.jpg"/>*/}
-                      {/*</div>*/}
-                      {/*<h3>User Name7</h3>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                {/*</ScrollArea>*/}
+                  {/*<button onClick={this.clearSelection}>Back</button>*/}
+                  <p>
+                  <br />
+                    <b>Email : </b>{this.state.selectedUser.profile.email}
+                  </p>
+
+                </div>
+                }
               </div>
-            </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4">
             <div className="row">
@@ -228,7 +196,10 @@ export default class MlAnchorInfoView extends React.Component {
                   <h3>Objectives :</h3>
                   <ul className="list-info">
                     {
-                      this.state.objective.map((ob, index) => {
+                      !this.state.objective.length && <p> No objectives added</p>
+                    }
+                    {
+                      this.state.objective.length !== 0 && this.state.objective.map((ob, index) => {
                         const { status, description } = ob;
                         if (status) {
                           return <li key={`${description}index`}>{description}</li>;
@@ -250,7 +221,10 @@ export default class MlAnchorInfoView extends React.Component {
               >
                 <h3>Contact Us:</h3>
                 {
-                  this.state.contactDetails.map((cd, index) => {
+                  !this.state.contactDetails.length && <p>No contact details added</p>
+                }
+                {
+                  this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
                     const { emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber } = cd;
                     return (
                       <p key={index}>
@@ -265,9 +239,18 @@ export default class MlAnchorInfoView extends React.Component {
               </ScrollArea>
             </div>
           </div>
-          <div>
-            <a onClick={this.changePath.bind(this)} href="">enter to subchapter</a>
+          <div className="col-md-12 text-center">
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
+            </div>
+            <div className="col-md-4">
+              <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into subchapter</a>
+            </div>
+            <div className="col-md-4">
+              {/*<a href="#" className="fileUpload mlUpload_btn">Get invited</a>*/}
+            </div>
           </div>
+
 
         </div>
       </div>

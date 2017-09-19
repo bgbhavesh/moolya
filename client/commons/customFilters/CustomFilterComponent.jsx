@@ -369,9 +369,9 @@ export default class MlCustomFilterComponent extends Component {
 
                 <br className="brclear"/>
               <div className="ml_icon_btn">
-                <a href="#"  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span
+                <a href=""  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span
                   className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn" onClick={this.onCancelFilter.bind(this)}><span className="ml ml-delete"></span></a>
+                <a href="" id="cancel_contact" className="cancel_btn" onClick={this.onCancelFilter.bind(this)}><span className="ml ml-delete"></span></a>
 
 
             </div>

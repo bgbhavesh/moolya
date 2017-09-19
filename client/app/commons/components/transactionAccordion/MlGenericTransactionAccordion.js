@@ -7,6 +7,7 @@ import React, {Component} from "react";
 import MlAppRegistrationWizard from '../../../registrations/component/MlAppRegistrationWizard'
 import MlConnectionRequest from './MlConnectionRequest';
 import MlInvestmentRequest from './MlInvestmentRequest'
+import MlShareCalendar from './MlShareCalendar'
 
 export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
@@ -24,9 +25,8 @@ export default function MlGenericTransactionAccordion(props) {
       return <MlAppRegistrationWizard config={data._id} isAccodion={true}/>
       break;
     }
-    case 'share':
-      //<MlShareCalendar/> to be used here
-      return <MlConnectionRequest data={data}/>
+    case 'sharing':
+      return <MlShareCalendar data={data}/>
       break;
     case 'connectionRequest':
     case 'interaction': {

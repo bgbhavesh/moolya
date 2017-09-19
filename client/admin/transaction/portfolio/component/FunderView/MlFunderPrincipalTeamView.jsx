@@ -201,9 +201,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                     className="small">{principal.designation}</p></div>
                                   {/*<div className="ml_icon_btn">*/}
-                                  {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                  {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                  {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                  {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                  {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                  {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
                                   {/*</div>*/}
                                 </div>
                               </div>
@@ -247,9 +247,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div><p>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</p><p
                                           className="small">{selectedPrincipal.designation}</p></div>
                                         {/*<div className="ml_icon_btn">*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
                                         {/*</div>*/}
                                       </div>
                                     </div>
@@ -404,9 +404,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <p className="small">{selectedTeam.designation}</p>
                                         </div>
                                         {/*<div className="ml_icon_btn">*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                        {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                        {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
                                         {/*</div>*/}
                                       </div>
                                     </div>
@@ -547,7 +547,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="#" className="save_btn">Save</a>
+                        <a href="" className="save_btn">Save</a>
                       </div>
                     </div>
                   </div>
@@ -595,7 +595,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                       </div>
 
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="#" className="save_btn">Save</a>
+                        <a href="" className="save_btn">Save</a>
                       </div>
                     </div>
                   </div>

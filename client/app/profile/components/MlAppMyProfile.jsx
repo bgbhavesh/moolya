@@ -89,7 +89,7 @@ class MlAppMyProfile extends Component {
         userDetails: response,
         firstName:response.profile.firstName,
         lastName:response.profile.lastName,
-        displayName:response.profile.email,
+        username:response.profile.email,
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
@@ -116,7 +116,7 @@ class MlAppMyProfile extends Component {
       firstName: this.state.firstName,
       middleName: this.state.middleName,
       lastName: this.state.lastName,
-      userName: this.state.displayName,
+      // userName: this.state.username,
       genderType: this.state.gender,
       dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
     }
@@ -399,7 +399,7 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group">
                       <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
-                             defaultValue={this.state.displayName}/>
+                             defaultValue={this.state.username}/>
                     </div>
                     <div className="form-group">
                       <div className="input_types">
@@ -420,7 +420,7 @@ class MlAppMyProfile extends Component {
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
-                    <br className="brclear" />
+                    <br className="brclear" /><br/>
                     <div className="form-group">
                       <input type="text" placeholder="Mobile Number" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.mobileNumber}/>
@@ -510,7 +510,7 @@ class MlAppMyProfile extends Component {
                         <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
 
                       </div>
-                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
+                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
                   </form>
                 </div>
               </div>

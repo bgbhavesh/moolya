@@ -67,50 +67,56 @@ export default class CropperModal extends React.PureComponent {
 
   render() {
     const { show, toggleShow, uploadingImage, imageSrc, cropperStyle } = this.props;
-    return (
-      <div className={cropperStyle === 'circle' ? 'circle-cropper': ''}>
-        <Modal show={show}>
-          <Modal.Header>
-            Choose your profile picture.
-          </Modal.Header>
-          <Modal.Body>
-            {uploadingImage ? <MlLoader /> : ''}
-            <div style={{ width: '100%' }}>
-              <center>
-                <label htmlFor="avatar" className="">
-                  <a className="mlUpload_btn">Browse Image</a>
-                </label>
-              </center>
-              <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeImageSrc} style={{ display: 'none' }} />
-              <br />
-              <br />
-              <div className="circle-cropper">
-                <Cropper
-                  zoomTo={1}
-                  viewMode={1}
-                  style={{ height: 350, width: '100%' }}
-                  aspectRatio={cropperStyle !== 'any' ? 1 / 1 : undefined}
-                  guides={false}
-                  src={this.state.imageSrc || imageSrc}
-                  ref={(cropper) => { this.cropper = cropper; }}
-                  center
-                />
-              </div>
+    const CModal = (
+      <Modal show={show}>
+        <Modal.Header>
+          Choose your profile picture.
+        </Modal.Header>
+        <Modal.Body>
+          {uploadingImage ? <MlLoader /> : ''}
+          <div style={{ width: '100%' }}>
+            <center>
+              <label htmlFor="avatar" className="">
+                <a className="mlUpload_btn">Browse Image</a>
+              </label>
+            </center>
+            <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeImageSrc} style={{ display: 'none' }} />
+            <br />
+            <br />
+            <div className="circle-cropper">
+              <Cropper
+                zoomTo={1}
+                viewMode={1}
+                style={{ height: 350, width: '100%' }}
+                aspectRatio={cropperStyle !== 'any' ? 1 / 1 : undefined}
+                guides={false}
+                src={this.state.imageSrc || imageSrc}
+                ref={(cropper) => { this.cropper = cropper; }}
+                center
+              />
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <div className="form-group">
-              <a disabled={uploadingImage} className="mlUpload_btn" onClick={toggleShow}>
-                Close
-              </a>
-              <a onClick={this.onImageUpload} disabled={uploadingImage} className="mlUpload_btn" >
-                {this.props.submitText || 'Upload'}
-              </a>
-            </div>
-          </Modal.Footer>
-        </Modal>
-      </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="form-group">
+            <a disabled={uploadingImage} className="mlUpload_btn" onClick={toggleShow}>
+              Close
+            </a>
+            <a onClick={this.onImageUpload} disabled={uploadingImage} className="mlUpload_btn" >
+              {this.props.submitText || 'Upload'}
+            </a>
+          </div>
+        </Modal.Footer>
+      </Modal>
     );
+    if (cropperStyle === 'circle') {
+      return (
+        <div className={cropperStyle === 'circle' ? 'circle-cropper': ''}>
+          {CModal}
+        </div>
+      );
+    }
+    return CModal;
   }
 }
 

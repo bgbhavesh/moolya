@@ -64,6 +64,7 @@ const mlAppClusterDashboardMapConfig=new MlAppViewer({
   },
   viewComponent:<MlAppClusterMapView params={this.params} />,
   mapMarkerComponent:<MlAppClusterMapMarker/>,
+  disableHover:true,
   // mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     // {

@@ -117,13 +117,13 @@ class MlEditBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/backendUserList");
-      else
-        toastr.error(response.result);
+    if (response && response.success) {
+      toastr.success(response.result);
+      FlowRouter.go("/admin/settings/backendUserList");
     }
-  };
+    else
+      toastr.error(response.result);
+  }
 
   componentWillMount() {
     let url = window.location.href;

@@ -7,7 +7,8 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -22,8 +23,8 @@ export default class MlCompanyViewMCL extends React.Component {
       licenses:{},
       data:{},
       annotations:[],
-      content:{}
-
+      content:{},
+      loading:true
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -74,7 +75,7 @@ export default class MlCompanyViewMCL extends React.Component {
     if (responseL) {
       this.setState({licenses: responseL.licenses});
     }
-
+    this.setState({loading: false});
     data = {
       memberships:this.state.memberships,
       licenses: this.state.licenses,
@@ -152,46 +153,58 @@ export default class MlCompanyViewMCL extends React.Component {
   }
 
   render(){
+    const showLoader = this.state.loading;
       return (
-        <div className="portfolio-main-wrap" id="annotatorContent">
-          <h2>MCL</h2>
+        <div>
+          {showLoader === true ? ( <MlLoader/>) : (
+            <div className="portfolio-main-wrap" id="annotatorContent">
+              <h2>MCL</h2>
 
-          <div className="col-md-6 col-sm-6 nopadding-left">
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Membership </div>
-              <div className="panel-body ">
+              <div className="col-md-6 col-sm-6 nopadding-left">
+                <div className="panel panel-default panel-form-view">
+                  <div className="panel-heading">Membership</div>
+                  <div className="panel-body ">
 
-                {this.state.memberships&&this.state.memberships.membershipsDescription?this.state.memberships.membershipsDescription:""}
+                    {this.state.memberships && this.state.memberships.membershipsDescription ? this.state.memberships.membershipsDescription :  (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                    </div>)}
+
+                  </div>
+                </div>
+                <div className="clearfix"></div>
+
+
+              </div>
+              <div className="col-md-6 col-sm-6 nopadding-right">
+
+
+                <div className="panel panel-default panel-form-view">
+                  <div className="panel-heading">Compliances</div>
+                  <div className="panel-body ">
+
+                    {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                    </div>)}
+
+                  </div>
+                </div>
+                <div className="clearfix"></div>
+                <div className="panel panel-default panel-form-view">
+                  <div className="panel-heading">Licenses</div>
+                  <div className="panel-body ">
+
+                    {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                      </div>)}
+
+                  </div>
+                </div>
+
 
               </div>
             </div>
-            <div className="clearfix"></div>
-
-
-          </div>
-          <div className="col-md-6 col-sm-6 nopadding-right">
-
-
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Compliances</div>
-              <div className="panel-body ">
-
-                {this.state.compliances&&this.state.compliances.compliancesDescription?this.state.compliances.compliancesDescription:""}
-
-              </div>
-            </div>
-            <div className="clearfix"></div>
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Licenses </div>
-              <div className="panel-body ">
-
-                {this.state.licenses&&this.state.licenses.licensesDescription?this.state.licenses.licensesDescription:""}
-
-              </div>
-            </div>
-
-
-          </div>
+          )
+          }
         </div>
       )
   }

@@ -55,7 +55,8 @@ export default class MlFunderDayComponent extends Component {
     const {status} = this.state;
     return (
       status === 0? <div className="rbc-slot-filling-fast-status" ></div>:
-        status > 1?<div className="rbc-slot-full-status" ></div>:
+        status > 0 && status < 4 ? <div className="rbc-slot-available-status" ></div>:
+          status >= 4?<div className="rbc-slot-full-status" ></div>:
                 <div></div>
     )
   }

@@ -6,6 +6,7 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const key = 'lookingFor';
 export default class MlServiceProviderLookingForView extends React.Component {
@@ -13,7 +14,8 @@ export default class MlServiceProviderLookingForView extends React.Component {
     super(props);
     this.state = {
       serviceProviderLookingFor: [],
-      isUserValidForAnnotation: false
+      isUserValidForAnnotation: false,
+      loading:true
     }
     this.fetchPortfolioInfo.bind(this);
     // this.fetchAnnotations.bind(this);
@@ -114,7 +116,7 @@ export default class MlServiceProviderLookingForView extends React.Component {
   async fetchPortfolioInfo() {
     const response = await findServiceProviderLookingForActionHandler(this.props.portfolioDetailsId, key);
     if (response) {
-      this.setState({serviceProviderLookingFor: response});
+      this.setState({serviceProviderLookingFor: response,loading:false});
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
@@ -124,32 +126,33 @@ export default class MlServiceProviderLookingForView extends React.Component {
   render() {
     let that = this;
     let lookingforArray = that.state.serviceProviderLookingFor || [];
-    let loading = this.state.loading ? this.state.loading : false;
+    let loading = this.state.loading;
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
           <div>
-            {_.isEmpty(lookingforArray) && <div className="portfolio-main-wrap">
-              <NoData tabName={this.props.tabName}/>
-            </div>}
-
-            {!_.isEmpty(lookingforArray) && <div id="annotatorContent">
-              <h2>Looking For</h2>
-              <div className="col-lg-12">
-                <div className="row">
-                  {lookingforArray && lookingforArray.map(function (details, idx) {
-                    return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                      <div className="team-block">
-                        <span className="ml my-ml-browser_3"/>
-                        <h3>
-                          {details.lookingForName && details.lookingForName}
-                        </h3>
-                      </div>
-                    </div>)
-                  })}
+            {_.isEmpty(lookingforArray) ?(
+              <div className="portfolio-main-wrap">
+                <NoData tabName={this.props.tabName}/>
+              </div>):(
+              <div id="annotatorContent">
+                <h2>Looking For</h2>
+                <div className="col-lg-12">
+                  <div className="row">
+                    {lookingforArray && lookingforArray.map(function (details, idx) {
+                      return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                        <div className="team-block">
+                          <span className="ml my-ml-browser_3"/>
+                          <h3>
+                            {details.lookingForName && details.lookingForName}
+                          </h3>
+                        </div>
+                      </div>)
+                    })}
+                  </div>
                 </div>
-              </div>
-            </div> }
+              </div> )
+            }
           </div>)}
       </div>
     )

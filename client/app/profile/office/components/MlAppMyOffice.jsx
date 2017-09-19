@@ -149,10 +149,10 @@ export default class MlAppMyOffice extends Component {
                             Office</a>
                         </div>:<div></div>}
                         <div className="col-md-4 nopadding">
-                          <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                          <a href="" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
                         </div>
                         <div className="col-md-4 nopadding">
-                          <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                          <a href="" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
                         </div>
                       </div>
                     </div>

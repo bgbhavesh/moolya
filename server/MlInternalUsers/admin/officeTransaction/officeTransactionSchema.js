@@ -99,6 +99,7 @@ let officeTransaction = `
       subChapter: String
       community: String
       transactionType: String
+      transactionTypeId: String
       createdby: String
       email: String
       mobileNumber: String

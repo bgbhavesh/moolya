@@ -63,7 +63,7 @@ if (Meteor.isServer) {
                       "dynamicLink": true,
                       "dynamicLinkHandler": "",
                       "subMenusId": "dashboard",
-                      "subMenuMappingId": "dashboard_specSubChapters"
+                      "subMenuMappingId": "dashboard_chapters"
                     }
                   ]
                 }]

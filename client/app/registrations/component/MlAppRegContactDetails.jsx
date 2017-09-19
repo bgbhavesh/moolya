@@ -300,9 +300,9 @@ export default class MlAppRegContactDetails extends React.Component {
                          data-errMsg="Phone Number is required"/>
                 </div>
                 <div className="ml_icon_btn">
-                  <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
+                  <a href="" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
                     className="ml ml-save"></span></a>
-                  {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                  {/*<a href="" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
                 </div>
               </div>
               {that.state.contactNumberArray && (that.state.contactNumberArray.map(function (options, key) {
@@ -326,9 +326,9 @@ export default class MlAppRegContactDetails extends React.Component {
                            className="form-control float-label" data-required={true} data-errMsg="Number is required"/>
                   </div>
                   <div className="ml_icon_btn">
-                    <a href="#" onClick={that.onEditingContact.bind(that, key)} className="save_btn"><span
+                    <a href="" onClick={that.onEditingContact.bind(that, key)} className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that, key)}><span
+                    <a href="" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that, key)}><span
                       className="ml ml-delete"></span></a>
                   </div>
                 </div>)

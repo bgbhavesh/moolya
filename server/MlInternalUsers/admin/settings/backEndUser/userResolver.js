@@ -148,10 +148,11 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
   }
 };
 
+//todo:// need to check this update function it is not correct
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
-  if (user) {
+  var userAccess = checkAnchorAccess (args, context)
+  var user = mlDBController.findOne('users', {_id: args.userId}, context)
+  if (user && userAccess) {
     if (user.profile.isSystemDefined) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
@@ -168,12 +169,10 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
           return response;
         }
 
-        // let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
         let resp = mlDBController.update('users', args.userId, {profile: user.profile}, {$set:true}, context)
         if (resp) {
           let code = 200;
-          let result = {user: resp};
-          let response = new MlRespPayload().successPayload(result, code);
+          let response = new MlRespPayload().successPayload("User Details Updated", code);
           return response
         }
       } else {
@@ -182,7 +181,8 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
         return response;
       }
     }
-  }
+  }else
+    return new MlRespPayload().errorPayload('Not Authorised', 409)
 };
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
@@ -1168,7 +1168,8 @@ MlResolver.MlQueryResolver['fetchUserForReistration'] = (obj, args, context, inf
     users = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId},{"profile.isActive":true}]}, context).fetch();
   }
   users.map(function (user) {
-    user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
+    // user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
+    user.username = user.profile.firstName+" "+user.profile.lastName;
   })
   return users;
 }
@@ -1179,9 +1180,16 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
-    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
     // resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.InternalUprofile.moolyaProfile.firstName":args.attributes.firstName,"profile.InternalUprofile.moolyaProfile.middleName":args.attributes.middleName, "profile.InternalUprofile.moolyaProfile.lastName":args.attributes.lastName,  "profile.InternalUprofile.moolyaProfile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
-    resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.firstName":args.attributes.firstName,"profile.middleName":args.attributes.middleName, "profile.lastName":args.attributes.lastName,  "profile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
+    // resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.firstName":args.attributes.firstName,"profile.middleName":args.attributes.middleName, "profile.lastName":args.attributes.lastName,  "profile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
+    resp = mlDBController.update('users', context.userId, {
+      "profile.profileImage": args.attributes.profileImage,
+      "profile.firstName": args.attributes.firstName,
+      "profile.middleName": args.attributes.middleName,
+      "profile.lastName": args.attributes.lastName,
+      "profile.genderType": args.attributes.genderType,
+      "profile.dateOfBirth": args.attributes.dateOfBirth
+    }, {$set: true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -1694,4 +1702,16 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
   })
   var response = mlDBController.aggregate('users', query, context)
   return response
+}
+
+checkAnchorAccess = function (args, context) {
+  var isAccess = true
+  var userProfile = new MlAdminUserContext().userProfileDetails(context.userId)
+  if (userProfile && userProfile.isAnchor) {
+    if (args.userId === context.userId)
+      isAccess = true
+    else
+      isAccess = false
+  }
+  return isAccess
 }

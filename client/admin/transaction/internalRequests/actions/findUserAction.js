@@ -13,6 +13,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                 isInternaluser,
                 isExternaluser,
                 isActive,
+                isMoolya
                 firstName,
                 middleName,
                 lastName,
@@ -39,6 +40,11 @@ export async function findBackendUserActionHandler(userTypeId) {
                     number,
                     isOTPValidated
                   },
+                  socialLinksInfo {
+                    socialLinkTypeName
+                    socialLinkType
+                    socialLinkUrl
+                  }
                   globalAssignment,
                   isActive,
                   userProfiles{
@@ -64,6 +70,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                       chapterName,
                       subChapterName,
                       communityName
+                      isAnchor
                     }
                   }
                     

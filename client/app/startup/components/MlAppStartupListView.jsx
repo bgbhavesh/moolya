@@ -13,7 +13,7 @@ export default class MlAppStartupListView extends Component {
       lineCap: 'round',
       lineWidth: 5,
       onStep: function (from, to, percent) {
-        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+        $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
     $('.pie-rating').pieChart({
@@ -22,7 +22,7 @@ export default class MlAppStartupListView extends Component {
       lineCap: 'round',
       lineWidth: 5,
       onStep: function (from, to, percent) {
-        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+        $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
     $('.pie-like').pieChart({
@@ -31,7 +31,7 @@ export default class MlAppStartupListView extends Component {
       lineCap: 'round',
       lineWidth: 5,
       onStep: function (from, to, percent) {
-        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+        $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
   }

@@ -62,8 +62,6 @@ html
       authorize: true
       onLoad: onLinkedInLoad
     script(type = 'in/Login').
-
-
     .ms_main_wrap
       .ms_header
         .header_left
@@ -163,8 +161,8 @@ html
                 | To view more details and to collaborate with #{space}
                 span.m_red #{displayName}
             a.ms_btn_re(href='/login') Login
-            |  or
-            a.ms_btn_re(href='/register') Register
+            |  or #{space}
+            a.ms_btn_re(href='https://www.moolya.global/register') Register
             br
             b
               | on #{space}

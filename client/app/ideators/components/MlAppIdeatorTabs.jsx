@@ -108,7 +108,7 @@ render(){
   let tabs = this.state.tabs;
   return (
     <div className="col-md-12 nopadding">
-      <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
+      <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
     </div>
   )
   // return <MlTabComponent tabs={tabs}/>

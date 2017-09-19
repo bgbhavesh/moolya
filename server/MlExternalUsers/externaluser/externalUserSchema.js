@@ -21,6 +21,7 @@ let externalUser = `
         communityCode : String,
         communityDefName:String,
         chapterName:String,
+        portfolioId:String,
         profile:Profile,
         isActive:Boolean
     }
@@ -229,6 +230,7 @@ let externalUser = `
         fetchUserProfiles:[externalUserProfiles]
         fetchMapCenterCordsForExternalUser(module:String, id:String):mapCenterCords
         findDefaultUserProfile:externalUserProfiles
+        fetchMoolyaAdmins(userId: String, profileId: String):userDetails
     }
 `
 
@@ -252,3 +254,6 @@ let supportedApi = [
 
 MlResolver.MlModuleResolver.push(supportedApi)
 
+/**
+ * @import "userDetails" from ['userSchema']
+ * */

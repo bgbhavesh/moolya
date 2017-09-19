@@ -9,10 +9,14 @@ export default class Step4 extends React.Component{
    */
   constructor(props) {
     super(props);
-    console.log(props.data);
     this.state={
       paymentData: props.data ? props.data : {isDiscount: false},
+      isDataChanged:false,
     };
+  }
+
+  isUpdated() {
+    return !this.state.isDataChanged;
   }
 
   /**
@@ -40,11 +44,15 @@ export default class Step4 extends React.Component{
       delete paymentData.discountValue;
     }
     this.setState({
-      paymentData: paymentData
+      paymentData: paymentData,
     }, function () {
       this.calculateDerivedAmount();
     }.bind(this));
   }
+  componentWillMount() {
+    this.props.activeComponent(1);
+  }
+
 
   /**
    * Method :: payableAmount
@@ -58,7 +66,7 @@ export default class Step4 extends React.Component{
       let discountType = evt.target.value;
       paymentData.discountType = discountType;
       this.setState({
-        paymentData: paymentData
+        paymentData: paymentData,
       }, function () {
         this.calculateDerivedAmount();
       }.bind(this));
@@ -188,6 +196,7 @@ export default class Step4 extends React.Component{
     } else {
       this.paymentValidate();
     }
+    this.setState({isDataChanged:true});
     if (!this.errorMsg) {
       this.props.setActivityDetails({payment:paymentData}, false);
     }

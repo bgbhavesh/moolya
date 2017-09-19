@@ -71,6 +71,7 @@ let myOfficeSchema = `
         chapterName: String
         communityId: String
         communityName: String
+        communityCode: String
         barerCount:Int
         officeName : String
         branchType : String
@@ -175,6 +176,7 @@ let myOfficeSchema = `
         chapterName: String
         communityId: String
         communityName: String
+        communityCode: String
         barerCount:Int
         officeName : String
         branchType : String

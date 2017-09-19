@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 // import dashboardRoutes from '../actions/routesActionHandler';
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
+import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 export default class MlCommunityList extends Component {
 
@@ -122,17 +123,18 @@ export default class MlCommunityList extends Component {
 
       return (
         <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-
-          <div className="ideators_list_block">
-            {/*<div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>*/}
-            <h3>{prop.name}</h3>
-            {/*<span className={`ml2 ml-${icon}`}></span>*/}
-            <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
-            <div className="block_footer">
-              {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
-              <span>{prop.chapterName} - {prop.communityDefName}</span>
+          <a href={dashboardRoutes.userListRoute(clusterId, chapterId, subChapterId, prop.portfolioId, icon)}>
+            <div className="ideators_list_block">
+              {/*<div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>*/}
+                <h3>{prop.name}</h3>
+              {/*<span className={`ml2 ml-${icon}`}></span>*/}
+              <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
+              <div className="block_footer">
+                {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
+                <span>{prop.chapterName} - {prop.communityDefName}</span>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       )}
     )

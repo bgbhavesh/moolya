@@ -33,7 +33,6 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
     let userId = context.userId;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
-    console.log('---profile---', profile)
     let dataToInsert = {
       owner:{
         userId: userId,
@@ -141,7 +140,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
         userId: { "$first": "$userId" },
         profileId: { "$first": "$profileId" },
         sharedStartDate: { "$first": "$shareStartDate"},
-        sharedEndDate: { "$first": "$shareStartDate"},
+        sharedEndDate: { "$first": "$shareEndDate"},
         isDownloadable: { "$first": "$isDownloadable"},
         createdAt: { "$first": "$createdAt"}
       }
@@ -222,6 +221,11 @@ MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) =>
         delete info['file'];
       }
   })
+  // data.filter((details) => {
+  //   if((Date.UTC(details.sharedStartDate.getFullYear(), details.sharedStartDate.getMonth(), details.sharedStartDate.getDate()) === Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) ) /(1000 * 60 * 60 * 24)) {
+  //     return details;
+  //   }
+  // })
   return data;
 }
 

@@ -1,7 +1,7 @@
 import MlRespPayload from "../../../commons/mlPayload";
 export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
 
-  static  validateCommunity(regId,regDetails) {
+  static  validateCommunity(regDetails,regId) {
     let isActiveCommunity=true;
     let response=null;
     let subChapterId=null,registrationType=null,clusterId=null,chapterId=null;

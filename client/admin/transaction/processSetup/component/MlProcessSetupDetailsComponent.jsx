@@ -346,8 +346,8 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                     <div className="form-group">
                       <textarea onChange={(e)=>this.updateAbout(e)} defaultValue={this.state.about} placeholder="About" className="form-control float-label"></textarea>
                     </div>
-                    <a href="" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
-                    <a href="" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>
               </div>

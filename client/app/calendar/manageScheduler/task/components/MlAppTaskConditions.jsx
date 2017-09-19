@@ -17,7 +17,9 @@ export default class MlAppTaskConditions extends Component {
     this.handleBlur.bind(this);
     return this;
   }
-
+  isUpdated(){
+    return true;
+  }
   componentWillMount() {
     const resp = this.findTaskDetails();
     return resp;

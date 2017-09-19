@@ -188,6 +188,15 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView'
   }
 });
 
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
+
 appSection.route('/myProfile', {
   name: 'myProfile',
   action(){
@@ -551,12 +560,13 @@ appSection.route('/calendar/notification', {
   }
 });
 
-appSection.route('/calendar/manageSchedule/all/activityList', {
-  name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
-  }
-});
+// appSection.route('/calendar/manageSchedule', {
+  // name: 'calendar_manageSchedule',
+  // action(){
+    // FlowRouter.go("/app/calendar/manageSchedule/all/activityList");
+    //mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
+  // }
+// });
 
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',

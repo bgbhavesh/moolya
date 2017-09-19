@@ -17,7 +17,9 @@ export default class MlAppTaskStep5 extends React.Component {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
   }
-
+  isUpdated(){
+   return true;
+  }
   render() {
     return (
       <div className="step_form_wrap step1">

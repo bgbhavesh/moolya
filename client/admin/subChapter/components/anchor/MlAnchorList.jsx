@@ -105,7 +105,7 @@ export default class MlAnchorList extends React.Component {
     var data = this.props.data
     var response = await findAnchorUserActionHandler(data)
     console.log('anchor user list', response)
-    this.setState({ data: response })
+    this.setState({ data: response.userDetails })
     return response
   }
 
@@ -117,6 +117,7 @@ export default class MlAnchorList extends React.Component {
     const _this = this
     let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
     let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
+    const isActive = this.state.userData && this.state.userData.profile && this.state.userData.profile.isActive;
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
@@ -153,7 +154,7 @@ export default class MlAnchorList extends React.Component {
                 </div>
                 <div>
                   <div className="form-group">
-                    <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"
+                    <input type="text" placeholder="Middle Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}
                       onChange={event => this.updateProfileData('middleName', event.target.value)} />
                   </div>
@@ -173,14 +174,14 @@ export default class MlAnchorList extends React.Component {
                     <textarea placeholder="About" className="form-control float-label"></textarea>
                   </div>
                   <div className="form-group">
-                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label"
+                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
                         this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.contact
                         && this.state.userData.profile.InternalUprofile.moolyaProfile.contact.length ?
                         this.state.userData.profile.InternalUprofile.moolyaProfile.contact[0].number : ""} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email Id" className="form-control float-label" disabled
+                    <input type="text" placeholder="Email Id" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.email}
                        />
                   </div>
@@ -240,8 +241,8 @@ export default class MlAnchorList extends React.Component {
                 <br className="brclear" />
                 <div className="form-group switch_wrap inline_switch">
                   <label className="">Status</label>
-                  <label className="switch">
-                    <input type="checkbox" />
+                  <label className={`switch ${isActive ? 'on' : ''}`}>
+                    <input checked={isActive} onChange={event => this.updateProfileData('isActive', !isActive)} type="checkbox"/>
                     <div className="slider"></div>
                   </label>
                 </div>

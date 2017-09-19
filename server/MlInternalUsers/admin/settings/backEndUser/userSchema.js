@@ -308,6 +308,11 @@ let BackEndUser = `
         isAvailiable:Boolean
     }
     
+    type anchorUsers {  
+      userDetails : [userDetails]
+      portfolioCounter : [Portfoliodetails]
+    }
+    
     type userDetails{
          _id: String
         alsoAssignedas: String,
@@ -542,7 +547,7 @@ let BackEndUser = `
         getUserProfileForService(profileId: String): ExternalProfile
         findExternalUserAddressBook(registrationId:String): externalUserAdditionalInfoSchema
         findBranchAddressInfo: [AddressInfoSchema]
-        fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [userDetails]
+        fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): anchorUsers
     }
 `
 

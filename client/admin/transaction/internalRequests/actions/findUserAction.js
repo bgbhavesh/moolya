@@ -13,6 +13,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                 isInternaluser,
                 isExternaluser,
                 isActive,
+                isMoolya
                 firstName,
                 middleName,
                 lastName,

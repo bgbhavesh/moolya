@@ -201,14 +201,15 @@ export default class MlStartupInvestor extends React.Component{
     this.props.getInvestorDetails(startupInvestor, this.state.privateKey);
 
   }
-  onLogoFileUpload(file){
+  onLogoFileUpload(image,fileInfo){
     // if(e.target.files[0].length ==  0)
     //   return;
     // let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
+    let file=image;
     let name = 'logo';
-    let fileName = file.name;
+    let fileName = fileInfo.name;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
@@ -286,11 +287,11 @@ export default class MlStartupInvestor extends React.Component{
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image,e) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image,e);
   }
 
   render(){

@@ -157,12 +157,15 @@ class MlAppMyProfile extends Component {
           this.onCheckPassword();
           if (this.state.pwdErrorMsg)
             toastr.error("Confirm Password does not match with Password");
-          else {
+          else if(this.state.newpwdErrorMsg){
+            toastr.error("Existing password and New Password should not match");
+          }else{
             const response = await resetPasswordActionHandler(userDetails);
             // this.refs.id.value='';
             this.refs.confirmPassword.value = '';
             this.refs.password.value = '';
             this.setState({"pwdErrorMsg": 'Password reset complete'})
+            this.setState({"newpwdErrorMsg": 'Password reset complete'})
             toastr.success(response.result);
             $('#password').val("");
             this.setState({PasswordReset: false, showChangePassword: true})
@@ -199,12 +202,18 @@ class MlAppMyProfile extends Component {
   }
 
   onCheckPassword() {
+    let existingPassword = this.refs.existingPassword.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
     if (confirmPassword != password) {
       this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
-    } else {
+    } else{
       this.setState({"pwdErrorMsg": ''})
+    }
+    if(existingPassword===password||existingPassword===confirmPassword){
+      this.setState({"newpwdErrorMsg": 'Existing password and New Password should not match'})
+    }else{
+      this.setState({"newpwdErrorMsg": ''})
     }
   }
 

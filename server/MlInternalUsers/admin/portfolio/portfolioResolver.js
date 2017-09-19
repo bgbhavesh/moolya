@@ -13,6 +13,8 @@ import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
+import  MlSiteMapInsertion from '../../../MlExternalUsers/microSite/microSiteRepo/MlSiteMapInsertion'
+import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 
 /**
  * @module [externaluser portfolio Landing]
@@ -291,9 +293,8 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     }
 
     if(response && response.success){
-        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
-        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+
+      MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
     }
 
     return response;
@@ -341,12 +342,30 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let code = 200;
         let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
-        if(response){
+        if (response) {
+          const urlFormationObject = {
+            clusterName: regRecord.clusterName.replace(/ /g, "_"),
+            chapterName: regRecord.chapterName.replace(/ /g, "_"),
+            subChapterName: regRecord.subChapterName.replace(/ /g, "_"),
+            communityName: regRecord.communityName.replace(/ /g, "_")
+          }
+          const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
+          const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
+          let uniqueSeoName = firstNameUser + '_' + lastNameUser;
+          uniqueSeoName = uniqueSeoName.replace(/ /g, "_");
+          const portfolio_user_id = {
+            userId: regRecord.userId,
+            portFolioId: args.portfoliodetailsId
+          }
+
+            MlSiteMapInsertion.mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
-          if(response && response.success){
+          MlSMSNotification.portfolioGoLiveRequest(args.portfoliodetailsId)
+         // if(response && response.success){
+          if (response && response.success) {
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-            var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."
+            var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
             portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
         }

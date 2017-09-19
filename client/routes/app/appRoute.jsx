@@ -32,6 +32,8 @@ import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} f
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
+import MlMicroSitePreview from '../../app/microSite/components/mlMicroSitePreview'
+
 import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
 //todo :// "MlAnchorInfoView" make this component in the commons
 
@@ -184,6 +186,15 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView'
     mount(AppLayout, {
       appContent: <MlAnchorInfoView subChapterId={params.subChapterId} clusterId={params.clusterId}
                                       chapterId={params.chapterId} queryParams={queryParams}/>
+    })
+  }
+});
+
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });
@@ -551,12 +562,13 @@ appSection.route('/calendar/notification', {
   }
 });
 
-appSection.route('/calendar/manageSchedule/all/activityList', {
-  name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
-  }
-});
+// appSection.route('/calendar/manageSchedule', {
+  // name: 'calendar_manageSchedule',
+  // action(){
+    // FlowRouter.go("/app/calendar/manageSchedule/all/activityList");
+    //mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
+  // }
+// });
 
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',
@@ -768,4 +780,11 @@ appSection.route('/privacy', {
     mount(AppLayout,{appContent:< MlAppPrivacy />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/previewProfile', {
+  name: 'myPublicProfile',
+  action(params){
+    mount(AppLayout,{appContent:< MlMicroSitePreview />, isProfileMenu: true})
+  }
 });

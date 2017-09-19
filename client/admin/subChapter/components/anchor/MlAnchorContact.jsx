@@ -8,8 +8,8 @@ import gql from 'graphql-tag';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 
+//todo:// replace set-time out for sending data to parent need to change
 export default class MlAnchorContact extends React.Component {
-
   constructor(props) {
     super(props);
     this.sendDataToParent = this.sendDataToParent.bind(this);
@@ -93,9 +93,10 @@ export default class MlAnchorContact extends React.Component {
   }
 
   onOptionSelectedAddressType(val, callback, label) {
-    this.props.onContactChange('addressTypeId', val), function () {
+    this.props.onContactChange('addressTypeId', val)
+    setTimeout(() => {
       this.props.onContactChange('addressTypeName', label.label);
-    };
+    }, 10);
   }
 
   onChange(field, value) {

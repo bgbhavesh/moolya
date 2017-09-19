@@ -117,7 +117,7 @@ export default class VerticalBreadCrum extends Component {
         list.push({
           name: properName(routePathHierarchy[index]),
            // +' ('+getNameFromDB(pathHierarchy[index],routePathHierarchy[index]) +')' ,
-          link: '/app/calendar/manageSchedule/all/activityList',
+          link: '/app/calendar/manageSchedule',
         });
       } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' || pathHierarchy[index] === 'true'
               || routePathHierarchy[index - 1] === 'manageSchedule') {

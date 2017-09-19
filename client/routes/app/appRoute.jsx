@@ -560,12 +560,13 @@ appSection.route('/calendar/notification', {
   }
 });
 
-appSection.route('/calendar/manageSchedule/all/activityList', {
-  name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
-  }
-});
+// appSection.route('/calendar/manageSchedule', {
+  // name: 'calendar_manageSchedule',
+  // action(){
+    // FlowRouter.go("/app/calendar/manageSchedule/all/activityList");
+    //mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
+  // }
+// });
 
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',

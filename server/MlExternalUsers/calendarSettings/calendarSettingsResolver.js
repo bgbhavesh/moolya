@@ -432,4 +432,130 @@ MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args
     let response = new MlRespPayload().errorPayload(result, code);
     return response;
   }
-}
+};
+
+
+MlResolver.MlQueryResolver['getUserProfileDetails'] = (obj, args, context, info) => {
+  let userId = args.userId ? args.userId : context.userId;
+  let pipleline = [
+    { "$match": {_id: userId}},
+    { "$unwind": "$profile.externalUserProfiles"},
+    {
+      "$lookup": {
+        "from": "mlSubChapters",
+        "localField":"profile.externalUserProfiles.subChapterId",
+        "foreignField": "_id",
+        "as": "subDepartment"
+      }
+    },
+    { "$unwind": "$subDepartment" },
+    {
+      "$project": {
+        "userId": "$_id",
+        "firstName": "$profile.firstName",
+        "lastName": "$profile.lastName",
+        "displayName": "$profile.displayName",
+        "profileId": "$profile.externalUserProfiles.profileId",
+        "profileImage": "$profile.profileImage",
+        "clusterId": "$profile.externalUserProfiles.clusterId",
+        "clusterName": "$profile.externalUserProfiles.clusterName",
+        "chapterId": "$profile.externalUserProfiles.chapterId",
+        "chapterName": "$profile.externalUserProfiles.chapterName",
+        "subChapterId": "$profile.externalUserProfiles.subChapterId",
+        "subChapterName": "$profile.externalUserProfiles.subChapterName",
+        "communityId": "$profile.externalUserProfiles.communityId",
+        "communityName": "$profile.externalUserProfiles.communityName",
+        "communityDefCode": "$profile.externalUserProfiles.communityDefCode",
+        "communityDefName": "$profile.externalUserProfiles.communityDefName",
+        "isActive": "$profile.externalUserProfiles.isActive",
+        "isApprove": "$profile.externalUserProfiles.isApprove",
+        "isMoolya": "$subDepartment.isDefaultSubChapter"
+      }
+    },
+    {
+      "$lookup": { "from": "mlResourceConfig", "localField":"communityDefCode", "foreignField": "community.communityCode", "as": "resource"  }
+    },
+    {
+      "$addFields": {
+        "resource" : { "$reduce": {
+          "input": "$resource",
+          "initialValue": [],
+          "in": { "$concatArrays" : ["$$value", ["$$this.resourceCode"]] }
+        }}
+      }
+    },
+    {
+      "$addFields": {
+        "isHasManageSchedule" : { $in :[ "MANAGESCHEDULE", "$resource" ] },
+        "isHasOffice": { $in :[ "OFFICE", "$resource" ] }
+      }
+    },
+    {
+      "$lookup": { "from": "mlOffice", "localField":"profileId", "foreignField": "profileId", "as": "offices"  }
+    }
+  ];
+  return mlDBController.aggregate('users', pipleline, context);
+};
+
+MlResolver.MlQueryResolver['getUserActiveProfileDetails'] = (obj, args, context, info) => {
+  let userId = args.userId ? args.userId : context.userId;
+  let pipleline = [
+    { "$match": {_id: userId}},
+    { "$unwind": "$profile.externalUserProfiles"},
+    {
+      "$lookup": {
+        "from": "mlSubChapters",
+        "localField":"profile.externalUserProfiles.subChapterId",
+        "foreignField": "_id",
+        "as": "subDepartment"
+      }
+    },
+    { "$unwind": "$subDepartment" },
+    {
+      "$project": {
+        "userId": "$_id",
+        "firstName": "$profile.firstName",
+        "lastName": "$profile.lastName",
+        "displayName": "$profile.displayName",
+        "profileId": "$profile.externalUserProfiles.profileId",
+        "profileImage": "$profile.profileImage",
+        "clusterId": "$profile.externalUserProfiles.clusterId",
+        "clusterName": "$profile.externalUserProfiles.clusterName",
+        "chapterId": "$profile.externalUserProfiles.chapterId",
+        "chapterName": "$profile.externalUserProfiles.chapterName",
+        "subChapterId": "$profile.externalUserProfiles.subChapterId",
+        "subChapterName": "$profile.externalUserProfiles.subChapterName",
+        "communityId": "$profile.externalUserProfiles.communityId",
+        "communityName": "$profile.externalUserProfiles.communityName",
+        "communityDefCode": "$profile.externalUserProfiles.communityDefCode",
+        "communityDefName": "$profile.externalUserProfiles.communityDefName",
+        "isActive": "$profile.externalUserProfiles.isActive",
+        "isApprove": "$profile.externalUserProfiles.isApprove",
+        "isMoolya": "$subDepartment.isDefaultSubChapter"
+      }
+    },
+    { "$match": { isActive: true } },
+    {
+      "$lookup": { "from": "mlResourceConfig", "localField":"communityDefCode", "foreignField": "community.communityCode", "as": "resource"  }
+    },
+    {
+      "$addFields": {
+        "resource" : { "$reduce": {
+          "input": "$resource",
+          "initialValue": [],
+          "in": { "$concatArrays" : ["$$value", ["$$this.resourceCode"]] }
+        }}
+      }
+    },
+    {
+      "$addFields": {
+        "isHasManageSchedule" : { $in :[ "MANAGESCHEDULE", "$resource" ] },
+        "isHasOffice": { $in :[ "OFFICE", "$resource" ] }
+      }
+    },
+    {
+      "$lookup": { "from": "mlOffice", "localField":"profileId", "foreignField": "profileId", "as": "offices"  }
+    }
+  ];
+  return mlDBController.aggregate('users', pipleline, context);
+};

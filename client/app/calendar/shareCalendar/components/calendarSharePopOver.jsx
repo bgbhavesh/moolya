@@ -141,7 +141,12 @@ export default class CalendarSharePopOver extends React.Component {
 
   deleteTeamMembers(index) {
     let teamMembers = this.state.teamData || [];
-    teamMembers.splice(index,1);
+    teamMembers[index].isAdded = false
+    this.setState({teamData: teamMembers})
+  }
+  addTeamMembers(index) {
+    let teamMembers = this.state.teamData || [];
+    teamMembers[index].isAdded = true
     this.setState({teamData: teamMembers})
   }
 
@@ -151,7 +156,7 @@ export default class CalendarSharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="doc_upload" key={index}>
-          <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/><img src={value.fileUrl}/></li>
+          <li>{<FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>}<img src={value.fileUrl}/></li>
         </ul>
       )
     })
@@ -164,7 +169,7 @@ export default class CalendarSharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="img_upload ul-hide" key={index}>
-          <li ><FontAwesome name='minus' onClick={that.deleteTeamMembers.bind(that,index)}/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index)}/> : <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
         </ul>
       )
     })
@@ -174,17 +179,18 @@ export default class CalendarSharePopOver extends React.Component {
   saveDetails() {
     let that = this;
     let teamMembers = that.state.teamData || [];
-    let file = [];
     let user = [];
     teamMembers.map(function(team) {
-      let userDetails = {
-        userId: team.userId ? team.userId : 'userId',
-        profileId: team.profileId ? team.profileId : ''
-      };
-      user.push(userDetails)
+      if(team.isAdded) {
+        let userDetails = {
+          userId: team.userId ? team.userId : 'userId',
+          profileId: team.profileId ? team.profileId : ''
+        };
+        user.push(userDetails)
+      }
     });
     let Details = {
-      users:user,
+      users:user
     }
     if(this.state.startDate) {
       Details.sharedStartDate =  this.state.startDate.format("MM-DD-YYYY hh:mm:ss");
@@ -209,7 +215,6 @@ export default class CalendarSharePopOver extends React.Component {
     } else {
       toastr.error(response.result);
     }
-    console.log(response)
   }
 
 

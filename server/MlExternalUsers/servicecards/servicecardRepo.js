@@ -335,8 +335,7 @@ class MlServiceCardRepo{
       return new MlRespPayload().successPayload(dataToInsert.orderId, 200);
     }
 
-    updateServiceCardOrder(payload, context)
-    {
+    updateServiceCardOrder(payload, context) {
       let orderId = payload.userServiceCardPaymentInfo.orderId;
       let userId = context.userId;
 
@@ -386,6 +385,39 @@ class MlServiceCardRepo{
         return new MlRespPayload().errorPayload(e.message, 400)
       }
       return new MlRespPayload().successPayload("Payment Updated", 200);
+    }
+
+    cloneServiceCard(serviceId, context) {
+      if(_.isEmpty(serviceId)) {
+        return new MlRespPayload().errorPayload("Invalid Service Card", 400);
+      }
+      try {
+        let service = mlDBController.findOne('MlServiceCardDefinition', {_id: serviceId}, context);
+        if(!service){
+          return new MlRespPayload().errorPayload("Invalid Service Card", 400);
+        }
+
+        service.name = service.name + " Copy";
+        service.displayName = service.displayName + " Copy";
+        service.isCurrentVersion = true;
+        service.createdAd = new Date();
+        service.updatedAt = new Date();
+        service.versions = INITIAL_VERSION;
+        service.isCurrentVersion = true;
+        service.isLive = false;
+        service.isReview = false;
+        service.isApproved = false;
+        delete service._id;
+        orderNumberGenService.createUserServiceOrderId(service);
+        // Creating new version service card def
+        let newScVersion = mlDBController.insert('MlServiceCardDefinition', service, context);
+        if(!newScVersion){
+          return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
+        }
+      }catch (e){
+        return new MlRespPayload().errorPayload(e.message, 400);
+      }
+      return new MlRespPayload().successPayload("Service Card Clone Successfully", 200);
     }
 
     createServiceCard(serviceDefId, orderId, context){

@@ -71,7 +71,8 @@ let chapterSchema = `
     
     type contactDetailsOutput{
       contactPersonRole: String,
-      addressType: String,
+      addressTypeId: String,
+      addressTypeName : String
       contactNumber: String
       emailId: String,
       buildingNumber: String,
@@ -132,7 +133,8 @@ let chapterSchema = `
     
     input contactDetailsInput {
       contactPersonRole: String,
-      addressType: String,
+      addressTypeId: String,
+      addressTypeName : String
       contactNumber: String
       emailId: String,
       buildingNumber: String,

@@ -24,7 +24,8 @@ class MlAnchorTabsContainer extends React.Component {
         selectedIndex: -1,
         formData: {
           contactPersonRole: '',
-          addressType: '',
+          addressTypeId: '',
+          addressTypeName: '',
           contactNumber: '',
           emailId: '',
           buildingNumber: '',
@@ -70,7 +71,7 @@ class MlAnchorTabsContainer extends React.Component {
         let stateContactDetails = JSON.parse(JSON.stringify(this.state.subChapter.contactDetails));
         const { objective: stateObjective } = this.state;
         if (this.state.contactDetailsFormData.selectedIndex === -1
-          && this.state.contactDetailsFormData.formData.addressType) {
+          && this.state.contactDetailsFormData.formData.addressTypeId) {
           if (!stateContactDetails) stateContactDetails = [];
           stateContactDetails.push(this.state.contactDetailsFormData.formData);
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {

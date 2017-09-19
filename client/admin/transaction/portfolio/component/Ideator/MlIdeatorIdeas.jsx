@@ -127,13 +127,14 @@ export default class MlIdeatorIdeas extends React.Component{
     return resp;
   }
 
-  onLogoFileUpload(file){
+  onLogoFileUpload(image,fileInfo){
     // if(e.target.files[0].length ==  0)
     //   return;
     // let file = e.target.files[0];
     //let fileName = e.target.files[0].name;
     //let name = e.target.name;
-    let fileName=file.name;
+    let file=image;
+    let fileName=fileInfo.name;
     if(file){
       let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -172,11 +173,11 @@ export default class MlIdeatorIdeas extends React.Component{
       showProfileModal: !status
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image,e) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image,e);
   }
   render(){
     let that = this;

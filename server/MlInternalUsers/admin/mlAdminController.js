@@ -20,7 +20,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
-import findPortFolioDetails from '../../MlExternalUsers/sitemap/microSiteRepo/microSite'
+import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
 
 let helmet = require('helmet');
 var Tokens = require('csrf')
@@ -105,7 +105,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
 
   let path = process.env.PWD;                                                 // Core Project Root Path
-  graphQLServer.set('views', path + '/server/MlExternalUsers/sitemap/views');   // MicroSite View folder that contains static files.
+  graphQLServer.set('views', path + '/server/MlExternalUsers/microSite/views');   // MicroSite View folder that contains static files.
   graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
 
   var tokens = new Tokens()

@@ -621,6 +621,10 @@ let startupPortfolioSchema = `
         accountType         : String
         firstName            : String
         lastName            : String
+        likes               : Int
+        connections         :Int
+        views               :Int
+        followings          :Int
     }
     
     type Query{

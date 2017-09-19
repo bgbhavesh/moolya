@@ -12,6 +12,7 @@ import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEM
 import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import mlOfficeInteractionService from './mlOfficeInteractionRepo'
 import MlAccounts from '../../commons/mlAccounts';
+import MlSMSNotification from '../../mlNotifications/mlSmsNotifications/mlSMSNotification'
 
 let request = require('request');
 var base64 = require('base64-min');
@@ -325,8 +326,8 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
       let code = 400;
       return new MlRespPayload().errorPayload('Error in Activating the office', code);
     }else if(result){
-       MlEmailNotification.bespokeOfficeActivated( args.id);
-       mlOfficeValidationRepo.sendSMSonOfficeActivation(args.id, context);
+        MlEmailNotification.bespokeOfficeActivated( args.id);
+        MlSMSNotification.sendSMSonOfficeActivation(args.id, context);
      }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){

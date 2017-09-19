@@ -77,7 +77,7 @@ export default class MyList extends React.Component{
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12">
-            <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
+            <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
           </div>
         </div>
       </div>

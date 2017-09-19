@@ -470,6 +470,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 $project:{
                   _id : 1,
                   name: "$profile.displayName",
+                  portfolioId : '$portfolio._id',
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
@@ -495,6 +496,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: 1,
                   communityDefName:1,
                   chapterName:1,
+                  portfolioId : 1,
                   isActive: 1,
                   address: {
                     $filter: {
@@ -516,6 +518,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   name: 1,
                   communityCode: 1,
                   communityDefName:1,
+                  portfolioId : 1,
                   chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
@@ -556,6 +559,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   profile:{
                     profileImage:"$profile.profileImage"
                   },
+                  portfolioId : '$portfolio._id',
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
@@ -581,6 +585,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: 1,
                   communityDefName:1,
                   chapterName:1,
+                  portfolioId : 1,
                   profile:1,
                   isActive: 1,
                   address: {
@@ -603,6 +608,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   name: 1,
                   profile:1,
                   communityCode: 1,
+                  portfolioId : 1,
                   communityDefName:1,
                   chapterName:1,
                   isActive: 1,

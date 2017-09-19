@@ -272,7 +272,7 @@ export default class MlAnchorContact extends React.Component {
                 <br className="brclear" />
                 <div className="form-group switch_wrap inline_switch">
                   <label className="">Status</label>
-                  <label className="switch">
+                  <label className={`switch ${this.props.formData.status ? 'on' : ''}`}>
                     <input type="checkbox"
                       checked={this.props.formData.status}
                       onChange={event => this.onChange('status', event.target.checked)} />

@@ -16,7 +16,9 @@ export default class MlAppTaskPayment extends Component {
     this.handleBlurPercent.bind(this);
     return this;
   }
-
+  isUpdated(){
+    return true;
+  }
   componentWillMount() {
     const resp = this.findTaskDetails();
     return resp;

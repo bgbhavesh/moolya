@@ -1129,16 +1129,30 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     count = data.length;
   }
   else if(args.module === "cluster"){
-    var activeClusters = [];
-    // var user = Meteor.users.findOne({_id:context.userId});
-    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
+      var activeClusters = [];
+      var isListView = false;
+      if(args.queryProperty&&args.queryProperty.query&&args.queryProperty.query.indexOf("{") !== -1){
+        var query = JSON.parse(args.queryProperty.query);
+        isListView = query.isListView;
+      }
+      if(isListView){
+        var bounds = query.bounds ? query.bounds : {};
+        var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+        var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+        var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+        var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-      // var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true}) || [];
-
-      // var clusterIds = _.map(user_profiles, "clusterId");
-      // clusterIds = _.uniq(clusterIds);
-
-      var clusters = mlDBController.find('MlClusters', {isActive:true}, context).fetch();
+        var clusters = mlDBController.find('MlClusters', {$and:
+          [
+            {isActive: true},
+            {longitude: {$lte: rightLng}},
+            {longitude: {$gte: leftLng}},
+            {latitude: {$lte: topLat}},
+            {latitude: {$gte: bottomLat}}
+          ]}, context).fetch();
+      }else{
+        var clusters = mlDBController.find('MlClusters', {isActive: true}, context).fetch();
+      }
 
       _.each(clusters, function (cluster) {
         let country = mlDBController.findOne('MlCountries', {isActive: true, _id:cluster.countryId}, context, {sort: {country: 1}});
@@ -1153,19 +1167,34 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     return {totalRecords: totalRecords, data: data};
   }
   else if(args.module === "chapter"){
-    var activeChapters = [];
-    // var user = Meteor.users.findOne({_id:context.userId});
-    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
-    //
-    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "clusterId":args.queryProperty.query}) || [];
-    //
-    //   if(!user_profiles)
-    //     throw new Error('Profile Not Found');
-    //
-    //   var chapterIds = _.map(user_profiles, "chapterId");
-    //   chapterIds = _.uniq(chapterIds);
+      var activeChapters = [];
+      var isListView = false;
+      if(args.queryProperty.query.indexOf("{") !== -1){
+        var query = JSON.parse(args.queryProperty.query);
+        isListView = query.isListView;
+      }
+      if(isListView){
+        var bounds = query.bounds ? query.bounds : {};
+        var clusterId = query.clusterId ? query.clusterId : "";
+        var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+        var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+        var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+        var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-      var chapters = mlDBController.find('MlChapters', {clusterId:args.queryProperty.query, isActive:true}, context).fetch();
+        var chapters = mlDBController.find('MlChapters', {$and:
+          [
+            {isActive: true},
+            {clusterId:clusterId},
+            {longitude: {$lte: rightLng}},
+            {longitude: {$gte: leftLng}},
+            {latitude: {$lte: topLat}},
+            {latitude: {$gte: bottomLat}}
+          ]}, context).fetch();
+      }else{
+        var clusterId = args.queryProperty.query
+        var chapters = mlDBController.find('MlChapters', {isActive: true, clusterId:clusterId}, context).fetch();
+      }
+
 
       _.each(chapters, function (chapter) {
         let city = mlDBController.findOne('MlCities', {isActive: true, _id:chapter.cityId}, context, {sort: {country: 1}});
@@ -1180,19 +1209,33 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     return {totalRecords: totalRecords, data: data};
   }
   else if(args.module === "subChapter"){
-    var activeChapters = [];
-    // var user = Meteor.users.findOne({_id:context.userId});
-    // if(user && user.profile && user.profile.isExternaluser === true && user.profile.isActive === true) {
-    //
-    //   var user_profiles = _.filter(user.profile.externalUserProfiles, {"isActive": true, "isApprove": true, "chapterId":args.queryProperty.query}) || [];
-    //
-    //   if(!user_profiles)
-    //     throw new Error('Profile Not Found');
-    //
-    //   var subChapterIds = _.map(user_profiles, "subChapterId");
-    //   subChapterIds = _.uniq(subChapterIds);
+    var isListView = false;
+    if(args.queryProperty.query.indexOf("{") !== -1){
+      var query = JSON.parse(args.queryProperty.query);
+      isListView = query.isListView;
+    }
+    if(isListView){
+      var bounds = query.bounds ? query.bounds : {};
+      var chapterId = query.chapterId ? query.chapterId : "";
+      var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+      var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+      var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+      var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-      var subChapters = mlDBController.find('MlSubChapters', {chapterId:args.queryProperty.query, isActive:true}, context).fetch();
+      var subChapters = mlDBController.find('MlSubChapters', {$and:
+        [
+          {isActive: true},
+          {chapterId:chapterId},
+          {longitude: {$lte: rightLng}},
+          {longitude: {$gte: leftLng}},
+          {latitude: {$lte: topLat}},
+          {latitude: {$gte: bottomLat}}
+        ]}, context).fetch();
+    }else{
+      var chapterId = args.queryProperty.query;
+      var subChapters = mlDBController.find('MlSubChapters', {isActive: true,chapterId:chapterId}, context).fetch();
+    }
+
 
     // }
 

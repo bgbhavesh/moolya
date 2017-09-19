@@ -10,6 +10,7 @@
  */
 import React, { Component } from 'react';
 import MlInfiniteScrollComposer from '../actions/MlInfiniteScrollComposer';
+import _ from 'lodash';
 
 export default class MlInfiniteScroll extends Component {
 
@@ -20,7 +21,9 @@ export default class MlInfiniteScroll extends Component {
 
   render() {
     let config=this.props.config;
-    config.params = this.props.params;
+    if(!config.params || _.isEmpty(config.params))
+      config.params = this.props.params;
+
     return (
       <MlInfiniteScrollComposer {...config}/>
     );

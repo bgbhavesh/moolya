@@ -1,7 +1,7 @@
 import React from 'react';
 import MlInfinity from "../../../commons/components/infinityView/MlInfinityView";
 import MlListViewContainer from "../../core/containers/MlAppListViewContainer";
-import MlMapViewContainer from "../../core/containers/MlAppMapViewContainer"
+import MlAppMapViewContainer from "../../core/containers/MlAppMapViewContainer"
 import MlInfiniteScroll from '../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll'
 
 /*
@@ -17,12 +17,36 @@ export default class MlViews extends React.Component {
       viewMode:true,
     }
     this.viewModeChange.bind(this);
+    this.getBound = this.getBound.bind(this);
   }
 
   viewModeChange(mode) {
     this.setState({'viewMode': mode});
   }
 
+  getBound(obj){
+    // if(this.state && obj){
+    //   console.log(obj);
+    //   this.props.listConfig.bounds=obj.bounds;
+    // }
+    if(obj.bounds){
+      if(this.props.listConfig && this.props.listConfig.params) {
+        this.props.listConfig.params.bounds = obj.bounds;
+      }else{
+        let newParams = {params:{bounds:obj.bounds}}
+        this.props.listConfig = _.omit(this.props.listConfig, 'params')
+        this.props.listConfig=_.extend(this.props.listConfig,newParams);
+      }
+
+      if(this.props.params){
+        this.props.params.bounds = obj.bounds;
+      }else{
+        let newParams = {params:{bounds:obj.bounds}}
+        this.props = _.omit(this.props, 'params')
+        this.props=_.extend(this.props,newParams);
+      }
+    }
+  }
 
   render() {
     var specificViewMode = _.has(this.props, 'viewMode');
@@ -44,12 +68,12 @@ export default class MlViews extends React.Component {
     var showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
     var infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
     var config = this.props;
-    var listConfig = this.props.listConfig;
+    var listConfig = config.listConfig;
     listConfig.isApp = true
     var params = this.props.params ? this.props.params : null;
     return (
       <div className="app_main_wrap">
-        {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> :
+        {viewMode ? <MlAppMapViewContainer params={params} bounds={this.getBound.bind(this)} {...config.mapConfig} /> :
           <MlInfiniteScroll params={params} config={listConfig}/> }
         {showInfinity && (<MlInfinity {...infinityViewProps} />)}
       </div>

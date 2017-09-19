@@ -267,7 +267,7 @@ export default class MlServiceProviderLookingFor extends Component {
         }
       }`;
     const showLoader = this.state.loading;
-    let lookingOption = {options: {variables: {communityCode: "IDE"}}};
+    let lookingOption = {options: {variables: {communityCode: "SPS"}}};
     let that = this;
     let serviceProviderLookingForList = that.state.serviceProviderLookingForList || [];
     return (

@@ -45,6 +45,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
+  validationCheck = MlRegistrationPreCondition.validateCommunity(args.registration);
+  if (validationCheck && !validationCheck.isValid) {
+    return validationCheck.validationResponse;
+  }
 
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
@@ -414,7 +418,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        *Validate selected community of user
        *return the error if community is inActive
        */
-      validationCheck = MlRegistrationPreCondition.validateCommunity(id, details);
+      validationCheck = MlRegistrationPreCondition.validateCommunity(details,id);
       if (validationCheck && !validationCheck.isValid) {
         return validationCheck.validationResponse;
       }

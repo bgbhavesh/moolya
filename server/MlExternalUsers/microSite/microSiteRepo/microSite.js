@@ -10,11 +10,11 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     return 'Next';
   }
   let idPortFolio = existsSeoName.portFolioId;
-  let userID  = existsSeoName.userId;
+  let userID = existsSeoName.userId;
   let portFolio = {
     profilePic: '',
-    firstName:'',
-    lastName:'',
+    firstName: '',
+    lastName: '',
     displayName: '',
     clusterName: '',
     chapterName: '',
@@ -27,10 +27,10 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     privateFields: {},
     currentUrl: fullUrl,
     twitterHandle: '@kanwar00733',
-    branches:[]
+    branches: []
   }
 
-  let userObject  = await mlDBController.findOne('users', {'_id': userID});
+  let userObject = await mlDBController.findOne('users', {'_id': userID});
   let displayName = userObject.profile.displayName;
   portFolio.displayName = displayName
   if (!idPortFolio) {
@@ -47,11 +47,8 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     return 'Redirect_to_login';
   }
 
-  let privateFieldsObjects = resultParentPortFolio.privateFields;
-  let privateFields = {}
-  _.forEach(privateFieldsObjects, function (value) {
-    privateFields[value.keyName] = true
-  });
+  //Finding fields private to User.
+  let privateFields = getPrivateFields(resultParentPortFolio.privateFields);
   portFolio.privateFields = privateFields
   // Store portfolio information.
 
@@ -155,11 +152,13 @@ async function STU(portFolio, query) {
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
-      portFolio.aboutDiscription = aboutUs.startupDescription
+      portFolio.aboutDiscription = aboutUs.startupDescription?aboutUs.startupDescription:''
     }
     getManagementInfo(portFolio, resultStartUpPortFolio);
     getLookingForDescription(portFolio, resultStartUpPortFolio);
+    await getBranches(portFolio, resultStartUpPortFolio);
     appendKeywords(portFolio);
+
   }
   return portFolio;
 }
@@ -279,9 +278,9 @@ function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
   communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
   if (checkVowel(communityType.charAt(0))) {
-    communityType = 'an ' + "\'" +communityType +"\'";
+    communityType = 'an ' + "\'" + communityType + "\'";
   } else {
-    communityType = 'a '  + "\'" +communityType +"\'";
+    communityType = 'a ' + "\'" + communityType + "\'";
   }
   return communityType
 }
@@ -309,6 +308,31 @@ function getDefaultMenu(dynamicLinksClasses) {
 }
 
 
+async function getBranches(portFolio, resultPortFolioBranches) {
+  let branches = resultPortFolioBranches.branches;
+  let outputBranches = [];
+  if(branches)
+  {
+    await Promise.all(branches.map(async (branch) => {
+      let city = branch.cityId?await getCity(branch.cityId):'';
+      let state =branch.stateId? await getState(branch.stateId):'';
+      let country= branch.countryId?await getCountry(branch.countryId):'';
+
+      outputBranches.push({
+        name:branch.name,
+        branches_logo: branch.logo ? branch.logo.fileUrl : '',
+        addr1: branch.address1 ? branch.address1 : '',
+        addr2: branch.address2 ? branch.address2 : '',
+        area: branch.area ? branch.area : 'branch.area',
+        state:state,
+        country: country,
+        city:city
+      })
+    }));
+  }
+
+  portFolio.branches = outputBranches;
+}
 function getDynamicLinksClasses() {
   let dynamicLinksClasses = {
     'About': 'pageAboutDiscription',
@@ -324,6 +348,42 @@ function getDynamicLinksClasses() {
   return dynamicLinksClasses;
 }
 
+async function getCity(cityId) {
+  let result = await
+    mlDBController.findOne('MlCities', {_id: cityId});
+  if(result)
+    return result.name
+  else
+    return ''
+}
+
+async function getState(stateId) {
+  let result = await
+    mlDBController.findOne('MlStates', {_id: stateId});
+  if(result)
+    return result.name;
+  else
+    return '';
+}
+
+
+async function getCountry(countryId) {
+  let result = await
+    mlDBController.findOne('MlCountries', {_id: countryId});
+  if(result)
+    return result.displayName
+  else
+    return '';
+}
+
+function getPrivateFields(privateFieldsObjects) {
+  let privateFields = {}
+  _.forEach(privateFieldsObjects, function (value) {
+    privateFields[value.keyName] = true
+  });
+
+  return privateFields
+}
 
 function appendKeywords(portFolio) {
 

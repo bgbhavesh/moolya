@@ -113,8 +113,7 @@ html
             li
           .pages
             .pageManagement
-              p
-                include management
+              include management
             .pageAwards
               if(!privateFields.awardsDescription)
                 p
@@ -123,12 +122,10 @@ html
                 h2 Private Content
             .pageBranches
               if(!privateFields.branches)
-                p
-                  include branches
+                include branches
               else
                 h2 Private Content
             .pageLookingFor
-              p
               if(!privateFields.lookingForDescription)
                 include looking_for
                 h3 Past winners have included:
@@ -142,15 +139,19 @@ html
                 h2 Private Content
             .pageAboutDiscription
               if(!privateFields.aboutDiscription)
-                p
-                  | !{aboutDiscription}
-                  h3 Past winners have included:
-                    .img_list
-                      img(src='/images/list_img_01.png')
-                      img(src='/images/list_img_01.png')
-                      img(src='/images/list_img_01.png')
-                      img(src='/images/list_img_01.png')
-                      img(src='/images/list_img_01.png')
+                if(aboutDiscription && aboutDiscription.length  > 0 )
+                  p
+                    | !{aboutDiscription}
+                    h3 Past winners have included:
+                      .img_list
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
               else
                  h2 Private Content
 

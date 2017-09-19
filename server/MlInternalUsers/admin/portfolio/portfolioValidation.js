@@ -95,17 +95,17 @@ class portfolioValidation {
     return concat
   }
 
-  sendSMSforPortfolio(portfolioDetailsId, msg){
-    var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
-    if(portfolioDetails){
-      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
-      var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-      if(countryCode && defaultProfile){
-        var mobileNumber = defaultProfile.mobileNumber
-        mlSmsController.sendSMS(msg, countryCode, mobileNumber)
-      }
-    }
-  }
+  // sendSMSforPortfolio(portfolioDetailsId, msg){
+  //   var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
+  //   if(portfolioDetails){
+  //     var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+  //     var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+  //     if(countryCode && defaultProfile){
+  //       var mobileNumber = defaultProfile.mobileNumber
+  //       mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+  //     }
+  //   }
+  // }
 
   getLivePortfolioCount() {
     return mlDBController.aggregate('MlPortfolioDetails', [

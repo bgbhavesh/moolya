@@ -13,6 +13,7 @@ import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
+import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 
 /**
  * @module [externaluser portfolio Landing]
@@ -291,9 +292,8 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     }
 
     if(response && response.success){
-        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
-        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+
+      MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
     }
 
     return response;
@@ -344,6 +344,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         if(response){
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
+          MlSMSNotification.portfolioGoLiveRequest(args.portfoliodetailsId)
           if(response && response.success){
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
             var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."

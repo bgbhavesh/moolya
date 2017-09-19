@@ -231,13 +231,14 @@ export default class MlServiceProviderAwards extends Component {
     this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(file,e) {
+  onLogoFileUpload(image,fileInfo) {
     // if (e.target.files[0].length == 0)
     //   return;
     // let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
-    let fileName=file.name;
+    let fileName=fileInfo.name;
+    let file=image;
     if(file){
       let data = {
         moduleName: "PORTFOLIO",
@@ -324,11 +325,11 @@ export default class MlServiceProviderAwards extends Component {
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image,e) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image,e);
   }
 
   render() {
@@ -365,16 +366,16 @@ export default class MlServiceProviderAwards extends Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                      <a id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addAward.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3>Add New Awards</h3>
+                          <h3 onClick={this.addAward.bind(this)}> Add New Awards</h3>
                         </div>
                       </a>
                     </div>
                     {serviceProviderAwardsList.map(function (details, idx) {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                        <a href="" id={"create_client" + idx}>
+                        <a id={"create_client" + idx}>
                           <div className="list_block">
                             <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"

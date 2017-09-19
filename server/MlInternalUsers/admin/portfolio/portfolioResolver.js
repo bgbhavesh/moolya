@@ -13,7 +13,9 @@ import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
-import  MlSiteMapInsertion from '../../../MlExternalUsers/sitemap/microSiteRepo/MlSiteMapInsertion'
+import  MlSiteMapInsertion from '../../../MlExternalUsers/microSite/microSiteRepo/MlSiteMapInsertion'
+import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
+
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -291,9 +293,8 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     }
 
     if(response && response.success){
-        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
-        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+
+      MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
     }
 
     return response;
@@ -360,12 +361,14 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
             MlSiteMapInsertion.mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
+          MlSMSNotification.portfolioGoLiveRequest(args.portfoliodetailsId)
+         // if(response && response.success){
           if (response && response.success) {
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
             var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
             portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
-        }
+        //}
         return response
       } else {
         let code = 401;

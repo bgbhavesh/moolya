@@ -8,11 +8,18 @@ export default class MlAnchorUserGrid extends PureComponent {
     return (
       <ScrollArea speed={0.8} className="left_wrap">
         {
-          !this.props.users.length && <p>No Anchor users found.</p>
+          !this.props.users.length && <div className={this.props.classNames || 'col-md-6 col-sm-6'} key="1">
+            <div className="list_block provider_block">
+              <div className="provider_mask">
+                <CDNImage className="user_pic" src='/images/def_profile.png' />
+              </div>
+              <h3>No anchor user</h3>
+            </div>
+          </div>
         }
         {
           this.props.users.map((user, index) => (
-            <div className={this.props.classNames || "col-md-6 col-sm-6" } key={index}>
+            <div className={this.props.classNames || "col-md-6 col-sm-6"} key={index}>
               <div className="list_block provider_block" onClick={() => this.props.clickHandler(user.userId)}>
                 <div className="provider_mask">
                   <CDNImage className="user_pic" src={user.profileImage ? user.profileImage : '/images/def_profile.png'} />

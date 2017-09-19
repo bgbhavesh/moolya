@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import {render} from "react-dom";
-import {getUserProfileActionHandler} from "../../activity/actions/activityActionHandler";
+import {getUserActiveProfileDetails} from "../../activity/actions/activityActionHandler";
 
 export default class MlCalendarHeader extends Component {
   constructor(props) {
@@ -11,7 +10,7 @@ export default class MlCalendarHeader extends Component {
       displayName: "",
       profileDisplay: false,
       subMenu: false
-    }
+    };
     this.getUserProfiles.bind(this)
   }
 
@@ -30,8 +29,10 @@ export default class MlCalendarHeader extends Component {
     return resp
   }
 
-  changeProfile(profileId){
-    FlowRouter.go("/app/calendar/manageSchedule/"+profileId+"/activityList")
+  changeProfile( profileId, isDisabled ) {
+    if( profileId && !isDisabled) {
+      FlowRouter.go("/app/calendar/manageSchedule/"+profileId+"/activityList");
+    }
   };
   changeType(type){
     let selectedProfileId = FlowRouter.getParam('profileId');
@@ -44,12 +45,57 @@ export default class MlCalendarHeader extends Component {
   }
 
   async getUserProfiles() {
-    const resp = await getUserProfileActionHandler();
-    // this.setState({profile: resp})
-    let name = resp[0].displayName;
-    let profileImage = resp[0].profileImage;
-    this.setState({profile: resp, displayName: name, profilePic: profileImage})
-    return resp;
+
+    const response = await getUserActiveProfileDetails();
+    if(response) {
+      let profiles = response.map((data) => {
+        let iconClass = "";
+        switch (data.communityDefCode){
+          case "FUN":
+            iconClass = "my-ml-Investors";
+            break;
+          case "STU":
+            iconClass = "my-ml-Startups";
+            break;
+          case "IDE":
+            iconClass = "my-ml-Ideator";
+            break;
+          case "INS":
+            iconClass = "my-ml-Institutions";
+            break;
+          case "SPS":
+            iconClass = "my-ml-Service-Providers";
+            break;
+          case "OFB":
+            iconClass = "my-ml-team-members";
+            break;
+          default:
+            iconClass = "ml-moolya-symbol";
+        }
+        return {
+          showIcon: true,
+          iconClass: iconClass,
+          name: data.clusterName + ' - ' +  ( data.isMoolya ? '' : (data.subChapterName + ' - ') )  + data.communityName,
+          isDisabled: !data.isHasManageSchedule,
+          userId: data.userId,
+          profileId: data.profileId
+        }
+      });
+      if(profiles.length == 1){
+        let profileId = response && response[0] && response[0].profileId ? response[0].profileId: 'all';
+        FlowRouter.setParams({
+          profileId: profileId
+        });
+      }
+      let name = response && response[0] && response[0].displayName ? response[0].displayName: '';
+      let profileImage = response && response[0] && response[0].profileImage ? response[0].profileImage: '';
+      this.setState({
+        profile: profiles,
+        displayName: name,
+        profilePic: profileImage
+      });
+      console.log(response, profiles);
+    }
   }
 
 
@@ -58,19 +104,20 @@ export default class MlCalendarHeader extends Component {
     let selectedProfileId = FlowRouter.getParam('profileId');
     let that = this;
     let type = this.props.type;
+    let consolidated = profiles.length == 1 ? profiles[0].profileId : 'all';
 
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li>
-            <a href="" onClick={()=>that.changeProfile("all")}>
+            <a href="" onClick={()=>that.changeProfile(consolidated, false)}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>{that.state.displayName ? that.state.displayName : "All"}</span>
               </div>
             </a>
           </li>
-          <li className={"sub_list_wrap "+ ( selectedProfileId == "all" ? "" :"hidden_list" )}>
+          <li className={"sub_list_wrap "+ ( selectedProfileId == consolidated ? "" :"hidden_list" )}>
             <ul className="sub_list">
               <li className={ type == "activity" ? "active_user" : ""}>
                 <a onClick={()=>that.changeType("activity")} href="">
@@ -96,18 +143,31 @@ export default class MlCalendarHeader extends Component {
                   </div>
                 </a>
               </li>
+              { profiles.length == 1
+                ?
+                  <li className={ type == "calendar" ? "active_user" : ""} >
+                    <a onClick={()=>that.changeToCalendarSettings()} href="">
+                      <span className="icon_bg"><span className="icon_lg fa fa-calendar"></span></span><br />
+                      <div className="tooltiprefer">
+                        <span>Calendar</span>
+                      </div>
+                    </a>
+                  </li>
+                :
+                  ''
+              }
             </ul>
           </li>
 
-          {profiles.map(function (profile, idx) {
+          { profiles.length > 1 && profiles.map(function (profile, idx) {
             return (
               <span key={idx}>
-                < li>
+                < li className={ selectedProfileId == profile.profileId ? "active_user" : '' } >
                   <div >
-                    <a href="" onClick={()=>that.changeProfile(profile.profileId)}>
-                      <span className="icon_bg"> <span className="icon_lg ml my-ml-Investors"></span></span><br />
+                    <a href="" onClick={()=>that.changeProfile(profile.profileId, profile.isDisabled)} className={profile.isDisabled ? "disabled" : ""} >
+                      <span className="icon_bg"> <span className={ "icon_lg ml "+ profile.iconClass }></span></span><br />
                       <div className="tooltiprefer">
-                        <span>{profile.communityName}</span>
+                        <span>{profile.name}</span>
                       </div>
                     </a>
                   </div>

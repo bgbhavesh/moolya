@@ -11,6 +11,7 @@ import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAc
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
 import MlUserContext from "../../../MlExternalUsers/mlUserContext";
+import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
 
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
@@ -53,7 +54,7 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
             mlInteractionService.createTransactionRequest(toUser._id,'inquire', args.resourceId, resp, fromuser._id, fromUserType );
             MlEmailNotification.enquireRequest(fromuser,toUser)
             MlNotificationController.onEnquiryRequestReceived(fromuser,toUser);
-           // sendSMSForEnquiryRequest(fromuser, args.resourceId, context)
+            MlSMSNotification.sendSMSForEnquiryRequest(fromuser, args.resourceId, context)
           }
         }catch (e){
             let code = 400;
@@ -78,20 +79,3 @@ validateExternalUser=(user)=>{
 }
 
 
-sendSMSForEnquiryRequest = (fromUser, portfolioId, context) => {
-  var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
-  if(portfolioDetails){
-    var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
-    var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-    var from = new MlUserContext().userProfileDetails(fromUser._id);
-    if(countryCode && defaultProfile && from){
-      var mobileNumber = defaultProfile.mobileNumber
-      var currentdate = new Date();
-      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-      var updatedDateTime = date+" "+time
-      var msg = 'You have received an enquiry request from '+from.firstName+' '+from.lastName +' on moolya on '+updatedDateTime+'. Login now to respond to it.'
-      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
-    }
-  }
-}

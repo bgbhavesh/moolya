@@ -12,12 +12,13 @@ import MlStartupAssets from "./MlStartupAssets";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
+import _ from 'lodash'
 import MlStartupEditTemplate from '../MlStartupEditTemplate'
 
 export default class MlStartupTab extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
+    this.state =  {activeTab:0,tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
                     portfolioStartupSP:{}, portfolioStartupInfo:{},portfolioStartupBranches:[],
                     portfolioStartupTechnologies:[],portfolioStartupLegal:{}, portfolioStartupRating:{}, admin: true,
                     client:client}
@@ -152,17 +153,32 @@ export default class MlStartupTab extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      let index = _.findIndex(tabs, function(o) {
+        return o.title == activeTab;
+      });
+      if(index>-1 && index !== this.state.activeTab)
+        this.setState({activeTab:index});
+    }
+
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
 
 
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab: tab });
+  }
+
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} backClickHandler={this.props.getStartUpState}/>
   }
 }
 

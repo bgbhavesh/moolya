@@ -117,13 +117,13 @@ class MlEditBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/backendUserList");
-      else
-        toastr.error(response.result);
+    if (response && response.success) {
+      toastr.success(response.result);
+      FlowRouter.go("/admin/settings/backendUserList");
     }
-  };
+    else
+      toastr.error(response.result);
+  }
 
   componentWillMount() {
     let url = window.location.href;
@@ -560,7 +560,7 @@ class MlEditBackendUser extends React.Component{
                     <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                   </div> : <div></div>}*/}
 
-                  <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="" className="mlUpload_btn">Send Notification</a> </div>
+                  <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
                   </form>

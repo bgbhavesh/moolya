@@ -71,18 +71,42 @@ export async function getTeamUsersActionHandler(officeId) {
 export async function getUserProfileActionHandler() {
   const result = await appClient.query({
     query: gql`
-query  {
-  getUserProfiles{
-    profileId
-    communityName
-    displayName
-    profileImage
-  }
-}
+      query  {
+        getUserProfiles{
+          profileId
+          communityName
+          displayName
+          profileImage
+        }
+      }
     `,
     forceFetch:true
   });
   const users = result.data.getUserProfiles;
+  return users
+}
+
+export async function getUserActiveProfileDetails() {
+  const result = await appClient.query({
+    query: gql`
+      query  {
+        getUserActiveProfileDetails{
+          userId
+          profileId
+          profileImage
+          displayName
+          clusterName
+          communityName
+          communityDefCode
+          subChapterName
+          isHasManageSchedule
+          isMoolya
+        }
+      }
+    `,
+    forceFetch:true
+  });
+  const users = result.data.getUserActiveProfileDetails;
   return users
 }
 

@@ -21,6 +21,7 @@ let externalUser = `
         communityCode : String,
         communityDefName:String,
         chapterName:String,
+        portfolioId:String,
         profile:Profile,
         isActive:Boolean
     }

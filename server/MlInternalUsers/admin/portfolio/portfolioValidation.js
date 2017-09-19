@@ -109,11 +109,15 @@ class portfolioValidation {
 
   getLivePortfolioCount() {
     return mlDBController.aggregate('MlPortfolioDetails', [
-      {$match: {status: "PORT_LIVE_NOW"}},
       {
         "$group": {
           _id: "$communityCode",
-          "communityType": {$first: "$communityType"}, count: {$sum: 1}
+          "communityType": {$first: "$communityType"},
+          "count": {
+            $sum: {
+              "$cond": [{"$eq": ["$status", "PORT_LIVE_NOW"]}, 1, 0]
+            }
+          }
         }
       },
       {

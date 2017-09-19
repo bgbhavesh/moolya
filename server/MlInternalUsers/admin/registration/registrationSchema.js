@@ -187,7 +187,9 @@ let registrationSchema = `
         assignedUser    :   String,
         profileImage    :   String,
         status          :   String,
-        createdBy       :   String
+        createdBy       :   String,
+        promoCode       :   String,
+        campaignCode    :   String
     }
     
      type emailVerification{
@@ -270,7 +272,9 @@ let registrationSchema = `
         transactionId   :   String
         assignedUserId    :   String,
         createdBy       :   String,
-        allocationStatus :  String
+        allocationStatus :  String,
+        promoCode       :   String,
+        campaignCode    :   String
         
     }
     

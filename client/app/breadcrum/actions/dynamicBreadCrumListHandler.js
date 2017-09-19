@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { client } from '../../../admin/core/apolloConnection';
 import _ from 'lodash';
-export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, params, callback) {
+export default function getBreadCrumListBasedOnhierarchy(params, callback) {
   params = params || {};
   const requ = _.pick(params, ['clusterId', 'chapterId', 'subChapterId', 'communityId']);
   const breadCrumHierarchyPromise = client.query({
@@ -27,57 +27,57 @@ export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, par
     result = _.sortBy(result, ['hierarchyLevel']);
 
     const path = Object.assign(FlowRouter._current.path);
-    let pathHierarchy = (path.split('?')[0]).split('/');
+    const pathHierarchy = (path.split('?')[0]).split('/');
 
     if (path.includes('dashboard')) {
       _.forEach(result, (detail, index) => {
         list.push({
-          linkId: detail.hierarchyRefId,
+          // linkId: detail.hierarchyRefId,
           linkUrl: generateLinkForDashboardUrl(path, detail.hierarchyRefId, detail.moduleFieldRef, detail.hierarchyRefName),
           linkName: detail.hierarchyRefName,
-          seq: detail.hierarchyLevel,
+          // seq: detail.hierarchyLevel,
         });
       });
     } else {
       _.forEach(result, (detail, index) => {
         list.push({
-          linkId: detail.hierarchyRefId,
+          // linkId: detail.hierarchyRefId,
           linkUrl: generateLink(path, detail.hierarchyRefId, detail.moduleFieldRef, detail.hierarchyRefName),
           linkName: detail.hierarchyRefName,
-          seq: detail.hierarchyLevel,
+          // seq: detail.hierarchyLevel,
         });
       });
     }
 
     list = list.reverse();
 
-    if (firstLevel === 'clusters' || firstLevel === 'chapters') {
-      let name = pathHierarchy[pathHierarchy.length - 1];
-      if (name === 'STU') name = 'Startup';
-      else if (name === 'FUN') name = 'Investor';
-      else if (name === 'IDE') name = 'Ideator';
-      else if (name === 'CMP') name = 'Company';
-      else if (name === 'INS') name = 'Institute';
-      else if (name === 'SPS') name = 'Service Provider';
-      else if (name === 'assignusers') name = 'Assign Users';
+    let name = pathHierarchy[pathHierarchy.length - 1].trim();
+    if (name === 'STU') name = 'Startup';
+    else if (name === 'FUN') name = 'Investor';
+    else if (name === 'IDE') name = 'Ideator';
+    else if (name === 'CMP') name = 'Company';
+    else if (name === 'INS') name = 'Institute';
+    else if (name === 'SPS') name = 'Service Provider';
+    else if (name === 'assignusers') name = 'Assign Users';
+    if (name !== 'chapters' && name !== 'subChapters' && name !== 'communities' && name!== 'true') {
       list.push({
         linkUrl: path,
         linkName: properName(name),
       });
     }
 
-    if(list && list.length && list[0].linkName === 'Dashboard')
-      list.splice(0, 1);
+
+    if (list && list.length && list[0].linkName === 'Dashboard') { list.splice(0, 1); }
     if (callback) {
       callback(list);
     }
   });
 }
 
-function generateLink(path, RefID, moduleType,name) {
+function generateLink(path, RefID, moduleType, name) {
   let postfix = '/';
 
-  if (moduleType === 'subChapterId') postfix +=  name + '/'+'subChapterDetails';
+  if (moduleType === 'subChapterId') postfix += `${name}/` + 'subChapterDetails';
   else if (moduleType === 'chapterId') postfix += 'subChapters';
   else if (moduleType === 'clusterId') postfix += 'clusterDetails';
   // else if (moduleType === 'communityId') postfix += '/communities?viewMode=true';

@@ -94,7 +94,7 @@ export default MlAccounts=class MlAccounts {
       path : verificationLink,
       firstName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
       contactNumber : "+91-40-4672 5725 /Ext",
-      hours : 48,
+      hours : 72,
       fromEmail : emailOptions&&emailOptions.from?emailOptions.from:"",
       toEmail : emailOptions&&emailOptions.to?emailOptions.to:"",
     }

@@ -96,7 +96,7 @@ export default class MlAppEditOffice extends React.Component{
       }));
     }
 
-    const App = () => <MlTabComponent tabs={getTabs()}  selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>;
+    const App = () => <MlTabComponent tabs={getTabs()}  selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

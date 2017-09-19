@@ -45,8 +45,14 @@ class MlAddEntity extends React.Component {
       }
 
       const response = await addEntityActionHandler(EntityDetails)
-      toastr.success("Entity Created");
-      return response;
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if (response.success) {
+        toastr.success("Entity Created");
+        FlowRouter.go("/admin/settings/registration/entityList");
+      }
+      // toastr.success("Entity Created");
+      // return response;
     }
   }
   componentDidMount()  {

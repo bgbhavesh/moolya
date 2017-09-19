@@ -9,11 +9,12 @@ export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      breadCrumList: [],
       toggle: 1,
+      list: [],
     };
     this.setDefaultName = this.setDefaultName.bind(this);
     this.fetchNameToDisplay.bind(this);
+    this.getHierarchyDetails = this.getHierarchyDetails.bind(this);
   }
 
   setDefaultName(type) {
@@ -30,64 +31,70 @@ export default class VerticalBreadCrum extends Component {
     this.setState({ toggle: !this.state.toggle });
   }
 
-  componentDidMount() {
-    this.context.breadCrum.subscribe(this.renderBreadcrumb.bind(this));
-  }
-
   componentWillMount() {
-    const path = Object.assign(FlowRouter._current.path);
     const routePath = Object.assign(FlowRouter._current.route.path);
-    const pathHierarchy = path.split('/');
     const routePathHierarchy = routePath.split('/');
 
     routePathHierarchy.map((object, index) => {
-      if (object.includes(':')) {
-        const id = pathHierarchy[index].split('?')[0];
-        this.fetchNameToDisplay(object, id);
+      if (object.startsWith(':')) {
+        this.fetchNameToDisplay();
       }
     });
   }
 
-  async fetchNameToDisplay(type, id) {
+  componentDidMount() {
+    this.context.breadCrum.subscribe(this.renderBreadcrumb.bind(this));
+    this.getHierarchyDetails();
+  }
+
+  getHierarchyDetails() {
+
+  }
+
+  async fetchNameToDisplay() {
     const object = {};
-    type = type.split(':')[1].trim();
-    if (type === 'portfolioId') {
-      var response = await fetchPortfolioImageHandler(id);
+
+    if (FlowRouter.getParam('portfolioId')) {
+      var response = await fetchPortfolioImageHandler(FlowRouter.getParam('portfolioId'));
       if (response) {
-        object[type] = response.portfolioUserName;
+        object['portfolioId'] = response.portfolioUserName;
         this.setState(object);
-      } else this.setDefaultName(type);
-    } else if (type === 'taskId') {
-      var response = await fetchInternalTaskInfo(id);
+      } else this.setDefaultName('portfolioId');
+    } else if ( FlowRouter.getParam('taskId')) {
+      var response = await fetchInternalTaskInfo(FlowRouter.getParam('taskId'));
       if (response) {
-        object[type] = response.name;
+        object['taskId'] = response.name;
         this.setState(object);
-      } else this.setDefaultName(type);
-    } else if (type === 'officeId') {
-      var response = await getTeamUsersActionHandler(id);
+      } else this.setDefaultName('taskId');
+    } else if (FlowRouter.getParam('officeId')) {
+      var response = await getTeamUsersActionHandler(FlowRouter.getParam('officeId'));
       if (response) {
-        object[type] = response.name;
+        object['officeId'] = response.name;
         this.setState(object);
-      } else this.setDefaultName(type);
-    } else if (type === 'memberId') {
+      } else this.setDefaultName('officeId');
+    } else if (FlowRouter.getParam('memberId')) {
+      const id = FlowRouter.getParam('memberId');
       var response = await fetchAllOfficeMembers();
       if (response) {
         response.map((obj) => {
           if (obj._id === id) {
-            object[type] = obj.name;
+            object['memberId'] = obj.name;
             this.setState(object);
           }
         });
-      } else this.setDefaultName(type);
-    } else if (type === 'id') {
-      var response = await findRegistrationActionHandler(id);
+      } else this.setDefaultName('memberId');
+    } else if (FlowRouter.getParam('id')) {
+      var response = await findRegistrationActionHandler(FlowRouter.getParam('id'));
       if (response && response.registrationInfo && response.registrationInfo.registrationType) {
         const resType = response.registrationInfo.communityName;
-        object[type] = resType;
+        object['id'] = resType;
         this.setState(object);
-      } else this.setDefaultName(type);
+      } else this.setDefaultName('id');
+    } else if (FlowRouter.getParam('communityType')) {
+      object['communityType'] = properName(id);
+      this.setState(object);
     } else {
-      this.setDefaultName(type);
+      this.setDefaultName('communityType');
     }
   }
 
@@ -107,6 +114,14 @@ export default class VerticalBreadCrum extends Component {
 
     let list = [];
 
+    if (routePath === '/officeMember/:officeId/:memberId') {
+      // return [
+      //   {linkName : 'Edit Office'}
+      // ]
+      // const cname = routePathHierarchy[index].split(':')[1];
+      // const name = this.state[cname];
+    }
+
     for (const index in routePathHierarchy) {
       if (routePathHierarchy[index] === ':communityType') {
         const tempList = list;
@@ -116,14 +131,13 @@ export default class VerticalBreadCrum extends Component {
       if (routePathHierarchy[index] === 'manageSchedule') {
         list.push({
           name: properName(routePathHierarchy[index]),
-           // +' ('+getNameFromDB(pathHierarchy[index],routePathHierarchy[index]) +')' ,
-          link: '/app/calendar/manageSchedule',
+          link: '/app/calendar/manageSchedule/all/activityList',
         });
-      } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' || pathHierarchy[index] === 'true'
-              || routePathHierarchy[index - 1] === 'manageSchedule') {
-         // do nothing
+      } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' ||routePathHierarchy[index] === ':isFirst'
+        || routePathHierarchy[index - 1] === 'manageSchedule') {
+        // do nothing
       } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')
-         && (routePathHierarchy[index - 1] === 'portfolio')) {
+        && (routePathHierarchy[index - 1] === 'portfolio')) {
 
       } else if (routePathHierarchy[index].startsWith(':')) {
         if (routePathHierarchy[index] === ':officeId') {
@@ -131,12 +145,12 @@ export default class VerticalBreadCrum extends Component {
         } else {
           const cname = routePathHierarchy[index].split(':')[1];
           const name = this.state[cname];    // get name from DATABASE using ID and set here
-           // if (routePathHierarchy[index-2] === 'view' || routePathHierarchy[index-2] === 'edit'){
-           //   name += ' ('+routePathHierarchy[index-2] +')';
-           // }
-           // else if(routePathHierarchy[index-2] === 'explore'){
-           //   name += ' ('+properName(routePathHierarchy[index-1]) +')';
-           // }
+          // if (routePathHierarchy[index-2] === 'view' || routePathHierarchy[index-2] === 'edit'){
+          //   name += ' ('+routePathHierarchy[index-2] +')';
+          // }
+          // else if(routePathHierarchy[index-2] === 'explore'){
+          //   name += ' ('+properName(routePathHierarchy[index-1]) +')';
+          // }
           list.push({
             name,
             link: path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0],
@@ -181,15 +195,19 @@ export default class VerticalBreadCrum extends Component {
       }
     }
 
-    let className = '';
+    if (list[0].name === 'Calendar') {
+      list.splice(0, 1);
+    }
+
+    list.splice(0, 1);
+
+    let currentClassName = '';
     const mlist = list.map((obj, index) => {
-      if (index + 1 === list.length) className = 'current';
-      return (<li key={index} className={className} onClick={ this.onLinkClicked.bind(this)}><a href={obj.link} >{obj.name}</a></li>);
+      if (index + 1 === list.length) currentClassName = 'current';
+      return (<li key={index} className={currentClassName} onClick={ this.onLinkClicked.bind(this)}><a href={obj.link} >{obj.name}</a></li>);
     });
 
     if (list.length > 0) { mlist.push(<li key={'last'} className='timelineLast'></li>); }
-
-    mlist.splice(0, 1);
     return (
       <div className="vTimeline">
         <ul>

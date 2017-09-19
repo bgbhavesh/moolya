@@ -201,7 +201,7 @@ adminSection.route('/documents/communityList', {
 adminSection.route('/documents/history', {
   name: 'documents_HistoryList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'community'}} />, adminContent:<MlDocumentsTabHistoryList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'history'}} />, adminContent:<MlDocumentsTabHistoryList/>})
   }
 });
 adminSection.route('/documents/:pid/:kycid/:docid', {
@@ -215,7 +215,7 @@ adminSection.route('/documents/:pid/:kycid/:docid', {
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlInternalRequestsList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'internalRequests'}} />, adminContent:<MlInternalRequestsList/>})
     //mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
   }
 });
@@ -223,7 +223,7 @@ adminSection.route('/transactions/requestedList', {
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'approvels'}} />, adminContent:<MlApprovedInternalRequestsList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'approvedRequests'}} />, adminContent:<MlApprovedInternalRequestsList/>})
     //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
   }
 });
@@ -231,7 +231,7 @@ adminSection.route('/transactions/approvedList', {
 adminSection.route('/transactions/rejectList', {
   name: 'transaction_RejectedList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'reject'}} />, adminContent:<MlRejectedInternalRequestsList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'rejectedRequests'}} />, adminContent:<MlRejectedInternalRequestsList/>})
     //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
   }
 });
@@ -239,7 +239,7 @@ adminSection.route('/transactions/rejectList', {
 adminSection.route('/transactions/registrationApprovedList', {
   name: 'transaction_registration_approved',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
   }
 });
 
@@ -264,7 +264,7 @@ adminSection.route('/transactions/registrationRequested/edit', {
 adminSection.route('/transactions/registrationRequested', {
   name: 'transaction_registration_requested',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'requested'}} />, adminContent:<MlRequestedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'requested'}} />, adminContent:<MlRequestedList/>})
   }
 });
 
@@ -363,7 +363,7 @@ adminSection.route('/transactions/rejectedRegistrations', {
 adminSection.route('/transactions/registrationHistory', {
   name: 'transaction_registration_history',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'history'}} />, adminContent:<MlRegistrationTabHistoryList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'history'}} />, adminContent:<MlRegistrationTabHistoryList/>})
   }
 });
 // ************* Portfolio Routes **************

@@ -18,7 +18,7 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
     this.state = {
       tabs: [], admin: true,
       client: client,
-      activeTab: 0,
+      activeTab: 'About Us',
     }
     ;
   }
@@ -28,7 +28,6 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
    * */
   componentDidMount() {
     var props = this.props
-    console.log(props)
     setTimeout(function () {
       if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
@@ -111,28 +110,25 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.title,
         getContent: () => tab.component
       }));
     }
 
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
-      let index = _.findIndex(tabs, function(o) {
-        return o.title == activeTab;
-      });
-      if(index>-1)
-        this.setState({activeTab:index});
+      this.setState({activeTab});
     }
     this.setState({tabs: getTabs() || []});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
   updateTab(index){
-    let tab =  this.state.tabs[index].title;
-    FlowRouter.setQueryParams({ subtab: tab });
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
   }
-
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} />
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}
+    type="subtab" mkey="title"/>
   }
 }

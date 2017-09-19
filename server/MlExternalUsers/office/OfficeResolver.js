@@ -284,7 +284,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
        if(ret){
          MlEmailNotification.newOfficeRequestSent(context);
        }
-      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName','communityCode']);
       let officeTransaction = _.extend(details, extendObj)
       MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
       scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId, frequencyType)

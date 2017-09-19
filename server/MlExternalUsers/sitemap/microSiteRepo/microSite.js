@@ -10,11 +10,12 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     return 'Next';
   }
   let idPortFolio = existsSeoName.portFolioId;
-
+  let userID  = existsSeoName.userId;
   let portFolio = {
     profilePic: '',
-    firstName: '',
-    lastName: '',
+    firstName:'',
+    lastName:'',
+    displayName: '',
     clusterName: '',
     chapterName: '',
     listView: [],
@@ -25,9 +26,13 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     lookingForDescription: '',
     privateFields: {},
     currentUrl: fullUrl,
-    twitterHandle: '@kanwar00733'
-
+    twitterHandle: '@kanwar00733',
+    branches:[]
   }
+
+  let userObject  = await mlDBController.findOne('users', {'_id': userID});
+  let displayName = userObject.profile.displayName;
+  portFolio.displayName = displayName
   if (!idPortFolio) {
     return portFolio
   }
@@ -149,7 +154,6 @@ async function STU(portFolio, query) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : '';
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.startupDescription
     }
@@ -186,7 +190,6 @@ async function ServiceProviderPortFolio(portFolio, query) {
 
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about
-      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
       portFolio.profilePic = aboutUs.aboutImages ? aboutUs.aboutImages[0].fileUrl : '';
       portFolio.aboutDiscription = aboutUs.aboutDescription;
 
@@ -205,7 +208,6 @@ async function CMP(portFolio, query) {
     portFolio.communityType = 'a Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
@@ -224,7 +226,6 @@ async function INS(portFolio, query) {
     portFolio.communityType = getCommunityType(resultINSPortFolio)
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
-      portFolio.firstName = aboutUs.title ? aboutUs.title : ''
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
@@ -237,8 +238,6 @@ async function INS(portFolio, query) {
 }
 
 function getProfileInfo(portFolio, portFolioProfileInfo) {
-  portFolio.firstName = portFolioProfileInfo.firstName;
-  portFolio.lastName = portFolioProfileInfo.lastName;
   portFolio.profilePic = portFolioProfileInfo.profilePic;
   return portFolio;
 }
@@ -280,9 +279,9 @@ function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
   communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
   if (checkVowel(communityType.charAt(0))) {
-    communityType = 'an ' + communityType;
+    communityType = 'an ' + "\'" +communityType +"\'";
   } else {
-    communityType = 'a ' + communityType;
+    communityType = 'a '  + "\'" +communityType +"\'";
   }
   return communityType
 }

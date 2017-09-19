@@ -368,7 +368,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
             var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
             portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
-        }
+        //}
         return response
       } else {
         let code = 401;

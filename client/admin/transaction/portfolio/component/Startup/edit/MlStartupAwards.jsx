@@ -227,13 +227,14 @@ export default class MlStartupAwards extends React.Component{
     this.props.getAwardsDetails(startupAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(file){
+  onLogoFileUpload(fileInfo,image){
     // if(e.target.files[0].length ==  0)
     //   return;
     // let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
-    let fileName = file.name;
+    let fileName = fileInfo.name;
+    let file =image;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -320,11 +321,11 @@ export default class MlStartupAwards extends React.Component{
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image,e) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(e,image);
   }
 
   render(){

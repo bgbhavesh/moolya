@@ -188,6 +188,15 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView'
   }
 });
 
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
+
 appSection.route('/myProfile', {
   name: 'myProfile',
   action(){

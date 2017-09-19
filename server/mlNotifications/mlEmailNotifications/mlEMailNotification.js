@@ -713,7 +713,7 @@ const MlEmailNotification= class MlEmailNotification {
       path: verificationLink,
       investorEmail: userEmail,
       investorContactNumber: contactNumber,
-      hours: 48
+      hours: 72
     }
     let toEmail = registrationData && registrationData.email ? registrationData.email : "";
     let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_office_member_invitation_email", "email", regObj);

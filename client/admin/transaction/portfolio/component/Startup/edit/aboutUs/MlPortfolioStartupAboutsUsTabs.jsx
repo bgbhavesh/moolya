@@ -12,6 +12,7 @@ import MlStartupAssets from "./MlStartupAssets";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
+import _ from 'lodash'
 import MlStartupEditTemplate from '../MlStartupEditTemplate'
 
 export default class MlStartupTab extends React.Component{

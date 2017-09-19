@@ -15,7 +15,7 @@ export default class MlAnchorInfoView extends React.Component {
     this.state = {
       objective: [],
       contactDetails: [],
-      data:[],
+      data:{userDetails:[], portfolioCounter:[]},
       selectedUser: {},
       subChapterImageLink:"/images/startup_default.png",
 
@@ -24,6 +24,7 @@ export default class MlAnchorInfoView extends React.Component {
     this.handleUserClick = this.handleUserClick.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
     this.getAnchorUsers = this.getAnchorUsers.bind(this)
+    this.renderCommunityCount = this.renderCommunityCount.bind(this)
   }
 
   componentDidMount() {
@@ -81,31 +82,33 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   componentWillMount() {
-    // const { clusterId, chapterId, subChapterId } = this.props;
-    console.log(this.props);
-    // this.getAnchorUsers();
     const resp = this.fetchSubChapterDetails()
     return resp
-    // const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
-    // const objective = response && response.objective && response.objective.map((ob) => ({
-    //   description: ob.description,
-    //   status: ob.status,
-    // }));
-    // const contactDetails = response.contactDetails && response.contactDetails.map((det) => _.omit(det, '__typename'))
-    // this.setState({
-    //   objective: objective || [],
-    //   contactDetails: contactDetails || []
-    // })
   }
 
   changePath(){
-    console.log(this.props)
     var queryParams = this.props.queryParams && this.props.queryParams.viewMode
     queryParams = JSON.parse(queryParams)
     if(this.props.isAdmin)
       FlowRouter.go('/admin/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
     else
       FlowRouter.go('/app/dashboard/'+this.props.clusterId+'/'+this.props.chapterId+'/'+this.props.subChapterId+'/'+'communities?viewMode='+queryParams)
+  }
+
+  renderCommunityCount() {
+    return this.state.data.portfolioCounter.map(function (value, say) {
+      return (<li key={say}>
+        <a href="">
+          <span className="icon_bg">
+            <span className={value.communityImageLink}></span>
+          </span>
+          <br />
+          <div className="tooltiprefer">
+            <span>{value.communityType} <b>{value.count}</b></span>
+          </div>
+        </a>
+      </li>)
+    })
   }
 
   render() {
@@ -121,46 +124,7 @@ export default class MlAnchorInfoView extends React.Component {
               </div>
               <div className="col-md-10 nopadding att_members">
                 <ul className="users_list">
-                  <li>
-                    <a href="#">
-                      <span className="icon_bg"> <span className="icon_lg ml ml-ideator"></span></span><br />
-                      <div className="tooltiprefer">
-                        <span>Ideator <b>20k</b></span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span className="icon_bg"> <span className="icon_lg ml ml-startup"></span></span><br />
-                      <div className="tooltiprefer">
-                        <span>Startup <b>20k</b></span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span className="icon_bg"> <span className="icon_lg ml ml-company"></span></span><br />
-                      <div className="tooltiprefer">
-                        <span>Company <b>20k</b></span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
-                      <div className="tooltiprefer">
-                        <span>Funder <b>20k</b></span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span className="icon_bg"> <span className="icon_lg ml ml-users"></span></span><br />
-                      <div className="tooltiprefer">
-                        <span>SP <b>20k</b></span>
-                      </div>
-                    </a>
-                  </li>
+                  {this.renderCommunityCount()}
                 </ul>
 
               </div>
@@ -168,7 +132,7 @@ export default class MlAnchorInfoView extends React.Component {
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
               <div className="left_wrap left_user_blocks">
-                {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data} clickHandler={this.handleUserClick} />}
+                {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick} />}
                 {this.state.selectedUser.profile &&
                 <div>
                   <h3 className="back_btn" onClick={this.clearSelection} alt="Go Back" title="Go Back">

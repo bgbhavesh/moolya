@@ -57,7 +57,8 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
           }
           contactDetails {
             contactPersonRole,
-            addressType,
+            addressTypeId
+            addressTypeName
             contactNumber
             emailId,
             buildingNumber,

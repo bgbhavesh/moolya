@@ -19,7 +19,7 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
       sectorsAndServices: {},
       listOfIncubators: {},
       admin: true,
-      activeTab: 0,
+      activeTab: 'Startup Incubators',
     };
   }
 
@@ -78,17 +78,14 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.title,
         getContent: () => tab.component
       }));
     }
 
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
-      let index = _.findIndex(tabs, function(o) {
-        return o.title == activeTab;
-      });
-      if(index>-1 && index !== this.state.activeTab)
-        this.setState({activeTab:index});
+      this.setState({activeTab});
     }
 
     this.setState({tabs:getTabs() ||[]});
@@ -97,12 +94,13 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
   }
 
   updateTab(index){
-    let tab =  this.state.tabs[index].title;
-    FlowRouter.setQueryParams({ subtab: tab });
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
   }
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} backClickHandler={this.props.backClickHandler}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} backClickHandler={this.props.backClickHandler}
+                           type="subtab" mkey="title"/>
   }
 }

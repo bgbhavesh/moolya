@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { client } from '../../../core/apolloConnection';
 import _ from 'lodash';
-export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, params, callback) {
+export default function getBreadCrumListBasedOnhierarchy(module, params, callback) {
   params = params || {};
   const requ = _.pick(params, ['clusterId', 'chapterId', 'subChapterId', 'communityId']);
   const breadCrumHierarchyPromise = client.query({
@@ -27,8 +27,8 @@ export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, par
     result = _.sortBy(result, ['hierarchyLevel']);
 
     const path = Object.assign(FlowRouter._current.path);
-
     let pathHierarchy = path.split('/');
+
     if (path.includes('dashboard')) {
       _.forEach(result, (detail, index) => {
         list.push({
@@ -51,7 +51,7 @@ export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, par
 
     list = list.reverse();
 
-    if (firstLevel === 'clusters' || firstLevel === 'chapters') {
+    if (path.includes('clusters') || path.includes('chapters')) {
       let name = pathHierarchy[pathHierarchy.length - 1];
       if (name === 'STU') name = 'Startup';
       else if (name === 'FUN') name = 'Investor';
@@ -59,7 +59,7 @@ export default function getBreadCrumListBasedOnhierarchy(firstLevel, module, par
       else if (name === 'CMP') name = 'Company';
       else if (name === 'INS') name = 'Institute';
       else if (name === 'SPS') name = 'Service Provider';
-      else if (name === 'assignusers') name = 'Assign Users';
+      else if (name === 'assignusers') name = 'Backend Users';
       list.push({
         linkUrl: path,
         linkName: properName(name),

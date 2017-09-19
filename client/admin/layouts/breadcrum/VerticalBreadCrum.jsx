@@ -33,28 +33,18 @@ export default class VerticalBreadCrum extends Component {
     const menuConfig = this.context.menu && this.context.menu.menu ? this.context.menu.menu : [];
     let breadCrum = null;
     const path = Object.assign(FlowRouter._current.path);
-    // let list = {};
-    let firstLevel = '';
-    if (path.includes('dashboard')) firstLevel = 'dashboard';
-    else if (path.includes('clusters')) firstLevel = 'clusters';
-    else if (path.includes('chapters')) firstLevel = 'chapters';
-    else if (path.includes('community')) firstLevel = 'community';
-
-    // if (firstLevel) {
-    //   list = {
-    //     linkUrl: path.split(firstLevel)[0] + firstLevel,
-    //     linkName: properName(firstLevel),
-    //   };
-    // }
 
     if (this.props && this.props.breadcrum) {
       breadCrum = this.props.breadcrum;
+
       if (breadCrum.type === 'hierarchy') {
         const params = FlowRouter.current().params;
-        getBreadCrumListBasedOnhierarchy(firstLevel, breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
+        getBreadCrumListBasedOnhierarchy( breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
       } else if (breadCrum.type) {
         let module = properName(breadCrum.module);
+
         if (module === 'Roles') module = 'Roles & Permissions';
+
         let breadCrumObject = [
           { linkName: properName(breadCrum.type), linkId: breadCrum.type },
           { linkName: module, linkId: 'module' },
@@ -62,7 +52,7 @@ export default class VerticalBreadCrum extends Component {
         if (breadCrum.subModule) {
           breadCrumObject.push({
             linkName: properName(breadCrum.subModule),
-            linkId: 'subModule',
+            // linkId: 'subModule',
           });
         }
 
@@ -80,13 +70,6 @@ export default class VerticalBreadCrum extends Component {
   }
 
   render() {
-    const path = FlowRouter.current().route.name;
-    const params = FlowRouter.current().params;
-    const queryParams = FlowRouter.current().queryParams;
-    let menu,
-      tabOptions;
-    const breadCrumList = [];
-
     let counter = 0;
     const linksLength = this.state.breadCrumList.length;
     const list = this.state.breadCrumList.map((prop, id) => {
@@ -112,12 +95,19 @@ export default class VerticalBreadCrum extends Component {
 
 function StaticBreadCrumListHandler(list, breadCrum, menu) {
   let currentModule = {};
+  const path = Object.assign(FlowRouter._current.path);
+  const module = breadCrum.subModule || breadCrum.module;
+  const pathHierarchy = path.split('/');
+
   if (breadCrum.type) {
     if (breadCrum.type === 'templates') { list[1].linkName += ' List'; }
+    if (breadCrum.type === 'transaction' && breadCrum.module === 'registrations') {
+      list[1].linkUrl = `${path.split('transactions')[0]}transactions/registrationRequested`;
+    }
 
     menu.map((object) => {
       if ((object.uniqueId).includes(breadCrum.type) || (breadCrum.type).includes(object.uniqueId)) {
-        list[0].linkUrl = object.link;
+        // list[0].linkUrl = object.link;
         currentModule = object;
       }
     });
@@ -128,9 +118,8 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
         }
       });
     }
-    const path = Object.assign(FlowRouter._current.path);
-    const module = breadCrum.subModule || breadCrum.module;
-    const pathHierarchy = path.split('/');
+
+
     for (const each of pathHierarchy) {
       if (each.startsWith('edit')) {
         const link = `${path.split('edit')[0] + module}List`;
@@ -156,18 +145,28 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
       }
     }
   }
-  list.splice(0, 1);
+  if (list[0].linkName === 'Packages' && list[1].linkName === 'Office') {   //  for name correction
+    list[1].linkName = 'Office Packages';
+  }
+
+  list.splice(0, 1);                                         // removing menu level from breadcrumb
   if (!list || !list.length) return [];
 
   for (let i = 1; i < list.length; i++) {
+    if (list[i - 1].linkName === 'Registration') {          //  for name correction
+      if (list[i].linkName === 'Stage Of Company') {
+        list[i].linkName = 'Company Stages';
+      } else if (list[i].linkName === 'Business') {
+        list[i].linkName = 'Types Of Business';
+      } else if (list[i].linkName === 'Entity') {
+        list[i].linkName = 'Entity Types';
+      }
+    }
     if (list[i].linkName === list[i - 1].linkName) {
       list.splice(i, 1);
       break;
     }
   }
-  list.map((object) => {
-    if (object.linkName === 'Office') object.linkName = 'Office Packages';
-  });
   return list;
 }
 
@@ -199,7 +198,6 @@ function StaticBreadCrumListHandlerWithNoBredcum() {
       }
     });
   }
-
 
   return list;
 }

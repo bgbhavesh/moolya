@@ -289,7 +289,7 @@ export default class MlAppFunderEditTabs extends React.Component {
   }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
   }
 }
 MlAppFunderEditTabs.childContextTypes = {

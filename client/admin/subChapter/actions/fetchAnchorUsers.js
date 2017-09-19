@@ -10,10 +10,18 @@ export async function findAnchorUserActionHandler(paramContext) {
     query: gql`
     query($clusterId: String,$chapterId: String,$subChapterId: String){
     fetchAnchorUsers(clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId){
-         userId: _id
-         displayName
-         userName
-         profileImage
+       userDetails{
+          userId: _id
+          displayName
+          userName
+          profileImage
+       }
+      portfolioCounter {
+          communityCode : _id
+          communityType
+          communityImageLink
+          count
+        }
       } 
     }`,
     forceFetch:true,

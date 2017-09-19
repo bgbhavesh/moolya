@@ -106,6 +106,29 @@ class portfolioValidation {
       }
     }
   }
+
+  getLivePortfolioCount() {
+    return mlDBController.aggregate('MlPortfolioDetails', [
+      {$match: {status: "PORT_LIVE_NOW"}},
+      {
+        "$group": {
+          _id: "$communityCode",
+          "communityType": {$first: "$communityType"}, count: {$sum: 1}
+        }
+      },
+      {
+        "$lookup": {from: "mlCommunityDefinition", localField: "_id", foreignField: "code", as: "imageLink"}
+      },
+      {"$unwind": "$imageLink"},
+      {
+        $project: {
+          "communityType": 1,
+          "count": 1,
+          "communityImageLink": '$imageLink.communityImageLink'
+        }
+      }
+    ])
+  }
 }
 
 const portfolioValidationRepo = new portfolioValidation();

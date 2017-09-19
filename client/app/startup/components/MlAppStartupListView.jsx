@@ -6,7 +6,35 @@ import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 
 export default class MlAppStartupListView extends Component {
-
+  componentDidMount(){
+    $('.pie-passion').pieChart({
+      barColor: '#ef4647',
+      trackColor: '#192430',
+      lineCap: 'round',
+      lineWidth: 5,
+      onStep: function (from, to, percent) {
+        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+      }
+    });
+    $('.pie-rating').pieChart({
+      barColor: '#ffe144',
+      trackColor: '#192430',
+      lineCap: 'round',
+      lineWidth: 5,
+      onStep: function (from, to, percent) {
+        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+      }
+    });
+    $('.pie-like').pieChart({
+      barColor: '#B9C5CC',
+      trackColor: '#192430',
+      lineCap: 'round',
+      lineWidth: 5,
+      onStep: function (from, to, percent) {
+        $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+      }
+    });
+  }
   /**
    * @props isExplore
    * Note: routes [deciding] based on isExplore
@@ -26,18 +54,41 @@ export default class MlAppStartupListView extends Component {
     let that = this
     const data=this.props.data||[];
     const list=  data.map((startup, idx) =>
-      <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
+      <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
-          <div className="ideators_list_block">
-            {/*<div className="premium"><span>Starter</span></div>*/}
-            {/*<h3>{startup.aboutUs&&startup.aboutUs.description?startup.aboutUs.description:""}</h3>*/}
-            <div className="premium">
-              <span>{startup.accountType}</span>
+          <div className="company_block">
+            <div className="regular"><span>{startup.accountType}</span></div>
+            <div className="company_header">
+              <img src={startup.aboutUs.logo?startup.aboutUs.logo[0].fileUrl:""} />
             </div>
-            <h3>{startup.firstName}</h3>
-            <div className="list_icon"><span className="ml my-ml-Startups"></span></div>
-            <div className="block_footer">
-              <span>{startup.chapterName} - {startup.communityType}</span>
+            <h3>{startup.firstName}<br/><span>{startup.chapterName}</span></h3>
+            <div className="row nomargin">
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <div className="pie-title-center pie-passion" data-percent={startup.views}> <span className="pie-value"></span> </div><br/>
+                views
+              </div>
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <div className="pie-title-center pie-rating" data-percent={startup.followings}> <span className="pie-value"></span> </div><br/>
+                followings
+              </div>
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <div className="pie-title-center pie-like" data-percent={startup.likes}> <span className="pie-value"></span> </div><br/>
+                Likes
+              </div>
+            </div>
+            <div className="row nomargin footer">
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <span>0</span><br />
+                Favourites
+              </div>
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <span>0</span><br />
+                Projects
+              </div>
+              <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
+                <span>{startup.connections}</span><br />
+                Connect
+              </div>
             </div>
           </div>
         </a>

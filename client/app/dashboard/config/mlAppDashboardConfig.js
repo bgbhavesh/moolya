@@ -157,6 +157,7 @@ export const mlDashboardListConfig=new MlAppViewer({
                             isActive,
                             profileImage
                           }
+                          portfolioId
                           isActive
                       }
                    }                                                                                                     

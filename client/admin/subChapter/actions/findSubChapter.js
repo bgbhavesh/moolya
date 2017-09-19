@@ -57,14 +57,15 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
           }
           contactDetails {
             contactPersonRole,
-            addressType,
+            addressTypeId
+            addressTypeName
             contactNumber
             emailId,
             buildingNumber,
             street,
             landmark,
             area,
-            town,
+            cityId,
             stateId,
             countryId,
             pincode,

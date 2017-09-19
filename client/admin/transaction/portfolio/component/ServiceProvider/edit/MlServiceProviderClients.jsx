@@ -338,7 +338,7 @@ export default class MlServiceProviderClients extends Component {
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="" id="create_clientdefault" data-placement="right" data-class="large_popover">
+                    <a id="create_clientdefault" data-placement="right" data-class="large_popover">
                       <div className="list_block notrans" onClick={this.addClient.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
@@ -352,7 +352,7 @@ export default class MlServiceProviderClients extends Component {
                       $("#makePrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
                     }
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="" id={"create_client" + idx}>
+                      <a id={"create_client" + idx}>
                         <div className="list_block">
                           {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
                           <FontAwesome name='unlock' id={"makePrivate" + idx}

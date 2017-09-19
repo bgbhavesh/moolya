@@ -21,7 +21,8 @@ export default class SharePopOver extends React.Component {
       selectedDatasToShare: props.Details?props.Details:[],
       startDate: "",
       endDate: "",
-      isDownloadable: false
+      downloadable: false,
+
     };
   }
 
@@ -124,13 +125,6 @@ export default class SharePopOver extends React.Component {
       this.setState({startDate: value})
     }
   }
-  sharedEndDate(event) {
-    if(event._d) {
-      let value = moment(event._d);//.format('DD-MM-YYYY');
-      this.setState({endDate: value})
-    }
-  }
-
   deleteSelectedDate(index) {
     let data = this.state.selectedDatasToShare || [];
     data.splice(index,1);
@@ -138,9 +132,22 @@ export default class SharePopOver extends React.Component {
     // this.props.deletedData(data)
   }
 
+  sharedEndDate(event) {
+    if(event._d) {
+      let value = moment(event._d);//.format('DD-MM-YYYY');
+      this.setState({endDate: value})
+    }
+  }
+
+  addTeamMembers(index) {
+    let teamMembers = this.state.teamData || [];
+    teamMembers[index].isAdded = true
+    this.setState({teamData: teamMembers})
+  }
+
   deleteTeamMembers(index) {
     let teamMembers = this.state.teamData || [];
-    teamMembers.splice(index,1);
+    teamMembers[index].isAdded = false
     this.setState({teamData: teamMembers})
   }
 
@@ -163,7 +170,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="img_upload ul-hide" key={index}>
-          <li ><FontAwesome name='minus' onClick={that.deleteTeamMembers.bind(that,index)}/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
         </ul>
           )
     })
@@ -185,11 +192,13 @@ export default class SharePopOver extends React.Component {
       file.push(fileDetails)
     });
       teamMembers.map(function(team) {
-        let userDetails = {
-          userId: team.userId ? team.userId : 'userId',
-          profileId: team.profileId ? team.profileId : ''
-        };
-        user.push(userDetails)
+        if(team.isAdded) {
+          let userDetails = {
+            userId: team.userId ? team.userId : 'userId',
+            profileId: team.profileId ? team.profileId : ''
+          };
+          user.push(userDetails)
+        }
       });
     let Details = {
       files: file,
@@ -199,7 +208,6 @@ export default class SharePopOver extends React.Component {
     if(this.state.startDate) {
        Details.sharedStartDate =  this.state.startDate.format("MM-DD-YYYY hh:mm:ss");
     }
-
     if(this.state.endDate) {
       Details.sharedEndDate = this.state.endDate.format("MM-DD-YYYY hh:mm:ss");
     }
@@ -211,7 +219,6 @@ export default class SharePopOver extends React.Component {
   }
 
   async saveInfo(Details) {
-
     const response  = await storeSharedDetailsHandler(Details)
     if(response.success){
       toastr.success(response.result);
@@ -219,8 +226,22 @@ export default class SharePopOver extends React.Component {
     } else {
       toastr.error(response.result);
     }
-    console.log(response)
   }
+
+  // searchFunctionality(e) {
+  //   let value  = e.target.value;
+  //   let that = this;
+  //   let data = that.state.teamData || [];
+  //   let datas = data.map(function(value, index) {
+  //     return (
+  //       <ul className="img_upload ul-hide" key={index}>
+  //         <li ><FontAwesome name='minus' onClick={that.deleteTeamMembers.bind(that,index)}/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+  //       </ul>
+  //     )
+  //   })
+  //   // if()
+  //   return datas;
+  // }
 
 
 
@@ -238,7 +259,7 @@ render(){
                            />
           </div>
           {/*<div className="form-group">*/}
-            {/*<input type="text" placeholder="Search here" className="form-control float-label" id=""></input>*/}
+            {/*<input type="text" placeholder="Search here" className="form-control float-label" id="" onChange={this.searchFunctionality.bind(this)}></input>*/}
           {/*</div>*/}
           {this.teamMembersData()}
           <div className="clearfix" />
@@ -279,7 +300,7 @@ render(){
           </div>
           <div className="clearfix" />
           <div className="ml_btn">
-            <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
+            <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Share</a>
             <a href="" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
           </div>
         </div>

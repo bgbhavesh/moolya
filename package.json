@@ -111,6 +111,7 @@
     "meteor-node-stubs": "^0.2.5",
     "mocha": "3.4.2",
     "moment": "^2.18.1",
+    "omit-deep-lodash": "^1.0.0",
     "points-cluster": "0.1.4",
     "prop-types": "15.5.10",
     "pug": "^2.0.0-rc.3",

@@ -171,12 +171,12 @@ export default class MlShareDetailsComponent extends React.Component {
                 <br/>
                 <div className="col-md-6 nopadding-left">
                   <div className="form-group">
-                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? sharedStartDate: '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? sharedStartDate: 'NA' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
                   </div>
                 </div>
                 <div className="col-md-6 nopadding-right">
                   <div className="form-group">
-                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? sharedEndDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? sharedEndDate : 'NA' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
                   </div>
                 </div>
                 <div className="clearfix" />

@@ -144,7 +144,6 @@ class MlAppMyProfile extends Component {
   }
 
   async resetPassword() {
-    debugger;
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);

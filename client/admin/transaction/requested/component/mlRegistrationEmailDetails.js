@@ -294,7 +294,7 @@ export default class EmailDetails extends React.Component{
                 <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label" id="" data-required={true} data-errMsg="Email Id is required"/>
               </div>
               <div className="ml_icon_btn">
-                <a href="" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
+                <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
                   className="ml ml-save"></span></a>
               </div>
             </div>
@@ -312,9 +312,9 @@ export default class EmailDetails extends React.Component{
                   <input type="text" ref={'emailId'+key} placeholder="Enter URL" valueKey={options.emailId} className="form-control float-label" defaultValue={options.emailId} data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="ml_icon_btn">
-                  <a href="" className="save_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}><span
+                  <a href="#" className="save_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}><span
                     className="ml ml-save"></span></a>
-                  <a href="" className="cancel_btn" onClick = {that.onClear.bind(that,key,options.emailIdType)}><span className="ml ml-delete"></span></a>
+                  <a href="#" className="cancel_btn" onClick = {that.onClear.bind(that,key,options.emailIdType)}><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
             }))}

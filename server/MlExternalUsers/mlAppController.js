@@ -140,11 +140,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                   };
                   let response = MlResolver.MlMutationResolver['updatePayment'](null, payObj, context, null);
                   if(response){
-                      res.redirect(Meteor.absoluteUrl()+"app/transaction");
+                      //res.redirect(Meteor.absoluteUrl()+"app/transaction",{query:{"status":post.TxStatus}});
+                    const query = qs.stringify({
+                      "status":post.TxStatus
+                    });
+                    if(post && post.TxStatus && post.TxStatus.toLowerCase() == "canceled"){
+                      res.redirect(Meteor.absoluteUrl()+"app/payOfficeSubscription/"+response+"?"+query);
+                    }else{
+                      res.redirect(Meteor.absoluteUrl()+"app/transaction?"+query);
+                    }
+
                   }
                 }
                 else {
-                  res.writeHead(403, { "Content-Type": "text/html" });
+                  //res.writeHead(403, { "Content-Type": "text/html" });
+                  let code = 403;
                   var error = { "error" : "Transaction Failed", "message": "Signature Verification Failed" };
 
                   let result = {message:"The request did not have valid authorization credentials"}

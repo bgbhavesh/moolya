@@ -10,6 +10,7 @@ import NotificationTemplateEngine from "../commons/mlTemplateEngine"
 import mlSmsController from "../mlNotifications/mlSmsNotifications/mlSmsController"
 import mlSMSConst from "../mlNotifications/mlSmsNotifications/mlSmsConstants"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
+import MlSMSNotification from '../mlNotifications/mlSmsNotifications/mlSMSNotification'
 import _ from 'underscore'
 import moment from "moment";
 var _lodash = require('lodash');
@@ -93,7 +94,7 @@ export default MlAccounts=class MlAccounts {
       path : verificationLink,
       firstName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
       contactNumber : "+91-40-4672 5725 /Ext",
-      hours : 48,
+      hours : 72,
       fromEmail : emailOptions&&emailOptions.from?emailOptions.from:"",
       toEmail : emailOptions&&emailOptions.to?emailOptions.to:"",
     }
@@ -157,7 +158,7 @@ export default MlAccounts=class MlAccounts {
       this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
 
       //on successful email verification
-      this.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
+      MlSMSNotification.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
     }
 
     return {
@@ -165,7 +166,7 @@ export default MlAccounts=class MlAccounts {
     };
   }
 
-  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
+/*  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
     var regDetails = mlDBController.findOne('MlRegistration',{_id:regId});
     if(!regDetails){
       throw new Error(403, "Mobile Number entered  is not registered");
@@ -174,7 +175,7 @@ export default MlAccounts=class MlAccounts {
     var sms = _.find(mlSMSConst, 'SMS_EMAIL_VERIFIED')
     var msg= sms.SMS_EMAIL_VERIFIED
     mlSmsController.sendSMS(msg, countryCode, mobileNumber)
-  }
+  }*/
 
   static sendVerificationSmsOtp(regId,numbr,customEmailComponent){
 
@@ -223,10 +224,12 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "\n\nThank you for registering with moolya!\n"+
+      /*msg= "\n\nThank you for registering with moolya!\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";
+      "\n\nTeam moolya\n";*/
+      msg= "Thank you for registering with moolya!"+"Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons."+
+        "Regards,"+"Team moolya";
 
     }
 
@@ -617,7 +620,7 @@ export default MlAccounts=class MlAccounts {
   }
 
   static sendForgotPasswordEamil(email, context) {
-    user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
+    var user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
     if(!user){
       return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
     }
@@ -635,6 +638,8 @@ export default MlAccounts=class MlAccounts {
     /*let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_forgot_reset_password_mailer","email",regObj)*/
     if(res){
       let emailSent = MlEmailNotification.forgotPassword(context, Meteor.absoluteUrl('reset')+'/'+token);
+      let userId = user&&user._id?user._id:""
+      MlSMSNotification.forgotPassword(userId,context)
     /*  var emailOptions={};
       //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
       emailOptions.from=fromEmail;

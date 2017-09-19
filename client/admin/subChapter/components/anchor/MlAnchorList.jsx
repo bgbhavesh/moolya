@@ -2,11 +2,14 @@
  * Created by vishwadeep on 12/9/17.
  */
 import React from 'react';
+import gql from 'graphql-tag';
 import ScrollArea from 'react-scrollbar';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
+import omitDeep from 'omit-deep-lodash';
 var FontAwesome = require('react-fontawesome');
 
 //todo:// floatlabel initialize
@@ -16,12 +19,26 @@ export default class MlAnchorList extends React.Component {
     this.state = {
       loading: true,
       data: [],
-      userData: {}
+      userData: {
+        socialLinksInfo: [],
+      },
+      socialLinkForm: {
+        socialLinkType: '',
+        socialLinkTypeName: '',
+        socialLinkUrl: '',
+      },
+      selectedSocialTab: 0,
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.updateProfileData = this.updateProfileData.bind(this);
     this.updateInternalUprofileData = this.updateInternalUprofileData.bind(this);
+    this.renderSocialForm = this.renderSocialForm.bind(this);
+    this.renderAvailableSocialForm = this.renderAvailableSocialForm.bind(this);
+    this.removeSocialLink = this.removeSocialLink.bind(this);
+    this.onSocialFormChange = this.onSocialFormChange.bind(this);
+    this.onSaveSocialLink = this.onSaveSocialLink.bind(this);
+    this.onChangeSocialLinkTab = this.onChangeSocialLinkTab.bind(this);
     return this
   }
 
@@ -97,7 +114,7 @@ export default class MlAnchorList extends React.Component {
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
     response = this.deepClone(response);
-    this.setState({ userData: response });
+    this.setState({ userData: omitDeep(response, '__typename') });
     return response;
   }
 
@@ -105,7 +122,8 @@ export default class MlAnchorList extends React.Component {
     var data = this.props.data
     var response = await findAnchorUserActionHandler(data)
     console.log('anchor user list', response)
-    this.setState({ data: response })
+    const userDetails = response.userDetails && response.userDetails.map && response.userDetails.map((d) => omitDeep(d, '__typename'));
+    this.setState({ data: userDetails })
     return response
   }
 
@@ -113,10 +131,118 @@ export default class MlAnchorList extends React.Component {
     this.props.getUserDetails(data)
   }
 
+  removeSocialLink(index) {
+    let userData = this.state.userData;
+    console.log(index);
+    userData.socialLinksInfo.splice(index, 1);
+    this.setState({
+      userData,
+    });
+  }
+
+  onChangeSocialLinkTab(index, dataIndex) {
+    const socialLinkForm = this.state.userData.socialLinksInfo[dataIndex] || {};
+    this.setState({ selectedSocialTab: index, socialLinkForm })
+  }
+
+  renderAvailableSocialForm(socialLinks) {
+    const linkTabs = socialLinks.map((link, i) => {
+      const { socialLinkTypeName, socialLinkType, socialLinkUrl } = link;
+      return (
+        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""}>
+          <a>{socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick={(evt) => { evt.stopPropagation(); this.removeSocialLink(i) }} /></b></a>
+        </li>
+      )
+    });
+    addSocialLinkTab = (
+      <li onClick={() => this.onChangeSocialLinkTab(0, this.state.userData.socialLinksInfo.length)} className={this.state.selectedSocialTab === 0 ? "active": ""}>
+        <a> <FontAwesome name='plus-square' /> Add Social Links </a>
+      </li>
+    )
+    return [addSocialLinkTab, ...linkTabs];
+  }
+
+  onSaveSocialLink() {
+    const selectedIndex = this.state.selectedSocialTab;
+    const userData = this.state.userData;
+    if (selectedIndex) {
+      userData.socialLinksInfo[selectedIndex - 1] = this.state.socialLinkForm;
+    } else {
+      userData.socialLinksInfo.push(this.state.socialLinkForm);
+    }
+    this.setState({
+      userData,
+      socialLinkForm: selectedIndex ? this.state.socialLinkForm : { },
+    });
+  }
+
+  onSocialFormChange(key, value, label) {
+    const socialLinkForm = { ...this.state.socialLinkForm };
+    socialLinkForm[key] = value;
+    if (key === 'socialLinkType' && label )
+    if(label) {
+      socialLinkForm.socialLinkTypeName = label;
+    }
+    this.setState({
+      socialLinkForm,
+    })
+  }
+
+  renderSocialForm(){
+    const socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+        label
+        value
+      }
+    }`;
+    const socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS", hierarchyRefId: this.props.data.clusterId } } };
+    return (
+      <div className="tab-content clearfix">
+        <div className="tab-pane active">
+          <div className="form-group">
+            <Moolyaselect multiSelect={false} ref={'socialLinkType'}
+              placeholder="Select Social Link"
+              className="form-control float-label" onSelect={(value, cb, { label }) => {this.onSocialFormChange('socialLinkType', value, label);} }
+              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
+              queryOptions={socialLinkTypeOption} selectedValue={this.state.socialLinkForm.socialLinkType}
+              isDynamic={true} />
+          </div>
+          <div className="form-group">
+            <input type="text" value={this.state.socialLinkForm.socialLinkUrl || ''} onChange={(evt) => this.onSocialFormChange('socialLinkUrl', evt.target.value)} placeholder="Enter URL" className="form-control float-label"/>
+          </div>
+          <div className="form-group">
+            <button onClick={this.onSaveSocialLink} type="button">Save</button>
+            <button type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderSocialLinkForm(socialLinks) {
+    return (
+      <div className="ml_tabs">
+        <ul className="nav nav-pills">
+          {this.renderAvailableSocialForm(socialLinks)}
+        </ul>
+        {this.renderSocialForm()}
+      </div>
+    );
+  }
+
   render() {
+    const socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+        label
+        value
+      }
+    }`;
+    const socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS", hierarchyRefId: this.props.data.clusterId } } };
+    const socialLinks = this.state.userData.socialLinksInfo || [];
     const _this = this
     let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
     let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
+    const isActive = this.state.userData && this.state.userData.profile && this.state.userData.profile.isActive;
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
@@ -153,7 +279,7 @@ export default class MlAnchorList extends React.Component {
                 </div>
                 <div>
                   <div className="form-group">
-                    <input type="text" id="AssignedAs" placeholder="Middle Name" className="form-control float-label"
+                    <input type="text" placeholder="Middle Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}
                       onChange={event => this.updateProfileData('middleName', event.target.value)} />
                   </div>
@@ -173,14 +299,14 @@ export default class MlAnchorList extends React.Component {
                     <textarea placeholder="About" className="form-control float-label"></textarea>
                   </div>
                   <div className="form-group">
-                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label"
+                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
                         this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.contact
                         && this.state.userData.profile.InternalUprofile.moolyaProfile.contact.length ?
                         this.state.userData.profile.InternalUprofile.moolyaProfile.contact[0].number : ""} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email Id" className="form-control float-label" disabled
+                    <input type="text" placeholder="Email Id" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.email}
                        />
                   </div>
@@ -190,58 +316,15 @@ export default class MlAnchorList extends React.Component {
                       Social Links
                     </div>
                     <div className="panel-body">
-
-
-                      <div className="ml_tabs">
-                        <ul className="nav nav-pills">
-                          <li className="active">
-                            <a href="#3a" data-toggle="tab">Linkdin&nbsp;<b><FontAwesome name='minus-square' /></b></a>
-                          </li>
-                          <li>
-                            <a href="#4a" data-toggle="tab">Facebook&nbsp;<b><FontAwesome name='minus-square' /></b></a>
-                          </li>
-                          <li>
-                            <a href="" className="add-contact"><FontAwesome name='plus-square' /> Add Social Links</a>
-                          </li>
-                        </ul>
-
-                        <div className="tab-content clearfix">
-                          <div className="tab-pane active" id="1a">
-                            <div className="form-group">
-                              <select className="form-control">
-                                <option>Select type</option>
-                                <option>test</option>
-                              </select>
-                            </div>
-                            <div className="form-group">
-                              <input type="text" placeholder="Enter URL" className="form-control float-label" id="" />
-                            </div>
-                          </div>
-                          <div className="tab-pane" id="2a">
-                            <div className="form-group">
-                              <select className="form-control">
-                                <option>social link Type</option>
-                                <option>test</option>
-                              </select>
-                            </div>
-                            <div className="form-group">
-                              <input type="text" placeholder="Email Id" className="form-control float-label" id="" />
-                            </div>
-                            <div className="ml_btn">
-                              <a href="" className="save_btn">Save</a>
-                              <a href="" className="cancel_btn">Cancel</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      {this.renderSocialLinkForm(socialLinks)}
                     </div>
                   </div>
                 </div>
                 <br className="brclear" />
                 <div className="form-group switch_wrap inline_switch">
                   <label className="">Status</label>
-                  <label className="switch">
-                    <input type="checkbox" />
+                  <label className={`switch ${isActive ? 'on' : ''}`}>
+                    <input checked={isActive} onChange={event => this.updateProfileData('isActive', !isActive)} type="checkbox"/>
                     <div className="slider"></div>
                   </label>
                 </div>

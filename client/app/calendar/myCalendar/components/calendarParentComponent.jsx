@@ -153,6 +153,7 @@ export default class MLAppMyCalendar extends Component {
     let details = [];
     let events = 'events' in resp ? resp.events : [];
     let data = 'days' in resp ? resp.days : [];
+    console.log("data",data);
     if(_.isEmpty(events)) {
       this.setState({
         events: [],
@@ -171,7 +172,8 @@ export default class MLAppMyCalendar extends Component {
         }
       });
       that.setState({
-        events: details
+        events: details,
+        data: data
       });
     }
       return resp;

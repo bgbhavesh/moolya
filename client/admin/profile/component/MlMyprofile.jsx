@@ -291,12 +291,15 @@ export default class MlMyProfile extends React.Component {
         this.onCheckPassword();
         if (this.state.pwdErrorMsg)
           toastr.error("Confirm Password does not match with  New Password");
-        else {
+        else if(this.state.newpwdErrorMsg){
+          toastr.error("Existing password and New Password should not match");
+        }else{
           const response = await resetPasswordActionHandler(userDetails);
           // this.refs.id.value='';
           this.refs.confirmPassword.value = '';
           this.refs.password.value = '';
-          this.setState({"pwdErrorMsg": 'Password reset complete'})
+          this.setState({"pwdErrorMsg": 'Password reset complete'});
+          this.setState({"newpwdErrorMsg": 'Password reset complete'})
           toastr.success(response.result);
           $('#password').val("");
           this.setState({PasswordReset: false, showChangePassword: true})
@@ -343,12 +346,18 @@ export default class MlMyProfile extends React.Component {
    * **/
 
   onCheckPassword() {
+    let existingPassword = this.refs.existingPassword.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
     if (confirmPassword != password) {
       this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
     } else {
       this.setState({"pwdErrorMsg": ''})
+    }
+    if(existingPassword===password||existingPassword===confirmPassword){
+      this.setState({"newpwdErrorMsg": 'Existing password and New Password should not match'})
+    }else{
+      this.setState({"newpwdErrorMsg": ''})
     }
   }
 
@@ -529,7 +538,7 @@ export default class MlMyProfile extends React.Component {
                           <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
                           <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                         </div>
-                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
+                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
 
 
                     <div className="form-group" id="date-of-birth">

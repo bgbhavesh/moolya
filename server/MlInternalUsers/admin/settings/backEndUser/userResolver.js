@@ -13,6 +13,7 @@ import MlEmailNotification from "../../../../mlNotifications/mlEmailNotification
 // import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
+import portfolioValidationRepo from '../../portfolio/portfolioValidation'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -148,10 +149,11 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
   }
 };
 
+//todo:// need to check this update function it is not correct
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
-  if (user) {
+  var userAccess = checkAnchorAccess (args, context)
+  var user = mlDBController.findOne('users', {_id: args.userId}, context)
+  if (user && userAccess) {
     if (user.profile.isSystemDefined) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
@@ -168,12 +170,10 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
           return response;
         }
 
-        // let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
         let resp = mlDBController.update('users', args.userId, {profile: user.profile}, {$set:true}, context)
         if (resp) {
           let code = 200;
-          let result = {user: resp};
-          let response = new MlRespPayload().successPayload(result, code);
+          let response = new MlRespPayload().successPayload("User Details Updated", code);
           return response
         }
       } else {
@@ -182,7 +182,8 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
         return response;
       }
     }
-  }
+  }else
+    return new MlRespPayload().errorPayload('Not Authorised', 409)
 };
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
@@ -1701,5 +1702,18 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
     }
   })
   var response = mlDBController.aggregate('users', query, context)
-  return response
+  var portfolioCount = portfolioValidationRepo.getLivePortfolioCount()
+  return {userDetails: response, portfolioCounter: portfolioCount}
+}
+//todo:// restrict anchor user to update "isActive" status maintain the old status only
+checkAnchorAccess = function (args, context) {
+  var isAccess = true
+  var userProfile = new MlAdminUserContext().userProfileDetails(context.userId)
+  if (userProfile && userProfile.isAnchor) {
+    if (args.userId === context.userId)
+      isAccess = true
+    else
+      isAccess = false
+  }
+  return isAccess
 }

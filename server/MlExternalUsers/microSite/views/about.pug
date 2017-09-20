@@ -3,7 +3,7 @@ html
   mixin space()
     | !{' '}
   head
-    -var title = firstName + " " +lastName +" "+ communityType+ " on moolya / " + chapterName + " / "+ clusterName
+    -var title = displayName +" " +  communityType+ " on moolya from " + chapterName + " , "+ clusterName
     -var desc = aboutDiscription?aboutDiscription.substr(0,160):''
 
     meta(charset='utf-8')
@@ -18,17 +18,23 @@ html
     meta(property='og:title', content=title)
     meta(property='og:description', content=desc)
     meta(property='og:url', content=currentUrl)
+    meta(property='og:image:secure_url', content=profilePic)
+    meta(property='og:image:alt', content=displayName)
+
     meta(property='og:site_name', content='')
+    meta(property='fb:app_id', content='328947447490953')
+
 
     meta(name='twitter:card', content='summary')
     meta(name='twitter:description', content=desc)
     meta(name='twitter:title', content=title)
     meta(name='twitter:site', content=twitterHandle)
     meta(name='twitter:creator', content='moolya')
+    meta(name='twitter:image', content=profilePic)
 
-    link(href='css/ms_styles.css', type='text/css', media='all', rel='stylesheet')
-    link(href='css/font-awesome.css', type='text/css', media='all', rel='stylesheet')
-    link(href='css/swiper.min.css', type='text/css', media='all', rel='stylesheet')
+    link(href='/css/ms_styles.css', type='text/css', media='all', rel='stylesheet')
+    link(href='/css/font-awesome.css', type='text/css', media='all', rel='stylesheet')
+    link(href='/css/swiper.min.css', type='text/css', media='all', rel='stylesheet')
   body
     script.
       window.fbAsyncInit = function () {
@@ -50,14 +56,16 @@ html
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
+
+    script(type = 'in/Login').
     .ms_main_wrap
       .ms_header
         .header_left
           .shape1
-          img(src='images/logo.png')
+          img(src='/images/logo.png')
         .header_right
-          img(src='images/ecosystem.png')
-          img(src='images/patent.png')
+          img(src='/images/ecosystem.png')
+          img(src='/images/patent.png')
           .ms_social_wrap
             span.web_url
               a(href='http://www.moolya.global')
@@ -73,25 +81,25 @@ html
                   a(href='#' onclick='facebookShare("' + currentUrl + '",this)')
                     i.fa.fa-facebook(aria-hidden='true')
                 li
-                  a(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'&text=caption"', title='Twitter share', target='_blank')
-                    i.fa.fa-twitter(aria-hidden='true')
+                  a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share')
+                   i.fa.fa-twitter(aria-hidden='true')
                 li
-                  a(href='#')
+                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url='+currentUrl+'')
                     i.fa.fa-linkedin(aria-hidden='true')
                 li
-                  a(href='#')
-                    i.fa.fa-google-plus(aria-hidden='true')
+                  a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'')
+                    i.fa.fa-google-plus(aria-hidden='true' alt="Share on Google+")
       .ms_content_wrap
         .content_left
           .profile_pic
-            img(src=profilePic)
+            img(src=profilePic?profilePic:'/images/no-image.png' alt=displayName)
         .content_right
           h2
-            | #{firstName} #{lastName} is '#{communityType}' on #{space}
+            | #{displayName} is #{communityType} on #{space}
             span.m_red m
             span.m_yel oo
             span.m_red lya
-            |  / #{chapterName} / #{clusterName}
+            |  from #{chapterName}, #{clusterName}
           ul.ms_menu
             each list, i in listView
               li
@@ -99,8 +107,7 @@ html
             li
           .pages
             .pageManagement
-              p
-                include management
+              include management
             .pageAwards
               if(!privateFields.awardsDescription)
                 p
@@ -109,34 +116,36 @@ html
                 h2 Private Content
             .pageBranches
               if(!privateFields.branches)
-                p
-                  include branches
+                include branches
               else
                 h2 Private Content
             .pageLookingFor
-              p
               if(!privateFields.lookingForDescription)
                 include looking_for
                 h3 Past winners have included:
                   .img_list
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
-                    img(src='images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
+                    img(src='/images/list_img_01.png')
               else
                 h2 Private Content
             .pageAboutDiscription
               if(!privateFields.aboutDiscription)
-                p
-                  | #{aboutDiscription}
-                  h3 Past winners have included:
-                    .img_list
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
-                      img(src='images/list_img_01.png')
+                if(aboutDiscription && aboutDiscription.length  > 0 )
+                  p
+                    | !{aboutDiscription}
+                    h3 Past winners have included:
+                      .img_list
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                        img(src='/images/list_img_01.png')
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
               else
                  h2 Private Content
 
@@ -146,10 +155,10 @@ html
             p
               strong
                 | To view more details and to collaborate with #{space}
-                span.m_red #{firstName} #{lastName}
+                span.m_red #{displayName}
             a.ms_btn_re(href='/login') Login
-            |  or
-            a.ms_btn_re(href='/register') Register
+            |  or #{space}
+            a.ms_btn_re(href='https://www.moolya.global/register') Register
             br
             b
               | on #{space}
@@ -169,45 +178,43 @@ html
             }
 
             var facebookShare = function (linkName, event) {
-              console.log('facebookShare')
               FB.ui({
                 method: 'share',
                 display: 'popup',
                 href: linkName,
               }, function (response) {
+                console.log(response);
               });
             }
-
           script.
-            script().
-              (function ($) {
-                /**
-                 * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
-                 *
-                 * @param  {[object]} e           [Mouse event]
-                 * @param  {[integer]} intWidth   [Popup width defalut 500]
-                 * @param  {[integer]} intHeight  [Popup height defalut 400]
-                 * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
-                 */
-                $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
-                  // Prevent default anchor event
-                  e.preventDefault();
-                  // Set values for window
-                  intWidth = intWidth || '500';
-                  intHeight = intHeight || '400';
-                  strResize = (blnResize ? 'yes' : 'no');
-                  // Set title and open popup with focus on it
-                  var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
-                    strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
-                    objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
-                }
-                /* ================================================== */
-                $(document).ready(function ($) {
-                  $('.customer.share').on("click", function (e) {
-                    $(this).customerPopup(e);
-                  });
+            (function ($) {
+              /**
+               * jQuery function to prevent default anchor event and take the href * and the title to make a share popup
+               *
+               * @param  {[object]} e           [Mouse event]
+               * @param  {[integer]} intWidth   [Popup width defalut 500]
+               * @param  {[integer]} intHeight  [Popup height defalut 400]
+               * @param  {[boolean]} blnResize  [Is popup resizeabel default true]
+               */
+              $.fn.customerPopup = function (e, intWidth, intHeight, blnResize) {
+                // Prevent default anchor event
+                e.preventDefault();
+                // Set values for window
+                intWidth = intWidth || '600';
+                intHeight = intHeight || '600';
+                strResize = (blnResize ? 'yes' : 'no');
+                // Set title and open popup with focus on it
+                var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),
+                  strParam = 'width=' + intWidth + ',height=' + intHeight + ',resizable=' + strResize,
+                  objWindow = window.open(this.attr('href'), strTitle, strParam).focus();
+              }
+              /* ================================================== */
+              $(document).ready(function ($) {
+                $('.customer.share').on("click", function (e) {
+                  $(this).customerPopup(e);
                 });
-              }(jQuery));
+              });
+            }(jQuery));
 
 
 

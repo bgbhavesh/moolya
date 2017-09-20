@@ -42,10 +42,12 @@ class MlAppActivity extends Component {
       paymentInfo:{
         isDiscount: false
       },
+      activeComponent:0,
     };
     this.getActivityDetails = this.getActivityDetails.bind(this);
     this.setActivityDetails = this.setActivityDetails.bind(this);
     this.profileId =  FlowRouter.getParam('profileId');
+    this.activeComponent = this.activeComponent.bind(this);
   }
 
   /**
@@ -65,6 +67,11 @@ class MlAppActivity extends Component {
 
   componentWillUpdate() {
     initalizeFloatLabel();
+  }
+
+  activeComponent(currentComponent){
+    console.log(currentComponent);
+    this.setState({currentComponent});
   }
   /**
    * Method :: getActivityDetails
@@ -149,6 +156,13 @@ class MlAppActivity extends Component {
     this.activityDetails = data;
     this.isBasicData = isBasicData || false;
   }
+
+
+
+  toastError(msg){
+    toastr.error(msg+' is  Mandatory');
+  }
+
   /**
    * Method :: saveActivity
    * Desc   :: Save activity data on server
@@ -162,8 +176,16 @@ class MlAppActivity extends Component {
       toastr.error("Please a profile");
       return false;
     }
-    if (this.isBasicData) {
+
+    console.log('activityDetails=',activityDetails);
+    console.log('state=',this.state);
+
+    if(this.state.currentComponent === 0) {
       let duration = activityDetails.duration;
+      if(!duration){
+        toastr.error("Enter a valid duration");
+        return false;
+      }
 
       /**
        * Remove duration key if they are not in int format
@@ -180,14 +202,38 @@ class MlAppActivity extends Component {
         return false;
       }
 
+      if(!(activityDetails.conversation&&activityDetails.conversation.length) ){
+        this.toastError('Conservation Type');
+        return false;
+      }else if(!(activityDetails.deliverable&&activityDetails.deliverable.length&&activityDetails.deliverable[0]) ){
+        this.toastError('Deliverable field');
+        return false;
+      }else if(!activityDetails.displayName){
+        this.toastError('Display Name');
+        return false;
+      } else if(!activityDetails.name){
+        this.toastError('Activity Name');
+        return false;
+      } else if(!(activityDetails.isExternal||activityDetails.isInternal)){
+        this.toastError('Activity Type');
+        return false;
+      }
+
       if(activityDetails.mode !== 'online') {
         delete activityDetails.conversation;
       }
       activityDetails.isServiceCardEligible = activityDetails.isExternal ? activityDetails.isServiceCardEligible : false;
       activityDetails.duration = duration ;
     }
-    activityDetails.profileId = this.profileId;
+    else if(this.state.currentComponent === 1){
+      if(!this.state.paymentInfo || !(this.state.paymentInfo.amount)){
+        this.toastError('Gross Payble Amount');
+        return false;
+      }
+    }
+
     if (activityDetails && activityDetails.teams) {
+      activityDetails.profileId = this.profileId;
       let data = activityDetails.teams && activityDetails.teams.map(function (team) {
         team.users = team.users.filter(function (user) {
           return user.isAdded;
@@ -227,6 +273,7 @@ class MlAppActivity extends Component {
         name: 'Create',
         component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
                                    setActivityDetails={that.setActivityDetails}
+                                   activeComponent={this.activeComponent}
                                    data={that.state.basicInfo} />,
         icon: <span className="ml my-ml-add_tasks"></span>
       },
@@ -234,6 +281,7 @@ class MlAppActivity extends Component {
         name: 'Choose team',
         component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails}
                                     setActivityDetails={that.setActivityDetails}
+                                    activeComponent={this.activeComponent}
                                     isInternal={this.state.isInternal}
                                     isExternal={this.state.isExternal}
                                     data={this.state.teamInfo} />,
@@ -243,12 +291,14 @@ class MlAppActivity extends Component {
         name: 'Payment', component:
         <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
                               setActivityDetails={that.setActivityDetails}
+                              activeComponent={this.activeComponent}
                               data={this.state.paymentInfo} />,
         icon: <span className="ml ml-payments"></span>
       },
       {
         name: 'History',
-        component: <MlAppActivityHistory />,
+        component: <MlAppActivityHistory
+          activeComponent={this.activeComponent}/>,
         icon: <span className="ml my-ml-history"></span>
       }
     ];

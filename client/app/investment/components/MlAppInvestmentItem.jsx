@@ -107,7 +107,7 @@ export default class MlAppInvestmentItem extends Component {
                       </div>)
                       break;
                     case "STU":
-                      return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
+                      return (<div className="col-md-3 col-sm-4 col-lg-2" key={idx} onClick={()=>that.selectPortfolio(data)}>
                         <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                           <div className="premium">
                           <span>

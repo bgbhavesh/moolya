@@ -32,7 +32,12 @@ export default class MlAppPayOfficeSubscription extends Component {
       paymentObjectLoading:true,
       paymentError:false
     });
-
+    let status = FlowRouter.getQueryParam('status');
+    if(status.toLowerCase() == "canceled"){
+      toastr.error("payment canceled");
+    }else if(status.toLowerCase() == "success"){
+      toastr.success("payment successful!!");
+    }
     //this.payClick();
   }
 

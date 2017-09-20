@@ -5,6 +5,13 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 
 export default class MlAppActivityHistory extends React.Component{
+  isUpdated(){
+    return true;
+  }
+  componentWillMount() {
+    this.props.activeComponent(3);
+  }
+
   componentDidMount()
   {
     $('.float-label').jvFloat();

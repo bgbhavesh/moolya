@@ -69,8 +69,8 @@ export default class MlUsersTransactionDetailsComponent extends React.Component 
                   </div>
                   <br className="clearfix" />
                   {/* <div className="ml_btn">
-                   /!*<a href="" className="save_btn">View</a>*!/
-                   <a href="" className="cancel_btn">Actions</a>
+                   /!*<a href="#" className="save_btn">View</a>*!/
+                   <a href="#" className="cancel_btn">Actions</a>
                    </div>*/}
                 </div>
               </div>

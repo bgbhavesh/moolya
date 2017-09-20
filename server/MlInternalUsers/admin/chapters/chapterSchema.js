@@ -71,14 +71,15 @@ let chapterSchema = `
     
     type contactDetailsOutput{
       contactPersonRole: String,
-      addressType: String,
+      addressTypeId: String,
+      addressTypeName : String
       contactNumber: String
       emailId: String,
       buildingNumber: String,
       street: String,
       landmark: String,
       area: String,
-      town: String,
+      cityId: String,
       stateId: String,
       countryId: String,
       pincode: String,
@@ -132,14 +133,15 @@ let chapterSchema = `
     
     input contactDetailsInput {
       contactPersonRole: String,
-      addressType: String,
+      addressTypeId: String,
+      addressTypeName : String
       contactNumber: String
       emailId: String,
       buildingNumber: String,
       street: String,
       landmark: String,
       area: String,
-      town: String,
+      cityId: String,
       stateId: String,
       countryId: String,
       pincode: String,

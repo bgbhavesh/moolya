@@ -12,8 +12,8 @@ import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import {getCommunityName} from '../../../commons/utils';
-import mlSMSConst from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
-import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
+
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
@@ -42,6 +42,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   }
 
   validationCheck = MlRegistrationPreCondition.validateBackEndUserExist(args.registration);
+  if (validationCheck && !validationCheck.isValid) {
+    return validationCheck.validationResponse;
+  }
+  validationCheck = MlRegistrationPreCondition.validateCommunity(args.registration);
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
@@ -184,7 +188,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
-
+    let communityName = communityDef&&communityDef.name?communityDef.name:""
+    MlSMSNotification.registerAsRequest(id,communityName,context)
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
@@ -291,27 +296,26 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   var response = null
   if (args.registrationId) {
     var id = args.registrationId;
-    response = MlRegistration.findOne({"_id": id});
+    response = MlRegistration.findOne({"_id": id}) || {}
     var countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
     let country = countryId ? mlDBController.findOne('MlCountries', {_id: countryId}, context) : {};
     response.registrationInfo.countryCode = country ? country.countryCode : ""
-    if (response && response.registrationInfo && response.registrationInfo.clusterId && response.registrationInfo.chapterId && response.registrationInfo.subChapterId) {
-      return response;
-    } else(response && response.registrationInfo && !response.registrationInfo.clusterId && !response.registrationInfo.chapterId && response.registrationInfo.subChapterId)
-    {
-      // let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
-      let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
-      let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context)
-      let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context)
-      let chapterId = chapterData && chapterData._id ? chapterData._id : ""
-      let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context)
-      response.registrationInfo.clusterId = clusterData && clusterData._id ? clusterData._id : "";
-      response.registrationInfo.chapterId = chapterData && chapterData._id ? chapterData._id : "";
-      response.registrationInfo.subChapterId = subChapterData && subChapterData._id ? subChapterData._id : "";
-      return response
-
-
-    }
+    return response
+    // if (response && response.registrationInfo && response.registrationInfo.clusterId && response.registrationInfo.chapterId && response.registrationInfo.subChapterId) {
+    //   return response;
+    // } else(response && response.registrationInfo && !response.registrationInfo.clusterId && !response.registrationInfo.chapterId && response.registrationInfo.subChapterId)
+    // {
+    //   // let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
+    //   let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
+    //   let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context)
+    //   let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context)
+    //   let chapterId = chapterData && chapterData._id ? chapterData._id : ""
+    //   let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context)
+    //   response.registrationInfo.clusterId = clusterData && clusterData._id ? clusterData._id : "";
+    //   response.registrationInfo.chapterId = chapterData && chapterData._id ? chapterData._id : "";
+    //   response.registrationInfo.subChapterId = subChapterData && subChapterData._id ? subChapterData._id : "";
+    //   return response
+    // }
   }
 }
 
@@ -414,7 +418,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        *Validate selected community of user
        *return the error if community is inActive
        */
-      validationCheck = MlRegistrationPreCondition.validateCommunity(id, details);
+      validationCheck = MlRegistrationPreCondition.validateCommunity(details,id);
       if (validationCheck && !validationCheck.isValid) {
         return validationCheck.validationResponse;
       }
@@ -802,7 +806,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
       MlEmailNotification.onKYCApprove(regRecord);
       MlNotificationController.onUserApproval(regRecord);
-      sendSMSonKYCApproved(regRecord)
+      MlSMSNotification.sendSMSonKYCApproved(regRecord)
       // mlSmsController
 
       let portfolioDetails = {
@@ -1024,7 +1028,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
           */
             MlEmailNotification.onKYCDecline(user);
             MlNotificationController.onKYCDecline(user);
-            sendSMSonKYCDeclined(user)
+            MlSMSNotification.sendSMSonKYCDeclined(user)
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -1835,20 +1839,4 @@ headerCommunityDisplay = (registrationInfo, context) => {
   if (!isMoolya)
     returnName = subChapterName + '/' + chapterName + '/' + registrationInfo.communityName
   return returnName
-}
-
-sendSMSonKYCApproved = (regRecord) => {
-    var mobileNumber = regRecord.registrationInfo.contactNumber;
-    var countryCode =  regRecord.registrationInfo.countryId;
-    var obj = _.find(mlSMSConst, 'KYC_APPROVED')
-    var msg= obj.KYC_APPROVED
-    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
-}
-
-sendSMSonKYCDeclined = (regRecord) => {
-  var mobileNumber = regRecord.registrationInfo.contactNumber;
-  var countryCode =  regRecord.registrationInfo.countryId;
-  var obj = _.find(mlSMSConst, 'KYC_DECLINED')
-  var msg= obj.KYC_DECLINED
-  mlSmsController.sendSMS(msg, countryCode, mobileNumber)
 }

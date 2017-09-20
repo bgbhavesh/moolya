@@ -175,7 +175,7 @@ export default class MlAssignTask extends React.Component {
           <Select
             name="form-field-name"
             value="one"
-            className="form-control float-label"
+            className="float-label"
             options={that.state.users}
             onChange={(value)=>that.addUser(value)}
           />

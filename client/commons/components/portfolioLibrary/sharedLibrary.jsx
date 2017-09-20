@@ -287,7 +287,7 @@ export default class  SharedLibrary extends React.Component {
 
     return (
       <div>
-        <h2>Library</h2>
+        {/*<h2>Library</h2>*/}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>

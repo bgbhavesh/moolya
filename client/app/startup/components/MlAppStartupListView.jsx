@@ -4,6 +4,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
+import CDNImage from '../../../commons/components/CDNImage/CDNImage'
 
 export default class MlAppStartupListView extends Component {
   componentDidMount(){
@@ -58,8 +59,10 @@ export default class MlAppStartupListView extends Component {
         <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
           <div className="company_block">
             <div className="regular"><span>{startup.accountType}</span></div>
-            <div className="company_header">
-              <img src={startup.aboutUs.logo?startup.aboutUs.logo[0].fileUrl:""} />
+           <div className="company_header">
+             {startup.aboutUs && startup.aboutUs.logo && startup.aboutUs.logo.length ?
+               <CDNImage src={startup.aboutUs.logo[0].fileUrl} className="c_image"/> :
+               <CDNImage src="/images/no_image.png" />}
             </div>
             <h3>{startup.firstName}<br/><span>{startup.chapterName}</span></h3>
             <div className="row nomargin">

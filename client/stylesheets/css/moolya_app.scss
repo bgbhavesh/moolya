@@ -240,7 +240,7 @@ $menuTrans:all 0.5s linear;
     }
     span{ color: $mlYellow; }
       .company_header{background:$mlWhite; border-radius:10px 10px 0 0; padding:5px 10px;height:53px;
-        img{height: 45px;}
+        img{height: 45px;border-radius: 5px;}
       }
       .pie-title-center {display: inline-block; position: relative; text-align: center;
         span{
@@ -1098,7 +1098,7 @@ p{margin-top:10px;}
   .img_upload{
     margin:0px;padding:0px;
     li{
-      float: left;position:relative;margin-right:20px;width:50px;
+      float: left;position:relative;margin-right:20px;width:50px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
       .fa{
           position: absolute; width: 20px; height: 20px; background: #ef4647; border-radius: 50%; color: #fff; line-height: 20px; font-size: 12px;     right: 0px; top: -5px;}
         img{

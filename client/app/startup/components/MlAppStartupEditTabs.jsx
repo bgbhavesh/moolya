@@ -65,6 +65,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlStartupAboutUs client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
@@ -73,6 +74,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
+        name: "Management",
         component: <MlStartupManagement key="2" isAdmin={false} client={appClient}
                                         getManagementDetails={this.getManagementDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -81,6 +83,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
+        name: "Investor",
         component: <MlStartupInvestor client={appClient} isAdmin={false} key="3"
                                       getInvestorDetails={this.getInvestorDetails.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
@@ -89,6 +92,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
+        name: "Data",
         component: <MlStartupData client={appClient} key="4" getDataDetails={this.getDataDetails.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId} isApp={true}/>
       },
@@ -96,6 +100,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Charts",
+        name: "Charts",
         component: <MlStartupCharts key="5" client={appClient} isAdmin={false}
                                     getChartDetails={this.getChartDetails.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
@@ -105,6 +110,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards",
+        name: "Awards",
         component: <MlStartupAwards client={appClient} isAdmin={false} key="6"
                                     getAwardsDetails={this.getAwardsDetails.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
@@ -113,6 +119,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary key="7" isAdmin={false} client={appClient}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
@@ -120,6 +127,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "M C & L",
+        name: "M C And L",
         component: <MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -127,6 +135,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
@@ -244,7 +253,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
@@ -260,7 +269,7 @@ export default class MlAppStartupEditTabs extends React.Component {
   }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
     // return  <MlVerticalTabComponent/>
   }
 

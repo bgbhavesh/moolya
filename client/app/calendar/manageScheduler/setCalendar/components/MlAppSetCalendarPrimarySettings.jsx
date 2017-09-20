@@ -48,19 +48,19 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
   }
 
   updateSlotBreakTime(event){
-    if(event.target.value > 0) {
+    // if(event.target.value > 0) {
       this.setState({
         slotBreakTime:event.target.value
       });
-    }
+    // }
   }
 
   updateAppointmentCountPerSlots(event){
-    if(event.target.value > 0) {
+    // if(event.target.value > 0) {
       this.setState({
         appointmentCountPerSlots:event.target.value
       });
-    }
+    // }
   }
 
   updateOverlappingSchedule(event){
@@ -71,9 +71,9 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
 
   updateSlotDuration(event, type) {
     let slotDuration = this.state.slotDuration;
-    if( parseInt(event.target.value) >= 0) {
+    // if( parseInt(event.target.value) >= 0) {
       slotDuration[type] = event.target.value;
-    }
+    // }
     this.setState({
       slotDuration: slotDuration
     });

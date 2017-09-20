@@ -22,6 +22,7 @@ export async function fetchSlotAppointmentsDetailsActionHandler (appointmentId) 
             isProvider
             isClient
             isAttendee
+            status
           }
           taskName
           userMobileNumber

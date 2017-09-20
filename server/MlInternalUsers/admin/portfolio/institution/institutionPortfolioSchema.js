@@ -216,6 +216,7 @@ let institutePortfolioSchema = `
       communityType   : String
       firstName         : String
       lastName : String
+      profileImage        : String
           likes             : Int
         connections         : Int
         views               : Int
@@ -420,7 +421,6 @@ let institutePortfolioSchema = `
         information         : informationOutput
         clients             : [clientsOutput]
         privateFields:[PrivateKeys]
-
     }
     type Query{
         fetchInstitutionPortfolioAboutUs(portfoliodetailsId:String!):InstitutionPortfolioAboutUsOutput

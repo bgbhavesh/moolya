@@ -179,8 +179,9 @@ export default class MlFunderSuccessStories extends React.Component {
   onSaveAction(e) {
     var isDate = _.findIndex(this.state.funderSuccess, { date: '' })
     var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
-    if ((isDate > 0) || (dateKey.length != this.state.funderSuccess && this.state.funderSuccess.length))
+    if ((isDate > 0) || (dateKey.length !== (this.state.funderSuccess && this.state.funderSuccess.length))) {
       toastr.error("Please select Date");
+    }
     this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false })
   }
 
@@ -315,7 +316,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           <a href="" id={"team_list" + idx}>
 
                             <div className="list_block notrans funding_list">
-                              <div className="cluster_status inactive_cl">
+                              <div>
                                 <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
                               </div>

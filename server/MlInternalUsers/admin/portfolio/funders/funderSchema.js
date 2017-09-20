@@ -196,6 +196,7 @@ let FunderPortfolioSchema = `
         communityType       : String
         firstName           : String
         lastName            : String
+        profileImage        : String
     }
   
     input successStories{

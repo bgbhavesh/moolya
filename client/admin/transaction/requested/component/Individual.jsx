@@ -302,12 +302,12 @@ export default class Individual extends React.Component{
                           <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                         </div>
                         <div className="form-group mandatory">
-                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"dob"} inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMsg="Date Of Birth is required"/>
                           <FontAwesome name="calendar" className="password_icon"/>
                           <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
                         </div>
-                        <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>
+                        <div className="form-group mandatory">
+                          <Moolyaselect multiSelect={false}  ref={"gender"} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true} data-required={true} data-errMsg="Gender is required"/>
                         </div>
                       <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
 

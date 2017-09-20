@@ -44,6 +44,7 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
                         communityType
                         firstName
                         lastName
+                        profileImage
                       }
                     }
                 }

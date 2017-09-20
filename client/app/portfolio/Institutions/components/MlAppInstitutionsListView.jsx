@@ -3,6 +3,7 @@
  * */
 import React, {Component, PropTypes} from "react";
 import {fetchPortfolioActionHandler} from '../../../ideators/actions/ideatorActionHandler'
+import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 
 export default class MlAppInstitutionListView extends Component {
   /**
@@ -58,19 +59,22 @@ export default class MlAppInstitutionListView extends Component {
           <div className="company_block">
             <div className="regular"><span>{intitution.accountType}</span></div>
             <div className="company_header">
+              {intitution.profileImage && intitution.profileImage ?
+                <CDNImage src={intitution.profileImage} className="c_image"/> :
+                <CDNImage src="/images/no_image.png" />}
             </div>
             <h3>{intitution.firstName}<br/><span>{intitution.chapterName}</span></h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-passion" data-percent="40%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-passion" data-percent={intitution.views}> <span className="pie-value"></span> </div><br/>
                 views
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-rating" data-percent="80%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-rating" data-percent={intitution.followings}> <span className="pie-value"></span> </div><br/>
                 followings
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-like" data-percent="50%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-like" data-percent={intitution.likes}> <span className="pie-value"></span> </div><br/>
                 Likes
               </div>
             </div>
@@ -84,7 +88,7 @@ export default class MlAppInstitutionListView extends Component {
                 Projects
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <span>0</span><br />
+                <span>{intitution.connections}</span><br />
                 Connect
               </div>
             </div>

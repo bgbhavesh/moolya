@@ -107,7 +107,7 @@ class portfolioValidation {
   //   }
   // }
 
-  getLivePortfolioCount() {
+  getLivePortfolioCount(clusterId, chapterId, subChapterId) {
     return mlDBController.aggregate('MlPortfolioDetails', [
       {
         "$group": {
@@ -115,7 +115,14 @@ class portfolioValidation {
           "communityType": {$first: "$communityType"},
           "count": {
             $sum: {
-              "$cond": [{"$eq": ["$status", "PORT_LIVE_NOW"]}, 1, 0]
+              "$cond": [
+                { "$and": [
+                  {"$eq": ["$status", "PORT_LIVE_NOW"]},
+                  {"$eq": ["$clusterId", clusterId]},
+                  {"$eq": ["$chapterId", chapterId]},
+                  {"$eq": ["$subChapterId", subChapterId]},
+                ]
+                }, 1, 0],
             }
           }
         }

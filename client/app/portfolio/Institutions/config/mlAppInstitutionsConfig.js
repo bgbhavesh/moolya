@@ -49,6 +49,7 @@ export const mlAppInstitutionConfig = new MlAppViewer({
                         connections
                         views
                         followings
+                        profileImage
                       }
                     }
                 }

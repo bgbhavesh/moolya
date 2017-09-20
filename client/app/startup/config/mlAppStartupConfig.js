@@ -53,6 +53,7 @@ export const mlAppStartupConfig = new MlAppViewer({
                       connections
                       views
                       followings
+                      profileImage
                       }
                    }                                                                                                     
                 }

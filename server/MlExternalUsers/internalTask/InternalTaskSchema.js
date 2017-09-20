@@ -101,6 +101,7 @@ let internalTaskSchema = `
       expectedInput: String
       expectedOutput: String
       users: [internalTaskAttendees]
+      docs: [internalTaskFileAttributes]
     }
   
     type Query{

@@ -173,6 +173,27 @@ class MlAppInternalAssignTaskItem extends React.Component {
               <div className="form-group">
                 <textarea className="form-control float-label" placeholder="Expected Input" value={task.expectedInput ? task.expectedInput :''} ></textarea>
               </div>
+              <div className="panel panel-default mart20">
+                <div className="panel-heading"> Attached Documents </div>
+                <div className="panel-body">
+                  <div className="swiper-container conversation-slider blocks_in_form">
+                    <div className="swiper-wrapper">
+                      {task.docs.map(function(doc) {
+                        return(
+                          <div className="swiper-slide">
+                            <a href={doc.fileUrl} target="_blank">
+                              <FontAwesome name='eye'/>
+                            </a>
+                            <a href={doc.fileUrl} download="FileName">
+                              <FontAwesome name='download'/>
+                            </a>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
         </div>

@@ -232,8 +232,8 @@ class MlAppActivity extends Component {
       }
     }
 
+    activityDetails.profileId = this.profileId;
     if (activityDetails && activityDetails.teams) {
-      activityDetails.profileId = this.profileId;
       let data = activityDetails.teams && activityDetails.teams.map(function (team) {
         team.users = team.users.filter(function (user) {
           return user.isAdded;

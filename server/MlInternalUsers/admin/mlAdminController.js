@@ -136,7 +136,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
             res.redirect('/login');
           }
-          res.render('about', portFolio)
+          res.render(pathAbout, portFolio)
         } else {
           next()
         }

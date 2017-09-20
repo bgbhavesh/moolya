@@ -3,7 +3,8 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
-import NoData from '../../../../../commons/components/noData/noData'
+import NoData from '../../../../../commons/components/noData/noData';
+import {initalizeFloatLabel } from "../../../../../../client/admin/utils/formElemUtil";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var options = [
@@ -132,6 +133,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-($('.' + className).outerHeight(true) + 120));
+
+    initalizeFloatLabel();
 
   }
 

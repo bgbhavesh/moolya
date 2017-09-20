@@ -17,6 +17,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.state = {
       loading: false,
       roleForm: [],
+      isAnchorTrue: [],
       roleDetails: [{
         roleId: '',
         validFrom: '',
@@ -72,6 +73,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
     this.setState({loading: false, rolesData: roleDetails});
+
+    if (selObject.label && selObject.label.indexOf('anchor') !== -1) {
+      let anchorList = this.state.isAnchorTrue;
+      anchorList[index] = true;
+      this.setState({isAnchorTrue: anchorList});
+    }
+    else {
+      let anchorList = this.state.isAnchorTrue;
+      anchorList[index] = false;
+      this.setState({isAnchorTrue: anchorList});
+    }
     // if (this.state.roleForm[did]['departmentName'] === "operations") {
     //   if (selObject.label == "subchapteradmin") {
     //     $("#chapter_admin_check").removeAttr('disabled');
@@ -353,6 +365,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                       <div className="">
                         <div className="">
                           {department.roles.map(function (details, idx) {
+                            let isAnchorByDefault = false;
+                            if (details.roleName && details.roleName.indexOf('anchor') !== -1) {
+                              isAnchorByDefault = true;
+                            }
                               return (
                                 <div className="form_inner_block" key={idx}>
                                   <div className="form-group">
@@ -360,6 +376,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                       <div className="input_types"><input id="chapter_admin_check" type="checkbox"
                                                                           checked={details.isChapterAdmin}
                                                                           onChange={that.isChapterAdminChange.bind(that,idx, id)}
+                                                                          disabled={that.state.isAnchorTrue[idx] || isAnchorByDefault}
                                       /><label
                                         htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div> : <div></div>}
 

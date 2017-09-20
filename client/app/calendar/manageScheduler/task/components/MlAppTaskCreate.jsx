@@ -14,6 +14,7 @@ import {findTaskActionHandler} from "../actions/saveCalanderTask";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import _ from "lodash";
 let Select = require('react-select');
+var diff = require('deep-diff').diff;
 import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 
 export default class MlAppTaskCreate extends Component {
@@ -26,9 +27,19 @@ export default class MlAppTaskCreate extends Component {
     super(props);
     this.state = {
       loading: true,
-      data: {}
+      data: {},
+      oldData:{},
     };
     return this;
+  }
+
+  isUpdated(){
+    var differences = diff(this.state.oldData, this.state.data);
+    if(differences && differences.length>0){
+      return false
+    }else{
+      return true
+    }
   }
 
   /**
@@ -59,7 +70,7 @@ export default class MlAppTaskCreate extends Component {
     if (taskId) {
       var response = await findTaskActionHandler(taskId);
       if (!_.isEmpty(response)) {
-        this.setState({loading: false, data: response});
+        this.setState({loading: false, data: response, oldData: response});
       }
       return response
     } else {
@@ -87,7 +98,6 @@ export default class MlAppTaskCreate extends Component {
     let details = this.state.data;
     let name = e.target.name;
     let value = e.target.value;
-    console.log(name,value, e.target.checked);
     if(e.target.value== 'true'){
       value = e.target.checked
     }
@@ -154,8 +164,8 @@ export default class MlAppTaskCreate extends Component {
                   </div>
                   <div className="form-group">
                     <label>Total number of Sessions <input className="form-control inline_input medium_in"
-                                                               type="Number" min="0"
-                                                               defaultValue={this.state.data.noOfSession}
+                                                               type="Number" min="1"
+                                                               defaultValue={this.state.data.noOfSession || 1 }
                                                                name="noOfSession" onBlur={this.handleBlur.bind(this)}/>
                     </label>
                   </div>

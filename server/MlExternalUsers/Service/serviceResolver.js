@@ -110,6 +110,11 @@ MlResolver.MlMutationResolver['updateBeSpokeService'] = (obj, args, context, inf
   return mlServiceCardRepo.updateBespokeServiceCardDefinition(args.Services, context);
 };
 
+MlResolver.MlMutationResolver['cloneServiceCard'] = (obj, args, context, info) => {
+  return mlServiceCardRepo.cloneServiceCard(args.serviceId, context);
+};
+
+
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardDefinition(args.Services, context);

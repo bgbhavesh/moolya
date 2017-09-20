@@ -1705,7 +1705,7 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
   var portfolioCount = portfolioValidationRepo.getLivePortfolioCount()
   return {userDetails: response, portfolioCounter: portfolioCount}
 }
-
+//todo:// restrict anchor user to update "isActive" status maintain the old status only
 checkAnchorAccess = function (args, context) {
   var isAccess = true
   var userProfile = new MlAdminUserContext().userProfileDetails(context.userId)

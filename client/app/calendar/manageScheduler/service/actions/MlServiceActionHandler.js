@@ -198,6 +198,25 @@ export async function updateServiceActionHandler(serviceId,Services) {
   return teamMembers
 }
 
+export async function cloneServiceCardActionHandler(serviceId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId:String!){
+        cloneServiceCard(serviceId:$serviceId){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId
+    }
+  });
+  const teamMembers = result.data.cloneServiceCard;
+  return teamMembers
+}
+
 
 export async function fetchServicesActionHandler (profileId) {
   const result = await appClient.query({

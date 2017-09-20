@@ -232,6 +232,112 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
       {
+        '$lookup': {
+          from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'likes'
+        }
+      },
+      {
+        "$addFields": {
+          "likes": {
+            "$filter":
+            { input: "$likes",
+              as: "data",
+              cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+            }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlConnections', localField: 'userId', foreignField: 'users.userId',
+          as: 'connections'
+        }
+      },
+      {
+        "$addFields": {
+          "connection": {
+            "$filter":
+            { input: "$connections",
+              as: "data",
+              cond: { "$eq": ["$$data.isAccepted", true] }
+            }
+          }
+        }
+      },
+      // {
+      //   $unwind:
+      //   {
+      //     path: "$connections",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $unwind:
+      //   {
+      //     path: "$connections.users",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   "$addFields": {
+      //     isConnection: { "$and": [{"$eq": [ "$userId", "$connections.users.userId" ]},
+      //       { "$eq" :["$connections.users.isFavourite", true] },
+      //       { "$eq" :["$connections.isAccepted", true] } ] }
+      //   }
+      // },
+      // {
+      //   "$group": {
+      //     _id: "$_id",
+      //     "data": { "$first": "$$ROOT" },
+      //     "fav": { "$sum" : { "$cond": ["$isConnection", 1, 0] } }
+      //   }
+      // },
+      // {
+      //   "$addFields": {
+      //     "data.favCount": { $trunc : "$fav" }
+      //   }
+      // },
+      // {
+      //   "$replaceRoot": { "newRoot" : "$data" }
+      // },
+      {
+        '$lookup': {
+          from: 'mlViews', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'views'
+        }
+      },
+      {
+        "$addFields": {
+          "views": {
+            "$filter":
+            { input: "$views",
+              as: "data",
+              cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+            }
+
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlFollowings', localField: 'userId', foreignField: 'followerId',
+          as: 'followings'
+        }
+      },
+      {
+        "$addFields": {
+          "followings":  {
+            "$filter":
+            { input: "$followings",
+              as: "data",
+              cond: { "$eq": ["$$data.isActive", true] }
+            }
+
+          }
+        }
+      },
+      {
         '$project': {
           portfolioDetailsId: 1,
           aboutUs: 1,
@@ -244,6 +350,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          likes:{"$size":"$likes"},
+          connections: { "$size": "$connection" },
+          views:{"$size":"$views"},
+          followings:{"$size":"$followings"}
+
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }

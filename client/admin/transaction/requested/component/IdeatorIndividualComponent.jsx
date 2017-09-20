@@ -410,15 +410,15 @@ export default class IdeatorIndividualComponent extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMssg="Date Of Birth is required"/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"dob"} inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerDateOfBirth.bind(that)}/>
                     {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
                   </div>
                   {/*<div className="form-group">*/}
                     {/*<Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>*/}
                   {/*</div>*/}
-                  <div className="form-group">
-                    <Select name="form-field-name"  placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
+                  <div className="form-group mandatory">
+                    <Select name="form-field-name"  ref={"gender"} placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" data-required={true} data-errMsg="Gender is required"/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>

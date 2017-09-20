@@ -39,6 +39,11 @@ export default class MlAnchorInfoView extends React.Component {
       }
     });
   }
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(200+$('.app_header').outerHeight(true)));
+
+  }
 
   handleUserClick(id) {
     const resp = this.getAnchorUserDetails(id);
@@ -100,11 +105,11 @@ export default class MlAnchorInfoView extends React.Component {
       return (<li key={say}>
         <a href="">
           <span className="icon_bg">
-            <span className={value.communityImageLink}></span>
+            <span className={`icon_lg ${value.communityImageLink}`}></span>
           </span>
           <br />
           <div className="tooltiprefer">
-            <span>{value.communityType} <b>{value.count}</b></span>
+            <span><small>{value.communityType}</small> <b>{value.count}</b></span>
           </div>
         </a>
       </li>)
@@ -132,11 +137,15 @@ export default class MlAnchorInfoView extends React.Component {
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
               <div className="left_wrap left_user_blocks">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                >
                 {!this.state.selectedUser.profile && <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick} />}
                 {this.state.selectedUser.profile &&
                 <div>
-                  <h3 className="back_btn" onClick={this.clearSelection} alt="Go Back" title="Go Back">
-                    <span className="fa fa-angle-left fa-2x"/> &nbsp;{this.state.selectedUser.profile.firstName}
+                  <h3 style={{'display':'inline-block'}} onClick={this.clearSelection} alt="Go Back" title="Go Back">
+                    <span className="fa fa-angle-left"/> &nbsp;{this.state.selectedUser.profile.firstName}
                   </h3>
 
                   {/*<button onClick={this.clearSelection}>Back</button>*/}
@@ -147,6 +156,7 @@ export default class MlAnchorInfoView extends React.Component {
 
                 </div>
                 }
+                </ScrollArea>
               </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4">

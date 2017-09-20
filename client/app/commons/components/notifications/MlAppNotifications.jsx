@@ -22,7 +22,7 @@ export default class MlAppNotifications extends Component {
     if (response && response.success) {
       that.setState({notifications: response.result})
     }
-    console.log('-------notifications data is---------',response)
+    // console.log('-------notifications data is---------',response)
   }
 
   render() {

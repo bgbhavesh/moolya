@@ -4,33 +4,39 @@
 
 import React from 'react';
 import AppointmentSes from './appointmentSession';
-import {fetchAdminServiceAppointment} from "../../action/fetchAdminServiceAppointment";
+import { fetchAdminServiceAppointment } from "../../action/fetchAdminServiceAppointment";
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      orderId : props.orderId,
+      orderId: props.orderId,
       data: {
         client: {},
         owner: {},
-        sessionInfo:[]
+        sessionInfo: []
       }
     };
   }
 
-  componentWillMount(){
+  componentWillReceiveProps({ orderId }) {
+    this.setState({ orderId }, () => {
+      this.fetchAdminServiceAppointment();
+    })
+  }
+
+  componentWillMount() {
     this.fetchAdminServiceAppointment();
   }
 
   async fetchAdminServiceAppointment() {
     let orderId = this.state.orderId;
     const that = this;
-    if(orderId){
+    if (orderId) {
       let response = await fetchAdminServiceAppointment(orderId);
       console.log(response);
-      if(response && response.success ) {
+      if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
         data.client = data.client ? data.client : {};
@@ -45,69 +51,68 @@ export default class MlAppServicePurchasedDetail extends React.Component {
 
   render() {
 
-    const {data} = this.state;
-    console.log(data);
+    const { data } = this.state;
 
     // console.log("This Props", this.props);
     return (
       <div className="ml_tabs">
-        <ul  className="nav nav-pills">
+        <ul className="nav nav-pills">
           <li className="active">
-            <a  href="#1a" data-toggle="tab">Details</a>
+            <a href={`#${data.orderId}1a`} data-toggle="tab">Details</a>
           </li>
           <li>
-            <a href="#2a" data-toggle="tab">Activity Log</a>
+            <a href={`#${data.orderId}2a`} data-toggle="tab">Activity Log</a>
           </li>
           <li>
-            <a href="#3a" data-toggle="tab">Sessions</a>
+            <a href={`#${data.orderId}3a`} data-toggle="tab">Sessions</a>
           </li>
           <li>
-            <a href="#4a" data-toggle="tab">Service Details</a>
+            <a href={`#${data.orderId}4a`} data-toggle="tab">Service Details</a>
           </li>
           <li>
-            <a href="#5a" data-toggle="tab">Release Pay</a>
+            <a href={`#${data.orderId}5a`} data-toggle="tab">Release Pay</a>
           </li>
           <li>
-            <a href="#6a" data-toggle="tab">Payment Details</a>
+            <a href={`#${data.orderId}6a`} data-toggle="tab">Payment Details</a>
           </li>
           <li>
-            <a href="#7a" data-toggle="tab">Device Details</a>
+            <a href={`#${data.orderId}7a`} data-toggle="tab">Device Details</a>
           </li>
         </ul>
 
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id="1a">
+          <div className="tab-pane active" id={`${data.orderId}1a`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" defaultValue="moo1234" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User Id" value={data.client.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" defaultValue="Varun K" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Name" value={data.client.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue="varun.k@gmail.com" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email ID" value={data.client.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" defaultValue="9848565852" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Phone no" value={data.client.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="India" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" value={data.client.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="Hyderabad" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" value={data.client.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue="Moolya" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub Chapter" value={data.client.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="Funder" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>
               </div>
@@ -115,47 +120,47 @@ export default class MlAppServicePurchasedDetail extends React.Component {
             </div>
           </div>
           {/*second tab*/}
-          <div className="tab-pane" id="2a">
+          <div className="tab-pane" id={`${data.orderId}2a`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment Id" defaultValue="moo123456" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Appointment Id" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Appointment Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" defaultValue="mootr234567" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction ID" value={data.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment With" defaultValue="Manohar Kumar" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Appointment With" value={data.owner.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" defaultValue="mootr234567" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User Id" value={data.owner.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="Service Provider" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" value={data.owner.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="subChater" defaultValue="moolya" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="subChater" value={data.owner.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="Hyderabad" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" value={data.owner.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="India" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" value={data.owner.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Contact Number" defaultValue="9848283828" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Contact Number" value={data.owner.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email Id" defaultValue="manohar@gmail.com" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email Id" value={data.owner.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Gender" defaultValue="Male" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Gender" value={data.owner.gender} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 {/*<a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>*/}
               </div>
@@ -163,99 +168,99 @@ export default class MlAppServicePurchasedDetail extends React.Component {
             </div>
           </div>
           {/*third tab*/}
-          <div className="tab-pane" id="3a">
-            <AppointmentSes/>
+          <div className="tab-pane" id={`${data.orderId}3a`}>
+            <AppointmentSes appointment={this.state.data} />
           </div>
 
           {/*fourth tab*/}
-          <div className="tab-pane" id="4a">
+          <div className="tab-pane" id={`${data.orderId}4a`}>
             <p>Take from this page "appFunderMyAppointment"</p>
           </div>
           {/*fivth tab*/}
-          <div className="tab-pane" id="5a">
+          <div className="tab-pane" id={`${data.orderId}5a`}>
             <h3>Total Amount: 25,000 INR</h3>
             <div className="panel panel-default">
               <div className="panel-body">
                 <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Select Community</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name"/></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Enter Units"/></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status"/></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name" /></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Enter Units" /></div></div></div>
+                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
               </div>
             </div>
             <div className="panel panel-default">
               <div className="panel-body">
                 <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Service Provider</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Mohan Kumar"/></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5000 Units"/></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status"/></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Mohan Kumar" /></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5000 Units" /></div></div></div>
+                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
               </div>
             </div>
             <div className="panel panel-default">
               <div className="panel-body">
                 <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Investor</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Ramesh Jain"/></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5600 Units"/></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status"/></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Ramesh Jain" /></div></div></div>
+                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5600 Units" /></div></div></div>
+                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
               </div>
             </div>
           </div>
 
-          <div className="tab-pane" id="6a">
+          <div className="tab-pane" id={`${data.orderId}6a`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Date & Time" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction ID" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" defaultValue="Rs 25,000" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total amount paid" value={data.totalAmount} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Payment mode" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card number" defaultValue="1234 2545 2565 4585" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card number" defaultValue="" className="form-control float-label" id="" />
                 </div>
 
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" defaultValue="Kiran Kumar" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card Holder name" value={data.client.name} defaultValue="Kiran Kumar" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Promotion Code" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Code Amount" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Code Amount" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Status" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Voucher Code" defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="tab-pane" id="7a">
+          <div className="tab-pane" id={`${data.orderId}7a`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device name" defaultValue="Ipad air 2" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device name" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Device ID" defaultValue="L8125#585" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device IP" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device IP" defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="IP Location" defaultValue="Hyderabad" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="IP Location" defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
 

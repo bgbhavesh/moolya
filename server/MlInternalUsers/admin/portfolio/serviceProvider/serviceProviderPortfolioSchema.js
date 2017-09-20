@@ -99,6 +99,7 @@ let serviceProviderPortfolioSchema = `
          firstName            : String
          lastName             : String
          lookingFor           : [lookingForOutput]
+         profileImage         : String
     }
     
     input logo{

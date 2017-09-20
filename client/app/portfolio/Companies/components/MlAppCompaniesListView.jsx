@@ -60,20 +60,22 @@ export default class MlAppCompanyListView extends Component {
           <div className="company_block">
             <div className="regular"><span>{company.accountType}</span></div>
             <div className="company_header">
-              <img src="" />
+              {company.profileImage && company.profileImage ?
+                <CDNImage src={company.profileImage} className="c_image"/> :
+                <CDNImage src="/images/no_image.png" />}
             </div>
             <h3>{company.firstName}<br/><span>{company.chapterName}</span></h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-passion" data-percent="40%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-passion" data-percent={company.views}> <span className="pie-value"></span> </div><br/>
                 views
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-rating" data-percent="80%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-rating" data-percent={company.followings}> <span className="pie-value"></span> </div><br/>
                 followings
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-like" data-percent="90%"> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-like" data-percent={company.likes}> <span className="pie-value"></span> </div><br/>
                 Likes
               </div>
             </div>
@@ -87,7 +89,7 @@ export default class MlAppCompanyListView extends Component {
                 Projects
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <span>0</span><br />
+                <span>{company.connections}</span><br />
                 Connect
               </div>
             </div>

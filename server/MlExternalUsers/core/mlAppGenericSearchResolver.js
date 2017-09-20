@@ -1163,7 +1163,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1218,7 +1219,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1273,7 +1275,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1328,7 +1331,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1384,7 +1388,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {

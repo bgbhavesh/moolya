@@ -82,6 +82,7 @@ class Library extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar1 = this.handleUploadAvatar1.bind(this);
     this.toggleModal1 = this.toggleModal1.bind(this);
+    this.connectionManagement= this.connectionManagement.bind(this);
   }
 
   /**
@@ -267,14 +268,14 @@ class Library extends React.Component {
    * @returns Void
    */
 
-  ImageUpload(fileInfo, image) {
-    let file = image;
-    let fileSize = fileInfo.size / 1024 / 1024;
-    let fileType = fileInfo.type;
-    this.setState({ fileType: fileInfo.type, fileName: fileInfo.name, fileSize: fileSize });
+  ImageUpload(e) {
+    let file = e.target.files[0];
+    let fileSize = file.size / 1024 / 1024;
+    let fileType = file.type;
+    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
     this.getCentralLibrary();
     if (this.state.totalLibrarySize < 50) {
-      let fileExists = this.checkIfFileAlreadyExists(fileInfo.name, "image");
+      let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
       let typeShouldBe = _.compact(fileType.split('/'));
       if (file && typeShouldBe && typeShouldBe[0] == "image") {
         if (!fileExists) {
@@ -327,14 +328,14 @@ class Library extends React.Component {
    * @returns Void
    */
 
-  TemplateUpload(fileInfo, image) {
-    let file = image;
-    let fileType = fileInfo.type;
-    let fileSize = fileInfo.size / 1024 / 1024;
-    this.setState({ fileType: fileInfo.type, fileName: fileInfo.name, fileSize: fileSize });
+  TemplateUpload(e) {
+    let file = e.target.files[0];
+    let fileType = file.type;
+    let fileSize = file.size / 1024 / 1024;
+    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
     this.getCentralLibrary();
     if (this.state.totalLibrarySize < 50) {
-      let fileExists = this.checkIfFileAlreadyExists(fileInfo.name, "template");
+      let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
       let typeShouldBe = _.compact(fileType.split('/'));
       if (file && typeShouldBe && typeShouldBe[0] == "image") {
         if (!fileExists) {
@@ -366,7 +367,7 @@ class Library extends React.Component {
     if (this.state.totalLibrarySize < 50) {
       let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
       let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[1] !== "image" && typeShouldBe[1] !== "video") {
+      if (file && typeShouldBe && typeShouldBe[0] !== "image" && typeShouldBe[0] !== "video") {
         if (!fileExists) {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
@@ -733,7 +734,7 @@ class Library extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='lock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='unlock' /> : ""}
+          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='lock' /> : ""}
           {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />}
           <a href="" data-toggle="modal" data-target=".imagepop"
             onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
@@ -813,7 +814,7 @@ class Library extends React.Component {
     const Templates = templateData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='lock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='unlock' /> : ""}
+          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='lock' /> : ""}
           {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template")} />}
           <a href="" data-toggle="modal" data-target=".templatepop"
             onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
@@ -878,7 +879,7 @@ class Library extends React.Component {
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='lock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='unlock' /> : ""}
+          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='lock' /> : ""}
           {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
@@ -951,7 +952,7 @@ class Library extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : ""}
+          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : ""}
           {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
           <a href="" data-toggle="modal" data-target=".documentpop"
             onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>
@@ -1263,6 +1264,7 @@ class Library extends React.Component {
   }
 
   connectionManagement(userId) {
+    this.setState({sharedFiles: []})
     this.getSharedFiles(userId);
   }
 

@@ -7,6 +7,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../actions/ideatorActionHandler'
+import CDNImage from '../../../commons/components/CDNImage/CDNImage';
 
 /**
  * export of the default component
@@ -48,7 +49,10 @@ export default class MlAppIdeatorListView extends Component {
                         <span>{ideator.accountType}</span>
                       </div>
                       <h3>{ideator.name}</h3>
-                      <div className="list_icon"><span className="ml my-ml-Ideator"></span></div>
+                      {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
+                        <div className="list_icon">
+                          <span className="ml my-ml-Ideator"></span>
+                        </div>}
                       <p>{ideator.ideas[0].title}</p>
                       <div className="block_footer">
                         <span>{ideator.chapterName}</span>

@@ -651,6 +651,10 @@ if (!hierarchyAssignmentNonMoolya) {
 //   }
 // })
 
+Accounts.config({
+  loginExpirationInDays:1
+});
+
 
 /******************************************* User Login <Start> *******************************************************/
 

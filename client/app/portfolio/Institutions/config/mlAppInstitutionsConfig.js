@@ -45,6 +45,11 @@ export const mlAppInstitutionConfig = new MlAppViewer({
                         communityType
                         firstName
                         lastName
+                        likes
+                        connections
+                        views
+                        followings
+                        profileImage
                       }
                     }
                 }

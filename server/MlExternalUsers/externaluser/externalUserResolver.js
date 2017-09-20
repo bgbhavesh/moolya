@@ -495,3 +495,30 @@ MlResolver.MlQueryResolver['findDefaultUserProfile'] = (obj, args, context, info
   return defaultProfile;
 }
 
+MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => {
+  var userId = args.userId ? args.userId : context.userId
+  var profileDetails = {}
+  if (args.profileId)
+    profileDetails = new MlUserContext().userProfileDetailsByProfileId(args.profileId)
+  else
+    profileDetails = new MlUserContext(userId).userProfileDetails(userId)
+  var query = [
+    {
+      $match: {
+        'profile.isInternaluser': true, 'profile.isMoolya': true,
+        'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': profileDetails.clusterId,
+        'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': profileDetails.chapterId,
+        'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId': profileDetails.subChapterId
+      }
+    },
+    {
+      "$project": {
+        _id: 1, "displayName": {$concat: ["$profile.firstName", " ", "$profile.lastName"]},
+        "userName": "$username",
+        "profileImage": "$profile.profileImage"
+      }
+    }
+  ]
+  var response = mlDBController.aggregate('users', query, context)
+  return response
+}

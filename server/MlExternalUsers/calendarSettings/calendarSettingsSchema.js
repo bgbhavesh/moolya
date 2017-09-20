@@ -117,12 +117,41 @@ let calendarSettingSlot=`
     vacations               : [calendarSettingVacation]
   }
   
+  type CalenderHeaderProfileDetails {
+    userId: String
+    firstName: String
+    lastName: String
+    displayName: String
+    profileId: String
+    profileImage: String
+    clusterId: String
+    clusterName: String
+    chapterId: String
+    chapterName: String
+    subChapterId: String
+    subChapterName: String
+    communityId: String
+    communityName: String
+    communityDefCode: String
+    communityDefName: String
+    isActive: Boolean
+    isApprove: Boolean
+    resource: [String]
+    isHasManageSchedule: Boolean
+    isHasOffice: Boolean
+    isMoolya: Boolean
+    offices: [MyOffice]
+  }
+  
   type Query {   
      fetchMyCalendarSetting(profileId:String):CalendarSetting
      getMyCalendar(month:Int, year: Int): MonthCalendar
      getServiceProviderCalendar(portfolioId:String, month:Int, year: Int, orderId: String): MonthCalendar
      getMyCalendarDayAvailable:response
      getSessionDayAvailable(orderId:String!, sessionId: String!, day: Int, month: Int, year: Int): [TimeSlots]
+     getUserProfileDetails(userId:String): [CalenderHeaderProfileDetails]
+     getUserActiveProfileDetails(userId:String): [CalenderHeaderProfileDetails]
+     
   }
   
   type Mutation {

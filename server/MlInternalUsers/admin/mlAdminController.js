@@ -20,7 +20,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
-import findPortFolioDetails from './microSite/microSite'
+import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
 
 let helmet = require('helmet');
 var Tokens = require('csrf')
@@ -60,7 +60,8 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  about: '/about',
+  about: '/*',
+  view:'/view/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -104,21 +105,45 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
 
   let path = process.env.PWD;                                                 // Core Project Root Path
-  graphQLServer.set('views', path + '/server/MlInternalUsers/admin/views');   // MicroSite View folder that contains static files.
+  graphQLServer.set('views', path + '/server/MlExternalUsers/microSite/views');   // MicroSite View folder that contains static files.
   graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
 
   var tokens = new Tokens()
   var secret = tokens.secretSync()
 
 
+  graphQLServer.get(config.view, async function (req, res, next) {
+
+          const pathName = req.url;
+          const originalUrl = req.originalUrl.replace('/view','');
+          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+            res.redirect('/login');
+          }
+          res.render('about', portFolio)
+        }
+  )
+
   // Serving static pages.
-  graphQLServer.get(config.about, async function (req, res) {
-      const pathName = req.url;
-      const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-      console.log(fullUrl)
-      const idPortFolio = req.query.id;
-      const portFolio = await findPortFolioDetails(idPortFolio,pathName,fullUrl);
-      res.render('about', portFolio)
+  graphQLServer.get(config.about, async function (req, res, next) {
+      if (!(req.url.includes('login') || req.url.includes('registration'))) {
+        if (!req.headers.cookie.includes('meteor_login_token')) {
+          const pathName = req.url;
+          const originalUrl = req.originalUrl;
+          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+            res.redirect('/login');
+          }
+          res.render('about', portFolio)
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+
     }
   )
 

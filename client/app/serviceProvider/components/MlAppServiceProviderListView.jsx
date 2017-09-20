@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
+import CDNImage from '../../../commons/components/CDNImage/CDNImage'
 
 export default class MlAppServiceProviderListView extends Component {
 
@@ -21,13 +22,15 @@ export default class MlAppServiceProviderListView extends Component {
       <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, provider.portfolioDetailsId)}>
           <div className="ideators_list_block">
-            {/*<div className="premium"><span>Starter</span></div>*/}
             <div className="premium">
               <span>{provider.accountType}</span>
             </div>
             <h3>{provider.about&&provider.about.aboutTitle?provider.about.aboutTitle:""}</h3>
-            <div className="list_icon"><span className="ml my-ml-Service-Providers"></span></div>
-            {/*<img src="/images/valuation.png" className="c_image"/>*/}
+            {provider.profileImage ? <CDNImage src={provider.profileImage} className="c_image"/> :
+              <div className="list_icon">
+                <span className="ml my-ml-Service-Providers"></span>
+              </div>}
+
             <div className="block_footer">
               <span>{provider.chapterName} - {provider.communityType}</span>
             </div>

@@ -41,5 +41,10 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
       return ;
       break;
   }
-  return response;
+  if(response){
+    return paymentInfo.resourceId;
+  }else{
+    return response;
+  }
+  //return response;
 };

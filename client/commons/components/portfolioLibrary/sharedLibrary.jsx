@@ -13,6 +13,7 @@ import React from 'react';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
+import _ from 'lodash'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
 
@@ -77,22 +78,26 @@ export default class  SharedLibrary extends React.Component {
     let Video = [];
     let Template = [];
     let Document = [];
-    data.map(function(fileInfo){
-      let type = fileInfo.file.fileType;
-      if(type === 'image') {
-        Image.push(fileInfo)
-        that.setState({imageDetails: Image})
-      } else if(type === 'video') {
-        Video.push(fileInfo)
-        that.setState({videoDetails: Video})
-      } else if(type === 'document') {
-        Document.push(fileInfo)
-        that.setState({documentDetails: Document})
-      } else {
-        Template.push(fileInfo)
-        that.setState({templateDetails: Template})
-      }
-    })
+    if(_.isEmpty(data)){
+      this.setState({imageDetails: [], videoDetails:[],documentDetails:[], templateDetails:[]  })
+    } else{
+      data.map(function(fileInfo){
+        let type = fileInfo.file.fileType;
+        if(type === 'image') {
+          Image.push(fileInfo)
+          that.setState({imageDetails: Image})
+        } else if(type === 'video') {
+          Video.push(fileInfo)
+          that.setState({videoDetails: Video})
+        } else if(type === 'document') {
+          Document.push(fileInfo)
+          that.setState({documentDetails: Document})
+        } else {
+          Template.push(fileInfo)
+          that.setState({templateDetails: Template})
+        }
+      })
+    }
   }
 
   /**

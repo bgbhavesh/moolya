@@ -26,7 +26,8 @@ constructor(props){
   this.state =  {
     tabs: [],
     ideatorPortfolio:{},
-    ideatorId:this.props.config
+    ideatorId:this.props.config,
+    activeTab:'The Idea',
   };
   // this.getIdeatorDetails.bind(this);
   // this.getProblemSolution.bind(this)
@@ -89,17 +90,25 @@ componentWillMount()
       tabClassName: 'horizon-item', // Optional
       panelClassName: 'panel1', // Optional
       title: tab.title,
+      key: tab.title,
       getContent: () => tab.component
     }));
   }
+  let activeTab = FlowRouter.getQueryParam('tab');
+  if(activeTab){
+    this.setState({activeTab});
+  }
   this.setState({tabs:getTabs() ||[]});
 }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
 render(){
   let tabs = this.state.tabs;
   return (
     <div className="col-md-12 nopadding">
-      <MlTabComponent tabs={tabs}/>
+      <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
     </div>
   )
   // return <MlTabComponent tabs={tabs}/>

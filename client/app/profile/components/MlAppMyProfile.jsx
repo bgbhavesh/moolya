@@ -14,7 +14,10 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAccordion from "../../commons/components/MlAccordion";
-
+import CropperModal from '../../../commons/components/cropperModal';
+import {appClient} from '../../core/appConnection';
+import {smsUserOtpHandler, verifyUserMobileNumberHandler, resendUserSmsOtpHandler} from '../../../commons/verificationActionHandler';
+import _ from "lodash";
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -27,12 +30,22 @@ class MlAppMyProfile extends Component {
       passwordState: " ",
       passwordValidation: false,
       PasswordReset:false,
-      showChangePassword:true
+      showChangePassword:true,
+      showProfileModal: false,
+      uploadingAvatar: false,
+      getOTPClicked:false,
+      mobileNumber : ""
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
     this.findUserDetails.bind(this);
     this.onfoundationDateSelection.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onImageFileUpload = this.onImageFileUpload.bind(this);
+    this.verifyMobileNumber.bind(this);
+    this.resendSmsOtp.bind(this);
+    this.sendSmsOtp.bind(this);
   }
   componentDidMount() {
   setTimeout(function(){
@@ -65,16 +78,23 @@ class MlAppMyProfile extends Component {
   async findUserDetails() {
     const response = await fetchUserDetails();
     if (response) {
+      if(response.profile && response.profile.externalUserProfiles && response.profile.externalUserProfiles.length>0){
+        var externalProfile = _.find(response.profile.externalUserProfiles, {isDefault:true});
+        if(!externalProfile){
+          externalProfile = response.profile.externalUserProfiles[0]
+        }
+      }
       this.setState({
         loading: false,
         userDetails: response,
         firstName:response.profile.firstName,
         lastName:response.profile.lastName,
-        displayName:response.profile.email,
+        username:response.profile.email,
         dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
         profileImage:response.profile.profileImage,
         gender:response.profile.genderType,
-        userId:response._id
+        userId:response._id,
+        mobileNumber:externalProfile&&externalProfile.mobileNumber?externalProfile.mobileNumber:""
       });
       this.genderSelect()
     }else {
@@ -96,7 +116,7 @@ class MlAppMyProfile extends Component {
       firstName: this.state.firstName,
       middleName: this.state.middleName,
       lastName: this.state.lastName,
-      userName: this.state.displayName,
+      // userName: this.state.username,
       genderType: this.state.gender,
       dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
     }
@@ -137,12 +157,15 @@ class MlAppMyProfile extends Component {
           this.onCheckPassword();
           if (this.state.pwdErrorMsg)
             toastr.error("Confirm Password does not match with Password");
-          else {
+          else if(this.state.newpwdErrorMsg){
+            toastr.error("Existing password and New Password should not match");
+          }else{
             const response = await resetPasswordActionHandler(userDetails);
             // this.refs.id.value='';
             this.refs.confirmPassword.value = '';
             this.refs.password.value = '';
             this.setState({"pwdErrorMsg": 'Password reset complete'})
+            this.setState({"newpwdErrorMsg": 'Password reset complete'})
             toastr.success(response.result);
             $('#password').val("");
             this.setState({PasswordReset: false, showChangePassword: true})
@@ -179,12 +202,18 @@ class MlAppMyProfile extends Component {
   }
 
   onCheckPassword() {
+    let existingPassword = this.refs.existingPassword.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
     if (confirmPassword != password) {
       this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
-    } else {
+    } else{
       this.setState({"pwdErrorMsg": ''})
+    }
+    if(existingPassword===password||existingPassword===confirmPassword){
+      this.setState({"newpwdErrorMsg": 'Existing password and New Password should not match'})
+    }else{
+      this.setState({"newpwdErrorMsg": ''})
     }
   }
 
@@ -214,19 +243,27 @@ class MlAppMyProfile extends Component {
     }
   }
 
-  async onImageFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
+  async onImageFileUpload(file){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
     let user = {profile: {profileImage:" "}}
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId:this.state.userId, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
       return response;
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
     }
   }
 
   onFileUploadCallBack(resp){
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
@@ -242,6 +279,60 @@ class MlAppMyProfile extends Component {
   cancelResetPassword(){
     $('#password').val("");
     this.setState({PasswordReset:false,showChangePassword:true})
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onImageFileUpload(image);
+  }
+  async resendSmsOtp(){
+    this.setState({getOTPClicked:true});
+    if(this.state.canResend){
+      const resp = await resendUserSmsOtpHandler(appClient);
+      if(resp.success){
+        toastr.success("OTP sent successfully");
+      }
+      return resp
+    }
+  }
+
+  async sendSmsOtp(){
+    this.setState({getOTPClicked:true});
+    setTimeout(function(){
+      this.setState({canResend:true})
+    }.bind(this),30000)
+    let mobileNumber=this.state.mobileNumber;
+    const response=await smsUserOtpHandler(appClient);
+    if(response.success){
+      toastr.success("OTP sent successfully");
+    }
+    return response;
+  }
+
+  async verifyMobileNumber(){
+    let mobileNumber=this.state.mobileNumber;
+    let otp=this.refs.enteredOTP.value;
+      const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
+      let resp=null;
+      if(response.success){
+        resp = JSON.parse(response.result);
+        this.setState({mobileNumberVerified:resp.mobileNumberVerified});
+        toastr.success("Mobile Number Verified");
+        this.setState({getOTPClicked:false});
+      }else{
+        this.setState({mobileNumberVerified:false});
+      }
+      return response;
+  }
+  cancelOtpRequest(){
+    this.setState({getOTPClicked:false});
   }
 
   render(){
@@ -279,6 +370,14 @@ class MlAppMyProfile extends Component {
   };
     let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
     let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+
+    let isMobileVerified = false;
+    if(this.state.userDetails&&this.state.userDetails.mobileNumbers){
+      obj = _.find(this.state.userDetails.mobileNumbers, {mobileNumber:this.state.mobileNumber, verified:true});
+      if(obj)
+        isMobileVerified = obj.verified;
+    }
+
     return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
@@ -309,7 +408,7 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group">
                       <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
-                             defaultValue={this.state.displayName}/>
+                             defaultValue={this.state.username}/>
                     </div>
                     <div className="form-group">
                       <div className="input_types">
@@ -330,6 +429,46 @@ class MlAppMyProfile extends Component {
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
+                    <br className="brclear" /><br/>
+                    <div className="form-group">
+                      <input type="text" placeholder="Mobile Number" className="form-control float-label" readOnly="readOnly"
+                             defaultValue={this.state.mobileNumber}/>
+
+                      {isMobileVerified?
+
+                        <div className="email_notify">
+                          <div className="input_types">
+                            <input ref="isEmailNotified" type="checkbox" name="checkbox" checked={true}/>
+                            <label htmlFor="checkbox1"><span> </span>Verified</label>
+                          </div>
+                        </div>
+                        :<div></div>}
+
+                    </div>
+                    {
+                      isMobileVerified||(this.state.mobileNumber=="")?<div></div>:
+                        <div className="form-group">
+                          <a href="" className="mlUpload_btn" onClick={this.sendSmsOtp.bind(this)}>Get OTP</a>
+                        </div>
+                    }
+                    {
+                      this.state.getOTPClicked?
+                        <div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Enter OTP" ref="enteredOTP" className="form-control float-label" />
+                          </div>
+                          <div className="ml_btn">
+                            <a href="" className="cancel_btn" onClick={this.verifyMobileNumber.bind(this)}>Submit</a>
+                            <a href="" className="cancel_btn" onClick={this.resendSmsOtp.bind(this)}>Resend</a>
+                            <a href="" className="save_btn" onClick={this.cancelOtpRequest.bind(this)}>Cancel</a>
+
+                        </div>
+
+                        </div>
+                        :
+                        <div></div>
+                    }
+
                   </form>
                 </div>
               </div>
@@ -339,8 +478,9 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
+
+                        <span onClick={this.toggleModal.bind(this)}>Profile Pic</span>
+                        {/*<input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>*/}
                       </div>
                       <div className="previewImg ProfileImg">
                         <img src={genderImage}/>
@@ -379,11 +519,17 @@ class MlAppMyProfile extends Component {
                         <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
 
                       </div>
-                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
+                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
                   </form>
                 </div>
               </div>
-
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="square"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
             </ScrollArea>
           </div>
           <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />

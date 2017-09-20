@@ -16,6 +16,7 @@ import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import moment from "moment";
 import {first, pick, isEmpty} from 'lodash'
+import Datetime from "react-datetime";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -58,6 +59,7 @@ class MlEditBackendUser extends React.Component{
     this.updateBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
+    this.onBirthDateSelection.bind(this);
     this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
     this.onisActiveChanged= this.onisActiveChanged.bind(this);
     this.onMakeDefultChange=this.onMakeDefultChange.bind(this);
@@ -87,6 +89,13 @@ class MlEditBackendUser extends React.Component{
     this.setState({genderSelect: e.target.value})
   }
 
+  onBirthDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      this.setState({loading: false, birthDate: value});
+    }
+  }
+
  //  async updateBackend(){
  //    let Details = {
  //      userId: ,
@@ -108,13 +117,13 @@ class MlEditBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/backendUserList");
-      else
-        toastr.error(response.result);
+    if (response && response.success) {
+      toastr.success(response.result);
+      FlowRouter.go("/admin/settings/backendUserList");
     }
-  };
+    else
+      toastr.error(response.result);
+  }
 
   componentWillMount() {
     let url = window.location.href;
@@ -206,7 +215,8 @@ class MlEditBackendUser extends React.Component{
               communityName: userRole[j].communityName,
               communityId: userRole[j].communityId,
               communityCode : userRole[j].communityCode,
-              communityHierarchyLevel : userRole[j].communityHierarchyLevel
+              communityHierarchyLevel : userRole[j].communityHierarchyLevel,
+              isAnchor : userRole[j].isAnchor
             }
             userRolesDetails.push(json)
           }
@@ -295,7 +305,8 @@ class MlEditBackendUser extends React.Component{
             subDepartmentName:userRole[j].subDepartmentName,
             communityId:userRole[j].communityId,
             communityCode : userRole[j].communityCode,
-            communityHierarchyLevel : userRole[j].communityHierarchyLevel
+            communityHierarchyLevel : userRole[j].communityHierarchyLevel,
+            isAnchor : userRole[j].isAnchor
           }
           userRolesDetails.push(json)
         }
@@ -435,6 +446,10 @@ class MlEditBackendUser extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig = [
       {
         actionName: 'save',
@@ -525,7 +540,8 @@ class MlEditBackendUser extends React.Component{
                                     labelKey={'label'} placeholder="Select Subchapter"
                                     selectedValue={that.state.selectedSubChapter} queryType={"graphql"}
                                     query={subChapterQuery} isDynamic={true}
-                                    onSelect={that.optionsBySelectSubChapter.bind(that)}/>
+                                    onSelect={that.optionsBySelectSubChapter.bind(that)}
+                                    disabled={true}/>
                     )}
                     <div className="form-group">
                       <Select name="form-field-name" placeholder="Select Role" className="float-label"
@@ -571,7 +587,8 @@ class MlEditBackendUser extends React.Component{
                   </div>
 
                     <div className="form-group">
-                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label " defaultValue={Dob} disabled="disabled" />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={Dob} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
+                      {/*<input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label " defaultValue={Dob} disabled="disabled" />*/}
                       <FontAwesome name="calendar" className="password_icon"/>
 
                     </div>

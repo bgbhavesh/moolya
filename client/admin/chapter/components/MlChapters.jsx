@@ -27,6 +27,7 @@ export default class MlChaptersView extends React.Component {
     return (
       <div>
         <div className="admin_main_wrap">
+
           <div><MlListViewContainer params={params} {...listConfig}/></div>
 
         </div>

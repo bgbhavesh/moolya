@@ -21,6 +21,7 @@ import {mlAppMyRequestedBespokeServiceConfig} from "./../config/mlAppRequestedAp
 import MlAppOngoingSelectedMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingSelectedMyAppointment';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppSelectedSelfTaskMyAppointment';
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 
 console.log("mlAppPendingAppointmentConfig", mlAppPendingAppointmentConfig);
 
@@ -29,7 +30,7 @@ export default class MlAppMyAppointment extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      activeTab: FlowRouter.getQueryParam('tab') ? FlowRouter.getQueryParam('tab') : 'pending',
+      activeTab: FlowRouter.getQueryParam('tab')? FlowRouter.getQueryParam('tab') : 'pending',
       selectedAppointment: FlowRouter.getQueryParam('appointment')
     }
   }
@@ -40,11 +41,15 @@ export default class MlAppMyAppointment extends React.Component {
     });
   }
 
-  onChange(tab) {
-    FlowRouter.setQueryParams({
-      tab:tab,
-      appointment: null
-    });
+  // onChange(tab) {
+  //   FlowRouter.setQueryParams({
+  //     tab:tab,
+  //     appointment: null
+  //   });
+  // }
+  onChange(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab ,  appointment: null});
   }
 
   getAppointmentComponentToLoad(status) {
@@ -103,7 +108,8 @@ export default class MlAppMyAppointment extends React.Component {
       }));
     }
 
-    const App = () => <Tabs items={getTabs()} selectedTabKey={ activeTab ? activeTab : "pending" }  onChange={that.onChange} />;
+    const App = () => <MlTabComponent tabs={getTabs()} selectedTabKey={ this.state.activeTab || 'Pending'}  onChange={that.onChange}
+    type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -115,4 +121,3 @@ export default class MlAppMyAppointment extends React.Component {
     )
   }
 };
-

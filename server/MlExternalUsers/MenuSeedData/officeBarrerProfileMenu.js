@@ -47,12 +47,12 @@ if(Meteor.isServer){
         "uniqueId" : "myAppointment"
       },
       {
-        "image":"ml my-ml-settings_new",
-        "link": "/app/settings",
+        "image":"ml my-ml-library_3",
+        "link": "/app/library",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Settings",
-        "uniqueId" : "settings"
+        "name" : "Library",
+        "uniqueId" : "library"
       },
       {
         "image":"ml my-ml-terms_and_conditions",
@@ -77,6 +77,15 @@ if(Meteor.isServer){
         "isMenu" : true,
         "name" : "My Subscriptions",
         "uniqueId" : "mySubscriptions",
+        isDisabled:true
+      },
+      {
+        "image":"ml my-ml-settings_new",
+        "link": "/app/settings",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "settings",
         isDisabled:true
       },
     ]

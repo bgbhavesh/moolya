@@ -1,9 +1,6 @@
 /**
  * Created by venkatasrinag on 20/3/17.
  */
-/**
- * Created by venkatasrinag on 20/3/17.
- */
 if(Meteor.isServer){
   MlMenus.upsert({name:"mlCommunityAdminMenu"},{$set:{
     "name" : "mlCommunityAdminMenu",
@@ -56,8 +53,21 @@ if(Meteor.isServer){
                 "subMenusId":"dashboard",
                 "isLink" : true,
                 "isMenu" : true,
-                "image" : ""
-
+                "image" : "",
+                "subMenu": [
+                  {
+                    "link": "/admin/dashboard/anchorDetails",
+                    "name": "Anchor Details",
+                    "uniqueId": "dashboard_specSubChapters_anchorInfoView",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": "",
+                    "dynamicLink": true,
+                    "dynamicLinkHandler": "",
+                    "subMenusId": "dashboard",
+                    "subMenuMappingId": "dashboard_chapters"
+                  }
+                ]
               }]
           },
           {
@@ -272,7 +282,139 @@ if(Meteor.isServer){
             ]
           },
         ]
-
+      },
+      /**
+       * admin left nav users routes
+       */
+      {
+        "image": "ml my-ml-users",
+        "link": "/admin/users/clusters",
+        "name": "Users",
+        "uniqueId": "users",
+        "isLink": true,
+        "isMenu": true,
+        "subMenu": [
+          {
+            "link" : "/admin/users/clusters",
+            "name" : "Cluster",
+            "uniqueId" : "users_cluster",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId" : "users",
+            "subMenuMappingId" : "users_cluster",
+            "subMenu" : [
+              {
+                "link" : "/admin/users/aboutuser",
+                "name" : "About",
+                "uniqueId" : "users_about",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_about"
+              },
+              {
+                "link" : "/admin/users/addressBook",
+                "name" : "Address Book",
+                "uniqueId" : "users_addressBook",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_addressBook"
+              },
+              {
+                "link": "/admin/users/portfolio",
+                "name": "Portfolio",
+                "uniqueId": "users_portfolio",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "dynamicLink": true,
+                "dynamicLinkHandler": "",
+                "subMenusId": "users_cluster",
+                "subMenuMappingId": "users_portfolio"
+              },
+              {
+                "link" : "/admin/users/connections",
+                "name" : "Connections",
+                "uniqueId" : "users_connections",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_connections"
+              },
+              {
+                "link" : "/admin/users/favourites",
+                "name" : "Favourites",
+                "uniqueId" : "users_favourites",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_favourites"
+              },
+              {
+                "link" : "/admin/users/transactions",
+                "name" : "Transactions",
+                "uniqueId" : "users_transactions",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_transactions"
+              },
+              {
+                "link" : "/admin/users/library",
+                "name" : "Library",
+                "uniqueId" : "users_library",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId" : "users_cluster",
+                "subMenuMappingId" : "users_library"
+              }
+            ]
+          },
+          {
+            "link": "/admin/users/history",
+            "name": "History",
+            "uniqueId": "users_History",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/history",
+                "name": "List Clusters",
+                "uniqueId": "users_HistoryList",
+                "subMenuMappingId": "users_HistoryList",
+                "subMenusId": "users_cluster",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          }
+        ]
       },
       {
         "image" : "ml my-ml-templates",

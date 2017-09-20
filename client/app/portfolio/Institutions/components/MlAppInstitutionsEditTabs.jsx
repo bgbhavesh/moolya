@@ -23,7 +23,8 @@ export default class MlAppInstitutionEditTabs extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, institutionPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {tabs: [], aboutUs: {}, institutionPortfolio: {}, portfolioKeys: {privateKeys: [],
+      removePrivateKeys: []},activeTab:'About'};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -73,6 +74,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlInstitutionAboutUs client={appClient} isAdmin={false} key="1"
                                          getAboutus={this.getAboutus.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
@@ -82,6 +84,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
+        name: "Management",
         component: <MlInstitutionManagement key="2" isAdmin={false} client={appClient}
                                             getManagementDetails={this.getManagementDetails.bind(this)}
                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -90,6 +93,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
+        name: "Investor",
         component: <MlInstitutionInvestor client={appClient} isAdmin={false} key="3"
                                           getInvestorDetails={this.getInvestorDetails.bind(this)}
                                           portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
@@ -98,6 +102,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
+        name: "Data",
         component: <MlInstitutionData client={appClient} key="4" getDataDetails={this.getDataDetails.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId} isApp={true}/>
       },
@@ -105,6 +110,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Charts",
+        name: "Charts",
         component: <MlInstitutionCharts key="5" client={appClient} isAdmin={false}
                                         getChartDetails={this.getChartDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}
@@ -114,6 +120,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards",
+        name: "Awards",
         component: <MlInstitutionAwards client={appClient} isAdmin={false} key="6"
                                         getAwardsDetails={this.getAwardsDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
@@ -122,6 +129,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary key="7" isAdmin={false} client={appClient}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
@@ -129,6 +137,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "M C & L",
+        name: "M C And L",
         component: <MlInstitutionMCL key="8" getInstitutionMCL={this.getInstitutionMCL.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -136,6 +145,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlInstitutionLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                             portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
@@ -143,6 +153,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Partner",
+        name: "Partner",
         component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)}
                                               portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
@@ -150,6 +161,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "CSR",
+        name: "CSR",
         component: <MlInstitutionCSR client={appClient} isAdmin={false} key="11"
                                      getCSRDetails={this.getCSRDetails.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
@@ -159,6 +171,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "R&D",
+        name: "R&D",
         component: <MlInstitutionRAndD key="12" getRDDetails={this.getRDDetails.bind(this)}
                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>
       },
@@ -166,6 +179,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Intrapreneur",
+        name: "Intrapreneur",
         component: <MlInstitutionIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)}
                                               portfolioDetailsId={this.props.portfolioDetailsId} tabName="intrapreneurRecognition"/>
       },
@@ -173,6 +187,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Incubators",
+        name: "Incubators",
         component: <MlInstitutionIncubator client={appClient} isAdmin={false} key="15"
                                            getIncubators={this.getIncubators.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}
@@ -357,16 +372,23 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
     // return  <MlVerticalTabComponent/>
   }
 
@@ -375,3 +397,4 @@ MlAppInstitutionEditTabs.childContextTypes = {
   institutionPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object
 };
+

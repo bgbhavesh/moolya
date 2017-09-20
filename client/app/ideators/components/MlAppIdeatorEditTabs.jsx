@@ -25,6 +25,7 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     super(props)
     this.state = {
       tabs: [],
+      activeTab:'Ideas',
       ideatorPortfolio: {},
       ideatorId: this.props.config, portfolioKeys: {privateKeys: [], removePrivateKeys: []}
     };
@@ -123,7 +124,8 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     let data = this.state.idea;
     data = details;
     this.setState({idea: data})
-    this.props.getIdeatorIdeaDetails(data, privatekey);
+    let updateItem = _.omit(data, 'ideaImage');
+    this.props.getIdeatorIdeaDetails(updateItem, privatekey);
   }
 
   getProblemSolution(details, privatekey) {
@@ -174,7 +176,6 @@ export default class MlAppIdeatorEditTabs extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp
@@ -189,18 +190,25 @@ export default class MlAppIdeatorEditTabs extends React.Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
   render() {
     let tabs = this.state.tabs;
     return (
       <div className="col-md-12 nopadding">
-        <MlTabComponent tabs={tabs}/>
+        <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
       </div>
     )
     // return <MlTabComponent tabs={tabs}/>

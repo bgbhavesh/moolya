@@ -12,6 +12,9 @@ import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAcce
 import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
+import mlRegistrationRepo from "../../admin/registration/mlRegistrationRepo";
+import  MlSiteMapInsertion from '../../../MlExternalUsers/microSite/microSiteRepo/MlSiteMapInsertion'
+import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 
 /**
  * @module [externaluser portfolio Landing]
@@ -45,6 +48,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
   let user;
   let portfolioDetails = args.portfoliodetails
   let ret;
+  let updateRecord = {}
   try {
       if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityType) {
         /** introducing profile Id based on registration in portfolio from users and creating portfolio based on profileId*/
@@ -58,6 +62,10 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
             portfolioDetails['createdAt'] = new Date();
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
+                  //changing status to portfolio kickoff
+                  mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_KICKOFF');
+                  let updatedResponse = mlDBController.update('MlPortfolioDetails',ret,updateRecord, {$set: true}, context)
+
                   switch (portfolioDetails.communityType){
                       case "Ideators":{
                           let ideatorInfo = {}
@@ -235,6 +243,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
 MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) => {
     let response;
     var privateFields = [];
+    let updateRecord = {}
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
         if(details && details.privateFields && details.privateFields.length){
@@ -243,10 +252,13 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         else{
           privateFields = args.privateFields || [];
         }
-        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP', transactionUpdatedDate:new Date()}, {$set:true}, context)
-      if(privateFields){
-        detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
-      }
+       // let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP', transactionUpdatedDate:new Date()}, {$set:true}, context)
+        mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_PEND');
+        updateRecord.transactionUpdatedDate=new Date();
+       var detailsUpdate = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
+        if(privateFields){
+          detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
+        }
         if(details && detailsUpdate){
             // switch (details.communityType){
               switch (details.communityCode){
@@ -281,9 +293,8 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     }
 
     if(response && response.success){
-        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
-        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+
+      MlSMSNotification.portfolioUpdate(args.portfoliodetailsId);
     }
 
     return response;
@@ -297,12 +308,15 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let updatedResponse;
+    let updateRecord = {}
     let regRecord = mlDBController.findOne('MlPortfolioDetails', {
         _id: args.portfoliodetailsId,
-        status: 'Go Live',
+        status: 'PORT_GO_LIVE_PEND',
       }, context) || {}
     if (!_.isEmpty(regRecord)) {
-      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live", transactionUpdatedDate: new Date()}, {$set: true}, context)
+      mlRegistrationRepo.updateStatus(updateRecord,'PORT_LIVE_NOW');
+      let updatedResponse = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
+      //updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "PORT_LIVE_NOW", transactionUpdatedDate: new Date()}, {$set: true}, context)
       if (updatedResponse) {
         let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
         let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName', 'profileId'])
@@ -328,13 +342,31 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let code = 200;
         let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
-        if(response){
+        if (response) {
+          const urlFormationObject = {
+            clusterName: regRecord.clusterName.replace(/ /g, "_"),
+            chapterName: regRecord.chapterName.replace(/ /g, "_"),
+            subChapterName: regRecord.subChapterName.replace(/ /g, "_"),
+            communityName: regRecord.communityName.replace(/ /g, "_")
+          }
+          const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
+          const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
+          let uniqueSeoName = firstNameUser + '_' + lastNameUser;
+          uniqueSeoName = uniqueSeoName.replace(/ /g, "_");
+          const portfolio_user_id = {
+            userId: regRecord.userId,
+            portFolioId: args.portfoliodetailsId
+          }
+
+            MlSiteMapInsertion.mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
-          if(response && response.success){
+          MlSMSNotification.portfolioGoLiveRequest(args.portfoliodetailsId)
+         // if(response && response.success){
+          if (response && response.success) {
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-            var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."
-            portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+            var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
+            // portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
         }
         return response
@@ -364,7 +396,7 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
       if(response && response.success){
         var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
         var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been declined on"+ new Date()+"."+"Login to moolya for next steps."
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+        // portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
       }
     }
     return updatedResponse;
@@ -373,10 +405,13 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
 
 MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) => {
   let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
+  let updateRecord = {}
   if(details && details.userId == context.userId){
     try {
-      let status = "Go Live";
-      let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
+      //let status = "Go Live";
+      //let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
+      mlRegistrationRepo.updateStatus(updateRecord,'PORT_GO_LIVE_PEND');
+      let ret = mlDBController.update('MlPortfolioDetails',args.portfoliodetailsId,updateRecord, {$set: true}, context)
       if (ret) {
         let code = 200;
         let alert =  MlAlertNotification.onGoLiveRequestAdmin()

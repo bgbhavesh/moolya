@@ -74,7 +74,7 @@ export default class AppMyProfileMyoffice extends React.Component{
               <span>{(options.createdTS) ? timeConverter(options.createdTS) : "7 Sep 2017 21:57:40" }</span>
               <br className="brclear"/>
               {options.message} </p>
-            {/*<span className="read_more" title="Read more"><a href="#">...</a></span>*/}
+            {/*<span className="read_more" title="Read more"><a href="">...</a></span>*/}
           </div>
         </li>);
     });

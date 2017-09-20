@@ -53,7 +53,9 @@ let sharedLibrarySchema = `
       isSignedUrl: Boolean
       isDownloadable: Boolean
       createdAt:Date
+      daysToExpire: Int
       ownerInfo: ShareOwnerInfo
+      isExpired: Boolean
     }
     
     type SharedOutputAdmin {
@@ -61,6 +63,7 @@ let sharedLibrarySchema = `
       files: [fileDetails]
       sharedEndDate: Date
       sharedStartDate: Date
+      daysToExpire: Int
       isSignedUrl: Boolean
       isDownloadable: Boolean
       createdAt:Date

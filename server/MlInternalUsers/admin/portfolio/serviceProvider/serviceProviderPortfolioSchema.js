@@ -63,20 +63,6 @@ let serviceProviderPortfolioSchema = `
         aboutImages           : [imagesTypeSchema]
         privateFields         : [PrivateKeys]
     }
-    
-    type awardsRecognitionOutput{
-        awardName:String
-        awardId:String
-        isAwardPrivate:Boolean
-        year:String
-        isYearPrivate:Boolean
-        awardDescription:String
-        isAwardDescriptionPrivate:Boolean
-        logo:imagesTypeSchema,
-        makePrivate:Boolean,
-        index: Int
-        privateFields:[PrivateKeys]
-    }
 
     type membershipsOutput{
         membershipDescription : String, 
@@ -113,6 +99,7 @@ let serviceProviderPortfolioSchema = `
          firstName            : String
          lastName             : String
          lookingFor           : [lookingForOutput]
+         profileImage         : String
     }
     
     input logo{
@@ -208,3 +195,21 @@ let supportedApi = [
   {api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: "PORTFOLIO"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+
+/*
+ * @awardsRecognitionOutput : startup
+ */
+
+// type awardsRecognitionOutput{
+//   awardName:String
+//   awardId:String
+//   isAwardPrivate:Boolean
+//   year:String
+//   isYearPrivate:Boolean
+//   awardDescription:String
+//   isAwardDescriptionPrivate:Boolean
+//   logo:imagesTypeSchema,
+//     makePrivate:Boolean,
+//     index: Int
+//   privateFields:[PrivateKeys]
+// }

@@ -45,6 +45,12 @@ class MlAppPortfolio extends Component{
     this.assignActionHandlerProxy.bind(this);
     return this;
   }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   console.log('======');
+  //   console.log(nextProps);
+  //   console.log(this.props);
+  //   return !isEqual( this.props.appContent , nextProps.appContent );
+  // }
 
   toggle() {
     this.setState({
@@ -390,14 +396,14 @@ class MlAppPortfolio extends Component{
                         </div>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="save_btn"  onClick={this.onResolveComment.bind(this)}>Resolve</a>
-                        <a href="#" className="cancel_btn"  onClick={this.onReopenComment.bind(this)}>Re open</a>
-                        <a href="#" className="cancel_btn"  onClick={this.commentClicked.bind(this)}>Comment</a>
+                        <a href="" className="save_btn"  onClick={this.onResolveComment.bind(this)}>Resolve</a>
+                        <a href="" className="cancel_btn"  onClick={this.onReopenComment.bind(this)}>Re open</a>
+                        <a href="" className="cancel_btn"  onClick={this.commentClicked.bind(this)}>Comment</a>
                       </div>
                       {/*<div>
                         <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
                         <div className="ml_icon_btn">
-                          <a href="#" data-id={annotationDetails.id} className="save_btn"><span
+                          <a href="" data-id={annotationDetails.id} className="save_btn"><span
                             className="ml ml-save"  onClick={this.onSavingComment.bind(this)}></span></a>
                         </div>
                       </div>*/}
@@ -405,7 +411,7 @@ class MlAppPortfolio extends Component{
                       <textarea ref="comment"  id="commentData" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
-                        <a href="#" data-id={annotationDetails.id} className="circle_btn">
+                        <a href="" data-id={annotationDetails.id} className="circle_btn">
                           <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
                         </a>
 

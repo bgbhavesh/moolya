@@ -13,7 +13,7 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
   allIds = _.uniq(allIds);
 
   _.each(allIds, function (userId) {
-    let portfolios = MlPortfolioDetails.find({userId:userId, status: 'gone live'}).fetch();    //checking portfolio is gone live or not
+    let portfolios = MlPortfolioDetails.find({userId:userId, status: 'PORT_LIVE_NOW'}).fetch();    //checking portfolio is gone live or not
     var ideasArr = [];
     if(!_.isEmpty(portfolios)){                                                                // checking portfolio is there or not
       _.each(portfolios, function (portfolio) {
@@ -38,7 +38,7 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchIdeaByPortfolioId'] = (obj, args, context, info) => {
   if(args.portfolioId){
-    let idea = MlIdeas.findOne({portfolioId:args.portfolioId});
+    let idea = MlIdeas.findOne({portfolioId:args.portfolioId}) || {}
     return idea;
   }
   return {};

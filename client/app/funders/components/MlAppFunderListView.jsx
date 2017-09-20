@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
-
+import CDNImage from '../../../commons/components/CDNImage/CDNImage';
 /**
  * import of libs and routes
  * */
@@ -31,7 +31,10 @@ export default class MlAppFunderListView extends Component {
           <div className="ideators_list_block">
             {/* <div className="premium"><span>{funder.accountType}</span></div>*/}
             <h3>{funder.funderAbout ? funder.funderAbout.firstName : ''}</h3>
-            <div className="list_icon"><span className="ml my-ml-Investors"></span></div>
+            {funder.profileImage ? <CDNImage src={funder.profileImage} className="c_image"/> :
+              <div className="list_icon">
+                <span className="ml my-ml-Investors"></span>
+              </div>}
             <div className="block_footer">
               <span>{funder.chapterName} - {funder.communityType}</span>
             </div>
@@ -40,7 +43,7 @@ export default class MlAppFunderListView extends Component {
       </div>
     );
 
-    return (<div className="row ideators_list">
+    return (<div className="ideators_list">
       <div className="col-md-12"> <h2>Investors</h2></div>
       {list}
       </div>);

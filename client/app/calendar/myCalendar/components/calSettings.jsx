@@ -115,7 +115,7 @@ export default class CalCreateAppointment extends React.Component{
                 <div className="col-md-4 att_groups nopadding">
                   <ul className="users_list">
                     <li>
-                      <a href="#">
+                      <a href="">
                         <span className="icon_bg"> <span className="icon_lg ml flaticon-ml-active-user"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Bearers</span>
@@ -123,7 +123,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <span className="icon_bg"> <span className="icon_lg ml ml-clients"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Clients</span>
@@ -131,7 +131,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <span className="icon_bg"><span className="icon_lg ml ml-moolya-symbol"></span></span><br />
                         <div className="tooltiprefer">
                           <span>moolya</span>
@@ -139,7 +139,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <span className="icon_bg"><span className="icon_lg fa fa-building-o"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Office</span>
@@ -151,7 +151,7 @@ export default class CalCreateAppointment extends React.Component{
                 <div className="col-md-8 att_members">
                   <ul className="users_list">
                     <li>
-                      <a href="#">
+                      <a href="">
                         <img src="/images/p_3.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Venu<br/>Rs.3000</span>
@@ -159,7 +159,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <img src="/images/p_34.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Ramya<br/>Rs.5000</span>
@@ -167,7 +167,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <img src="/images/p_13.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Sameer<br/>Rs.8000</span>
@@ -175,7 +175,7 @@ export default class CalCreateAppointment extends React.Component{
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="">
                         <img src="/images/p_1.jpg" /><br />
                         <div className="tooltiprefer">
                           <span>Usha<br/>Rs.6000</span>
@@ -197,12 +197,12 @@ export default class CalCreateAppointment extends React.Component{
             </div>
             <div className="pull-right">
               <div className="ml_btn large_btn">
-                <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.18,950.00/-</a>
+                <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.18,950.00/-</a>
               </div>
             </div>
             <br className="brclear"/>
             <div className="ml_btn btn_wrap">
-              <a href="/app/calCreateTask" className="save_btn">Book</a> <a href="#" className="cancel_btn">Cancel</a>
+              <a href="/app/calCreateTask" className="save_btn">Book</a> <a href="" className="cancel_btn">Cancel</a>
             </div>
           </div>
         </div>

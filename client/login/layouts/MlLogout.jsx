@@ -56,7 +56,7 @@ export default class MlLogout extends Component {
     return (
       <div className="logout">
         <div className="login_bg" style={{textAlign: "center"}}>
-          <img className="logo" src="/images/moolya_logo.png"/>
+          <img className="logout_logo" src="/images/moolya_logo.png"/>
           <div className="clearfix"/>
           <div className="logout_message">
             <h3>You have been logged out...</h3>
@@ -82,7 +82,7 @@ export default class MlLogout extends Component {
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a
-                    href="https://www.moolya.in/register">Register</a></p>
+                    href="https://www.moolya.global/register">Register</a></p>
                 </form>
               </div>
             </div>

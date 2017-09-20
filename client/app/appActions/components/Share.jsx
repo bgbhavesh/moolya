@@ -81,8 +81,8 @@ export default class SharePopOver extends React.Component {
             <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label></div>
           </div>
           <div className="ml_btn">
-            <a href="#" className="save_btn">Send</a>
-            <a href="#" className="cancel_btn">Cancel</a>
+            <a href="" className="save_btn">Send</a>
+            <a href="" className="cancel_btn">Cancel</a>
           </div>
 
         </PopoverContent>

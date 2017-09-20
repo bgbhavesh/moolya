@@ -18,6 +18,8 @@ let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
 
+import CropperModal from '../../../../../commons/components/cropperModal';
+
 /**
  * Initialize conversation types
  */
@@ -51,7 +53,17 @@ export default class MlAppBasicInfo extends React.Component{
         imageLink             : '',
         conversation          : []
       },
+      showProfileModal: false,
+      uploadingAvatar: false,
+      isDataChanged:false,
     };
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
+  }
+
+  isUpdated() {
+    return !this.state.isDataChanged;
   }
 
   /**
@@ -63,7 +75,7 @@ export default class MlAppBasicInfo extends React.Component{
     let id = FlowRouter.getQueryParam('id');
     if(id) {
       this.setState({
-        basicData: props.data
+        basicData: props.data,
       }, () => {
         this.saveDetails();
       });
@@ -80,7 +92,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data.industryTypes = value;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -98,12 +110,14 @@ export default class MlAppBasicInfo extends React.Component{
       return data.value;
     });
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
   }
-
+  componentWillMount() {
+    this.props.activeComponent(0);
+  }
   /**
    * Method :: updateDuration
    * Desc   :: update state duration data
@@ -116,7 +130,7 @@ export default class MlAppBasicInfo extends React.Component{
       let data = this.state.basicData;
       data.duration[type] = evt.target.value;
       this.setState({
-        basicData: data
+        isDataChanged:true,basicData: data
       }, () => {
         this.saveDetails();
       });
@@ -134,7 +148,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data[type] = evt.target.value;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -151,7 +165,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data[type] = evt.target.checked;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -171,7 +185,7 @@ export default class MlAppBasicInfo extends React.Component{
       data.mode = 'online';
     }
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -182,14 +196,14 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc   :: Upload img on server and set response data in state
    * @returns Void
    */
-  async onFileUpload() {
+  async onFileUpload(file) {
     const that = this;
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage: " "}}
       }
     };
-    let file = document.getElementById("upload_hex").files[0];
+    // let file = document.getElementById("upload_hex").files[0];
     if (file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user};
 
@@ -198,17 +212,25 @@ export default class MlAppBasicInfo extends React.Component{
        */
       let response = await multipartASyncFormHandler(data, file, 'registration', function (res) {
         res = JSON.parse(res);
+        that.setState({
+          uploadingAvatar: false,
+          showProfileModal: false
+        });
         if(res.success){
           let data = that.state.basicData;
           data.imageLink = res.result;
           that.setState({
-            basicData : data
+            isDataChanged:true,basicData : data
           }, () => {
             that.saveDetails();
           });
         }
       });
       return response;
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
     }
   }
 
@@ -236,7 +258,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -255,7 +277,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable.splice(index, 1);
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -274,7 +296,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable[index] = evt.target.value;
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -297,6 +319,18 @@ export default class MlAppBasicInfo extends React.Component{
       }
     });
     this.props.getActivityDetails();
+  }
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onFileUpload(image);
   }
 
   /**
@@ -401,7 +435,7 @@ export default class MlAppBasicInfo extends React.Component{
                               valueKey={'value'}
                               labelKey={'label'}
                               queryType={"graphql"}
-                              query={industryTypeQuery}
+                              query={industryTypeQuery}Moolyaselect
                               isDynamic={true} placeholder="Select Industry Type"
                               onSelect={that.selectIndustry.bind(that)}
                               selectedValue={that.state.basicData.industryTypes}
@@ -417,8 +451,8 @@ export default class MlAppBasicInfo extends React.Component{
                   </div>
                   <br className="brclear"/>*/}
                   <div className="upload_hex">
-                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah" width="105" height="auto"/>
-                    <input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>
+                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah"  onClick={this.toggleModal.bind(this)} width="105" height="auto"/>
+                    {/*<input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>*/}
                   </div>
                 </div>
                 <div className="form-group">
@@ -433,6 +467,13 @@ export default class MlAppBasicInfo extends React.Component{
               </form>
             </div>
           </div>
+          <CropperModal
+            uploadingImage={this.state.uploadingAvatar}
+            handleImageUpload={this.handleUploadAvatar}
+            cropperStyle="square"
+            show={this.state.showProfileModal}
+            toggleShow={this.toggleModal}
+          />
           <br className="brclear"/>
           {that.state.basicData.deliverable.map(function (data, index) {
             return (

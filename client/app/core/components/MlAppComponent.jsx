@@ -7,6 +7,7 @@ import MlAppLeftNav from "../components/MlAppLeftNav";
 import MlLoader from "../../../commons/components/loader/loader";
 import MlAppContextHandler from './MlAppContextHandler'
 import {withApollo} from "react-apollo";
+import isEqualWith from 'lodash/isEqualWith'
 
 @withApollo
 
@@ -14,14 +15,39 @@ class MlAppComponent extends Component{
     constructor(props, c){
         super(props, c)
 
-        this.state = {loading:true, theme: null, language:null, menu:null, userType:null}
-        this.fetchMenu.bind(this)
+        this.state = {loading:true, theme: null, language:null, menu:null, userType:null, initiate:true,breadcrumbClicked:false}
+        this.fetchMenu.bind(this);
+      this.breadcrumbClickedFunc = this.breadcrumbClickedFunc.bind(this);
     }
 
-    componentDidMount(){
+  shouldComponentUpdate(nextProps,nextState,nextContext){
+    // let path = Object.assign(FlowRouter._current.path);
+    // let hierarchy = path.split('/app/');
+    // if(hierarchy[1]){
+    //   let v= hierarchy[1].split('/')[0];
+    //   if(v !== 'explore' && v !== 'startup' && v !== 'funder' && v !== 'serviceProvider' && v !== 'company' && v !== 'institution' && v !== 'ideator' & v!=='portfolio'){
+    //     return true;
+    //   }
+    // }
+
+    if(FlowRouter.getRouteName () === "myAppointment" ) {
+      return true;
+    }
+
+    if(!FlowRouter.getQueryParam('tab')) return true;
+
+    return !isEqualWith(this.props, nextProps) ||
+      !isEqualWith(this.state, nextState) ||
+      !isEqualWith(this.context, nextContext);
+  }
+
+
+  componentDidMount(){
         let isProfileMenu = this.props.isProfileMenu || false;
         let isExploreMenu = this.props.isExploreMenu || false;
         let isCalenderMenu = this.props.isCalenderMenu || false;
+
+        this.setState({initiate:false});
         this.fetchMenu(isProfileMenu, isExploreMenu, isCalenderMenu)
     }
 
@@ -37,6 +63,10 @@ class MlAppComponent extends Component{
         this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu, nextProps.isCalenderMenu)
       }
     }
+
+  breadcrumbClickedFunc(){
+    this.setState({breadcrumbClicked:!this.state.breadcrumbClicked});
+  }
 
     async fetchMenu(isProfileMenu, isExploreMenu, isCalenderMenu){
         let query = "";
@@ -55,6 +85,7 @@ class MlAppComponent extends Component{
     }
 
     render(){
+      var that = this
         const showLoader = this.state.loading;
         const MlComponent = function (props) {
             if (props.showLoader) {
@@ -62,9 +93,9 @@ class MlAppComponent extends Component{
             }
             return (
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
-                    <MlAppHeader/>
+                    <MlAppHeader breadcrumbClicked={that.breadcrumbClickedFunc}  hello="hello"/>
                     <MlAppLeftNav/>
-                    <MlAppContextHandler context={props.appContent} isFirst={props.isFirst}/>
+                    <MlAppContextHandler context={props.appContent} isFirst={props.isFirst} />
                     {/*{props.appContent}*/}
                 </MlAppContextProvider>
             );

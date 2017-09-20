@@ -4,6 +4,7 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlGenericAwardsView from "../../StartupView/MlGenericAwardsView";
 
 const KEY = 'awardsRecognition'
 
@@ -117,19 +118,20 @@ export default class MlCompanyViewAwards extends React.Component {
       <div id="annotatorContent">
         <h2>Awards</h2>
         <div className="col-lg-12">
-          <div className="row">
-            {awardsArray && awardsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.awardName}
-                  </h3>
-                </div>
-              </div>)
-            })}
+          <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}/>
+          {/*<div className="row">*/}
+            {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
+              {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
+                {/*<div className="team-block">*/}
+                  {/*<img src={details.logo&&details.logo.fileUrl} className="team_img" />*/}
+                  {/*<h3>*/}
+                    {/*{details&&details.awardName}*/}
+                  {/*</h3>*/}
+                {/*</div>*/}
+              {/*</div>)*/}
+            {/*})}*/}
 
-          </div>
+          {/*</div>*/}
         </div>
       </div>
     )

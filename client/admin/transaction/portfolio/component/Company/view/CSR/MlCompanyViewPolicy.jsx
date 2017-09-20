@@ -134,6 +134,15 @@ export default class MlCompanyViewPolicy extends React.Component {
   }
 
   render(){
+    let that = this;
+    let policy = that.state.policy || {};
+    if(_.isEmpty(policy)){
+      return (
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName} />
+        </div>
+      )
+    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -141,12 +150,13 @@ export default class MlCompanyViewPolicy extends React.Component {
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body">
-                  <p>{this.state.policy&&this.state.policy.policyDescription}</p>
+                  <p>{this.state.policy && this.state.policy.policyDescription}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       )
+    }
   }
 }

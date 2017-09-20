@@ -55,15 +55,8 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "News",
-        "uniqueId" : "news"
-      },
-      {
-        "image":"ml my-ml-settings_new",
-        "link": "/app/news",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Settings",
-        "uniqueId" : "settings"
+        "uniqueId" : "news",
+        isDisabled:true
       },
       // {
       //   "image":"fa fa-calendar-check-o",
@@ -90,6 +83,15 @@ if(Meteor.isServer){
         "isMenu" : true,
         "name" : "moolya Services",
         "uniqueId" : "subscriptions",
+        isDisabled:true
+      },
+      {
+        "image":"ml my-ml-settings_new",
+        "link": "/app/news",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "settings",
         isDisabled:true
       },
 

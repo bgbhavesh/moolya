@@ -95,16 +95,50 @@ class portfolioValidation {
     return concat
   }
 
-  sendSMSforPortfolio(portfolioDetailsId, msg){
-    var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
-    if(portfolioDetails){
-      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
-      var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-      if(countryCode && defaultProfile){
-        var mobileNumber = defaultProfile.mobileNumber
-        mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+  // sendSMSforPortfolio(portfolioDetailsId, msg){
+  //   var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
+  //   if(portfolioDetails){
+  //     var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+  //     var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+  //     if(countryCode && defaultProfile){
+  //       var mobileNumber = defaultProfile.mobileNumber
+  //       mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+  //     }
+  //   }
+  // }
+
+  getLivePortfolioCount(clusterId, chapterId, subChapterId) {
+    return mlDBController.aggregate('MlPortfolioDetails', [
+      {
+        "$group": {
+          _id: "$communityCode",
+          "communityType": {$first: "$communityType"},
+          "count": {
+            $sum: {
+              "$cond": [
+                { "$and": [
+                  {"$eq": ["$status", "PORT_LIVE_NOW"]},
+                  {"$eq": ["$clusterId", clusterId]},
+                  {"$eq": ["$chapterId", chapterId]},
+                  {"$eq": ["$subChapterId", subChapterId]},
+                ]
+                }, 1, 0],
+            }
+          }
+        }
+      },
+      {
+        "$lookup": {from: "mlCommunityDefinition", localField: "_id", foreignField: "code", as: "imageLink"}
+      },
+      {"$unwind": "$imageLink"},
+      {
+        $project: {
+          "communityType": 1,
+          "count": 1,
+          "communityImageLink": '$imageLink.communityImageLink'
+        }
       }
-    }
+    ])
   }
 }
 

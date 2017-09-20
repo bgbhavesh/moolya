@@ -79,14 +79,6 @@ if(Meteor.isServer){
             "uniqueId" : "myAppointment"
           },
           {
-              "image":"ml my-ml-settings_new",
-              "link": "/app/settings",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Settings",
-              "uniqueId" : "settings"
-          },
-          {
               "image":"ml my-ml-terms_and_conditions",
               "link": "/app/termsConditions",
               "isLink" : true,
@@ -103,8 +95,16 @@ if(Meteor.isServer){
               "uniqueId" : "privacy"
           },
         {
+          "image":"ml my-ml-privacy",
+          "link": "/app/previewProfile",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "My Public Profile",
+          "uniqueId" : "myPublicProfile"
+        },
+        {
           "image":"ml my-ml-Referral_Invite",
-          "link": "#",
+          "link": "",
           "isLink" : true,
           "isMenu" : true,
           "name" : "Referral & Invites",
@@ -113,11 +113,20 @@ if(Meteor.isServer){
         },
         {
           "image":"ml my-ml-subscriptions",
-          "link": "#",
+          "link": "",
           "isLink" : true,
           "isMenu" : true,
           "name" : "My Subscriptions",
           "uniqueId" : "mySubscriptions",
+          isDisabled:true
+        },
+        {
+          "image":"ml my-ml-settings_new",
+          "link": "",//"link": "/app/settings",
+          "isLink" : true,
+          "isMenu" : true,
+          "name" : "Settings",
+          "uniqueId" : "settings",
           isDisabled:true
         },
           // {

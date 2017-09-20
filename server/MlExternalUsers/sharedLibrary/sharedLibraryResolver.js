@@ -33,7 +33,6 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
     let userId = context.userId;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
-    console.log('---profile---', profile)
     let dataToInsert = {
       owner:{
         userId: userId,
@@ -141,7 +140,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
         userId: { "$first": "$userId" },
         profileId: { "$first": "$profileId" },
         sharedStartDate: { "$first": "$shareStartDate"},
-        sharedEndDate: { "$first": "$shareStartDate"},
+        sharedEndDate: { "$first": "$shareEndDate"},
         isDownloadable: { "$first": "$isDownloadable"},
         createdAt: { "$first": "$createdAt"}
       }
@@ -201,7 +200,7 @@ MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info
     {"$project": {
       userId: "$_id",
       profilePic: "$profile.profileImage",
-      displayName: "$profile.displayName"
+      displayName: "$profile.firstName"
     } }
   ];
   let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
@@ -212,9 +211,22 @@ MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
-  let userId =  args.userId;
-  let data = mlDBController.find('MlSharedLibrary',{'user.userId':context.userId}, context).fetch();
-  return data;
-
+  let userId =  args.userId ? args.userId : context.userId ;
+  let libraryData = [];
+  let data = mlDBController.find('MlSharedLibrary',{ 'owner.userId':userId, 'user.userId':context.userId}, context).fetch();
+  data.map((info)=>{
+    // new Date(info.sharedStartDate) - new Date(info.sharedEndDate);
+    let expiryDate = Math.floor((Date.UTC(info.sharedEndDate.getFullYear(), info.sharedEndDate.getMonth(), info.sharedEndDate.getDate()) - Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) ) /(1000 * 60 * 60 * 24));
+      info.daysToExpire = expiryDate;
+      if(expiryDate < 0 || expiryDate === 0) {
+         info.isExpired = true;
+      }
+      let status = ((!info.isExpired) || new Date(info.sharedStartDate) === new Date())
+    let yetToBeShared = new Date(info.sharedStartDate) > new Date()
+    if(!info.isExpired && status && (!yetToBeShared)) {//&& (info && info.sharedStartDate ? new Date(info.sharedStartDate) === new Date() : true )) { // && (info && info.sharedStartDate ? info.sharedStartDate === new Date() : true )
+        libraryData.push(info)
+      }
+  })
+  return libraryData;
 }
 

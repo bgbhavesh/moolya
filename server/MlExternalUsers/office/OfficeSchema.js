@@ -71,6 +71,7 @@ let myOfficeSchema = `
         chapterName: String
         communityId: String
         communityName: String
+        communityCode: String
         barerCount:Int
         officeName : String
         branchType : String
@@ -175,6 +176,7 @@ let myOfficeSchema = `
         chapterName: String
         communityId: String
         communityName: String
+        communityCode: String
         barerCount:Int
         officeName : String
         branchType : String
@@ -225,6 +227,7 @@ let myOfficeSchema = `
         getMyOfficeRole(officeId: String!): response
         updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
         getOfficeTransactionPaymentLink(transactionId: String!):response
+        officeMemberGoIndependent(memberId: String, communityCode: String):response
     }
 `;
 

@@ -208,7 +208,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
                     {task.userInfo && task.userInfo.map(function(user, index){
                       return(
                         <li key={index}>
-                          <a href="#">
+                          <a href="">
                             <span></span>
                             <img src={ user.profileUrl ? user.profileUrl : "/images/def_profile.png"} /><br />
                             <div className="tooltiprefer">

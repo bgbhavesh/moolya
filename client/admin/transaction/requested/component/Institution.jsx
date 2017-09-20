@@ -274,8 +274,8 @@ export default class institution extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
+                <div className="form-group mandatory">
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"foundationDate"} inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">

@@ -32,6 +32,13 @@ export const mlAppRejectedAppointmentConfig = new MlAppViewer({
                             sessionId
                             serviceOrderId
                           }
+                          appointmentWith {
+                            userId
+                            profileId
+                            displayName
+                            status
+                            userProfilePic
+                          }
                           startDate
                           endDate
                         }

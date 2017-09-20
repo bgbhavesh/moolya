@@ -167,15 +167,15 @@ export default class MlAssignTask extends React.Component {
         <div className="clearfix" />
         <h1>
            Set priority of attendes
-           <a href="#" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
-           <a href="#" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
+           <a href="" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
+           <a href="" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
         </h1>
         <div className="clearfix" />
         <div className="" style={ this.state.showAdd ? {'display':'none'} : {}}>
           <Select
             name="form-field-name"
             value="one"
-            className="form-control float-label"
+            className="float-label"
             options={that.state.users}
             onChange={(value)=>that.addUser(value)}
           />
@@ -207,7 +207,7 @@ export default class MlAssignTask extends React.Component {
           <textarea ref="note" placeholder="Notes / Remarks" className="form-control float-label" id=""></textarea>
         </div>
         <div className="clearfix" />
-        <a href="#" onClick={()=>that.submit()} className="save_btn">Assign</a>
+        <a href="" onClick={()=>that.submit()} className="save_btn">Assign</a>
       </div>
     )
   }

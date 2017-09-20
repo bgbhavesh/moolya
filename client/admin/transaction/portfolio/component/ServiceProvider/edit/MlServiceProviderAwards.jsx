@@ -13,6 +13,7 @@ import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfoli
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import CropperModal from '../../../../../../commons/components/cropperModal';
 
 export default class MlServiceProviderAwards extends Component {
   constructor(props, context) {
@@ -26,7 +27,9 @@ export default class MlServiceProviderAwards extends Component {
       serviceProviderAwardsList: [],
       selectedVal: null,
       selectedObject: "default",
-      privateKey:{}
+      privateKey:{},
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
@@ -34,6 +37,9 @@ export default class MlServiceProviderAwards extends Component {
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -59,10 +65,13 @@ export default class MlServiceProviderAwards extends Component {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.awardsRecognition)
+    const response = await fetchServiceProviderPortfolioAwards(portfolioDetailsId);
     if (empty) {
-      const response = await fetchServiceProviderPortfolioAwards(portfolioDetailsId);
-      if (response) {
+      if (response && response.length) {
         this.setState({loading: false, serviceProviderAwards: response, serviceProviderAwardsList: response});
+      }
+      else{
+        this.setState({loading:false})
       }
     } else {
       this.setState({
@@ -71,6 +80,7 @@ export default class MlServiceProviderAwards extends Component {
         serviceProviderAwardsList: that.context.serviceProviderPortfolio.awardsRecognition
       });
     }
+    this.serviceProviderAwardServer = response &&response.awardsRecognition?response.awardsRecognition:[]
   }
 
   addAward() {
@@ -97,14 +107,28 @@ export default class MlServiceProviderAwards extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.awardId
+      "selectedVal": details.awardId,
+      popoverOpen: !(this.state.popoverOpen)},() =>{
+      this.lockPrivateKeys(index)
     });
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.serviceProviderAwardServer && this.serviceProviderAwardServer[selIndex]?this.serviceProviderAwardServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e) {
@@ -119,9 +143,14 @@ export default class MlServiceProviderAwards extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex}
-    this.setState({privateKey: privateKey})
-    this.setState({data: details}, function () {
+    // var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex}
+    // this.setState({privateKey: privateKey})
+    // this.setState({data: details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -202,22 +231,34 @@ export default class MlServiceProviderAwards extends Component {
     this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(e) {
-    if (e.target.files[0].length == 0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
-      portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: {awardsRecognition: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
-    };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+  onLogoFileUpload(image,fileInfo) {
+    // if (e.target.files[0].length == 0)
+    //   return;
+    // let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let fileName=fileInfo.name;
+    let file=image;
+    if(file){
+      let data = {
+        moduleName: "PORTFOLIO",
+        actionName: "UPLOAD",
+        portfolioDetailsId: this.props.portfolioDetailsId,
+        portfolio: {awardsRecognition: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+      };
+      let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
 
   onFileUploadCallBack(file,resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -278,7 +319,18 @@ export default class MlServiceProviderAwards extends Component {
       this.setState({loading: false, serviceProviderAwards: cloneBackUp, serviceProviderAwardsList: cloneBackUpList});
     }
   }
-
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image,e) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image,e);
+  }
 
   render() {
     var yesterday = Datetime.moment().subtract(0, 'day');
@@ -314,16 +366,16 @@ export default class MlServiceProviderAwards extends Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                      <a id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addAward.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3>Add New Awards</h3>
+                          <h3 onClick={this.addAward.bind(this)}> Add New Awards</h3>
                         </div>
                       </a>
                     </div>
                     {serviceProviderAwardsList.map(function (details, idx) {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                        <a href="" id={"create_client" + idx}>
+                        <a id={"create_client" + idx}>
                           <div className="list_block">
                             <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"
@@ -358,23 +410,22 @@ export default class MlServiceProviderAwards extends Component {
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
                                       defaultValue={this.state.data.year}
-                                      closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}
-                                      isValidDate={ valid }/>
+                                      closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" name="awardDescription" placeholder="About"
-                                   className="form-control float-label" defaultValue={this.state.data.awardDescription}
+                            <input type="text" name="awardsDescription" placeholder="About"
+                                   className="form-control float-label" defaultValue={this.state.data.awardsDescription}
                                    onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                         id="isAwardDescriptionPrivate"
-                                         defaultValue={this.state.data.isAwardDescriptionPrivate}
-                                         onClick={this.onLockChange.bind(this, "awardDescription", "isAwardDescriptionPrivate")}/>
+                                         id="isDescriptionPrivate"
+                                         defaultValue={this.state.data.isDescriptionPrivate}
+                                         onClick={this.onLockChange.bind(this, "awardDescription", "isDescriptionPrivate")}/>
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
-                              <span>Upload Logo</span>
-                              <input type="file" name="logo" id="logo" className="upload" accept="image/*"
-                                     onChange={this.onLogoFileUpload.bind(this)}/>
+                                <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+                              {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
+                                     onChange={this.onLogoFileUpload.bind(this)}/>*/}
                             </div>
                           </div> : ""}
                           <div className="clearfix"></div>
@@ -394,6 +445,13 @@ export default class MlServiceProviderAwards extends Component {
                   </div>
                 </PopoverContent>
               </Popover>
+              <CropperModal
+                uploadingImage={this.state.uploadingAvatar}
+                handleImageUpload={this.handleUploadAvatar}
+                cropperStyle="any"
+                show={this.state.showProfileModal}
+                toggleShow={this.toggleModal}
+              />
             </div>
           </div>)}
       </div>
@@ -402,4 +460,5 @@ export default class MlServiceProviderAwards extends Component {
 }
 MlServiceProviderAwards.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

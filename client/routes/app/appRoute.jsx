@@ -32,12 +32,17 @@ import {mlAppSubChapterDashboardListConfig, mlAppSubChapterDashboardMapConfig} f
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
+import MlMicroSitePreview from '../../app/microSite/components/mlMicroSitePreview'
+
+import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
+//todo :// "MlAnchorInfoView" make this component in the commons
 
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MLAppMyCalendar from "../../app/calendar/myCalendar/components/calendarParentComponent";
+import ShareCalendar from "../../app/calendar/shareCalendar/components/shareCalendar"
 
 /**
  * Activities Routes
@@ -171,6 +176,25 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities', {
     mount(AppLayout, {
       appContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlDashboardMapConfig}
                            listConfig={mlDashboardListConfig} params={params}/>
+    })
+  }
+});
+
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/anchorInfoView', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAnchorInfoView subChapterId={params.subChapterId} clusterId={params.clusterId}
+                                      chapterId={params.chapterId} queryParams={queryParams}/>
+    })
+  }
+});
+
+appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+  name: 'dashboard',
+  action(params, queryParams){
+    mount(AppLayout, {
+      appContent: <MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });
@@ -516,6 +540,14 @@ appSection.route('/calendar', {
   }
 });
 
+appSection.route('/calendar/shareCalendar', {
+  name: 'calendar_share',
+  action(){
+    mount(AppLayout,{appContent: <ShareCalendar />, isCalenderMenu: true})
+    // mount(AppLayout,{appContent:<MlAppDashboard/>})
+  }
+});
+
 appSection.route('/calendar/officeCalendar', {
   name: 'calendar_office',
   action(){
@@ -526,16 +558,17 @@ appSection.route('/calendar/officeCalendar', {
 appSection.route('/calendar/notification', {
   name: 'calendar_notification',
   action(){
-    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: false})
+    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: true})
   }
 });
 
-appSection.route('/calendar/manageSchedule/all/activityList', {
-  name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
-  }
-});
+// appSection.route('/calendar/manageSchedule', {
+  // name: 'calendar_manageSchedule',
+  // action(){
+    // FlowRouter.go("/app/calendar/manageSchedule/all/activityList");
+    //mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})
+  // }
+// });
 
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',
@@ -747,4 +780,11 @@ appSection.route('/privacy', {
     mount(AppLayout,{appContent:< MlAppPrivacy />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/previewProfile', {
+  name: 'myPublicProfile',
+  action(params){
+    mount(AppLayout,{appContent:< MlMicroSitePreview />, isProfileMenu: true})
+  }
 });

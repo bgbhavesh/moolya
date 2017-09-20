@@ -11,18 +11,37 @@ import {findOfficeAction} from "../actions/findOfficeAction";
 import {getMyOfficeRoleActionHandler} from "../actions/getMyOfficeRole";
 import MlTableViewContainer from "../../../../../client/admin/core/containers/MlTableViewContainer";
 import {mlOfficeTransactionConfig} from "../config/MlOfficeTransactionConfig";
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 
 export default class MlAppEditOffice extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       availableCommunities:[],
-      role : ''
+      role : '',
+      activeTab:'Principals',
     }
   }
   componentWillMount() {
+
+    if( !FlowRouter.getQueryParam('tab') ) {
+      FlowRouter.setQueryParams({ tab: "Principals" });
+    }
+
+    setTimeout(function () {
+      let params = new URL(window.location.href).searchParams;
+      if(!params.get('tab')) {
+        FlowRouter.reload();
+      }
+    },0);
+
+
     const resp = this.officeDetails();
     this.getMyOfficeRole();
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     return resp;
   }
 
@@ -50,7 +69,10 @@ export default class MlAppEditOffice extends React.Component{
       this.setState({loading: false})
     }
   }
-
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
   render(){
     const that = this;
     let noAccessMessage = <p className="text-danger">No access for team member. Only principle can have access to this tab.</p>
@@ -69,11 +91,12 @@ export default class MlAppEditOffice extends React.Component{
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
+        key: MlTab.name,
         getContent: () => MlTab.tabContent,
       }));
     }
 
-    const App = () => <Tabs items={getTabs()} />;
+    const App = () => <MlTabComponent tabs={getTabs()}  selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -86,3 +109,4 @@ export default class MlAppEditOffice extends React.Component{
     )
   }
 };
+

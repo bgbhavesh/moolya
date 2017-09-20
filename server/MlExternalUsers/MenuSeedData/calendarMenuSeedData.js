@@ -15,11 +15,11 @@ if(Meteor.isServer){
       },
       {
         "image":"ml my-ml-calendar",
-        "link": "/app/calendar/clientCalendar",
+        "link": "/app/calendar/shareCalendar",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Client Calendar",
-        "uniqueId" : "calendar_client"
+        "name" : "Shared Calendar",
+        "uniqueId" : "calendar_share"
       },
 
       {
@@ -30,16 +30,6 @@ if(Meteor.isServer){
         "name" : "Office Calendar",
         "uniqueId" : "calendar_office"
       },
-
-      {
-        "image":"ml my-ml-settings_new",
-        "link": "/app/calendar/settings",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Settings",
-        "uniqueId" : "calendar_settings"
-      },
-
       {
         "image":"ml my-ml-notifications",
         "link": "/app/calendar/notification",
@@ -48,10 +38,19 @@ if(Meteor.isServer){
         "name" : "Notifications",
         "uniqueId" : "calendar_notification"
       },
+      {
+        "image":"ml my-ml-settings_new",
+        "link": "/app/calendar/settings",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "calendar_settings",
+        isDisabled: true
+      },
 
       // {
       //   "image":"fa fa-calendar-check-o",
-      //   "link": "/app/calendar/manageSchedule/all/activityList",
+      //   "link": "/app/calendar/manageSchedule",
       //   "isLink" : true,
       //   "isMenu" : true,
       //   "name" : "Manage Schedule",

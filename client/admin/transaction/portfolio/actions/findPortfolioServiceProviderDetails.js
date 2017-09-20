@@ -11,22 +11,24 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             data: fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"awardsRecognition") {
             awardsRecognition{
-              awardId
               awardName
-              index
+              awardId
               isAwardPrivate
               year
               isYearPrivate
-              awardDescription
-              isAwardDescriptionPrivate
+              awardsDescription
+              isDescriptionPrivate
               logo{
-                fileName
+                fileName,
                 fileUrl
-              } 
+              },
               makePrivate
+              index
               privateFields{
                   keyName,
                   booleanKey
+                   index
+                   tabName
                 }
               }
             }
@@ -61,6 +63,8 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
               privateFields{
                   keyName,
                   booleanKey
+                  index
+                  tabName
                 }
               }
             }
@@ -405,6 +409,8 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
                     privateFields{
                       keyName,
                       booleanKey
+                       index
+                       tabName
                     }
                 }
             }

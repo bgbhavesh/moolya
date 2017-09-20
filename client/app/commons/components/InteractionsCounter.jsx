@@ -47,10 +47,10 @@ export default class InteractionsCounter extends React.Component{
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
       {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},
-      {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'},
       {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-handshake-1'},
       {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-support'},
-      {name: 'follow',displayName:'Follow',iconClass: 'ml flaticon-ml-shapes'}
+      {name: 'follow',displayName:'Follow',iconClass: 'ml flaticon-ml-shapes'},
+      {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'}
     ];
 
     let data=this.state.data;
@@ -65,7 +65,7 @@ export default class InteractionsCounter extends React.Component{
       let actionCount=(_.find(data,{actionName:option.name})||{}).count;
         return (
            <li key={option.name}>
-             <a href="#"><span className={option.iconClass}></span>
+             <a href=""><span className={option.iconClass}></span>
              <b>{actionCount}</b>
              </a>
              <span className="tooltipnew">

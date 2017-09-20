@@ -102,7 +102,13 @@ let appointment=`
     profileId: String
     count: String
   }
-  
+  type AppointmentWith {
+    userId: String
+    status: String
+    profileId: String
+    displayName: String
+    userProfilePic: String
+  }
   type Appointment {
     _id: String
     appointmentType: String
@@ -110,6 +116,7 @@ let appointment=`
     client: AppointmentUser
     provider: AppointmentUser
     appointmentInfo: AppointmentInfo
+    appointmentWith: AppointmentWith
     startDate: Date
     endDate: Date
   }
@@ -122,6 +129,7 @@ let appointment=`
    isProvider: Boolean
    isClient: Boolean
    isAttendee: Boolean
+   status: String
   }
   
   type SlotInfo {
@@ -199,6 +207,22 @@ let appointment=`
     expectedInput: String
     expectedOutput: String
   }
+  
+  type AppointmentAdmin {
+    _id: String
+    appointmentId: String
+    createdBy: String
+    emailId: String
+    source: String
+    transactionType: String
+    cluster: String
+    chapter: String
+    subChapter: String
+    community: String
+    createdAt: String
+    status: String
+  }
+  
   type Query {
      fetchMyAppointmentByStatus(status: String): [Appointment]
      fetchAllProfileAppointmentCounts(month:Int, year: Int): profileAppointment
@@ -218,6 +242,8 @@ let appointment=`
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
      updateAppointmentByStatus(appointmentId: String, status: String): response
+     
+     fetchAdminServiceAppointment( orderId: String! ): response
   }
 `;
 
@@ -226,6 +252,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appointment]);
 let supportedApi = [
   {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
+  {api:'fetchAdminServiceAppointment', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
   {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
   {api:'updateAppointmentByStatus', actionName:'UPDATE', resourceName:"SERVICECARD"},
 ];

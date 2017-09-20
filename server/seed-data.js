@@ -240,7 +240,7 @@ let modulesclusteranchor = [
   {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
-  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: permissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "GLOBALSETTINGS"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
@@ -264,6 +264,7 @@ var roleclusteranchor = {
   assignRoles: assignRolesAnchor,
   modules: modulesclusteranchor,
   isActive: true,
+  isAnchor : true,
   isSystemDefined: true
 }
 MlRoles.update({roleName: "clusteranchor"}, {$set: roleclusteranchor}, {upsert: true})
@@ -273,7 +274,7 @@ var moduleschapteranchor = [
   {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
-  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: permissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
@@ -297,6 +298,7 @@ let rolechapteranchor = {
   assignRoles: assignRolesAnchor,
   modules: moduleschapteranchor,
   isActive: true,
+  isAnchor : true,
   isSystemDefined: true
 }
 MlRoles.update({roleName: "chapteranchor"}, {$set: rolechapteranchor}, {upsert: true})
@@ -306,7 +308,7 @@ let modulessubchapteranchor = [
   {moduleId: (_.find(mlModules, {code: "CHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "SUBCHAPTER"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "COMMUNITY"}))._id, actions: readPermissions, isActive: true},
-  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: readPermissions, isActive: true},
+  {moduleId: (_.find(mlModules, {code: "USERS"}))._id, actions: permissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "REGISTRATION"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "PORTFOLIO"}))._id, actions: readPermissions, isActive: true},
   {moduleId: (_.find(mlModules, {code: "MASTERSETTINGS"}))._id, actions: readPermissions, isActive: true},
@@ -336,6 +338,7 @@ let rolesubchapteranchor = {
   assignRoles: assignRolesAnchor,
   modules: modulessubchapteranchor,
   isActive: true,
+  isAnchor : true,
   isNonMoolyaAvailable: true,
   isSystemDefined: true
 }
@@ -369,6 +372,7 @@ let roleCommunityAnchor = {
   assignRoles: assignRolesAnchor,
   modules: modulesCommunityAnchor,
   isActive: true,
+  isAnchor : true,
   isNonMoolyaAvailable: true,
   isSystemDefined: true
 }
@@ -646,6 +650,10 @@ if (!hierarchyAssignmentNonMoolya) {
 //     }
 //   }
 // })
+
+Accounts.config({
+  loginExpirationInDays:1
+});
 
 
 /******************************************* User Login <Start> *******************************************************/

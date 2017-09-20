@@ -30,14 +30,14 @@ export const gMap = ({
       onChildMouseLeave={onChildMouseLeave}
     >
       {
-        clusters
+        clusters&&clusters.length>0?clusters
           .map(({...markerProps, id, numPoints}) => (
             numPoints === 1
               ? <MapMarkers  key={id} lat={markerProps.lat} {...mapContext} module={module} hover={mapContext.hoverKey === markerProps.id}
                              lng={markerProps.lng} text={markerProps.desc}
                              desc={markerProps.desc}  markerId={markerProps.recordId} isActive ={markerProps.isActive} status ={markerProps.status} showImage={showImage}/>
               : <ClusterMarker key={id} {...markerProps} />
-          ))
+          )):[]
       }
     </GoogleMap>
   );
@@ -62,16 +62,23 @@ const markerDataConfig = lifecycle({
 });
 
 
-getZoomFromMarkers= (zoom,mapContext) => {
+getZoomFromMarkers= (zoom,mapContext,clickedOn) => {
   try{
-    console.log("Deciding zoom based on clusters");
-    let locPoints=[];
-    if(zoom>=4){
-      return zoom+2;
-    }
-    _.forEach(mapContext.data.data,function (cluster) {
-      if(cluster.lat && cluster.lng)
-        locPoints.push({lat:cluster.lat,lng:cluster.lng});
+    console.log("Deciding zoom based on clicked " + clickedOn);
+    let locPoints=[],i=0;
+
+    _.forEach(mapContext.data.data,function (cluster,i) {
+      if(cluster.lat && cluster.lng && clickedOn.indexOf(cluster._id)>-1){
+        let pointLatLong = {lat:cluster.lat,lng:cluster.lng};
+        if(locPoints.length>0){ //Hack to avoid same lat long points
+          if(locPoints[0].lat===cluster.lat && locPoints[0].lng === cluster.lng){
+            pointLatLong.lat=cluster.lat+(0.0000002*i);
+            pointLatLong.lng=cluster.lng+(0.0000001*i);
+          }
+        }
+        locPoints.push(pointLatLong);
+      }
+
     })
 
     const bounds = getBoundsFromPoints(locPoints);
@@ -81,7 +88,8 @@ getZoomFromMarkers= (zoom,mapContext) => {
       height: 502, // Map height in pixels
     };
 
-    return fitBounds(bounds, size).zoom;
+    let proposedZoom = fitBounds(bounds, size).zoom;
+    return proposedZoom<=zoom?zoom+1:proposedZoom;
   } catch(e){
     return zoom+2
   }
@@ -114,356 +122,162 @@ const mapClusterHOC =compose(
       minZoom: 3,
       maxZoom: 15,
       options: {
-        styles: [
+        styles:[
           {
-            elementType: 'geometry',
-            stylers: [
+            "elementType": "geometry",
+            "stylers": [
               {
-                color: '#242f3e'
+                "color": "#f5f5f5"
               }
             ]
           },
           {
-            elementType: 'labels.text.fill',
-            stylers: [
+            "elementType": "labels.icon",
+            "stylers": [
               {
-                color: '#746855'
+                "visibility": "off"
               }
             ]
           },
           {
-            elementType: 'labels.text.stroke',
-            stylers: [
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                color: '#242f3e'
+                "color": "#616161"
               }
             ]
           },
           {
-            featureType: 'administrative.country',
-            stylers: [
+            "elementType": "labels.text.stroke",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#f5f5f5"
               }
             ]
           },
           {
-            featureType: 'administrative.country',
-            elementType: 'geometry.fill',
-            stylers: [
+            "featureType": "administrative.land_parcel",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                color: '#273545'
-              },
-              {
-                'visibility': 'on'
-              },
-              {
-                'weight': 8
+                "color": "#bdbdbd"
               }
             ]
           },
           {
-            featureType: 'administrative.country',
-            elementType: 'geometry.stroke',
-            stylers: [
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [
               {
-                color: '#ffffff'
-              },
-              {
-                'visibility': 'on'
-              },
-              {
-                'weight': 1
+                "color": "#eeeeee"
               }
             ]
           },
           {
-            featureType: 'administrative.country',
-            elementType: 'labels.text',
-            stylers: [
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                'visibility': 'on'
-              }
-            ]
-
-          },
-          {
-            featureType: 'administrative.country',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#ef4647'
-              },
-              {
-                'saturation': 100
-              },
-              {
-                'lightness': 5
-              },
-              {
-                'visibility': 'on'
+                "color": "#757575"
               }
             ]
           },
           {
-            featureType: 'administrative.country',
-            elementType: 'labels.text.stroke',
-            stylers: [
+            "featureType": "poi.park",
+            "elementType": "geometry",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#e5e5e5"
               }
             ]
           },
           {
-            featureType: 'administrative.land_parcel',
-            stylers: [
+            "featureType": "poi.park",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#9e9e9e"
               }
             ]
           },
           {
-            featureType: 'administrative.locality',
-            elementType: 'geometry.fill',
-            stylers: [
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [
               {
-                color: '#ffff44'
+                "color": "#ffffff"
               }
             ]
           },
           {
-            featureType: 'administrative.locality',
-            elementType: 'labels.text.fill',
-            stylers: [
+            "featureType": "road.arterial",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                color: '#ffff44'
+                "color": "#757575"
               }
             ]
           },
           {
-            featureType: 'administrative.neighborhood',
-            elementType: 'labels.text',
-            stylers: [
+            "featureType": "road.highway",
+            "elementType": "geometry",
+            "stylers": [
               {
-                color: '#273545'
-              },
-              {
-                'visibility': 'on'
+                "color": "#dadada"
               }
             ]
           },
           {
-            featureType: 'poi',
-            elementType: 'labels.text',
-            stylers: [
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#616161"
               }
             ]
           },
           {
-            featureType: 'poi',
-            elementType: 'labels.text.fill',
-            stylers: [
+            "featureType": "road.local",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                color: '#d59563'
+                "color": "#9e9e9e"
               }
             ]
           },
           {
-            featureType: 'poi.attraction',
-            stylers: [
+            "featureType": "transit.line",
+            "elementType": "geometry",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#e5e5e5"
               }
             ]
           },
           {
-            featureType: 'poi.business',
-            stylers: [
+            "featureType": "transit.station",
+            "elementType": "geometry",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#eeeeee"
               }
             ]
           },
           {
-            featureType: 'poi.business',
-            elementType: 'labels.text.fill',
-            stylers: [
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
               {
-                'visibility': 'off'
+                "color": "#a3ccff"
               }
             ]
           },
           {
-            featureType: 'poi.government',
-            stylers: [
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [
               {
-                'visibility': 'off'
-              }
-            ]
-          },
-          {
-            featureType: 'poi.park',
-            elementType: 'geometry',
-            stylers: [
-              {
-                color: '#263c3f'
-              }
-            ]
-          },
-          {
-            featureType: 'poi.park',
-            elementType: 'labels.text',
-            stylers: [
-              {
-                'visibility': 'off'
-              }
-            ]
-          },
-          {
-            featureType: 'poi.park',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#6b9a76'
-              }
-            ]
-          },
-          {
-            featureType: 'road',
-            elementType: 'geometry',
-            stylers: [
-              {
-                color: '#38414e'
-              }
-            ]
-          },
-          {
-            featureType: 'road',
-            elementType: 'geometry.stroke',
-            stylers: [
-              {
-                color: '#212a37'
-              }
-            ]
-          },
-          {
-            featureType: 'road',
-            elementType: 'labels',
-            stylers: [
-              {
-                'visibility': 'off'
-              }
-            ]
-          },
-          {
-            featureType: 'road',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#9ca5b3'
-              }
-            ]
-          },
-          {
-            featureType: 'road.highway',
-            elementType: 'geometry',
-            stylers: [
-              {
-                color: '#746855'
-              }
-            ]
-          },
-          {
-            featureType: 'road.highway',
-            elementType: 'geometry.stroke',
-            stylers: [
-              {
-                color: '#1f2835'
-              }
-            ]
-          },
-          {
-            featureType: 'road.highway',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#f3d19c'
-              }
-            ]
-          },
-          {
-            featureType: 'transit',
-            elementType: 'geometry',
-            stylers: [
-              {
-                color: '#2f3948'
-              }
-            ]
-          },
-          {
-            featureType: 'transit.station',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#d59563'
-              }
-            ]
-          },
-          {
-            featureType: 'transit.station.bus',
-            stylers: [
-              {
-                'visibility': 'off'
-              }
-            ]
-          },
-          {
-            featureType: 'water',
-            elementType: 'geometry',
-            stylers: [
-              {
-                color: '#17263c'
-              }
-            ]
-          },
-          {
-            featureType: 'water',
-            elementType: 'geometry.fill',
-            stylers: [
-              {
-                color: '#547396'
-              },
-              {
-                'visibility': 'on'
-              }
-            ]
-          },
-          {
-            featureType: 'water',
-            elementType: 'labels.text',
-            stylers: [
-              {
-                'visibility': 'off'
-              }
-            ]
-          },
-          {
-            featureType: 'water',
-            elementType: 'labels.text.fill',
-            stylers: [
-              {
-                color: '#515c6d'
-              }
-            ]
-          },
-          {
-            featureType: 'water',
-            elementType: 'labels.text.stroke',
-            stylers: [
-              {
-                color: '#17263c'
+                "color": "#5387c8"
               }
             ]
           }
@@ -505,7 +319,7 @@ const mapClusterHOC =compose(
         let center = {
           lat: loc.lat, lng: loc.lng
         };
-        let myzoom={zoom: getZoomFromMarkers(zoom,mapContext)};
+        let myzoom={zoom: getZoomFromMarkers(zoom,mapContext,evt)};
         if( parseFloat(center.lat).toFixed(4) != parseFloat(centerPoint.lat).toFixed(4) || parseFloat(center.lng).toFixed(4) != parseFloat(centerPoint.lng).toFixed(4)){
           setMapProps({center,zoom}, function () {
             setMapProps(myzoom);
@@ -541,17 +355,20 @@ const mapClusterHOC =compose(
         let mapBounds = [];
         if(mapProps.bounds){
           clusterMap = getCluster(mapProps);
-          mapBounds =  clusterMap.map(({wx, wy, numPoints, points}) => ({
+          mapBounds =  clusterMap.map(({wx, wy, numPoints, points}) => {
+           let allIds = points.map((point)=>(point._id)).join('_'); // to get zoom on click, this id is used in getZoomFromMarkers
+           return {
               lat: parseFloat(wy),
               lng: parseFloat(wx),
               text: numPoints,
               numPoints,
-              id: `${numPoints}_${points[0]._id}`,
+              id: allIds,
               recordId: points[0]._id,
               isActive: points[0].isActive,
               status: points[0].status,
               desc: points[0].text
-            }))
+            }
+        })
         }
         return {
           clusters: mapBounds

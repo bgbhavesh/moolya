@@ -63,6 +63,31 @@ let chapterSchema = `
       canView:Boolean,
       canTransact:Boolean
     }
+    
+    type objectiveOutput {
+      description: String
+      status: Boolean
+    }
+    
+    type contactDetailsOutput{
+      contactPersonRole: String,
+      addressTypeId: String,
+      addressTypeName : String
+      contactNumber: String
+      emailId: String,
+      buildingNumber: String,
+      street: String,
+      landmark: String,
+      area: String,
+      cityId: String,
+      stateId: String,
+      countryId: String,
+      pincode: String,
+      latitude: String,
+      longitude: String,
+      status: Boolean,
+    }
+  
     type SubChapter{
         _id:String
         clusterId:String
@@ -88,6 +113,8 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         moolyaSubChapterAccess:moolyaSubChapterAccess
         associatedObj : [relatedSubChaptersOutput]
+        objective: [objectiveOutput]
+        contactDetails: [contactDetailsOutput]
     }
     
     input moolyaSubChapterAccessObject{
@@ -97,6 +124,30 @@ let chapterSchema = `
       canSearch:Boolean,
       canView:Boolean,
       canTransact:Boolean
+    }
+    
+    input objectiveInput {
+     description : String
+     status : Boolean
+    }
+    
+    input contactDetailsInput {
+      contactPersonRole: String,
+      addressTypeId: String,
+      addressTypeName : String
+      contactNumber: String
+      emailId: String,
+      buildingNumber: String,
+      street: String,
+      landmark: String,
+      area: String,
+      cityId: String,
+      stateId: String,
+      countryId: String,
+      pincode: String,
+      latitude: String,
+      longitude: String,
+      status: Boolean,
     }
     
     input subChapterObject{
@@ -125,6 +176,8 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
         associatedObj : [relatedSubChaptersInput]
+        objective : [objectiveInput]
+        contactDetails: [contactDetailsInput]
     }
     
     input relatedSubChaptersInput {

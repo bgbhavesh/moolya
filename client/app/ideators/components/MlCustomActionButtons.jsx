@@ -101,16 +101,16 @@ export default class MlCustomActionButtons extends React.Component {
 
               <div className="related_buttons">
                 <ul>
-                  <li><a href="#"><span className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href=""><span className="ml ml-calls"></span><br />Connect</a></li>
                 </ul>
               </div>
 
@@ -119,23 +119,23 @@ export default class MlCustomActionButtons extends React.Component {
 
               <div className="action_buttons">
                 <ul>
-                  <li><a href="#" id="pop_connect" onClick={this.actionClick.bind(this, "pop_connect")}><span
+                  <li><a href="" id="pop_connect" onClick={this.actionClick.bind(this, "pop_connect")}><span
                     className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml my-ml-favourites"></span><br />Favorites</a></li>
-                  <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}><span
+                  <li><a href=""><span className="ml my-ml-favourites"></span><br />Favorites</a></li>
+                  <li><a href="" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}><span
                     className="ml flaticon-ml-support"></span><br />Inquiry</a></li>
-                  <li><a href="#" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}><span
+                  <li><a href="" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}><span
                     className="ml flaticon-ml-note"></span><br />Review</a></li>
-                  <li><a href="#"><span className="ml my-ml-mywishlist"></span><br />Wishlist</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing"></span><br />Upload</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing-1"></span><br />Download</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-share-arrow"></span><br />Share</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-share-files"></span><br />Compare</a></li>
-                  <li><a href="#" id="pop_conersation" onClick={this.actionClick.bind(this, "pop_conersation")}><span
+                  <li><a href=""><span className="ml my-ml-mywishlist"></span><br />Wishlist</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-cloud-computing"></span><br />Upload</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-cloud-computing-1"></span><br />Download</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-share-arrow"></span><br />Share</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-share-files"></span><br />Compare</a></li>
+                  <li><a href="" id="pop_conersation" onClick={this.actionClick.bind(this, "pop_conersation")}><span
                     className="ml flaticon-ml-chat"></span><br />Conversation</a></li>
-                  <li><a href="#" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}><span
+                  <li><a href="" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}><span
                     className="ml flaticon-ml-networking"></span><br />Collaborate</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-note-1"></span><br />Feedback</a></li>
+                  <li><a href=""><span className="ml flaticon-ml-note-1"></span><br />Feedback</a></li>
                 </ul>
 
               </div>
@@ -162,8 +162,8 @@ export default class MlCustomActionButtons extends React.Component {
           <PopoverTitle>Collaborate</PopoverTitle>
           <PopoverContent>Do you want to collaborate ?
             <div className="ml_btn">
-              <a href="#" className="save_btn">Yes</a>
-              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_collaborate')}>No</a>
+              <a href="" className="save_btn">Yes</a>
+              <a href="" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_collaborate')}>No</a>
             </div>
           </PopoverContent>
         </Popover>
@@ -221,8 +221,8 @@ export default class MlCustomActionButtons extends React.Component {
           <PopoverContent>
             Do you want to connect ?
             <div className="ml_btn">
-              <a href="#" className="save_btn">Connect</a>
-              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_connect')}>Cancel</a>
+              <a href="" className="save_btn">Connect</a>
+              <a href="" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_connect')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>
@@ -233,37 +233,37 @@ export default class MlCustomActionButtons extends React.Component {
           <PopoverContent>
             <ul className="list_style">
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='envelope-o'/><br />
                   Mail
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='comment-o'/><br />
                   Chat
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='video-camera'/><br />
                   Video
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='volume-up'/><br />
                   Audio
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='mobile'/><br />
                   SMS
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="">
                   <FontAwesome name='phone'/><br />
                   Call
                 </a>
@@ -288,8 +288,8 @@ export default class MlCustomActionButtons extends React.Component {
               <textarea placeholder="Subject" defaultValue="Inquiry" className="form-control float-label"></textarea>
             </div>
             <div className="ml_btn">
-              <a href="#" className="save_btn">Send</a>
-              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_inquiry')}>Cancel</a>
+              <a href="" className="save_btn">Send</a>
+              <a href="" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_inquiry')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>

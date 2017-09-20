@@ -268,12 +268,10 @@ class MlPortfolio extends React.Component {
       removeKeys: this.state.removePrivateKeys
     }
     const response = await updatePortfolioActionHandler(jsonData)
-    // toastr.success(response.result)
     if (response) {
       if (this.props.communityType == "Ideators") {
         let idea = this.state.idea
         if (idea) {
-          // const loggedInUser = getAdminUserContext();
           const response1 = await updateIdeatorIdeaActionHandler(idea, this.loggedUserDetails)
           return response1;
         }
@@ -409,7 +407,7 @@ class MlPortfolio extends React.Component {
                       <textarea ref="comment" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
-                      <a href="#" data-id={annotationDetails.id} className="circle_btn">
+                      <a href="" data-id={annotationDetails.id} className="circle_btn">
                         <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
                       </a>
 
@@ -450,6 +448,7 @@ class MlPortfolio extends React.Component {
 MlPortfolio.contextTypes = {
   userType: PropTypes.string,
   annotationsInfo: PropTypes.array,
+  breadCrum:PropTypes.Object
 };
 
 export default MlPortfolio = formHandler()(MlPortfolio);

@@ -21,6 +21,10 @@ export default class MlAppTaskSession extends Component {
     return this;
   }
 
+  isUpdated(){
+    return true;
+  }
+
   componentWillMount() {
     this.fetchActivities();
     const resp = this.findTaskDetails();
@@ -202,22 +206,26 @@ export default class MlAppTaskSession extends Component {
                   console.log(activity);
                   if (activity) {
                     return(
-                      <div className="swiper-slide funding_list list_block notrans funding_list" key={idx}>
-
-                        <span className="block_del"><FontAwesome onClick={()=>that.removeActivity(id, idx)} name='minus'/></span>
-                            <p className="online">{activity.mode}</p>
-                            <span>Duration:
-                            </span><br />
-                            <div className="form-group">
-                              <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={(activity.duration && activity.duration.hours) ? activity.duration.hours:0}/> Hours <input
-                                type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                className="form-control inline_input" defaultValue={(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }/>
-                                Mins</label>
-                            </div>
-
-                          <h3>{activity.displayName}</h3>
-                          {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
-
+                      <div className="col-lg-2 col-md-4 col-sm-4 swiper-slide" key={idx}>
+                        <div className="card_block"><h3>Name of the Task</h3>
+                          <div className="inactive"><FontAwesome onClick={()=>that.removeActivity(id, idx)} name='minus'/></div>
+                          <div className="clearfix"></div>
+                          <div className="list_icon mart0">
+                            <span className="price">Rs. 18,500</span>
+                            <span className="price pull-right">4 Sessions</span>
+                            <div className="clearfix"></div>
+                            <i className="c_image ml my-ml-Ideator"></i>
+                            <div className="clearfix"></div>
+                            <span className="price"><div className="form-group">
+                              <label>
+                                <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours:0}</span> Hours
+                                <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                      className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }</span>
+                                 Mins
+                              </label>
+                            </div></span>
+                            <button className="btn btn-danger pull-right">{activity.mode}</button>
+                          </div><div className="block_footer"><span> {activity.displayName} </span></div></div>
                       </div>
                     )
                   }
@@ -235,3 +243,20 @@ export default class MlAppTaskSession extends Component {
     )
   }
 };
+{/*<div className="swiper-slide funding_list list_block notrans funding_list" key={idx}>*/}
+
+  {/*<span className="block_del"><FontAwesome onClick={()=>that.removeActivity(id, idx)} name='minus'/></span>*/}
+  {/*<p className="online">{activity.mode}</p>*/}
+  {/*<span>Duration:*/}
+                            {/*</span><br />*/}
+  {/*<div className="form-group">*/}
+    {/*<label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={(activity.duration && activity.duration.hours) ? activity.duration.hours:0}/> Hours <input*/}
+      {/*type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"*/}
+      {/*className="form-control inline_input" defaultValue={(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }/>*/}
+      {/*Mins</label>*/}
+  {/*</div>*/}
+
+  {/*<h3>{activity.displayName}</h3>*/}
+  {/*/!*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*!/*/}
+
+{/*</div>*/}

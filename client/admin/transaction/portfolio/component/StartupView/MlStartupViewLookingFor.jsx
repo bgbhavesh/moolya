@@ -6,13 +6,14 @@ var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import NoData from '../../../../../commons/components/noData/noData'
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 const KEY = "lookingFor"
 export default class MlStartupViewLookingFor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupLookingforList: []};
+    this.state = {startupLookingforList: [],loading:true};
     this.fetchPortfolioStartupDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -111,32 +112,34 @@ export default class MlStartupViewLookingFor extends React.Component {
   render(){
     let that = this;
     let lookingforArray = that.state.startupLookingforList && that.state.startupLookingforList.lookingFor  || [];
-    if(_.isEmpty(lookingforArray)){
-      return (
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Looking For</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {lookingforArray && lookingforArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <span className="ml my-ml-browser_3" />
-                    <h3>
-                      {details.lookingForName&&details.lookingForName}
-                    </h3>
+    let loading = this.state.loading;
+    return ( <div>
+      {loading === true ? ( <MlLoader/>) : (
+        <div>
+          {_.isEmpty(lookingforArray) ?(
+            <div className="portfolio-main-wrap">
+              <NoData tabName={this.props.tabName}/>
+            </div>):(
+              <div id="annotatorContent">
+                <h2>Looking For</h2>
+                <div className="col-lg-12">
+                  <div className="row">
+                    {lookingforArray && lookingforArray.map(function (details, idx) {
+                      return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                        <div className="team-block">
+                          <span className="ml my-ml-browser_3" />
+                          <h3>
+                            {details.lookingForName&&details.lookingForName}
+                          </h3>
+                        </div>
+                      </div>)
+                    })}
                   </div>
-                </div>)
-              })}
-            </div>
-          </div>
-        </div>
+                </div>
+              </div>)
+          }
+        </div>)}
+      </div>
       )
     }
-  }
 }

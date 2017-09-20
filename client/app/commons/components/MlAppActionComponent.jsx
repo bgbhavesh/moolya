@@ -36,6 +36,11 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml fa fa-trash-o'
       },
       {
+        actionName: 'clone',
+        displayName:'Clone',
+        iconClass: 'ml fa fa-clone'
+      },
+      {
         actionName: 'like',
         displayName:'Like',
         iconClass: 'ml my-ml-like'

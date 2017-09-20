@@ -343,6 +343,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
   let profileId = args.profileId;
   let date = new Date();
   let month = args.month ? args.month : date.getMonth() ;
+  month = month + 1;
   let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
@@ -941,13 +942,14 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
         "isProvider": "$attendeeDetails.isProvider",
         "isClient": "$attendeeDetails.isClient",
         "isAttendee": "$attendeeDetails.isAttendee",
+        "status":"$attendeeDetails.status"
       }}
     }}
   ]
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine );
 
-  return result;
+    return result;
 
 };
 
@@ -1025,4 +1027,161 @@ MlResolver.MlQueryResolver['fetchSelfTask'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload('Appointment self task not found', code);
     return response;
   }
+};
+
+MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, context, info) => {
+  let orderId = args.orderId;
+  let pipeline = [
+    {"$match":{orderId: orderId}},
+    { "$lookup":
+      {
+        from: "mlServiceCardDefinition",
+        localField: "serviceId",
+        foreignField: "_id",
+        as: "service"
+      }
+    },
+    {"$unwind": "$service" },
+    {"$addFields": { "sessionInfo" : "$service.tasks" } },
+    {"$unwind": "$sessionInfo" },
+    { "$lookup":
+      {
+        from: "mlTask",
+        localField: "sessionInfo.id",
+        foreignField: "_id",
+        as: "task"
+      }
+    },
+    {"$unwind": "$task" },
+    {"$unwind": "$sessionInfo.sessions"},
+    {"$unwind": "$task.session" },
+    {"$addFields": { "isSameSession" : { "$eq": [ "$sessionInfo.sessions.id", "$task.session.sessionId"] } } },
+    {"$match": { "isSameSession": true } },
+    {"$addFields": {
+      "sessionInfo.duration": "$task.session.duration",
+      "owner": {
+        "userId": "$service.userId",
+        "profileId": "$service.profileId",
+      },
+      "client": {
+        "userId": "$userId",
+        "profileId": "$profileId",
+      }
+    }
+    },
+    {"$project": { "service":0, "task":0, "isSameSession":0 } },
+    { "$lookup":
+      {
+        from: "mlAppointments",
+        localField: "sessionInfo.sessions.id",
+        foreignField: "appointmentInfo.sessionId",
+        as: "appointment"
+      }
+    },
+    { "$unwind":
+      {
+        path: "$appointment",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    { "$match": {
+      "$or": [
+        {"appointment.appointmentInfo.serviceOrderId" : orderId},
+        {"appointment" : { "$exists": false } }
+      ]
+    }
+    },
+    {"$addFields": {
+      "sessionInfo.status": "$appointment.status",
+      "sessionInfo.startDate": "$appointment.startDate",
+    }
+    },
+    { "$group": {
+      "_id" : "$_id",
+      "orderId":  { "$first": "$orderId" },
+      "serviceId":  { "$first": "$serviceId" },
+      "serviceName":  { "$first": "$serviceName" },
+      "amount":  { "$first": "$amount" },
+      "tax":  { "$first": "$tax" },
+      "discountedAmount":  { "$first": "$discountedAmount" },
+      "totalAmount":  { "$first": "$totalAmount" },
+      "isActive":  { "$first": "$isActive" },
+      "paymentStatus":  { "$first": "$paymentStatus" },
+      "createdAt":  { "$first": "$createdAt" },
+      "owner":  { "$first": "$owner" },
+      "client":  { "$first": "$client" },
+      "sessionInfo": { "$push": "$sessionInfo" },
+    }
+    },
+    {
+      "$lookup": {
+        "from": "users",
+        "localField": "owner.userId",
+        "foreignField": "_id",
+        "as": "ownerInfo"
+      }
+    },
+    { "$unwind" : "$ownerInfo" },
+    { "$unwind" : "$ownerInfo.profile.externalUserProfiles" },
+    {
+      "$lookup": {
+        "from": "users",
+        "localField": "client.userId",
+        "foreignField": "_id",
+        "as": "clientInfo"
+      }
+    },
+    { "$unwind" : "$clientInfo" },
+    { "$unwind" : "$clientInfo.profile.externalUserProfiles" },
+    {"$addFields": {
+      "isSameOwnerProfile" : { "$eq": [ "$ownerInfo.profile.externalUserProfiles.profileId", "$owner.profileId"] },
+      "isSameClientProfile" : { "$eq": [ "$clientInfo.profile.externalUserProfiles.profileId", "$client.profileId"]}
+    }
+    },
+    {"$match": { "isSameOwnerProfile": true, "isSameClientProfile": true } },
+    {"$project": {
+      "_id" : 1,
+      "orderId": 1,
+      "serviceId": 1,
+      "serviceName": 1,
+      "amount": 1,
+      "tax": 1,
+      "discountedAmount": 1,
+      "totalAmount": 1,
+      "isActive": 1,
+      "paymentStatus": 1,
+      "createdAt": 1,
+      "sessionInfo": 1,
+      "owner": {
+        "userId": "$owner.userId",
+        "profileId": "$owner.profileId",
+        "name": "$ownerInfo.profile.displayName",
+        "cluster": "$ownerInfo.profile.externalUserProfiles.clusterName",
+        "chapter": "$ownerInfo.profile.externalUserProfiles.chapterName",
+        "subChapter": "$ownerInfo.profile.externalUserProfiles.subChapterName",
+        "community": "$ownerInfo.profile.externalUserProfiles.communityName",
+        "email": "$ownerInfo.profile.email",
+        "phoneNo": "$ownerInfo.profile.mobileNumber",
+        "gender": "$ownerInfo.profile.genderType"
+      },
+      "client": {
+        "userId": "$client.userId",
+        "profileId": "$client.profileId",
+        "name": "$clientInfo.profile.displayName",
+        "cluster": "$clientInfo.profile.externalUserProfiles.clusterName",
+        "chapter": "$clientInfo.profile.externalUserProfiles.chapterName",
+        "subChapter": "$clientInfo.profile.externalUserProfiles.subChapterName",
+        "community": "$clientInfo.profile.externalUserProfiles.communityName",
+        "email": "$clientInfo.profile.email",
+        "phoneNo": "$clientInfo.profile.mobileNumber",
+        "gender": "$clientInfo.profile.genderType"
+      }
+    }
+    }
+  ];
+  let result = mlDBController.aggregate('MlScOrder', pipeline );
+  result = JSON.stringify(result);
+  let code = 200;
+  let response = new MlRespPayload().successPayload(result, code);
+  return response;
 };

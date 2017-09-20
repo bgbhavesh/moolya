@@ -6,7 +6,9 @@ import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
-
+import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
+import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
+import _ from 'lodash';
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
@@ -14,6 +16,7 @@ class MlAppProfileHeader extends Component {
     this.state={profilePic:""}
     this.regStatus = false;
     this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
+
     return this;
   }
 
@@ -82,7 +85,7 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    let gImg = user && user.user && user.user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let gImg = user && user.user && user.user.profile && user.user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
       this.setState({
         profilePic:user.user.profile.profileImage == " "?gImg:user.user.profile.profileImage
@@ -101,9 +104,16 @@ class MlAppProfileHeader extends Component {
       FlowRouter.go("/app/register/");
   }
 
+
+  breadcrumbClicked(){
+    this.props.breadcrumbClicked();
+  }
+
   render() {
     const {data} = this.state
     let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
+    let path = Object.assign(FlowRouter._current.path);
+    let breadcrumType= path.includes('dashboard');
 
     return (
       <div>
@@ -111,10 +121,21 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
+
+        {breadcrumType ?
+          <DynamicBreadcrum/>
+          :
+          <VerticalBreadCrum breadcrumbClicked={this.breadcrumbClicked.bind(this)} />
+        }
+
+
         {/*{showLoader===true?(<MlLoader/>):(*/}
+
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
+
+
           <MlAppNotificationsConfig />
 
 
@@ -122,30 +143,30 @@ class MlAppProfileHeader extends Component {
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
-                <a href="/app/myprofile">
+                <a href="/app/myprofile" className={activeProfileArcClass('myprofile')}>
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Registration"} data-placement="right">
-                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"Pending Registration":"Registration"} data-placement="right">
+                  <a href="" className={isDisabled?"disable":activeProfileArcClass('register')} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile">
+                <a href="/app/appSwitchProfile"  className={activeProfileArcClass('appSwitchProfile')}>
                   <span className="ml my-ml-switch_profile"></span>
                 </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
+                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""} className={activeProfileArcClass('registerAs')}><span className="ml my-ml-register_as"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
-              {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
+              {/*<a href=""><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
               <li data-toggle="tooltip" title="Calendar" data-placement="top">
-                <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
+                <a href="/app/calendar" className={activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
-                <a href="/app/task"><img className="profile-img" src="/images/7.png" /></a>
+                <a href="/app/task" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
                 <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>
@@ -166,7 +187,32 @@ class MlAppProfileHeader extends Component {
 export default MlAppHeader = createContainer(props => {
   return {
     user: Meteor.user(),
+    breadcrumbClicked : props.breadcrumbClicked
   };
 }, MlAppProfileHeader);
 
+/**
+ * This method returns the className if the option is active
+ * @param type(String: type of profile option.myProfile/registerAs,calendar,myTask)
+ * returns result of className as active or null
+ */
+var activeProfileArcClass=function(type,params){
+  var currentPath = Object.assign(FlowRouter._current.path);
+  var path = (currentPath.split('?')[0]).split('/');
+  path=_.compact(path);//remove empty strings
+  _.pull(path, 'app');//pull 'app' route
+  var className='';
+  var profileLinkMapObject={'portfolio':'myprofile','myprofile':'myprofile','addressBook':'myprofile','myConnections':'myprofile','myOffice':'myprofile','addOffice':'myprofile','editOffice':'myprofile','library':'myprofile','myAppointment':'myprofile','termsConditions':'myprofile','privacy':'myprofile','previewProfile':'myprofile',
+                            'register':'register',
+                            'appSwitchProfile':'appSwitchProfile',
+                            'registerAs':'registerAs',
+                            'calendar':'calendar','shareCalendar':'calendar','officeCalendar':'calendar','notification':'calendar','manageSchedule':'calendar','settings':'calendar',
+                            'task':'task'};
+   _.every(path,function(i){
+     var profilePath=profileLinkMapObject[i];
+     if(profilePath===type){className='active'; return false;};
+     return true;
+    });
+  return className;
+}
 

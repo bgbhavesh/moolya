@@ -24,7 +24,8 @@ import {appClient} from "../../core/appConnection";
 export default class MlAppStartupViewTabs extends Component {
   constructor(props) {
     super(props);
-    this.state = {tabs: []};
+    this.state = {tabs: [],
+      activeTab:'About'};
   }
 
 
@@ -60,6 +61,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlStartupViewAboutLanding key="1" portfolioDetailsId={this.props.portfolioDetailsId}
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
@@ -68,6 +70,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
+        name: "Management",
         component: <MlStartupViewManagement key="2" isAdmin={false} client={appClient}
                                             portfolioDetailsId={this.props.portfolioDetailsId}
                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
@@ -76,6 +79,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
+        name: "Investor",
         component: <MlStartupViewInvestor key="3" portfolioDetailsId={this.props.portfolioDetailsId}
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -86,6 +90,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards",
+        name: "Awards",
         component: <MlStartupViewAwards key="6" portfolioDetailsId={this.props.portfolioDetailsId}
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -93,6 +98,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary isAdmin={false} client={appClient} key="7"
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}/>
@@ -101,6 +107,7 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "M C & L",
+        name: "M C And L",
         component: <MlStartupViewMCL key="9" portfolioDetailsId={this.props.portfolioDetailsId}
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -108,11 +115,12 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlStartupViewLookingFor key="10" portfolioDetailsId={this.props.portfolioDetailsId}
                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
     ]
-    return tabs;
+    return tabs;title
   }
 
   componentWillMount() {
@@ -123,14 +131,23 @@ export default class MlAppStartupViewTabs extends Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
   }
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
+
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }

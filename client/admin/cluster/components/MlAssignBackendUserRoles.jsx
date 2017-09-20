@@ -72,6 +72,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
     specificRole.roles[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
     specificRole.roles[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
+    specificRole.roles[index]['isAnchor'] = selObject.isAnchor?selObject.isAnchor:false;
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
     this.setState({rolesData: roleDetails});
@@ -257,7 +258,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
               }
             }
           };
-          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName}}`;
+          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName, isAnchor}}`;
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"

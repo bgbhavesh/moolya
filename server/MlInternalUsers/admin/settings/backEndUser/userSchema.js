@@ -23,7 +23,14 @@ let BackEndUser = `
         _id: String,
         username: String,
         profile:ExternalUserProfile,
+        mobileNumbers:[MobileNumbers]
     }
+    type MobileNumbers{
+        mobileNumber: String,
+        verified: Boolean,
+        countryId: String,
+    }
+    
     type ExternalUserProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
@@ -106,6 +113,7 @@ let BackEndUser = `
         subChapterName:String,
         communityName:String,
         clusterName : String
+        isAnchor : Boolean
     }
     
     type MoolyaProfile{
@@ -120,6 +128,7 @@ let BackEndUser = `
         displayName: String,
         email:String,
         contact:[Contacts],
+        socialLinksInfo     : [SocialLinkInfoSchema]
         globalAssignment:Boolean,
         isActive:Boolean,
         userProfiles:[UserProfiles]
@@ -155,6 +164,7 @@ let BackEndUser = `
         departmentName : String,
         subDepartmentId : String,
         subDepartmentName : String
+        isAnchor : Boolean
     }
     
     input userprofiles{
@@ -175,6 +185,7 @@ let BackEndUser = `
         email:String,
         contact:[contacts],
         globalAssignment:Boolean,
+        socialLinksInfo    : [SocialLinkInfo]
         isActive:Boolean,
         userProfiles:[userprofiles],
         profileImage:String,
@@ -184,7 +195,7 @@ let BackEndUser = `
         timeZone: String
         dateOfBirth: Date,
         genderType: String
-        
+        isAnchor : Boolean
     }
 
     input InternalUprofile{
@@ -297,7 +308,13 @@ let BackEndUser = `
         isAvailiable:Boolean
     }
     
+    type anchorUsers {  
+      userDetails : [userDetails]
+      portfolioCounter : [Portfoliodetails]
+    }
+    
     type userDetails{
+         _id: String
         alsoAssignedas: String,
         displayName:String,
         userName:String,
@@ -323,6 +340,7 @@ let BackEndUser = `
         departmentName:String,
         subDepartmentId:String,
         subDepartmentName:String
+        isAnchor      : Boolean
     }
    
     type mapCenterCords{
@@ -471,7 +489,7 @@ let BackEndUser = `
        addressInfo        : [AddressInfoSchema]
        emailInfo          : [EmailInfoSchema]
        contactInfo        : [ContactInfoSchema]
-       socialLinkInfo     : [SocialLinkInfoSchema]
+       socialLinksInfo     : [SocialLinkInfoSchema]
        kycDocuments       : [kycDocumentInfoSchema]   
     }
     
@@ -529,6 +547,7 @@ let BackEndUser = `
         getUserProfileForService(profileId: String): ExternalProfile
         findExternalUserAddressBook(registrationId:String): externalUserAdditionalInfoSchema
         findBranchAddressInfo: [AddressInfoSchema]
+        fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): anchorUsers
     }
 `
 
@@ -558,6 +577,7 @@ let supportedApi = [
     {api:'getUserProfileForService',actionName:'READ', moduleName:"USERS"},
     {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findExternalUserAddressBook',actionName:'READ', moduleName:"USERS", isWhiteList: true},
+    {api:'fetchAnchorUsers',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

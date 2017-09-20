@@ -54,7 +54,7 @@ export default class BugReportComponent extends React.Component {
             <h3 id="successMsg" style={{'display': 'none'}}>We appreciate your help / suggestion.<br /> We may revert to you for any
               additional details.</h3>
           </div>
-          <a href="#" className="bug_button">
+          <a href="" className="bug_button">
             <FontAwesome name='bug'/>
           </a>
         </div>

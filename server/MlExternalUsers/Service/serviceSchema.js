@@ -327,6 +327,7 @@ let service=`
         createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response
         updateServiceCardOrder(userServiceCardPaymentInfo: userServiceCardPaymentInfo):response
         checkServiceSubChapterAccessControl(serviceId:String!):response
+        cloneServiceCard(serviceId:String!):response
    }
 `;
 

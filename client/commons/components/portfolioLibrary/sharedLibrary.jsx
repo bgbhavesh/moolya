@@ -13,6 +13,7 @@ import React from 'react';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
+import _ from 'lodash'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
 
@@ -70,6 +71,35 @@ export default class  SharedLibrary extends React.Component {
     })
   }
 
+  componentWillReceiveProps(newProps) {
+    let data = newProps && newProps.data ? newProps.data : [] ;
+    let that = this;
+    let Image = [];
+    let Video = [];
+    let Template = [];
+    let Document = [];
+    if(_.isEmpty(data)){
+      this.setState({imageDetails: [], videoDetails:[],documentDetails:[], templateDetails:[]  })
+    } else{
+      data.map(function(fileInfo){
+        let type = fileInfo.file.fileType;
+        if(type === 'image') {
+          Image.push(fileInfo)
+          that.setState({imageDetails: Image})
+        } else if(type === 'video') {
+          Video.push(fileInfo)
+          that.setState({videoDetails: Video})
+        } else if(type === 'document') {
+          Document.push(fileInfo)
+          that.setState({documentDetails: Document})
+        } else {
+          Template.push(fileInfo)
+          that.setState({templateDetails: Template})
+        }
+      })
+    }
+  }
+
   /**
    * Method :: toggle
    * Desc   :: toggles the Modal component
@@ -124,8 +154,9 @@ export default class  SharedLibrary extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-            <a href="" data-toggle="modal" data-target=".imagepop"
+            <a href="" data-toggle="modal" data-target=".imagespop"
                                                  onClick={that.random.bind(that, show.file.url, id)}>
               <img src={show.file.url} /></a>
           <div id="images" className="title">{show.file.fileName}</div>
@@ -148,8 +179,9 @@ export default class  SharedLibrary extends React.Component {
     const Templates = templateData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-          <a href="" data-toggle="modal" data-target=".templatepop"
+          <a href="" data-toggle="modal" data-target=".templatespop"
              onClick={that.randomTemplate.bind(that, show.file.url, id)}>
             <img src={show.file.url} /></a>
           <div id="templates" className="title">{show.file.fileName}</div>
@@ -172,8 +204,9 @@ export default class  SharedLibrary extends React.Component {
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-          <a href="" data-toggle="modal" data-target=".videopop"
+          <a href="" data-toggle="modal" data-target=".videospop"
              onClick={that.randomVideo.bind(that, show.file.url, id)}>
             <video width="120" height="100" controls>
               <source src={show.file.url} type="video/mp4"></source>
@@ -198,8 +231,9 @@ export default class  SharedLibrary extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-          <a href="" data-toggle="modal" data-target=".documentpop"
+          <a href="" data-toggle="modal" data-target=".documentspop"
              onClick={that.randomDocument.bind(that, show.file.url, id)}>
             <img src="/images/doc.png"/></a>
           <div id="images" className="title">{show.file.fileName}</div>
@@ -261,14 +295,14 @@ export default class  SharedLibrary extends React.Component {
 
     return (
       <div>
-        <h2>Library</h2>
+        {/*<h2>Library</h2>*/}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
             <img src="/images/video_1.jpg"/>
           </ModalBody>
         </Modal>
-        <div className="modal fade bs-example-modal-sm library-popup imagepop"
+        <div className="modal fade bs-example-modal-sm library-popup imagespop"
              onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
              aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
@@ -283,7 +317,7 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup templatepop"
+        <div className="modal fade bs-example-modal-sm library-popup templatespop"
              onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
              aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
@@ -298,7 +332,7 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup documentpop"
+        <div className="modal fade bs-example-modal-sm library-popup documentspop"
              onContextMenu={(e) => e.preventDefault()}
              tabindex="-1"
              role="dialog"
@@ -319,7 +353,7 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup videopop"
+        <div className="modal fade bs-example-modal-sm library-popup videospop"
              onContextMenu={(e) => e.preventDefault()}
              tabindex="-1"
              role="dialog"

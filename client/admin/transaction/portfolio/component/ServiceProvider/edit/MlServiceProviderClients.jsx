@@ -10,8 +10,7 @@ import {fetchServiceProviderClients} from "../../../actions/findPortfolioService
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
-
-
+import CropperModal from '../../../../../../commons/components/cropperModal';
 export default class MlServiceProviderClients extends Component {
   constructor(props, context) {
     super(props);
@@ -25,12 +24,17 @@ export default class MlServiceProviderClients extends Component {
       selectedVal: null,
       selectedObject: "default",
       privateKey:{},
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -55,20 +59,24 @@ export default class MlServiceProviderClients extends Component {
     //     serviceProviderClientsList: this.context.startupPortfolio.clients
     //   });
     // }
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
 
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.clients)
+    const response = await fetchServiceProviderClients(portfolioDetailsId);
     if (empty) {
-      const response = await fetchServiceProviderClients(portfolioDetailsId);
-      if (response) {
+      if (response && response.length>0) {
         this.setState({loading: false, serviceProviderClients: response, serviceProviderClientsList: response});
         // _.each(response.privateFields, function (pf) {
         //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         // })
+      }
+      else{
+        this.setState({loading:false})
       }
     } else {
       this.setState({
@@ -77,6 +85,7 @@ export default class MlServiceProviderClients extends Component {
         serviceProviderClientsList: that.context.serviceProviderPortfolio.clients
       });
     }
+    this.serviceProviderClientsServer =response?response:[]
   }
 
   addClient() {
@@ -99,16 +108,31 @@ export default class MlServiceProviderClients extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.companyId
+      "selectedVal": details.companyId,
+      popoverOpen: !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.serviceProviderClientsServer && this.serviceProviderClientsServer[selIndex]?this.serviceProviderClientsServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
@@ -122,9 +146,14 @@ export default class MlServiceProviderClients extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
-    this.setState({privateKey:privateKey})
-    this.setState({data: details}, function () {
+    // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data: details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -181,22 +210,35 @@ export default class MlServiceProviderClients extends Component {
 
   }
 
-  onLogoFileUpload(e) {
-    if (e.target.files[0].length == 0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
-      portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: {clients: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
-    };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+  onLogoFileUpload(fileInfo,image) {
+    /*if (e.target.files[0].length == 0)
+      return;*/
+    //let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+   
+    let file = image;
+    let fileName = fileInfo.name;
+    if(file){
+      let data = {
+        moduleName: "PORTFOLIO",
+        actionName: "UPLOAD",
+        portfolioDetailsId: this.props.portfolioDetailsId,
+        portfolio: {clients: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+      };
+      let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
 
   onFileUploadCallBack(file,resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -260,7 +302,18 @@ export default class MlServiceProviderClients extends Component {
     if (this.state.popoverOpen)
       this.setState({popoverOpen: false})
   }
-
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image,e) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(e,image);
+  }
   render() {
     let that = this;
     const showLoader = that.state.loading;
@@ -285,7 +338,7 @@ export default class MlServiceProviderClients extends Component {
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="" id="create_clientdefault" data-placement="right" data-class="large_popover">
+                    <a id="create_clientdefault" data-placement="right" data-class="large_popover">
                       <div className="list_block notrans" onClick={this.addClient.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
@@ -299,7 +352,7 @@ export default class MlServiceProviderClients extends Component {
                       $("#makePrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
                     }
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="" id={"create_client" + idx}>
+                      <a id={"create_client" + idx}>
                         <div className="list_block">
                           {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
                           <FontAwesome name='unlock' id={"makePrivate" + idx}
@@ -340,9 +393,10 @@ export default class MlServiceProviderClients extends Component {
                         </div>
                         {displayUploadButton ? <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
-                            <span>Upload Logo</span>
-                            <input type="file" name="logo" id="logo" className="upload" accept="image/*"
-                                   onChange={this.onLogoFileUpload.bind(this)}/>
+                              <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+
+                            {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
+                                   onChange={this.onLogoFileUpload.bind(this)}/>*/}
                           </div>
                         </div> : ""}
                         <div className="clearfix"></div>
@@ -362,6 +416,13 @@ export default class MlServiceProviderClients extends Component {
                 </div>
               </PopoverContent>
             </Popover>
+            <CropperModal
+              uploadingImage={this.state.uploadingAvatar}
+              handleImageUpload={this.handleUploadAvatar}
+              cropperStyle="any"
+              show={this.state.showProfileModal}
+              toggleShow={this.toggleModal}
+            />
           </div>)}
       </div>
     )
@@ -369,4 +430,5 @@ export default class MlServiceProviderClients extends Component {
 }
 MlServiceProviderClients.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

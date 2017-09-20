@@ -19,7 +19,7 @@ let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import MlLoader from '../../../commons/components/loader/loader'
 import {client} from '../../core/apolloConnection';
-
+import CropperModal from '../../../commons/components/cropperModal';
 
 class MlAssignBackendUsers extends React.Component {
   constructor(props) {
@@ -32,12 +32,15 @@ class MlAssignBackendUsers extends React.Component {
           users: [{username: '', _id: ''}],
           userDisplayName: '',
           username: '',
+          showProfileModal: false,
       }
 
       this.addEventHandler.bind(this);
       this.assignBackendUsers.bind(this);
       this.updateSelectedBackEndUser.bind(this);
       this.filterClusterBasedRoles.bind(this);
+      this.toggleProfileModal = this.toggleProfileModal.bind(this);
+      this.onUploadAvatar = this.onUploadAvatar.bind(this);
       // this.findCluster.bind(this);
       return this;
   }
@@ -149,7 +152,7 @@ class MlAssignBackendUsers extends React.Component {
       subChapterId: params.subChapterId,
       communityId: params.communityId
     }
-      let response = await multipartFormHandler(data, this.refs.profilePic.files[0])
+      let response = await multipartFormHandler(data, this.state.profilePic)
       return response;
   }
 
@@ -192,6 +195,19 @@ class MlAssignBackendUsers extends React.Component {
   resetBackendUers() {
       this.setState({loading: true});
       this.setState({selectedBackendUser:'', userDisplayName:'', username:'', alsoAssignedAs:"", loading: false});
+  }
+
+  onUploadAvatar(image) {
+    this.setState({
+      profilePic: image,
+    });
+    this.toggleProfileModal();
+  }
+
+  toggleProfileModal() {
+    this.setState({
+      showProfileModal: !this.state.showProfileModal,
+    });
   }
 
 
@@ -256,7 +272,11 @@ class MlAssignBackendUsers extends React.Component {
       const showLoader = this.state.loading;
       let gImage = this.state.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
       let genderImage = (!this.state.profileImage || this.state.profileImage == " "?gImage:this.state.profileImage)
-
+    console.log(this.state.profilePic);
+    var urlCreator = window.URL || window.webkitURL;
+    let imageUrl = '';
+    if (this.state.profilePic)
+      imageUrl = urlCreator.createObjectURL(this.state.profilePic);
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -299,12 +319,20 @@ class MlAssignBackendUsers extends React.Component {
                   <form>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" ref="profilePic"/>
+                        <span onClick={this.toggleProfileModal}>Profile Pic</span>
+
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={genderImage}/>
+                        <img src={this.state.profilePic ? imageUrl : genderImage}/>
                       </div>
+                      <CropperModal
+                        handleImageUpload={this.onUploadAvatar}
+                        uploadingImage={false}
+                        show={this.state.showProfileModal}
+                        toggleShow={this.toggleProfileModal}
+                        cropperStyle="circle"
+                        submitText="Crop"
+                      />
                     </div>
                     <br className="brclear"/>
                     {/*{that.state.cluster.isActive ?*/}

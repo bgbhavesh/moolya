@@ -10,8 +10,10 @@ import NotificationTemplateEngine from "../commons/mlTemplateEngine"
 import mlSmsController from "../mlNotifications/mlSmsNotifications/mlSmsController"
 import mlSMSConst from "../mlNotifications/mlSmsNotifications/mlSmsConstants"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
+import MlSMSNotification from '../mlNotifications/mlSmsNotifications/mlSMSNotification'
 import _ from 'underscore'
 import moment from "moment";
+var _lodash = require('lodash');
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -92,7 +94,7 @@ export default MlAccounts=class MlAccounts {
       path : verificationLink,
       firstName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
       contactNumber : "+91-40-4672 5725 /Ext",
-      hours : 48,
+      hours : 72,
       fromEmail : emailOptions&&emailOptions.from?emailOptions.from:"",
       toEmail : emailOptions&&emailOptions.to?emailOptions.to:"",
     }
@@ -156,7 +158,7 @@ export default MlAccounts=class MlAccounts {
       this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
 
       //on successful email verification
-      this.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
+      MlSMSNotification.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
     }
 
     return {
@@ -164,7 +166,7 @@ export default MlAccounts=class MlAccounts {
     };
   }
 
-  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
+/*  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
     var regDetails = mlDBController.findOne('MlRegistration',{_id:regId});
     if(!regDetails){
       throw new Error(403, "Mobile Number entered  is not registered");
@@ -173,7 +175,7 @@ export default MlAccounts=class MlAccounts {
     var sms = _.find(mlSMSConst, 'SMS_EMAIL_VERIFIED')
     var msg= sms.SMS_EMAIL_VERIFIED
     mlSmsController.sendSMS(msg, countryCode, mobileNumber)
-  }
+  }*/
 
   static sendVerificationSmsOtp(regId,numbr,customEmailComponent){
 
@@ -206,7 +208,7 @@ export default MlAccounts=class MlAccounts {
       }
     }else{
       var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
-      otps = [{num: otpNumber, time: new Date(), verified: false}];
+      otps = [{num: otpNumber, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode}];
       otp=otpNumber;
     }
 
@@ -214,7 +216,7 @@ export default MlAccounts=class MlAccounts {
     if(otp){
       //DO WE NEED TO UPDATE THE TIME?
     }else{
-      otps.push({num:otpNum, time: new Date(), verified: false});
+      otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
 
     MlRegistration.update({_id: regId},{$set:{"otps": otps}});
@@ -222,10 +224,97 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "\n\nThank you for registering with moolya!\n"+
+      /*msg= "\n\nThank you for registering with moolya!\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";
+      "\n\nTeam moolya\n";*/
+      msg= "Thank you for registering with moolya!"+"Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons."+
+        "Regards,"+"Team moolya";
+
+    }
+
+    //send SMS
+    if(mobileNumber){
+
+      Meteor.setTimeout(function() {
+        mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+        // mlSms.send(countryCode,mobileNumber,msg);
+      }, 1 * 1000);
+
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.mobileNumber=mobileNumber;
+    resp.otp=otp;
+    return resp;
+  }
+
+  static sendUserVerificationSmsOtp(userId,customEmailComponent){
+
+    var user = mlDBController.findOne('users',{_id:userId});
+
+    var mobileNumber = null;
+    var externalProfile = {};
+    if(user && user.profile){
+
+      if(user.profile && user.profile.externalUserProfiles && user.profile.externalUserProfiles.length>0){
+        externalProfile = _.find(user.profile.externalUserProfiles, {isDefault:true});
+        if(!externalProfile){
+          externalProfile = user.profile.externalUserProfiles[0]
+        }
+      }
+      mobileNumber = externalProfile.mobileNumber;
+
+      if(!mobileNumber){
+        return {mobileNumber:"", error: true,reason:"Mobile Number is not available", code:403};
+      }
+
+    }
+
+    var otp = null;
+    var mobileNumber=mobileNumber;
+    var countryCode=externalProfile.countryId;
+    var msg=null;
+    // if(!mobileNumber){
+    //   mobileNumber=(regDetails.registrationInfo||{}).contactNumber;
+    // }
+
+    var otps = user.otps || [];
+
+    if(otps){
+      for(var i =0; i<otps.length; i++){
+        var otpRec = otps[i];
+        if(otpRec.verified === false){
+          if(new Date() - otpRec.time.getTime() < 60*60*1000){
+            otp = otpRec.num;
+            otpRec.resendTime = new Date();
+            break;
+          }
+        }
+      }
+    }else{
+      var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
+      otps = [{num: otpNumber, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode}];
+      otp=otpNumber;
+    }
+
+    var otpNum = otp || Math.floor(1000 + Math.random() * 9000)+"";
+    if(otp){
+      //DO WE NEED TO UPDATE THE TIME?
+    }else{
+      otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
+    }
+
+    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
+
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(user,otpNum);
+    }else{
+      msg= "\n\nThank you for registering with moolya!\n"+
+        "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
+        "\n\nRegards,\n" +
+        "\n\nTeam moolya\n";
 
     }
 
@@ -278,7 +367,7 @@ export default MlAccounts=class MlAccounts {
 
     }else{
       var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
-      otps = [{num: otpNumber, time: new Date(), verified: false}];
+      otps = [{num: otpNumber, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode}];
       otp=otpNumber;
     }
 
@@ -286,7 +375,7 @@ export default MlAccounts=class MlAccounts {
     if(otp){
       //DO WE NEED TO UPDATE THE TIME?
     }else{
-      otps.push({num:otpNum, time: new Date(), verified: false});
+      otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
     MlRegistration.update({"registrationInfo.contactNumber":numbr},{$set:{"otps":otps}});
     //send SMS
@@ -312,6 +401,164 @@ export default MlAccounts=class MlAccounts {
     resp.otp=otp;
     return resp;
 
+  }
+  static resendUserVerificationSmsOtp(userId,customEmailComponent){
+
+    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var mobileNumber = null;
+    var externalProfile = {}
+    if(user && user.profile){
+
+      if(user.profile && user.profile.externalUserProfiles && user.profile.externalUserProfiles.length>0){
+        externalProfile = _.find(user.profile.externalUserProfiles, {isDefault:true});
+        if(!externalProfile){
+          externalProfile = user.profile.externalUserProfiles[0]
+        }
+      }
+      mobileNumber = externalProfile.mobileNumber;
+
+      if(!mobileNumber){
+        return {mobileNumber:"", error: true,reason:"Mobile Number is not available", code:403};
+      }
+
+    }
+
+    let to=mobileNumber;
+    let countryCode=externalProfile.countryId;
+
+    if(!to){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+    var otp = null;
+    var mobileNumber=to;
+    var msg=null;
+    var otps = user.otps;
+    if(otps){
+      for(var i =0; i<otps.length; i++){
+        var otpRec =otps[i];
+        if(otpRec.verified === false){
+          if(new Date() - otpRec.time.getTime() < 15*60*1000){
+            otp = otpRec.num;
+            otpRec.resendTime = new Date();
+            break;
+          }
+        }
+      }
+
+    }else{
+      var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
+      otps = [{num: otpNumber, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode}];
+      otp=otpNumber;
+    }
+
+    var otpNum = otp || Math.floor(1000 + Math.random() * 9000)+"";
+    if(otp){
+      //DO WE NEED TO UPDATE THE TIME?
+    }else{
+      otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
+    }
+    MlRegistration.update({"registrationInfo.contactNumber":numbr},{$set:{"otps":otps}});
+    //send SMS
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(user,otpNum);
+    }else{
+      msg= "Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.";
+    }
+    //send SMS
+    if(mobileNumber){
+
+      Meteor.setTimeout(function() {
+
+        // mlSms.send(countryCode,to,msg);
+        mlSmsController.sendSMS(msg, countryCode, to)
+      }, 1 * 1000);
+
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.mobileNumber=mobileNumber;
+    resp.otp=otp;
+    return resp;
+
+  }
+
+  static verifyUserMobileNumberOtp(userId, otp){
+
+    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var mobileNumber = null;
+    if(user && user.profile){
+
+        if(user.profile && user.profile.externalUserProfiles && user.profile.externalUserProfiles.length>0){
+          var externalProfile = _.find(user.profile.externalUserProfiles, {isDefault:true});
+          if(!externalProfile){
+            externalProfile = user.profile.externalUserProfiles[0]
+          }
+        }
+        mobileNumber = externalProfile.mobileNumber;
+
+        if(!mobileNumber){
+          return {mobileNumber:"", error: true,reason:"Mobile Number is not available", code:403};
+        }
+
+    }
+
+
+    if( user.otps && user.otps.length > 0){
+      var otpFound = false;
+      var otpVerified=false;
+      var otpExpired=false;
+      for(var i =0; i<user.otps.length; i++){
+        var otpRec = user.otps[i];
+
+        //Commented as it was validating old otp for reset pwd
+        if(otpRec.verified === true){
+          otpFound = true;
+          otpVerified=true;
+          break;
+        }
+        let otpNum=otpRec.num;
+        if(otpNum&&Number(otpNum) === otp && otpRec.verified === false){
+          var otpTime = 15;//todo: configure it as the settings
+          if(new Date() - otpRec.time.getTime() > (otpTime*60*10000 || 5*60*10000)){
+            //throw new Error(403, "OTP "+otp+" has expired, generate new one with resend option");
+            otpExpired=true;
+            break;
+          }
+          otpRec.verified = true;
+          var mobileArr = user.mobileNumbers;
+          var mobileObj = _.find(mobileArr, {mobileNumber:mobileNumber})
+          if(mobileObj){
+            mobileObj.verified = true
+            _lodash.remove(mobileArr, {mobileNumber:mobileNumber})
+            mobileArr.push(mobileObj);
+          }
+          user.mobileNumbers = mobileArr;
+
+          var updatedCount=Meteor.users.update({_id:userId},{$set:{"otps":user.otps, "mobileNumbers":user.mobileNumbers}});
+          otpFound = true;
+          break;
+        }
+      }
+
+      if(otpVerified){
+        return {mobileNumber:mobileNumber, error: true,reason:"Mobile Number entered has already been verified", code:403};
+      }else if(otpExpired){
+        return {mobileNumber:mobileNumber, error: true,reason:"OTP "+otp+" has expired, generate new one with resend option", code:403};
+      }else if(!otpFound){
+        return {mobileNumber:mobileNumber, error: true,reason:"OTP is Invalid, enter a correct one or try resend option", code:403};
+      }else{
+        return {mobileNumber:mobileNumber,recordId:user._id, error: false,reason:"Mobile Number has been verified.", code:200};
+        //These commented lines are to generate token for user to login when the user verifies his mobile/email
+        // var stampedLoginToken = Accounts._generateStampedLoginToken();
+        // Accounts._insertLoginToken(user._id, stampedLoginToken);
+        //return stampedLoginToken;
+      }
+
+    }else{
+      //throw new Error(403, "Invalid otp,Please provide a valid otp to verify your number");
+      return {mobileNumber:mobileNumber, error: true,reason:"Invalid otp,Please provide a valid otp to verify your number", code:403};
+    }
   }
 
   static verifyMobileNumberOtp(mobileNumber, otp){
@@ -373,7 +620,7 @@ export default MlAccounts=class MlAccounts {
   }
 
   static sendForgotPasswordEamil(email, context) {
-    user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
+    var user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
     if(!user){
       return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
     }
@@ -391,6 +638,8 @@ export default MlAccounts=class MlAccounts {
     /*let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_forgot_reset_password_mailer","email",regObj)*/
     if(res){
       let emailSent = MlEmailNotification.forgotPassword(context, Meteor.absoluteUrl('reset')+'/'+token);
+      let userId = user&&user._id?user._id:""
+      MlSMSNotification.forgotPassword(userId,context)
     /*  var emailOptions={};
       //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
       emailOptions.from=fromEmail;

@@ -6,7 +6,8 @@ import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorD
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
+import CropperModal from '../../../../../commons/components/cropperModal';
 
 export default class MlIdeatorIdeas extends React.Component{
   constructor(props, context){
@@ -15,11 +16,16 @@ export default class MlIdeatorIdeas extends React.Component{
       loading: true,
       data:{},
       privateKey:{},
-      privateValues:[]
+      privateValues:[],
+      showProfileModal: false,
+      uploadingAvatar: false,
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -121,16 +127,27 @@ export default class MlIdeatorIdeas extends React.Component{
     return resp;
   }
 
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let fileName = e.target.files[0].name;
-    let name = e.target.name;
-    let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:" ", fileName : fileName}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  onLogoFileUpload(image,fileInfo){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
+    //let fileName = e.target.files[0].name;
+    //let name = e.target.name;
+    let file=image;
+    let fileName=fileInfo.name;
+    if(file){
+      let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+    }this.setState({
+      uploadingAvatar: false,
+    });
+
   }
-  onFileUploadCallBack(name,file,resp){
+  onFileUploadCallBack(file,resp){
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if(resp){
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -149,7 +166,19 @@ export default class MlIdeatorIdeas extends React.Component{
       }
     }
   }
-
+  toggleModal() {
+    const that = this;
+    var status = that.state.showProfileModal
+    this.setState({
+      showProfileModal: !status
+    });
+  }
+  handleUploadAvatar(image,e) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image,e);
+  }
   render(){
     let that = this;
     const showLoader = this.state.loading;
@@ -161,14 +190,24 @@ export default class MlIdeatorIdeas extends React.Component{
       <div>
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
-          <a href="#" >
+          {/*<a href="" >*/}
             <div className="upload_hex">
               {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
               <img src={image} id="blah" width="105" height="auto"/>
-              <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
+              {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
             </div>
-          </a>
+          {/*</a>*/}
+          <div className="fileUpload mlUpload_btn">
+            <span onClick={this.toggleModal}>Upload Pic</span>
+          </div>
         </div>
+        <CropperModal
+          uploadingImage={this.state.uploadingAvatar}
+          handleImageUpload={this.handleUploadAvatar}
+          cropperStyle="square"
+          show={this.state.showProfileModal}
+          toggleShow={this.toggleModal}
+        />
         <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
           <form>
             <div className="form-group">

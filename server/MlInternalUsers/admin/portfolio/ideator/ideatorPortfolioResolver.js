@@ -9,6 +9,7 @@ import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlRegistrationRepo from "../../registration/mlRegistrationRepo";
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
@@ -355,6 +356,7 @@ MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) =>
 MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
     let portfolioId = ""
     let  user = {}
+    let updateRecord = {}
     if(args && args.idea){
         try{
             let idea = args.idea;
@@ -382,7 +384,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                 }
             }
             if(isCreatePortfolioRequest) {
-                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "Approved"}, context) //|| {"registrationInfo": {}};
+                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "REG_USER_APR"}, context) //|| {"registrationInfo": {}};
                 let createdName
                 if(Meteor.users.findOne({_id : context.userId}))
                 {
@@ -398,7 +400,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     "subChapterId" :regRecord.registrationInfo.subChapterId,
                     "source" : "self",
                     "createdBy" : createdName,
-                    "status" : "Yet To Start",
+                    "status" : "REG_PORT_KICKOFF",
                     "isPublic": false,
                     "isGoLive" : false,
                     "isActive" : false,
@@ -427,6 +429,10 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     return resp;
                   }
                   idea.portfolioId = resp.result;
+                  if(resp&&resp.result){
+                    mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_KICKOFF');
+                    let updatedResponse = mlDBController.update('MlPortfolioDetails',resp.result,updateRecord, {$set: true}, context)
+                  }
                 }else {
                   let code = 400;
                   let response = new MlRespPayload().errorPayload('User is not approved from Hard registration', code);
@@ -689,15 +695,14 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
   if(args.idea) {
-    // var idea = MlIdeas.findOne({"_id":args.ideaId})
     var idea = mlDBController.findOne('MlIdeas', {_id: args.ideaId}, context)
     var updatedIdea = args.idea;
     if(idea){
-      // let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea})
       let ret = mlDBController.update('MlIdeas', args.ideaId, updatedIdea, {$set:true}, context)
       if (ret) {
+        let ideatoralert = MlAlertNotification.onPortfolioUpdates()
         let code = 200;
-        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        let response = new MlRespPayload().successPayload(ideatoralert, code);
         return response;
       }
     }
@@ -728,6 +733,7 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
           if(idea){
+            idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
             idea.createdAt = portfolio?portfolio.createdAt:null;
             idea.updatedAt = portfolio?portfolio.transactionUpdatedDate:null;
             ideas.push(idea);

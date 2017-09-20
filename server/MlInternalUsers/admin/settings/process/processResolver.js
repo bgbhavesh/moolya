@@ -446,16 +446,15 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         allKycDoc.push(doc);
       })
     }
-   /* if (allKycDoc && allKycDoc.length > 0) {
+    if (allKycDoc && allKycDoc.length > 0) {
       //getting uniq documents based on documentId
       allCombinationDoc = _underscore.uniq(allKycDoc, function (kyc) {
         let docId = kyc&&kyc.documentId?kyc.documentId:""
         return docId;
       });
-      //llCombinationDoc = _underscore.uniq(allKycDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
+      //allCombinationDoc = _underscore.uniq(allKycDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
       return allCombinationDoc
     }
-*/
     return allKycDoc
   }
 
@@ -584,7 +583,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
 
   //checking for the email exist or not
-  let user = MlRegistration.find({"$and": [{"registrationInfo.email": email}, {"status": "Approved"}]}).fetch();
+  let user = MlRegistration.find({"$and": [{"registrationInfo.email": email}, {"status": "REG_USER_APR"}]}).fetch();
   if (user && user.length > 0) {
     let ApprovedKyc = [];
     let kycDoc = null;

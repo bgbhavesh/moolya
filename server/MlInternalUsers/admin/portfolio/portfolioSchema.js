@@ -49,6 +49,9 @@ let portfolioSchema = `
         communityId:String
         canAccess         : Boolean
         portfolioImage : String
+        allocationStatus :  String
+        count : String
+        communityImageLink : String
     }
     
     input privateKeys{

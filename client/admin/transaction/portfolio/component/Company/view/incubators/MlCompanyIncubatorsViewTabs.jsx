@@ -5,21 +5,22 @@ import MlCompanyViewStartupIncubators from "./MlCompanyViewStartupIncubators";
 import MlCompanyViewSectors from "./MlCompanyViewSectors";
 import MlCompanyViewListOfIncubators from "./MlCompanyViewListOfIncubators";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../core/apolloConnection'
+import {client} from '../../../../../../core/apolloConnection';
+import _ from 'lodash';
 // import {appClient} from '../../../../../../../app/core/appConnection'
 
 export default class MlCompanyIncubatorsViewTabs extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {
+    this.state = {
       tabs: [],
-      portfolioIncubators:{},
-      institutionIncubators:{},
-      sectorsAndServices:{},
-      listOfIncubators:{},
+      portfolioIncubators: {},
+      institutionIncubators: {},
+      sectorsAndServices: {},
+      listOfIncubators: {},
       admin: true,
-    }
-    ;
+      activeTab: 'Startup Incubators',
+    };
   }
 
   /**
@@ -77,18 +78,29 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.title,
         getContent: () => tab.component
       }));
     }
+
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
+
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
     this.setBackTab()
   }
 
+  updateTab(index){
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
+  }
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} backClickHandler={this.props.backClickHandler}
+                           type="subtab" mkey="title"/>
   }
 }
-

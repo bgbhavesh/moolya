@@ -13,6 +13,7 @@ import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioD
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
+import CropperModal from '../../../../../../commons/components/cropperModal';
 
 const KEY = "awardsRecognition"
 
@@ -28,7 +29,9 @@ export default class MlCompanyAwards extends React.Component{
       selectedIndex:-1,
       awardsList:[],
       selectedVal:null,
-      selectedObject:"default"
+      selectedObject:"default",
+      showProfileModal: false,
+      uploadingAvatar: false
     }
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
@@ -36,6 +39,9 @@ export default class MlCompanyAwards extends React.Component{
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
     return this;
   }
 
@@ -52,15 +58,16 @@ export default class MlCompanyAwards extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+   const resp= this.fetchPortfolioDetails();
+   return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.awardsRecognition)
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.awardsRecognition) {
+      if (response && response.awardsRecognition && response.awardsRecognition.length>0) {
         this.setState({loading: false, awards: response.awardsRecognition, awardsList: response.awardsRecognition});
       }else{
         this.setState({loading:false})
@@ -68,6 +75,7 @@ export default class MlCompanyAwards extends React.Component{
     }else{
       this.setState({loading: false, awards: that.context.companyPortfolio.awardsRecognition, awardsList: that.context.companyPortfolio.awardsRecognition});
     }
+    this.CompanyAwardServer = response&&response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -89,13 +97,32 @@ export default class MlCompanyAwards extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({selectedIndex:index, data:details,
+      selectedObject : index,
+      "selectedVal" : details.awardId,
+      popoverOpen : !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.CompanyAwardServer && this.CompanyAwardServer[selIndex]?this.CompanyAwardServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onLockChange(fiedName, field, e){
     var isPrivate = false
@@ -109,9 +136,14 @@ export default class MlCompanyAwards extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data:details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -195,17 +227,29 @@ export default class MlCompanyAwards extends React.Component{
     this.props.getAwardsDetails(awards, this.state.privateKey);
   }
 
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+  onLogoFileUpload(image,fileInfo){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    // let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let file=image;
+    let fileName=fileInfo.name;
+    if(file){
+      let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+    }else{
+      this.setState({
+        uploadingAvatar: false,
+      });
+    }
   }
 
   onFileUploadCallBack(file,resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
@@ -272,7 +316,18 @@ export default class MlCompanyAwards extends React.Component{
       this.setState({loading: false, awards:cloneBackUp,awardsList:cloneBackUpList});
     }
   }
-
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image,e) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(image,e);
+  }
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
@@ -308,7 +363,7 @@ export default class MlCompanyAwards extends React.Component{
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover" >
+                    <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
                       <div className="list_block notrans" onClick={this.addAward.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addAward.bind(this)}>Add New Awards</h3>
@@ -317,7 +372,7 @@ export default class MlCompanyAwards extends React.Component{
                   </div>
                   {awardsList.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="#" id={"create_client"+idx}>
+                      <a href="" id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
@@ -351,12 +406,13 @@ export default class MlCompanyAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAwardsDescriptionPrivate" defaultValue={this.state.data.isAwardsDescriptionPrivate}  onClick={this.onLockChange.bind(this, "awardsDescription", "isAwardsDescriptionPrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "awardsDescription", "isDescriptionPrivate")}/>
                       </div>
                       {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">
-                          <span>Upload Logo</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                            <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+
+                         {/* <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                         </div>
                       </div>:""}
                       <div className="clearfix"></div>
@@ -371,6 +427,13 @@ export default class MlCompanyAwards extends React.Component{
                 </div>
               </PopoverContent>
             </Popover>
+            <CropperModal
+              uploadingImage={this.state.uploadingAvatar}
+              handleImageUpload={this.handleUploadAvatar}
+              cropperStyle="square"
+              show={this.state.showProfileModal}
+              toggleShow={this.toggleModal}
+            />
           </div>
         </div>)}
       </div>
@@ -379,4 +442,5 @@ export default class MlCompanyAwards extends React.Component{
 }
 MlCompanyAwards.contextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

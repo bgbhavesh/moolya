@@ -29,8 +29,29 @@ class MlAppTaskLanding extends Component {
     let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     var response;
     this.errorMsg = '';
+
+    console.log('send=',this.state);
     if (sendData && sendData.payment && sendData.payment.isDiscount) {
-      if(sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null ){
+      if(!sendData.name){
+        this.errorMsg = 'Task Name is required';
+        toastr.error(this.errorMsg);
+        return false;
+      }else if(!sendData.displayName){
+        this.errorMsg = 'Display Name is required';
+        toastr.error(this.errorMsg);
+        return false;
+      }else if(!sendData.isExternal && !sendData.isInternal){
+        this.errorMsg = 'Task Type is required';
+        toastr.error(this.errorMsg);
+        return false;
+      }else if(!sendData.noOfSession){
+        this.errorMsg = 'Number of Session is Mandatory';
+        toastr.error(this.errorMsg);
+        return false;
+      }
+
+
+      else if(sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null ){
         this.errorMsg = 'Payable amount is required';
         toastr.error(this.errorMsg);
         return false;
@@ -185,10 +206,10 @@ class MlAppTaskLanding extends Component {
           name: 'Create Task',
           component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>,
-          icon:<span className="ml fa fa-plus-square-o"></span>
+          icon:<span className="ml my-ml-add_tasks"></span>
         },
         {
-          name: 'Create Session',
+          name: 'Choose Activity',
           component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
                                        taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }
                                        editMode={this.props.editMode}
@@ -219,7 +240,7 @@ class MlAppTaskLanding extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true}/>
+                <StepZilla steps={steps} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false} dontValidate={false} showConfirm={true}/>
               </div>
             </div>
           </div>

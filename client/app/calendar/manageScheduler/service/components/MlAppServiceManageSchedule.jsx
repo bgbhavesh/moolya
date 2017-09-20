@@ -29,7 +29,8 @@ import {
   fetchTasksAmountActionHandler,
   updateGoLiveServiceActionHandler,
   fetchTaskDetailsForServiceCard,
-  updateReviewServiceActionHandler
+  updateReviewServiceActionHandler,
+  cloneServiceCardActionHandler
 } from '../actions/MlServiceActionHandler';
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails';
 
@@ -69,9 +70,12 @@ class MlAppServiceManageSchedule extends Component {
       clusterData: {}
     };
     this.options = [
-      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Onetime', label: 'One Time'},
       {value: 'Daily', label: 'Daily'},
-      {value: 'Monthly', label: 'Monthly'}
+      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Monthly', label: 'Monthly'},
+      {value: 'Quarterly', label: 'Quarterly'},
+      {value: 'Yearly', label: 'Yearly'},
     ];
     this.profileId = this.props.profileId?this.props.profileId:FlowRouter.getParam('profileId');
     this.serviceId = this.props.serviceId?this.props.serviceId:FlowRouter.getQueryParam('id');
@@ -96,6 +100,7 @@ class MlAppServiceManageSchedule extends Component {
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
     this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
     this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
+    this.cloneServiceCard = this.cloneServiceCard.bind(this);
   }
 
   componentWillMount() {
@@ -164,7 +169,7 @@ class MlAppServiceManageSchedule extends Component {
                                           viewMode={this.props.viewMode}
                                           setSessionFrequency={this.setSessionFrequency}
                                           onChangeFormField={this.onChangeFormField}/>,
-        icon: <span className="ml fa fa-plus-square-o"></span>
+        icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: !this.props.viewMode?'Select Tasks':'Tasks',
@@ -996,6 +1001,19 @@ class MlAppServiceManageSchedule extends Component {
     const resp = await updateReviewServiceActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Sent for review successfully');
   }
+
+  /**
+   * Method :: sendReviewService
+   * Desc :: Send to admin for review
+   */
+  async cloneServiceCard() {
+    console.log('Clone', this.serviceId);
+    const resp = await cloneServiceCardActionHandler(this.serviceId);
+    this.showResponseMsg(resp, 'Service clone successfully');
+    if(resp.success){
+      FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/serviceList');
+    }
+  }
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -1013,7 +1031,7 @@ class MlAppServiceManageSchedule extends Component {
         handler: async(event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: true,
+        showAction: _this.serviceId ? true : false,
         actionName: 'send for review',
         handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
       },
@@ -1028,6 +1046,11 @@ class MlAppServiceManageSchedule extends Component {
         handler: async(event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }
+      },
+      {
+        showAction: _this.serviceId ? true : false,
+        actionName: 'clone',
+        handler: async(event) => _this.props.handler(_this.cloneServiceCard.bind(this))
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -1052,7 +1075,8 @@ class MlAppServiceManageSchedule extends Component {
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
                            stepsNavigation={true}
-                           prevBtnOnLastStep={true}/>
+                           showNavigation={false}
+                           prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

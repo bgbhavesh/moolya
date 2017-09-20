@@ -26,10 +26,16 @@ export default class MlAppChooseTeam extends React.Component{
       teamData: props.data ? props.data : [{users: []}],
       isExternal: props.isExternal ? props.isExternal : false,
       isInternal: props.isInternal ? props.isInternal : false,
+      isDataChanged:false,
       offices : []
     };
   }
-
+  componentWillMount() {
+    this.props.activeComponent(2);
+  }
+  isUpdated() {
+    return !this.state.isDataChanged;
+  }
   /**
    * Component Will Receive Props
    * Desc :: Set basic date in steps from props
@@ -41,7 +47,8 @@ export default class MlAppChooseTeam extends React.Component{
       this.setState({
         teamData: props.data ? props.data : [{users: []}],
         isExternal: props.isExternal ? props.isExternal : false,
-        isInternal: props.isInternal ? props.isInternal : false
+        isInternal: props.isInternal ? props.isInternal : false,
+        isDataChanged:false,
       }, function(){
         this.getUsers();
       }.bind(this));
@@ -163,7 +170,7 @@ export default class MlAppChooseTeam extends React.Component{
     let teamData = this.state.teamData;
     teamData.push({users:[]});
     this.setState({
-      teamData : teamData
+      teamData : teamData,isDataChanged:true
     }, () => {
       this.saveDetails()
     });
@@ -178,7 +185,7 @@ export default class MlAppChooseTeam extends React.Component{
     let teamData = this.state.teamData;
     teamData.splice(index , 1);
     this.setState({
-      teamData : teamData
+      teamData : teamData,isDataChanged:true
     }, () => {
       this.saveDetails()
     });
@@ -232,7 +239,7 @@ export default class MlAppChooseTeam extends React.Component{
       }
     }
     this.setState({
-      teamData:teamData
+      teamData:teamData,isDataChanged:true
     }, () => {
       this.saveDetails()
     });
@@ -252,7 +259,7 @@ export default class MlAppChooseTeam extends React.Component{
       teamData[teamIndex].users[userIndex].isMandatory = false;
     }
     this.setState({
-      teamData: teamData
+      teamData: teamData,isDataChanged:true
     }, () => {
       this.saveDetails()
     });
@@ -271,7 +278,7 @@ export default class MlAppChooseTeam extends React.Component{
     teamData[teamIndex].users[userIndex].isAdded = true;
     teamData[teamIndex].users[userIndex].isMandatory = evt.target.checked;
     this.setState({
-      teamData: teamData
+      teamData: teamData,isDataChanged:true
     }, () => {
       this.saveDetails()
     });

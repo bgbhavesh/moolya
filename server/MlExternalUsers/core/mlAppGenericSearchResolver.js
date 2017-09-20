@@ -147,7 +147,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -168,6 +168,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          profileImage : "$user.profile.profileImage"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -185,7 +186,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -206,6 +207,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          profileImage : "$user.profile.profileImage"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -223,7 +225,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -231,6 +233,112 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
+          from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'likes'
+        }
+      },
+      {
+        "$addFields": {
+          "likes": {
+            "$filter":
+            { input: "$likes",
+              as: "data",
+              cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+            }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlConnections', localField: 'userId', foreignField: 'users.userId',
+          as: 'connections'
+        }
+      },
+      {
+        "$addFields": {
+          "connection": {
+            "$filter":
+            { input: "$connections",
+              as: "data",
+              cond: { "$eq": ["$$data.isAccepted", true] }
+            }
+          }
+        }
+      },
+      // {
+      //   $unwind:
+      //   {
+      //     path: "$connections",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $unwind:
+      //   {
+      //     path: "$connections.users",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   "$addFields": {
+      //     isConnection: { "$and": [{"$eq": [ "$userId", "$connections.users.userId" ]},
+      //       { "$eq" :["$connections.users.isFavourite", true] },
+      //       { "$eq" :["$connections.isAccepted", true] } ] }
+      //   }
+      // },
+      // {
+      //   "$group": {
+      //     _id: "$_id",
+      //     "data": { "$first": "$$ROOT" },
+      //     "fav": { "$sum" : { "$cond": ["$isConnection", 1, 0] } }
+      //   }
+      // },
+      // {
+      //   "$addFields": {
+      //     "data.favCount": { $trunc : "$fav" }
+      //   }
+      // },
+      // {
+      //   "$replaceRoot": { "newRoot" : "$data" }
+      // },
+      {
+        '$lookup': {
+          from: 'mlViews', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'views'
+        }
+      },
+      {
+        "$addFields": {
+          "views": {
+            "$filter":
+            { input: "$views",
+              as: "data",
+              cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+            }
+
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlFollowings', localField: 'userId', foreignField: 'followerId',
+          as: 'followings'
+        }
+      },
+      {
+        "$addFields": {
+          "followings":  {
+            "$filter":
+            { input: "$followings",
+              as: "data",
+              cond: { "$eq": ["$$data.isActive", true] }
+            }
+
+          }
+        }
+      },
       {
         '$project': {
           portfolioDetailsId: 1,
@@ -244,6 +352,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          profileImage : "$user.profile.profileImage",
+          likes:{"$size":"$likes"},
+          connections: { "$size": "$connection" },
+          views:{"$size":"$views"},
+          followings:{"$size":"$followings"}
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -295,7 +408,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -318,6 +431,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "chapterId": '$port.chapterId',
           "communityCode": '$port.communityCode',
           "industryId": '$port.industryId',
+          profileImage : "$user.profile.profileImage"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -334,7 +448,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -342,6 +456,76 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
+          from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'likes'
+        }
+      },
+      {
+        "$addFields": {
+          "likes": {
+            "$filter":
+              { input: "$likes",
+                as: "data",
+                cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+              }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlConnections', localField: 'userId', foreignField: 'users.userId',
+          as: 'connections'
+        }
+      },
+      {
+        "$addFields": {
+          "connection": {
+            "$filter":
+              { input: "$connections",
+                as: "data",
+                cond: { "$eq": ["$$data.isAccepted", true] }
+              }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlViews', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'views'
+        }
+      },
+      {
+        "$addFields": {
+          "views": {
+            "$filter":
+              { input: "$views",
+                as: "data",
+                cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+              }
+
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlFollowings', localField: 'userId', foreignField: 'followerId',
+          as: 'followings'
+        }
+      },
+      {
+        "$addFields": {
+          "followings":  {
+            "$filter":
+              { input: "$followings",
+                as: "data",
+                cond: { "$eq": ["$$data.isActive", true] }
+              }
+
+          }
+        }
+      },
       {
         '$project': {
           portfolioDetailsId: 1,
@@ -355,6 +539,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
+          profileImage : "$user.profile.profileImage",
+          likes:{"$size":"$likes"},
+          connections: { "$size": "$connection" },
+          views:{"$size":"$views"},
+          followings:{"$size":"$followings"}
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -371,7 +560,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
+      {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -379,6 +568,76 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
+          from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'likes'
+        }
+      },
+      {
+        "$addFields": {
+          "likes": {
+            "$filter":
+              { input: "$likes",
+                as: "data",
+                cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+              }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlConnections', localField: 'userId', foreignField: 'users.userId',
+          as: 'connections'
+        }
+      },
+      {
+        "$addFields": {
+          "connection": {
+            "$filter":
+              { input: "$connections",
+                as: "data",
+                cond: { "$eq": ["$$data.isAccepted", true] }
+              }
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlViews', localField: 'portfolioDetailsId', foreignField: 'resourceId',
+          as: 'views'
+        }
+      },
+      {
+        "$addFields": {
+          "views": {
+            "$filter":
+              { input: "$views",
+                as: "data",
+                cond: { "$eq": ["$$data.resourceType", "$port.transactionType"] }
+              }
+
+          }
+        }
+      },
+      {
+        '$lookup': {
+          from: 'mlFollowings', localField: 'userId', foreignField: 'followerId',
+          as: 'followings'
+        }
+      },
+      {
+        "$addFields": {
+          "followings":  {
+            "$filter":
+              { input: "$followings",
+                as: "data",
+                cond: { "$eq": ["$$data.isActive", true] }
+              }
+
+          }
+        }
+      },
       {
         '$project': {
           portfolioDetailsId: 1,
@@ -391,7 +650,12 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
-          industryId: '$port.industryId'
+          profileImage : "$user.profile.profileImage",
+          industryId: '$port.industryId',
+          likes:{"$size":"$likes"},
+          connections: { "$size": "$connection" },
+          views:{"$size":"$views"},
+          followings:{"$size":"$followings"}
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -401,7 +665,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module === "externalUsers"){
-
     // var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
 
     var query = JSON.parse(args.queryProperty.query);
@@ -451,7 +714,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -470,6 +733,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 $project:{
                   _id : 1,
                   name: "$profile.displayName",
+                  portfolioId : '$portfolio._id',
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
@@ -495,6 +759,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: 1,
                   communityDefName:1,
                   chapterName:1,
+                  portfolioId : 1,
                   isActive: 1,
                   address: {
                     $filter: {
@@ -516,6 +781,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   name: 1,
                   communityCode: 1,
                   communityDefName:1,
+                  portfolioId : 1,
                   chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
@@ -534,7 +800,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               },
               { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              { "$match" : {"portfolio.status":"gone live"}},
+              { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -556,6 +822,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   profile:{
                     profileImage:"$profile.profileImage"
                   },
+                  portfolioId : '$portfolio._id',
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
@@ -581,6 +848,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: 1,
                   communityDefName:1,
                   chapterName:1,
+                  portfolioId : 1,
                   profile:1,
                   isActive: 1,
                   address: {
@@ -603,6 +871,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   name: 1,
                   profile:1,
                   communityCode: 1,
+                  portfolioId : 1,
                   communityDefName:1,
                   chapterName:1,
                   isActive: 1,
@@ -738,7 +1007,16 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Pending", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -756,7 +1034,17 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } },
+
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
@@ -774,6 +1062,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Completed", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -792,6 +1089,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       { "$unwind": "$members" },
       { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Rejected", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -857,7 +1163,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -912,7 +1219,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -967,7 +1275,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1022,7 +1331,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {
@@ -1078,7 +1388,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
         "idea": { "$ifNull": ["$idea.title", '']},
         "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
-        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']},
+        profileImage: '$portfolioUser.profile.profileImage'
       }
       },
       {

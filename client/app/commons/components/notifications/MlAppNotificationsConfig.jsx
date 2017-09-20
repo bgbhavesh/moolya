@@ -59,8 +59,7 @@ export default class MlAppNotificationsConfig extends Component {
       var unreadNotificationss = response.result.filter(that.utilityfunction);
       that.setState({UnreadCount: unreadNotificationss.length});
     }
-
-    console.log('-------notifications data is---------',response);
+    // console.log('-------notifications data is---------',response);
   }
 
   utilityfunction(notify){

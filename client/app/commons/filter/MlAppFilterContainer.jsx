@@ -105,10 +105,10 @@ export default class MlAppFilterContainer extends Component {
             updateFilterQuery={this.updateFilterQuery}
           />
           <div className="ml_icon_btn">
-            <a href="#"  className="save_btn" onClick={that.onApplyFilter.bind(this)} >
+            <a href=""  className="save_btn" onClick={that.onApplyFilter.bind(this)} >
               <span className="ml my-ml-save"></span>
             </a>
-            <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onCancelFilter.bind(this)}>
+            <a href="" id="cancel_contact" className="cancel_btn" onClick={that.onCancelFilter.bind(this)}>
               <span className="ml my-ml-cancel"></span>
             </a>
           </div>

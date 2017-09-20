@@ -270,7 +270,7 @@ MlResolver.MlQueryResolver['fetchConnectionByUser'] = (obj, args, context, info)
         name:
           { $concat: [ "$users.profile.displayName", "-", "$users.profile.externalUserProfiles.clusterName", "-", "$users.profile.externalUserProfiles.communityDefName" ]},
         profileId: "$users.profile.externalUserProfiles.profileId",
-        userId: "$_id",
+        userId: "$users._id",
       }
 
     }

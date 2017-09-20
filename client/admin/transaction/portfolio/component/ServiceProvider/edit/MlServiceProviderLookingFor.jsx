@@ -66,7 +66,7 @@ export default class MlServiceProviderLookingFor extends Component {
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.lookingFor)
     const response = await findServiceProviderLookingForActionHandler(portfolioDetailsId);
     if (empty) {
-      if (response) {
+      if (response && response.length>0) {
         this.setState({
           loading: false,
           serviceProviderLookingFor: response,
@@ -83,6 +83,7 @@ export default class MlServiceProviderLookingFor extends Component {
         // this.lockPrivateKeys()
       });
     }
+    this.serviceProviderLookingForServer = response?response:[]
   }
 
   // lockPrivateKeys() {
@@ -113,15 +114,30 @@ export default class MlServiceProviderLookingFor extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.lookingForId
+      "selectedVal": details.lookingForId,
+      popoverOpen: !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.serviceProviderLookingForServer && this.serviceProviderLookingForServer[selIndex]?this.serviceProviderLookingForServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onSaveAction(e) {
@@ -140,14 +156,9 @@ export default class MlServiceProviderLookingFor extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {
-      keyName: fieldName,
-      booleanKey: field,
-      isPrivate: isPrivate,
-      index: this.state.selectedIndex,
-      tabName: this.props.tabName
-    }
-    this.setState({data: details, privateKey: privateKey}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -256,7 +267,7 @@ export default class MlServiceProviderLookingFor extends Component {
         }
       }`;
     const showLoader = this.state.loading;
-    let lookingOption = {options: {variables: {communityCode: "IDE"}}};
+    let lookingOption = {options: {variables: {communityCode: "SPS"}}};
     let that = this;
     let serviceProviderLookingForList = that.state.serviceProviderLookingForList || [];
     return (
@@ -274,7 +285,7 @@ export default class MlServiceProviderLookingFor extends Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                      <a id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addLookingFor.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3 onClick={this.addLookingFor.bind(this)}>Add New Looking For</h3>
@@ -283,7 +294,7 @@ export default class MlServiceProviderLookingFor extends Component {
                     </div>
                     {serviceProviderLookingForList.map(function (details, idx) {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                        <a href="" id={"create_client" + idx}>
+                        <a id={"create_client" + idx}>
                           <div className="list_block">
                             <div className="cluster_status">
                               <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>

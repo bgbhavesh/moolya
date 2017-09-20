@@ -733,7 +733,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   /**check its dependency required or not*/
   if (args.module == "FunderPortfolio") {
-    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'PORT_LIVE_NOW', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
     let portId = _lodash.map(value, '_id')
     let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
     data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
@@ -982,6 +982,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               'in': {
                 "_id": "$$trans._id",
                 "transactionId": "$$trans.transactionId",
+                "transactionTypeId": "$$trans.transactionTypeId",
                 "cluster": "$$trans.clusterName",
                 "chapter": "$$trans.chapterName",
                 "subChapter": "$$trans.subChapterName",

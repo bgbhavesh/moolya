@@ -57,10 +57,6 @@ html
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-    script(type = 'text/javascript', src = '//platform.linkedin.com/in.js').
-      api_key: 8146rgyjf4wael
-      authorize: true
-      onLoad: onLinkedInLoad
     script(type = 'in/Login').
     .ms_main_wrap
       .ms_header
@@ -88,11 +84,11 @@ html
                   a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share')
                    i.fa.fa-twitter(aria-hidden='true')
                 li
-                  a(href='#' onclick='onLinkedInLoad()')
+                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url='+currentUrl+'')
                     i.fa.fa-linkedin(aria-hidden='true')
                 li
-                  a(href='#')
-                    i.fa.fa-google-plus(aria-hidden='true')
+                  a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'')
+                    i.fa.fa-google-plus(aria-hidden='true' alt="Share on Google+")
       .ms_content_wrap
         .content_left
           .profile_pic
@@ -190,35 +186,6 @@ html
                 console.log(response);
               });
             }
-          script(type='text/javascript').
-            // Setup an event listener to make an API call once auth is complete
-            var onLinkedInLoad = function () {
-              IN.Event.on(IN, "auth", shareContent);
-            }
-            // Handle the successful return from the API call
-            function onSuccess(data) {
-              console.log(data);
-            }
-            // Handle an error response from the API call
-            function onError(error) {
-              console.log(error);
-            }
-            // Use the API call wrapper to share content on LinkedIn
-            function shareContent() {
-              // Build the JSON payload containing the content to be shared
-              var payload = {
-                "comment": "Check out developer.linkedin.com! http://localhost:3000/about?id=wJSZWvJxeQHRpjRXX",
-                "visibility": {
-                  "code": "anyone"
-                }
-              };
-              IN.API.Raw("/people/~/shares?format=json")
-                .method("POST")
-                .body(JSON.stringify(payload))
-                .result(onSuccess)
-                .error(onError);
-            }
-
           script.
             (function ($) {
               /**
@@ -233,8 +200,8 @@ html
                 // Prevent default anchor event
                 e.preventDefault();
                 // Set values for window
-                intWidth = intWidth || '500';
-                intHeight = intHeight || '400';
+                intWidth = intWidth || '600';
+                intHeight = intHeight || '600';
                 strResize = (blnResize ? 'yes' : 'no');
                 // Set title and open popup with focus on it
                 var strTitle = ((typeof this.attr('title') !== 'undefined') ? this.attr('title') : 'Social Share'),

@@ -18,7 +18,6 @@ export default class MlShareCalendarPresentation extends React.Component {
       }
     };
     const userDetails = propsData.ownerInfo ? propsData.ownerInfo : {};
-    console.log(`Printing props ${JSON.stringify(propsData, null, 4)}`);
     let transId = Math.random().toString(36).slice(2); //userDetails.userId;
     return (
       <div className="ml_tabs">

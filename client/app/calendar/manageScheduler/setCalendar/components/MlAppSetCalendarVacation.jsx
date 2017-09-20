@@ -51,16 +51,17 @@ class MlAppSetCalendarVacation extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    let vacationData = {
-      startTime: '',
-      startDate: '',
-      endTime: '',
-      endDate: '',
-      note: '',
-      type: 'holiday',
-      isAllowBooking: false,
-      isAutoCancelAppointment: false
-    };
+    // console.log('props', newProps);
+    // let vacationData = {
+    //   startTime: '',
+    //   startDate: '',
+    //   endTime: '',
+    //   endDate: '',
+    //   note: '',
+    //   type: 'holiday',
+    //   isAllowBooking: false,
+    //   isAutoCancelAppointment: false
+    // };
     this.setState({vacations: newProps.vacations, selectedVacation: '', vacationData: vacationData});
   }
 

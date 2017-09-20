@@ -1098,7 +1098,7 @@ p{margin-top:10px;}
   .img_upload{
     margin:0px;padding:0px;
     li{
-      float: left;position:relative;margin-right:20px;width:50px;
+      float: left;position:relative;margin-right:20px;width:50px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
       .fa{
           position: absolute; width: 20px; height: 20px; background: #ef4647; border-radius: 50%; color: #fff; line-height: 20px; font-size: 12px;     right: 0px; top: -5px;}
         img{

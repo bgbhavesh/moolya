@@ -216,6 +216,7 @@ let institutePortfolioSchema = `
       communityType   : String
       firstName         : String
       lastName : String
+      profileImage        : String
     }
     
     input institutionIncubators{

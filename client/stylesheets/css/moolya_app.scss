@@ -240,7 +240,7 @@ $menuTrans:all 0.5s linear;
     }
     span{ color: $mlYellow; }
       .company_header{background:$mlWhite; border-radius:10px 10px 0 0; padding:5px 10px;height:53px;
-        img{height: 45px;}
+        img{height: 45px;border-radius: 5px;}
       }
       .pie-title-center {display: inline-block; position: relative; text-align: center;
         span{

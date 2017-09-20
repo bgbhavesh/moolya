@@ -335,6 +335,7 @@ let startupPortfolioSchema = `
       firstName : String
       lastName : String
       lookingFor           : [lookingForOutput]
+      profileImage        : String
    }
     
     

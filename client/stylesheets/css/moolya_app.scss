@@ -2189,7 +2189,7 @@ p{margin-top:10px;}
   position: relative;
   margin-bottom: 15px;
   text-shadow: none;
-  /*margin-top:15px;*/
+  margin-top:15px;
 }
 .card_block .active, .card_block .inactive{
   width: 20px;
@@ -2289,6 +2289,7 @@ p{margin-top:10px;}
   font-size: 12px; top: 54px;
 }
 .card_block.appointment_card .ml{margin-top: 15px;}
+.manage_tasks .card_block{ width: 180px;}
 
 
 .calendar-settings .form-group .ml, .calendar-settings .form-group .fa {

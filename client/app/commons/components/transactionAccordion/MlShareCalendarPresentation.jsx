@@ -6,27 +6,80 @@ export default class MlShareCalendarPresentation extends React.Component {
 
   }
   componentWillMount() {
-    this.setState({data: this.props.propsData});
+    this.setState({ data: this.props.propsData });
     console.log('---this.props---', this.props.propsData)
   }
 
   render() {
     let that = this;
-    const {propsData} = this.props || [];
+    const { propsData } = this.props || {
+      propsData: {
+        ownerInfo: {}
+      }
+    };
+    const userDetails = propsData.ownerInfo ? propsData.ownerInfo : {};
+    console.log(`Printing props ${JSON.stringify(propsData, null, 4)}`);
     let transId = Math.random().toString(36).slice(2); //userDetails.userId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href="#1a" data-toggle="tab">Details</a>
+            <a href={"#1a" + transId} data-toggle="tab">Details</a>
+          </li>
+          <li>
+            <a href={"#2a" + transId} data-toggle="tab">Activity Log</a>
+          </li>
+          <li>
+            <a href={"#3a" + transId} data-toggle="tab">Device Details</a>
+          </li>
+          <li>
+            <a href={"#4a" + transId} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id="1a">
+          <div className="tab-pane active" id={"1a" + transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Shared Date & Time" value={propsData && propsData.createdAt ? propsData.createdAt: ''} className="form-control float-label" id=""/>
+                  <input type="text" disabled placeholder="User Id" value={userDetails.userId} className="form-control float-label" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Transaction Id" value={userDetails.transactionId} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Date & Time" value={propsData.createdAt} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Name" value={userDetails.name} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Email Id" value={userDetails.email} className="form-control float-label" id="" />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Phone no" value={userDetails.mobileNumber} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Cluster" value={userDetails.cluster} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Chapter" value={userDetails.chapter} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Sub Chapter" value={userDetails.subChapter} className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" disabled placeholder="Community" value={userDetails.community} className="form-control float-label" id="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="tab-pane" id={`2a${transId}`}>
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <input type="text" placeholder="Shared Date & Time" value={propsData && propsData.createdAt ? propsData.createdAt : ''} className="form-control float-label" id="" />
                 </div>
                 <h5>Shared with :</h5>
                 <ul>
@@ -35,7 +88,7 @@ export default class MlShareCalendarPresentation extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ user.profilePic ? user.profilePic : "/images/data_balance.jpg"}/>
+                          <img src={user.profilePic ? user.profilePic : "/images/data_balance.jpg"} />
                           <span>{user.displayName}</span>
                         </li>
                       )
@@ -45,8 +98,41 @@ export default class MlShareCalendarPresentation extends React.Component {
                 <div className="clearfix" />
                 <br />
                 <div className="form-group">
-                  <input type="text" placeholder="Status" value="Completed" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Status" value="Completed" className="form-control float-label" id="" />
                 </div>
+              </div>
+              <div className="col-md-6">
+                <a href="#" className="fileUpload mlUpload_btn release_cancel">Deactivate</a>
+              </div>
+            </div>
+          </div>
+          <div className="tab-pane" id={"3a" + transId}>
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <input type="text" placeholder="Device name" defaultValue="Ipad air 2" className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" placeholder="Device ID" defaultValue="L8125#585" className="form-control float-label" id="" />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <input type="text" placeholder="Device IP" defaultValue="10.20.1.6" className="form-control float-label" id="" />
+                </div>
+                <div className="form-group">
+                  <input type="text" placeholder="IP Location" defaultValue="Hyderabad" className="form-control float-label" id="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="tab-pane" id={"4a" + transId}>
+            <div className="row">
+              <div className="col-md-6">
+                One
+              </div>
+              <div className="col-md-6">
+                Two
               </div>
             </div>
           </div>

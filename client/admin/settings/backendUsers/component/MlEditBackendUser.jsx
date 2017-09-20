@@ -540,7 +540,8 @@ class MlEditBackendUser extends React.Component{
                                     labelKey={'label'} placeholder="Select Subchapter"
                                     selectedValue={that.state.selectedSubChapter} queryType={"graphql"}
                                     query={subChapterQuery} isDynamic={true}
-                                    onSelect={that.optionsBySelectSubChapter.bind(that)}/>
+                                    onSelect={that.optionsBySelectSubChapter.bind(that)}
+                                    disabled={true}/>
                     )}
                     <div className="form-group">
                       <Select name="form-field-name" placeholder="Select Role" className="float-label"

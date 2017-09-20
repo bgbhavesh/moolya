@@ -306,6 +306,7 @@ class MlAppServiceManageSchedule extends Component {
           activeComponent={this.activeComponent.bind(this)}
           redirectWithCalendar={this.redirectWithCalendar}
           addExtraUsers={this.addExtraUsers.bind(this)}
+          getSessionNumber={this.getSessionNumber.bind(this)}
         />,
         icon: <span className="ml fa fa-users"></span>
       },

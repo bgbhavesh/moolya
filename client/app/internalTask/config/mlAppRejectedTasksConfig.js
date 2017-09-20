@@ -32,6 +32,7 @@ export const mlMyAppRejectedInternalTaskConfig = new MlAppViewer({
                           community{
                            name 
                           }
+                          profileImage
                         }
                       }
                   }

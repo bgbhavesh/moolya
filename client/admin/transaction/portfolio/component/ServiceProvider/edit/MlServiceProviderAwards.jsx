@@ -231,13 +231,14 @@ export default class MlServiceProviderAwards extends Component {
     this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(file,e) {
+  onLogoFileUpload(image,fileInfo) {
     // if (e.target.files[0].length == 0)
     //   return;
     // let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
-    let fileName=file.name;
+    let fileName=fileInfo.name;
+    let file=image;
     if(file){
       let data = {
         moduleName: "PORTFOLIO",
@@ -324,11 +325,11 @@ export default class MlServiceProviderAwards extends Component {
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image,e) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image,e);
   }
 
   render() {

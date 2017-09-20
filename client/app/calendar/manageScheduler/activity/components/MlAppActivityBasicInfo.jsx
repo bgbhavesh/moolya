@@ -55,10 +55,15 @@ export default class MlAppBasicInfo extends React.Component{
       },
       showProfileModal: false,
       uploadingAvatar: false,
+      isDataChanged:false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
     this.onFileUpload = this.onFileUpload.bind(this);
+  }
+
+  isUpdated() {
+    return !this.state.isDataChanged;
   }
 
   /**
@@ -70,7 +75,7 @@ export default class MlAppBasicInfo extends React.Component{
     let id = FlowRouter.getQueryParam('id');
     if(id) {
       this.setState({
-        basicData: props.data
+        basicData: props.data,
       }, () => {
         this.saveDetails();
       });
@@ -87,7 +92,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data.industryTypes = value;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -105,12 +110,14 @@ export default class MlAppBasicInfo extends React.Component{
       return data.value;
     });
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
   }
-
+  componentWillMount() {
+    this.props.activeComponent(0);
+  }
   /**
    * Method :: updateDuration
    * Desc   :: update state duration data
@@ -123,7 +130,7 @@ export default class MlAppBasicInfo extends React.Component{
       let data = this.state.basicData;
       data.duration[type] = evt.target.value;
       this.setState({
-        basicData: data
+        isDataChanged:true,basicData: data
       }, () => {
         this.saveDetails();
       });
@@ -141,7 +148,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data[type] = evt.target.value;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -158,7 +165,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data[type] = evt.target.checked;
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -178,7 +185,7 @@ export default class MlAppBasicInfo extends React.Component{
       data.mode = 'online';
     }
     this.setState({
-      basicData: data
+      isDataChanged:true,basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -213,7 +220,7 @@ export default class MlAppBasicInfo extends React.Component{
           let data = that.state.basicData;
           data.imageLink = res.result;
           that.setState({
-            basicData : data
+            isDataChanged:true,basicData : data
           }, () => {
             that.saveDetails();
           });
@@ -251,7 +258,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -270,7 +277,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable.splice(index, 1);
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -289,7 +296,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable[index] = evt.target.value;
     basicData.deliverable = deliverable;
     this.setState({
-      basicData: basicData
+      isDataChanged:true,basicData: basicData
     }, () => {
       this.saveDetails();
     });

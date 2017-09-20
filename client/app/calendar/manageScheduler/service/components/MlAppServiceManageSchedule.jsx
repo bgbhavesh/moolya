@@ -29,7 +29,8 @@ import {
   fetchTasksAmountActionHandler,
   updateGoLiveServiceActionHandler,
   fetchTaskDetailsForServiceCard,
-  updateReviewServiceActionHandler
+  updateReviewServiceActionHandler,
+  cloneServiceCardActionHandler
 } from '../actions/MlServiceActionHandler';
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails';
 
@@ -96,6 +97,7 @@ class MlAppServiceManageSchedule extends Component {
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
     this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
     this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
+    this.cloneServiceCard = this.cloneServiceCard.bind(this);
   }
 
   componentWillMount() {
@@ -996,6 +998,19 @@ class MlAppServiceManageSchedule extends Component {
     const resp = await updateReviewServiceActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Sent for review successfully');
   }
+
+  /**
+   * Method :: sendReviewService
+   * Desc :: Send to admin for review
+   */
+  async cloneServiceCard() {
+    console.log('Clone', this.serviceId);
+    const resp = await cloneServiceCardActionHandler(this.serviceId);
+    this.showResponseMsg(resp, 'Service clone successfully');
+    if(resp.success){
+      FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/serviceList');
+    }
+  }
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -1013,7 +1028,7 @@ class MlAppServiceManageSchedule extends Component {
         handler: async(event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: true,
+        showAction: _this.serviceId ? true : false,
         actionName: 'send for review',
         handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
       },
@@ -1028,6 +1043,11 @@ class MlAppServiceManageSchedule extends Component {
         handler: async(event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }
+      },
+      {
+        showAction: _this.serviceId ? true : false,
+        actionName: 'clone',
+        handler: async(event) => _this.props.handler(_this.cloneServiceCard.bind(this))
       }
     ];
     export const genericPortfolioAccordionConfig = {

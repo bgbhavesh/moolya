@@ -539,7 +539,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
-          profileImage : "$user.profile.profileImage"
+          profileImage : "$user.profile.profileImage",
           likes:{"$size":"$likes"},
           connections: { "$size": "$connection" },
           views:{"$size":"$views"},
@@ -650,7 +650,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           clusterId: '$port.clusterId',
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
-          profileImage : "$user.profile.profileImage"
+          profileImage : "$user.profile.profileImage",
           industryId: '$port.industryId',
           likes:{"$size":"$likes"},
           connections: { "$size": "$connection" },

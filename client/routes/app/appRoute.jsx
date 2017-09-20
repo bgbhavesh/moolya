@@ -558,7 +558,7 @@ appSection.route('/calendar/officeCalendar', {
 appSection.route('/calendar/notification', {
   name: 'calendar_notification',
   action(){
-    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: false})
+    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: true})
   }
 });
 

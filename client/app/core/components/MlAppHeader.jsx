@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
 import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
-
+import _ from 'lodash';
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
@@ -143,30 +143,30 @@ class MlAppProfileHeader extends Component {
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
-                <a href="/app/myprofile">
+                <a href="/app/myprofile" className={activeProfileArcClass('myprofile')}>
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
                 <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"Pending Registration":"Registration"} data-placement="right">
-                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
+                  <a href="" className={isDisabled?"disable":activeProfileArcClass('register')} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile">
+                <a href="/app/appSwitchProfile"  className={activeProfileArcClass('appSwitchProfile')}>
                   <span className="ml my-ml-switch_profile"></span>
                 </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-register_as"></span></a>
+                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""} className={activeProfileArcClass('registerAs')}><span className="ml my-ml-register_as"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href=""><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
               <li data-toggle="tooltip" title="Calendar" data-placement="top">
-                <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
+                <a href="/app/calendar" className={activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
-                <a href="/app/task"><img className="profile-img" src="/images/7.png" /></a>
+                <a href="/app/task" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
                 <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>
@@ -191,4 +191,28 @@ export default MlAppHeader = createContainer(props => {
   };
 }, MlAppProfileHeader);
 
+/**
+ * This method returns the className if the option is active
+ * @param type(String: type of profile option.myProfile/registerAs,calendar,myTask)
+ * returns result of className as active or null
+ */
+var activeProfileArcClass=function(type,params){
+  var currentPath = Object.assign(FlowRouter._current.path);
+  var path = (currentPath.split('?')[0]).split('/');
+  path=_.compact(path);//remove empty strings
+  _.pull(path, 'app');//pull 'app' route
+  var className='';
+  var profileLinkMapObject={'portfolio':'myprofile','myprofile':'myprofile','addressBook':'myprofile','myConnections':'myprofile','myOffice':'myprofile','addOffice':'myprofile','editOffice':'myprofile','library':'myprofile','myAppointment':'myprofile','termsConditions':'myprofile','privacy':'myprofile','previewProfile':'myprofile',
+                            'register':'register',
+                            'appSwitchProfile':'appSwitchProfile',
+                            'registerAs':'registerAs',
+                            'calendar':'calendar','shareCalendar':'calendar','officeCalendar':'calendar','notification':'calendar','manageSchedule':'calendar','settings':'calendar',
+                            'task':'task'};
+   _.every(path,function(i){
+     var profilePath=profileLinkMapObject[i];
+     if(profilePath===type){className='active'; return false;};
+     return true;
+    });
+  return className;
+}
 

@@ -28,6 +28,12 @@ class MlAppServiceBasicInfo extends Component {
 
   constructor(props) {
     super(props);
+    this.state={
+      serviceExpireTime:this.props.daysRemaining||1,
+      currentFrequency:(this.props.data&&this.props.data.sessionFrequency)? this.props.data.sessionFrequency :'Onetime',
+    }
+    this.changeServiceExpireTime=this.changeServiceExpireTime.bind(this);
+    this.setSessionFrequency=this.setSessionFrequency.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +65,25 @@ class MlAppServiceBasicInfo extends Component {
    * Desc :: Showing html page
    * @returns {XML}
    */
+
+  changeServiceExpireTime(e){
+    this.setState({serviceExpireTime:e.target.value});
+  }
+
+  setSessionFrequency(value){
+    let days=1;
+    if(value === 'Weekly'){
+      days=7;
+    }else if(value === 'Monthly'){
+      days=30;
+    }else if(value === 'Quarterly'){
+      days=120;
+    }else if(value === 'Yearly'){
+      days=365;
+    }
+    this.setState({currentFrequency:value,serviceExpireTime:days});
+    this.props.setSessionFrequency(value);
+  }
   render(){
     const {
       data,
@@ -172,7 +197,7 @@ class MlAppServiceBasicInfo extends Component {
                           options={options}
                           value={data.sessionFrequency}
                           placeholder='Renewal Frequency'
-                          onChange={(value) => setSessionFrequency(value.value)}
+                          onChange={(value) => this.setSessionFrequency(value.value)}
                           disabled={this.props.viewMode}/>
                 </div>
                 <div className="form-group">
@@ -238,8 +263,8 @@ class MlAppServiceBasicInfo extends Component {
                   <label>
                     Service expires &nbsp;
                     <input type="text"
-                           className="form-control inline_input"
-                           disabled value={daysRemaining}  />
+                           className="form-control inline_input" onChange={this.changeServiceExpireTime}
+                           disabled={(this.state.currentFrequency!== 'Onetime')} value={this.state.serviceExpireTime}  />
                     days from the date of purchase
                   </label>
                 </div>

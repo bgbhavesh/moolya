@@ -1,6 +1,3 @@
-/**
- * Created by venkatasrinag on 5/4/17.
- */
 import React, { PropTypes } from 'react';
 import Tabs from 'react-responsive-tabs';
 export default class MlTabComponent extends React.Component {
@@ -11,43 +8,41 @@ export default class MlTabComponent extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.selectedTabKey !== undefined) {
-      if (!FlowRouter.getQueryParam('tab')) {
-        let value = '';
-        if (this.state.tabs[0].title && typeof this.state.tabs[0].title === 'string') {
-          value = this.state.tabs[0].title;
-        } else if (this.state.tabs[0].name) {
-          value = this.state.tabs[0].name;
-        } else {
-          value = this.state.tabs[0].key;
-        }
-        FlowRouter.setQueryParams({ tab: value });
+    const type = this.props.type;
+    if (type) {
+      if (!FlowRouter.getQueryParam(type)) {
+        let object = {};
+        var key= this.props.mkey || 'title';
+        if(this.state.tabs[0].name) key= 'name';
+        object[type]=this.state.tabs[0][key];
+        FlowRouter.setQueryParams(object);
       }
       this.context.breadCrum.updateBreadCrum();
-
-      if (this.props.tabs[0].tabClassName === 'moolya_btn') {
-        if (!FlowRouter.getQueryParam('subtab')) { FlowRouter.setQueryParams({ subtab: this.props.tabs[0].title }); }
-      }
     }
   }
 
   onActivate(index) {
-    if (this.props.selectedTabKey !== undefined) {
-      if (!isNumber(index)) {
-        FlowRouter.setQueryParams({ tab: index, appointment: null, ' Team': null });
-      } else {
-        const tab = Object.assign(this.state.tabs)[index];
-        FlowRouter.setQueryParams({ subtab: tab.title });
-      }
-      this.context.breadCrum.updateBreadCrum();
+    const type = this.props.type;
+    if (type) {
+      let object = {};
+      object[type]=index;
+      object["appointment"] = null;
+      object[" Team"] = null;
+      FlowRouter.setQueryParams(object);
     }
+    this.context.breadCrum.updateBreadCrum();
   }
 
   render() {
     const tabs = this.state.tabs;
     let params = new URL(window.location.href).searchParams;
-    const selectedTabKey = params.get('tab');//this.props.selectedTabKey;
-    return <Tabs items={tabs} selectedTabKey={selectedTabKey} onChange={this.onActivate.bind(this)} />;
+    if(this.props.type){
+      let selectedTabKey = params.get(this.props.type);
+      return <Tabs items={tabs} selectedTabKey={selectedTabKey ||this.props.selectedTabKey} onChange={this.onActivate.bind(this)} />;
+    }
+    else{
+      return <Tabs items={tabs} onChange={this.onActivate.bind(this)} />;
+    }
   }
 }
 

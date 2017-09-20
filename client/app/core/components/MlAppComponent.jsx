@@ -21,14 +21,20 @@ class MlAppComponent extends Component{
     }
 
   shouldComponentUpdate(nextProps,nextState,nextContext){
-    let path = Object.assign(FlowRouter._current.path);
-    let hierarchy = path.split('/app/');
-    if(hierarchy[1]){
-      let v= hierarchy[1].split('/')[0];
-      if(v !== 'explore' && v !== 'startup' && v !== 'funder' && v !== 'serviceProvider' && v !== 'company' && v !== 'institution' && v !== 'ideator' ){
-        return true;
-      }
+    // let path = Object.assign(FlowRouter._current.path);
+    // let hierarchy = path.split('/app/');
+    // if(hierarchy[1]){
+    //   let v= hierarchy[1].split('/')[0];
+    //   if(v !== 'explore' && v !== 'startup' && v !== 'funder' && v !== 'serviceProvider' && v !== 'company' && v !== 'institution' && v !== 'ideator' & v!=='portfolio'){
+    //     return true;
+    //   }
+    // }
+
+    if(FlowRouter.getRouteName () === "myAppointment" ) {
+      return true;
     }
+
+    if(!FlowRouter.getQueryParam('tab')) return true;
 
     return !isEqualWith(this.props, nextProps) ||
       !isEqualWith(this.state, nextState) ||

@@ -246,7 +246,7 @@ export default class MlStartupData extends React.Component{
           <h2>Data</h2>
           <div className="main_wrap_scroll">
             <div className="col-md-6 col-sm-6 nopadding-left">
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Balance Sheet
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -258,7 +258,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('balanceSheet')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Quaterly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -270,7 +270,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('quaterlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Yearly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -282,7 +282,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('yearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Half Yearly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -294,7 +294,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('halfYearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Annual Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -308,7 +308,7 @@ export default class MlStartupData extends React.Component{
               </div>
             </div>
             <div className="col-md-6 col-sm-6 nopadding-right">
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Profit and Loss
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -320,7 +320,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('profitAndLoss')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Cash Flow
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -332,7 +332,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('cashFlow')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Share Holdings
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -344,7 +344,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('shareHoldings')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Capital Structure
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -356,7 +356,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('capitalStructure')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Ratio
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">

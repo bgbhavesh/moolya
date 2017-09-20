@@ -55,6 +55,7 @@ let sharedLibrarySchema = `
       createdAt:Date
       daysToExpire: Int
       ownerInfo: ShareOwnerInfo
+      isExpired: Boolean
     }
     
     type SharedOutputAdmin {

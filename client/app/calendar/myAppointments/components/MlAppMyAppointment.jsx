@@ -41,11 +41,15 @@ export default class MlAppMyAppointment extends React.Component {
     });
   }
 
-  onChange(tab) {
-    FlowRouter.setQueryParams({
-      tab:tab,
-      appointment: null
-    });
+  // onChange(tab) {
+  //   FlowRouter.setQueryParams({
+  //     tab:tab,
+  //     appointment: null
+  //   });
+  // }
+  onChange(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab ,  appointment: null});
   }
 
   getAppointmentComponentToLoad(status) {
@@ -104,7 +108,8 @@ export default class MlAppMyAppointment extends React.Component {
       }));
     }
 
-    const App = () => <MlTabComponent tabs={getTabs()} selectedTabKey={ this.state.activeTab || 'Pending'}  onChange={that.onChange} />;
+    const App = () => <MlTabComponent tabs={getTabs()} selectedTabKey={ this.state.activeTab || 'Pending'}  onChange={that.onChange}
+    type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

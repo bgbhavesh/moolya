@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 // import dashboardRoutes from '../actions/routesActionHandler';
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
+import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 export default class MlCommunityList extends Component {
 
@@ -122,17 +123,18 @@ export default class MlCommunityList extends Component {
 
       return (
         <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-
-          <div className="ideators_list_block">
-            {/*<div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>*/}
-            <h3>{prop.name}</h3>
-            {/*<span className={`ml2 ml-${icon}`}></span>*/}
-            <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
-            <div className="block_footer">
-              {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
-              <span>{prop.chapterName} - {prop.communityDefName}</span>
+          <a href={dashboardRoutes.userListRoute(clusterId, chapterId, subChapterId, prop.portfolioId, icon)}>
+            <div className="ideators_list_block">
+              {/*<div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>*/}
+                <h3>{prop.name}</h3>
+              {/*<span className={`ml2 ml-${icon}`}></span>*/}
+              <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
+              <div className="block_footer">
+                {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
+                <span>{prop.chapterName} - {prop.communityDefName}</span>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       )}
     )
@@ -143,7 +145,7 @@ export default class MlCommunityList extends Component {
       <div>
           <div className="community_icons fixed_icon">
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
-              <span className="ml my-ml-browser_5 br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+              <span className="ml ml-select-all br br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>
             <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
               <span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>

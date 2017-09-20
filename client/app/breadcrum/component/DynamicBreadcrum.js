@@ -31,7 +31,7 @@ export default class DynamicBreadcrum extends Component {
 
   getHierarchyDetails() {
     const params = FlowRouter.current().params;
-    getBreadCrumListBasedOnhierarchy('chapters', {}, params, this.setBreadCrumHierarchyCallback.bind(this));
+    getBreadCrumListBasedOnhierarchy( params, this.setBreadCrumHierarchyCallback.bind(this));
   }
 
   render() {
@@ -54,12 +54,6 @@ export default class DynamicBreadcrum extends Component {
         <ul>
           {list}
         </ul>
-        {/* <ul>
-          <li>India</li>
-          <li>Telangana</li>
-          <li className="current">Internal Users</li>
-          <li className="timelineLast"></li>
-        </ul>*/}
       </div>
     );
   }
@@ -108,9 +102,6 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
         });
       }
     }
-    // if(breadCrum.sub)
-  } else {
-
   }
 
   return list;

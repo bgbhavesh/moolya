@@ -271,7 +271,7 @@ export default class MlInstitutionEditData extends React.Component{
               smoothScrolling={true}
               default={true}>
             <div className="col-md-6 col-sm-6 nopadding-left">
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Balance Sheet
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -283,7 +283,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('balanceSheet')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Quaterly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -295,7 +295,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('quaterlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Yearly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -307,7 +307,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('yearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Half Yearly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -319,7 +319,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('halfYearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Annual Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -333,7 +333,7 @@ export default class MlInstitutionEditData extends React.Component{
               </div>
             </div>
             <div className="col-md-6 col-sm-6 nopadding-right">
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Profit and Loss
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -345,7 +345,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('profitAndLoss')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Cash Flow
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -357,7 +357,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('cashFlow')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Share Holdings
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -369,7 +369,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('shareHoldings')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Capital Structure
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -381,7 +381,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('capitalStructure')}
                 </div>
               </div>
-              <div className="panel panel-default">
+              <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">
                   Ratio
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">

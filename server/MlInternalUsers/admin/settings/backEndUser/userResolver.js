@@ -13,6 +13,7 @@ import MlEmailNotification from "../../../../mlNotifications/mlEmailNotification
 // import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
+import portfolioValidationRepo from '../../portfolio/portfolioValidation'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -1701,9 +1702,10 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
     }
   })
   var response = mlDBController.aggregate('users', query, context)
-  return response
+  var portfolioCount = portfolioValidationRepo.getLivePortfolioCount()
+  return {userDetails: response, portfolioCounter: portfolioCount}
 }
-
+//todo:// restrict anchor user to update "isActive" status maintain the old status only
 checkAnchorAccess = function (args, context) {
   var isAccess = true
   var userProfile = new MlAdminUserContext().userProfileDetails(context.userId)

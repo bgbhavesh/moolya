@@ -50,6 +50,8 @@ let portfolioSchema = `
         canAccess         : Boolean
         portfolioImage : String
         allocationStatus :  String
+        count : String
+        communityImageLink : String
     }
     
     input privateKeys{

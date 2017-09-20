@@ -40,12 +40,19 @@ export const mlAppStartupConfig = new MlAppViewer({
                       portfolioDetailsId
                         aboutUs{                                            
                             startupDescription
+                            logo{
+                               fileUrl
+                            }
                         }
                       chapterName
                       accountType
                       communityType
                       firstName
                       lastName
+                      likes
+                      connections
+                      views
+                      followings
                       }
                    }                                                                                                     
                 }

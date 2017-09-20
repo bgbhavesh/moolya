@@ -74,8 +74,19 @@ export default class MlInstitutionEditData extends React.Component{
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
     // if (file  && typeShouldBe && typeShouldBe[1]==="pdf" && typeShouldBe[1]==="image") {
-    let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-    let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,type, file));
+    //let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+    let data = this.state.uploadedData
+    if( data && data[type] && !_.isEmpty(data[type])) {
+      data[type].push({fileUrl:"",fileName:file.name})
+    }else {
+      let tempArray = [];
+      tempArray.push({fileUrl:"",fileName:file.name})
+      data[type] = tempArray;
+    }
+    let uplodatedData = {}
+    uplodatedData[type] = data[type]
+    let updatedData ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{data : uplodatedData}};
+    let response =  multipartASyncFormHandler(updatedData, file, 'registration', this.onFileUploadCallBack.bind(this,type, file));
     // }else{
     //   toastr.error("Please select a Document Format")
     // }
@@ -98,18 +109,11 @@ export default class MlInstitutionEditData extends React.Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure);
+        if (result.success) {
+          this.fetchInstitutionPortfolioData();
+        }
       }
-      var link = $.parseJSON(resp).result;
-      if( data && data[`${type}`] ) {
-        data[`${type}`].push({fileUrl:link,fileName:file.name})
-      }else {
-        let tempArray = [];
-        tempArray.push({fileUrl:link,fileName:file.name})
-        data[`${type}`] = tempArray;
-      }
-      this.setState({uploadedData: data}, function(){
-        that.props.getDataDetails(this.state.uploadedData, 'data')
-      });
+
     }
   }
 

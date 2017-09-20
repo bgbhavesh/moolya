@@ -625,6 +625,7 @@ let startupPortfolioSchema = `
         connections         :Int
         views               :Int
         followings          :Int
+        profileImage        : String
     }
     
     type Query{

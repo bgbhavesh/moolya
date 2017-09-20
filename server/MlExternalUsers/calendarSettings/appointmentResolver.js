@@ -343,6 +343,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
   let profileId = args.profileId;
   let date = new Date();
   let month = args.month ? args.month : date.getMonth() ;
+  month = month + 1;
   let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
@@ -941,13 +942,14 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
         "isProvider": "$attendeeDetails.isProvider",
         "isClient": "$attendeeDetails.isClient",
         "isAttendee": "$attendeeDetails.isAttendee",
+        "status":"$attendeeDetails.status"
       }}
     }}
   ]
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine );
 
-  return result;
+    return result;
 
 };
 

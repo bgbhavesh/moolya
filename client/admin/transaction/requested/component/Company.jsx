@@ -373,8 +373,8 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
-              <div className="form-group">
-                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
+              <div className="form-group mandatory">
+                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  ref={"foundationDate"} inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Foundation Date is required"/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">

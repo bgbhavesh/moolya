@@ -19,6 +19,7 @@ let FontAwesome = require('react-fontawesome');
 import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
+import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -45,8 +46,10 @@ class MlAppInternalMyTaskItem extends React.Component{
       offices:[],
       users:[],
       teamData: [{users: []}],
+      docs: []
 
     };
+    this.deleteDocs = this.deleteDocs.bind(this);
   }
 
   /**
@@ -193,10 +196,17 @@ class MlAppInternalMyTaskItem extends React.Component{
       dataToInsert.users = users;
     }
 
+    let docs = this.state.docs;
+    if(docs.length) {
+      dataToInsert.docs = docs;
+    }
+
     let response = await createSelfInternalTask(dataToInsert);
     if(response) {
       toastr.success(response.result);
-      this.props.updateType('list');
+      FlowRouter.setQueryParams({
+        add: null
+      });
     }
   }
 
@@ -271,6 +281,69 @@ class MlAppInternalMyTaskItem extends React.Component{
     });
   }
 
+  /**
+   * Method :: documentUpload
+   * Desc   :: update team type in specific team
+   * @param evt   :: Object  :: javascript event object
+   * @param index :: Integer :: Index of specific team
+   * @returns Void
+   */
+  documentUpload(e) {
+    let file = e.target.files[0];
+    this.setState({fileType:file.type,fileName:file.name });
+    let fileType = file.type;
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if (file  && typeShouldBe && typeShouldBe[1]==="pdf" ) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+      let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file.name));
+    }else{
+      toastr.error("Please select a Document Format")
+    }
+  }
+
+  onFileUploadCallBack( fileName, resp ) {
+    if ( resp ) {
+      let documents = this.state.docs || [];
+      let link = $.parseJSON(resp).result;
+      let documentAttributes = {
+        fileName: fileName,
+        fileUrl: link
+      };
+      documents.push(documentAttributes);
+      this.setState({docs: documents});
+    }
+  }
+
+  deleteDocs(index) {
+    console.log('Called');
+    let docs = this.state.docs || []
+    docs.splice(index, 1);
+    console.log(docs);
+    this.setState({docs: docs})
+  }
+
+  attachedDocuments() {
+    let that = this;
+    let documents = that.state.docs || [];
+    let documentsUploaded =  documents.map(function(docsToView, index){
+      return(
+        <div className="thumbnail" key={index}>
+          <FontAwesome name='trash-o' onClick={that.deleteDocs.bind(that, index)} />
+          <div id="images" className="title">
+            <img src="/images/pdf.png"/>
+          </div>
+        </div>
+      )
+    });
+    return documentsUploaded;
+  }
+
+
+  cancelDetails(){
+    FlowRouter.setQueryParams({
+      add: null
+    });
+  }
 
   /**
    * Render
@@ -291,7 +364,7 @@ class MlAppInternalMyTaskItem extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => that.props.handler(that.props.updateType.bind(this, 'list'))
+        handler: async(event) => that.props.handler(that.cancelDetails.bind(this))
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -372,9 +445,33 @@ class MlAppInternalMyTaskItem extends React.Component{
             </div>
           </div>
 
+
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+            <div className="panel panel-default uploaded_files">
+              <div className="panel-heading">
+                Attached Documents
+                <div className="pull-right block_action">
+                  <div className="fileUpload upload_file_mask" id="create_video">
+                    <a href="javascript:void(0);">
+                      <span className="ml ml-upload">
+                        <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.documentUpload.bind(that)} />
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <div className="pull-right block_action">
+                  <span className="single_icon ml ml-information information"></span>
+                </div>
+              </div>
+              <div className="panel-body">
+                {this.attachedDocuments()}
+              </div>
+            </div>
+          </div>
+
           {that.state.teamData.map(function (team, index) {
             return (
-              <div className="col-md-12 nopadding-left" key={index}>
+              <div className="col-md-6 nopadding-left" key={index}>
                 <div className="panel panel-default cal_view_task">
                   <div className="panel-heading">
                     Select Users

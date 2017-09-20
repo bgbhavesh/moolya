@@ -7,8 +7,9 @@ import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
 export default class MlAssignDepartmentComponent extends React.Component {
   constructor(props){
     super(props);
-    this.state={
-      assignDepartmentForm:[{department: null,subDepartment:null}]
+    this.state = {
+      assignDepartmentForm: [{ department: null, subDepartment: null }],
+      disableList: [],
     }
     return this;
   }
@@ -18,15 +19,17 @@ export default class MlAssignDepartmentComponent extends React.Component {
   componentWillMount(){
     let assignDepartmentForm = this.props.departments
     if(assignDepartmentForm){
+      let disabledArray = this.state.disableList;
       let assgnDepartmentDetails=[]
       for(let i=0;i<assignDepartmentForm.length;i++){
         let json={
           department:assignDepartmentForm[i].department,
           subDepartment:assignDepartmentForm[i].subDepartment
         }
-        assgnDepartmentDetails.push(json)
+        disabledArray[i] = true;
+        assgnDepartmentDetails.push(json);
       }
-      this.setState({assignDepartmentForm: assgnDepartmentDetails})
+      this.setState({disableList: disabledArray, assignDepartmentForm: assgnDepartmentDetails})
     }
 
   }
@@ -38,11 +41,14 @@ export default class MlAssignDepartmentComponent extends React.Component {
   }
  RemoveAssignDepartmentForm(idx,event){
      let assignDepartmentForm;
+     let disabledArray = this.state.disableList;
+     disabledArray[idx] = false;
      assignDepartmentForm= this.state.assignDepartmentForm.filter(function(object,index){
        return idx !== index;
      });
      this.setState({
-       assignDepartmentForm: assignDepartmentForm
+       assignDepartmentForm: assignDepartmentForm,
+       disableList: disabledArray,
      })
    this.props.getAssignedDepartments(assignDepartmentForm);
  }
@@ -103,9 +109,9 @@ export default class MlAssignDepartmentComponent extends React.Component {
              {idx>0&&(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
            </div>
            <div className="panel-body">
-               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
+               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} disabled={that.state.disableList[idx]} />
 
-                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} disabled={that.state.disableList[idx]} />
            </div>
          </div>
          )}

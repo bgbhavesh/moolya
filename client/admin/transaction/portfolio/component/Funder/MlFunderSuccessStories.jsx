@@ -315,7 +315,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           <a href="" id={"team_list" + idx}>
 
                             <div className="list_block notrans funding_list">
-                              <div className="cluster_status inactive_cl">
+                              <div>
                                 <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
                               </div>

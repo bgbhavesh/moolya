@@ -111,8 +111,12 @@ export default class SharePopOver extends React.Component {
     return current.isAfter(yesterday);
   }
 
-  validTillToggle(){
-      $('#date-time').toggleClass('rdtOpen');
+  validTillToggle(type){
+    if(type == "start") {
+      $('#start-time').toggleClass('rdtOpen');
+    } else {
+      $('#end-time').toggleClass('rdtOpen');
+    }
   }
 
   isDownloadable(e) {
@@ -170,7 +174,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="img_upload ul-hide" key={index}>
-          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
         </ul>
           )
     })
@@ -264,7 +268,7 @@ render(){
           {this.teamMembersData()}
           <div className="clearfix" />
           <div className="col-md-6 nopadding-left">
-            <div className="form-group" id="date-time">
+            <div className="form-group" id="start-time">
               <Datetime dateFormat={"DD-MM-YYYY"}
                         timeFormat={false}
                         inputProps={{placeholder: "Shared Start Date"}}
@@ -274,12 +278,12 @@ render(){
                         />
               <FontAwesome name="calendar"
                            className="password_icon"
-                           onClick={this.validTillToggle.bind(this)}
+                           onClick={this.validTillToggle.bind(this , 'start')}
                            />
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
-            <div className="form-group" id="date-time">
+            <div className="form-group" id="end-time">
               <Datetime dateFormat={"DD-MM-YYYY"}
                         timeFormat={false}
                         inputProps={{placeholder: "Shared End Date"}}
@@ -290,7 +294,7 @@ render(){
                         disabled={this.props.viewMode}/>
               <FontAwesome name="calendar"
                            className="password_icon"
-                           onClick={this.validTillToggle.bind(this)}
+                           onClick={this.validTillToggle.bind(this, 'end')}
                            />
             </div>
           </div>

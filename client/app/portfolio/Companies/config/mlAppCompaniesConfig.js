@@ -43,6 +43,10 @@ export const mlAppCompanyConfig = new MlAppViewer({
                         firstName
                         lastName
                         profileImage
+                        likes
+                        connections
+                        views
+                        followings
                       }
                     }
                 }

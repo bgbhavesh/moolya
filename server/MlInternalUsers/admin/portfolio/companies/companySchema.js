@@ -336,6 +336,10 @@ let startupPortfolioSchema = `
       lastName : String
       lookingFor           : [lookingForOutput]
       profileImage        : String
+       likes               : Int
+       connections         : Int
+       views               : Int
+       followings          : Int
    }
     
     

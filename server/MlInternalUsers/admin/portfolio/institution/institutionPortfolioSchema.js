@@ -217,6 +217,10 @@ let institutePortfolioSchema = `
       firstName         : String
       lastName : String
       profileImage        : String
+          likes             : Int
+        connections         : Int
+        views               : Int
+        followings          : Int
     }
     
     input institutionIncubators{

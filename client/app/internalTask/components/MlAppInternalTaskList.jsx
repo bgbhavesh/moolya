@@ -103,7 +103,9 @@ export default class MlAppInternalTaskList extends React.Component{
                             </div>
                             <h3>{task.ownerName ? task.ownerName : ""}</h3>
                             <div className="list_icon">
-                              <img src="/images/valuation.png" style={{"margin": 0}} className="c_image ml ml-ideator"/>
+                              {/*<img src="/images/valuation.png" style={{"margin": 0}} className="c_image ml ml-ideator"/>*/}
+                              <img src={task.profileImage ? task.profileImage : "/images/valuation.png"}
+                                   style={{"margin": 0}} className="c_image ml ml-ideator"/>
                             </div>
                             <p>{task.portfolioTitle ? task.portfolioTitle : ""}</p>
                             <div className="block_footer">
@@ -140,7 +142,9 @@ export default class MlAppInternalTaskList extends React.Component{
                           </div>
                           <h3>{task.ownerName ? task.ownerName : ""}</h3>
                           <div className="list_icon">
-                            <img src="/images/valuation.png" style={{"margin": 0}} className="c_image ml ml-ideator"/>
+                            {/*<img src="/images/valuation.png" style={{"margin": 0}} className="c_image ml ml-ideator"/>*/}
+                            <img src={task.profileImage ? task.profileImage : "/images/valuation.png"}
+                                 style={{"margin": 0}} className="c_image ml ml-ideator"/>
                           </div>
                           <p>{task.portfolioTitle ? task.portfolioTitle : ""}</p>
                           <div className="block_footer">

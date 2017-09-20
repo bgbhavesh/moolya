@@ -51,6 +51,9 @@ export default class MlBackendUserListView extends Component {
 
     });
 
-    return (<div className="row">{list}</div>);
+    return (<div className="row">
+      <h2>BackendUsers</h2>
+      {list}
+      </div>);
   }
 }

@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react';
+var FontAwesome = require('react-fontawesome');
 import {fetchSlotAppointmentsDetailsActionHandler} from './../actions/fetchSlotAppointmentsDetails';
 
 export default class MlAppSlotAppointmentDetails extends Component {
@@ -14,9 +15,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
     console.log('props', props);
   }
   componentDidMount() {
-    $(function() {
       $('.float-label').jvFloat();
-    });
     var WinWidth = $(window).width();
     if(WinWidth > 768){
       $(".app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
@@ -68,7 +67,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
                       <div className="col-md-9">
                         <br />
                         <div className="form-group">
-                          <input type="text" placeholder="Task Type" defaultValue={appointmentType} className="form-control float-label" id="" disabled/>
+                          <input className="form-control float-label" type="text" placeholder="Service Name" defaultValue={data.appointmentInfo.serviceName} id="" disabled/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="Task Name" defaultValue={data.taskName} className="form-control float-label" id="" disabled/>
@@ -86,6 +85,8 @@ export default class MlAppSlotAppointmentDetails extends Component {
                           return(
                             <li>
                               <a href="">
+                                {info.status === 'Accepted' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellowgreen'}}/> : info.status === 'Pending' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellow'}}/> :
+                                  info.status === 'Rejected' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'red'}}/> : <FontAwesome name='circle' style={{'position': 'absolute', }}/>}
                                 <img src={info.profileImage? info.profileImage : "/images/img2.png"}/><br />
                                 <div className="tooltiprefer">
                                   <span>{`${info.firstName} ${info.lastName}`}</span>

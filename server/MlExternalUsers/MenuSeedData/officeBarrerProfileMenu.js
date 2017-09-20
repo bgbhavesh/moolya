@@ -47,6 +47,14 @@ if(Meteor.isServer){
         "uniqueId" : "myAppointment"
       },
       {
+        "image":"ml my-ml-library_3",
+        "link": "/app/library",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Library",
+        "uniqueId" : "library"
+      },
+      {
         "image":"ml my-ml-terms_and_conditions",
         "link": "/app/termsConditions",
         "isLink" : true,

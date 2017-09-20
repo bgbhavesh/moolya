@@ -18,7 +18,7 @@ if(Meteor.isServer){
         "link": "/app/calendar/shareCalendar",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Share Calendar",
+        "name" : "Shared Calendar",
         "uniqueId" : "calendar_share"
       },
 

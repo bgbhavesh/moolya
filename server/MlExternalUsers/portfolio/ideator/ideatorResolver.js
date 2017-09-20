@@ -38,7 +38,7 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchIdeaByPortfolioId'] = (obj, args, context, info) => {
   if(args.portfolioId){
-    let idea = MlIdeas.findOne({portfolioId:args.portfolioId});
+    let idea = MlIdeas.findOne({portfolioId:args.portfolioId}) || {}
     return idea;
   }
   return {};

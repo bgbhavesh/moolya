@@ -56,6 +56,7 @@ export const
                         chapterName
                         userId
                         name
+                        profileImage
                     }
                   }
                 }

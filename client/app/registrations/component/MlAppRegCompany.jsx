@@ -394,10 +394,10 @@ export default class MlAppRegCompany extends React.Component {
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.companyEmail}
                              placeholder="Company Email" className="form-control float-label" id=""/>
                     </div>
-                    <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Foundation Year"}}
+                    <div className="form-group mandatory">
+                      <Datetime dateFormat="DD-MM-YYYY" ref={"foundationDate"} timeFormat={false} inputProps={{placeholder: "Foundation Year"}}
                                 closeOnSelect={true} value={that.state.foundationDate}
-                                onChange={that.onFoundationDateSelection.bind(that)}/>
+                                onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
                     <div className="form-group">

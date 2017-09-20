@@ -145,7 +145,7 @@ export default class MlCommunityList extends Component {
       <div>
           <div className="community_icons fixed_icon">
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
-              <span className="ml my-ml-browser_5 br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+              <span className="ml ml-select-all br br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>
             <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
               <span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>

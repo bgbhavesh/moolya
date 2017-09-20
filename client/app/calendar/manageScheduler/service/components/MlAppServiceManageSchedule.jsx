@@ -70,9 +70,12 @@ class MlAppServiceManageSchedule extends Component {
       clusterData: {}
     };
     this.options = [
-      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Onetime', label: 'One Time'},
       {value: 'Daily', label: 'Daily'},
-      {value: 'Monthly', label: 'Monthly'}
+      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Monthly', label: 'Monthly'},
+      {value: 'Quarterly', label: 'Quarterly'},
+      {value: 'Yearly', label: 'Yearly'},
     ];
     this.profileId = this.props.profileId?this.props.profileId:FlowRouter.getParam('profileId');
     this.serviceId = this.props.serviceId?this.props.serviceId:FlowRouter.getQueryParam('id');

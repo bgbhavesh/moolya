@@ -82,6 +82,7 @@ class Library extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar1 = this.handleUploadAvatar1.bind(this);
     this.toggleModal1 = this.toggleModal1.bind(this);
+    this.connectionManagement= this.connectionManagement.bind(this);
   }
 
   /**
@@ -951,7 +952,7 @@ class Library extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : ""}
+          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : ""}
           {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
           <a href="" data-toggle="modal" data-target=".documentpop"
             onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>

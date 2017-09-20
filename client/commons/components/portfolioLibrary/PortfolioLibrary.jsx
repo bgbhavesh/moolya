@@ -532,6 +532,7 @@ class Library extends React.Component {
 
   onFileUploadCallBack(type, resp) {
     if (resp !== 'Maximum file size exceeded') {
+      this.setState({popoverOpen: !(this.state.popoverOpen)})
       this.setState({ uploadedData: resp });
       var link = $.parseJSON(this.state.uploadedData).result;
       this.setState({ uploadedData: link });
@@ -1015,6 +1016,7 @@ class Library extends React.Component {
   sendDataToPortfolioLibrary(dataDetail, index) {
     let portfolioId = FlowRouter.getRouteName();
     let tempObject = Object.assign({}, dataDetail);
+    this.setState({popoverOpen: !(this.state.popoverOpen)})
     if (dataDetail.libraryType === "image") {
       if (portfolioId === "library") {
         let data = this.state.imageDetails || [];

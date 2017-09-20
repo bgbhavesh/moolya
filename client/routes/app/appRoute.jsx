@@ -194,7 +194,7 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/
   name: 'dashboard',
   action(params, queryParams){
     mount(AppLayout, {
-      appContent: <MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+      appContent: <MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });

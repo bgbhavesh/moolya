@@ -30,6 +30,10 @@ class MlAppComponent extends Component{
     //   }
     // }
 
+    if(FlowRouter.getRouteName () === "myAppointment" ) {
+      return true;
+    }
+
     if(!FlowRouter.getQueryParam('tab')) return true;
 
     return !isEqualWith(this.props, nextProps) ||

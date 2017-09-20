@@ -1,5 +1,5 @@
 import {MlAppViewer} from "../../../commons/core/MlAppViewer";
-import MlAppInternalMyTask from "../components/myTask/MlAppInternalMyTask";
+import MlAppInternalMyTaskList from "../components/myTask/MlAppInternalMyTaskList";
 import React from "react";
 import gql from "graphql-tag";
 
@@ -8,7 +8,7 @@ export const mlMyAppSelfInternalTaskConfig = new MlAppViewer({
   moduleName: "mySelfInternalTask",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppInternalMyTask/>,
+  viewComponent: <MlAppInternalMyTaskList/>,
   header: true,
   headerComponents:{
     filter: true,
@@ -32,6 +32,7 @@ export const mlMyAppSelfInternalTaskConfig = new MlAppViewer({
                           community{
                            name 
                           }
+                          profileImage
                         }
                       }
                   }

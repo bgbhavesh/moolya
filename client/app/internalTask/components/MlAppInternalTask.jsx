@@ -23,11 +23,18 @@ export default class MlAppInternalTask extends React.Component{
   componentDidMount() {
   }
 
+
+  removeTab(){
+    FlowRouter.setQueryParams({
+      add: null
+    });
+  }
+
   render(){
     let MlTabs = [
       {
         name: 'My Tasks',
-        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppSelfInternalTaskConfig} />
+        tabContent: <MlAppInternalMyTask />
       },
       {
         name: 'Pending Tasks',
@@ -56,7 +63,7 @@ export default class MlAppInternalTask extends React.Component{
       }));
     }
 
-    const App = () => <Tabs items={getTabs()} />;
+    const App = () => <Tabs items={getTabs()} onChange={() => this.removeTab()} />;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

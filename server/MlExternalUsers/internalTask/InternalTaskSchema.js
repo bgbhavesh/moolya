@@ -58,6 +58,7 @@ let internalTaskSchema = `
         clusterName: String
         ownerName: String
         portfolioTitle: String
+        profileImage : String
     }
     
     input internalTaskCommunity {

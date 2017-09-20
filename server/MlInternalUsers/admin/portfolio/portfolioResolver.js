@@ -366,7 +366,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
           if (response && response.success) {
             var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
             var msg = "Your Go-Live request for " + defaultProfile.communityDefName + " has been approved on" + new Date() + "." + "Login to moolya for next steps."
-            portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+            // portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
           }
         }
         return response
@@ -396,7 +396,7 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
       if(response && response.success){
         var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
         var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been declined on"+ new Date()+"."+"Login to moolya for next steps."
-        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+        // portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
       }
     }
     return updatedResponse;

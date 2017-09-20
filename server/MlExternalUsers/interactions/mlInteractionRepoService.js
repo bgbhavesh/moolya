@@ -100,6 +100,7 @@ class MlInteractionService{
                 user:{
                   name:'$user.profile.displayName'
                 },
+                profileImage:'$user.profile.profileImage',
                 stage: {
                   "$filter": {
                     input: "$stage",

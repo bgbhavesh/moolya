@@ -942,13 +942,14 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
         "isProvider": "$attendeeDetails.isProvider",
         "isClient": "$attendeeDetails.isClient",
         "isAttendee": "$attendeeDetails.isAttendee",
+        "status":"$attendeeDetails.status"
       }}
     }}
   ]
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine );
 
-  return result;
+    return result;
 
 };
 

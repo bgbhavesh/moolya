@@ -179,8 +179,9 @@ export default class MlFunderSuccessStories extends React.Component {
   onSaveAction(e) {
     var isDate = _.findIndex(this.state.funderSuccess, { date: '' })
     var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
-    if ((isDate > 0) || (dateKey.length != this.state.funderSuccess && this.state.funderSuccess.length))
+    if ((isDate > 0) || (dateKey.length !== (this.state.funderSuccess && this.state.funderSuccess.length))) {
       toastr.error("Please select Date");
+    }
     this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false })
   }
 

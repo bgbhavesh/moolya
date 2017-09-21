@@ -7,11 +7,11 @@
 import gql from "graphql-tag";
 import {client} from "../../core/apolloConnection";
 
-export async function fetchConnectionHandler(portfolioId, communityCode) {
+export async function fetchConnectionHandler(registrationId, communityCode) {
   const result = await client.query({
     query: gql `
-            query($portfolioId:String, $communityCode: String){
-                fetchConnectionsByPortfolio(portfolioId:$portfolioId, communityCode:$communityCode) {
+            query($registrationId:String, $communityCode: String){
+                fetchConnectionsByReg(registrationId:$registrationId, communityCode:$communityCode) {
                     userName
                     firstName
                     lastName
@@ -21,11 +21,11 @@ export async function fetchConnectionHandler(portfolioId, communityCode) {
             }
         `,
     variables: {
-      portfolioId,
+      registrationId,
       communityCode
     },
     forceFetch: true
   })
-  const connection = result.data.fetchConnectionsByPortfolio;
+  const connection = result.data.fetchConnectionsByReg;
   return connection
 }

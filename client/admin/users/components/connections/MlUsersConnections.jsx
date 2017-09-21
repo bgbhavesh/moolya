@@ -2,7 +2,7 @@
  * Created by vishwadeep on 26/7/17.
  */
 import React, {Component} from "react";
-import {fetchConnectionHandler} from "../actions/findUsersConnectionsHandlers";
+import {fetchConnectionHandler} from "../../actions/findUsersConnectionsHandlers";
 
 export default class MlUsersConnections extends Component {
   constructor(props, context) {
@@ -18,8 +18,8 @@ export default class MlUsersConnections extends Component {
 
   async getAllConnections() {
     let communityCode = this.props.communityCode
-    let portfolioId = this.props.data.config.portfolioId
-    var response = await fetchConnectionHandler(portfolioId, communityCode)
+    let registrationId = this.props.data.config.registrationId
+    var response = await fetchConnectionHandler(registrationId, communityCode)
     console.log(response)
     if (response && response.length > 0)
       this.setState({data: response})

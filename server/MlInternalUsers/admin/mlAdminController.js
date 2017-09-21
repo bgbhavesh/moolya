@@ -103,10 +103,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
 
-
-  let path = process.env.PWD;                                                 // Core Project Root Path
-  graphQLServer.set('views', path + '/server/MlExternalUsers/microSite/views');   // MicroSite View folder that contains static files.
-  graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
+  let pathAbout = Assets.absoluteFilePath('microSite/views/about.pug')
+  let path = process.env.PWD;                                          // Core Project Root Path
+  //graphQLServer.set('views', path + '/server/MlExternalUsers/microSite/views');   // MicroSite View folder that contains static files.
+  //graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
 
   var tokens = new Tokens()
   var secret = tokens.secretSync()
@@ -121,13 +121,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
             res.redirect('/login');
           }
-          res.render('about', portFolio)
+          res.render(pathAbout, portFolio)
         }
   )
 
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res, next) {
-      console.log('Request Headers and URL',req.headers,req.url);
       if (!(req.url.includes('login') || req.url.includes('registration'))) {
         if (!req.headers.cookie.includes('meteor_login_token')) {
           const pathName = req.url;
@@ -137,7 +136,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
             res.redirect('/login');
           }
-          res.render('about', portFolio)
+          res.render(pathAbout, portFolio)
         } else {
           next()
         }

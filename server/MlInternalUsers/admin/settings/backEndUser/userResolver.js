@@ -1684,6 +1684,9 @@ MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
   var query = []
+  var clusterId = args.clusterId || ''
+  var chapterId = args.chapterId || ''
+  var subChapterId = args.subChapterId || ''
   if (args.clusterId && args.chapterId && args.subChapterId) {
     query.push({
       '$match': {
@@ -1702,10 +1705,10 @@ MlResolver.MlQueryResolver['fetchAnchorUsers'] = (obj, args, context, info) => {
     }
   })
   var response = mlDBController.aggregate('users', query, context)
-  var portfolioCount = portfolioValidationRepo.getLivePortfolioCount()
+  var portfolioCount = portfolioValidationRepo.getLivePortfolioCount(clusterId, chapterId, subChapterId)
   return {userDetails: response, portfolioCounter: portfolioCount}
 }
-
+//todo:// restrict anchor user to update "isActive" status maintain the old status only
 checkAnchorAccess = function (args, context) {
   var isAccess = true
   var userProfile = new MlAdminUserContext().userProfileDetails(context.userId)

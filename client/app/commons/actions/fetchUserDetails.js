@@ -15,7 +15,7 @@ export async function fetchUserDetailsHandler() {
        profileImage
        headerCommunityDisplay
        pendingRegId
-          registrationInfo {  
+          registrationInfo {
             firstName
             lastName
             contactNumber
@@ -66,7 +66,7 @@ export async function requestPortfolioForGoLive(resId) {
                     success,
                     code,
                     result
-                }  
+                }
             }
         `,
     variables: {
@@ -106,4 +106,9 @@ export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)
   mlConversationUtils.getNotifications(cb)
   //mlConversationUtils.ackNotification(payload, cb)
+}
+
+export function getNotificationsCounter(cb) {
+  mlConversationUtils.getNotificationsCounter(cb)
+
 }

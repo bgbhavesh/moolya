@@ -33,6 +33,7 @@ export default class MLAppMyCalendar extends Component {
       communityName:"",
       profile:[],
       slotDetailInfo: [{}],
+      indexValue:0,
       exploreAppointmentIds: []
     };
     this.onNavigate = this.onNavigate.bind(this);
@@ -41,6 +42,7 @@ export default class MLAppMyCalendar extends Component {
     this.getAllAppointments.bind(this);
     this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
     this.appointmentView = this.appointmentView.bind(this);
+    this.getSessionNumber.bind(this);
   }
 
   onNavigate(date) {
@@ -129,6 +131,10 @@ export default class MLAppMyCalendar extends Component {
     return resp;
   }
 
+  getSessionNumber(index) {
+    this.setState({indexValue:index})
+  }
+
 
   componentToLoad(response, date){
    if(this.state.profileId) {
@@ -153,6 +159,7 @@ export default class MLAppMyCalendar extends Component {
     let details = [];
     let events = 'events' in resp ? resp.events : [];
     let data = 'days' in resp ? resp.days : [];
+    console.log("data",data);
     if(_.isEmpty(events)) {
       this.setState({
         events: [],
@@ -171,7 +178,8 @@ export default class MLAppMyCalendar extends Component {
         }
       });
       that.setState({
-        events: details
+        events: details,
+        data: data
       });
     }
       return resp;
@@ -302,7 +310,7 @@ export default class MLAppMyCalendar extends Component {
                   startDate={that.state.appointmentDate}
                   onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
                 />
-                <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
+                <MlAppServiceManageSchedule profileId={this.state.profileId} getSessionNumber={this.getSessionNumber.bind(this)} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
               </div>
             </div>
           </div>
@@ -353,6 +361,7 @@ export default class MLAppMyCalendar extends Component {
                     onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
                   />
                   <MlAppSlotAppointmentDetails
+                    sessionNumber={this.state.indexValue}
                     appointmentIds={ this.state.exploreAppointmentIds }
                     isView={true}
                     viewEvent = {this.appointmentView}

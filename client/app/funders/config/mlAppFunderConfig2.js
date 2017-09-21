@@ -37,6 +37,7 @@ export const mlAppFunderConfig2=new MlAppViewer({
                       communityType
                       firstName
                       lastName
+                      profileImage
                     }
                   }
                 }

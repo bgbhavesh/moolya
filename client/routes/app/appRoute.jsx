@@ -194,7 +194,7 @@ appSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/
   name: 'dashboard',
   action(params, queryParams){
     mount(AppLayout, {
-      appContent: <MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+      appContent: <MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });
@@ -558,7 +558,7 @@ appSection.route('/calendar/officeCalendar', {
 appSection.route('/calendar/notification', {
   name: 'calendar_notification',
   action(){
-    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: false})
+    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: true})
   }
 });
 

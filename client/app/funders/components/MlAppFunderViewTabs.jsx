@@ -35,16 +35,16 @@ export default class MlAppFunderViewTabs extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAboutView key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestmentView key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Principals & Team" , component:<MlFunderPrincipalTeamView key="3" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Areas Of Interest" , component:<MlFunderAreaOfInterestView key="6" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary  client={appClient} key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlFunderLookingForView key="11" tabName="lookingFor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<MlBeSpokeListView  myPortfolio={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About", component:<MlFunderAboutView key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" ,  name:"Investments" ,component:<MlFunderInvestmentView key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Principals & Team" , name:"Principals And Team" ,component:<MlFunderPrincipalTeamView key="3" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" ,  name:"Engagement Methods" ,component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Areas Of Interest" ,  name:"Areas Of Interest" ,component:<MlFunderAreaOfInterestView key="6" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" ,name:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" ,name:"Library" , component:<PortfolioLibrary  client={appClient} key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" ,  name:"News" , component:<MlFunderNewsView key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , name:"Looking For" , component:<MlFunderLookingForView key="11" tabName="lookingFor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , name:"Services" ,  component:<MlBeSpokeListView  myPortfolio={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
   }
@@ -57,7 +57,7 @@ export default class MlAppFunderViewTabs extends React.Component{
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
@@ -73,6 +73,6 @@ export default class MlAppFunderViewTabs extends React.Component{
   }
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }

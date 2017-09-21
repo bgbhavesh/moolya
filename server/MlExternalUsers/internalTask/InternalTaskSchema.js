@@ -58,6 +58,7 @@ let internalTaskSchema = `
         clusterName: String
         ownerName: String
         portfolioTitle: String
+        profileImage : String
     }
     
     input internalTaskCommunity {
@@ -101,6 +102,7 @@ let internalTaskSchema = `
       expectedInput: String
       expectedOutput: String
       users: [internalTaskAttendees]
+      docs: [internalTaskFileAttributes]
     }
   
     type Query{

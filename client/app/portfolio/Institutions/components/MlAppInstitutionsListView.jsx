@@ -11,7 +11,7 @@ export default class MlAppInstitutionListView extends Component {
    * Note: routes [deciding] based on isExplore
    * cheking [permissions to view the portfolio]
    * */
-  componentDidMount(){
+  componentDidUpdate(){
     $('.pie-passion').pieChart({
       barColor: '#ef4647',
       trackColor: '#192430',
@@ -67,11 +67,11 @@ export default class MlAppInstitutionListView extends Component {
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={intitution.views}> <span className="pie-value"></span> </div><br/>
-                views
+                Views
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-rating" data-percent={intitution.followings}> <span className="pie-value"></span> </div><br/>
-                followings
+                Followings
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-like" data-percent={intitution.likes}> <span className="pie-value"></span> </div><br/>
@@ -89,7 +89,7 @@ export default class MlAppInstitutionListView extends Component {
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <span>{intitution.connections}</span><br />
-                Connect
+                Connects
               </div>
             </div>
           </div>

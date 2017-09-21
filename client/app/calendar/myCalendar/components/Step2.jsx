@@ -170,7 +170,7 @@ class MlAppServiceSelectTask extends Component{
 
   async setSession(index, sessionId, duration) {
     const {selectedTaskId} = this.state;
-    // let {selectedTaskId} = this.props;
+    this.props.getSessionNumber(index+1)
     this.setState({sessionId: sessionId})
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){

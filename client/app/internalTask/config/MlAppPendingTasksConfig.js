@@ -32,6 +32,7 @@ export const mlMyAppPendingInternalTaskConfig = new MlAppViewer({
                           community{
                            name 
                           }
+                          profileImage
                         }
                       }
                   }

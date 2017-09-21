@@ -32,6 +32,7 @@ export const mlMyAppCurrentInternalTaskConfig = new MlAppViewer({
                           community{
                            name 
                           }
+                          profileImage
                         }
                       }
                   }

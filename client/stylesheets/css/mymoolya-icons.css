@@ -13,7 +13,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.my-ml-public_profile:before {
+  content: "\e9f9";
+}
 .my-ml-pending_registrations:before {
   content: "\e9f5";
 }

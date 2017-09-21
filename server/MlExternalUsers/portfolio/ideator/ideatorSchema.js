@@ -14,6 +14,7 @@ let ideatorPortfolioSchema = `
         userId:String
         name:String
         communityType : String
+        profileImage        : String
     }
     type ideasOutput{
         _id:String,

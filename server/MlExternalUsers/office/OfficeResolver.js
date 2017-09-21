@@ -420,7 +420,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       ];
       let memberAssicatedWithSameInvester = mlDBController.aggregate('MlOffice', pipeline);
       // let isAlreadyInSameOffice = mlDBController.find('MlOfficeMembers', {emailId: args.officeMember.emailId}).fetch();
-      if(memberAssicatedWithSameInvester.length  == 0) {
+      if(memberAssicatedWithSameInvester.length  == 0 || isUserRegExist.status == "REG_EMAIL_P" || isUserRegExist.status == "REG_EMAIL_V" ) {
         let code = 400;
         let response = new MlRespPayload().errorPayload("User is not allowed to be associated to this office. Please contact administrator", code);
         return response;

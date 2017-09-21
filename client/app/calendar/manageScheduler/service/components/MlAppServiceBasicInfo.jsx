@@ -29,12 +29,13 @@ class MlAppServiceBasicInfo extends Component {
   constructor(props) {
     super(props);
     this.state={
-      serviceExpireTime:this.props.daysRemaining||1,
+      serviceExpireTime:(props.data &&props.data.serviceExpiry) ? props.data.serviceExpiry : "",
       currentFrequency:(this.props.data&&this.props.data.sessionFrequency)? this.props.data.sessionFrequency :'Onetime',
     }
     this.changeServiceExpireTime=this.changeServiceExpireTime.bind(this);
     this.setSessionFrequency=this.setSessionFrequency.bind(this);
   }
+
 
   componentDidMount() {
     this.props.getServiceDetails();
@@ -67,7 +68,9 @@ class MlAppServiceBasicInfo extends Component {
    */
 
   changeServiceExpireTime(e){
-    this.setState({serviceExpireTime:e.target.value});
+    let value = e.target.value;
+    this.setState({serviceExpireTime:value});
+    this.props.setServiceExpiry(value)
   }
 
   setSessionFrequency(value){
@@ -78,7 +81,7 @@ class MlAppServiceBasicInfo extends Component {
       days=30;
     }else if(value === 'Quarterly'){
       days=120;
-    }else if(value === 'Yearly'){
+    }else if(value === 'Annually'){
       days=365;
     }
     this.setState({currentFrequency:value,serviceExpireTime:days});
@@ -98,6 +101,7 @@ class MlAppServiceBasicInfo extends Component {
       optionsBySelectCommunities,
       checkBoxHandler,
       options,
+      setServiceExpiry,
       setSessionFrequency,
       clusterData } = this.props;
 
@@ -254,7 +258,7 @@ class MlAppServiceBasicInfo extends Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={data.status} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode}/>
+                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode}/>
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -262,9 +266,9 @@ class MlAppServiceBasicInfo extends Component {
                 <div className="form-group">
                   <label>
                     Service expires &nbsp;
-                    <input type="text"
-                           className="form-control inline_input" onChange={this.changeServiceExpireTime}
-                           disabled={(this.state.currentFrequency!== 'Onetime')} value={this.state.serviceExpireTime}  />
+                    <input type="number"
+                           className="form-control inline_input" onChange={(event)=>setServiceExpiry(event)}
+                           disabled={(this.state.currentFrequency !== 'Onetime')}  value={data.serviceExpiry}  />
                     days from the date of purchase
                   </label>
                 </div>

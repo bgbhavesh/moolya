@@ -276,6 +276,10 @@ export default class MlAppRegStep4 extends React.Component {
     }
   }
 
+  exitRegistration(){
+    FlowRouter.go('/app/dashboard')
+  }
+
   async onClear(index, value) {
     this.refs["socialLinkTypeUrl" + index].value = "";
     /*
@@ -303,7 +307,7 @@ export default class MlAppRegStep4 extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: this.exitRegistration.bind(this)
       },
     ]
 

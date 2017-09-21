@@ -244,6 +244,7 @@ let appointment=`
      updateAppointmentByStatus(appointmentId: String, status: String): response
      
      fetchAdminServiceAppointment( orderId: String! ): response
+     fetchAdminSessionAppointment( orderId: String! ): response
   }
 `;
 
@@ -253,6 +254,7 @@ let supportedApi = [
   {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'fetchAdminServiceAppointment', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
+  {api:'fetchAdminSessionAppointment', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
   {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
   {api:'updateAppointmentByStatus', actionName:'UPDATE', resourceName:"SERVICECARD"},
 ];

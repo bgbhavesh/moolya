@@ -9,7 +9,7 @@ import {updateRegistrationInfoDetails} from "../actions/updateRegistration";
 import update from "immutability-helper";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import {mlFieldValidations,validatedPhoneNumber} from "../../../commons/validations/mlfieldValidation";
 import _underscore from "underscore";
 var FontAwesome = require('react-fontawesome');
 var diff = require('deep-diff').diff;
@@ -100,10 +100,14 @@ export default class MlAppRegContactDetails extends React.Component {
     refs.push(this.refs["numberType"])
     refs.push(this.refs["contactNumber"])
     let ret = mlFieldValidations(refs)
-
+    let countrycode=this.state.countryDetails.countryCode;
+    let contactNumber = this.refs["contactNumber"] && this.refs["contactNumber"].value;
+    let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
     if (ret) {
       toastr.error(ret);
-    } else {
+    } else if (countrycode && !isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
+    }else {
 
       let contactList = this.state.contactNumberObject;
       contactList.numberType = this.state.selectedNumberTypeValue,
@@ -152,10 +156,14 @@ export default class MlAppRegContactDetails extends React.Component {
       refs.push(this.refs["contactNumber" + index])
       refs.push(this.refs["numberType" + index])
       let ret = mlFieldValidations(refs)
-
+      let countrycode=this.state.countryDetails.countryCode;
+      let contactNumber = this.refs["numberType" + index] && this.refs["numberType" + index].value;
+      let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
       if (ret) {
         toastr.error(ret);
-      } else {
+      } else if (countrycode && !isValidPhoneNumber) {
+        toastr.error('Please enter a valid contact number');
+      }else {
         let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
         let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
         let updatedComment = update(this.state.contactNumberArray[index], {

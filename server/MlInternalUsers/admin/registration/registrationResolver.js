@@ -49,6 +49,11 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
+  /**Validate Office Bearer registration,Fix: MOOLYA-2690*/
+  validationCheck = MlRegistrationPreCondition.validateOFBCommunity(args.registration);
+  if (validationCheck && !validationCheck.isValid) {
+    return validationCheck.validationResponse;
+  }
 
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
@@ -341,6 +346,11 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.pendingRegId = isAllowRegisterAs._id
         }
 
+        if(response.status === "REG_USER_APR"){
+          response.isCalendar = true;
+        } else {
+          response.isCalendar = false;
+        }
         let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
         response.registrationInfo.communityName = getCommunityName(communityCode);
         response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)

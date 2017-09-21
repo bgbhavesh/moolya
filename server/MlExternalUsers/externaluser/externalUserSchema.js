@@ -211,7 +211,14 @@ let externalUser = `
     type mapCenterCords{
         lat:Float,
         lng:Float
-    }    
+    }   
+     
+    type userDetails {
+      displayName: String
+      profileImage: String
+      _id: String
+      userName: String
+    }
     
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
@@ -231,7 +238,7 @@ let externalUser = `
         fetchUserProfiles:[externalUserProfiles]
         fetchMapCenterCordsForExternalUser(module:String, id:String):mapCenterCords
         findDefaultUserProfile:externalUserProfiles
-        fetchMoolyaAdmins(userId: String, profileId: String):userDetails
+        fetchMoolyaAdmins(userId: String, profileId: String):[userDetails]
     }
 `
 

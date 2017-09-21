@@ -72,10 +72,13 @@ class MlAppProfileHeader extends Component {
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response){
+      console.log("Is Cal", response);
       if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
-        this.setState({isAllowRegisterAs:false})
+        this.setState({
+          isAllowRegisterAs:false
+        });
       }
-      this.setState({data: response, loading:false})
+      this.setState({data: response, loading:false, isCalendar: response.isCalendar})
     }
   }
 
@@ -162,8 +165,8 @@ class MlAppProfileHeader extends Component {
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href=""><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
-              <li data-toggle="tooltip" title="Calendar" data-placement="top">
-                <a href="/app/calendar" className={activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
+              <li data-toggle={!this.state.isCalendar ?"":"tooltip"} title={!this.state.isCalendar ?"Pending Registration":"Calendar"} data-placement="top">
+                <a href={ !this.state.isCalendar ? "" : "/app/calendar"} className={!this.state.isCalendar ?"disable": activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
                 <a href="/app/task" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>

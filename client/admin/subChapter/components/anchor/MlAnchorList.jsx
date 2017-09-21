@@ -9,6 +9,7 @@ import { findBackendUserActionHandler } from '../../../transaction/internalReque
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
+import CropperModal from '../../../../commons/components/cropperModal';
 import omitDeep from 'omit-deep-lodash';
 var FontAwesome = require('react-fontawesome');
 
@@ -35,6 +36,8 @@ export default class MlAnchorList extends React.Component {
         socialLinkUrl: '',
       },
       selectedSocialTab: 0,
+      showUploadPicModal: false,
+      uploadingPic: false,
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
@@ -47,6 +50,8 @@ export default class MlAnchorList extends React.Component {
     this.onSaveSocialLink = this.onSaveSocialLink.bind(this);
     this.onChangeSocialLinkTab = this.onChangeSocialLinkTab.bind(this);
     this.onClearSocialLink = this.onClearSocialLink.bind(this);
+    this.onToggleUploadPic = this.onToggleUploadPic.bind(this);
+    this.handleCropPic = this.handleCropPic.bind(this);
     return this
   }
 
@@ -309,6 +314,19 @@ export default class MlAnchorList extends React.Component {
     );
   }
 
+  onToggleUploadPic() {
+    this.setState({
+      showUploadPicModal: !this.state.showUploadPicModal
+    })
+  }
+
+  handleCropPic(pic) {
+    this.setState({
+      croppedPic: pic,
+      showUploadPicModal: false,
+    })
+  }
+
   render() {
     const socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
       data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -326,6 +344,10 @@ export default class MlAnchorList extends React.Component {
     let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
     let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
     const isActive = this.state.userData && this.state.userData.profile && this.state.userData.profile.isActive;
+    var urlCreator = window.URL || window.webkitURL;
+    let imageUrl = '';
+    if (this.state.croppedPic)
+      imageUrl = urlCreator.createObjectURL(this.state.croppedPic);
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
@@ -345,12 +367,11 @@ export default class MlAnchorList extends React.Component {
             >
               <form>
                 <div className="form-group">
-                  <div className="fileUpload mlUpload_btn">
+                  <div onClick={this.onToggleUploadPic} className="fileUpload mlUpload_btn">
                     <span>Upload Pic</span>
-                    <input type="file" className="upload" />
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src={Img} />
+                    <img src={imageUrl || Img} />
                   </div>
                 </div>
                 <br className="brclear" />
@@ -412,6 +433,14 @@ export default class MlAnchorList extends React.Component {
                   </label>
                 </div>
               </form>
+              <CropperModal
+                toggleShow={this.onToggleUploadPic}
+                show={this.state.showUploadPicModal}
+                uploadingImage={this.state.uploadingPic}
+                cropperStyle="circle"
+                handleImageUpload={this.handleCropPic}
+                submitText={"Crop Image"}
+              />
             </ScrollArea>
           </div>
         </div>
@@ -419,3 +448,4 @@ export default class MlAnchorList extends React.Component {
     )
   }
 };
+

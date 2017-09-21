@@ -261,7 +261,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       };
       resp = mlDBController.insert('MlAppointmentMembers', providerData, context);
 
-      mlServiceCardRepo.createTransactionRequest(service.userId, 'sessionAppointment', orderId, SCOrderDetails.serviceId, SCOrderDetails.userId, 'user', context)
+      mlServiceCardRepo.createTransactionRequest(service.userId, 'sessionAppointment', appointmentData.appointmentId, SCOrderDetails.serviceId, SCOrderDetails.userId, 'user', context)
       let code = 200;
       let response = new MlRespPayload().successPayload("Appointment book successfully", code);
       return response;
@@ -1100,6 +1100,7 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
       "_id" : "$_id",
       "orderId":  { "$first": "$orderId" },
       "serviceId":  { "$first": "$serviceId" },
+      "service":  { "$first": "$service" },
       "serviceName":  { "$first": "$serviceName" },
       "amount":  { "$first": "$amount" },
       "tax":  { "$first": "$tax" },
@@ -1142,8 +1143,96 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
     {"$project": {
       "_id" : 1,
       "orderId": 1,
+      "service": 1,
       "serviceId": 1,
       "serviceName": 1,
+      "amount": 1,
+      "tax": 1,
+      "discountedAmount": 1,
+      "totalAmount": 1,
+      "isActive": 1,
+      "paymentStatus": 1,
+      "createdAt": 1,
+      "sessionInfo": 1,
+      "owner": {
+        "userId": "$owner.userId",
+        "profileId": "$owner.profileId",
+        "name": "$ownerInfo.profile.displayName",
+        "cluster": "$ownerInfo.profile.externalUserProfiles.clusterName",
+        "chapter": "$ownerInfo.profile.externalUserProfiles.chapterName",
+        "subChapter": "$ownerInfo.profile.externalUserProfiles.subChapterName",
+        "community": "$ownerInfo.profile.externalUserProfiles.communityName",
+        "email": "$ownerInfo.profile.email",
+        "phoneNo": "$ownerInfo.profile.mobileNumber",
+        "gender": "$ownerInfo.profile.genderType"
+      },
+      "client": {
+        "userId": "$client.userId",
+        "profileId": "$client.profileId",
+        "name": "$clientInfo.profile.displayName",
+        "cluster": "$clientInfo.profile.externalUserProfiles.clusterName",
+        "chapter": "$clientInfo.profile.externalUserProfiles.chapterName",
+        "subChapter": "$clientInfo.profile.externalUserProfiles.subChapterName",
+        "community": "$clientInfo.profile.externalUserProfiles.communityName",
+        "email": "$clientInfo.profile.email",
+        "phoneNo": "$clientInfo.profile.mobileNumber",
+        "gender": "$clientInfo.profile.genderType"
+      }
+    }
+    }
+  ];
+  let result = mlDBController.aggregate('MlScOrder', pipeline );
+  result = JSON.stringify(result);
+  let code = 200;
+  let response = new MlRespPayload().successPayload(result, code);
+  return response;
+};
+
+MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, context, info) => {
+  let orderId = args.orderId;
+  let pipeline = [
+    {"$match":{appointmentId: orderId}},
+    { "$lookup":
+      {
+        from: "mlServiceCardDefinition",
+        localField: "appointmentInfo.serviceCardId",
+        foreignField: "_id",
+        as: "service"
+      }
+    },
+    {"$unwind": "$service" },
+    {
+      "$lookup": {
+        "from": "users",
+        "localField": "provider.userId",
+        "foreignField": "_id",
+        "as": "ownerInfo"
+      }
+    },
+    { "$unwind" : "$ownerInfo" },
+    { "$unwind" : "$ownerInfo.profile.externalUserProfiles" },
+    {
+      "$lookup": {
+        "from": "users",
+        "localField": "client.userId",
+        "foreignField": "_id",
+        "as": "clientInfo"
+      }
+    },
+    { "$unwind" : "$clientInfo" },
+    { "$unwind" : "$clientInfo.profile.externalUserProfiles" },
+    {"$addFields": {
+      "isSameOwnerProfile" : { "$eq": [ "$ownerInfo.profile.externalUserProfiles.profileId", "$provider.profileId"] },
+      "isSameClientProfile" : { "$eq": [ "$clientInfo.profile.externalUserProfiles.profileId", "$client.profileId"]}
+    }
+    },
+    {"$match": { "isSameOwnerProfile": true, "isSameClientProfile": true } },
+    {"$project": {
+      "_id" : 1,
+      "orderId": 1,
+      "serviceId": 1,
+      "serviceName": 1,
+      "service": 1,
       "amount": 1,
       "tax": 1,
       "discountedAmount": 1,

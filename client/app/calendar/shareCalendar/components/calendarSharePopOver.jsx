@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import Datetime from "react-datetime";
-import {fetchActivitiesTeamsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
+import {getMoolyaAdminsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
 import moment from "moment";
 import {fetchConnections} from '../actions/fetchConnectionsForCalendar'
 import {storeSharedDetailsHandler} from '../actions/mlSharedCalendarActionHandler'
@@ -16,6 +16,7 @@ export default class CalendarSharePopOver extends React.Component {
     this.state={isSessionExpand: true}
     this.toggle = this.toggle.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
+    this.getMoolyaAdmins.bind(this);
     this.state = {
       popoverOpen: false,
       popoverTwoOpen: false,
@@ -85,7 +86,7 @@ export default class CalendarSharePopOver extends React.Component {
       if(selectedUserType.value == 'myConnections') {
         that.getMyConnections();
       } else if( selectedUserType.value == "moolyaAdmin" ){
-        // To do
+        that.getMoolyaAdmins();
       } else {
         that.getUsers(selectedUserType.value)
       }
@@ -100,6 +101,19 @@ export default class CalendarSharePopOver extends React.Component {
         profileId: user.profileId,
         profileImage: user.profileImage,
         userId: user.userId
+      };
+      return userInfo;
+    });
+    this.setState({teamData: users});
+  }
+
+  async getMoolyaAdmins(){
+    let resp = await getMoolyaAdminsActionHandler("","");
+    let users = resp.map(function (user) {
+      let userInfo = {
+        name: user.displayName,
+        profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+        userId: user._id
       };
       return userInfo;
     });

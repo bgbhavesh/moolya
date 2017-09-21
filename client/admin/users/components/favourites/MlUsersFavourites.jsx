@@ -2,7 +2,7 @@
  * Created by vishwadeep on 26/7/17.
  */
 import React, {Component} from "react";
-import {fetchFavouritesHandler}  from '../actions/findUsersFavouritesHandlers'
+import {fetchFavouritesHandler}  from '../../actions/findUsersFavouritesHandlers'
 
 export default class MlUsersFavourites extends Component {
   constructor(props, context) {
@@ -18,8 +18,8 @@ export default class MlUsersFavourites extends Component {
 
   async getAllConnections() {
     let communityCode = this.props.communityCode
-    let portfolioId = this.props.data.config.portfolioId
-    var response = await fetchFavouritesHandler(portfolioId, communityCode)
+    let registrationId = this.props.data.config.registrationId
+    var response = await fetchFavouritesHandler(registrationId, communityCode)
     console.log(response)
     if (response && response.length > 0)
       this.setState({data: response})

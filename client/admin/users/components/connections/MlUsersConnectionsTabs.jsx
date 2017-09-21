@@ -6,13 +6,13 @@
  * */
 import React, {Component} from "react";
 import {render} from "react-dom";
-import MlUsersFavourites from "./MlUsersFavourites";
-import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
+import MlUsersConnections from "./MlUsersConnections";
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 
 /**
  * export of default class
  * */
-export default class MlUsersFavouriteTabs extends React.Component {
+export default class MlUsersConnectionsTabs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {tabs: []};
@@ -44,37 +44,37 @@ export default class MlUsersFavouriteTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Ideator",
-        component: <MlUsersFavourites key="1" communityCode={'IDE'} data={this.props}/>
+        component: <MlUsersConnections key="1" communityCode={'IDE'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
-        component: <MlUsersFavourites key="2" communityCode={'FUN'} data={this.props}/>
+        component: <MlUsersConnections key="2" communityCode={'FUN'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Service Provider",
-        component: <MlUsersFavourites key="3" communityCode={'SPS'} data={this.props}/>
+        component: <MlUsersConnections key="3" communityCode={'SPS'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Startup",
-        component: <MlUsersFavourites key="4" communityCode={'STU'} data={this.props}/>
+        component: <MlUsersConnections key="4" communityCode={'STU'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Company",
-        component: <MlUsersFavourites key="5" communityCode={'CMP'} data={this.props}/>
+        component: <MlUsersConnections key="5" communityCode={'CMP'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Institutions",
-        component: <MlUsersFavourites key="6" communityCode={'INS'} data={this.props}/>
+        component: <MlUsersConnections key="6" communityCode={'INS'} data={this.props}/>
       }
     ]
     return tabs;

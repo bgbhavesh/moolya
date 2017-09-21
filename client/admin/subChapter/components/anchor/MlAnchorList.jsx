@@ -20,6 +20,13 @@ export default class MlAnchorList extends React.Component {
       loading: true,
       data: [],
       userData: {
+        profile: {
+          internalProfile: {
+            moolyaProfile: {
+              socialLinksInfo: [],
+            }
+          }
+        },
         socialLinksInfo: [],
       },
       socialLinkForm: {
@@ -39,6 +46,7 @@ export default class MlAnchorList extends React.Component {
     this.onSocialFormChange = this.onSocialFormChange.bind(this);
     this.onSaveSocialLink = this.onSaveSocialLink.bind(this);
     this.onChangeSocialLinkTab = this.onChangeSocialLinkTab.bind(this);
+    this.onClearSocialLink = this.onClearSocialLink.bind(this);
     return this
   }
 
@@ -49,6 +57,14 @@ export default class MlAnchorList extends React.Component {
   handleUserClick(id, event) {
     console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
+    this.setState({
+      socialLinkForm: {
+        socialLinkType: '',
+        socialLinkTypeName: '',
+        socialLinkUrl: '',
+      },
+      selectedSocialTab: 0,
+    })
     return resp;
 
   }
@@ -134,14 +150,24 @@ export default class MlAnchorList extends React.Component {
   removeSocialLink(index) {
     let userData = this.state.userData;
     console.log(index);
-    userData.socialLinksInfo.splice(index, 1);
+    userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.splice(index, 1);
     this.setState({
       userData,
-    });
+      selectedSocialTab: 0,
+      socialLinkForm: {
+        socialLinkType: '',
+        socialLinkTypeName: '',
+        socialLinkUrl: '',
+      },
+    }, () => this.sendDatatoParent(this.state.userData));
   }
 
   onChangeSocialLinkTab(index, dataIndex) {
-    const socialLinkForm = this.state.userData.socialLinksInfo[dataIndex] || {};
+    let socialLinkForm;
+    const { userData } = this.state;
+    if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo) {
+      socialLinkForm = userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo[dataIndex] || {};
+    }
     this.setState({ selectedSocialTab: index, socialLinkForm })
   }
 
@@ -154,8 +180,13 @@ export default class MlAnchorList extends React.Component {
         </li>
       )
     });
+    let length = 1;
+    const { userData } = this.state;
+    if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo) {
+      length = userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.length || 1;
+    }
     addSocialLinkTab = (
-      <li onClick={() => this.onChangeSocialLinkTab(0, this.state.userData.socialLinksInfo.length)} className={this.state.selectedSocialTab === 0 ? "active": ""}>
+      <li onClick={() => this.onChangeSocialLinkTab(0, length)} className={this.state.selectedSocialTab === 0 ? "active": ""}>
         <a> <FontAwesome name='plus-square' /> Add Social Links </a>
       </li>
     )
@@ -165,27 +196,75 @@ export default class MlAnchorList extends React.Component {
   onSaveSocialLink() {
     const selectedIndex = this.state.selectedSocialTab;
     const userData = this.state.userData;
+    if (!this.state.socialLinkForm.socialLinkUrl || !this.state.socialLinkForm.socialLinkType) {
+      return null;
+    }
     if (selectedIndex) {
-      userData.socialLinksInfo[selectedIndex - 1] = this.state.socialLinkForm;
+      if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
+        if (userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo) {
+          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo[selectedIndex - 1] = this.state.socialLinkForm;
+        } else {
+          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo = [this.state.socialLinkForm];
+        }
+      }
     } else {
-      userData.socialLinksInfo.push(this.state.socialLinkForm);
+      if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
+        if (userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.length) {
+          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.push(this.state.socialLinkForm);
+        } else {
+          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo = [this.state.socialLinkForm];
+        }
+      }
     }
     this.setState({
       userData,
       socialLinkForm: selectedIndex ? this.state.socialLinkForm : { },
-    });
+    }, () => this.sendDatatoParent(this.state.userData));
   }
 
   onSocialFormChange(key, value, label) {
-    const socialLinkForm = { ...this.state.socialLinkForm };
+    let socialLinkForm = { ...this.state.socialLinkForm };
     socialLinkForm[key] = value;
     if (key === 'socialLinkType' && label )
-    if(label) {
-      socialLinkForm.socialLinkTypeName = label;
+      if(label) {
+        socialLinkForm.socialLinkTypeName = label;
+      }
+    let currentInfo = [];
+    const { userData } = this.state;
+    if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
+      currentInfo = this.state.userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo || [];
+    }
+    if (currentInfo && currentInfo.length) {
+      for (let i=0; i<currentInfo.length; i++) {
+        if (currentInfo[i] && currentInfo[i].socialLinkType === value) {
+          this.setState({
+            selectedSocialTab: i+1,
+          });
+          socialLinkForm = userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo ? userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo[i] : {};
+          break;
+        }
+      }
     }
     this.setState({
       socialLinkForm,
-    })
+    });
+  }
+
+  onClearSocialLink() {
+    if (this.state.selectedSocialTab !== 0) {
+      const socialLinkForm = this.state.socialLinkForm;
+      socialLinkForm.socialLinkUrl = ''
+      return this.setState({
+        socialLinkForm,
+      })
+    }
+    this.setState({
+      socialLinkForm: {
+        socialLinkType: '',
+        socialLinkTypeName: '',
+        socialLinkUrl: '',
+      },
+    });
   }
 
   renderSocialForm(){
@@ -201,8 +280,8 @@ export default class MlAnchorList extends React.Component {
         <div className="tab-pane active">
           <div className="form-group">
             <Moolyaselect multiSelect={false} ref={'socialLinkType'}
-              placeholder="Select Social Link"
-              className="form-control float-label" onSelect={(value, cb, { label }) => {this.onSocialFormChange('socialLinkType', value, label);} }
+              placeholder="Select Social Link" disabled={this.state.selectedSocialTab !== 0}
+              className="form-control float-label" onSelect={(value, cb, socialOption) => {this.onSocialFormChange('socialLinkType', value, socialOption ? socialOption.label : '');} }
               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
               queryOptions={socialLinkTypeOption} selectedValue={this.state.socialLinkForm.socialLinkType}
               isDynamic={true} />
@@ -212,7 +291,7 @@ export default class MlAnchorList extends React.Component {
           </div>
           <div className="form-group">
             <button onClick={this.onSaveSocialLink} type="button">Save</button>
-            <button type="button">Cancel</button>
+            <button type="button" onClick={this.onClearSocialLink}>Clear</button>
           </div>
         </div>
       </div>
@@ -238,7 +317,11 @@ export default class MlAnchorList extends React.Component {
       }
     }`;
     const socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS", hierarchyRefId: this.props.data.clusterId } } };
-    const socialLinks = this.state.userData.socialLinksInfo || [];
+    const { userData } = this.state;
+    let socialLinks = [];
+    if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
+      socialLinks = this.state.userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo || [];
+    }
     const _this = this
     let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
     let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;

@@ -47,12 +47,14 @@ export default class MlAppTaskList extends React.Component{
           <div className="col-lg-12">
             <div className="row">
               {that.props.profileId !== "all" ?<div className="col-lg-2 col-md-4 col-sm-4">
+                <div className="card_block">
                 <a href="" onClick={()=>this.onClickAdd()}>
-                  <div className="list_block notrans">
-                    <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Create a task</h3>
+                  <div className="add_task">
+                    <div><span className="ml ml-plus "></span></div>
+                    <div className="block_footer"><span>Create a task</span></div>
                   </div>
                 </a>
+                </div>
               </div>: <div></div>}
               { this.state.tasks.map(function (task, index) {
                 return (

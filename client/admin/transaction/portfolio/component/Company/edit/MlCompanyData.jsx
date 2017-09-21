@@ -20,11 +20,13 @@ export default class MlCompanyData extends React.Component{
   }
 
   async componentWillMount() {
+    this.fetchPortfolioData()
+  }
+  async fetchPortfolioData(){
     const resp = await fetchCompanyPortfolioData(this.props.portfolioDetailsId,this.props.client)
     this.setState({
       uploadedData: resp
     })
-    console.log('---response from server---',resp)
   }
 
   componentDidMount()
@@ -49,14 +51,14 @@ export default class MlCompanyData extends React.Component{
   }
 
   documentUpload(type, e) {
-    this.setState({uploadType: type})
     let file = e.target.files[0];
-    this.setState({fileType:file.type,fileName:file.name });
-    let fileType = file.type
-    let typeShouldBe = _.compact(fileType.split('/'));
-    // if (file  && typeShouldBe && typeShouldBe[1]==="pdf" && typeShouldBe[1]==="image") {
-    let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-    let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,type, file));
+    let updatedData = {
+      moduleName: "PORTFOLIO",
+      actionName: "UPLOAD",
+      portfolioDetailsId: this.props.portfolioDetailsId,
+      portfolio: {data: {[type]: [{fileUrl: '', fileName: file.name}]}}
+    }
+    let response =  multipartASyncFormHandler(updatedData, file, 'registration', this.onFileUploadCallBack.bind(this,type, file));
     // }else{
     //   toastr.error("Please select a Document Format")
     // }
@@ -64,10 +66,7 @@ export default class MlCompanyData extends React.Component{
 
 
   onFileUploadCallBack(type, file, resp) {
-    let that = this;
-    let data = this.state.uploadedData;
     if (resp && type) {
-      //save to library
       let result = JSON.parse(resp)
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
@@ -79,17 +78,7 @@ export default class MlCompanyData extends React.Component{
         }
         this.libraryAction(fileObjectStructure);
       }
-      var link = $.parseJSON(resp).result;
-      if( data && data[`${type}`] ) {
-        data[`${type}`].push({fileUrl:link,fileName:file.name})
-      }else {
-        let tempArray = [];
-        tempArray.push({fileUrl:link,fileName:file.name})
-        data[`${type}`] = tempArray;
-      }
-      this.setState({uploadedData: data}, function(){
-        that.props.getDataDetails(this.state.uploadedData, 'data')
-      });
+      this.fetchPortfolioData();
     }
   }
   async libraryAction(file) {

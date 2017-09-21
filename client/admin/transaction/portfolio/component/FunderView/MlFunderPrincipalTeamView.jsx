@@ -157,6 +157,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     }
   }
   onSelectPrincipal(index, e){
+    _.each(this.state.funderPrincipalList[index], function (value, field) {
+      if (typeof (field) == 'string')
+        $("#"+field).removeClass('fa-lock').addClass('un_lock fa-unlock')
+    })
     this.setState({PIndex:index})
 
     _.each(this.state.funderPrincipalList[index].privateFields, function (pf) {
@@ -164,7 +168,15 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     })
   }
   onSelectTeam(index, e){
+    _.each(this.state.funderTeamList[index], function (value, field) {
+      if (typeof (field) == 'string')
+        $("#team"+field).removeClass('fa-lock').addClass('un_lock fa-unlock')
+    })
     this.setState({TIndex:index})
+
+    _.each(this.state.funderTeamList[index].privateFields, function (pf) {
+      $("#team"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
   render() {
     let that = this;
@@ -267,25 +279,21 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isFirstNamePrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Company" className="form-control float-label"
                                                id="cluster_name"
                                                value={selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Year of Experience"
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isYearsOfExperiencePrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"/>
                                       </div>
 
                                     </form>
@@ -297,9 +305,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.designation ? selectedPrincipal.designation : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isDesignationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"/>
                                       </div>
 
                                       <div className="form-group">
@@ -307,18 +313,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedPrincipal.duration ? selectedPrincipal.duration : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isDurationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isDurationPrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Qualification"
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.qualification ? selectedPrincipal.qualification : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isQualificationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"/>
                                       </div>
 
 
@@ -331,9 +333,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedPrincipal.isAboutPrincipalPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"/>
                                       </div>
                                     </form>
                                   </div>
@@ -423,9 +423,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isFirstNamePrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisFirstNamePrivate"/>
                                       </div>
 
                                       <div className="form-group">
@@ -433,16 +431,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisCompanyNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Year of Experience"
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isYearsOfExperiencePrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisYearsOfExperiencePrivate"/>
                                       </div>
 
                                       <div className="form-group">
@@ -450,9 +446,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.designation ? selectedTeam.designation : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isDesignationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDesignationPrivate"/>
                                       </div>
 
                                       <div className="form-group">
@@ -460,18 +454,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedTeam.duration ? selectedTeam.duration : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isDurationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDurationPrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Qualification"
                                                className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.qualification ? selectedTeam.qualification : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isQualificationPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisQualificationPrivate"/>
                                       </div>
 
                                       <div className="form-group">
@@ -479,9 +469,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                                id="cluster_name"
                                                value={selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}
                                                disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock"/><input
-                                        type="checkbox" className="lock_input" id="makePrivate"
-                                        checked={selectedTeam.isAboutTeamPrivate}/>
+                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisAboutTeamPrivate"/>
                                       </div>
                                     </form>
                                   </div>

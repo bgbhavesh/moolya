@@ -112,7 +112,7 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
       }
     });
   }else{//if resource Owner is viewing his own resource
-    actionsList=[{'actionName':'collaborate',isDisabled:true,isHidden:false},{'actionName':'partner',isDisabled:true,isHidden:false},{'actionName':'comment',isDisabled:true,isHidden:false},{'actionName':'review',isDisabled:true,isHidden:false},
+     actionsList=[{'actionName':'collaborate',isDisabled:true,isHidden:false},{'actionName':'partner',isDisabled:true,isHidden:false},{'actionName':'comment',isDisabled:true,isHidden:false},{'actionName':'review',isDisabled:true,isHidden:false},
       {'actionName':'enquire',isDisabled:true,isHidden:false},{'actionName':'follow',isDisabled:true,isHidden:false},{'actionName':'favourite',isDisabled:true,isHidden:false},{'actionName':'connect',isDisabled:true,isHidden:false},{'actionName':'like',isDisabled:true,isHidden:false}];
 
   }

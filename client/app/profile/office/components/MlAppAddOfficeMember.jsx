@@ -196,16 +196,16 @@ export default class MlAppAddOfficeMember extends React.Component{
                 </div>
                 <div className="form-group invitation">
                   <div className="input_types">
-                    <input disabled={this.state.userType == "isAdminUser" ? true : false} defaultChecked={this.state.userType == "isFreeUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
+                    <input id="checkbox1" disabled={this.state.selected == "principle" ? true : false} defaultChecked={this.state.userType == "isFreeUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
                     <label htmlFor="checkbox1"><span></span>Free User</label>
                   </div>
                   <div className="input_types">
-                    <input disabled={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
-                    <label htmlFor="checkbox1"><span></span>Paid User</label>
+                    <input id="checkbox2" disabled={this.state.selected == "principle" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
+                    <label htmlFor="checkbox2"><span></span>Paid User</label>
                   </div>
                   <div className="input_types">
-                    <input disabled={this.state.userType == "isAdminUser" ? false : true} checked={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
-                    <label htmlFor="checkbox1"><span></span>Admin User</label>
+                    <input id="checkbox3" onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
+                    <label htmlFor="checkbox3"><span></span>Admin User</label>
                   </div>
                   <br className="brclear"/>
                 </div>

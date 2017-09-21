@@ -4,7 +4,6 @@ var PhoneNumber = require( 'awesome-phonenumber' );
 
 //import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
-debugger
   for (var  key in  elements) {
     let element = elements[key];
     if (element instanceof Select) {
@@ -20,7 +19,7 @@ debugger
     }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
-       var value = selectObj.props['selectedValue']
+       var value = selectObj.props['selectedValue']?selectObj.props['selectedValue']:selectObj.props['value'];
       var  multi= selectObj.props['multiSelect']
 
         if (isRequired && multi&&value.length==0) {
@@ -55,4 +54,9 @@ export function validatedPhoneNumber(countryCode, contactNumber){
     isValidPhoneNumber = pn.isValid( );
   }
   return isValidPhoneNumber;
+}
+
+export function validatedEmailId(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
 }

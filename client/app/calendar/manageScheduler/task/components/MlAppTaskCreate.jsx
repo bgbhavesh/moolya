@@ -8,9 +8,9 @@
 /**
  * Imports libs and components
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import ScrollArea from "react-scrollbar";
-import {findTaskActionHandler} from "../actions/saveCalanderTask";
+import { findTaskActionHandler } from "../actions/saveCalanderTask";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import _ from "lodash";
 let Select = require('react-select');
@@ -28,16 +28,16 @@ export default class MlAppTaskCreate extends Component {
     this.state = {
       loading: true,
       data: {},
-      oldData:{},
+      oldData: {},
     };
     return this;
   }
 
-  isUpdated(){
+  isUpdated() {
     var differences = diff(this.state.oldData, this.state.data);
-    if(differences && differences.length>0){
+    if (differences && differences.length > 0) {
       return false
-    }else{
+    } else {
       return true
     }
   }
@@ -58,6 +58,7 @@ export default class MlAppTaskCreate extends Component {
    */
   componentWillMount() {
     const resp = this.findTaskDetails();
+    this.props.activeComponent(0);
     return resp;
   }
 
@@ -70,11 +71,11 @@ export default class MlAppTaskCreate extends Component {
     if (taskId) {
       var response = await findTaskActionHandler(taskId);
       if (!_.isEmpty(response)) {
-        this.setState({loading: false, data: response, oldData: response});
+        this.setState({ loading: false, data: response, oldData: response }, this.sendTaskDataToParent);
       }
       return response
     } else {
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -83,12 +84,12 @@ export default class MlAppTaskCreate extends Component {
     let name = "sessionFrequency";
     details = _.omit(details, [name]);
     if (val) {
-      details = _.extend(details, {[name]: val.value});
-      this.setState({data: details}, function () {
+      details = _.extend(details, { [name]: val.value });
+      this.setState({ data: details }, function () {
         this.sendTaskDataToParent()
       })
     } else {
-      this.setState({data: details}, function () {
+      this.setState({ data: details }, function () {
         this.sendTaskDataToParent()
       })
     }
@@ -98,12 +99,16 @@ export default class MlAppTaskCreate extends Component {
     let details = this.state.data;
     let name = e.target.name;
     let value = e.target.value;
-    if(e.target.value== 'true'){
+    if (name === "noOfSession" && value < 1) {
+      toastr.error('Number of session cannot be less than 1');
+      return false;
+    }
+    if (e.target.value == 'true') {
       value = e.target.checked
     }
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: value});
-    this.setState({data: details}, function () {
+    details = _.extend(details, { [name]: value });
+    this.setState({ data: details }, function () {
       this.sendTaskDataToParent()
     })
   }
@@ -112,8 +117,8 @@ export default class MlAppTaskCreate extends Component {
     let details = this.state.data;
     let name = 'isActive';
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.currentTarget.checked});
-    this.setState({data: details}, function () {
+    details = _.extend(details, { [name]: e.currentTarget.checked });
+    this.setState({ data: details }, function () {
       this.sendTaskDataToParent()
     })
   }
@@ -126,55 +131,55 @@ export default class MlAppTaskCreate extends Component {
 
   render() {
     let sessionFrequencyOptions = [
-      {value: 'weekly', label: 'Weekly'},
-      {value: 'monthly', label: 'Monthly'},
-      {value: 'daily', label: 'Daily'}
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'monthly', label: 'Monthly' },
+      { value: 'daily', label: 'Daily' }
     ]
-    let sessionFrequencyActive=''
-    if(this.state.data.sessionFrequency){
-      sessionFrequencyActive='active'
+    let sessionFrequencyActive = ''
+    if (this.state.data.sessionFrequency) {
+      sessionFrequencyActive = 'active'
     }
     const showLoader = this.state.loading;
     return (
       <div className="step_form_wrap step1">
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader />) : (
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
                   <div className="form-group">
                     <input type="text" placeholder="Task Name" name="name" defaultValue={this.state.data.name}
-                           className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                      className="form-control float-label" onBlur={this.handleBlur.bind(this)} />
                   </div>
-                  <label>Task Type</label><br/>
+                  <label>Task Type</label><br />
                   <div className="form-group">
                     <div className="input_types">
                       <input id="isInternal" type="checkbox" value={true} name="isInternal"
-                             defaultChecked={this.state.data.isInternal}
-                             onChange={this.handleBlur.bind(this)}/><label
-                      htmlFor="isInternal"><span><span></span></span>Internal</label>
+                        defaultChecked={this.state.data.isInternal}
+                        onChange={this.handleBlur.bind(this)} /><label
+                          htmlFor="isInternal"><span><span></span></span>Internal</label>
                     </div>
                     <div className="input_types">
                       <input id="isExternal" type="checkbox" name="isExternal" value={true}
-                             defaultChecked={this.state.data.isExternal}
-                             onChange={this.handleBlur.bind(this)}/><label
-                      htmlFor="isExternal"><span><span></span></span>External</label>
+                        defaultChecked={this.state.data.isExternal}
+                        onChange={this.handleBlur.bind(this)} /><label
+                          htmlFor="isExternal"><span><span></span></span>External</label>
                     </div>
-                    <br className="brclear"/>
+                    <br className="brclear" />
                   </div>
                   <div className="form-group">
                     <label>Total number of Sessions <input className="form-control inline_input medium_in"
-                                                               type="Number" min="1"
-                                                               defaultValue={this.state.data.noOfSession || 1 }
-                                                               name="noOfSession" onBlur={this.handleBlur.bind(this)}/>
+                      type="Number" min="1"
+                      defaultValue={this.state.data.noOfSession || 1}
+                      name="noOfSession" onBlur={this.handleBlur.bind(this)} />
                     </label>
                   </div>
                   <div className="form-group">
                     <label>Duration: &nbsp; <input className="form-control inline_input" type="Number" disabled="true"
-                                                   defaultValue={this.state.data.duration && this.state.data.duration.hours}
-                                                  /> Hours <input
-                      className="form-control inline_input" disabled="true" type="Number" min="0"
-                      defaultValue={this.state.data.duration && this.state.data.duration.minutes}/>
+                      defaultValue={this.state.data.duration && this.state.data.duration.hours}
+                    /> Hours <input
+                        className="form-control inline_input" disabled="true" type="Number" min="0"
+                        defaultValue={this.state.data.duration && this.state.data.duration.minutes} />
                       Mins </label>
                   </div>
                 </form>
@@ -185,27 +190,27 @@ export default class MlAppTaskCreate extends Component {
                 <form>
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" className="form-control float-label"
-                           name="displayName"
-                           defaultValue={this.state.data.displayName} onBlur={this.handleBlur.bind(this)}/>
+                      name="displayName"
+                      defaultValue={this.state.data.displayName} onBlur={this.handleBlur.bind(this)} />
                   </div>
                   <div className="form-group">
-                  <textarea placeholder="Notes" className="form-control float-label" defaultValue={this.state.data.note}
-                            name="note" id="cl_about" onBlur={this.handleBlur.bind(this)}>
-                  </textarea>
+                    <textarea placeholder="Notes" className="form-control float-label" defaultValue={this.state.data.note}
+                      name="note" id="cl_about" onBlur={this.handleBlur.bind(this)}>
+                    </textarea>
                   </div>
                   <div className="form-group">
-                  {/*<span className="placeHolder active">Frequency</span>*/}
+                    {/*<span className="placeHolder active">Frequency</span>*/}
                     <span className={`placeHolder ${sessionFrequencyActive}`}>Frequency</span>
-                  <Select className="form-field-name" options={sessionFrequencyOptions} placeholder="Frequency"
-                          value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)}/>
-                    <br className="clear-fix"/><br className="clear-fix"/>
+                    <Select className="form-field-name" options={sessionFrequencyOptions} placeholder="Frequency"
+                      value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)} />
+                    <br className="clear-fix" /><br className="clear-fix" />
                   </div>
                   <div className="form-group">
                     <div className="input_types">
                       <input id="isServiceCardEligible" type="checkbox" name="isServiceCardEligible" value={true}
-                             checked={this.state.data.isServiceCardEligible && this.state.data.isExternal}
-                             disabled={!this.state.data.isExternal}
-                             onChange={this.handleBlur.bind(this)}/>
+                        checked={this.state.data.isServiceCardEligible && this.state.data.isExternal}
+                        disabled={!this.state.data.isExternal}
+                        onChange={this.handleBlur.bind(this)} />
                       <label htmlFor="isServiceCardEligible"><span><span></span></span>Eligible
                         for service card</label>
                     </div>
@@ -214,11 +219,11 @@ export default class MlAppTaskCreate extends Component {
                     <label className="">Status</label>
                     <label className="switch">
                       <input type="checkbox" ref="isActive" checked={this.state.data.isActive}
-                             onChange={this.onStatusChange.bind(this)}/>
+                        onChange={this.onStatusChange.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>
-                  <br className="brclear"/>
+                  <br className="brclear" />
                 </form>
               </div>
             </div>

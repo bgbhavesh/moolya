@@ -100,6 +100,8 @@ let serviceProviderPortfolioSchema = `
          lastName             : String
          lookingFor           : [lookingForOutput]
          profileImage         : String
+         isDefaultSubChapter : Boolean
+         subChapterName : String
     }
     
     input logo{

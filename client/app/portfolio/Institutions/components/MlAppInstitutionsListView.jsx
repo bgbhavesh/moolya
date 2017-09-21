@@ -63,7 +63,9 @@ export default class MlAppInstitutionListView extends Component {
                 <CDNImage src={intitution.profileImage} className="c_image"/> :
                 <CDNImage src="/images/no_image.png" />}
             </div>
-            <h3>{intitution.firstName}<br/><span>{intitution.chapterName}</span></h3>
+            <h3>{intitution.firstName}<br/>
+              <span>{intitution.chapterName}{!intitution.isDefaultSubChapter?"-" +intitution.subChapterName:""}</span>
+            </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={intitution.views}> <span className="pie-value"></span> </div><br/>

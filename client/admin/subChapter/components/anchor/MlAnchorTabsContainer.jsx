@@ -109,6 +109,10 @@ class MlAnchorTabsContainer extends React.Component {
 
   getUserDetails(details) {
     //get tab details
+    if (details.socialLinksInfo && details.socialLinksInfo[0]) {
+      details.profile.InternalUprofile.moolyaProfile.socialLinksInfo = details.socialLinksInfo;
+      // details.socialLinksInfo = undefined;
+    }
     this.setState({ contact: details, module: "users" })
   }
   getObjectiveDetails(details) {

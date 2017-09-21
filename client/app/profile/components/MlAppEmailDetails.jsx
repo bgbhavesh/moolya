@@ -8,7 +8,7 @@ import {createUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {updateUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 import {findCountryCode} from '../../registrations/actions/findRegistration'
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import {mlFieldValidations, validatedEmailId} from "../../../commons/validations/mlfieldValidation";
 import Moolyaselect from  '../../commons/components/MlAppSelectWrapper'
 var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
@@ -63,9 +63,13 @@ export default class AppEmailDetails extends React.Component {
     let registerid = this.props.registerId;
     let profileid = this.props.profileId;
     let ret = mlFieldValidations(this.refs)
+    var emailId=this.refs["emailId"].value
+    let isValidEmail = validatedEmailId(emailId);
     if (ret) {
       toastr.error(ret);
-    } else {
+    } else if (emailId && !isValidEmail) {
+      toastr.error('Please enter a valid EmailId');
+    }else {
 
       let emailList = this.state.emailDetailsObject;
       emailList.emailIdType = this.state.selectedEmailTypeValue,
@@ -112,9 +116,12 @@ export default class AppEmailDetails extends React.Component {
         refs.push(this.refs["emailIdType" + index])
         refs.push(this.refs["emailId" + index])
         let ret = mlFieldValidations(refs)
-
+        var emailId=this.refs["emailId" + index].value
+        let isValidEmail = validatedEmailId(emailId);
         if (ret) {
           toastr.error(ret);
+        }else if (emailId && !isValidEmail) {
+          toastr.error('Please enter a valid EmailId');
         } else {
           let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.details[index].emailIdTypeName;
           let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.details[index].emailIdType;

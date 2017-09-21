@@ -3,7 +3,7 @@ html
   mixin space()
     | !{' '}
   head
-    -var title = displayName +" " +  communityType+ " on moolya from " + chapterName + " , "+ clusterName
+    -var title = displayName +" is " +  communityType+ " on moolya from " + chapterName + " , "+ clusterName
     -var desc = aboutDiscription?aboutDiscription.substr(0,160):''
 
     meta(charset='utf-8')
@@ -16,7 +16,7 @@ html
     meta(property='fb:app_id', content='328947447490953')
     meta(property='og:locale', content='en_US')
     meta(property='og:type', content='website')
-    meta(property='og:title', content=title)
+    meta(property='og:title', content=title?title.substr(0,60):'')
     meta(property='og:description', content=desc)
     meta(property='og:url', content=currentUrl)
     meta(property='og:image:secure_url', content=profilePic)
@@ -26,7 +26,7 @@ html
 
     meta(name='twitter:card', content='summary')
     meta(name='twitter:description', content=desc)
-    meta(name='twitter:title', content=title)
+    meta(name='twitter:title', content=title?title.substr(0,60):'')
     meta(name='twitter:site', content=twitterHandle)
     meta(name='twitter:creator', content='moolya')
     meta(name='twitter:image', content=profilePic)
@@ -77,16 +77,16 @@ html
               label share this profile
               ul
                 li
-                  a(href='#' onclick='facebookShare("' + currentUrl + '",this)')
+                  a(href='#' rel='nofollow' onclick='facebookShare("' + currentUrl + '",this)')
                     i.fa.fa-facebook(aria-hidden='true')
                 li
-                  a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share')
+                  a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share' rel='nofollow')
                    i.fa.fa-twitter(aria-hidden='true')
                 li
-                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url='+currentUrl+'')
+                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url='+currentUrl+'' rel='nofollow')
                     i.fa.fa-linkedin(aria-hidden='true')
                 li
-                  a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'')
+                  a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'' rel='nofollow')
                     i.fa.fa-google-plus(aria-hidden='true' alt="Share on Google+")
                 //li
                 //  a(href='https://web.whatsapp.com/send?text='+currentUrl+'' data-action="share/whatsapp/share")
@@ -97,7 +97,7 @@ html
           .profile_pic
             img(src=profilePic?profilePic:'/images/no-image.png' alt=displayName)
         .content_right
-          h2
+          h1
             | #{displayName} is #{communityType} on #{space}
             span.m_red m
             span.m_yel oo
@@ -106,7 +106,7 @@ html
           ul.ms_menu
             each list, i in listView
               li
-                a.ms_btn_ye(href='#' onclick='something("' + list.className + '",this)') #{list.name}
+                a.ms_btn_ye(href='#' + list.name onclick='something("' + list.className + '",this)') #{list.name}
             li
           .pages
             .pageManagement

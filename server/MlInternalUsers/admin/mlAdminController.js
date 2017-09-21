@@ -134,7 +134,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
           const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
-            res.redirect('/login');
+            next()
           }
           res.render(pathAbout, portFolio)
         } else {

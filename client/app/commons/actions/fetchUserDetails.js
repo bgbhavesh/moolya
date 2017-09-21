@@ -14,6 +14,7 @@ export async function fetchUserDetailsHandler() {
        firstName
        profileImage
        headerCommunityDisplay
+       isCalendar
        pendingRegId
           registrationInfo {
             firstName

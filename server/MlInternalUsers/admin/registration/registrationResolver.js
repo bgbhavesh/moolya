@@ -341,6 +341,11 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.pendingRegId = isAllowRegisterAs._id
         }
 
+        if(response.status === "REG_USER_APR"){
+          response.isCalendar = true;
+        } else {
+          response.isCalendar = false;
+        }
         let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
         response.registrationInfo.communityName = getCommunityName(communityCode);
         response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)

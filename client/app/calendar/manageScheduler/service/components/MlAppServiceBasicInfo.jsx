@@ -85,6 +85,7 @@ class MlAppServiceBasicInfo extends Component {
       days=365;
     }
     this.setState({currentFrequency:value,serviceExpireTime:days});
+    this.props.setServiceExpiry(days)
     this.props.setSessionFrequency(value);
   }
   render(){
@@ -258,7 +259,7 @@ class MlAppServiceBasicInfo extends Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode}/>
+                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode || data.isActive}/>
                     <div className="slider"></div>
                   </label>
                 </div>

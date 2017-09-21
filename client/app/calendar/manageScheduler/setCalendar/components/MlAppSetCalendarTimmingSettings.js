@@ -2,6 +2,7 @@
  * Created by pankaj on 29/6/17.
  */
 import React, { Component } from 'react';
+import _ from 'lodash';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 import Moment from 'moment';
@@ -23,8 +24,9 @@ class MlAppSetCalendarTimmingSettings extends Component {
     this.state = {
       dayName: 1,
       isActive: ( props.timingInfo && typeof props.timingInfo.isActive == undefined) ? props.timingInfo.isActive : true,
-      isCloneDisabled: true,
+      isCloneDisabled: false,
       slots: [],
+      cloningMessage:'',
       lunch: [],
       weeksName: [{
         name: 'Mon', daysNumber: 1, isActiveWeekDay: false
@@ -52,6 +54,7 @@ class MlAppSetCalendarTimmingSettings extends Component {
         all: false
       }
     };
+    this.getCloningMessage =this.getCloningMessage.bind(this);
   }
 
   componentWillMount() {
@@ -67,6 +70,7 @@ class MlAppSetCalendarTimmingSettings extends Component {
   }
 
   componentDidMount() {
+    this.getCloningMessage();
     initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
@@ -130,6 +134,35 @@ class MlAppSetCalendarTimmingSettings extends Component {
       lunch: lunch,
       slots: slots
     });
+  }
+
+  formatName(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  getCloningMessage(){
+    let {weekDays,dayName}=this.state;
+
+    let weekDaysKeys= Object.keys(weekDays);
+    if(dayName===0) dayName=7;
+    let currentDay = weekDaysKeys[dayName-1];
+    let message = "Cloning from ";
+    let prefix='';
+    if(weekDays['all']){
+      prefix = 'All';
+    }else
+      weekDaysKeys.map(day=>{
+        if(weekDays[day] && currentDay !==day){
+          if(prefix) prefix+=', ';
+          prefix+=this.formatName(day);
+        }
+      });
+
+    message += this.formatName(currentDay);
+    if(prefix) {
+      message += ' to ' + prefix;
+    }
+    this.setState({cloningMessage:message});
   }
 
   /**
@@ -291,14 +324,26 @@ class MlAppSetCalendarTimmingSettings extends Component {
    * @param daysNumber --> current day selected
    */
   setWeekDays(daysNumber) {
-    let { weeksName } = this.state;
-    weeksName.forEach((week) => {
+    let { weeksName ,weekDays } = this.state;
+
+    let keys= Object.keys(weekDays); //setting all weekDays false
+    keys.map((day)=>{
+      weekDays[day]=false;
+
+    });
+
+    let currentDayIndex=0;
+    weeksName.forEach((week,index) => {
       if(week.daysNumber === daysNumber) {
         week.isActiveWeekDay = true;
+        currentDayIndex=index;
       } else {
         week.isActiveWeekDay = false;
       }
     });
+
+    weekDays[keys[currentDayIndex]]=true;
+
     const workingTime = filter(this.props.timingInfo, {'dayName': daysNumber});
     let slots = [];
     let lunch = [];
@@ -308,10 +353,12 @@ class MlAppSetCalendarTimmingSettings extends Component {
     }
     this.setState({
       weeksName: weeksName,
+      weekDays:weekDays,
       dayName: daysNumber,
     }, () => {
       this.setLunchValues(lunch);
       this.setSlotsValues(slots);
+      this.getCloningMessage();
     });
   }
 
@@ -321,18 +368,51 @@ class MlAppSetCalendarTimmingSettings extends Component {
    */
   setWeeksLayout() {
     const { weeksName, dayName } = this.state;
+    const timingInfo = this.props.timingInfo;
+
+
+    let currentIndex = _.findIndex(timingInfo, {dayName: dayName});
+    let currentSlot={};
+    if(currentIndex>-1) currentSlot=this.getStartAndEnd(timingInfo[currentIndex]);
+
     const listWeeks = weeksName.map((week) => {
+      let mclassName='';
+
+      let index = _.findIndex(timingInfo, {dayName: week.daysNumber});
+
+      let mSlot = {};
+      if(index>-1) mSlot = timingInfo[index];
+
+      if(week.daysNumber ===  dayName){
+        mclassName ='active sameWorkTime';
+      }else if(currentSlot.start && currentSlot.end &&_.isEqual(currentSlot,  this.getStartAndEnd(mSlot))){
+        mclassName='sameWorkTime';
+      }
       return (
         <li key={week.daysNumber}
-            className={week.daysNumber ===  dayName ? 'active' : ''}
+            className={mclassName}
             onClick={() => this.setWeekDays(week.daysNumber)}>
           {week.name}
         </li>
       )
     });
-    return (
-      <ul>{listWeeks}</ul>
-    );
+      return (
+        <ul>{listWeeks}</ul>
+      );
+  }
+
+  getStartAndEnd(slot){
+    if(!slot || !slot.slots)
+      return {};
+    slot=slot.slots;
+    if(slot && slot.length){
+      let object={};
+      object.start = slot[0].start;
+      object.end = slot[slot.length-1].end;
+      return object;
+    }else{
+      return {start:"",end:""}
+    }
   }
 
   /**
@@ -492,11 +572,21 @@ class MlAppSetCalendarTimmingSettings extends Component {
    * selectWeekDays() --> set the week days to show working and break time duration
    * @param event --> set the checked w.r.t id
    */
-  selectWeekDays(event) {
-    let {weekDays} = this.state;
+  selectWeekDays(event,isActiveWeekDay) {
+    let {weekDays,weeksName,dayName} = this.state;
     const { id, checked } = event.target;
-    weekDays[id] = checked;
-    this.setState({weekDays: weekDays});
+    if(!isActiveWeekDay){
+      if(id==='all'){
+        let keys = Object.keys(weekDays);
+        keys.map((day,index)=>{
+          if((index+1)!==dayName || dayName===8)
+            weekDays[day]=checked;
+        });
+      }else if(!weekDays.all){
+        weekDays[id] = checked;
+      }
+      this.setState({weekDays: weekDays},()=>{this.getCloningMessage();});
+    }
   }
 
   render(){
@@ -524,6 +614,7 @@ class MlAppSetCalendarTimmingSettings extends Component {
             actionOptions={appActionConfig}/>
         }]
     };
+     let weeksName =this.state.weeksName;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
@@ -605,106 +696,106 @@ class MlAppSetCalendarTimmingSettings extends Component {
               </div>
               <div className="panel-body checkbox_group">
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.monday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="monday" type="checkbox" name="monday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.monday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[0].isActiveWeekDay)}/>
                         <label htmlFor="monday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-primary active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 1)?"btn btn-danger active":"btn btn-primary active"}>
                       Monday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.tuesday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="tuesday" type="checkbox" name="tuesday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.tuesday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[1].isActiveWeekDay)}/>
                         <label htmlFor="tuesday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-success active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 2)?"btn btn-danger active":"btn btn-success active"}>
                       Tuesday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.wednesday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="wednesday" type="checkbox" name="wednesday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.wednesday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[2].isActiveWeekDay)}/>
                         <label htmlFor="wednesday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-info active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 3)?"btn btn-danger active":"btn btn-info active"}>
                       Wednesday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.thursday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="thursday" type="checkbox" name="thursday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.thursday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[3].isActiveWeekDay)}/>
                         <label htmlFor="thursday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-warning active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 4)?"btn btn-danger active":"btn btn-warning active"}>
                       Thursday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.friday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="friday" type="checkbox" name="friday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.friday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[4].isActiveWeekDay)}/>
                         <label htmlFor="friday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-danger active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 5)?"btn btn-danger active":"btn btn-primary active"}>
                       Friday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.saturday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="saturday" type="checkbox" name="saturday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.saturday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[5].isActiveWeekDay)}/>
                         <label htmlFor="saturday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-info active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 6)?"btn btn-danger active":"btn btn-success active"}>
                       Saturday
                     </label>
                   </div>
                 </div>
                 <div className="form-group">
-                  <div className="btn-group">
+                  <div className={(weekDays.sunday)?'btn-group selectedDay':'btn-group'}>
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="sunday" type="checkbox" name="sunday" value="1" disabled={isCloneDisabled}
                                checked={weekDays.sunday}
-                               onClick={(event) => this.selectWeekDays(event)}/>
+                               onClick={(event) => this.selectWeekDays(event,weeksName[6].isActiveWeekDay)}/>
                         <label htmlFor="sunday"><span><span></span></span></label>
                       </div>
                     </label>
-                    <label htmlFor="fancy-checkbox-default" className="btn btn-primary active">
+                    <label htmlFor="fancy-checkbox-default" className={(this.state.dayName === 0)?"btn btn-danger active":"btn btn-info active"}>
                       Sunday
                     </label>
                   </div>
@@ -726,8 +817,11 @@ class MlAppSetCalendarTimmingSettings extends Component {
                 </div>
               </div>
             </div>
+
+            <div>{this.state.cloningMessage}</div>
             </div>
           </form>
+
           <div className="wrap_right">
             {this.setWeeksLayout()}
           </div>

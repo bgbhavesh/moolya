@@ -5,10 +5,10 @@
 import React from 'react';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
+import {findAddressBookActionHandler} from '../../actions/findUserAddressBookHandler'
 export default class MlUserAddressDetails extends React.Component {
   constructor(props) {
     super(props);

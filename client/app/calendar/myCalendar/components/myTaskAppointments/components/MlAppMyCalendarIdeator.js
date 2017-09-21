@@ -17,6 +17,8 @@ let Select = require('react-select');
 import {
   createInternalAppointmentInfo
 } from '../actions/MlAppointmentActionHandler';
+import MlAppActionComponent from "../../../../../commons/components/MlAppActionComponent";
+import MlAccordion from "../../../../../commons/components/MlAccordion";
 
 export default class MlAppMyCalendarIdeator extends Component {
 
@@ -174,7 +176,7 @@ export default class MlAppMyCalendarIdeator extends Component {
         if (!selfInternalAppointmentInfo[field].name) {
           this.isError = 'name is required';
         }
-      } else if (!selfInternalAppointmentInfo[field]) {
+      } else if (typeof selfInternalAppointmentInfo[field] === "undefined") {
         this.isError = `${field} is required`;
         return;
       }
@@ -183,6 +185,7 @@ export default class MlAppMyCalendarIdeator extends Component {
       const resp = await createInternalAppointmentInfo(selfInternalAppointmentInfo);
       if (resp && resp.success) {
         toastr.success('Created successfully');
+        this.props.componentToLoad('calendar');
       }
     } else {
       toastr.error(this.isError);
@@ -191,6 +194,33 @@ export default class MlAppMyCalendarIdeator extends Component {
   render() {
     const that = this;
     const {appointmentTaskInfo} = this.state;
+
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: that.saveInternalAppointmentInfo.bind(this)
+      },
+      {
+        showAction: true,
+        actionName: 'exit',
+        handler: that.props.componentToLoad.bind(this, 'calendar')
+      }
+    ];
+
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'task', resourceType: 'task'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
+
     /**
      * fetch industries graphql query
      */
@@ -198,8 +228,11 @@ export default class MlAppMyCalendarIdeator extends Component {
                                data:fetchIndustries{label:industryName,value:_id}
                                   }`;
     return (
-      <div className="step_form_wrap step1">
-        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+      <div className="app_main_wrap">
+        <div className="app_padding_wrap">
+          <div className="col-md-12">
+            <div className="step_form_wrap step1">
+              <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
@@ -223,11 +256,11 @@ export default class MlAppMyCalendarIdeator extends Component {
                          onChange={(event) => this.onChangeFormField(event)} />
                 </div>
                 <div className="form-group">
-                  <label>About<textarea className="form-control float-label"
-                                        id="about"
-                                        onChange={(event) => this.onChangeFormField(event)}
-                                        value={appointmentTaskInfo.about}></textarea>
-                  </label>
+                  <label>About </label>
+                  <textarea className="form-control float-label"
+                            id="about"
+                            onChange={(event) => this.onChangeFormField(event)}
+                            value={appointmentTaskInfo.about}></textarea>
                 </div>
                 <div className="form-group">
                   <label>Time: &nbsp;
@@ -241,11 +274,11 @@ export default class MlAppMyCalendarIdeator extends Component {
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Expected intput<textarea className="form-control float-label"
-                                                  id="expectedInput"
-                                                  onChange={(event) => this.onChangeFormField(event)}
-                                                  value={appointmentTaskInfo.expectedInput}></textarea>
-                  </label>
+                  <label>Expected intput</label>
+                  <textarea className="form-control float-label"
+                            id="expectedInput"
+                            onChange={(event) => this.onChangeFormField(event)}
+                            value={appointmentTaskInfo.expectedInput}></textarea>
                 </div>
               </form>
             </div>
@@ -291,22 +324,26 @@ export default class MlAppMyCalendarIdeator extends Component {
                           value={appointmentTaskInfo.frequency} onChange={this.onFrequencySelect.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <label>Expected output<textarea className="form-control float-label"
-                                                  id="expectedOutput"
-                                                  onChange={(event) => this.onChangeFormField(event)}
-                                                  value={appointmentTaskInfo.expectedOutput}></textarea>
-                  </label>
+                  <label>Expected output</label>
+                  <textarea className="form-control float-label"
+                            id="expectedOutput"
+                            onChange={(event) => this.onChangeFormField(event)}
+                            value={appointmentTaskInfo.expectedOutput}></textarea>
                 </div>
                 <br className="brclear"/>
               </form>
-              <div className="form-group">
-                <div className="ml_btn" style={{'textAlign':'center'}}>
-                  <button onClick={()=>this.saveInternalAppointmentInfo()} className="save_btn" >Save</button>
-                </div>
-              </div>
+              {/*<div className="form-group">*/}
+                {/*<div className="ml_btn" style={{'textAlign':'center'}}>*/}
+                  {/*<button onClick={()=>this.saveInternalAppointmentInfo()} className="save_btn" >Save</button>*/}
+                {/*</div>*/}
+              {/*</div>*/}
             </div>
           </div>
         </ScrollArea>
+            </div>
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          </div>
+        </div>
       </div>
     )
   }

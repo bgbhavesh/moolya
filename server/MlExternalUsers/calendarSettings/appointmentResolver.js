@@ -896,6 +896,20 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
       as: "taskInfo"
     }
     },
+    {"$lookup": {
+      from: "mlAppointmentTask",
+      localField: "appointmentInfo.taskId",
+      foreignField: "_id",
+      as: "internalTaskInfo"
+    }
+    },
+    {
+      "$addFields": {
+        "taskInfo": {
+          "$cond": [ { "$size": "$taskInfo" }, "$taskInfo", "$internalTaskInfo" ]
+        }
+      }
+    },
     {"$unwind":"$taskInfo"} ,
     {"$lookup": {
       from: "mlAppointmentMembers",

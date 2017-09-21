@@ -16,8 +16,9 @@ import MlAppDayBackground from "./../../common/components/MlAppDayBackground";
 import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
 import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
 import MlAppSlotAppointmentDetails from "./../../common/components/MlAppSlotAppointmentDetails";
-import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
+import {getUserActiveProfileDetails} from "../../manageScheduler/activity/actions/activityActionHandler";
 import MlAppCalenderAppointmentInfo from "./../../common/components/MlAppCalenderAppointmentInfo";
+import MlAppMyCalendarIdeator from "./myTaskAppointments/components/MlAppMyCalendarIdeator";
 
 export default class MLAppMyCalendar extends Component {
 
@@ -60,7 +61,6 @@ export default class MLAppMyCalendar extends Component {
 
   componentWillUpdate(nextProps, nextState){
     if(nextState.componentToLoad === 'calendar' && this.state.componentToLoad !== "calendar") {
-      console.log('componentWillUpdate');
       let profileId = this.state.profileId;
       if(profileId) {
         this.getProfileBasedAppointments(profileId);
@@ -126,8 +126,9 @@ export default class MLAppMyCalendar extends Component {
   }
 
   async getUserProfiles() {
-    const resp = await getUserProfileActionHandler();
-    this.setState({profile: resp})
+    const resp = await getUserActiveProfileDetails();
+    console.log("profile", resp);
+    this.setState({profile: resp});
     return resp;
   }
 
@@ -159,7 +160,6 @@ export default class MLAppMyCalendar extends Component {
     let details = [];
     let events = 'events' in resp ? resp.events : [];
     let data = 'days' in resp ? resp.days : [];
-    console.log("data",data);
     if(_.isEmpty(events)) {
       this.setState({
         events: [],
@@ -220,10 +220,22 @@ export default class MLAppMyCalendar extends Component {
     let minutes = startDate.split(':')[1];
     date.setHours(hours);
     date.setMinutes(minutes);
-    this.setState({
-      componentToLoad: "createTask",
-      appointmentDate: date
+    let profiles = this.state.profile || [];
+    let profileId = FlowRouter.getQueryParam("profile");
+    let profile = profiles.find( (user) => {
+      return user.profileId === profileId;
     });
+    if( profile && profile.isHasManageSchedule ){
+      this.setState({
+        componentToLoad: "createTask",
+        appointmentDate: date
+      });
+    } else {
+      this.setState({
+        componentToLoad: "selfAppointment",
+        appointmentDate: date
+      });
+    }
   }
 
   appointmentView(appointment){
@@ -251,8 +263,6 @@ export default class MLAppMyCalendar extends Component {
     const that = this;
     let yesterday = new Date();
     yesterday.setDate(yesterday.getDate()-1);
-    console.log(yesterday);
-    console.log(yesterday.getTime());
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
       case 'calendar':
@@ -343,7 +353,8 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <CalCreateAppointmentView/>
+              <MlAppMyCalendarIdeator appointmentDate={that.state.appointmentDate} componentToLoad={that.componentToLoad.bind(that)}/>
+              {/*<CalCreateAppointmentView/>*/}
             </div>
           </div>
         )

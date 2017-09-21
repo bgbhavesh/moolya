@@ -143,7 +143,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
           <Select
             name="form-field-name"
             value=""
-            className="form-control float-label"
+            className="float-label"
             options={that.state.users}
             onChange={(value)=>that.addUser(value)}
           />
@@ -175,7 +175,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
           name="form-field-name"
           value={that.state.mode}
           placeholder="Select Mode"
-          className="form-control float-label"
+          className="float-label"
           options={that.state.modes}
           onChange={(value)=>that.addMode(value)}
         />

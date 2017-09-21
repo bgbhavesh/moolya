@@ -101,6 +101,7 @@ class MlAppServiceManageSchedule extends Component {
     this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
     this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
     this.cloneServiceCard = this.cloneServiceCard.bind(this);
+    this.setServiceExpiry = this.setServiceExpiry.bind(this);
   }
 
   componentWillMount() {
@@ -168,7 +169,9 @@ class MlAppServiceManageSchedule extends Component {
                                           validTill={this.validTill}
                                           viewMode={this.props.viewMode}
                                           setSessionFrequency={this.setSessionFrequency}
-                                          onChangeFormField={this.onChangeFormField}/>,
+                                          onChangeFormField={this.onChangeFormField}
+                                          setServiceExpiry={this.setServiceExpiry}/>,
+
         icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
@@ -383,7 +386,7 @@ class MlAppServiceManageSchedule extends Component {
           displayName: service.displayName,
           noOfSession: service.noOfSession,
           sessionFrequency: service.sessionFrequency,
-          status: service.status,
+          isActive: service.isActive,
           validTill: service.validTill,
           cluster: service.cluster,
           isBeSpoke: service.isBeSpoke,
@@ -391,6 +394,7 @@ class MlAppServiceManageSchedule extends Component {
           isLive: service.isLive,
           city: service.city,
           state: service.state,
+          serviceExpiry: service.serviceExpiry,
           community: service.community
         };
         finalAmount = service.finalAmount;
@@ -593,7 +597,8 @@ class MlAppServiceManageSchedule extends Component {
         hours: serviceBasicInfo.duration.hours,
         minutes: serviceBasicInfo.duration.minutes
       },
-      status: serviceBasicInfo.status,
+      serviceExpiry: serviceBasicInfo.serviceExpiry,
+      isActive: serviceBasicInfo.isActive,
       validTill: serviceBasicInfo.validTill ? new Moment(serviceBasicInfo.validTill).format(Meteor.settings.public.dateFormat) : null,
       city: serviceBasicInfo.city,
       cluster: {
@@ -911,7 +916,7 @@ class MlAppServiceManageSchedule extends Component {
    */
   checkBoxHandler(event) {
     let {serviceBasicInfo} = this.state;
-    serviceBasicInfo.status = event.target.checked;
+    serviceBasicInfo.isActive = event.target.checked;
     this.setState({serviceBasicInfo: serviceBasicInfo});
   }
 
@@ -981,6 +986,13 @@ class MlAppServiceManageSchedule extends Component {
   setSessionFrequency(value) {
     let serviceBasicInfo = this.state.serviceBasicInfo;
     serviceBasicInfo.sessionFrequency = value;
+    this.setState({serviceBasicInfo: serviceBasicInfo})
+  }
+
+
+  setServiceExpiry(event) {
+    let serviceBasicInfo = this.state.serviceBasicInfo;
+    serviceBasicInfo.serviceExpiry= event.target.value;
     this.setState({serviceBasicInfo: serviceBasicInfo})
   }
 

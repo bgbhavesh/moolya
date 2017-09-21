@@ -1,9 +1,10 @@
 
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
-import {createTaskActionHandler, updateTaskActionHandler} from "../actions/saveCalanderTask";
+import { findTaskActionHandler } from "../actions/saveCalanderTask";
+import { createTaskActionHandler, updateTaskActionHandler } from "../actions/saveCalanderTask";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
@@ -20,6 +21,7 @@ class MlAppTaskLanding extends Component {
     this.state = {
       loading: false
     }
+    this.activeComponent = this.activeComponent.bind(this);
     return this;
   }
 
@@ -30,42 +32,117 @@ class MlAppTaskLanding extends Component {
     var response;
     this.errorMsg = '';
 
-    console.log('send=',this.state);
+    console.log('send=', this.state);
+    if (this.state.currentComponent === 0) {
+      if (!sendData || !this.state.saveType) {
+        this.errorMsg = 'No changes to save';
+        toastr.error(this.errorMsg);
+        return false;
+      } else {
+        if (!sendData.name) {
+          this.errorMsg = 'Task Name is required';
+          toastr.error(this.errorMsg);
+          return false;
+        }
+        if (!sendData.displayName) {
+          this.errorMsg = 'Display Name is required';
+          toastr.error(this.errorMsg);
+          return false;
+        }
+        if (!sendData.isInternal && !sendData.isExternal) {
+          this.errorMsg = 'Task Type is required';
+          toastr.error(this.errorMsg);
+          return false;
+        }
+        if (!sendData.noOfSession) {
+          sendData.noOfSession = 1;
+        }
+        if (sendData.noOfSession < 1) {
+          toastr.error('Number of session cannot be less than 1');
+          return false;
+        }
+        if (sendData.isActive) {
+          if (this.state.saveType === 'taskCreate') {
+            this.errorMsg = 'Status cannot be active without adding sessions';
+            toastr.error(this.errorMsg);
+            return false;
+          }
+          if (this.state.saveType === 'taskUpdate') {
+            if (sendData.session && sendData.session.length) {
+              let showError = true;
+              for (let i = 0; i < sendData.session.length; i++) {
+                if (sendData.session[i].activities && sendData.session[i].activities.length) {
+                  showError = false;
+                }
+              }
+              if (showError) {
+                this.errorMsg = 'Status cannot be active without adding sessions';
+                toastr.error(this.errorMsg);
+                return false;
+              }
+            } else {
+              this.errorMsg = 'Status cannot be active without adding sessions';
+              toastr.error(this.errorMsg);
+              return false;
+            }
+          }
+        }
+      }
+    }
+    if (this.state.currentComponent === 1) {
+      if (sendData.session && sendData.session.length) {
+        let showError = true;
+        for (let i = 0; i < sendData.session.length; i++) {
+          if (sendData.session[i].activities && sendData.session[i].activities.length) {
+            showError = false;
+          }
+        }
+        if (showError) {
+          this.errorMsg = 'Select atleast one activity';
+          toastr.error(this.errorMsg);
+          return false;
+        }
+      } else {
+        this.errorMsg = 'Select atleast one activity';
+        toastr.error(this.errorMsg);
+        return false;
+      }
+    }
     if (sendData && sendData.payment && sendData.payment.isDiscount) {
-      if(!sendData.name){
+      if (!sendData.name) {
         this.errorMsg = 'Task Name is required';
         toastr.error(this.errorMsg);
         return false;
-      }else if(!sendData.displayName){
+      } else if (!sendData.displayName) {
         this.errorMsg = 'Display Name is required';
         toastr.error(this.errorMsg);
         return false;
-      }else if(!sendData.isExternal && !sendData.isInternal){
+      } else if (!sendData.isExternal && !sendData.isInternal) {
         this.errorMsg = 'Task Type is required';
         toastr.error(this.errorMsg);
         return false;
-      }else if(!sendData.noOfSession){
+      } else if (!sendData.noOfSession) {
         this.errorMsg = 'Number of Session is Mandatory';
         toastr.error(this.errorMsg);
         return false;
       }
 
 
-      else if(sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null ){
+      else if (sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null) {
         this.errorMsg = 'Payable amount is required';
         toastr.error(this.errorMsg);
         return false;
       }
       switch (sendData.payment.discountType) {
         case 'amount':
-          if(isNaN(sendData.payment.discountValue)) {
+          if (isNaN(sendData.payment.discountValue)) {
             this.errorMsg = 'Please enter a valid number';
           } else if (parseFloat(sendData.payment.discountValue) > parseFloat(sendData.payment.activitiesDerived)) {
             this.errorMsg = 'Amount must be equal or less than the payable amount'
           }
           break;
         case 'percent':
-          if(isNaN(sendData.payment.discountValue)) {
+          if (isNaN(sendData.payment.discountValue)) {
             this.errorMsg = 'Please enter a valid number';
           } else if (parseFloat(sendData.payment.discountValue) > 100) {
             this.errorMsg = 'Percent must be equal or less than 100'
@@ -114,7 +191,7 @@ class MlAppTaskLanding extends Component {
           return response
         }
           break;
-        default :
+        default:
           console.log('save type required')
       }
     } else {
@@ -128,11 +205,16 @@ class MlAppTaskLanding extends Component {
     console.log(response)
   };
 
+  activeComponent(currentComponent) {
+    console.log(currentComponent);
+    this.setState({ currentComponent });
+  }
+
   async handleSuccess(response) {
     console.log(response)
     if (response && response.success) {
       if (this.state.saveType == 'taskCreate')
-        FlowRouter.setQueryParams({id: response.result})
+        FlowRouter.setQueryParams({ id: response.result })
       toastr.success("Saved Successfully move to next step");
     } else if (response && !response.success) {
       toastr.error(response.result);
@@ -145,30 +227,30 @@ class MlAppTaskLanding extends Component {
     let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     let typeHandel = taskId ? "taskUpdate" : "taskCreate"
     // let typeHandel = this.props.editMode ? "taskUpdate" : "taskCreate"
-    this.setState({createData: details, saveType: typeHandel});
+    this.setState({ createData: details, saveType: typeHandel });
   }
 
   getSessionDetails(details, activities, isExternal) {
-    let totalMinutes = details.reduce(function(sum, value) {
+    let totalMinutes = details.reduce(function (sum, value) {
       let duration = value.duration ? value.duration : {};
-      return parseInt(sum) + parseInt((duration.hours ? duration.hours : 0))*60 + parseInt(( duration.minutes ? duration.minutes : 0 )) ;
+      return parseInt(sum) + parseInt((duration.hours ? duration.hours : 0)) * 60 + parseInt((duration.minutes ? duration.minutes : 0));
     }, 0);
     let obj = {
       duration: {
-        hours: parseInt(totalMinutes/60),
+        hours: parseInt(totalMinutes / 60),
         minutes: totalMinutes % 60
       },
       session: details
     }
-    this.setState({createData: obj, saveType: 'taskUpdate', activities: activities, isExternal: isExternal});
+    this.setState({ createData: obj, saveType: 'taskUpdate', activities: activities, isExternal: isExternal });
   }
 
   getPaymentDetails(details) {
-    this.setState({createData: details, saveType: 'taskUpdate'});
+    this.setState({ createData: details, saveType: 'taskUpdate' });
   }
 
   getConditionDetails(details) {
-    this.setState({createData: details, saveType: 'taskUpdate'});
+    this.setState({ createData: details, saveType: 'taskUpdate' });
   }
 
   render() {
@@ -177,12 +259,12 @@ class MlAppTaskLanding extends Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.saveTaskDetails.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async (event) => this.props.handler(this.saveTaskDetails.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
+        handler: async (event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + this.props.profileId + '/taskList')
         }
       }
@@ -193,10 +275,10 @@ class MlAppTaskLanding extends Component {
         {
           'title': 'Actions',
           isText: false,
-          style: {'background': '#ef4647'},
+          style: { 'background': '#ef4647' },
           contentComponent: <MlAppActionComponent
-            resourceDetails={{resourceId: 'sacsdvdsv', resourceType: 'task'}}   //resource id need to be given
-            actionOptions={appActionConfig}/>
+            resourceDetails={{ resourceId: 'sacsdvdsv', resourceType: 'task' }}   //resource id need to be given
+            actionOptions={appActionConfig} />
         }]
     };
 
@@ -204,43 +286,54 @@ class MlAppTaskLanding extends Component {
       [
         {
           name: 'Create Task',
-          component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
-                                      taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>,
-          icon:<span className="ml my-ml-add_tasks"></span>
+          component: <MlAppTaskCreate
+            activeComponent={this.activeComponent}
+            getCreateDetails={this.getCreateDetails.bind(this)}
+            taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')} />,
+          icon: <span className="ml my-ml-add_tasks"></span>
         },
         {
           name: 'Choose Activity',
-          component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
-                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }
-                                       editMode={this.props.editMode}
-                                       profileId={this.props.profileId}/>,
-          icon:<span className="ml flaticon-ml-file-1"></span>
+          component: <MlAppTaskSession
+            activeComponent={this.activeComponent}
+            getSessionDetails={this.getSessionDetails.bind(this)}
+            taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}
+            editMode={this.props.editMode}
+            profileId={this.props.profileId} />,
+          icon: <span className="ml flaticon-ml-file-1"></span>
         },
         {
           name: 'Terms and Conditions',
-          component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
-                                          taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>,
-          icon:<span className="ml flaticon-ml-interface-2"></span>
+          component: <MlAppTaskConditions
+            activeComponent={this.activeComponent}
+            getConditionDetails={this.getConditionDetails.bind(this)}
+            taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')} />,
+          icon: <span className="ml flaticon-ml-interface-2"></span>
         },
-        {name: 'Payment',
-          component: <MlAppTaskPayment getPaymentDetails={this.getPaymentDetails.bind(this)}
-                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>,
-          icon:<span className="ml ml-payments"></span>
+        {
+          name: 'Payment',
+          component: <MlAppTaskPayment
+            activeComponent={this.activeComponent}
+            getPaymentDetails={this.getPaymentDetails.bind(this)}
+            taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')} />,
+          icon: <span className="ml ml-payments"></span>
         },
-        {name: 'History', component: <MlAppTaskStep5 />,
-          icon:<span className="ml my-ml-history"></span>
+        {
+          name: 'History', component: <MlAppTaskStep5
+            activeComponent={this.activeComponent} />,
+          icon: <span className="ml my-ml-history"></span>
         }
       ]
 
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="task"/>
-          <div className="clearfix"/>
+          <MlAppScheduleHead type="task" />
+          <div className="clearfix" />
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={steps} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false} dontValidate={false} showConfirm={true}/>
+                <StepZilla steps={steps} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false} dontValidate={false} showConfirm={true} />
               </div>
             </div>
           </div>

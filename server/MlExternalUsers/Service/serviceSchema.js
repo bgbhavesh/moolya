@@ -91,6 +91,8 @@ let service=`
     name: String
     displayName: String
     noOfSession: Int
+    serviceExpiry: Int
+    isActive: Boolean
     sessionFrequency: String
     duration: Duration
     status: Boolean
@@ -159,6 +161,7 @@ let service=`
     displayName: String
     noOfSession: Int
     sessionFrequency: String
+    serviceExpiry: Int
     duration: Duration
     status: Boolean
     transactionId: String
@@ -269,8 +272,10 @@ let service=`
         displayName: String
         noOfSession: Int
         sessionFrequency:String
+        serviceExpiry: Int
         duration: duration
-        status: Boolean
+        status: String
+        isActive: Boolean
         termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: servicepayment

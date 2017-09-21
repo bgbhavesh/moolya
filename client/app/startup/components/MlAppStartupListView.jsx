@@ -7,7 +7,7 @@ import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionH
 import CDNImage from '../../../commons/components/CDNImage/CDNImage'
 
 export default class MlAppStartupListView extends Component {
-  componentDidMount(){
+  componentDidUpdate(){
     $('.pie-passion').pieChart({
       barColor: '#ef4647',
       trackColor: '#192430',
@@ -68,11 +68,11 @@ export default class MlAppStartupListView extends Component {
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={startup.views}> <span className="pie-value"></span> </div><br/>
-                views
+                Views
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-rating" data-percent={startup.followings}> <span className="pie-value"></span> </div><br/>
-                followings
+                Followings
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-like" data-percent={startup.likes}> <span className="pie-value"></span> </div><br/>
@@ -90,7 +90,7 @@ export default class MlAppStartupListView extends Component {
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <span>{startup.connections}</span><br />
-                Connect
+                Connects
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ export default class MlAppStartupListView extends Component {
     );
 
     return (<div className="ideators_list">
-      <div className="col-md-12"> <h2>Startup</h2></div>
+      <div className="col-md-12"> <h2>Startups</h2></div>
       {list}
       </div>);
 

@@ -71,12 +71,14 @@ export default class MlAppServiceList extends Component {
           <div className="col-lg-12" id="show">
             <div className="row">
               {this.profileId !== "all" ? <div className="col-lg-2 col-md-4 col-sm-4">
+                <div className="card_block">
                 <a href=" " onClick={() => this.createService()}>
-                  <div className="list_block notrans">
-                    <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Create a service</h3>
+                  <div className="add_task">
+                    <div><span className="ml ml-plus "></span></div>
+                    <div className="block_footer"><span>Create a service</span></div>
                   </div>
                 </a>
+                </div>
               </div>: <div></div> }
 
               {services && services.map((service, index) => {

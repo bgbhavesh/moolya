@@ -608,8 +608,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let email = registrationInfo.email
       var existingUser = mlDBController.findOne('users', {"username": email}, context)
       if (existingUser) {
-        let dob = args.details.dateOfBirth ? moment(args.details.dateOfBirth).startOf("day").toDate() : null
-        let gender = args.details.gender ? args.details.gender : null
+        let dob = args && args.details && args.details.dateOfBirth ? moment(args.details.dateOfBirth).startOf("day").toDate() : null
+        let gender = args && args.details && args.details.gender ? args.details.gender : null
         result = mlDBController.update('users', {username: email},
           {"profile.genderType": gender, "profile.dateOfBirth": dob}, {$set: true}, context)
       }

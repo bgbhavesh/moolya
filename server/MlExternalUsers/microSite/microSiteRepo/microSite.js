@@ -387,13 +387,13 @@ function getPrivateFields(privateFieldsObjects) {
 
 function appendKeywords(portFolio) {
 
-  let keywords = portFolio.firstName + ', ' + portFolio.lastName + ',' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityType;
-  if (portFolio.chapterName.trim() != '')
-    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.chapterName;
-  if (portFolio.clusterName.trim() != '')
-    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.clusterName;
-  if (portFolio.communityType.trim() != '')
-    keywords = keywords + ', ' + portFolio.firstName + " " + portFolio.lastName + " " + portFolio.communityType;
+  let keywords = portFolio.displayName + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityType;
+  if (portFolio.chapterName && portFolio.chapterName.trim().length >  0 )
+    keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.chapterName;
+  if (portFolio.clusterName && portFolio.clusterName.trim().length >  0 )
+    keywords = keywords + ', ' +portFolio.displayName  + " " + portFolio.clusterName;
+  if (portFolio.communityType && portFolio.communityType.trim().length >  0 )
+    keywords = keywords + ', ' + portFolio.displayName  + " " + portFolio.communityType;
   portFolio.keywords = keywords;
   return portFolio
 }

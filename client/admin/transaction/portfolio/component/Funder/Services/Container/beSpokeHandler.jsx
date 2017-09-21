@@ -125,8 +125,19 @@ export default class  BeSpokeHandler extends Component {
   async updateBeSpokeData(data){
     if(data){
       let detailsData = _.cloneDeep(this.state.details);
-      delete detailsData[__typename]
-      const resp = await updateBeSpokeServiceActionHandler(detailsData, this.props.portfolioDetailsId)
+       _.omit(detailsData.duration, '__typename')
+      let service = _.omit(detailsData, '__typename');
+      const resp = await updateBeSpokeServiceActionHandler(service, this.props.portfolioDetailsId)
+      if(resp && resp.success) {
+        toastr.success("Bespoke request updated successfully");
+        this.props.componentToView('landingPage');
+      } else {
+        if(!resp) {
+          toastr.error("No response from server");
+        } else {
+          toastr.error(res.result);
+        }
+      }
       return resp;
     }
   }

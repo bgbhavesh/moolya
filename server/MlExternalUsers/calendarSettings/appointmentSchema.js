@@ -129,6 +129,7 @@ let appointment=`
    isProvider: Boolean
    isClient: Boolean
    isAttendee: Boolean
+   status: String
   }
   
   type SlotInfo {

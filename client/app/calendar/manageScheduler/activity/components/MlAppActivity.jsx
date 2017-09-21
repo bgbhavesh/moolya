@@ -8,14 +8,14 @@
 /**
  * Imports libs and components
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppBasicInfo from "./MlAppActivityBasicInfo";
 import MlAppChooseTeam from "./MlAppChooseTeam";
 import MlAppActivityPayment from "./MlAppActivityPayment";
 import MlAppActivityHistory from "./MlAppActivityHistory";
-import { createActivityActionHandler , getActivityActionHandler, updateActivityActionHandler }  from './../actions/activityActionHandler';
+import { createActivityActionHandler, getActivityActionHandler, updateActivityActionHandler } from './../actions/activityActionHandler';
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
@@ -32,21 +32,21 @@ class MlAppActivity extends Component {
     this.state = {
       activityId: " ",
       basicInfo: {
-        industryTypes:[],
+        industryTypes: [],
         duration: {},
         deliverable: ['']
       },
       teamInfo: [{
-        users:[]
+        users: []
       }],
-      paymentInfo:{
+      paymentInfo: {
         isDiscount: false
       },
-      activeComponent:0,
+      activeComponent: 0,
     };
     this.getActivityDetails = this.getActivityDetails.bind(this);
     this.setActivityDetails = this.setActivityDetails.bind(this);
-    this.profileId =  FlowRouter.getParam('profileId');
+    this.profileId = FlowRouter.getParam('profileId');
     this.activeComponent = this.activeComponent.bind(this);
   }
 
@@ -69,48 +69,48 @@ class MlAppActivity extends Component {
     initalizeFloatLabel();
   }
 
-  activeComponent(currentComponent){
+  activeComponent(currentComponent) {
     console.log(currentComponent);
-    this.setState({currentComponent});
+    this.setState({ currentComponent });
   }
   /**
    * Method :: getActivityDetails
    * Desc   :: fetch the current activity details from server and set in state
    * @returns Void
    */
-  async getActivityDetails(){
+  async getActivityDetails() {
     const that = this;
     let id = FlowRouter.getQueryParam('id');
-    if(!id) {
-      this.setState({editScreen:false})
-    }else {
+    if (!id) {
+      this.setState({ editScreen: false })
+    } else {
       let activity = await getActivityActionHandler(id);
-      if(activity) {
-        let duration = activity.duration ? activity.duration :{};
+      if (activity) {
+        let duration = activity.duration ? activity.duration : {};
         duration = {
-          hours   : duration.hours ? duration.hours   : '',
-          minutes : duration.minutes ? duration.minutes : ''
+          hours: duration.hours ? duration.hours : '',
+          minutes: duration.minutes ? duration.minutes : ''
         };
 
         /**
          * Set activity basic info
          */
         let activityBasicInfo = {
-          name                  : activity.name,
-          displayName           : activity.displayName,
-          isInternal            : activity.isInternal,
-          isExternal            : activity.isExternal,
-          isActive              : activity.isActive,
-          mode                  : activity.mode ? activity.mode : "online",
-          isServiceCardEligible : activity.isServiceCardEligible,
-          industryTypes         : activity.industryTypes ? activity.industryTypes : [],
-          duration              : duration,
-          deliverable           : activity.deliverable && activity.deliverable.length ? (new Array(activity.deliverable))[0] : [''],
-          note                  : activity.note,
-          imageLink             : activity.imageLink,
-          conversation          : activity.conversation && activity.conversation.length ? (new Array(activity.conversation))[0] : []
+          name: activity.name,
+          displayName: activity.displayName,
+          isInternal: activity.isInternal,
+          isExternal: activity.isExternal,
+          isActive: activity.isActive,
+          mode: activity.mode ? activity.mode : "online",
+          isServiceCardEligible: activity.isServiceCardEligible,
+          industryTypes: activity.industryTypes ? activity.industryTypes : [],
+          duration: duration,
+          deliverable: activity.deliverable && activity.deliverable.length ? (new Array(activity.deliverable))[0] : [''],
+          note: activity.note,
+          imageLink: activity.imageLink,
+          conversation: activity.conversation && activity.conversation.length ? (new Array(activity.conversation))[0] : []
         };
-        let teamInfo = activity.teams ? activity.teams : [{users: []}];
+        let teamInfo = activity.teams ? activity.teams : [{ users: [] }];
         teamInfo = teamInfo.map(function (team) {
           return {
             resourceId: team.resourceId,
@@ -159,8 +159,8 @@ class MlAppActivity extends Component {
 
 
 
-  toastError(msg){
-    toastr.error(msg+' is  Mandatory');
+  toastError(msg) {
+    toastr.error(msg + ' is  Mandatory');
   }
 
   /**
@@ -172,17 +172,22 @@ class MlAppActivity extends Component {
   async saveActivity() {
     let id = FlowRouter.getQueryParam('id');
     let activityDetails = this.activityDetails;
-    if(!this.profileId) {
+    if (!this.profileId) {
       toastr.error("Please a profile");
       return false;
     }
 
-    console.log('activityDetails=',activityDetails);
-    console.log('state=',this.state);
+    console.log('activityDetails=', activityDetails);
+    console.log('state=', this.state);
 
-    if(this.state.currentComponent === 0) {
+    if (this.state.currentComponent === 0) {
+      if (!activityDetails) {
+        x
+        this.toastError('Activity Name');
+        return false;
+      }
       let duration = activityDetails.duration;
-      if(!duration){
+      if (!duration) {
         toastr.error("Enter a valid duration");
         return false;
       }
@@ -190,50 +195,50 @@ class MlAppActivity extends Component {
       /**
        * Remove duration key if they are not in int format
        */
-      if(!parseInt(duration.hours)){
+      if (!parseInt(duration.hours)) {
         delete duration.hours;
       }
-      if(!parseInt(duration.minutes)){
+      if (!parseInt(duration.minutes)) {
         delete duration.minutes;
       }
 
-      if(!duration.hours && !duration.minutes){
+      if (!duration.hours && !duration.minutes) {
         toastr.error("Enter a valid duration");
         return false;
       }
 
-      if(!(activityDetails.conversation&&activityDetails.conversation.length) ){
+      if (!(activityDetails.conversation && activityDetails.conversation.length) && activityDetails.mode === 'online') {
         this.toastError('Conservation Type');
         return false;
-      }else if(!(activityDetails.deliverable&&activityDetails.deliverable.length&&activityDetails.deliverable[0]) ){
+      } else if (!(activityDetails.deliverable && activityDetails.deliverable.length && activityDetails.deliverable[0])) {
         this.toastError('Deliverable field');
         return false;
-      }else if(!activityDetails.displayName){
+      } else if (!activityDetails.displayName) {
         this.toastError('Display Name');
         return false;
-      } else if(!activityDetails.name){
+      } else if (!activityDetails.name) {
         this.toastError('Activity Name');
         return false;
-      } else if(!(activityDetails.isExternal||activityDetails.isInternal)){
+      } else if (!(activityDetails.isExternal || activityDetails.isInternal)) {
         this.toastError('Activity Type');
         return false;
       }
 
-      if(activityDetails.mode !== 'online') {
+      if (activityDetails.mode !== 'online') {
         delete activityDetails.conversation;
       }
       activityDetails.isServiceCardEligible = activityDetails.isExternal ? activityDetails.isServiceCardEligible : false;
-      activityDetails.duration = duration ;
+      activityDetails.duration = duration;
     }
-    else if(this.state.currentComponent === 1){
-      if(!this.state.paymentInfo || !(this.state.paymentInfo.amount)){
+    else if (this.state.currentComponent === 1) {
+      if (!activityDetails.payment || !(activityDetails.payment.amount)) {
         this.toastError('Gross Payble Amount');
         return false;
       }
     }
 
+    activityDetails.profileId = this.profileId;
     if (activityDetails && activityDetails.teams) {
-      activityDetails.profileId = this.profileId;
       let data = activityDetails.teams && activityDetails.teams.map(function (team) {
         team.users = team.users.filter(function (user) {
           return user.isAdded;
@@ -248,17 +253,17 @@ class MlAppActivity extends Component {
       });
       activityDetails.teams = data;
     }
-    if(id){
+    if (id) {
       const res = await updateActivityActionHandler(id, activityDetails);
-      if(res){
+      if (res) {
         toastr.success("Updated Successfully");
       }
       this.getActivityDetails();
     } else {
       const res = await createActivityActionHandler(activityDetails);
-      if(res) {
+      if (res) {
         toastr.success("Created Successfully");
-        FlowRouter.setQueryParams({id:res.result});
+        FlowRouter.setQueryParams({ id: res.result });
       }
     }
   }
@@ -272,33 +277,33 @@ class MlAppActivity extends Component {
       {
         name: 'Create',
         component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
-                                   setActivityDetails={that.setActivityDetails}
-                                   activeComponent={this.activeComponent}
-                                   data={that.state.basicInfo} />,
+          setActivityDetails={that.setActivityDetails}
+          activeComponent={this.activeComponent}
+          data={that.state.basicInfo} />,
         icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Choose team',
         component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails}
-                                    setActivityDetails={that.setActivityDetails}
-                                    activeComponent={this.activeComponent}
-                                    isInternal={this.state.isInternal}
-                                    isExternal={this.state.isExternal}
-                                    data={this.state.teamInfo} />,
+          setActivityDetails={that.setActivityDetails}
+          activeComponent={this.activeComponent}
+          isInternal={this.state.isInternal}
+          isExternal={this.state.isExternal}
+          data={this.state.teamInfo} />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
         name: 'Payment', component:
         <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
-                              setActivityDetails={that.setActivityDetails}
-                              activeComponent={this.activeComponent}
-                              data={this.state.paymentInfo} />,
+          setActivityDetails={that.setActivityDetails}
+          activeComponent={this.activeComponent}
+          data={this.state.paymentInfo} />,
         icon: <span className="ml ml-payments"></span>
       },
       {
         name: 'History',
         component: <MlAppActivityHistory
-          activeComponent={this.activeComponent}/>,
+          activeComponent={this.activeComponent} />,
         icon: <span className="ml my-ml-history"></span>
       }
     ];
@@ -318,12 +323,12 @@ class MlAppActivity extends Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => that.props.handler(that.saveActivity.bind(this))
+        handler: async (event) => that.props.handler(that.saveActivity.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
+        handler: async (event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/activityList')
         }
       }
@@ -334,10 +339,10 @@ class MlAppActivity extends Component {
         {
           'title': 'Actions',
           isText: false,
-          style: {'background': '#ef4647'},
+          style: { 'background': '#ef4647' },
           contentComponent: <MlAppActionComponent
-            resourceDetails={{resourceId: 'activity', resourceType: 'activity'}}   //resource id need to be given
-            actionOptions={appActionConfig}/>
+            resourceDetails={{ resourceId: 'activity', resourceType: 'activity' }}   //resource id need to be given
+            actionOptions={appActionConfig} />
         }]
     };
     /**
@@ -346,12 +351,12 @@ class MlAppActivity extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="activity"/>
-          <div className="clearfix"/>
+          <MlAppScheduleHead type="activity" />
+          <div className="clearfix" />
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={this.setActivitySteps()} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false}/>
+                <StepZilla steps={this.setActivitySteps()} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false} />
               </div>
             </div>
           </div>

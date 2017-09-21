@@ -10,7 +10,6 @@ export default class MlBackendUserList extends Component {
   render() {
     return (
       <div className="admin_main_wrap">
-        <h2>BackendUsers</h2>
          <MlListViewContainer {...mlBackendUserListConfig} />
       </div>
     )

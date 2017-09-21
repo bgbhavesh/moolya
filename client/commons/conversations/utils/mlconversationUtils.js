@@ -36,6 +36,10 @@ class ConversationUtils{
     rkNotifications.listenForNotifications(rkConversations, callback)
   }
 
+  getNotificationsCounter(callback){
+    rkNotifications.listenForNotificationsCounter(rkConversations, callback)
+  }
+
   ackNotification(payload, callback){
     rkNotifications.updateNotification(rkConversations, payload,  callback)
   }

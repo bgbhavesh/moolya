@@ -19,7 +19,7 @@ export function mlFieldValidations(elements) {
     }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
-       var value = selectObj.props['selectedValue']
+       var value = selectObj.props['selectedValue']?selectObj.props['selectedValue']:selectObj.props['value'];
       var  multi= selectObj.props['multiSelect']
 
         if (isRequired && multi&&value.length==0) {

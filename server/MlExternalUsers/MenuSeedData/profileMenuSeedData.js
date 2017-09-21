@@ -95,7 +95,7 @@ if(Meteor.isServer){
               "uniqueId" : "privacy"
           },
         {
-          "image":"ml my-ml-privacy",
+          "image":"ml my-ml-public_profile",
           "link": "/app/previewProfile",
           "isLink" : true,
           "isMenu" : true,

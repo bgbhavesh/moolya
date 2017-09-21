@@ -211,7 +211,7 @@ $menuTrans:all 0.5s linear;
       .premium{top: 10px;}
     }
   }
-  .company_block{background:$mlBlue; border:$mlBlue solid 1px; text-shadow: none; color: $mlWhite; border-radius:10px; margin-bottom: 20px;
+  .company_block{background:$mlBlue; border:$mlBlue solid 1px; text-shadow: none; color: $mlWhite; border-radius:10px; margin-bottom: 20px;font-size: 12px;
     h3{ font-size: 16px; padding: 4px 10px 10px 10px; line-height: 22px;
       span{font-size: 14px;}
     }
@@ -2304,4 +2304,8 @@ p{margin-top:10px;}
   font-size: 25px;
   line-height: 30px;
   text-align: center;
+}
+
+.add_task {margin-top: 0px;
+  .ml-plus {line-height: 158px; color:#b9c5cc;font-size: 75px;background:none;border:0px;padding:0px; }
 }

@@ -28,6 +28,7 @@ export default class MlAppTaskSession extends Component {
   componentWillMount() {
     this.fetchActivities();
     const resp = this.findTaskDetails();
+    this.props.activeComponent(1);
     return resp;
   }
 

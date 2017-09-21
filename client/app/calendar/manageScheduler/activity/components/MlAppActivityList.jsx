@@ -50,12 +50,14 @@ export default class MlAppActivityList extends React.Component{
           <div className="col-lg-12" id="show">
             <div className="row">
               {profileId !== "all" ? <div className="col-lg-2 col-md-4 col-sm-4">
+                <div className="card_block">
                 <a href=" " onClick={() => that.addActivity()}>
-                  <div className="list_block notrans">
-                    <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Create an activity</h3>
+                  <div className="add_task">
+                    <div><span className="ml ml-plus "></span></div>
+                    <div className="block_footer"><span>Create an activity</span></div>
                   </div>
                 </a>
+                </div>
               </div>: <div></div> }
 
               {this.state.activities.map(function (activity, index) {

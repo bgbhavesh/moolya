@@ -6,9 +6,9 @@ import React from 'react';
 import {render} from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
-import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
-import {findCountryCode} from '../actions/findUserAddressBookHandler'
-import MlLoader from '../../../commons/components/loader/loader'
+import {findAddressBookActionHandler} from '../../actions/findUserAddressBookHandler'
+import {findCountryCode} from '../../actions/findUserAddressBookHandler'
+import MlLoader from '../../../../commons/components/loader/loader'
 
 export default class MlUserContactDetails extends React.Component {
   constructor(props) {

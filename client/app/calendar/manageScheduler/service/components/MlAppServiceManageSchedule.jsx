@@ -1043,12 +1043,12 @@ class MlAppServiceManageSchedule extends Component {
         handler: async(event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: _this.serviceId ? true : false,
+        showAction: _this.serviceId  && serviceBasicInfo.isActive? true : false,
         actionName: 'send for review',
         handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
       },
       {
-        showAction: isApproved ? true : false,
+        showAction: isApproved && serviceBasicInfo.isActive ? true : false,
         actionName: 'golive',
         handler: async(event) => _this.props.handler(_this.setGoLiveService.bind(this))
       },

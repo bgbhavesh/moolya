@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import Datetime from "react-datetime";
-import {fetchActivitiesTeamsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
+import {getMoolyaAdminsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
 import moment from "moment";
 import {storeSharedDetailsHandler, fetchConnections} from '../../actions/mlLibraryActionHandler'
 
@@ -85,11 +85,24 @@ export default class SharePopOver extends React.Component {
       if(selectedUserType.value == 'myConnections') {
         that.getMyConnections();
       } else if( selectedUserType.value == "moolyaAdmin" ){
-        // To do
+        that.getMoolyaAdmins();
       } else {
         that.getUsers(selectedUserType.value)
       }
     })
+  }
+
+  async getMoolyaAdmins(){
+    let resp = await getMoolyaAdminsActionHandler("","");
+    let users = resp.map(function (user) {
+      let userInfo = {
+        name: user.displayName,
+        profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+        userId: user._id
+      };
+      return userInfo;
+    });
+    this.setState({teamData: users});
   }
 
   async getMyConnections(){

@@ -110,16 +110,17 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
 
 /**
  * @module ['users']
- * @params [portfolioId, communityCode]
+ * @params [registrationId, communityCode]
  * fetching users for Favourites
  * */
-MlResolver.MlQueryResolver['fetchFavouritesByPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchFavouritesByReg'] = (obj, args, context, info) => {
   let userFavourites = [];
-  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context) || {}
-  if (portfolio && portfolio.userId && args.communityCode) {
-    var pipeline = [{$match: {'isAccepted': true, 'users': {$elemMatch: {'userId': portfolio.userId}}}},
+  let registration = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {}
+  var userId = registration && registration.registrationInfo && registration.registrationInfo.userId?registration.registrationInfo.userId:''
+  if (registration && userId && args.communityCode) {
+    var pipeline = [{$match: {'isAccepted': true, 'users': {$elemMatch: {'userId': userId}}}},
       {$unwind: "$users"},
-      {$match: {'users.userId': {$ne: portfolio.userId}, 'users.isFavourite': true}},
+      {$match: {'users.userId': {$ne: userId}, 'users.isFavourite': true}},
       {$lookup: {from: 'users', localField: 'users.userId', foreignField: '_id', as: 'userDetails'}},
       {$unwind: '$userDetails'}, {$unwind: '$userDetails.profile.externalUserProfiles'},
       {

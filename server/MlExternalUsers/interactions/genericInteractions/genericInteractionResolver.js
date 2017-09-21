@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
   let hasAccess = mlSubChapterAccessControl && mlSubChapterAccessControl.hasAccess ?  mlSubChapterAccessControl.hasAccess : false;
 
-  if (context && context.userId) {
+  if (context && context.userId &&context.userId!==resourceDetails.resourceOwnerId) {
     var connectionCode=generateConnectionCode(context.userId,resourceDetails.resourceOwnerId);
     _.each(actionNames, function (action) {
       switch(action){
@@ -111,6 +111,10 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
           break;
       }
     });
+  }else{//if resource Owner is viewing his own resource
+     actionsList=[{'actionName':'collaborate',isDisabled:true,isHidden:false},{'actionName':'partner',isDisabled:true,isHidden:false},{'actionName':'comment',isDisabled:true,isHidden:false},{'actionName':'review',isDisabled:true,isHidden:false},
+      {'actionName':'enquire',isDisabled:true,isHidden:false},{'actionName':'follow',isDisabled:true,isHidden:false},{'actionName':'favourite',isDisabled:true,isHidden:false},{'actionName':'connect',isDisabled:true,isHidden:false},{'actionName':'like',isDisabled:true,isHidden:false}];
+
   }
   return actionsList;
 }

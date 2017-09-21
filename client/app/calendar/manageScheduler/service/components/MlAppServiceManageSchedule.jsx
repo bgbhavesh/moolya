@@ -992,7 +992,7 @@ class MlAppServiceManageSchedule extends Component {
 
   setServiceExpiry(event) {
     let serviceBasicInfo = this.state.serviceBasicInfo;
-    serviceBasicInfo.serviceExpiry= event.target.value;
+    serviceBasicInfo.serviceExpiry= event && event.target && event.target.value ? event.target.value: event ;
     this.setState({serviceBasicInfo: serviceBasicInfo})
   }
 

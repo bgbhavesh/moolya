@@ -23,7 +23,8 @@ let externalUser = `
         chapterName:String,
         portfolioId:String,
         profile:Profile,
-        isActive:Boolean
+        isActive:Boolean 
+        accountType : String
     }
     type Profile{
       isExternaluser:Boolean,

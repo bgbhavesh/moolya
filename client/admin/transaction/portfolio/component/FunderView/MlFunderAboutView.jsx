@@ -220,7 +220,7 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Linkdin URL" name="linkedInUrl" defaultValue={this.state.data.linkedInUrl} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <input type="text" placeholder="LinkedIn URL" name="linkedInUrl" defaultValue={this.state.data.linkedInUrl} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedInUrlPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.isLinkedInUrlPrivate}/>
                           </div>
 

@@ -64,7 +64,9 @@ export default class MlAppStartupListView extends Component {
                <CDNImage src={startup.aboutUs.logo[0].fileUrl} className="c_image"/> :
                <CDNImage src="/images/no_image.png" />}
             </div>
-            <h3>{startup.firstName}<br/><span>{startup.chapterName}</span></h3>
+            <h3>{startup.firstName}<br/>
+              <span>{startup.chapterName}{!startup.isDefaultSubChapter?"-" +startup.subChapterName:""}</span>
+            </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={startup.views}> <span className="pie-value"></span> </div><br/>

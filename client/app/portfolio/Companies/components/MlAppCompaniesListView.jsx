@@ -119,7 +119,13 @@ export default class MlAppCompanyListView extends Component {
 
     return (<div className="ideators_list">
       <div className="col-md-12"><h2>Companies</h2></div>
-      {list}</div>);
+      {data && !data.length?(
+        <div className="alert alert-info col-md-8 col-md-offset-2 text-center" style={{'marginTop':'40px'}}>
+          There are no registrations to be shown here.
+        </div>
+      ):(<div>{list}</div>)
+      }
+    </div>);
 
   }
 }

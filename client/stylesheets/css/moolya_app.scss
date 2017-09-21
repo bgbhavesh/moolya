@@ -1208,9 +1208,12 @@ p{margin-top:10px;}
         border: $mlBlue solid 2px;
       }
       .tooltiprefer span {
-        background: $mlBlue; color: $mlWhite;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
+        background: $mlBlue; color: $mlWhite;overflow: inherit; text-overflow: ellipsis;white-space: nowrap;
 
         &:before{border-bottom-color: $mlBlue;}
+        small {
+          color: $mlWhite;overflow: hidden;text-overflow: ellipsis;width:60px; display: inline-block;line-height: 8px;font-size: 100%
+        }
       }
     }
   }
@@ -1784,7 +1787,7 @@ p{margin-top:10px;}
     }
   }
 }
-.moolya_admin{
+
   .users_list{padding: 5px 0px 10px 0px;border-radius: 6px;background-color: #273545;border: 1px solid #e3e3e3;margin-bottom:0px;
       li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;position: relative;
         a{text-decoration: none;
@@ -1804,6 +1807,9 @@ p{margin-top:10px;}
           span{background: $mlGray;color: $mlBlue;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;
             &:before{border-bottom-color: $mlGray;}
              b{background: $mlRed; font-size: 12px; border-radius: 5px; padding: 1px 4px;color:$mlWhite;font-weight:normal; }
+            small {
+              color: $mlWhite;overflow: hidden;text-overflow: ellipsis;width:60px; display: inline-block;line-height: 8px;font-size: 100%
+            }
           }
         }
           ul.sub_list{background-color: rgba(255,255,255,0.1);border-radius: 6px;padding-top: 6px;padding-bottom: 3px;
@@ -1838,7 +1844,7 @@ p{margin-top:10px;}
         }
       }
   }
-}
+
 
 .block_del{position: absolute;
   right: -6px;
@@ -2189,7 +2195,7 @@ p{margin-top:10px;}
   position: relative;
   margin-bottom: 15px;
   text-shadow: none;
-  /*margin-top:15px;*/
+  margin-top:15px;
 }
 .card_block .active, .card_block .inactive{
   width: 20px;
@@ -2289,6 +2295,7 @@ p{margin-top:10px;}
   font-size: 12px; top: 54px;
 }
 .card_block.appointment_card .ml{margin-top: 15px;}
+.manage_tasks .card_block{ width: 180px;}
 
 
 .calendar-settings .form-group .ml, .calendar-settings .form-group .fa {

@@ -4,12 +4,15 @@
 import React from 'react';
 import MlAppInternalMyTaskList from './MlAppInternalMyTaskList';
 import MlAppInternalMyTaskItem from './MlAppInternalMyTaskItem';
+import MlInfiniteScroll from "../../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll";
+import {mlMyAppSelfInternalTaskConfig} from './../../config/MlAppSelfTasksConfig';
 
 export default class MlAppInternalMyTask extends React.Component{
 
   constructor(props){
     super(props);
-    this.state ={
+    this.state = {
+      type: (FlowRouter.getQueryParam('add') === 'true' ? "new" : "")
     };
     this.updateType = this.updateType.bind(this);
   }
@@ -28,7 +31,7 @@ export default class MlAppInternalMyTask extends React.Component{
       case 'edit':
         return '';
       default:
-      return <MlAppInternalMyTaskList updateType={that.updateType} data={this.props.data} />
+      return <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppSelfInternalTaskConfig} />
     }
   }
 

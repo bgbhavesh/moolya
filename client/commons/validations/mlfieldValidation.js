@@ -4,7 +4,6 @@ var PhoneNumber = require( 'awesome-phonenumber' );
 
 //import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
-debugger
   for (var  key in  elements) {
     let element = elements[key];
     if (element instanceof Select) {

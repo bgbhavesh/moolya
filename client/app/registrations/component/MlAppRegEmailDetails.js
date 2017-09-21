@@ -8,7 +8,7 @@ import {findRegistrationActionHandler} from "../actions/findRegistration";
 import {updateRegistrationInfoDetails} from "../actions/updateRegistration";
 import update from "immutability-helper";
 import _underscore from "underscore";
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import {mlFieldValidations,validatedEmailId} from "../../../commons/validations/mlfieldValidation";
 var FontAwesome = require('react-fontawesome');
 var diff = require('deep-diff').diff;
 
@@ -81,10 +81,14 @@ export default class MlAppRegEmailDetails extends React.Component {
   async onSavingEmailDetails(index, value) {
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
-    let ret = mlFieldValidations(this.refs)
+    let ret = mlFieldValidations(this.refs);
+    var emailId=this.refs["emailId"].value
+    let isValidEmail = validatedEmailId(emailId);
     if (ret) {
       toastr.error(ret);
-    } else {
+    } else if (emailId && !isValidEmail) {
+      toastr.error('Please enter a valid EmailId');
+    }else {
 
       let emailList = this.state.emailDetailsObject;
       emailList.emailIdType = this.state.selectedEmailTypeValue,
@@ -130,10 +134,13 @@ export default class MlAppRegEmailDetails extends React.Component {
         refs.push(this.refs["emailIdType" + index])
         refs.push(this.refs["emailId" + index])
         let ret = mlFieldValidations(refs)
-
+        var emailId=this.refs["emailId"].value
+        let isValidEmail = validatedEmailId(emailId);
         if (ret) {
           toastr.error(ret);
-        } else {
+        } else if (emailId && !isValidEmail) {
+          toastr.error('Please enter a valid EmailId');
+        }else {
           let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
           let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;
           let updatedComment = update(this.state.emailDetails[index],

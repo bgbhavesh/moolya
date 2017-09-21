@@ -16,7 +16,7 @@ import {findCountryCode} from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import _ from 'lodash'
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
 
@@ -85,11 +85,14 @@ export default class ContactDetails extends React.Component{
      refs.push(this.refs["numberType"])
      refs.push(this.refs["contactNumber"])
      let ret = mlFieldValidations(refs)
-
+     let countrycode=this.state.countryDetails&&this.state.countryDetails.countryCode?this.state.countryDetails.countryCode:"";
+     let contactNumber = this.refs["contactNumber"] && this.refs["contactNumber"].value;
+     let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
      if (ret) {
        toastr.error(ret);
+     }else if (countrycode && !isValidPhoneNumber) {
+         toastr.error('Please enter a valid contact number');
      }else{
-
        let contactList = this.state.contactNumberObject;
        contactList.numberType = this.state.selectedNumberTypeValue,
          contactList.numberTypeName = this.state.selectedNumberTypeLabel,
@@ -136,9 +139,13 @@ export default class ContactDetails extends React.Component{
         refs.push(this.refs["contactNumber" + index])
         refs.push(this.refs["numberType" + index])
         let ret = mlFieldValidations(refs)
-
+        let countrycode=this.state.countryDetails&&this.state.countryDetails.countryCode?this.state.countryDetails.countryCode:"";
+        let contactNumber =this.refs["contactNumber" + index] && this.refs["contactNumber" + index].value;
+        let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
         if (ret) {
           toastr.error(ret);
+        }else if (countrycode && !isValidPhoneNumber) {
+          toastr.error('Please enter a valid contact number');
         }else{
           let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
           let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;

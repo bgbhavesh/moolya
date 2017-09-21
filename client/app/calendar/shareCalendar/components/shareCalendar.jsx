@@ -104,11 +104,14 @@ export default class ShareCalendar extends Component {
     const resp = await getSharedCalendarHandler(id,month, year, date);
     console.log('resp from calendar', resp)
     let days = resp.days;
-    let status = [];
-    days.map(function(data){
-      status.push(data.status)
-    })
-    this.setState({status: status})
+    // let status = [];
+    // days.map(function(data){
+    //   status.push(data.status)
+    // })
+    this.setState({
+      // status: status,
+      data: days
+    });
     return resp;
   }
 
@@ -230,7 +233,7 @@ export default class ShareCalendar extends Component {
     const that = this;
     return (
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
-        <MlCalendarHead getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  calendarHeaderManagement={that.calendarHeaderManagement.bind(that)} userDetails={that.userDetails.bind(that)} />
+        <MlCalendarHead getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts.bind(this)}  calendarHeaderManagement={that.calendarHeaderManagement.bind(that)} userDetails={that.userDetails.bind(that)} />
         <div className="app_padding_wrap">
           <Calender
             events={ that.state.events }

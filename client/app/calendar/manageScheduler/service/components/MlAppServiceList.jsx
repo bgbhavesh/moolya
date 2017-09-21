@@ -85,6 +85,7 @@ export default class MlAppServiceList extends Component {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
                     <div className="card_block"  onClick={()=>that.updateService(service._id, service.profileId)}><h3>{service.displayName}</h3>
+                      <div className={service.isLive ? 'active' : 'inactive'}></div>
                       <div className="clearfix"></div>
                       <div className="list_icon mart0">
                         <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>

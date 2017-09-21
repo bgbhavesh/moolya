@@ -219,15 +219,15 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
   }
 }
 
-MlResolver.MlQueryResolver['fetchConnectionsByPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchConnectionsByReg'] = (obj, args, context, info) => {
   var response = []
-  if (args && args.portfolioId && args.communityCode) {
+  if (args && args.registrationId && args.communityCode) {
     var query = [
-      {$match:{_id:args.portfolioId}},
-      {$lookup:{from:'mlConnections',localField:'userId', foreignField:'users.userId',as:'connections'}},
+      {$match:{_id:args.registrationId}},
+      {$lookup:{from:'mlConnections',localField:'registrationInfo.userId', foreignField:'users.userId',as:'connections'}},
       {$unwind :"$connections"},
       {$unwind :"$connections.users"},
-      {$project : { isEqual:  { "$cmp": [ "$connections.users.userId", "$userId" ] },
+      {$project : { isEqual:  { "$cmp": [ "$connections.users.userId", "$registrationInfo.userId" ] },
         "connections":1, userId:1 }},
       {$match: {'isEqual': 1 } },
       {$replaceRoot:{newRoot:"$connections"}},
@@ -249,7 +249,7 @@ MlResolver.MlQueryResolver['fetchConnectionsByPortfolio'] = (obj, args, context,
         'chapterName':{ $first:'$userDetails.profile.externalUserProfiles.chapterName'},
       }}
     ]
-    response = mlDBController.aggregate('MlPortfolioDetails', query, context);
+    response = mlDBController.aggregate('MlRegistration', query, context);
   }
   return response
 }

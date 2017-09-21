@@ -13,7 +13,7 @@ import {createUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {updateUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 import {findCountryCode} from '../../registrations/actions/findRegistration'
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import {mlFieldValidations, validatedPhoneNumber} from "../../../commons/validations/mlfieldValidation";
 import _ from "lodash";
 import _underscore from 'underscore'
 import update from "immutability-helper";
@@ -94,9 +94,13 @@ export default class AppContactDetails extends React.Component {
     refs.push(this.refs["numberType"])
     refs.push(this.refs["contactNumber"])
     let ret = mlFieldValidations(refs)
-
+    let countrycode=this.state.countryDetails.countryCode;
+    let contactNumber = this.refs["contactNumber"] && this.refs["contactNumber"].value;
+    let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
     if (ret) {
       toastr.error(ret);
+    }else if (countrycode && !isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
     } else {
 
       let contactList = this.state.contactNumberObject;
@@ -147,9 +151,13 @@ export default class AppContactDetails extends React.Component {
       refs.push(this.refs["contactNumber" + index])
       refs.push(this.refs["numberType" + index])
       let ret = mlFieldValidations(refs)
-
+      let countrycode=this.state.countryDetails.countryCode;
+      let contactNumber = this.refs["contactNumber" + index] && this.refs["contactNumber" + index].value;
+      let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
       if (ret) {
         toastr.error(ret);
+      }else if (countrycode && !isValidPhoneNumber) {
+        toastr.error('Please enter a valid contact number');
       } else {
         let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.details[index].numberTypeName;
         let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.details[index].numberType;

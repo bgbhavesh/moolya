@@ -132,6 +132,7 @@ async function IDE(portFolio, query) {
   let resultIDEPortfolio = await getResultPortFolio('MlIdeatorPortfolio', query);
   if (resultIDEPortfolio) {
     portFolio.communityType = getCommunityType(resultIDEPortfolio) // Replacing trailing 's'
+    portFolio.communityTypes =resultIDEPortfolio.communityType;
     let portfolioIdeatorDetails = resultIDEPortfolio.portfolioIdeatorDetails;
     if (portfolioIdeatorDetails) {
       getProfileInfo(portFolio, portfolioIdeatorDetails)
@@ -149,6 +150,7 @@ async function STU(portFolio, query) {
   let resultStartUpPortFolio = await getResultPortFolio('MlStartupPortfolio', query);
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
+    portFolio.communityTypes =resultStartUpPortFolio.communityType;
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
@@ -168,6 +170,7 @@ async function FUN(portFolio, query) {
   let resultFunderPortfolio = await getResultPortFolio('MlFunderPortfolio', query);
   if (resultFunderPortfolio) {
     portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
+    portFolio.communityTypes =resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.funderAbout) {
       getProfileInfo(portFolio, resultFunderPortfolio.funderAbout);
 
@@ -186,6 +189,7 @@ async function ServiceProviderPortFolio(portFolio, query) {
   let resultServicePortFolio = await getResultPortFolio('MlServiceProviderPortfolio', query);
   if (resultServicePortFolio) {
     portFolio.communityType = getCommunityType(resultServicePortFolio)// Replacing trailing 's'
+    portFolio.communityTypes =resultServicePortFolio.communityType;
 
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about
@@ -205,6 +209,7 @@ async function CMP(portFolio, query) {
   let resultCompanyPortFolio = await getResultPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
     portFolio.communityType = 'a Company';
+    portFolio.communityTypes ='Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
@@ -223,6 +228,7 @@ async function INS(portFolio, query) {
   let resultINSPortFolio = await getResultPortFolio('MlInstitutionPortfolio', query);
   if (resultINSPortFolio) {
     portFolio.communityType = getCommunityType(resultINSPortFolio)
+    portFolio.communityTypes =resultINSPortFolio.communityType;
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.profilePic = aboutUs.logo ? aboutUs.logo[0].fileUrl : ''
@@ -387,13 +393,13 @@ function getPrivateFields(privateFieldsObjects) {
 
 function appendKeywords(portFolio) {
 
-  let keywords = portFolio.displayName + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityType;
+  let keywords = portFolio.displayName + ', '+portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes;
   if (portFolio.chapterName && portFolio.chapterName.trim().length >  0 )
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.chapterName;
   if (portFolio.clusterName && portFolio.clusterName.trim().length >  0 )
     keywords = keywords + ', ' +portFolio.displayName  + " " + portFolio.clusterName;
   if (portFolio.communityType && portFolio.communityType.trim().length >  0 )
-    keywords = keywords + ', ' + portFolio.displayName  + " " + portFolio.communityType;
+    keywords = keywords + ', ' + portFolio.displayName  + " " + portFolio.communityTypes;
   portFolio.keywords = keywords;
   return portFolio
 }

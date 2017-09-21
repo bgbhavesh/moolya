@@ -49,6 +49,11 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
+  /**Validate Office Bearer registration,Fix: MOOLYA-2690*/
+  validationCheck = MlRegistrationPreCondition.validateOFBCommunity(args.registration);
+  if (validationCheck && !validationCheck.isValid) {
+    return validationCheck.validationResponse;
+  }
 
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};

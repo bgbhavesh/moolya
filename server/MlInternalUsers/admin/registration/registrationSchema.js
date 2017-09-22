@@ -221,6 +221,7 @@ let registrationSchema = `
          profileImage : String
          headerCommunityDisplay : String
          isShowOnMap : Boolean,
+         isCalendar: Boolean
          promoCode       :   String,
          campaignCode    :   String
     }

@@ -45,7 +45,7 @@ class MlAppServiceBasicInfo extends Component {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(hight+$('.app_header').outerHeight(true)));
-
+    this.props.activateComponent(0);
   }
 
   /**

@@ -8,6 +8,7 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlGenericAchievementsView from '../../../Company/view/MlGenericAchievementsView';
 
 const KEY = 'achievements'
 
@@ -137,18 +138,7 @@ export default class MlInstitutionViewAchievements extends React.Component {
         <div id="annotatorContent">
           <h2>Achievements</h2>
           <div className="col-lg-12">
-            <div className="row">
-              {achievementsArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo && details.logo.fileUrl} className="team_img"/>
-                    <h3>
-                      {details.achievementName && details.achievementName} <br />
-                    </h3>
-                  </div>
-                </div>)
-              })}
-            </div>
+            <MlGenericAchievementsView achievementsList={achievementsArray} isAdmin={this.props.isAdmin}/>
           </div>
         </div>
       )

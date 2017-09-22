@@ -197,6 +197,8 @@ let FunderPortfolioSchema = `
         firstName           : String
         lastName            : String
         profileImage        : String
+        isDefaultSubChapter : Boolean
+        subChapterName : String
     }
   
     input successStories{

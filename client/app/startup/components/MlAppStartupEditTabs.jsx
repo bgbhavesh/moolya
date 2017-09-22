@@ -14,7 +14,7 @@ import PortfolioLibrary from '../../../commons/components/portfolioLibrary/Portf
 import {appClient} from '../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
-export default class MlAppStartupEditTabs extends React.Component {
+export default class git MlAppStartupEditTabs extends React.Component {
 
   constructor(props) {
     super(props)

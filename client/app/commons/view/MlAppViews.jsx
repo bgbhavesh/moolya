@@ -70,6 +70,16 @@ export default class MlViews extends React.Component {
     var config = this.props;
     var listConfig = config.listConfig;
     listConfig.isApp = true
+    if(this.props.listConfig.params && this.props.listConfig.params.bounds){
+      if(!this.props.params){
+        let newParams = {params:{bounds:this.props.listConfig.params.bounds}}
+        this.props = _.omit(this.props, 'params')
+        this.props=_.extend(this.props,newParams);
+      }else if(this.props.params && !this.props.params.bounds){
+        this.props.params.bounds = this.props.listConfig.params.bounds
+      }
+    }
+
     var params = this.props.params ? this.props.params : null;
     return (
       <div className="app_main_wrap">

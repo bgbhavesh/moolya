@@ -5,6 +5,7 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import MlGenericPartnersView from '../../Company/view/MlGenericPartnersView';
 
 const KEY = 'partners'
 
@@ -132,19 +133,7 @@ export default class MlInstitutionViewPartners extends React.Component {
             {!_.isEmpty(partnersArray)&&  <div id="annotatorContent">
               <h2>Partners</h2>
               <div className="col-lg-12">
-                <div className="row">
-                  {partnersArray && partnersArray.map(function (details, idx) {
-                    return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                      <div className="team-block">
-                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                        <h3>
-                          {details&&details.firstName}
-                        </h3>
-                      </div>
-                    </div>)
-                  })}
-
-                </div>
+                <MlGenericPartnersView partnersList={partnersArray} isAdmin={this.props.isAdmin}/>
               </div>
             </div> }
           </div>)}

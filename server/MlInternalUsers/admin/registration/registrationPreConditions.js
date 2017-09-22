@@ -63,6 +63,17 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
 
     return {'isValid':true};
   }
+
+  static validateOFBCommunity(regDetails){
+    var registrationType=(regDetails||{}).registrationType;
+    if(registrationType&&registrationType==='OFB'){
+      let code = 401;
+      response = new MlRespPayload().errorPayload("Community not available for registration", code);
+      return {'isValid':false,'validationResponse':response};
+    }
+    return {'isValid':true};
+  }
+
   static  validateActiveCommunity(regId,regDetails) {
     let isActiveCommunity=true;
     let response=null;

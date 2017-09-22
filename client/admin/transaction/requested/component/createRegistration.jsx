@@ -13,7 +13,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedPhoneNumber,validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
 import {fetchSubChapterDetails} from "../../requested/actions/findRegistration"
 export default class MlCreateRegistration extends React.Component{
 
@@ -53,11 +53,15 @@ export default class MlCreateRegistration extends React.Component{
     let {countryCode} = this.state;
     let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
     let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
+    var emailId=this.refs.email.value;
+    let isValidEmail = validatedEmailId(emailId);
     if (ret) {
       toastr.error(ret);
     } else if (!isValidPhoneNumber) {
       toastr.error('Please enter a valid contact number');
-    } else {
+    }else if (emailId && !isValidEmail) {
+      toastr.error('Please enter a valid EmailId');
+    }else {
       let Details = {
 
         firstName: this.refs.firstName.value,

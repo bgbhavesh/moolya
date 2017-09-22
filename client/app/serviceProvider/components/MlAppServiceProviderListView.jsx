@@ -32,7 +32,7 @@ export default class MlAppServiceProviderListView extends Component {
               </div>}
 
             <div className="block_footer">
-              <span>{provider.chapterName} - {provider.communityType}</span>
+              <span>{provider.chapterName}{!provider.isDefaultSubChapter?"-" +provider.subChapterName:""}</span>
             </div>
           </div>
         </a>

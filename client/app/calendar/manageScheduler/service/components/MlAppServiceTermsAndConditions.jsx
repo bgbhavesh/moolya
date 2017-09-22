@@ -18,6 +18,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
   }
 
   componentDidMount() {
+    this.props.activateComponent(2);
     let viewMode = this.props.viewMode;
     const hight = viewMode ? 325 : 300;
     $('.float-label').jvFloat();

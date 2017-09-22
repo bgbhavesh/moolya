@@ -55,7 +55,7 @@ export default class MlAppIdeatorListView extends Component {
                         </div>}
                       <p>{ideator.ideas[0].title}</p>
                       <div className="block_footer">
-                        <span>{ideator.chapterName}</span>
+                        <span>{ideator.chapterName}{!ideator.isDefaultSubChapter?"-" +ideator.subChapterName:""}</span>
                       </div>
                     </div>
                   </a>

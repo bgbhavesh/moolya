@@ -221,6 +221,8 @@ let institutePortfolioSchema = `
         connections         : Int
         views               : Int
         followings          : Int
+      isDefaultSubChapter : Boolean
+      subChapterName : String
     }
     
     input institutionIncubators{

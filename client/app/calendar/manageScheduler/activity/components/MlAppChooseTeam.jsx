@@ -355,8 +355,8 @@ export default class MlAppChooseTeam extends React.Component{
                           <span className="placeHolder active">Choose team Type</span>
                           <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
                             <option value="chooseTeam" disabled="disabled">Choose team Type</option>
-                            <option value="connections">My Connections</option>
-                            <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
+                            <option value="connections" hidden={!that.state.isExternal} >My Connections</option>
+                            <option   value="moolyaAdmins">Moolya Admins</option>
                             {that.state.offices.map(function (office , index) {
                               return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
                             })}

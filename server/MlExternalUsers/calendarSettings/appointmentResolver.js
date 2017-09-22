@@ -1282,7 +1282,7 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
     }
     }
   ];
-  let result = mlDBController.aggregate('MlScOrder', pipeline );
+  let result = mlDBController.aggregate('MlAppointments', pipeline );
   result = JSON.stringify(result);
   let code = 200;
   let response = new MlRespPayload().successPayload(result, code);

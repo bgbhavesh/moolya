@@ -32,6 +32,8 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlProcessSetupDetailsComponent,
+  asyncExpand:true,
+  asyncExpandRowKey:'_id',
   showActionComponent:true,
   actionConfiguration:[
     {

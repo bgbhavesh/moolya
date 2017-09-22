@@ -693,7 +693,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
      */
     if (addressDetails && addressDetails.length < 1) {
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+      let response = new MlRespPayload().errorPayload("Default Address is mandatory", code);
       return response;
     } else if (addressDetails && addressDetails.length > 0) {
       /**
@@ -709,7 +709,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
          * If default address not found throw an error
          */
         let code = 401;
-        let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+        let response = new MlRespPayload().errorPayload("Default Address is mandatory", code);
         return response;
       } else if (found) {
         /**

@@ -324,34 +324,38 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   }
 }
 
+/**
+ * @appHeader
+ * @Note 1) "getting user registrationId from its default profile"
+ *       2) "getting if any registration is other than pending or approved state"
+ * */
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
   let userId = context.userId
   if (userId) {
-    /**getting user registrationId from its default profile*/
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if (profile) {
       let registerId = profile.registrationId
       let username = mlDBController.findOne('users', {_id: userId}, context).username
       if (registerId) {
         var response = MlRegistration.findOne({"_id": registerId}) || {}
-        /**getting if any registration is other than pending or approved state*/
+
         let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
           "registrationInfo.userName": username,
-          "status": {$nin: ["REG_USER_APR",'REG_ADM_REJ', 'REG_USER_REJ']}
+          "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
-        if (_lodash.isEmpty(isAllowRegisterAs))
+        if (_lodash.isEmpty(isAllowRegisterAs) ||  (isAllowRegisterAs.registrationInfo.communityDefCode === "BRW"))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id
         }
 
-        if(response.status === "REG_USER_APR"){
+        if (response.status === "REG_USER_APR") {
           response.isCalendar = true;
         } else {
           response.isCalendar = false;
         }
-        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
+        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType ? response.registrationInfo.registrationType : ''
         response.registrationInfo.communityName = getCommunityName(communityCode);
         response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)
         response.profileImage = profile.profileImage
@@ -1811,7 +1815,11 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
-  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'REG_USER_APR','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
+  let resp = mlDBController.find('MlRegistration', {
+      'registrationInfo.userName': user.username,
+      "registrationInfo.communityDefCode": {$ne: "BRW"},
+      status: {$nin: ['REG_USER_APR', 'REG_ADM_REJ', 'REG_USER_REJ']}
+    }, context).fetch() || []
   return resp;
 }
 

@@ -9,8 +9,10 @@ import { updateCalendarSettingActionHandler } from '../actions/updateCalendarSet
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
+import PopoverActionIcon from '../../../../../app/appActions/components/PopoverActionIcon';
+import CalendarPopOver from './CalendarPopOver';
 
-class MlAppSetCalendarPrimarySettings extends React.Component {
+class MlAppCalendarPrimarySettings extends React.Component {
 
   constructor(props) {
     super(props);
@@ -79,6 +81,12 @@ class MlAppSetCalendarPrimarySettings extends React.Component {
     });
   }
 
+  portfolioShareHandler(actionConfig, handlerCallback) {
+    if (handlerCallback) {//to handle the popover
+      handlerCallback({ });
+    }
+  }
+
   async updateCalendarSetting() {
     let dataToInsert = {
       slotDuration: {},
@@ -139,7 +147,13 @@ class MlAppSetCalendarPrimarySettings extends React.Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: async (event) => that.props.handler(that.updateCalendarSetting.bind(this))
+        hasPopOver: true,
+        popOverTitle: 'Shared Details',
+        placement: 'top',
+        target: 'sharedLibrary',
+        popOverComponent: <CalendarPopOver />,
+        actionComponent: PopoverActionIcon,
+        handler: this.portfolioShareHandler.bind(this),
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -206,4 +220,4 @@ class MlAppSetCalendarPrimarySettings extends React.Component {
   }
 };
 
-export default MlAppSetCalendarPrimarySettings = formHandler()(MlAppSetCalendarPrimarySettings);
+export default MlAppSetCalendarPrimarySettings = formHandler()(MlAppCalendarPrimarySettings);

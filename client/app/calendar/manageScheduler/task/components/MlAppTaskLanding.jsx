@@ -298,7 +298,7 @@ class MlAppTaskLanding extends Component {
             activeComponent={this.activeComponent}
             getSessionDetails={this.getSessionDetails.bind(this)}
             taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}
-            editMode={this.props.editMode}
+            editMode={true}
             profileId={this.props.profileId} />,
           icon: <span className="ml flaticon-ml-file-1"></span>
         },

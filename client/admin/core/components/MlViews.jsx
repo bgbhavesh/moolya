@@ -16,12 +16,31 @@ export default class MlViews extends React.Component {
       viewMode:true,
     }
     this.viewModeChange.bind(this);
+    this.getBound = this.getBound.bind(this);
   }
 
   viewModeChange(mode) {
     this.setState({'viewMode': mode});
   }
+  getBound(obj){
+    // let variables={};
+    // let hasQueryOptions = this.props&&this.props.queryOptions ? true : false;
+    //   if (hasQueryOptions) {
+    //     let config = this.props.listConfig
+    //     if(config && config.params){
+    //       let bounds={bounds:obj.bounds}
+    //       _.extend(config.params,bounds)
+    //     }else{
+    //       let newParams = {params:{bounds:obj.bounds}}
+    //       data = _.omit(config, 'params')
+    //       config=_.extend(data,newParams);
+    //     }
+    //     let dynamicQueryOption = this.props.listConfig && this.props.listConfig.buildQueryOptions ? this.props.listConfig.buildQueryOptions(config) : {};
+    //     variables = _.extend(variables, dynamicQueryOption);
+    //   }
+    //   this.props.listConfig.fetchMore(variables);
 
+  }
 
   render() {
     let specificViewMode = _.has(this.props, 'viewMode');
@@ -47,7 +66,7 @@ export default class MlViews extends React.Component {
     let params = this.props.params ? this.props.params : null;
     return (
       <div className="admin_main_wrap">
-        {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> :
+        {viewMode ? <MlMapViewContainer params={params} bounds={this.getBound.bind(this)} {...config.mapConfig} /> :
           <MlListViewContainer params={params} {...listConfig}/> }
         {showInfinity && (<MlInfinity {...infinityViewProps} />)}
       </div>

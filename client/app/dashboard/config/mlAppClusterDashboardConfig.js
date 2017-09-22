@@ -6,6 +6,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 import MlAppClusterMapMarker from '../components/MlAppClusterMapMarker'
+import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer'
 
 
 const mlAppClusterDashboardListConfig=new MlAppViewer({
@@ -19,6 +20,17 @@ const mlAppClusterDashboardListConfig=new MlAppViewer({
   perPageLimit: 20,
   sort:true,
   viewComponent:<MlAppClusterList />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    let queryObj = {
+      bounds:config.params&&config.params.bounds?config.params.bounds:null,
+      isListView:true,
+    };
+    let queryString = JSON.stringify(queryObj);
+    return {
+      queryProperty:{query:queryString}
+    }
+  },
   graphQlQuery:gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
@@ -62,7 +74,17 @@ const mlAppClusterDashboardMapConfig=new MlAppViewer({
     var zoom=4;
     return zoom;
   },
-  viewComponent:<MlAppClusterMapView params={this.params} />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    let queryObj = {
+      bounds:config.params&&config.params.bounds?config.params.bounds:null,
+    };
+    let queryString = JSON.stringify(queryObj);
+    return {
+      queryProperty:{query:queryString}
+    }
+  },
+  viewComponent:<MlAppMapViewContainer/>,
   mapMarkerComponent:<MlAppClusterMapMarker/>,
   disableHover:true,
   // mapFooterComponent:<MlMapFooter />,

@@ -185,12 +185,21 @@ let institutePortfolioSchema = `
         privateFields:[PrivateKeys]
     }
     
+     type institutionLookingForOutput{
+        lookingForName:String,
+        lookingForId:String,
+        lookingDescription:String,
+        makePrivate:Boolean
+        index: Int
+        privateFields:[PrivateKeys]
+    }
+    
     type InstitutionPortfolio{
       portfolioDetailsId: String
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
       licenses          : licensesOutput 
-      lookingFor        : [lookingForOutput]
+      lookingFor        : [institutionLookingForOutput]
       aboutUs           : AboutUs
       rating            : ratingOutput
       serviceProducts   : serviceProductsOutput

@@ -218,6 +218,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 .ml_profile>ol>li, nav>ol>li>a { /* So the first tier sits on top of the second tier disk */z-index: 10;}
 .ml_profile li:active a, .ml_profile li:focus a, .ml_profile li.focus a {background-color: #fff;box-shadow: 0 0 10px rgba(0, 0, 0, 1);outline: none;position: relative;left: 0;top: auto;/*z-index: 25;*/}
 .ml_profile>ol>li:active, nav>ol>li:focus, .ml_profile>ol>li.focus { /* Keep this to make sure only the current item appears above the disc. */z-index: 25;}
+.ml_profile a.active{border: #ef4647 solid 2px;background: #fff;}
 /* Just hide anything beyond 5*/
 /*.ml_profile>ol>li:nth-child(n+6) {display: none;}*/
 /* Positioning the first tier */

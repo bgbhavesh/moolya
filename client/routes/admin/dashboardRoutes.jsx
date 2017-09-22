@@ -39,7 +39,7 @@ adminSection.route('/dashboard', {
 adminSection.route('/dashboard/clusters', {
   name: 'dashboard_clusters',
   action(){
-    mount(AdminLayout, {
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,
       adminContent: <MlViews showInfinity={true} mapConfig={mlClusterDashboardMapConfig}
                              listConfig={mlClusterDashboardListConfig}/>
     })
@@ -59,7 +59,7 @@ adminSection.route('/dashboard/chapters', {
 adminSection.route('/dashboard/communities', {
   name: 'dashboard_communities',
   action(){
-    mount(AdminLayout, {
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'community'}} />,
       adminContent: <MlViews showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
                              listConfig={mlCommunityDashboardListConfig}/>
     })

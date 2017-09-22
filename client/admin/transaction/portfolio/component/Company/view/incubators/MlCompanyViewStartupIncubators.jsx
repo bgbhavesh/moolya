@@ -6,14 +6,17 @@ import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeato
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 const KEY = "startupIncubators"
 
 export default class MlCompanyViewStartupIncubators extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      startupIncubators:{}
+      startupIncubators:{},
+      content:{},
+      loading: true
     }
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
@@ -126,16 +129,27 @@ export default class MlCompanyViewStartupIncubators extends React.Component{
   }
 
   render(){
+    const showLoader = this.state.loading;
     return (
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
       <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Startup Incubators</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.state.startupIncubators && this.state.startupIncubators.startupIncubatorsDescription ? this.state.startupIncubators.startupIncubatorsDescription : ""}</p>
+              <p>{this.state.startupIncubators && this.state.startupIncubators.startupIncubatorsDescription ? this.state.startupIncubators.startupIncubatorsDescription
+                :   <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>
+            }
+            </p>
             </div>
           </div>
         </div>
+      </div>
+        )
+        }
       </div>
     )
   }

@@ -5,6 +5,7 @@ import {logout} from "../header/actions/logoutAction";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import { createContainer } from 'meteor/react-meteor-data';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 
 
@@ -103,11 +104,19 @@ class  MlAdminProfileApp extends Component {
           <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}
           ></h1>
           <ol>
-            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/admin/myprofile/personalInfo"><span className="ml my-ml-blank_Profile_3"></span></a></li>
-            <li data-toggle="tooltip" title="Log As" data-placement="right"><a href="/admin/logas"><span className="ml my-ml-Switch_Profile_Log_As"></span></a></li>
+            <li data-toggle="tooltip" title="My Profile" data-placement="right">
+              <a href="/admin/myprofile/personalInfo" className={activeProfileArcClass('myprofile')}><span className="ml my-ml-blank_Profile_3"></span></a>
+            </li>
+            <li data-toggle="tooltip" title="Log As" data-placement="right" >
+              <a href="/admin/logas" className={activeProfileArcClass('logas')}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
+            </li>
             {loggedInUser&&loggedInUser.hierarchyLevel<4?<li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><span className="ml my-ml-switch_profile"></span></a></li>:""}
-            <li data-toggle="tooltip" title="Themes" data-placement="right"><a href="#"><span className="ml my-ml-themes_10-01"></span></a></li>
-            <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a></li>
+            <li data-toggle="tooltip" title="Themes" data-placement="right">
+              <a href="#" className={activeProfileArcClass('themes')}><span className="ml my-ml-themes_10-01"></span></a>
+            </li>
+            <li data-toggle="tooltip" title="Logout" data-placement="left">
+              <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>
+            </li>
           </ol>
         </div>
         <div className="profile-name display_none">Welcome {this.state.firstName} </div>
@@ -125,3 +134,28 @@ export default MlAdminProfile = createContainer(props => {
     user: Meteor.user(),
   };
 }, MlAdminProfileApp);
+
+
+
+/**
+ * This method returns the className if the option is active
+ * @param type(String: type of profile option.myProfile/registerAs,calendar,myTask)
+ * returns result of className as active or null
+ */
+var activeProfileArcClass=function(type,params){
+  var currentPath = Object.assign(FlowRouter._current.path);
+  var path = (currentPath.split('?')[0]).split('/');
+  path=_.compact(path);//remove empty strings
+  _.pull(path, 'admin');//pull 'app' route
+  var className='';
+  var profileLinkMapObject={'myprofile':'myprofile',
+                            'logas':'logas',
+                             'themes':'themes'
+                           };
+  _.every(path,function(i){
+    var profilePath=profileLinkMapObject[i];
+    if(profilePath===type){className='active'; return false};
+    return true;
+  });
+  return className;
+}

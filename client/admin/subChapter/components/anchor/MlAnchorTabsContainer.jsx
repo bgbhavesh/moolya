@@ -100,7 +100,9 @@ class MlAnchorTabsContainer extends React.Component {
         }
 
         var updateDetails = this.props
-        return await updateBackendUserActionHandler(updateUserObject, updateDetails)
+        var response = await updateBackendUserActionHandler(updateUserObject, updateDetails)
+        this.setState({isUserUpdated: true})
+        return response
         break
       default:
         console.log('save type required')
@@ -113,7 +115,7 @@ class MlAnchorTabsContainer extends React.Component {
       details.profile.InternalUprofile.moolyaProfile.socialLinksInfo = details.socialLinksInfo;
       // details.socialLinksInfo = undefined;
     }
-    this.setState({ contact: details, module: "users" })
+    this.setState({ contact: details, module: "users", isUserUpdated: false })
   }
   getObjectiveDetails(details) {
     //get tab details
@@ -154,7 +156,7 @@ class MlAnchorTabsContainer extends React.Component {
       [
         {
           name: 'Anchors',
-          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails} />,
+          component: <MlAnchorList data={this.props} getUserDetails={this.getUserDetails} isUserUpdated={this.state.isUserUpdated}/>,
           icon: <span className="ml ml-basic-Information"></span>
         },
         {

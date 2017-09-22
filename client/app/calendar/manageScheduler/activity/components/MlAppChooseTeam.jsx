@@ -30,9 +30,6 @@ export default class MlAppChooseTeam extends React.Component{
       offices : []
     };
   }
-  componentWillMount() {
-    this.props.activeComponent(2);
-  }
   isUpdated() {
     return !this.state.isDataChanged;
   }
@@ -62,6 +59,7 @@ export default class MlAppChooseTeam extends React.Component{
   componentWillMount(){
     this.getOffices();
     this.getUsers();
+    this.props.activeComponent(2);
   }
 
   /**

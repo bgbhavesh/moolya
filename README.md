@@ -6,7 +6,7 @@ Based on :
 1. Flow router
 1. ECMAScript 6
 
-## Steps to start project ##
+## Steps to start moolya project ##
 1. `meteor npm install`
 
 1. `meteor npm start`

@@ -21,7 +21,7 @@ import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
-
+import getSiteMapUrls from '../../MlExternalUsers/microSite/microSiteRepo/siteMapCreation'
 let helmet = require('helmet');
 var Tokens = require('csrf')
 var siteMap = require('sitemap')
@@ -61,21 +61,12 @@ const defaultServerConfig = {
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
   microSite: '/*',
-  view:'/view/*',
+  view: '/view/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
 };
-var sitemap = siteMap.createSitemap ({
-  hostname: 'http://example.com',
-  cacheTime: 600000,        // 600 sec - cache purge period
-  urls: [
-    { url: '/page-1/',  changefreq: 'daily', priority: 0.3 },
-    { url: '/page-2/',  changefreq: 'monthly',  priority: 0.7 },
-    { url: '/page-3/'},    // changefreq: 'weekly',  priority: 0.5
-    { url: '/page-4/',   img: "http://urlTest.com" }
-  ]
-});
+
 
 
 // default graphql options to enhance the graphQLExpress server
@@ -121,14 +112,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   graphQLServer.get(config.view, async function (req, res, next) {
 
       const pathName = req.url;
-      const originalUrl = req.originalUrl.replace('/view','');
+      const originalUrl = req.originalUrl.replace('/view', '');
       let proto = req.protocol;
-      if(req.get('x-forwarded-proto').includes('https')){
+      if (req.get('x-forwarded-proto').includes('https')) {
         proto = 'https'
       }
       const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
       const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
-      if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+      if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
         res.redirect('/login');
       }
       res.render(pathAbout, portFolio)
@@ -142,12 +133,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           const pathName = req.url;
           const originalUrl = req.originalUrl;
           let proto = req.protocol;
-          if(req.get('x-forwarded-proto').includes('https')){
+          if (req.get('x-forwarded-proto').includes('https')) {
             proto = 'https'
           }
-          const fullUrl = proto+ '://' + req.get('host') + req.originalUrl;
+          const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
           const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
-          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+          if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
             next()
           }
           res.render(pathAbout, portFolio)
@@ -160,13 +151,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
     }
   )
-  graphQLServer.get('/sitemap.xml', function(req, res) {
-    sitemap.toXML( function (err, xml) {
+  graphQLServer.get('/sitemap.xml', async function (req, res) {
+    //Creating SiteMap.
+    const siteMapUrls = await getSiteMapUrls()
+    var sitemap = siteMap.createSitemap({
+      hostname: Meteor.absoluteUrl(),
+      cacheTime: 600000,        // 600 sec - cache purge period
+      urls: siteMapUrls
+    });
+    sitemap.toXML(function (err, xml) {
       if (err) {
         return res.status(500).end();
       }
       res.header('Content-Type', 'application/xml');
-      res.send( xml );
+      res.send(xml);
     });
   });
   var tokens = new Tokens()
@@ -441,23 +439,27 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
               });
               break;
             }
-            case "PORTFOLIO_IDEA_IMG":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
-              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                let ideaImage={fileUrl: resp, fileName:file.name};
-                if(data.isCreate){
-                  MlResolver.MlMutationResolver['createIdea'](null,{
-                      idea:{
-                        title: data.idea.title,
-                        ideaDescription: data.idea.ideaDescription,
-                        isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
-                        isIdeaPrivate: data.idea.isIdeaTitlePrivate,
-                        isActive: true,
-                        ideaImage:ideaImage
-                      },
-                    }, context, null);
-                }else{
-                  MlResolver.MlMutationResolver['updateIdea'](null,{idea:{ideaImage:ideaImage}, portfolioId:data.portfolioId, ideaId:data.ideaId}, context, null);
+            case "PORTFOLIO_IDEA_IMG": {
+              imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
+              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+                let ideaImage = {fileUrl: resp, fileName: file.name};
+                if (data.isCreate) {
+                  MlResolver.MlMutationResolver['createIdea'](null, {
+                    idea: {
+                      title: data.idea.title,
+                      ideaDescription: data.idea.ideaDescription,
+                      isIdeaTitlePrivate: data.idea.isIdeaTitlePrivate,
+                      isIdeaPrivate: data.idea.isIdeaTitlePrivate,
+                      isActive: true,
+                      ideaImage: ideaImage
+                    },
+                  }, context, null);
+                } else {
+                  MlResolver.MlMutationResolver['updateIdea'](null, {
+                    idea: {ideaImage: ideaImage},
+                    portfolioId: data.portfolioId,
+                    ideaId: data.ideaId
+                  }, context, null);
                 }
               });
               break;

@@ -112,6 +112,8 @@ html(prefix='og: http://ogp.me/ns#')
               li
                 a.ms_btn_ye(href='#' + list.name onclick='something("' + list.className + '",this)') #{list.name}
             li
+        .clear
+        .ms_content.mCustomScrollbar(data-mcs-theme='minimal-dark')
           .pages
             .pageManagement
               include management
@@ -143,35 +145,26 @@ html(prefix='og: http://ogp.me/ns#')
                 if(aboutDiscription && aboutDiscription.length  > 0 )
                   p
                     | !{aboutDiscription}
-                    h3 Past winners have included:
-                      .img_list
-                        img(src='/images/list_img_01.png')
-                        img(src='/images/list_img_01.png')
-                        img(src='/images/list_img_01.png')
-                        img(src='/images/list_img_01.png')
-                        img(src='/images/list_img_01.png')
+
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
               else
                  h2 Private Content
 
-
-
-          .register_block
-            p
-              strong
-                | To view more details and to collaborate with #{space}
-                span.m_red #{displayName}
-            a.ms_btn_re(href='/login') Login
-            |  or #{space}
-            a.ms_btn_re(href='https://www.moolya.global/register') Register
-            br
-            b
-              | on #{space}
-              span.m_red m
-              span.m_yel oo
-              span.m_red lya
+      .footer
+        p
+          strong
+            | To view more details and to collaborate with
+            span.m_red Benjamin Franklin
+        a.ms_btn_re(href='/login') Login
+        |  or
+        a.ms_btn_re(href='https://www.moolya.global/register') Register
+        b
+          | on #{space}
+          span.m_red m
+          span.m_yel oo
+          span.m_red lya
           script.
             $('.pages').children().css('display', 'none');
             $('.pageAboutDiscription').css('display', 'block');

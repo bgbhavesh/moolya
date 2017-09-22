@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import ScrollArea from 'react-scrollbar';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter'
 
 export default class MlAnchorObjective extends React.PureComponent {
@@ -42,7 +43,7 @@ export default class MlAnchorObjective extends React.PureComponent {
     });
 
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
+    $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
   }
 
   sendDataToParent(data){
@@ -80,6 +81,7 @@ export default class MlAnchorObjective extends React.PureComponent {
     return this.state.objectiveFormArray.map((objectiveForm, index) => {
       const { description, status } = objectiveForm;
       return (
+
         <div key={index} className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
           <div className="panel panel-default">
             <div className="panel-heading">Objective
@@ -103,6 +105,7 @@ export default class MlAnchorObjective extends React.PureComponent {
             </div>
           </div>
         </div>
+
       );
     });
   }
@@ -110,7 +113,14 @@ export default class MlAnchorObjective extends React.PureComponent {
   render() {
     return (
       <div className="col-md-12 nopadding">
+        <div className="left_wrap">
+          <ScrollArea
+            speed={0.8}
+            className="left_wrap"
+          >
         {this.renderObjectiveFormArray()}
+          </ScrollArea>
+        </div>
       </div>
     )
   }

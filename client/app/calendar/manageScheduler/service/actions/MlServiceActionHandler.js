@@ -238,6 +238,7 @@ export async function fetchServicesActionHandler (profileId) {
         }
         noOfSession
         status
+        isLive
       }
     }
     `,

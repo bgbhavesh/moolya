@@ -27,13 +27,13 @@ let favourites = `
     
     type Query{
         fetchFavourites:[FavouriteUser]
-        fetchFavouritesByPortfolio(portfolioId: String, communityCode: String): [FavouriteUser]
+        fetchFavouritesByReg(registrationId: String, communityCode: String): [FavouriteUser]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],favourites]);
 /**admin API data*/
 let supportedApi = [
-  {api:'fetchFavouritesByPortfolio', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true} //temp making white list
+  {api:'fetchFavouritesByReg', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true} //temp making white list
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

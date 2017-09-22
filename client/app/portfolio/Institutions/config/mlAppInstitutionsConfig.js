@@ -50,6 +50,8 @@ export const mlAppInstitutionConfig = new MlAppViewer({
                         views
                         followings
                         profileImage
+                        isDefaultSubChapter
+                        subChapterName
                       }
                     }
                 }

@@ -261,7 +261,7 @@ table{background: #fff;}
 .table>thead>tr>th{color: #ef4647;}
 .table-bordered>tbody>tr>td{border-bottom: 0px;border-left: 0px;}
 .react-bs-table .table-bordered > thead > tr > th{border-bottom-width: 1px !important;border-left-width: 0px;}
-.table-hover>tbody>tr:hover{background-color: #feeebf;cursor: pointer;}
+.table-hover>tbody>tr:hover{background-color: #ffe144;cursor: pointer;}
 .ml_tabs ul.nav{border-bottom: 2px solid #ef4647;margin-bottom: 15px;}
 .nav-pills>li>a{border-radius: 4px 4px 0px 0px;color: #273545;padding: 4px 15px;background: #B9C5CC;border: #96a2a9 solid 1px;border-bottom: none;font-size: 14px;}
 .nav-pills>li>a:hover{background-color: #B9C5CC !important;}
@@ -1003,10 +1003,10 @@ button:focus{outline: 0;}
 .comments-list {position: relative; }
 
 .comments-list .ml_btn{padding: 5px;}
-.comments-list .ml_btn .cancel_btn{height: 25px;font-size: 12px;line-height: 25px;}
+.comments-list .ml_btn .cancel_btn{height: 25px;font-size: 12px;line-height: 25px;cursor: pointer;}
 .comments-list .ml_btn .cancel_btn:before{    border-width: 12px 10px 13px 0px;}
 .comments-list .ml_btn .cancel_btn:after{    border-width: 12px 0 13px 10px;}
-.comments-list .ml_btn .save_btn{height: 25px;font-size: 12px;line-height: 25px;}
+.comments-list .ml_btn .save_btn{height: 25px;font-size: 12px;line-height: 25px;cursor: pointer;}
 .comments-list .ml_btn .save_btn:before{    border-width: 12px 10px 13px 0px;}
 .comments-list .ml_btn .save_btn:after{    border-width: 12px 0 13px 10px;}
 

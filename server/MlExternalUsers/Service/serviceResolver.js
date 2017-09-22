@@ -19,7 +19,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
       profileId:portfolio.profileId,
       isCurrentVersion: true,
       isBeSpoke: false,
-      isLive: true,
+      status: "Gone Live",
       validTill: { "$gte": new Date() }
     };
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();
@@ -177,6 +177,11 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
           args.Services[key] = service[key];
         }
       }
+      if(args.Services.isApproved) {
+        args.Services.status = "Admin Approved";
+      } else {
+        args.Services.status = "Rejected";
+      }
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
       if(result){
         let code = 200;
@@ -208,8 +213,7 @@ MlResolver.MlMutationResolver['updateServiceSendReview'] = (obj, args, context, 
     let response = new MlRespPayload().errorPayload('Service not found', code);
     return response
   }
-
-  let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: false, isReview: true}, {$set: 1}, context);
+  let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: false, isReview: true, status: "Send For Review"}, {$set: 1}, context);
   if(result){
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
@@ -230,12 +234,12 @@ MlResolver.MlMutationResolver['updateServiceGoLive'] = (obj, args, context, info
     let response = new MlRespPayload().errorPayload('Service not found', code);
     return response
   }
-  if(!service.isApproved){
+  if(!service.isApproved) {
     let code = 404;
     let response = new MlRespPayload().errorPayload('Service not activated, Please send for review', code);
     return response
   }
-  let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: true}, {$set: 1}, context);
+  let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
   if(result){
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);

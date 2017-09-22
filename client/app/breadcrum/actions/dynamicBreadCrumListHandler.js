@@ -90,10 +90,10 @@ function generateLink(path, RefID, moduleType, name) {
 
 function generateLinkForDashboardUrl(path, RefID, moduleType, index) {
   let postfix = '/';
-
-  if (moduleType === 'clusterId') postfix += 'chapters?viewMode=true';
-  else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode=true';
-  else if (moduleType === 'subChapterId') postfix += 'communities?viewMode=true';
+  let viewMode = FlowRouter.getQueryParam('viewMode') || 'true';
+  if (moduleType === 'clusterId') postfix += 'chapters?viewMode='+viewMode;
+  else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode='+viewMode;
+  else if (moduleType === 'subChapterId') postfix += 'communities?viewMode='+viewMode;
 
   if (path.includes(RefID)) {
     const url = path.split(RefID)[0];

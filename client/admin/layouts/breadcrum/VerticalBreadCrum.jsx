@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHandler';
+import ScrollArea from 'react-scrollbar'
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
@@ -14,9 +15,11 @@ export default class VerticalBreadCrum extends Component {
     this._isMounted = true;
     this.getHierarchyDetails();
   }
-
+  componentDidUpdate() {var WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));}
   componentWillUnmount() {
     this._isMounted = false;
+
   }
 
   setBreadCrumHierarchyCallback(list) {
@@ -33,7 +36,6 @@ export default class VerticalBreadCrum extends Component {
     const menuConfig = this.context.menu && this.context.menu.menu ? this.context.menu.menu : [];
     let breadCrum = null;
     const path = Object.assign(FlowRouter._current.path);
-
     if (this.props && this.props.breadcrum) {
       breadCrum = this.props.breadcrum;
 
@@ -45,21 +47,74 @@ export default class VerticalBreadCrum extends Component {
 
         if (module === 'Roles') module = 'Roles & Permissions';
 
+        if(breadCrum.type === 'documents' && breadCrum.document){
+          let breadCrumObject=[];
+          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
+            breadCrumObject.push({
+              linkName: properName((FlowRouter._current.oldRoute.path.split('documents/')[1]).split('List')[0]), linkId: breadCrum.type,linkUrl :FlowRouter._current.oldRoute.path
+            });
+          }
+
+          breadCrumObject.push({
+            linkName: properName(FlowRouter.getParam('docid')), linkId: 'module'
+          });
+
+          this.setBreadCrumHierarchyCallback(
+            breadCrumObject
+          );
+          return;
+        }
+
         let breadCrumObject = [
           { linkName: properName(breadCrum.type), linkId: breadCrum.type },
           { linkName: module, linkId: 'module' },
         ];
         if (breadCrum.subModule) {
+          if(breadCrum.subModule ==='stepCode'){
+            breadCrum.subModule = (FlowRouter.getParam('stepCode')).toLowerCase() || breadCrum.subModule;
+          }
+
           breadCrumObject.push({
             linkName: properName(breadCrum.subModule),
             // linkId: 'subModule',
           });
         }
 
-        breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig);
-        this.setBreadCrumHierarchyCallback(
-          breadCrumObject
-        );
+        if(breadCrum.subSubModule){
+          breadCrumObject.push({
+            linkName: properName(breadCrum.subSubModule)
+          });
+        }
+        if(breadCrum.subModule !=='stepCode')
+          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig);
+        else{
+          let modulePath = path.split('settings')[0] + 'settings/templatesList';
+          breadCrumObject[1].linkUrl = modulePath;
+          breadCrumObject[2].linkUrl = path;
+
+          breadCrumObject.slice(0,1);
+        }
+
+        if(breadCrum.dynamic){
+          const params = FlowRouter.current().params;
+          getBreadCrumListBasedOnhierarchy( breadCrum.subModule, params, (list)=>{
+
+            list.map(name=>{
+              breadCrumObject.push({linkName : name.linkName});
+            });
+
+            breadCrumObject[1].linkUrl = path.split( breadCrum.subModule.toLowerCase())[0] +  breadCrum.subModule.toLowerCase();
+            breadCrumObject[2].linkUrl = path.split( breadCrum.subModule.toLowerCase())[0] +  breadCrum.subModule.toLowerCase() + '/' + params['clusterId'] +"/chapters";
+
+            this.setBreadCrumHierarchyCallback(
+              breadCrumObject
+            );
+          });
+        }
+        else
+          this.setBreadCrumHierarchyCallback(
+            breadCrumObject
+          );
       }
     } else {
       const breadCrumObject = StaticBreadCrumListHandlerWithNoBredcum();
@@ -84,11 +139,21 @@ export default class VerticalBreadCrum extends Component {
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 
     return (
+
       <div className="vTimeline">
+        <div className="main_wrap_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+        >
         <ul>
           {list}
         </ul>
+        </ScrollArea>
+        </div>
       </div>
+
     );
   }
 }
@@ -124,11 +189,14 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
       if (each.startsWith('edit')) {
         const link = `${path.split('edit')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
+        if(breadCrum.transactionsRegistrations)
+          list[list.length - 1].linkUrl=  path.split('transactions')[0] +'transactions/'+   breadCrum.transactionsRegistrations;
+
         list.push({
           linkName: 'Edit',
           linkUrl: '',
         });
-      } else if (each.startsWith('add')) {
+      } else if (each.startsWith('add') && !each.startsWith('address')) {
         const link = `${path.split('add')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
         list.push({

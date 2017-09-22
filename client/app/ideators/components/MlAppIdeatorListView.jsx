@@ -40,28 +40,36 @@ export default class MlAppIdeatorListView extends Component {
           <div className="col-md-12">
             <h2>Ideators</h2>
           </div>
-            {data.map(function (ideator, idx) {
-              return (
-                <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-                  <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
-                    <div className="ideators_list_block">
-                      <div className="premium">
-                        <span>{ideator.accountType}</span>
-                      </div>
-                      <h3>{ideator.name}</h3>
-                      {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
-                        <div className="list_icon">
-                          <span className="ml my-ml-Ideator"></span>
-                        </div>}
-                      <p>{ideator.ideas[0].title}</p>
-                      <div className="block_footer">
-                        <span>{ideator.chapterName}{!ideator.isDefaultSubChapter?"-" +ideator.subChapterName:""}</span>
-                      </div>
+          {data && !data.length?
+            (<div className="alert alert-info col-md-8 col-md-offset-2 text-center" style={{'marginTop':'40px'}}>
+              There are no registrations to be shown here.
+            </div>):(
+              <div>
+                  {data.map(function (ideator, idx) {
+                  return (
+                    <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
+                      <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
+                        <div className="ideators_list_block">
+                          <div className="premium">
+                            <span>{ideator.accountType}</span>
+                          </div>
+                          <h3>{ideator.name}</h3>
+                          {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
+                            <div className="list_icon">
+                              <span className="ml my-ml-Ideator"></span>
+                            </div>}
+                          <p>{ideator.ideas[0].title}</p>
+                          <div className="block_footer">
+                            <span>{ideator.chapterName}</span>
+                          </div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                </div>
-              )
-            })}
+                  )
+                })};
+              </div>)
+          }
+
 
         </div>
       </div>

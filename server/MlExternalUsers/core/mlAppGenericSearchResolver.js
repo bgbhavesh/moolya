@@ -148,6 +148,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
       {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+     {
+       '$lookup': {
+         from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+         as: 'subChapter'
+       }
+     },
+     {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -168,7 +175,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
-          profileImage : "$user.profile.profileImage"
+          profileImage : "$user.profile.profileImage",
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -189,6 +198,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
       {
         '$lookup': {
+          from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+          as: 'subChapter'
+        }
+      },
+      {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
           as: 'user'
         }
@@ -207,7 +223,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           chapterId: '$port.chapterId',
           communityCode: '$port.communityCode',
           industryId: '$port.industryId',
-          profileImage : "$user.profile.profileImage"
+          profileImage : "$user.profile.profileImage",
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -233,6 +251,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
+          from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+          as: 'subChapter'
+        }
+      },
+      {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
       {
         '$lookup': {
           from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
@@ -356,7 +381,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           likes:{"$size":"$likes"},
           connections: { "$size": "$connection" },
           views:{"$size":"$views"},
-          followings:{"$size":"$followings"}
+          followings:{"$size":"$followings"},
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -411,6 +438,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {'$match': {"port.status": "PORT_LIVE_NOW", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
+          from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+          as: 'subChapter'
+        }
+      },
+      {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
           as: 'user'
         }
@@ -431,7 +465,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "chapterId": '$port.chapterId',
           "communityCode": '$port.communityCode',
           "industryId": '$port.industryId',
-          profileImage : "$user.profile.profileImage"
+          profileImage : "$user.profile.profileImage",
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -458,6 +494,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
       {
         '$lookup': {
+          from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+          as: 'subChapter'
+        }
+      },
+      {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
           from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
           as: 'likes'
         }
@@ -543,7 +586,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           likes:{"$size":"$likes"},
           connections: { "$size": "$connection" },
           views:{"$size":"$views"},
-          followings:{"$size":"$followings"}
+          followings:{"$size":"$followings"},
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -570,6 +615,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
       {
         '$lookup': {
+          from: 'mlSubChapters', localField: 'port.subChapterId', foreignField: '_id',
+          as: 'subChapter'
+        }
+      },
+      {'$unwind': {"path": "$subChapter", "preserveNullAndEmptyArrays": true}},
+      {
+        '$lookup': {
           from: 'mlLikes', localField: 'portfolioDetailsId', foreignField: 'resourceId',
           as: 'likes'
         }
@@ -655,7 +707,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           likes:{"$size":"$likes"},
           connections: { "$size": "$connection" },
           views:{"$size":"$views"},
-          followings:{"$size":"$followings"}
+          followings:{"$size":"$followings"},
+          subChapterName:"$subChapter.subChapterName",
+          isDefaultSubChapter:"$subChapter.isDefaultSubChapter"
         }
       },
       { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
@@ -738,6 +792,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
                   isActive: "$profile.isActive",
+                  accountType : "$profile.externalUserProfiles.accountType",
                   externalUserAdditionalInfo: {
                     $filter: {
                       input: "$profile.externalUserAdditionalInfo",
@@ -761,6 +816,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   chapterName:1,
                   portfolioId : 1,
                   isActive: 1,
+                  accountType : 1,
                   address: {
                     $filter: {
                       input: "$externalUserAdditionalInfo.addressInfo",
@@ -785,7 +841,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
-                  longitude: "$address.longitude"
+                  longitude: "$address.longitude",
+                  accountType : 1
                 }
               }
             ];
@@ -826,6 +883,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
+                  accountType : "$profile.externalUserProfiles.accountType",
                   isActive: "$profile.isActive",
                   externalUserAdditionalInfo: {
                     $filter: {
@@ -851,6 +909,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   portfolioId : 1,
                   profile:1,
                   isActive: 1,
+                  accountType:1,
                   address: {
                     $filter: {
                       input: "$externalUserAdditionalInfo.addressInfo",
@@ -875,6 +934,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityDefName:1,
                   chapterName:1,
                   isActive: 1,
+                  accountType:1,
                   latitude: "$address.latitude",
                   longitude: "$address.longitude"
                 }

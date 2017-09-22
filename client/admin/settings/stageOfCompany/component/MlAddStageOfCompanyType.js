@@ -45,8 +45,14 @@ class MlAddStageOfCompany extends React.Component {
       }
 
       const response = await addStageOfCompanyActionHandler(StageOfCompanyDetails)
-      toastr.success("Created Successfully")
-      return response;
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if (response.success) {
+        toastr.success("Created Successfully");
+        FlowRouter.go("/admin/settings/registration/stageOfCompanyList");
+      }
+      // toastr.success("Created Successfully")
+      // return response;
     }
   }
   componentDidMount()  {

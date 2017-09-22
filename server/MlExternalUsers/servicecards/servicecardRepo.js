@@ -414,8 +414,11 @@ class MlServiceCardRepo{
         service.isLive = false;
         service.isReview = false;
         service.isApproved = false;
+        service.isActive = false;
+        service.status = "In Active";
+        delete service.transactionId;
         delete service._id;
-        orderNumberGenService.createUserServiceOrderId(service);
+        orderNumberGenService.createServiceId(service);
         // Creating new version service card def
         let newScVersion = mlDBController.insert('MlServiceCardDefinition', service, context);
         if(!newScVersion){

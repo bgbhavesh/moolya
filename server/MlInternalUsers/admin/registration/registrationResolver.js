@@ -49,6 +49,11 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
+  /**Validate Office Bearer registration,Fix: MOOLYA-2690*/
+  validationCheck = MlRegistrationPreCondition.validateOFBCommunity(args.registration);
+  if (validationCheck && !validationCheck.isValid) {
+    return validationCheck.validationResponse;
+  }
 
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
@@ -217,6 +222,10 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     response = new MlRespPayload().errorPayload({message:"country is required"},400);
     return response;
   }
+  var user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
+  context.userId = user._id;
+  context.browser = 'Registration API'
+  context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
   var registrationExist = MlRegistration.findOne({
     "registrationInfo.email": args.registration.email,
@@ -230,10 +239,6 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return errResp;
   }
   else if (args.registration) {
-    let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
-    context.userId = user._id;
-    context.browser = 'Registration API'
-    context.url = Meteor.absoluteUrl("");
     args.registration.userName = args.registration.email;
     var emails = [{address: args.registration.userName, verified: false}];
     orderNumberGenService.assignRegistrationId(args.registration);
@@ -319,29 +324,38 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   }
 }
 
+/**
+ * @appHeader
+ * @Note 1) "getting user registrationId from its default profile"
+ *       2) "getting if any registration is other than pending or approved state"
+ * */
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
   let userId = context.userId
   if (userId) {
-    /**getting user registrationId from its default profile*/
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if (profile) {
       let registerId = profile.registrationId
       let username = mlDBController.findOne('users', {_id: userId}, context).username
       if (registerId) {
         var response = MlRegistration.findOne({"_id": registerId}) || {}
-        /**getting if any registration is other than pending or approved state*/
+
         let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
           "registrationInfo.userName": username,
-          "status": {$nin: ["REG_USER_APR",'REG_ADM_REJ', 'REG_USER_REJ']}
+          "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
-        if (_lodash.isEmpty(isAllowRegisterAs))
+        if (_lodash.isEmpty(isAllowRegisterAs) ||  (isAllowRegisterAs.registrationInfo.communityDefCode === "BRW"))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id
         }
 
-        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
+        if (response.status === "REG_USER_APR") {
+          response.isCalendar = true;
+        } else {
+          response.isCalendar = false;
+        }
+        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType ? response.registrationInfo.registrationType : ''
         response.registrationInfo.communityName = getCommunityName(communityCode);
         response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)
         response.profileImage = profile.profileImage
@@ -608,8 +622,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let email = registrationInfo.email
       var existingUser = mlDBController.findOne('users', {"username": email}, context)
       if (existingUser) {
-        let dob = args.details.dateOfBirth ? moment(args.details.dateOfBirth).startOf("day").toDate() : null
-        let gender = args.details.gender ? args.details.gender : null
+        let dob = args && args.details && args.details.dateOfBirth ? moment(args.details.dateOfBirth).startOf("day").toDate() : null
+        let gender = args && args.details && args.details.gender ? args.details.gender : null
         result = mlDBController.update('users', {username: email},
           {"profile.genderType": gender, "profile.dateOfBirth": dob}, {$set: true}, context)
       }
@@ -1801,7 +1815,11 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
-  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'REG_USER_APR','REG_ADM_REJ', 'REG_USER_REJ'] }}, context).fetch() || []
+  let resp = mlDBController.find('MlRegistration', {
+      'registrationInfo.userName': user.username,
+      "registrationInfo.communityDefCode": {$ne: "BRW"},
+      status: {$nin: ['REG_USER_APR', 'REG_ADM_REJ', 'REG_USER_REJ']}
+    }, context).fetch() || []
   return resp;
 }
 

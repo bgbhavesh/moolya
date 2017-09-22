@@ -84,6 +84,8 @@ export async function fetchServiceActionHandler (serviceId) {
         isBeSpoke
         isApproved
         isLive
+        isActive
+        serviceExpiry
         duration{
          hours
          minutes
@@ -236,6 +238,7 @@ export async function fetchServicesActionHandler (profileId) {
         }
         noOfSession
         status
+        isLive
       }
     }
     `,

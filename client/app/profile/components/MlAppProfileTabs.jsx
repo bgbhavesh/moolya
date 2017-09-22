@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";

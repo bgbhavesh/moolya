@@ -74,7 +74,7 @@ let connections = `
     type Query{
         fetchConnections:[ConnectedUser]
         fetchConnectionByTransaction(transactionId:String!):Connection
-        fetchConnectionsByPortfolio(portfolioId: String, communityCode: String): [ConnectedUser]
+        fetchConnectionsByReg(registrationId: String, communityCode: String): [ConnectedUser]
         fetchConnectionByUser: [MyConnectionUser]
     }
 `
@@ -83,6 +83,6 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],connections]);
 
 /**admin API data*/
 let supportedApi = [
-  {api:'fetchConnectionsByPortfolio', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true}  //temp making white list
+  {api:'fetchConnectionsByReg', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true}  //temp making white list
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

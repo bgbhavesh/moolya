@@ -10,8 +10,8 @@ import ScrollArea from "react-scrollbar";
 import MlUserContactDetails from "./MlUserContactDetails";
 import MlUserAddressDetails from "./MlUserAddressDetails";
 import MlUserEmailDetails from "./MlUserEmailDetails";
-import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
-import MlLoader from '../../../commons/components/loader/loader'
+import {findAddressBookActionHandler} from '../../actions/findUserAddressBookHandler'
+import MlLoader from '../../../../commons/components/loader/loader'
 
 export default class MlUsersAddressBook extends React.Component {
   constructor(props) {

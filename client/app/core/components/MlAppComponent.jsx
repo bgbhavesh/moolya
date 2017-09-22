@@ -21,6 +21,7 @@ class MlAppComponent extends Component{
     }
 
   shouldComponentUpdate(nextProps,nextState,nextContext){
+    console.log(nextProps,nextState,nextContext);
     // let path = Object.assign(FlowRouter._current.path);
     // let hierarchy = path.split('/app/');
     // if(hierarchy[1]){

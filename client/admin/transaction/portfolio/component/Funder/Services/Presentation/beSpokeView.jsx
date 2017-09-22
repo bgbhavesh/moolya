@@ -16,7 +16,11 @@ export default class  BeSpokeView extends Component {
   }
 
   saveData() {
-      let res = this.props.saveBeSpokeServiceDetails(true);
+    if(this.props.data){
+      this.props.updateBeSpokeData(true);
+    }else {
+      this.props.saveBeSpokeServiceDetails(true);
+    }
   }
 
   cancel(){
@@ -174,6 +178,8 @@ export default class  BeSpokeView extends Component {
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
+        <br className="clearfix"/>
+          <br className="clearfix"/>
         </div>
       </div>
     )

@@ -10,7 +10,6 @@ export default class MlAppointmentsDetailsComponent extends Component {
     const { data } = this.props;
     let appointmentId = data.appointmentId;
     let appointmentType = data.transactionType;
-    console.log(this.props);
     if (appointmentType === "Service-Purchased") {
       return (
         <MlAppServicePurchasedDetail orderId={appointmentId} />

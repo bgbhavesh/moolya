@@ -95,7 +95,7 @@ let service=`
     isActive: Boolean
     sessionFrequency: String
     duration: Duration
-    status: Boolean
+    status: String
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
@@ -163,7 +163,7 @@ let service=`
     sessionFrequency: String
     serviceExpiry: Int
     duration: Duration
-    status: Boolean
+    status: String
     transactionId: String
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]

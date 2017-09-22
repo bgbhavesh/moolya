@@ -780,6 +780,7 @@ let CoreModules = {
       depQuery = {$and: [{isMoolya: true}, {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}]}
     else if (!subChapter.isDefaultSubChapter)
       depQuery = {$and: [{"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}, {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', requestParams.subChapterId]}}}}]}
+    depQuery = mergeQueries(depQuery, userFilterQuery);
     let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
 
     resp.map(function (department) {

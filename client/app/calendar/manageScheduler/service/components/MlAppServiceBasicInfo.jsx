@@ -259,7 +259,7 @@ class MlAppServiceBasicInfo extends Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode || data.isActive}/>
+                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode && !this.props.canStatusChange }/>
                     <div className="slider"></div>
                   </label>
                 </div>

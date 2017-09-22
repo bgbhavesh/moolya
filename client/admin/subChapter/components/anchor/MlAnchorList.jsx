@@ -56,6 +56,10 @@ export default class MlAnchorList extends React.Component {
     this.onFileUpload = this.onFileUpload.bind(this);
     return this
   }
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+  }
 
   componentWillMount() {
     const resp = this.getAnchorUsers()
@@ -296,10 +300,16 @@ export default class MlAnchorList extends React.Component {
           <div className="form-group">
             <input type="text" value={this.state.socialLinkForm.socialLinkUrl || ''} onChange={(evt) => this.onSocialFormChange('socialLinkUrl', evt.target.value)} placeholder="Enter URL" className="form-control float-label"/>
           </div>
-          <div className="form-group">
-            <button onClick={this.onSaveSocialLink} type="button">Save</button>
-            <button type="button" onClick={this.onClearSocialLink}>Clear</button>
+          <div className="ml_icon_btn">
+            <a href="#" onClick={this.onSaveSocialLink}
+               className="save_btn"><span
+              className="ml ml-save"></span></a>
+            <a href="#" className="cancel_btn" onClick={this.onClearSocialLink}><span className="ml ml-delete"></span></a>
           </div>
+          {/*<div className="form-group">*/}
+            {/*<button onClick={this.onSaveSocialLink} type="button">Save</button>*/}
+            {/*<button type="button" onClick={this.onClearSocialLink}>Clear</button>*/}
+          {/*</div>*/}
         </div>
       </div>
     );

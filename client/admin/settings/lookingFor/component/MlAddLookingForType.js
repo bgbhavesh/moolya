@@ -59,8 +59,14 @@ class MlAddLookingFor extends React.Component {
       }
 
       const response = await addLookingForActionHandler(LookingForDetails)
-      toastr.success("Created Successfully");
-      return response;
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if (response.success) {
+        toastr.success("Created Successfully");
+        FlowRouter.go("/admin/settings/registration/lookingForList");
+      }
+      // toastr.success("Created Successfully");
+      // return response;
     }
   }
   componentDidMount()  {

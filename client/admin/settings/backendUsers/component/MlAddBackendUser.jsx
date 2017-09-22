@@ -13,7 +13,7 @@ import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import Datetime from "react-datetime";
 import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
 import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
@@ -92,6 +92,9 @@ class MlAddBackendUser extends React.Component {
 
   async  createBackendUser() {
     let ret = mlFieldValidations(this.refs)
+    if (!this.refs.email.value || !validatedEmailId(this.refs.email.value)) {
+      return toastr.error('Please enter a valid email address');
+    }
     if (ret) {
       toastr.error(ret);
     } else {
@@ -328,7 +331,7 @@ class MlAddBackendUser extends React.Component {
                       <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is Required"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
+                      <input type="email" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
                     </div>
 
                     <div className="form-group mandatory">

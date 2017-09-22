@@ -102,6 +102,7 @@ class MlAppServiceManageSchedule extends Component {
     this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
     this.cloneServiceCard = this.cloneServiceCard.bind(this);
     this.setServiceExpiry = this.setServiceExpiry.bind(this);
+    this.activateComponent = this.activateComponent.bind(this);
   }
 
   componentWillMount() {
@@ -130,6 +131,12 @@ class MlAppServiceManageSchedule extends Component {
   getRedirectServiceList(isRedirect) {
     this.setState({ isRedirect: isRedirect });
   }
+
+  activateComponent(index) {
+    this.setState({
+      currentComponent: index
+    })
+  }
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
@@ -157,6 +164,7 @@ class MlAppServiceManageSchedule extends Component {
           clusterCode={clusterCode}
           clusterName={clusterName}
           clusters={clusters}
+          activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           clusterData={this.state.clusterData}
           daysRemaining={daysRemaining}
@@ -179,6 +187,7 @@ class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
           profileId={this.profileId}
           serviceId={this.serviceId}
+          activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           deleteSelectedTask={this.deleteSelectedTask}
           getServiceDetails={this.getServiceDetails}
@@ -195,6 +204,7 @@ class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
           attachments={attachments}
           viewMode={this.props.viewMode}
+          activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           onChangeCheckBox={this.onChangeCheckBox}
           onChangeValue={this.onChangeValue}
@@ -208,6 +218,7 @@ class MlAppServiceManageSchedule extends Component {
           finalAmount={finalAmount}
           prevFinalAmount={prevFinalAmount}
           viewMode={this.props.viewMode}
+          activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           getServiceDetails={this.getServiceDetails}
           facilitationCharge={facilitationCharge}
@@ -539,28 +550,36 @@ class MlAppServiceManageSchedule extends Component {
   }
 
   isDataValid(serviceBasicInfo) {
-    if (!serviceBasicInfo.name) {
-      toastr.error('Service name is mandatory');
-      return false;
-    }
-    if (!serviceBasicInfo.displayName) {
-      toastr.error('Display name is mandatory');
-      return false;
-    }
-    if (!serviceBasicInfo.validTill) {
-      toastr.error('Valid till is mandatory');
-      return false;
-    }
-    if (!(serviceBasicInfo.state && serviceBasicInfo.state.length)) {
-      toastr.error('State is mandatory');
-      return false;
-    }
-    if (!(serviceBasicInfo.chapters && serviceBasicInfo.chapters.length)) {
-      toastr.error('City is mandatory');
-      return false;
-    } if (!(serviceBasicInfo.community && serviceBasicInfo.community.length)) {
-      toastr.error('Community is mandatory');
-      return false;
+    if (this.state.currentComponent === 0) {
+      if (!serviceBasicInfo.name) {
+        toastr.error('Service name is mandatory');
+        return false;
+      }
+      if (!serviceBasicInfo.displayName) {
+        toastr.error('Display name is mandatory');
+        return false;
+      }
+      if (!serviceBasicInfo.validTill) {
+        toastr.error('Valid till is mandatory');
+        return false;
+      }
+      if (!(serviceBasicInfo.state && serviceBasicInfo.state.length)) {
+        toastr.error('State is mandatory');
+        return false;
+      }
+      if (!serviceBasicInfo.chapters) {
+        if (!(serviceBasicInfo.city && serviceBasicInfo.city.length)) {
+          toastr.error('City is mandatory');
+          return false;
+        }
+      } else if (!(serviceBasicInfo.chapters && serviceBasicInfo.chapters.length)) {
+        toastr.error('City is mandatory');
+        return false;
+      }
+      if (!(serviceBasicInfo.community && serviceBasicInfo.community.length)) {
+        toastr.error('Community is mandatory');
+        return false;
+      }
     }
     return true;
   }

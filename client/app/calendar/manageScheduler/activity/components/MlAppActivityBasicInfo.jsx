@@ -10,10 +10,10 @@
  */
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../commons/components/MlAppSelectWrapper'
+import Moolyaselect from '../../../../commons/components/MlAppSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import { multipartASyncFormHandler } from '../../../../../commons/MlMultipartFormAction'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
@@ -24,38 +24,38 @@ import CropperModal from '../../../../../commons/components/cropperModal';
  * Initialize conversation types
  */
 const options = [
-  {value: 'audio', label: 'Audio'},
-  {value: 'video', label: 'Video'},
-  {value: 'meetup', label: 'MeetUp'}
+  { value: 'audio', label: 'Audio' },
+  { value: 'video', label: 'Video' },
+  { value: 'meetup', label: 'MeetUp' }
 ];
 
-export default class MlAppBasicInfo extends React.Component{
+export default class MlAppBasicInfo extends React.Component {
 
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state ={
-      basicData : {
-        name                  : "",
-        displayName           : "",
-        isInternal            : false,
-        isExternal            : false,
-        isActive              : false,
-        mode                  : "online",
-        isServiceCardEligible : false,
-        industryTypes         : [],
-        duration              : {},
-        deliverable           : [''],
-        note                  : '',
-        imageLink             : '',
-        conversation          : []
+    this.state = {
+      basicData: {
+        name: "",
+        displayName: "",
+        isInternal: false,
+        isExternal: false,
+        isActive: false,
+        mode: "online",
+        isServiceCardEligible: false,
+        industryTypes: [],
+        duration: {},
+        deliverable: [''],
+        note: '',
+        imageLink: '',
+        conversation: []
       },
       showProfileModal: false,
       uploadingAvatar: false,
-      isDataChanged:false,
+      isDataChanged: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -71,11 +71,12 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc :: Set basic date in steps from props
    * @param props :: Object - Parents data
    */
-  componentWillReceiveProps(props){
+  componentWillReceiveProps(props) {
     let id = FlowRouter.getQueryParam('id');
-    if(id) {
+    if (id) {
       this.setState({
         basicData: props.data,
+        isDataChanged: false,
       }, () => {
         this.saveDetails();
       });
@@ -92,7 +93,7 @@ export default class MlAppBasicInfo extends React.Component{
     let data = this.state.basicData;
     data.industryTypes = value;
     this.setState({
-      isDataChanged:true,basicData: data
+      isDataChanged: true, basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -110,7 +111,7 @@ export default class MlAppBasicInfo extends React.Component{
       return data.value;
     });
     this.setState({
-      isDataChanged:true,basicData: data
+      isDataChanged: true, basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -125,12 +126,12 @@ export default class MlAppBasicInfo extends React.Component{
    * @param type :: String :: type of duration hours or minutes
    * @returns Void
    */
-  updateDuration(evt, type){
-    if(evt.target.value >= 0 ) {
+  updateDuration(evt, type) {
+    if (evt.target.value >= 0) {
       let data = this.state.basicData;
       data.duration[type] = evt.target.value;
       this.setState({
-        isDataChanged:true,basicData: data
+        isDataChanged: true, basicData: data
       }, () => {
         this.saveDetails();
       });
@@ -144,11 +145,11 @@ export default class MlAppBasicInfo extends React.Component{
    * @param evt  :: Object :: javascript event object
    * @returns Void
    */
-  textFieldSaves(type,evt){
+  textFieldSaves(type, evt) {
     let data = this.state.basicData;
     data[type] = evt.target.value;
     this.setState({
-      isDataChanged:true,basicData: data
+      isDataChanged: true, basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -161,11 +162,11 @@ export default class MlAppBasicInfo extends React.Component{
    * @param evt  :: Object :: javascript event object
    * @returns Void
    */
-  checkBoxHandler(type,evt){
+  checkBoxHandler(type, evt) {
     let data = this.state.basicData;
     data[type] = evt.target.checked;
     this.setState({
-      isDataChanged:true,basicData: data
+      isDataChanged: true, basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -177,15 +178,15 @@ export default class MlAppBasicInfo extends React.Component{
    * @param evt  :: Object - javascript event object
    * @returns Void
    */
-  changeMode(evt){
+  changeMode(evt) {
     let data = this.state.basicData;
-    if(evt.target.checked){
+    if (evt.target.checked) {
       data.mode = 'offline';
     } else {
       data.mode = 'online';
     }
     this.setState({
-      isDataChanged:true,basicData: data
+      isDataChanged: true, basicData: data
     }, () => {
       this.saveDetails();
     });
@@ -200,12 +201,12 @@ export default class MlAppBasicInfo extends React.Component{
     const that = this;
     let user = {
       profile: {
-        InternalUprofile: {moolyaProfile: {profileImage: " "}}
+        InternalUprofile: { moolyaProfile: { profileImage: " " } }
       }
     };
     // let file = document.getElementById("upload_hex").files[0];
     if (file) {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user};
+      let data = { moduleName: "PROFILE", actionName: "UPDATE", user: user };
 
       /**
        * Call the multipartASyncFormHandler to upload file
@@ -216,18 +217,18 @@ export default class MlAppBasicInfo extends React.Component{
           uploadingAvatar: false,
           showProfileModal: false
         });
-        if(res.success){
+        if (res.success) {
           let data = that.state.basicData;
           data.imageLink = res.result;
           that.setState({
-            isDataChanged:true,basicData : data
+            isDataChanged: true, basicData: data
           }, () => {
             that.saveDetails();
           });
         }
       });
       return response;
-    }else{
+    } else {
       this.setState({
         uploadingAvatar: false,
       });
@@ -239,7 +240,7 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc   :: save activity details
    * @returns Void
    */
-  saveDetails(){
+  saveDetails() {
     const that = this;
     let data = that.state.basicData;
     that.props.setActivityDetails(data, true);
@@ -258,7 +259,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
-      isDataChanged:true,basicData: basicData
+      isDataChanged: true, basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -271,13 +272,13 @@ export default class MlAppBasicInfo extends React.Component{
    * @param evt   :: Object  - javascript event object
    * @returns Void
    */
-  removeDeliverables(index,evt) {
+  removeDeliverables(index, evt) {
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
     deliverable.splice(index, 1);
     basicData.deliverable = deliverable;
     this.setState({
-      isDataChanged:true,basicData: basicData
+      isDataChanged: true, basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -296,7 +297,7 @@ export default class MlAppBasicInfo extends React.Component{
     deliverable[index] = evt.target.value;
     basicData.deliverable = deliverable;
     this.setState({
-      isDataChanged:true,basicData: basicData
+      isDataChanged: true, basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -310,7 +311,7 @@ export default class MlAppBasicInfo extends React.Component{
 
     $('.float-label').jvFloat();
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(260+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (260 + $('.app_header').outerHeight(true)));
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
@@ -352,59 +353,59 @@ export default class MlAppBasicInfo extends React.Component{
      */
     return (
       <div className="step_form_wrap step1">
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Activity Name" value={( that.state.basicData.name ? that.state.basicData.name : '' )} onChange={this.textFieldSaves.bind(that,"name")}/>
+                  <input className="form-control float-label" placeholder="Activity Name" value={(that.state.basicData.name ? that.state.basicData.name : '')} onChange={this.textFieldSaves.bind(that, "name")} />
                 </div>
                 <div className="form-group">
                   <label>Activity type</label>
-                  <br className="brclear"/>
+                  <br className="brclear" />
                   <div className="input_types">
-                    <input id="internalCheckbox" name="internalCheckbox" type="checkbox"  onChange={that.checkBoxHandler.bind(that, "isInternal")} checked={this.state.basicData.isInternal} value="Internal"/>
+                    <input id="internalCheckbox" name="internalCheckbox" type="checkbox" onChange={that.checkBoxHandler.bind(that, "isInternal")} checked={this.state.basicData.isInternal} value="Internal" />
                     <label htmlFor="internalCheckbox">
                       <span><span></span></span>
                       Internal
                     </label>
                   </div>
                   <div className="input_types">
-                    <input id="externalCheckbox" name="externalCheckbox" type="checkbox"  onChange={that.checkBoxHandler.bind(that, "isExternal")} checked={this.state.basicData.isExternal} value="External"/>
+                    <input id="externalCheckbox" name="externalCheckbox" type="checkbox" onChange={that.checkBoxHandler.bind(that, "isExternal")} checked={this.state.basicData.isExternal} value="External" />
                     <label htmlFor="externalCheckbox">
                       <span><span></span></span>
                       External
                     </label>
                   </div>
-                  <br className="brclear"/>
+                  <br className="brclear" />
                 </div>
                 <div className="form-group">
                   <span className="placeHolder active">Conversation type</span>
                   <div className="form-group">
                     <Select name="form-field-name"
-                            multi={true}
-                            disabled={that.state.basicData.mode !== 'online'}
-                            valueKey={'value'}
-                            labelKey={'label'}
-                            options={options}
-                            value={this.state.basicData.conversation}
-                            placeholder='Conversation Type'
-                            onChange={this.updateConversation.bind(this)} />
+                      multi={true}
+                      disabled={that.state.basicData.mode !== 'online'}
+                      valueKey={'value'}
+                      labelKey={'label'}
+                      options={options}
+                      value={this.state.basicData.conversation}
+                      placeholder='Conversation Type'
+                      onChange={this.updateConversation.bind(this)} />
                   </div>
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Notes" value={that.state.basicData.note} onChange={that.textFieldSaves.bind(that, "note")}></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Duration: &nbsp;</label>
-                      <input type="Number" onChange={(evt)=>that.updateDuration(evt , 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : '' }  className="form-control inline_input"/>
+                  <label>Duration: &nbsp;
+                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : ''} className="form-control inline_input" />
                     Hours
 
 
 
-                      <input type="Number" onChange={(evt)=>that.updateDuration(evt , 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : '' }  className="form-control inline_input"/>
+                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : ''} className="form-control inline_input" />
                     Mins
-                  
+                  </label>
                 </div>
               </form>
             </div>
@@ -413,7 +414,7 @@ export default class MlAppBasicInfo extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Display Name" value={that.state.basicData.displayName} onChange={that.textFieldSaves.bind(that,"displayName")}/>
+                  <input className="form-control float-label" placeholder="Display Name" value={that.state.basicData.displayName} onChange={that.textFieldSaves.bind(that, "displayName")} />
                 </div>
                 <br className="brclear" />
                 <div className="form-group switch_wrap switch_names inline_switch">
@@ -422,7 +423,7 @@ export default class MlAppBasicInfo extends React.Component{
                     Online
                   </span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox" checked={this.state.basicData.mode !== 'online'} onChange={(evt) => that.changeMode(evt)}/>
+                    <input type="checkbox" checked={this.state.basicData.mode !== 'online'} onChange={(evt) => that.changeMode(evt)} />
                     <div className="slider"></div>
                   </label>
                   <span className={this.state.basicData.mode == 'offline' ? "state_label acLabel" : "state_label"}>
@@ -431,14 +432,14 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <br className="brclear" />
                 <Moolyaselect multiSelect={true}
-                              className="form-control float-label"
-                              valueKey={'value'}
-                              labelKey={'label'}
-                              queryType={"graphql"}
-                              query={industryTypeQuery}Moolyaselect
-                              isDynamic={true} placeholder="Select Industry Type"
-                              onSelect={that.selectIndustry.bind(that)}
-                              selectedValue={that.state.basicData.industryTypes}
+                  className="form-control float-label"
+                  valueKey={'value'}
+                  labelKey={'label'}
+                  queryType={"graphql"}
+                  query={industryTypeQuery} Moolyaselect
+                  isDynamic={true} placeholder="Select Industry Type"
+                  onSelect={that.selectIndustry.bind(that)}
+                  selectedValue={that.state.basicData.industryTypes}
                 />
 
                 {/*<div className="previewImg ProfileImg">
@@ -451,18 +452,18 @@ export default class MlAppBasicInfo extends React.Component{
                   </div>
                   <br className="brclear"/>*/}
                   <div className="upload_hex">
-                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah"  onClick={this.toggleModal.bind(this)} width="105" height="auto"/>
+                    <img src={that.state.basicData.imageLink ? that.state.basicData.imageLink : '/images/images.png'} id="blah" onClick={this.toggleModal.bind(this)} width="105" height="auto" />
                     {/*<input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>*/}
                   </div>
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" disabled={!that.state.basicData.isExternal} checked={that.state.basicData.isServiceCardEligible && that.state.basicData.isExternal } onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
+                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" disabled={!that.state.basicData.isExternal} checked={that.state.basicData.isServiceCardEligible && that.state.basicData.isExternal} onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")} />
                     <label htmlFor="isServiceCardEligible" ><span><span></span></span>
                       Eligible for service card
                     </label>
                   </div>
-                  <br className="brclear"/>
+                  <br className="brclear" />
                 </div>
               </form>
             </div>
@@ -474,19 +475,19 @@ export default class MlAppBasicInfo extends React.Component{
             show={this.state.showProfileModal}
             toggleShow={this.toggleModal}
           />
-          <br className="brclear"/>
+          <br className="brclear" />
           {that.state.basicData.deliverable.map(function (data, index) {
             return (
               <div className="panel panel-default" key={index}>
                 <div className="panel-heading">
                   Deliverables
                   <span className="see-more pull-right">
-                    <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
-                    <FontAwesome name='minus-square' hidden={ index == 0 } onClick={that.removeDeliverables.bind(that,index)} />
+                    <FontAwesome name='plus-square' hidden={index !== 0} onClick={that.addDeliverables.bind(that, index)} />
+                    <FontAwesome name='minus-square' hidden={index == 0} onClick={that.removeDeliverables.bind(that, index)} />
                   </span>
                 </div>
                 <div className="panel-body">
-                  <textarea className="form-control" value={data} onChange={(evt) => that.deliverableData(evt,index)}></textarea>
+                  <textarea className="form-control" value={data} onChange={(evt) => that.deliverableData(evt, index)}></textarea>
                 </div>
               </div>
             )

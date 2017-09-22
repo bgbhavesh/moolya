@@ -1,17 +1,49 @@
 import React, { Component } from 'react';
-import SessionAppointmentInfo from './MlAppServiceSessionAppointmentnfo';
+import { fetchAdminSessionAppointment } from '../../action/fetchAdminSessionAppointment';
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orderId: '1'
+      orderId: props.orderId,
+      data: {
+        client: {},
+        service:{},
+        owner: {},
+        sessionInfo: []
+      }
     };
-
+    this.fetchServiceSessionAppointments = this.fetchServiceSessionAppointments.bind(this);
   }
 
-  componetWillReceiveProps(nextProps) {
-    console.log(nextProps);
+  componentWillReceiveProps({ orderId }) {
+    this.setState({ orderId }, () => {
+      this.fetchServiceSessionAppointments();
+    })
+  }
+
+  componentWillMount() {
+    this.fetchServiceSessionAppointments();
+  }
+
+  async fetchServiceSessionAppointments() {
+    if (this.state.orderId) {
+      console.log('Fetching session appointment info');
+      let response = await fetchAdminSessionAppointment(this.state.orderId);
+      if (response && response.success) {
+        console.log('Got information. storing in state');
+        let data = JSON.parse(response.result);
+        data = data[0] ? data[0] : {};
+        data.client = data.client ? data.client : {};
+        data.owner = data.owner ? data.owner : {};
+        data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
+        this.setState({
+          data
+        }, () => {
+          console.log(JSON.stringify(this.state, null, 4));
+        });
+      }
+    }
   }
 
   render() {
@@ -36,36 +68,36 @@ export default class MlAppServiceSessionAppointment extends Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" defaultValue="moo1234" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User Id" value={this.state.data.client.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue="Tr12345678" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" defaultValue="Varun K" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Name" value={this.state.data.client.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue="varun.k@gmail.com" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email ID" value={this.state.data.client.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" defaultValue="9848565852" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Phone no" value={this.state.data.client.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="India" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={this.state.data.client.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="Hyderabad" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={this.state.data.client.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue="Moolya" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Sub Chapter" value={this.state.data.client.subChapter} defaultValue="Moolya" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="Funder" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={this.state.data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="panel panel-default cancel_app" style={{ 'display': 'none' }}>
                   <div className="panel-heading">Cancel an appointment</div>
@@ -123,51 +155,51 @@ export default class MlAppServiceSessionAppointment extends Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment Id" defaultValue="moo1234" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment Id" value={this.state.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment date & Time" defaultValue="27th May 2016, 10:30:00 AM IST" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue="Moo2132" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment With" defaultValue="Varun K" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment With" value={this.state.data.owner.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User ID" defaultValue="moo1234" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User ID" value={this.state.data.owner.profileId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="Service Provider" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={this.state.data.owner.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue="Moolya" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Sub Chapter" value={this.state.data.owner.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="Hyderabad" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={this.state.data.owner.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="India" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={this.state.data.owner.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Contact Number" defaultValue="984826565" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Contact Number" value={this.state.data.owner.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue="moolya@gmail.com" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email ID" value={this.state.data.owner.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Gender" defaultValue="male" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Gender" value={this.state.data.owner.gender} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
 
             </div>
           </div>
-          <div className="tab-pane active" id={`${this.state.orderId}3a`}>
+          <div className="tab-pane" id={`${this.state.orderId}3a`}>
             <p>Take from this page "appFunderMyAppointment"</p>
           </div>
-          <div className="tab-pane active" id={`${this.state.orderId}4a`}>
+          <div className="tab-pane" id={`${this.state.orderId}4a`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">

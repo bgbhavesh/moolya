@@ -128,8 +128,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
   // Serving static pages.
   graphQLServer.get(config.microSite, async function (req, res, next) {
-      if (!(req.url.includes('login'))) {
-        if (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token')) {
+      if (!(req.url.includes('login') || req.url === '/')) {
+        if (typeof req.headers.cookie === 'undefined' || (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token'))) {
           const pathName = req.url;
           const originalUrl = req.originalUrl;
           let proto = req.protocol;

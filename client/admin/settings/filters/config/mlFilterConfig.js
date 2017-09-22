@@ -36,6 +36,15 @@ function subChapterFormatter(data){
     return <div>All</div>;
   }
 }*/
+function updateStatusFormat (data){
+  let status=data&&data.data&&data.data.isActive;
+  if(status){
+    return <div>Active</div>;
+  }
+  else {
+    return <div>InActive</div>
+  }
+}
 
 const mlFilterTableConfig=new MlViewer.View({
   name:"filterTable",
@@ -53,7 +62,7 @@ const mlFilterTableConfig=new MlViewer.View({
     {dataField: "filterName", title: "Filter Name",dataSort:true},
     {dataField: "filterDescription", title: "Filter Description",dataSort:true},
     {dataField: "moduleName", title: "Module Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true}
+    {dataField: "isActive", title: "Active",dataSort:true,customComponent:updateStatusFormat}
 
   ], //@departmentsFormatter,@chapterFormatter,@subChapterFormatter custom functions for looping an array and displaying data in table
   tableHeaderClass:'react_table_head',

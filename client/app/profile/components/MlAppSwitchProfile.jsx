@@ -161,6 +161,7 @@ componentDidUpdate(){
                        <span className={prf.communityImage}></span>
                        <br />
                         {prf.communityDefName?prf.communityDefName:""}{prf.identityType?(<text>_{prf.identityType}</text>):""}
+                        <br />{prf.subChapterName?prf.subChapterName:""}
                         <br />{prf.chapterName?prf.chapterName:""}{prf.clusterName?(<text>_{prf.clusterName}</text>):""}
                         {prf.accountType?(<h2>Subscription: {prf.accountType}</h2>):""}<br />
                       </div>

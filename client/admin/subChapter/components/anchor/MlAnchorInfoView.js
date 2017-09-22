@@ -40,9 +40,14 @@ export default class MlAnchorInfoView extends React.Component {
     });
   }
   componentDidUpdate(){
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var dHeight = this.props.isAdmin ? 200 : 200
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(200+$('.app_header').outerHeight(true)));
-
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.left_wrap').height(WinHeight - (dHeight + $('.' + className).outerHeight(true)));
+    // var WinHeight = $(window).height();
+    // $('.left_wrap').height(WinHeight-(200+$('.app_header').outerHeight(true)));
   }
 
   handleUserClick(id) {

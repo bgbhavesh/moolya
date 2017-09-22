@@ -15,6 +15,8 @@ let ideatorPortfolioSchema = `
         name:String
         communityType : String
         profileImage        : String
+        isDefaultSubChapter : Boolean
+        subChapterName : String
     }
     type ideasOutput{
         _id:String,

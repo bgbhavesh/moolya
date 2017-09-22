@@ -126,6 +126,9 @@ export default class MlCommunityList extends Component {
           <a href={dashboardRoutes.userListRoute(clusterId, chapterId, subChapterId, prop.portfolioId, icon)}>
             <div className="ideators_list_block">
               {/*<div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>*/}
+              <div className="premium">
+                <span>{prop.accountType}</span>
+              </div>
                 <h3>{prop.name}</h3>
               {/*<span className={`ml2 ml-${icon}`}></span>*/}
               <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>

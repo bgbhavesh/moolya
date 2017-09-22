@@ -36,7 +36,7 @@ export default class MlAppFunderListView extends Component {
                 <span className="ml my-ml-Investors"></span>
               </div>}
             <div className="block_footer">
-              <span>{funder.chapterName} - {funder.communityType}</span>
+              <span>{funder.chapterName}{!funder.isDefaultSubChapter?"-" +funder.subChapterName:""}</span>
             </div>
           </div>
         </a>
@@ -45,7 +45,12 @@ export default class MlAppFunderListView extends Component {
 
     return (<div className="ideators_list">
       <div className="col-md-12"> <h2>Investors</h2></div>
-      {list}
+      {data && !data.length?(
+        <div className="alert alert-info col-md-8 col-md-offset-2 text-center" style={{'marginTop':'40px'}}>
+          There are no registrations to be shown here.
+        </div>
+      ):(<div>{list}</div>)
+      }
       </div>);
 
   }

@@ -54,6 +54,8 @@ export const mlAppStartupConfig = new MlAppViewer({
                       views
                       followings
                       profileImage
+                      isDefaultSubChapter
+                      subChapterName
                       }
                    }                                                                                                     
                 }

@@ -131,7 +131,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: tabName }
     // this.setState({privateKey:privateKey})
     this.setState({ data: details, privateKey: privateKey }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -169,22 +169,34 @@ export default class MlFunderPrincipalTeam extends React.Component {
         details = _.omit(details, [name]);
         details = _.extend(details, { [name]: e.target.value });
         this.setState({ data: details }, function () {
-          this.sendDataToParent()
+          // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: e.target.value });
       this.setState({ data: details }, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
   onSavePrincipalAction(e) {
-    this.setState({ funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false })
+    this.sendDataToParent();
+    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.principal) {
+      this.setState({ funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false });
+    }
+    else {
+      this.setState({ funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false });
+    }
   }
   onSaveTeamAction(e) {
-    this.setState({ funderTeamList: this.state.funderTeam, popoverOpenT: false })
+    this.sendDataToParent();
+    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.team) {
+      this.setState({ funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false });
+    }
+    else {
+      this.setState({ funderTeamList: this.state.funderTeam, popoverOpenT: false });
+    }
   }
 
   addPrincipal() {
@@ -208,7 +220,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     let data = _.cloneDeep(this.state.data);
     data.title = val;
     this.setState({ data: data }, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
 
@@ -222,7 +234,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       updatedData = _.extend(updatedData, { [key]: false });
     }
     this.setState({ data: updatedData }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -546,7 +558,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                   <div className="list_block notrans funding_list"
                                        onClick={that.onPrincipalTileClick.bind(that, idx, principal)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
-                                    <div className="cluster_status"><FontAwesome name='trash-o' /></div>
+                                    {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
                                     <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} />
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
@@ -586,7 +598,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                   <div className="list_block notrans funding_list"
                                        onClick={that.onTeamTileClick.bind(that, idx, team)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
-                                    <div className="cluster_status"><FontAwesome name='trash-o' /></div>
+                                    {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
                                     <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"} />
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>

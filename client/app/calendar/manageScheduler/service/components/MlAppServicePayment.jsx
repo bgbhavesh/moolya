@@ -18,6 +18,7 @@ export default class MlAppServicePayment extends React.Component{
   }
 
   componentDidMount() {
+    this.props.activateComponent(3);
     let WinHeight = $(window).height();
     let viewMode = this.props.viewMode;
     const hight = viewMode ? 320 : 300;

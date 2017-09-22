@@ -63,7 +63,9 @@ export default class MlAppInstitutionListView extends Component {
                 <CDNImage src={intitution.profileImage} className="c_image"/> :
                 <CDNImage src="/images/no_image.png" />}
             </div>
-            <h3>{intitution.firstName}<br/><span>{intitution.chapterName}</span></h3>
+            <h3>{intitution.firstName}<br/>
+              <span>{intitution.chapterName}{!intitution.isDefaultSubChapter?"-" +intitution.subChapterName:""}</span>
+            </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={intitution.views}> <span className="pie-value"></span> </div><br/>
@@ -117,7 +119,12 @@ export default class MlAppInstitutionListView extends Component {
 
     return (<div className="ideators_list">
       <div className="col-md-12"> <h2>Institutions</h2> </div>
-      {list}
+      {data && !data.length?(
+        <div className="alert alert-info col-md-8 col-md-offset-2 text-center" style={{'marginTop':'40px'}}>
+          There are no registrations to be shown here.
+        </div>
+      ):(<div>{list}</div>)
+      }
       </div>);
 
   }

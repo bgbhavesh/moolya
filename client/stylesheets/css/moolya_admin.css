@@ -293,6 +293,7 @@ table{background: #fff;}
   overflow-y: auto;
   /* margin-left: 20px; */
   overflow-x: hidden;
+  z-index: 10;
   /*width: 150px;*/
 }
 .vTimeline ul {

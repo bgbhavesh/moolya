@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { render } from 'react-dom';
-import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
+import {findAddressBookActionHandler} from '../../actions/findUserAddressBookHandler'
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
 

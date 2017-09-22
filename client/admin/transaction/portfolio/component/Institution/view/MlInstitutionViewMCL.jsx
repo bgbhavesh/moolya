@@ -7,6 +7,8 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -29,7 +31,7 @@ export default class MlInstitutionViewMCL extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
+    this.validateUserForAnnotation(this)
   }
 
   componentDidMount(){
@@ -38,10 +40,26 @@ export default class MlInstitutionViewMCL extends React.Component {
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
+
   }
   componentWillMount(){
+    this.validateUserForAnnotation();
     this.fetchPortfolioInstitutionDetails();
+
   }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
+
+
   async fetchPortfolioInstitutionDetails() {
     let that = this;
     let data = {};
@@ -139,11 +157,7 @@ export default class MlInstitutionViewMCL extends React.Component {
     return JSON.stringify(a) === JSON.stringify(b);
   };
 
-  componentDidUpdate(prevProps, prevState){
-    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
-    var currentLoaded=this.state.loading;
-    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
-  }
+ 
 
   render(){
     const {memberships, compliances, licenses} = this.state;

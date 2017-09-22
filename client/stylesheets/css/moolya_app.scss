@@ -211,7 +211,7 @@ $menuTrans:all 0.5s linear;
       .premium{top: 10px;}
     }
   }
-  .company_block{background:$mlBlue; border:$mlBlue solid 1px; text-shadow: none; color: $mlWhite; border-radius:10px; margin-bottom: 20px;
+  .company_block{background:$mlBlue; border:$mlBlue solid 1px; text-shadow: none; color: $mlWhite; border-radius:10px; margin-bottom: 20px;font-size: 12px;
     h3{ font-size: 16px; padding: 4px 10px 10px 10px; line-height: 22px;
       span{font-size: 14px;}
     }
@@ -2304,4 +2304,25 @@ p{margin-top:10px;}
   font-size: 25px;
   line-height: 30px;
   text-align: center;
+}
+
+.btn-group.selectedDay{ box-shadow: 0px 0px 5px #333; border-radius:5px;}
+li.sameWorkTime{position: relative;}
+li.sameWorkTime:after {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  content: '✓';
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 19px;
+  text-align: center;
+  text-shadow: 0 0 0.0714em #73994d;
+  font-weight: 700;
+}
+
+.add_task {margin-top: 0px;
+  .ml-plus {line-height: 158px; color:#b9c5cc;font-size: 75px;background:none;border:0px;padding:0px; }
 }

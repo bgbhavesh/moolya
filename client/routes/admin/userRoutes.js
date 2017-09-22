@@ -13,10 +13,10 @@ import MlAdminHeader from "../../admin/layouts/header/MlAdminHeader";
 import MlViews from "../../admin/core/components/MlViews";
 import {mlUsersClusterListConfig} from "../../admin/users/config/mlUsersClusterConfig";
 import MlUsersAbout from "../../admin/users/components/MlUsersAbout";
-import MlUsersAddressBook from "../../admin/users/components/MlUsersAddressBook";
+import MlUsersAddressBook from "../../admin/users/components/addressBook/MlUsersAddressBook";
 import MlUsersPortfolioLanding from "../../admin/users/components/MlUsersPortfolioLanding";
-import MlUsersConnectionsTabs from "../../admin/users/components/MlUsersConnectionsTabs";
-import MlUsersFavouriteTabs from "../../admin/users/components/MlUsersFavouriteTabs";
+import MlUsersConnectionsTabs from "../../admin/users/components/connections/MlUsersConnectionsTabs";
+import MlUsersFavouriteTabs from "../../admin/users/components/favourites/MlUsersFavouriteTabs";
 // import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
 import MlUsersTransactions from "../../admin/users/components/MlUsersTransactions";
 import MlUsersHistoryList from '../../admin/users/components/MlUsersTabHistoryList'

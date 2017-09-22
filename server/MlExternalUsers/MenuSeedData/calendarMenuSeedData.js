@@ -28,7 +28,8 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "Office Calendar",
-        "uniqueId" : "calendar_office"
+        "uniqueId" : "calendar_office",
+        isDisabled: true
       },
       {
         "image":"ml my-ml-notifications",

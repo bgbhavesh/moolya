@@ -71,22 +71,25 @@ export default class MlAppServiceList extends Component {
           <div className="col-lg-12" id="show">
             <div className="row">
               {this.profileId !== "all" ? <div className="col-lg-2 col-md-4 col-sm-4">
+                <div className="card_block">
                 <a href=" " onClick={() => this.createService()}>
-                  <div className="list_block notrans">
-                    <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Create a service</h3>
+                  <div className="add_task">
+                    <div><span className="ml ml-plus "></span></div>
+                    <div className="block_footer"><span>Create a service</span></div>
                   </div>
                 </a>
+                </div>
               </div>: <div></div> }
 
               {services && services.map((service, index) => {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
                     <div className="card_block"  onClick={()=>that.updateService(service._id, service.profileId)}><h3>{service.displayName}</h3>
+                      <div className={ service.status === "Gone Live" ? 'active' : 'inactive'}></div>
                       <div className="clearfix"></div>
                       <div className="list_icon mart0">
                         <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
-                        <span className="price pull-right">{service.status ? 'TRUE' : 'FALSE'}</span>
+                        <span className="price pull-right">{service.status ? service.status.toUpperCase() : ''}</span>
                         <div className="clearfix"></div>
                         <i className="c_image ml my-ml-Ideator"></i>
                         <div className="clearfix"></div>

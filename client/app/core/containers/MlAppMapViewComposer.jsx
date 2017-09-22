@@ -3,7 +3,7 @@ import { graphql,compose } from 'react-apollo';
 import MoolyaMapView from "../../../commons/components/map/MoolyaMapView"
 import _ from 'lodash';
 const DataComposerType='graphQl';
-export default class  MlMapViewComposer extends Component {
+export default class MlAppMapViewComposer extends Component {
   constructor(props) {
     super(props);
   }

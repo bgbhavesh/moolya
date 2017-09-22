@@ -1,13 +1,13 @@
 import React from 'react';
 
-import MlMapViewComposer from './MlAppMapViewComposer'
+import MlAppMapViewComposer from './MlAppMapViewComposer'
 
-export default class MlMapViewContainer extends React.Component {
+export default class MlAppMapViewContainer extends React.Component {
 
   render() {
     let config=this.props;
     return (
-      <MlMapViewComposer {...config}/>
+      <MlAppMapViewComposer {...config}/>
     );
   }
 };

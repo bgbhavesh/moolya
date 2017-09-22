@@ -14,7 +14,7 @@ import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 import _ from 'lodash'
 import _underscore from 'underscore'
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
 var diff = require('deep-diff').diff;
 export default class EmailDetails extends React.Component{
   constructor(props){
@@ -87,8 +87,12 @@ export default class EmailDetails extends React.Component{
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
     let ret = mlFieldValidations(this.refs)
+    var emailId=this.refs["emailId"].value
+    let isValidEmail = validatedEmailId(emailId);
     if (ret) {
       toastr.error(ret);
+    }else if (emailId && !isValidEmail) {
+      toastr.error('Please enter a valid EmailId');
     } else {
 
       let emailList = this.state.emailDetailsObject;
@@ -134,9 +138,12 @@ export default class EmailDetails extends React.Component{
           refs.push(this.refs["emailIdType" + index])
           refs.push(this.refs["emailId" + index])
           let ret = mlFieldValidations(refs)
-
+          var updatedEmailId=this.refs["emailId" + index].value
+          let isValidEmail = validatedEmailId(updatedEmailId);
           if (ret) {
             toastr.error(ret);
+          }else if (updatedEmailId && !isValidEmail) {
+            toastr.error('Please enter a valid EmailId');
           } else {
             let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
             let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;

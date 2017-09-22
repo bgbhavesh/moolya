@@ -43,7 +43,7 @@ class  MlAdminProfileApp extends Component {
         container:'body',
         trigger:"hover"
       });
-      $('.ml_profile [data-toggle="tooltip').on('click', function () {
+      $('.ml_profile [data-toggle="tooltip"]').on('click', function () {
         $(this).tooltip('hide');
       });
     },1000);

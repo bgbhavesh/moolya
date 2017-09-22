@@ -193,6 +193,13 @@ class MlServiceCardRepo{
             servicecard[key] = service[key];
           }
         }
+        if(!servicecard.isActive) {
+          servicecard.status = "In Active";
+        } else {
+          servicecard.status = "Active";
+        }
+        servicecard.isReview = false;
+        servicecard.isApproved = false;
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);

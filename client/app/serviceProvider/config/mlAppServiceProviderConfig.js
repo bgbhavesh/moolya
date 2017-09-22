@@ -45,6 +45,8 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
                         firstName
                         lastName
                         profileImage
+                        isDefaultSubChapter
+                        subChapterName
                       }
                     }
                 }

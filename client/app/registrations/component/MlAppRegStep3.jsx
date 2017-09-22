@@ -111,6 +111,10 @@ export default class MlAppRegStep3 extends React.Component {
     }
   }
 
+  exitRegistration(){
+    FlowRouter.go('/app/dashboard')
+  }
+
   render() {
     let MlActionConfig
     let userType = this.props.userType;
@@ -119,7 +123,7 @@ export default class MlAppRegStep3 extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: this.exitRegistration.bind(this)
       }
     ]
 

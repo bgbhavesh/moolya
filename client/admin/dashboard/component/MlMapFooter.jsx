@@ -72,12 +72,12 @@ export default class MlMapFooter extends React.Component {
         {showLoader === true ? (<MlLoader/>) :(
           data.length>0?
             <div className="bottom_actions_block bottom_count">
-             {(that.props.mapContext.module!="users")?<div><b>{that.state.activeUsers.length}</b> of <b>{that.state.users.length}</b> Users are Active<br/></div>:<div></div>}
+             {(that.props.mapContext.module!="users")?<div><b>{that.state.activeUsers.length}</b> of <b>{that.state.users.length}</b> User(s) are Active<br/></div>:<div></div>}
              <b>{activeData.length?activeData.length:0}</b> of <b>{data.length?data.length:0}</b> {that.state.module} are Active
             </div>:
 
             <div className="bottom_actions_block bottom_count">
-              <div><b>0</b> of <b>0</b> users are Active<br/></div>
+              <div><b>0</b> of <b>0</b> User(s) are Active<br/></div>
             </div>
 
         )}

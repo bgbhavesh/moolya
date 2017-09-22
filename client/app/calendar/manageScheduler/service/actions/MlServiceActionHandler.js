@@ -82,8 +82,11 @@ export async function fetchServiceActionHandler (serviceId) {
         sessionFrequency
         finalAmount
         isBeSpoke
+        status
         isApproved
         isLive
+        isActive
+        serviceExpiry
         duration{
          hours
          minutes
@@ -236,6 +239,7 @@ export async function fetchServicesActionHandler (profileId) {
         }
         noOfSession
         status
+        isLive
       }
     }
     `,

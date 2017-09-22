@@ -175,8 +175,10 @@ MlResolver.MlQueryResolver['getSharedCalendar'] = (obj, args, context, info) => 
   if( user && user.profile && user.profile.externalUserProfiles && user.profile.externalUserProfiles.length ){
     let profiles = user.profile.externalUserProfiles;
     let response = profiles.reduce(function (data ,profile) {
+      console.log("Data: ",data);
       let profileId = profile.profileId;
-      let userCalendar = MlAppointment.getUserCalendar(userId,profileId, args.month, args.year, args.date);
+      console.log("getSharedCalendar", userId, profileId);
+      let userCalendar = MlAppointment.getUserCalendar(userId,profileId, args.month, args.year, 1);
       if(data && data.days && data.days.length) {
         let dataDays = data && data.days ? data.days : [];
         let days = userCalendar && userCalendar.days ? userCalendar.days : [];
@@ -187,7 +189,7 @@ MlResolver.MlQueryResolver['getSharedCalendar'] = (obj, args, context, info) => 
             return dataday.date.getTime() == day.date.getTime()
           } );
           if(isFind) {
-            day = day.status > isFind.staus ? day : isFind;
+            day = day.status > isFind.status ? day : isFind;
           }
         })
       } else {

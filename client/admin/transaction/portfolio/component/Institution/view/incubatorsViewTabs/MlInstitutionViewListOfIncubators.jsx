@@ -11,14 +11,16 @@ import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 const KEY = "listOfIncubators"
 
 export default class MlInstitutionListOfIncubators extends React.Component{
   constructor(props, context){
     super(props);
     this.state= {
-      listOfIncubators: {}
+      listOfIncubators: {},
+      content:{},
+      loading: true
     }
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
@@ -124,19 +126,28 @@ export default class MlInstitutionListOfIncubators extends React.Component{
   }
 
   render(){
+    const showLoader = this.state.loading;
     return (
-      <div className="col-lg-12 col-sm-12" >
-        <div className="row">
-          <h2>List Of Incubators</h2>
-          <div className="panel panel-default panel-form-view" id="annotatorContent">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
+          <div className="col-lg-12 col-sm-12">
+            <div className="row">
+              <h2>List Of Incubators</h2>
+              <div className="panel panel-default panel-form-view" id="annotatorContent">
 
-            <div className="panel-body">
-              <p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription : ""}</p>
+                <div className="panel-body">
+                  <p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
+                    : <div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                    </div>
+                }</p>
 
+                </div>
+              </div>
             </div>
           </div>
-
-        </div>
+        )
+        }
       </div>
     )
   }

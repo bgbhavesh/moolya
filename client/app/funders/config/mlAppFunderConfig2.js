@@ -38,6 +38,8 @@ export const mlAppFunderConfig2=new MlAppViewer({
                       firstName
                       lastName
                       profileImage
+                      isDefaultSubChapter
+                      subChapterName
                     }
                   }
                 }

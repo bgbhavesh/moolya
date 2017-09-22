@@ -61,10 +61,15 @@ class MlAppServiceManageSchedule extends Component {
     this.redirectWithCalendar = this.redirectWithCalendar.bind(this);
     this.saveAction.bind(this);
     this.bookServiceCard.bind(this);
+    this.getSessionNumber  = this.getSessionNumber.bind(this);
   }
 
   componentWillMount() {
     this.getServiceList()
+  }
+
+  getSessionNumber() {
+
   }
 
   async getServiceList() {

@@ -57,6 +57,8 @@ export const
                         userId
                         name
                         profileImage
+                        isDefaultSubChapter
+                        subChapterName
                     }
                   }
                 }

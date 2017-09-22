@@ -47,6 +47,8 @@ export const mlAppCompanyConfig = new MlAppViewer({
                         connections
                         views
                         followings
+                        isDefaultSubChapter
+                        subChapterName
                       }
                     }
                 }

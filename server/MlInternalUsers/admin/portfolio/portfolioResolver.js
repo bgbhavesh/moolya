@@ -353,12 +353,15 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
           const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
           let uniqueSeoName = firstNameUser + '-' + lastNameUser;
           uniqueSeoName = uniqueSeoName.replace(/ /g, "-");
-          const portfolio_user_id = {
+          let siteMapDetails = {
             userId: regRecord.userId,
-            portFolioId: args.portfoliodetailsId
+            portFolioId: args.portfoliodetailsId,
+            priority: 1,
+            changeFreq:'daily',
+            uniqueSeoName:uniqueSeoName
           }
 
-            MlSiteMapInsertion.mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName);
+          MlSiteMapInsertion.mlCreateSEOUrl(siteMapDetails, urlFormationObject);
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
           MlSMSNotification.portfolioGoLiveRequest(args.portfoliodetailsId)

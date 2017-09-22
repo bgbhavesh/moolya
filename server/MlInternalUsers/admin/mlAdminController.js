@@ -60,7 +60,7 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  about: '/*',
+  microSite: '/*',
   view:'/view/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
@@ -103,35 +103,30 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
 
+  /**
+   *  MICROSITE  STATIC SERVER PATHS STARTS HERE
+   */
   let pathAbout = Assets.absoluteFilePath('microSite/views/about.pug')
-  let path = process.env.PWD;                                          // Core Project Root Path
-  //graphQLServer.set('views', path + '/server/MlExternalUsers/microSite/views');   // MicroSite View folder that contains static files.
-  //graphQLServer.set('view engine', 'pug');                                     // Setting View Engine to PUG( Renamed from jade)
-
-  var tokens = new Tokens()
-  var secret = tokens.secretSync()
-
-
   graphQLServer.get(config.view, async function (req, res, next) {
 
-          const pathName = req.url;
-          const originalUrl = req.originalUrl.replace('/view','');
-          let proto = req.protocol;
-          if(req.get('x-forwarded-proto').includes('https')){
-            proto = 'https'
-          }
-          const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
-          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
-          if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
-            res.redirect('/login');
-          }
-          res.render(pathAbout, portFolio)
-        }
+      const pathName = req.url;
+      const originalUrl = req.originalUrl.replace('/view','');
+      let proto = req.protocol;
+      if(req.get('x-forwarded-proto').includes('https')){
+        proto = 'https'
+      }
+      const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
+      const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+      if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
+        res.redirect('/login');
+      }
+      res.render(pathAbout, portFolio)
+    }
   )
 
   // Serving static pages.
-  graphQLServer.get(config.about, async function (req, res, next) {
-      if (!(req.url.includes('login') || req.url.includes('registration'))) {
+  graphQLServer.get(config.microSite, async function (req, res, next) {
+      if (!(req.url.includes('login'))) {
         if (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token')) {
           const pathName = req.url;
           const originalUrl = req.originalUrl;
@@ -154,6 +149,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
     }
   )
+
+  var tokens = new Tokens()
+  var secret = tokens.secretSync()
 
   graphQLServer.use(config.path, parseBody, graphqlExpress(async (req, res) => {
     try {

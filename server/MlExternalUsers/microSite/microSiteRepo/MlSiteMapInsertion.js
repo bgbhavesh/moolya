@@ -5,26 +5,25 @@ var noData = "not mentioned";
 const MlSiteMapInsertion = class MlSiteMapInsertion {
 
 
-  static  mlCreateSEOUrl(portfolio_user_id, urlFormationObject, uniqueSeoName) {
-    let seoUrl = '/' + urlFormationObject.clusterName + '/' + urlFormationObject.chapterName + '/' + urlFormationObject.subChapterName + '/' + urlFormationObject.communityName + '/' + uniqueSeoName;
-    let updateSiteMapObject = {
-      userId: portfolio_user_id.userId,
-      seoUrl: seoUrl,
-      uniqueSeoId: 1,
-      priority: 1,
-      createdBy: ''
-    }
-    try {
-      let existsSeoName = MlSitemap.findOne({seoUrl: seoUrl});
+  static  mlCreateSEOUrl(siteMapDetails, urlFormationObject) {
+    let uniqueSeoName = siteMapDetails.uniqueSeoName;
+    let seoUrl =  urlFormationObject.clusterName + '/' + urlFormationObject.chapterName + '/' + urlFormationObject.subChapterName + '/' + urlFormationObject.communityName + '/' + uniqueSeoName;
+    let siteMapUrl = Meteor.absoluteUrl() + seoUrl;
+    seoUrl = '/' + seoUrl;
+    siteMapDetails.originalUrl = seoUrl;
+    siteMapDetails.siteMapUrl = siteMapUrl;
+    siteMapDetails.seoUrl = seoUrl;
 
-      if (existsSeoName) {
-        let seoId = existsSeoName.uniqueSeoId + 1;
-        updateSiteMapObject.uniqueSeoId = seoId;
-        updateSiteMapObject.seoUrl = seoUrl +'-' +seoId;
-        MlSiteMapInsertion.mlUpdateSiteMap(portfolio_user_id.portFolioId, updateSiteMapObject);
+    try {
+      let seoUrlCount = MlSitemap.find({originalUrl: seoUrl}).count();
+
+      if (seoUrlCount !== 0) {
+        siteMapDetails.seoUrl = seoUrl +'-' +seoUrlCount;
+        siteMapDetails.siteMapUrl = siteMapUrl +'-' +seoUrlCount;
+        MlSiteMapInsertion.mlUpdateSiteMap(siteMapDetails);
       } else {
 
-        MlSiteMapInsertion.mlUpdateSiteMap(portfolio_user_id.portFolioId, updateSiteMapObject);
+        MlSiteMapInsertion.mlUpdateSiteMap( siteMapDetails);
 
       }
 
@@ -34,12 +33,12 @@ const MlSiteMapInsertion = class MlSiteMapInsertion {
     }
   }
 
-  static  mlUpdateSiteMap(portFolioId, updateObject) {
+  static  mlUpdateSiteMap(siteMapDetails) {
 
     MlSitemap.update(
-      {portFolioId: portFolioId},
+      {portFolioId: siteMapDetails.portFolioId},
       {
-        $set: updateObject
+        $set: siteMapDetails
       },
       {upsert: true}
     )

@@ -222,6 +222,10 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     response = new MlRespPayload().errorPayload({message:"country is required"},400);
     return response;
   }
+  var user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
+  context.userId = user._id;
+  context.browser = 'Registration API'
+  context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
   var registrationExist = MlRegistration.findOne({
     "registrationInfo.email": args.registration.email,
@@ -235,10 +239,6 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return errResp;
   }
   else if (args.registration) {
-    let user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
-    context.userId = user._id;
-    context.browser = 'Registration API'
-    context.url = Meteor.absoluteUrl("");
     args.registration.userName = args.registration.email;
     var emails = [{address: args.registration.userName, verified: false}];
     orderNumberGenService.assignRegistrationId(args.registration);

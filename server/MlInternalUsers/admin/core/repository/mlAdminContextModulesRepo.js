@@ -939,13 +939,31 @@ let CoreModules = {
     let piplelineQuery = [
       { "$match": {"transactionTypeId":"appointment"} },
       { "$lookup": {
+        from: "mlAppointments",
+        localField: "docId",
+        foreignField: "appointmentId",
+        as: "scAppointment"
+        }
+      },
+      {
+        "$unwind": {
+          path: "$scAppointment",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      { "$lookup": {
         from: "mlPayment",
         localField: "docId",
         foreignField: "resourceId",
         as: "scOrder"
       }
       },
-      { "$unwind": "$scOrder" },
+      {
+        "$unwind": {
+          path: "$scOrder",
+          preserveNullAndEmptyArrays: true
+        }
+      },
       { "$project" : {
         "_id": "$_id",
         "appointmentId": "$docId",
@@ -958,7 +976,7 @@ let CoreModules = {
         "subChapter": "$subChapterName",
         "community": "$communityName",
         "createdAt": "$createdAt",
-        "status": "$scOrder.status"
+        "status":  { "$ifNull" :  ["$scOrder.status", "$scAppointment.status"] }
       } }
     ];
 

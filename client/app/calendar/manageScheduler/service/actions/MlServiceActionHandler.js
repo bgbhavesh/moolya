@@ -82,6 +82,7 @@ export async function fetchServiceActionHandler (serviceId) {
         sessionFrequency
         finalAmount
         isBeSpoke
+        status
         isApproved
         isLive
         isActive

@@ -50,7 +50,15 @@ class MlDBController{
       {
         if (_.isObject(docId)){
           let oldValue  = collection.find(docId).fetch();
-          let result = collection.update(docId, {$set: payload}, {upsert:true});
+          var setOnInsert=updateOptions.setOnInsert;
+          var setOnInsertObject=updateOptions.setOnInsertObject;
+          var  result=null;
+          if(setOnInsert&&setOnInsertObject){
+            result = collection.update(docId, {$set: payload,$setOnInsert:setOnInsertObject}, {upsert:true});
+          }else{
+             result = collection.update(docId, {$set: payload}, {upsert:true});
+          }
+          //let result = collection.update(docId, {$set: payload}, {upsert:true});
           let newValue  = collection.find(docId).fetch()
           let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
           return result;

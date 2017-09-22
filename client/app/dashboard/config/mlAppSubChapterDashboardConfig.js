@@ -6,7 +6,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 import MlAppClusterMapMarker from '../components/MlAppClusterMapMarker'
-
+import MlAppMapViewContainer from '../../core/containers/MlAppMapViewContainer'
 
 const mlAppSubChapterDashboardListConfig=new MlAppViewer({
   name:"subChapterDashBoardList",
@@ -20,9 +20,14 @@ const mlAppSubChapterDashboardListConfig=new MlAppViewer({
   sort:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
-
+    let queryObj = {
+      chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+      bounds:config.params&&config.params.bounds?config.params.bounds:null,
+      isListView:true,
+    };
+    let queryString = JSON.stringify(queryObj);
     return {
-      queryProperty:{query:config.params&&config.params.chapterId?config.params.chapterId:null}
+      queryProperty:{query:queryString}
     }
   },
   viewComponent:<MlAppSubChapterList />,
@@ -81,7 +86,7 @@ const mlAppSubChapterDashboardMapConfig=new MlAppViewer({
     var zoom=10;
     return zoom;
   },
-  viewComponent:<MlAppClusterMapView params={this.params} />,
+  viewComponent:<MlAppMapViewContainer/>,
   mapMarkerComponent:<MlAppClusterMapMarker/>,
   // mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[

@@ -24,35 +24,36 @@ export default class MlAppCommunitiesList extends Component {
         return this;
     }
 
-    componentDidMount(){
-      this.fetchUserDetails();
-
+    componentWillMount(){
+      const resp = this.fetchUserDetails();
+      return resp
     }
 
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response) {
       this.isAllowRegisterAs = response.isAllowRegisterAs
-      if(response.isAllowRegisterAs)
-        toastr.success("user can set another registeras");
+      if(response.isAllowRegisterAs){
+        let registrationInfo = response.registrationInfo
+        toastr.success("set another registerAs");
+
+        this.setState({
+          status: response.status,
+          registerId: response._id,
+          firstName: registrationInfo.firstName,
+          lastName: registrationInfo.lastName,
+          contactNumber: registrationInfo.contactNumber,
+          email: registrationInfo.email,
+          userName: registrationInfo.userName,
+          country: registrationInfo.countryId,
+          communityId: registrationInfo.registrationType
+        });
+        this.fetchCommunities();
+      }
       else{
         FlowRouter.go("/app/register/"+response.pendingRegId);
         toastr.error("Complete one or more profile hard registration");
       }
-
-      let registrationInfo = response.registrationInfo
-      this.setState({
-        status: response.status,
-        registerId: response._id,
-        firstName: registrationInfo.firstName,
-        lastName: registrationInfo.lastName,
-        contactNumber: registrationInfo.contactNumber,
-        email: registrationInfo.email,
-        userName: registrationInfo.userName,
-        country: registrationInfo.countryId,
-        communityId: registrationInfo.registrationType
-      });
-      this.fetchCommunities();
     }
   }
 
@@ -97,42 +98,44 @@ export default class MlAppCommunitiesList extends Component {
     }
   }
 
+  /**
+   * @Note checking user registration status on "clientSite" for showing community for registerAs
+   * */
     async fetchCommunities() {
-        // let communities = await fetchCommunitiesHandler();
-      let communities = await fetchCommunitiesHandlerReg();
+      var communities = await fetchCommunitiesHandlerReg();
         let userCommunity=this.state.communityId
       let status=this.state.status
-      if(status=="REG_USER_APR"){
-        if(userCommunity=="CMP"){
-          let communitilist= _.filter(communities, function(community) {
-            return community.code==="CMP"
-          });
-          this.setState({communities:communitilist})
-        }else if(userCommunity=="INS"){
-          let communitilist= _.filter(communities, function(community) {
-            return community.code==="INS"
-          });
-          this.setState({communities:communitilist})
-        }else if(userCommunity=="BRW"){
-          let communitilist= _.filter(communities, function(community) {
-            return community.code!="BRW"
-          });
-          this.setState({communities:communitilist})
+      if(communities && communities.length){
+        if(status=="REG_USER_APR"){
+          if(userCommunity=="CMP"){
+            let communitilist= _.filter(communities, function(community) {
+              return community.code==="CMP"
+            });
+            this.setState({communities:communitilist})
+          }else if(userCommunity=="INS"){
+            let communitilist= _.filter(communities, function(community) {
+              return community.code==="INS"
+            });
+            this.setState({communities:communitilist})
+          }else if(userCommunity=="BRW"){
+            let communitilist = _.filter(communities, function (community) {
+              return community.code != "BRW" && community.code != "OFB"
+            });
+            this.setState({communities:communitilist})
+          }else{
+            let communitilist= _.filter(communities, function(community) {
+              return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
+            });
+            this.setState({communities:communitilist})
+          }
         }else{
-          let communitilist= _.filter(communities, function(community) {
-            return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
+          let communitilist = _.filter(communities, function (community) {
+            return community.code != "BRW" && community.code != "OFB"
           });
           this.setState({communities:communitilist})
         }
-      }else{
-        let communitilist= _.filter(communities, function(community) {
-          return community.code!="BRW"
-        });
-        this.setState({communities:communitilist})
-      }
-
-
         return communities;
+      }
     }
 
   optionsBySelectCountry(value){
@@ -142,9 +145,9 @@ export default class MlAppCommunitiesList extends Component {
     this.setState({selectedCity:value})
   }*/
   optionBySelectRegistrationType(value, calback, selObject){
-    this.setState({registrationType:value});
+    // this.setState({registrationType:value});
    // this.setState({identityType:null});
-    this.setState({coummunityName:selObject.label})
+    this.setState({registrationType:value, coummunityName:selObject.label})
   }
   optionsBySelectIdentity(val){
     this.setState({identity:val})

@@ -12,7 +12,7 @@ export default class MlAppStartupListView extends Component {
       barColor: '#ef4647',
       trackColor: '#192430',
       lineCap: 'round',
-      lineWidth: 5,
+      lineWidth: 2,
       onStep: function (from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
@@ -21,7 +21,7 @@ export default class MlAppStartupListView extends Component {
       barColor: '#ffe144',
       trackColor: '#192430',
       lineCap: 'round',
-      lineWidth: 5,
+      lineWidth: 2,
       onStep: function (from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
@@ -30,7 +30,7 @@ export default class MlAppStartupListView extends Component {
       barColor: '#B9C5CC',
       trackColor: '#192430',
       lineCap: 'round',
-      lineWidth: 5,
+      lineWidth: 2,
       onStep: function (from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
@@ -55,7 +55,7 @@ export default class MlAppStartupListView extends Component {
     let that = this
     const data=this.props.data||[];
     const list=  data.map((startup, idx) =>
-      <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+      <div className="col-md-2 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
           <div className="company_block">
             <div className="regular"><span>{startup.accountType}</span></div>
@@ -64,7 +64,9 @@ export default class MlAppStartupListView extends Component {
                <CDNImage src={startup.aboutUs.logo[0].fileUrl} className="c_image"/> :
                <CDNImage src="/images/no_image.png" />}
             </div>
-            <h3>{startup.firstName}<br/><span>{startup.chapterName}</span></h3>
+            <h3>{startup.firstName}<br/>
+              <span>{startup.chapterName}{!startup.isDefaultSubChapter?"-" +startup.subChapterName:""}</span>
+            </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
                 <div className="pie-title-center pie-passion" data-percent={startup.views}> <span className="pie-value"></span> </div><br/>

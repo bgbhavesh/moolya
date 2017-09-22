@@ -37,7 +37,28 @@ export default class MoolyaMapView extends Component {
         zoom: zoom,
       });
     }
+    // const resp = this.fetchZoomCenter()
+    // return resp
   }
+
+  // async fetchZoomCenter(){
+  //   let that = this;
+  //   let zoom = 1;
+  //   let hasZoom=that.props.fetchZoom||false;
+  //   if(hasZoom){
+  //     zoom= await that.props.fetchZoomHandler(that.props)||zoom;
+  //   }
+  //   if(that.props.hasCenter){
+  //     var center= await that.props.fetchCenterHandler(that.props);
+  //     this.setState({center:center||defaultCenter,zoom:zoom});
+  //   }else {
+  //     this.setState({
+  //       center: defaultCenter,
+  //       zoom: zoom,
+  //     });
+  //   }
+  // }
+
   componentWillUpdate(nextProps, nextState) {
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
 
@@ -68,31 +89,6 @@ export default class MoolyaMapView extends Component {
       this.props.fetchMore(variables);
     }
   }
-  getBounds(obj){
-    // Receiving bounds and zoom here
-    // Need to implement logic for MOOLYA- 1770
-    // Extend the variables and call fetch More
-
-    // let variables={};
-    // let hasQueryOptions = this.props&&this.props.queryOptions ? true : false;
-    // if(obj.zoom>1){
-    //   if (hasQueryOptions) {
-    //     let config = this.props
-    //     if(config && config.params){
-    //       let bounds={bounds:obj.bounds}
-    //       _.extend(config.params,bounds)
-    //     }else{
-    //       let newParams = {params:{bounds:obj.bounds}}
-    //       data = _.omit(config, 'params')
-    //       config=_.extend(data,newParams);
-    //     }
-    //     let dynamicQueryOption = this.props&&this.props.buildQueryOptions ? this.props.buildQueryOptions(config) : {};
-    //     variables = _.extend(variables,dynamicQueryOption);
-    //
-    //   }
-    //   this.props.fetchMore(variables);
-    // }
-  }
 
   render()
   {
@@ -105,7 +101,7 @@ export default class MoolyaMapView extends Component {
     let MapFooterComponent=null;
     // Fix me
     var path = window.location.pathname;
-    if(path.indexOf("communities") !== -1 || path.indexOf("app") !== -1){
+    if(this.props.isApp && path.indexOf("/communities") !== -1){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
     }
 
@@ -115,7 +111,7 @@ export default class MoolyaMapView extends Component {
     return (
       <span>
         {MapComponent?MapComponent:
-          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.getBounds.bind(this)}/>
+          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.props.bounds}/>
         }
         {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
           <div className="bottom_actions_block bottom_count">

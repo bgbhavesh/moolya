@@ -49,6 +49,15 @@ class MenuRepo{
   findCalendarResources(menuObject, context){
     var menu = _.cloneDeep(menuObject);
     var userProfile = new MlUserContext().userProfileDetails(context.userId)||{};
+    let registerId = userProfile.registrationId;
+    let regData = MlRegistration.findOne({"_id": registerId, status: { $ne: "REG_USER_APR"}});
+    if(regData) {
+      menu.menu.forEach( function (data, index , arr){
+        if([ "mycalendar", "calendar_share", "calendar_office" ].indexOf(data.uniqueId) >= 0 ) {
+          arr[index].isDisabled = true
+        }
+      });
+    }
     if(userProfile && userProfile.communityDefCode){
       var resources = mlResourceConfigRepo.getResourceConfig(userProfile.communityDefCode)
       if(resources.length > 0){
@@ -64,6 +73,14 @@ class MenuRepo{
                   "uniqueId" : "calendar_manageSchedule"
               }
               menu.menu.push(item)
+            }
+            break;
+            case "OFFICE":{
+              menu.menu.forEach( function (data, index , arr){
+                if(data.uniqueId === "calendar_office"){
+                  arr[index].isDisabled = false
+                }
+              })
             }
             break;
           }

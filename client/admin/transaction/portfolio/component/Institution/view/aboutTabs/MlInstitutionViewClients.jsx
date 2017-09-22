@@ -6,6 +6,7 @@ import React from 'react';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 
 const KEY = 'clients'
 
@@ -21,12 +22,28 @@ export default class MlInstitutionViewClients extends React.Component {
   }
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
-
   }
+
+
+  componentWillMount(){
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
+
 
   // componentDidMount() {
   //   this.initalizeAnnotaor()

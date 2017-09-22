@@ -68,7 +68,7 @@ export default class MlFunderSuccessStories extends React.Component {
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: e.target.value });
     this.setState({ data: details }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -78,7 +78,7 @@ export default class MlFunderSuccessStories extends React.Component {
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: this.refs.date.state.inputValue });
     this.setState({ data: details }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -128,7 +128,7 @@ export default class MlFunderSuccessStories extends React.Component {
       updatedData = _.extend(updatedData, { [key]: false });
     }
     this.setState({ data: updatedData }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -172,17 +172,28 @@ export default class MlFunderSuccessStories extends React.Component {
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName }
     // this.setState({privateKey:privateKey})
     this.setState({ data: details, privateKey: privateKey }, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    var isDate = _.findIndex(this.state.funderSuccess, { date: '' })
-    var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
-    if ((isDate > 0) || (dateKey.length !== (this.state.funderSuccess && this.state.funderSuccess.length))) {
+    this.sendDataToParent();
+    var funderSuccessArray = this.state.funderSuccess || [];
+
+    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
+      funderSuccessArray = this.context.funderPortfolio.successStories;
+    }
+    var isDate = _.findIndex(funderSuccessArray, { date: '' })
+    var dateKey = _.compact(_.map(funderSuccessArray, 'date'));
+    if ((isDate > 0) || (dateKey.length !== (funderSuccessArray && funderSuccessArray.length))) {
       toastr.error("Please select Date");
     }
-    this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false })
+    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
+      this.setState({ funderSuccessList: this.context.funderPortfolio.successStories, popoverOpen: false });
+    }
+    else {
+      this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false });
+    }
   }
 
   onLogoFileUpload(fileInfo, image) {

@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 let FontAwesome = require('react-fontawesome');
 import Days from "./Days.jsx";
+import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class MlAppFunderCalendarSlots extends Component {
 
@@ -12,10 +13,10 @@ export default class MlAppFunderCalendarSlots extends Component {
     super(props);
     this.state = {
       shift:'morning',
+      modalOpen: false,
       slotDetails:[],
       date: props.date ? props.date : new Date()
     };
-    console.log(props);
     this.handleDateSelect = this.handleDateSelect.bind(this);
   }
 
@@ -36,7 +37,20 @@ export default class MlAppFunderCalendarSlots extends Component {
       month: this.props.date.getMonth(),
       year: this.props.date.getFullYear()
     };
-    this.bookAppointment(tempObject)
+   this.setState({
+     tempObject,
+     modalOpen:true
+   })
+
+  }
+  onCancelAppointment(){
+    this.setState({tempObject:{},modalOpen:false});
+  }
+
+  onConfirmAppointment(){
+    let tempObject= this.state.tempObject;
+    this.setState({tempObject:{},modalOpen:false});
+    this.bookAppointment(tempObject).bind(this);
   }
 
   async bookAppointment(userServiceCardAppointmentInfo){
@@ -107,6 +121,19 @@ export default class MlAppFunderCalendarSlots extends Component {
 
     return (
       <div className="main_wrap_scroll" style={{"overflow": "hidden"}}>
+        <div>
+          <Modal isOpen={this.state.modalOpen} onHide={this.onClose}>
+            <ModalHeader>Title</ModalHeader>
+            <ModalBody>
+              <div>Do you want to fix this Appintment?</div>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.onConfirmAppointment.bind(this)}>Ok</Button>{' '}
+              <Button color="secondary" onClick={this.onCancelAppointment.bind(this)}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
+
+        </div>
         <div className="row funders_list">
           <ul className="cal_tabs act_tab">
             <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >

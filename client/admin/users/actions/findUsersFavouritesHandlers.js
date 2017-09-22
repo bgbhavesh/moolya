@@ -7,11 +7,11 @@
 import gql from "graphql-tag";
 import {client} from "../../core/apolloConnection";
 
-export async function fetchFavouritesHandler(portfolioId, communityCode) {
+export async function fetchFavouritesHandler(registrationId, communityCode) {
   const result = await client.query({
     query: gql `
-            query($portfolioId:String, $communityCode: String){
-                fetchFavouritesByPortfolio(portfolioId:$portfolioId, communityCode:$communityCode) {
+            query($registrationId:String, $communityCode: String){
+                fetchFavouritesByReg(registrationId:$registrationId, communityCode:$communityCode) {
                     userName
                     firstName
                     lastName
@@ -21,11 +21,11 @@ export async function fetchFavouritesHandler(portfolioId, communityCode) {
             }
         `,
     variables: {
-      portfolioId,
+      registrationId,
       communityCode
     },
     forceFetch: true
   })
-  const connection = result.data.fetchFavouritesByPortfolio;
+  const connection = result.data.fetchFavouritesByReg;
   return connection
 }

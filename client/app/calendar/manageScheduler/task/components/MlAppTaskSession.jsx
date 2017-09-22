@@ -129,6 +129,9 @@ export default class MlAppTaskSession extends Component {
 
   sendSessionDataToParent() {
     let data = _.cloneDeep(this.state.sessionData);
+    data.forEach(d=> {
+      delete d.isOffline;
+    })
     this.props.getSessionDetails(data, this.state.activities, this.state.data.isExternal);
   }
 

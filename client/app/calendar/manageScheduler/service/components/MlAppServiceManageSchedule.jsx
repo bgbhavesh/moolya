@@ -569,6 +569,10 @@ class MlAppServiceManageSchedule extends Component {
         toastr.error('State is mandatory');
         return false;
       }
+      if(!serviceBasicInfo.sessionFrequency) {
+        toastr.error('Session Frequency is mandatory');
+        return false;
+      }
       if (!serviceBasicInfo.chapters) {
         if (!(serviceBasicInfo.city && serviceBasicInfo.city.length)) {
           toastr.error('City is mandatory');
@@ -701,6 +705,10 @@ class MlAppServiceManageSchedule extends Component {
             }
           }
         }
+      } else {
+        toastr.error('Task is required to save');
+        isError = true;
+        return false;
       }
       if (isError) {
         return false;
@@ -743,6 +751,10 @@ class MlAppServiceManageSchedule extends Component {
         }
       });
       this.setState({ tasks: tasks });
+    } else if (this.state.currentComponent === 1) {
+      toastr.error('Task is required to save');
+      isError = true;
+      return false;
     }
     if (!_.isEmpty(serviceTermAndCondition)) {
       services.termsAndCondition = _.cloneDeep(serviceTermAndCondition);

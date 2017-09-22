@@ -54,13 +54,14 @@ export default class MlCreateRegistration extends React.Component{
     let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
     let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     var emailId=this.refs.email.value;
-    let isValidEmail = validatedEmailId(emailId);
+    const isValidEmail = validatedEmailId(emailId);
+    console.log(isValidEmail);
     if (ret) {
       toastr.error(ret);
     } else if (!isValidPhoneNumber) {
       toastr.error('Please enter a valid contact number');
-    }else if (emailId && !isValidEmail) {
-      toastr.error('Please enter a valid EmailId');
+    }else if (!isValidEmail) {
+      return toastr.error('Please enter a valid EmailId');
     }else {
       let Details = {
 

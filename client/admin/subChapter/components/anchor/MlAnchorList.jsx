@@ -65,6 +65,14 @@ export default class MlAnchorList extends React.Component {
     const resp = this.getAnchorUsers()
     return resp
   }
+
+  componentWillReceiveProps(newProps){
+    if(newProps && newProps.isUserUpdated){
+      const resp = this.getAnchorUsers()
+      return resp
+    }
+  }
+
   handleUserClick(id, event) {
     console.log('on user Click', id);
     const resp = this.getAnchorUserDetails(id);
@@ -148,7 +156,6 @@ export default class MlAnchorList extends React.Component {
   async getAnchorUsers() {
     var data = this.props.data
     var response = await findAnchorUserActionHandler(data)
-    console.log('anchor user list', response)
     const userDetails = response.userDetails && response.userDetails.map && response.userDetails.map((d) => omitDeep(d, '__typename'));
     this.setState({ data: userDetails })
     return response
@@ -160,7 +167,6 @@ export default class MlAnchorList extends React.Component {
 
   removeSocialLink(index) {
     let userData = this.state.userData;
-    console.log(index);
     userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.splice(index, 1);
     this.setState({
       userData,
@@ -302,8 +308,9 @@ export default class MlAnchorList extends React.Component {
           </div>
           <div className="ml_icon_btn">
             <a href="#" onClick={this.onSaveSocialLink}
-               className="save_btn"><span
-              className="ml ml-save"></span></a>
+               className="save_btn">
+              <span className="ml ml-save"></span>
+            </a>
             <a href="#" className="cancel_btn" onClick={this.onClearSocialLink}><span className="ml ml-delete"></span></a>
           </div>
           {/*<div className="form-group">*/}

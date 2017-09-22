@@ -46,7 +46,7 @@ export default class MlAppTempRoute extends Component {
                   icon = "ml my-ml-Startups"
                 else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Companies")
                   icon = "ml my-ml-Company"
-                else if(reg&&reg.registrationInfo&&reg.data.registrationInfo.communityName == "Service Providers")
+                else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Service Providers")
                   icon = "Service-Providers"
                 else if(reg&&reg.registrationInfo&&reg.registrationInfo.communityName == "Institutions")
                   icon = "ml my-ml-Institutions"

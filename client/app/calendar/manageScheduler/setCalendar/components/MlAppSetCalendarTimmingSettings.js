@@ -15,8 +15,10 @@ import {
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
+import PopoverActionIcon from '../../../../../app/appActions/components/PopoverActionIcon';
+import CalendarPopOver from './CalendarPopOver';
 
-class MlAppSetCalendarTimmingSettings extends Component {
+class MlAppCalendarTimmingSettings extends Component {
 
   constructor(props) {
     super(props);
@@ -589,6 +591,12 @@ class MlAppSetCalendarTimmingSettings extends Component {
     }
   }
 
+  portfolioShareHandler(actionConfig, handlerCallback) {
+    if (handlerCallback) {//to handle the popover
+      handlerCallback({});
+    }
+  }
+
   render(){
     const that = this;
     const { slots, lunch, isCloneDisabled, workEndTime, weekDays } = this.state;
@@ -599,7 +607,13 @@ class MlAppSetCalendarTimmingSettings extends Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => that.props.handler(that.updateCalendarSetting.bind(this))
+        hasPopOver: true,
+        popOverTitle: 'Shared Details',
+        placement: 'top',
+        target: 'sharedLibrary',
+        popOverComponent: <CalendarPopOver />,
+        actionComponent: PopoverActionIcon,
+        handler: this.portfolioShareHandler.bind(this),
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -837,4 +851,4 @@ class MlAppSetCalendarTimmingSettings extends Component {
   }
 };
 
-export default MlAppSetCalendarTimmingSettings = formHandler()(MlAppSetCalendarTimmingSettings);
+export default MlAppSetCalendarTimmingSettings = formHandler()(MlAppCalendarTimmingSettings);

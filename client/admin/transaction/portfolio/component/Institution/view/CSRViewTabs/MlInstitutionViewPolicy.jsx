@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 
 const KEY = "policy"
 export default class MlInstitutionViewPolicy extends React.Component {
@@ -18,13 +19,30 @@ export default class MlInstitutionViewPolicy extends React.Component {
     this.annotatorEvents.bind(this);
   }
 
-  componentDidMount() {
+ /* componentDidMount() {
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-  }
+  }*/
 
   componentWillMount(){
     this.fetchPortfolioDetails();
+
+    let resp = this.validateUserForAnnotation();
+    return resp
+
+  }
+
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   initalizeAnnotaor(){

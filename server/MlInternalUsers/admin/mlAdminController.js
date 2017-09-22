@@ -24,7 +24,7 @@ import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/
 
 let helmet = require('helmet');
 var Tokens = require('csrf')
-
+var siteMap = require('sitemap')
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
 let _language = require('graphql/language');
@@ -66,6 +66,17 @@ const defaultServerConfig = {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
 };
+var sitemap = siteMap.createSitemap ({
+  hostname: 'http://example.com',
+  cacheTime: 600000,        // 600 sec - cache purge period
+  urls: [
+    { url: '/page-1/',  changefreq: 'daily', priority: 0.3 },
+    { url: '/page-2/',  changefreq: 'monthly',  priority: 0.7 },
+    { url: '/page-3/'},    // changefreq: 'weekly',  priority: 0.5
+    { url: '/page-4/',   img: "http://urlTest.com" }
+  ]
+});
+
 
 // default graphql options to enhance the graphQLExpress server
 const defaultGraphQLOptions = {
@@ -149,7 +160,15 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
     }
   )
-
+  graphQLServer.get('/sitemap.xml', function(req, res) {
+    sitemap.toXML( function (err, xml) {
+      if (err) {
+        return res.status(500).end();
+      }
+      res.header('Content-Type', 'application/xml');
+      res.send( xml );
+    });
+  });
   var tokens = new Tokens()
   var secret = tokens.secretSync()
 

@@ -344,15 +344,15 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let response = new MlRespPayload().successPayload(result, code);
         if (response) {
           const urlFormationObject = {
-            clusterName: regRecord.clusterName.replace(/ /g, "_"),
-            chapterName: regRecord.chapterName.replace(/ /g, "_"),
-            subChapterName: regRecord.subChapterName.replace(/ /g, "_"),
-            communityName: regRecord.communityName.replace(/ /g, "_")
+            clusterName: regRecord.clusterName.replace(/ /g, "-"),
+            chapterName: regRecord.chapterName.replace(/ /g, "-"),
+            subChapterName: regRecord.subChapterName.replace(/ /g, "-"),
+            communityName: regRecord.communityName.replace(/ /g, "-")
           }
           const firstNameUser = user.profile.firstName ? user.profile.firstName : "";
           const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
-          let uniqueSeoName = firstNameUser + '_' + lastNameUser;
-          uniqueSeoName = uniqueSeoName.replace(/ /g, "_");
+          let uniqueSeoName = firstNameUser + '-' + lastNameUser;
+          uniqueSeoName = uniqueSeoName.replace(/ /g, "-");
           const portfolio_user_id = {
             userId: regRecord.userId,
             portFolioId: args.portfoliodetailsId

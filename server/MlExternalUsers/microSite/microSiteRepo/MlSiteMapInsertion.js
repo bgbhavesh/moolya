@@ -20,7 +20,7 @@ const MlSiteMapInsertion = class MlSiteMapInsertion {
       if (existsSeoName) {
         let seoId = existsSeoName.uniqueSeoId + 1;
         updateSiteMapObject.uniqueSeoId = seoId;
-        updateSiteMapObject.seoUrl = seoUrl +'_' +seoId;
+        updateSiteMapObject.seoUrl = seoUrl +'-' +seoId;
         MlSiteMapInsertion.mlUpdateSiteMap(portfolio_user_id.portFolioId, updateSiteMapObject);
       } else {
 

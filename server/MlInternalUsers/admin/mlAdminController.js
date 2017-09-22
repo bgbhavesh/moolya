@@ -116,7 +116,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
           const pathName = req.url;
           const originalUrl = req.originalUrl.replace('/view','');
-          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          let proto = req.protocol;
+          if(req.get('x-forwarded-proto').includes('https')){
+            proto = 'https'
+          }
+          const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
           const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
             res.redirect('/login');
@@ -128,13 +132,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   // Serving static pages.
   graphQLServer.get(config.about, async function (req, res, next) {
       if (!(req.url.includes('login') || req.url.includes('registration'))) {
-        if (!req.headers.cookie.includes('meteor_login_token')) {
+        if (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token')) {
           const pathName = req.url;
           const originalUrl = req.originalUrl;
-          const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+          let proto = req.protocol;
+          if(req.get('x-forwarded-proto').includes('https')){
+            proto = 'https'
+          }
+          const fullUrl = proto+ '://' + req.get('host') + req.originalUrl;
           const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
           if (portFolio === 'Next' ||portFolio ==='Redirect_to_login' ) {
-            res.redirect('/login');
+            next()
           }
           res.render(pathAbout, portFolio)
         } else {

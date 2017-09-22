@@ -14,13 +14,22 @@ import MlAccordion from "../../commons/components/MlAccordion";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 import {multipartASyncFormHandler, multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary} from '../../../commons/actions/mlLibraryActionHandler'
+import CropperModal from '../../../commons/components/cropperModal';
 
 class MlAppIdeatorAddIdea extends React.Component{
   constructor(props, context){
       super(props);
-      this.state= {loading: false, ideaImage:{}}
+      this.state= {
+        loading: false,
+        ideaImage:{},
+        showProfileModal: false,
+        uploadingAvatar: false
+      }
       this.createIdea.bind(this);
       this.handleSuccess.bind(this);
+      this.toggleModal = this.toggleModal.bind(this);
+      this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+      this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
       return this;
   }
 
@@ -95,13 +104,13 @@ class MlAppIdeatorAddIdea extends React.Component{
     return resp;
   }
 
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let fileName = e.target.files[0].name;
-    let name = e.target.name;
-    this.setState({file:file, name:name, fileName:fileName})
+  onLogoFileUpload(image,fileInfo){
+    // if(e.target.files[0].length ==  0)
+    //   return;
+    let file = image;
+    let fileName = fileInfo.name;
+    let name = 'logo';
+    this.setState({file:file, name:name, fileName:fileName,showProfileModal:false})
   }
 
   onFileUploadCallBack(name,file,resp){
@@ -128,7 +137,18 @@ class MlAppIdeatorAddIdea extends React.Component{
       }
     }
   }
-
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+  handleUploadAvatar(image,e) {
+    this.setState({
+      profilePic: image,
+    });
+    this.onLogoFileUpload(image,e);
+  }
   render(){
     const _this = this;
     let appActionConfig = [
@@ -157,6 +177,10 @@ class MlAppIdeatorAddIdea extends React.Component{
             actionOptions={appActionConfig}/>
         }]
     };
+    var urlCreator = window.URL || window.webkitURL;
+    let imageUrl = '';
+    if (this.state.profilePic)
+      imageUrl = urlCreator.createObjectURL(this.state.profilePic);
       const showLoader = this.state.loading;
       // let image = this.state.ideaImage&&this.state.ideaImage.fileUrl?this.state.ideaImage.fileUrl:"/images/images.png";
       return (
@@ -167,13 +191,21 @@ class MlAppIdeatorAddIdea extends React.Component{
                           <h2>Add Idea</h2>
                           <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
                               <a href="" >
-                                  <div className="upload_hex">
+                                  <div className="upload_hex" onClick={this.toggleModal.bind(this)}>
                                     <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
-                                    <img src="/images/images.png" id="blah" width="105" height="auto"/>
-                                    <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
+                                    {this.state.profilePic?
+                                    <img src={imageUrl} width="105" height="auto"/>:
+                                    <img src="/images/images.png" id="blah" width="105" height="auto"/>}
                                   </div>
                               </a>
                           </div>
+                          <CropperModal
+                            uploadingImage={this.state.uploadingAvatar}
+                            handleImageUpload={this.handleUploadAvatar}
+                            cropperStyle="square"
+                            show={this.state.showProfileModal}
+                            toggleShow={this.toggleModal}
+                          />
                           <div className="form_bg col-lg-8 col-lg-offset-2">
                               <form>
                                   <div className="form-group mandatory">

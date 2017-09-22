@@ -397,7 +397,7 @@ export default class MlAppBasicInfo extends React.Component {
                   <textarea className="form-control float-label" placeholder="Notes" value={that.state.basicData.note} onChange={that.textFieldSaves.bind(that, "note")}></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Duration: &nbsp;
+                  <label>Duration: &nbsp;</label>
                       <input type="Number" onChange={(evt) => that.updateDuration(evt, 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : ''} className="form-control inline_input" />
                     Hours
 
@@ -405,7 +405,7 @@ export default class MlAppBasicInfo extends React.Component {
 
                       <input type="Number" onChange={(evt) => that.updateDuration(evt, 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : ''} className="form-control inline_input" />
                     Mins
-                  </label>
+
                 </div>
               </form>
             </div>

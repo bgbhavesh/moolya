@@ -27,7 +27,23 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
     result = _.sortBy(result, ['hierarchyLevel']);
 
     const path = Object.assign(FlowRouter._current.path);
-    let pathHierarchy = path.split('/');
+    let pathHierarchy = (path.split('?')[0]).split('/');
+
+    if(module === 'clusterHierarchy'){
+      _.forEach(result, (detail, index) => {
+        list.push({
+          linkId: detail.hierarchyRefId,
+          linkName: detail.hierarchyRefName,
+          linkUrl : '',
+          seq: detail.hierarchyLevel,
+        });
+      });
+      list = list.reverse();
+
+      if(callback){
+        return callback(list);
+      }
+    }
 
     if (path.includes('dashboard')) {
       _.forEach(result, (detail, index) => {
@@ -51,7 +67,7 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
 
     list = list.reverse();
 
-    if (path.includes('clusters') || path.includes('chapters')) {
+    if (path.includes('clusters') || path.includes('chapters')|| path.includes('communities')) {
       let name = pathHierarchy[pathHierarchy.length - 1];
       if (name === 'STU') name = 'Startup';
       else if (name === 'FUN') name = 'Investor';
@@ -60,6 +76,7 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
       else if (name === 'INS') name = 'Institute';
       else if (name === 'SPS') name = 'Service Provider';
       else if (name === 'assignusers') name = 'Backend Users';
+      if(name!==('clusters') && name!==('chapters')&& name!==('communities'))
       list.push({
         linkUrl: path,
         linkName: properName(name),
@@ -88,9 +105,10 @@ function generateLink(path, RefID, moduleType,name) {
 function generateLinkForDashboardUrl(path, RefID, moduleType, index) {
   let postfix = '/';
 
-  if (moduleType === 'clusterId') postfix += 'chapters?viewMode=true';
-  else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode=true';
-  else if (moduleType === 'communityId') postfix += 'communities?viewMode=true';
+  let viewMode = FlowRouter.getQueryParam('viewMode') || 'true';
+  if (moduleType === 'clusterId') postfix += 'chapters?viewMode='+viewMode;
+  else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode='+viewMode;
+  else if (moduleType === 'communityId') postfix += 'communities?viewMode='+viewMode;
 
   if (path.includes(RefID)) {
     const url = path.split(RefID)[0];

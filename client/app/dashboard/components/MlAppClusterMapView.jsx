@@ -41,9 +41,7 @@ export default class MlAppClusterMapView extends Component {
       });
     }
   }
-  componentDidMount() {
 
-  }
   componentDidUpdate(){
     /*let loggedInUser = getAdminUserContext();
      if(loggedInUser.hierarchyLevel == 0){

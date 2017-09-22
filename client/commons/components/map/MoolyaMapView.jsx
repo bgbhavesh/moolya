@@ -9,7 +9,11 @@ import MlLoader from '../../../commons/components/loader/loader'
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
 export default class MoolyaMapView extends Component {
-
+componentDidMount(){
+  setTimeout(function(){
+    $('.gm-fullscreen-control').parent().addClass('hide');
+  },1000);
+}
   constructor(props){
     super(props);
     this.state = {

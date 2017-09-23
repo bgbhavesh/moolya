@@ -1,16 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import NoDataList from '../../../../commons/components/noData/noDataList';
+import MlLoader from "../../../../commons/components/loader/loader";
 
 export default class ProfileTileComponent extends Component {
-
+  getModuleName(modulName) {
+    if(modulName){
+      let selectedModuleName=modulName.split('my')[1];
+      return selectedModuleName
+    }else{
+      return "";
+    }
+  }
   render(){
     const users=this.props.data || [];
-
+    let config=this.props.config;
     return (
+      <div>
+        {config.loading === true ? ( <MlLoader/>) : (
       <div className="row ideators_list">
         {users && !users.length?(
-          <NoDataList />
+          <NoDataList moduleName={this.getModuleName(config.moduleName)} />
         ):(
           <div>
           {users.map( (data) => {
@@ -44,7 +54,8 @@ export default class ProfileTileComponent extends Component {
           })}
           </div>
           )}
-      </div>
+      </div>)}
+        </div>
     );
   }
 }

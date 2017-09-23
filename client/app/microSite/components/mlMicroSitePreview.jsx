@@ -24,8 +24,10 @@ export default class MlMicroSitePreview extends React.Component {
     const response = await fetchMicroSiteUrl()
     if (response) {
       let absoluteUrl = window.location.origin + '/' + response.url
-
-      this.setState({src: absoluteUrl})
+      if(typeof absoluteUrl =='undefined')
+        this.setState({src: absoluteUrl})
+      else
+        this.setState({src: false})
       this.setState({loading: false})
 
     }
@@ -37,12 +39,15 @@ export default class MlMicroSitePreview extends React.Component {
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <MlLoader />) : (
-          <form>
-            <iframe src={this.state.src} style={{'height': '550px', 'width': '93%'}}>
-            </iframe>
-          </form>
-        )}
+        {showLoader === true ? ( <MlLoader />) :
+            (this.state.src) ?
+              (<form>
+                <iframe src={this.state.src} style={{'height': '550px', 'width': '93%'}}>
+                 </iframe>
+              </form>)
+            :
+            (<div align="center" style={{fontSize:'30px'}}>Portifolio not requested for Live</div>)
+        }
       </div>)
   }
 

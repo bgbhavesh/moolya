@@ -12,6 +12,8 @@ import CDNImage from '../../../commons/components/CDNImage/CDNImage';
 /**
  * export of the default component
  * */
+import MlLoader from "../../../commons/components/loader/loader";
+import NoDataList from '../../../commons/components/noData/noDataList';
 export default class MlAppIdeatorListView extends Component {
   /**
    * redirect to get the details of the portfolio
@@ -34,16 +36,16 @@ export default class MlAppIdeatorListView extends Component {
   render() {
     let that = this
     const data = this.props.data || [];
+    let loading=this.props.config&&this.props.config.loading;
     return (
       <div>
-        <div className="ideators_list">
+        {loading === true ? ( <MlLoader/>) : (
+          <div className="ideators_list">
           <div className="col-md-12">
             <h2>Ideators</h2>
           </div>
           {data && !data.length?
-            (<div className="alert alert-info col-md-8 col-md-offset-2 text-center" style={{'marginTop':'40px'}}>
-              There are no registrations to be shown here.
-            </div>):(
+            (<NoDataList moduleName="Portfolios" />):(
               <div>
                   {data.map(function (ideator, idx) {
                   return (
@@ -72,6 +74,7 @@ export default class MlAppIdeatorListView extends Component {
 
 
         </div>
+        )}
       </div>
     )
   }

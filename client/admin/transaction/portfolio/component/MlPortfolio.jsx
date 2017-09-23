@@ -448,7 +448,7 @@ class MlPortfolio extends React.Component {
 MlPortfolio.contextTypes = {
   userType: PropTypes.string,
   annotationsInfo: PropTypes.array,
-  breadCrum:PropTypes.Object
+  breadCrum:PropTypes.object
 };
 
 export default MlPortfolio = formHandler()(MlPortfolio);

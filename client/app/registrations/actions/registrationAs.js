@@ -3,6 +3,7 @@ import {appClient} from "../../core/appConnection";
 import {createLead} from "../actions/createLead";
 import {createleadsquaredActivity} from "../../../commons/leadsquared/createleadsquaredActivity";
 
+//todo:// make the registerAs function from here only remove the dependency from admin
 export async function registerAsInfo(registrationDetails, Id) {
   let registration = registrationDetails;
   let registrationId = Id;

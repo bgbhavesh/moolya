@@ -10,9 +10,12 @@ import {findSubChapterActionHandler} from '../../actions/findSubChapter';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import {findBackendUserActionHandler} from '../../../transaction/internalRequests/actions/findUserAction';
 import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
+import {fetchUserDetailsHandler} from "../../../../app/commons/actions/fetchUserDetails";
+import {registerAsInfo} from '../../../transaction/requested/actions/registrationAs'
+import {pick} from 'lodash'
 
+//todo:// this file is to be placed in the commons as it is been used by both admin and app
 export default class MlAnchorInfoView extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -32,6 +35,9 @@ export default class MlAnchorInfoView extends React.Component {
     this.toggle = this.toggle.bind(this)
     this.submitRegisterAs = this.submitRegisterAs.bind(this)
     this.cancelForm = this.cancelForm.bind(this)
+    this.changePath = this.changePath.bind(this)
+    this.optionBySelectRegistrationType = this.optionBySelectRegistrationType.bind(this)
+    this.optionsBySelectIdentity = this.optionsBySelectIdentity.bind(this)
     return this;
   }
 
@@ -53,28 +59,12 @@ export default class MlAnchorInfoView extends React.Component {
     var dHeight = this.props.isAdmin ? 200 : 200
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
     $('.left_wrap').height(WinHeight - (dHeight + $('.' + className).outerHeight(true)));
-    // var WinHeight = $(window).height();
-    // $('.left_wrap').height(WinHeight-(200+$('.app_header').outerHeight(true)));
   }
 
   handleUserClick(id) {
     const resp = this.getAnchorUserDetails(id);
     return resp;
-
-  }
-
-
-  PopOverAction(type, e) {
-    this.setState({
-      popoverOpen: !(this.state.popoverOpen),
-      // target: type.id,
-      // // toDisplay: type.toDisplay,
-      // placement: type.placement,
-      // title: type.title,
-      // file: type.title
-    })
   }
 
   async getAnchorUserDetails(id) {
@@ -131,38 +121,66 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   optionBySelectRegistrationType(value, calback, selObject) {
-    this.setState({registrationType: value, coummunityName: selObject.label})
+    this.setState({registrationType: value})
   }
 
   toggle() {
     this.setState({popoverOpen: !this.state.popoverOpen});
   }
 
-  registerAsClick() {
-    //open popover
-    this.toggle()
+  async registerAsClick() {
+    const response = await fetchUserDetailsHandler()
+    if (response) {
+      this.isAllowRegisterAs = response.isAllowRegisterAs
+      const registrationInfo = response.registrationInfo
+      this.setState({
+        status: response.status,
+        registerId: response._id,
+        firstName: registrationInfo.firstName,
+        lastName: registrationInfo.lastName,
+        contactNumber: registrationInfo.contactNumber,
+        email: registrationInfo.email,
+        userName: registrationInfo.userName,
+        countryId: registrationInfo.countryId,
+        communityId: registrationInfo.registrationType
+      });
+    }
+    if (this.isAllowRegisterAs)
+      this.toggle()
+    else
+      toastr.error('complete pending registration')
     console.log('open the popover')
   }
 
   optionsBySelectIdentity(val) {
-    this.setState({identity: val})
+    this.setState({identityType: val})
   }
 
   async submitRegisterAs() {
     console.log('save register as')
+    var pickStates = pick(this.state, ['userName', 'firstName', 'lastName', 'contactNumber', 'email', 'registrationType', 'identityType', 'countryId'])
+    var propsId = pick(this.props, ['clusterId', 'chapterId', 'subChapterId'])
+    let finalRegData = _.extend(pickStates, propsId);
+    let registrationId = this.state.registerId
+    const response = await registerAsInfo(finalRegData, registrationId);
+    if (response && response.success) {
+      let reg = JSON.parse(response.result)
+      toastr.success("user registered successfully");
+      FlowRouter.go("/app/register/" + reg.registrationId);
+    } else if (response && !response.success)
+      toastr.error(response.result);
     // let registrationInfo={
     //   userName:this.state.userName,
     //   firstName:this.state.firstName,
     //   lastName:this.state.lastName,
     //   contactNumber:this.state.contactNumber,
     //   email:this.state.email,
-    //   registrationType:this.state.selectedCommunity,
-    //   identityType:this.state.identity,
+    //   registrationType:this.state.registrationType,
+    //   identityType:this.state.identityType,
     //   clusterId:this.props.clusterId,
     //   chapterId:this.props.chapterId,
     //   subChapterId:this.props.subChapterId,
-    //   cityId:this.state.selectedCity,
-    //   countryId:this.state.country
+    //   countryId:this.state.countryId
     // }
     // let registrationId=this.state.registerId
     // const response = await registerAsInfo(registrationInfo,registrationId);
@@ -198,8 +216,8 @@ export default class MlAnchorInfoView extends React.Component {
 
     let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterQuery = gql`query($id:String){data:fetchChapters(id:$id) {
-    value:_id
-    label:chapterName
+        value:_id
+        label:chapterName
       }  
     }`;
     let subChapterQuery = gql`query($id:String,$displayAllOption:Boolean){  
@@ -208,8 +226,8 @@ export default class MlAnchorInfoView extends React.Component {
         label:subChapterName
       }  
     }`;
-    let fetchCommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
+    let fetchCommunities = gql` query($isRegisterAs: Boolean){
+        data:fetchCommunitiesFromDef(isRegisterAs:$isRegisterAs){label:name,value:code}
       } 
     `;
     let fetchIdentity = gql`query($communityId:String){
@@ -226,7 +244,8 @@ export default class MlAnchorInfoView extends React.Component {
       }`;
     let chapterOption = {options: {variables: {id: this.props.clusterId}}};
     let subChapterOption = {options: {variables: {id: this.props.chapterId, displayAllOption: false}}};
-    let identityOptions = {options: {variables: {communityId: this.state.selectedCommunity}}};
+    let identityOptions = {options: {variables: {communityId: this.state.registrationType}}};
+    var communityOptions = {options: {variables: {isRegisterAs: true}}}
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -329,40 +348,83 @@ export default class MlAnchorInfoView extends React.Component {
               {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
             </div>
             <div className="col-md-4">
-              <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into
+              <a onClick={this.changePath} href="" className="fileUpload mlUpload_btn">Enter into
                 subchapter</a>
             </div>
-            <div className="col-md-4" >
-              <a href="" id="create_document" className="fileUpload mlUpload_btn" onClick={this.PopOverAction.bind(this)}>Get invited</a>
+            <div className="col-md-4">
+              <a href="" id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
+                invited</a>
             </div>
           </div>
         </div>
 
-        <Popover placement='top' isOpen={this.state.popoverOpen} target='create_document'>
-          <PopoverTitle>ABC</PopoverTitle>
+        <Popover placement="top" isOpen={this.state.popoverOpen} target="default_target" toggle={this.toggle}>
+          <PopoverTitle>Register As </PopoverTitle>
           <PopoverContent>
-            {/*<div className="ml_create_client">*/}
-              {/*<div className="medium-popover">*/}
-                {/*<div className="form-group popover_thumbnail">*/}
-                  Hello
-                {/*</div>*/}
-                {/*<div className="fileUpload mlUpload_btn">*/}
-                  {/*<span>Upload</span>*/}
-                  {/*{this.state.file === "Images" ?*/}
-                    {/*<input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)} /> :*/}
-                    {/*this.state.file === "Videos" ?*/}
-                      {/*<input type="file" className="upload_file upload" name="video_source" id="video_upload"*/}
-                             {/*onChange={that.videoUpload.bind(that)} /> :*/}
-                      {/*this.state.file === "Documents" ? <input type="file" className="upload" ref="upload"*/}
-                                                               {/*onChange={this.documentUpload.bind(this)} /> :*/}
-                        {/*this.state.file === "Templates" ? <input type="file" className="upload" ref="upload"*/}
-                                                                 {/*onChange={this.TemplateUpload.bind(this)} /> : ""}*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
+            <div className="form-group">
+              <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label"
+                            valueKey={'value'} labelKey={'label'} selectedValue={this.state.registrationType}
+                            queryType={"graphql"} query={fetchCommunities} isDynamic={true}
+                            queryOptions={communityOptions}
+                            onSelect={this.optionBySelectRegistrationType}/>
+            </div>
+            <div className="form-group">
+              <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                            labelKey={'label'} placeholder="Identity" selectedValue={this.state.identityType}
+                            queryType={"graphql"} query={fetchIdentity} queryOptions={identityOptions} isDynamic={true}
+                            onSelect={this.optionsBySelectIdentity}/>
+            </div>
+            <div className="col-md-6 nopadding-left">
+              <div className="form-group ">
+                <input type="text" ref="firstName" value={this.state.firstName} placeholder="First Name"
+                       className="form-control float-label" disabled="true"/>
+              </div>
+              <div className="form-group ">
+                <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number"
+                       className="form-control float-label" id="" disabled="true"/>
+              </div>
+              <div className="form-group">
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                              disabled={true}
+                              labelKey={'label'} placeholder="Country of Residence" selectedValue={this.state.countryId}
+                              queryType={"graphql"} query={countryQuery} isDynamic={true}/>
+              </div>
+            </div>
+            <div className="col-md-6 nopadding-right">
+              <div className="form-group ">
+                <input type="text" ref="lastName" value={this.state.contactNumber} placeholder="Last Name"
+                       className="form-control float-label" disabled="true"/>
+              </div>
+              <div className="form-group ">
+                <input type="text" ref="email" value={this.state.email} placeholder="Email Id"
+                       className="form-control float-label" disabled="true"/>
+              </div>
+              <div className="form-group">
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                              labelKey={'label'} placeholder="Cluster" selectedValue={this.props.clusterId}
+                              queryType={"graphql"} query={clusterQuery} isDynamic={true} disabled={true}/>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                              labelKey={'label'} placeholder="Chapter" selectedValue={this.props.chapterId}
+                              queryType={"graphql"} query={chapterQuery} queryOptions={chapterOption} isDynamic={true}
+                              disabled={true}/>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                              labelKey={'label'} placeholder="SubChapter" selectedValue={this.props.subChapterId}
+                              queryType={"graphql"} query={subChapterQuery} queryOptions={subChapterOption}
+                              isDynamic={true} disabled={true}/>
+              </div>
+            </div>
+            <div className="assign-popup">
+              <a data-toggle="tooltip" title="Save" data-placement="top" className="hex_btn hex_btn_in"
+                 onClick={this.submitRegisterAs}>
+                <span className="ml ml-save"></span>
+              </a>
+              <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in"
+                 onClick={this.cancelForm.bind(this)}>
+                <span className="ml ml-delete"></span>
+              </a>
+            </div>
           </PopoverContent>
         </Popover>
-
       </div>
     )
   }

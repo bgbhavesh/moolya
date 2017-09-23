@@ -278,7 +278,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/app/myProfile/registerAs")
+          FlowRouter.go("/app/dashboard")
         }
       },
     ]

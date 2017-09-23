@@ -39,6 +39,8 @@ const mlOfficeTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="office" moduleName="office" client={client}/>,
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlOfficeItem,
+  asyncExpand:true,
+  asyncExpandRowKey:'id',
   columns:[
     {dataField: "dateTime", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},

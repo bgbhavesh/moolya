@@ -21,7 +21,7 @@ export default class MlAnchorInfoView extends React.Component {
       data: {userDetails: [], portfolioCounter: []},
       selectedUser: {},
       subChapterImageLink: "/images/startup_default.png",
-      popoverOpen: true,
+      popoverOpen: false,
     };
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
@@ -63,6 +63,18 @@ export default class MlAnchorInfoView extends React.Component {
     const resp = this.getAnchorUserDetails(id);
     return resp;
 
+  }
+
+
+  PopOverAction(type, e) {
+    this.setState({
+      popoverOpen: !(this.state.popoverOpen),
+      // target: type.id,
+      // // toDisplay: type.toDisplay,
+      // placement: type.placement,
+      // title: type.title,
+      // file: type.title
+    })
   }
 
   async getAnchorUserDetails(id) {
@@ -183,6 +195,7 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   render() {
+
     let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterQuery = gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
@@ -319,13 +332,36 @@ export default class MlAnchorInfoView extends React.Component {
               <a onClick={this.changePath.bind(this)} href="" className="fileUpload mlUpload_btn">Enter into
                 subchapter</a>
             </div>
-            <div className="col-md-4">
-              <a href="" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get invited</a>
+            <div className="col-md-4" >
+              <a href="" id="create_document" className="fileUpload mlUpload_btn" onClick={this.PopOverAction.bind(this)}>Get invited</a>
             </div>
           </div>
         </div>
 
-        {/*registeras popover*/}
+        <Popover placement='top' isOpen={this.state.popoverOpen} target='create_document'>
+          <PopoverTitle>ABC</PopoverTitle>
+          <PopoverContent>
+            {/*<div className="ml_create_client">*/}
+              {/*<div className="medium-popover">*/}
+                {/*<div className="form-group popover_thumbnail">*/}
+                  Hello
+                {/*</div>*/}
+                {/*<div className="fileUpload mlUpload_btn">*/}
+                  {/*<span>Upload</span>*/}
+                  {/*{this.state.file === "Images" ?*/}
+                    {/*<input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)} /> :*/}
+                    {/*this.state.file === "Videos" ?*/}
+                      {/*<input type="file" className="upload_file upload" name="video_source" id="video_upload"*/}
+                             {/*onChange={that.videoUpload.bind(that)} /> :*/}
+                      {/*this.state.file === "Documents" ? <input type="file" className="upload" ref="upload"*/}
+                                                               {/*onChange={this.documentUpload.bind(this)} /> :*/}
+                        {/*this.state.file === "Templates" ? <input type="file" className="upload" ref="upload"*/}
+                                                                 {/*onChange={this.TemplateUpload.bind(this)} /> : ""}*/}
+                {/*</div>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          </PopoverContent>
+        </Popover>
 
       </div>
     )

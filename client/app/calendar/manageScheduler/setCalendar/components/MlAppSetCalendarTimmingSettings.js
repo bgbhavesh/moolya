@@ -57,6 +57,7 @@ class MlAppCalendarTimmingSettings extends Component {
       }
     };
     this.getCloningMessage =this.getCloningMessage.bind(this);
+    this.updateCalendarSetting = this.updateCalendarSetting.bind(this);
   }
 
   componentWillMount() {
@@ -608,10 +609,10 @@ class MlAppCalendarTimmingSettings extends Component {
         showAction: true,
         actionName: 'save',
         hasPopOver: true,
-        popOverTitle: 'Shared Details',
+        popOverTitle: 'Are you sure ?',
         placement: 'top',
         target: 'sharedLibrary',
-        popOverComponent: <CalendarPopOver />,
+        popOverComponent: <CalendarPopOver  save={this.updateCalendarSetting.bind(this)} />,
         actionComponent: PopoverActionIcon,
         handler: this.portfolioShareHandler.bind(this),
       }

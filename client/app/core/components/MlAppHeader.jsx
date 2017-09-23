@@ -56,7 +56,6 @@ class MlAppProfileHeader extends Component {
     let user = Meteor.user();
     let gImg = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.profile && user.profile.profileImage) {
-      console.log(user);
       this.setState({
         profilePic:user.profile.profileImage == " "?gImg:user.profile.profileImage
       });
@@ -72,7 +71,6 @@ class MlAppProfileHeader extends Component {
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response){
-      console.log("Is Cal", response);
       if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
         this.setState({
           isAllowRegisterAs:false

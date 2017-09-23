@@ -16,7 +16,8 @@ export default class  BeSpokeView extends Component {
   }
 
   saveData() {
-    if(this.props.data){
+    console.log("this.props.data:",this.props.data);
+    if(this.props.data && this.props.data._id) {
       this.props.updateBeSpokeData(true);
     }else {
       this.props.saveBeSpokeServiceDetails(true);

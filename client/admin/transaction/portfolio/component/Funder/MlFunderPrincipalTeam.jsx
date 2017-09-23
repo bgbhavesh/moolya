@@ -729,10 +729,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                          onClick={this.onLockChange.bind(this, "aboutPrincipal", "isAboutPrincipalPrivate", "principal")} />
 
                           </div>
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
-                          {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
-                          {/*</div>*/}
+                          <div className="form-group">
+                            <input type="text" placeholder="LinkedIn" name="linkedinUrl"
+                                   defaultValue={this.state.data.linkedinUrl}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)} />
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
+                                         onClick={this.onLockChange.bind(this, "linkedinUrl", "isLinkedinUrlPrivate", "principal")} />
+
+                          </div>
 
                           <div className="input_types">
                             <input id="makePrivate" type="checkbox"
@@ -874,10 +878,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
                                          onClick={this.onLockChange.bind(this, "aboutTeam", "isAboutTeamPrivate", "team")} />
                           </div>
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
-                          {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
-                          {/*</div>*/}
+                          <div className="form-group">
+                            <input type="text" placeholder="LinkedIn" name="linkedinUrl"
+                                   defaultValue={this.state.data.linkedinUrl}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)} />
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
+                                         onClick={this.onLockChange.bind(this, "linkedinUrl", "isLinkedinUrlPrivate", "team")} />
+
+                          </div>
 
                           <div className="input_types">
                             <input id="makePrivate" type="checkbox"

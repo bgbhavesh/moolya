@@ -3,6 +3,7 @@ import {client} from '../../../core/apolloConnection';
 import {createLead} from '../actions/createLead'
 import {createleadsquaredActivity} from '../../../../commons/leadsquared/createleadsquaredActivity'
 
+//todo:// this file is already in app side need to remove it from here it has no use from here
 export async function registerAsInfo(registrationDetails,Id) {
   let registration = registrationDetails;
  let registrationId=Id;

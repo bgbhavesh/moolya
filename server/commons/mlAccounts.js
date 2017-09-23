@@ -457,7 +457,7 @@ export default MlAccounts=class MlAccounts {
     }else{
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
-    MlRegistration.update({"registrationInfo.contactNumber":numbr},{$set:{"otps":otps}});
+    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
     //send SMS
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(user,otpNum);
@@ -527,13 +527,18 @@ export default MlAccounts=class MlAccounts {
           }
           otpRec.verified = true;
           var mobileArr = user.mobileNumbers;
-          var mobileObj = _.find(mobileArr, {mobileNumber:mobileNumber})
-          if(mobileObj){
-            mobileObj.verified = true
-            _lodash.remove(mobileArr, {mobileNumber:mobileNumber})
-            mobileArr.push(mobileObj);
+          if(mobileArr){
+            var mobileObj = _.find(mobileArr, {mobileNumber:mobileNumber})
+            if(mobileObj){
+              mobileObj.verified = true
+              _lodash.remove(mobileArr, {mobileNumber:mobileNumber})
+              mobileArr.push(mobileObj);
+            }
+            user.mobileNumbers = mobileArr;
+          }else{
+            let mobileNumbers = [{ num: otpNum, time: new Date(), verified: otpRec.verified, mobileNumber: mobileNumber, countryId: otpRec.countryId}];
+            user.mobileNumbers = mobileNumbers;
           }
-          user.mobileNumbers = mobileArr;
 
           var updatedCount=Meteor.users.update({_id:userId},{$set:{"otps":user.otps, "mobileNumbers":user.mobileNumbers}});
           otpFound = true;

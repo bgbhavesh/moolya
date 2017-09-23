@@ -25,7 +25,7 @@ export default class MlTable extends React.Component {
   render() {
     const selectRow = {
       mode: 'checkbox',
-      bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
+      bgColor: this.props.bgColor?this.props.bgColor:'#ffe144',
       onSelect: this.props.handleRowSelect,
       clickToExpand: this.props.isExpandableRow?true:false,
       onSelectAll: this.props.handleRowSelectAll,
@@ -69,7 +69,8 @@ export default class MlTable extends React.Component {
       onSortChange:this.props.onSortChange,
       onSearchChange:this.props.onSearchChange,
       clearSearch: false,
-      onlyOneExpanding:true};
+      onlyOneExpanding:true,
+      expandRowBgColor:this.props.expandRowBgColor?this.props.expandRowBgColor:'#fff'};
 
     const columnItems = this.props.columns.map((cl) =>{
       let columnOptions = {

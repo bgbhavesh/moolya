@@ -238,7 +238,7 @@ adminSection.route('/settings/addSubDepartment', {
 adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
   name: 'settings',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} subProcessConfig={params.subProcessId} stepCode={params.stepCode}/>})
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'templates','subModule':'stepCode'}}  subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} subProcessConfig={params.subProcessId} stepCode={params.stepCode}/>})
   }
 });
 /*
@@ -269,13 +269,13 @@ adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
 adminSection.route('/settings/hierarchy/platformhierarchy', {
   name: 'hierarchy_details',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'platform'}}/>,adminContent:< MlHierarchyList/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'platformHierarchy'}}/>,adminContent:< MlHierarchyList/>})
   }
 });
 adminSection.route('/settings/hierarchy/clusterhierarchy', {
   name: 'hierarchy',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'cluster'}}/>,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'clusterHierarchy'}}/>,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
 adminSection.route('/settings/hierarchy/history', {
@@ -287,14 +287,15 @@ adminSection.route('/settings/hierarchy/history', {
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
   name: 'hierarchy_chapters',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy'}}/>,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'clusterHierarchy'
+    ,'dynamic':true}}/>,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/:subChapterId/:defaultSubChapter/hierarchyDetails', {
   name: 'hierarchy_details',
   action(params){
     //mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDepartmentsList clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'clusterHierarchy','dynamic':true}} clusterId={params.clusterId}/>,adminContent:< MlHierarchyDepartmentsList clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
   }
 });
 
@@ -308,20 +309,20 @@ adminSection.route('/settings/editSubDepartment/:id', {
 adminSection.route('/settings/documentProcess/processList', {
   name: 'settings_processList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'processMapping'}} />, adminContent:<MlProcessMappingList />})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'processMapping'}} />, adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/documentProcess/addProcess', {
   name: 'settings_addProcess',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'processMapping'}} />,adminContent:<MlAddProcessMapping />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'processMapping'}} />,adminContent:<MlAddProcessMapping />})
   }
 });
 
 adminSection.route('/settings/documentProcess/editProcess/:id', {
   name: 'settings_editProcess',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'processMapping'}} />,adminContent:<MlEditProcessMapping config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'processMapping'}} />,adminContent:<MlEditProcessMapping config={params.id} />})
   }
 });
 
@@ -409,19 +410,19 @@ adminSection.route('/settings/editCity/:id', {
 adminSection.route('/settings/documentProcess/userTypeList', {
   name: 'settings_UserTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'userCategories'}} />, adminContent:< MlUserTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'userType'}} />, adminContent:< MlUserTypeList/>})
   }
 });
 adminSection.route('/settings/documentProcess/editUserType/:id', {
   name: 'settings_EditUserType',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'userCategories'}} />,adminContent:< MlEditUserType  config={params.id}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'userType'}} />,adminContent:< MlEditUserType  config={params.id}/>})
   }
 });
 adminSection.route('/settings/documentProcess/addUserType', {
   name: 'settings_AddUserType',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'userCategories'}} />,adminContent:< MlAddUserType/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'userType'}} />,adminContent:< MlAddUserType/>})
   }
 });
 adminSection.route('/settings/rolesList', {
@@ -465,73 +466,73 @@ adminSection.route('/settings/editTransactionType/:id', {
 adminSection.route('/settings/documentProcess/documentTypeList', {
   name: 'settings_DocumentTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentType'}} />, adminContent:< MlDocumentTypesList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentType'}} />, adminContent:< MlDocumentTypesList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addDocumentType', {
   name: 'settings_AddDocumentType',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentType'}} />,adminContent:< MlAddDocumentType/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentType'}} />,adminContent:< MlAddDocumentType/>})
   }
 });
 adminSection.route('/settings/documentProcess/editDocumentType/:id', {
   name: 'settings_EditDocumentType',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentType'}} />,adminContent:<MlEditDocumentType config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentType'}} />,adminContent:<MlEditDocumentType config={params.id} />})
   }
 });
 adminSection.route('/settings/documentProcess/documentFormatList', {
   name: 'settings_DocumentFormatList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentFormat'}} />, adminContent:< MlDocumentFormatsList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentFormat'}} />, adminContent:< MlDocumentFormatsList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addDocumentFormat', {
   name: 'settings_AddDocumentFormat',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentFormat'}} />,adminContent:< MlAddDocumentFormat/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentFormat'}} />,adminContent:< MlAddDocumentFormat/>})
   }
 });
 adminSection.route('/settings/documentProcess/editDocumentFormat/:id', {
   name: 'settings_EditDocumentFormat',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentFormat'}} />,adminContent:<MlEditDocumentFormat config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentFormat'}}/>,adminContent:<MlEditDocumentFormat config={params.id} />})
   }
 });
 adminSection.route('/settings/documentProcess/kycCategoryList', {
   name: 'settings_KycCategoryList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'kycCategory'}} />, adminContent:< MlKycCategoriesList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'kycCategory'}} />, adminContent:< MlKycCategoriesList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addKycCategory', {
   name: 'settings_AddKycCategory',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'kycCategory'}} />,adminContent:< MlAddKycCategory/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'kycCategory'}} />,adminContent:< MlAddKycCategory/>})
   }
 });
 adminSection.route('/settings/documentProcess/editKycCategory/:id', {
   name: 'settings_EditKycCategory',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'kycCategory'}} />,adminContent:<MlEditKycCategory config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'kycCategory'}} />,adminContent:<MlEditKycCategory config={params.id} />})
   }
 });
 adminSection.route('/settings/documentProcess/documentMappingList', {
   name: 'settings_DocumentMappingList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentMapping'}} />, adminContent:< MlDocumentMappingList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentMapping'}} />, adminContent:< MlDocumentMappingList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addDocumentMapping', {
   name: 'settings_AddDocumentMapping',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentMapping'}} />,adminContent:< MlAddDocumentMapping/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentMapping'}} />,adminContent:< MlAddDocumentMapping/>})
   }
 });
 adminSection.route('/settings/documentProcess/editDocumentMapping/:id', {
   name: 'settings_EditDocumentMapping',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentMapping'}} />,adminContent:<MlEditDocumentMapping config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'documentMapping'}} />,adminContent:<MlEditDocumentMapping config={params.id} />})
   }
 });
 adminSection.route('/settings/accountTypeList', {
@@ -556,55 +557,55 @@ adminSection.route('/settings/editAccountType/:id', {
 adminSection.route('/settings/documentProcess/industryList', {
   name: 'settings_IndustryTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'industry'}} />,adminContent:< MlIndustryTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'industry'}} />,adminContent:< MlIndustryTypeList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addIndustry', {
   name: 'settings_AddIndustryType',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'industry'}} />,adminContent:<MlAddIndustryType />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'industry'}}  />,adminContent:<MlAddIndustryType />})
   }
 });
 adminSection.route('/settings/documentProcess/editIndustry/:id', {
   name: 'settings_EditIndustryType',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'industry'}} />,adminContent:<MlEditIndustryType config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'industry'}} />,adminContent:<MlEditIndustryType config={params.id} />})
   }
 });
 adminSection.route('/settings/documentProcess/specificationList', {
   name: 'settings_SpecificationTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'specification'}} />, adminContent:< MlSpecificationTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'specification'}}  />, adminContent:< MlSpecificationTypeList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addSpecification', {
   name: 'settings_AddSpecificationType',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'specification'}} />,adminContent:< MlAddSpecificationType />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'specification'}}/>,adminContent:< MlAddSpecificationType />})
   }
 });
 adminSection.route('/settings/documentProcess/editSpecification/:id', {
   name: 'settings_EditIndustryType',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'specification'}} />,adminContent:<MlEditSpecificationType config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'specification'}}/>,adminContent:<MlEditSpecificationType config={params.id} />})
   }
 });
 adminSection.route('/settings/documentProcess/professionList', {
   name: 'settings_ProfessionTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'profession'}} />, adminContent:< MlProfessionTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'profession'}}/>, adminContent:< MlProfessionTypeList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addProfession', {
   name: 'settings_AddProfessionType',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'profession'}} />,adminContent:< MlAddProfessionType />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'profession'}}/>,adminContent:< MlAddProfessionType />})
   }
 });
 adminSection.route('/settings/documentProcess/editProfession/:id', {
   name: 'settings_EditProfessionType',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'profession'}} />,adminContent:<MlEditProfessionType config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader  breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'profession'}} />,adminContent:<MlEditProfessionType config={params.id} />})
   }
 });
 // adminSection.route('/settings/entityList', {            //Segregation of admin settings
@@ -744,19 +745,19 @@ adminSection.route('/settings/edittechnology/:id', {
 adminSection.route('/settings/documentProcess/subDomainList', {
   name: 'settings_SubDomainList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'subDomain'}} />, adminContent:<MlSubDomainList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'subDomain'}} />, adminContent:<MlSubDomainList/>})
   }
 });
 adminSection.route('/settings/documentProcess/addSubDomain', {
   name: 'settings_AddSubDomain',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'subDomain'}} />,adminContent:< MlAddSubDomain />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'subDomain'}}  />,adminContent:< MlAddSubDomain />})
   }
 });
 adminSection.route('/settings/documentProcess/editSubDomain/:id', {
   name: 'settings_EditSubDomain',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'subDomain'}} />,adminContent:<MlEditSubDomain config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'documentProcess','subModule':'subDomain'}}  />,adminContent:<MlEditSubDomain config={params.id} />})
   }
 });
 

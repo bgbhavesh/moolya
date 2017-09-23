@@ -75,7 +75,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
   }
   componentDidUpdate(){
     var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.list_block').click(function(){
+    $('.two').click(function(){
       $('#details-div').show();
       $('.top-content').hide();
       var $frame = $('#forcecentered');
@@ -103,7 +103,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       });
     });
 
-    $('.top-content2 .list_block').click(function(){
+    $('.one').click(function(){
       $('#details-div2').show();
       $('.top-content2').hide();
       var $frame = $('#forcecentered2');
@@ -112,7 +112,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       // Call Sly on frame
       $frame.sly({
         horizontal: 1,
-        itemNav: 'forceCentered2',
+        itemNav: 'forceCentered',
         smart: 1,
         activateOn: 'click',
         mouseDragging: 1,
@@ -209,7 +209,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectPrincipal.bind(that, idx)}>
-                                <div className="list_block notrans funding_list">
+                                <div className="list_block notrans two funding_list">
                                   <FontAwesome name='lock'/>
                                   <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                   <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
@@ -227,9 +227,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         })}
                       </div>
                     </div>
-                    <div id="details-div" style={{'display': 'none'}}>
-                      <div className="col-lg-12">
-                        <div className="row">
+                    <div id="details-div" className="border_top" style={{'display': 'none'}}>
+                      <div className="col-lg-12 nopadding">
                           <div className="top_block_scroller" id="forcecentered">
                             <ul>
                               {that.state.funderPrincipalList.map(function (principal, idx) {
@@ -247,7 +246,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               })}
                             </ul>
                           </div>
-                        </div>
                         <div>
 
                             <div className="details-panel">
@@ -356,7 +354,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectTeam.bind(that, idx)}>
-                                <div className="list_block notrans funding_list">
+                                <div className="list_block notrans one funding_list">
                                   <FontAwesome name='lock'/>
                                   <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                   <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
@@ -370,9 +368,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         })}
                       </div>
                     </div>
-                    <div id="details-div2" style={{'display': 'none'}}>
-                      <div className="col-lg-12">
-                        <div className="row">
+                    <div id="details-div2" className="border_top" style={{'display': 'none'}}>
+                      <div className="col-lg-12 nopadding">
                           <div className="top_block_scroller" id="forcecentered2">
                             <ul>
                               {that.state.funderTeamList.map(function (team, idx) {
@@ -390,7 +387,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               })}
                             </ul>
                           </div>
-                        </div>
                         <div>
 
                             <div className="details-panel">
@@ -406,6 +402,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>
                                           <p className="small">{selectedTeam.designation}</p>
                                         </div>
+                                        {/*<div className="ml_icon_btn">*/}
                                         {/*<div className="ml_icon_btn">*/}
                                         {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
                                         {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}

@@ -50,5 +50,5 @@ function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); }
 
 
 MlTabComponent.contextTypes = {
-  breadCrum: PropTypes.Object,
+  breadCrum: PropTypes.object,
 };

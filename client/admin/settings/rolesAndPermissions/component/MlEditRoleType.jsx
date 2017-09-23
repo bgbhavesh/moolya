@@ -129,7 +129,7 @@
       }
       return response;
     } else {
-      toastr.error("All Assign role fields Required");
+      toastr.error("Please fill all mandatory fields to proceed");
     }
   }
 

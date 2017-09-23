@@ -318,6 +318,7 @@ class MlAppMyProfile extends Component {
 
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;
+    this.setState({loading:true});
     let otp=this.refs.enteredOTP.value;
       const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
       let resp=null;
@@ -326,8 +327,9 @@ class MlAppMyProfile extends Component {
         this.setState({mobileNumberVerified:resp.mobileNumberVerified});
         toastr.success("Mobile Number Verified");
         this.setState({getOTPClicked:false});
+        this.findUserDetails();
       }else{
-        this.setState({mobileNumberVerified:false});
+        this.setState({loading:false,mobileNumberVerified:false});
       }
       return response;
   }

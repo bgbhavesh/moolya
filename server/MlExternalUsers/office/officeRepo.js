@@ -260,7 +260,7 @@ class MlOfficeRepo{
     officeMemeberValidations(userId, profile, payload){
         // var userOffices = mlDBController.find('MlOffice', {profileId:profile.profileId, userId:userId}).fetch();
         var officeMember = mlDBController.findOne('MlOfficeMembers', {officeId:payload.myOfficeId, userId:userId});
-        if(!officeMember || !officeMember.isPrincipal)
+        if(!officeMember || (!officeMember.isPrincipal && !officeMember.isAdminUser) )
           throw new Error('Invalid Office Member');
 
         var myOffice = mlDBController.findOne('MlOffice', {_id:payload.myOfficeId, isActive:true});

@@ -125,33 +125,38 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-
 }
+
+/**
+ * @Note: commented the authorization as the authorization now moved to generic layer
+ * todo:// need to check with business for the moolya and non-moolya pre conditions before the register as
+ * */
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
-  var validationCheck = null;
+  // var validationCheck = null;
   let updateRecord = {}
-  var date = new Date()
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+  var response = null
+  // var date = new Date()
+  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  // if (!isValidAuth) {
+  //   let code = 401;
+  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+  //   return response;
+  // }
   if (!args.registrationId) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Registration Id  is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("Registration Id  is mandatory!!!!", code);
     return response;
   }
   if (!args.registration.registrationType) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
     return response;
   } else if (!args.registration.userName) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("username is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("username is mandatory!!!!", code);
     return response;
   }
-  validationCheck = MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
+  var validationCheck = MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
   }
@@ -161,18 +166,25 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   let clusterInfo = MlClusters.findOne({_id: registrationInfo.clusterId})
   let communityDef = mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType || null)}, context) || {};
   registrationInfo.communityName = communityDef.name;
-  registrationInfo.clusterName = clusterInfo.clusterName,
-    registrationInfo.clusterId = clusterInfo._id
-  registrationInfo.countryId = userRegisterInfo.countryId
-  registrationInfo.cityId = userRegisterInfo.cityId
-  registrationInfo.password = userRegisterInfo.password
-  registrationInfo.accountType = userRegisterInfo.accountType
-  registrationInfo.institutionAssociation = userRegisterInfo.institutionAssociation
-  registrationInfo.companyname = userRegisterInfo.companyname
-  registrationInfo.companyUrl = userRegisterInfo.companyUrl
-  registrationInfo.remarks = userRegisterInfo.remarks
-  registrationInfo.referralType = userRegisterInfo.referralType
-  // registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
+  registrationInfo.clusterName = clusterInfo.clusterName
+  registrationInfo.clusterId = clusterInfo._id
+  var regDetails = _lodash.pick(userRegisterInfo, ['countryId', 'cityId', 'password', 'accountType', 'institutionAssociation', 'companyname', 'companyUrl', 'remarks', 'referralType'])
+  registrationInfo = _lodash.extend(registrationInfo, regDetails)
+  registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName
+  if (registrationInfo.subChapterId) {
+    var subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: registrationInfo.subChapterId}) || {}
+    registrationInfo.chapterName = subChapterDetails.chapterName
+    registrationInfo.subChapterName = subChapterDetails.subChapterName
+  }
+  // registrationInfo.countryId = userRegisterInfo.countryId
+  // registrationInfo.cityId = userRegisterInfo.cityId
+  // registrationInfo.password = userRegisterInfo.password
+  // registrationInfo.accountType = userRegisterInfo.accountType
+  // registrationInfo.institutionAssociation = userRegisterInfo.institutionAssociation
+  // registrationInfo.companyname = userRegisterInfo.companyname
+  // registrationInfo.companyUrl = userRegisterInfo.companyUrl
+  // registrationInfo.remarks = userRegisterInfo.remarks
+  // registrationInfo.referralType = userRegisterInfo.referralType
   registrationInfo.registrationDate = new Date()
   validationCheck = MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if (validationCheck && !validationCheck.isValid) {
@@ -194,7 +206,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
     let communityName = communityDef&&communityDef.name?communityDef.name:""
-    MlSMSNotification.registerAsRequest(id,communityName,context)
+    // MlSMSNotification.registerAsRequest(id,communityName,context)
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
@@ -352,11 +364,12 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
       if (registerId) {
         var response = MlRegistration.findOne({"_id": registerId}) || {}
 
-        let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
+        let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {   //MOOLYA_2792
           "registrationInfo.userName": username,
+          "registrationInfo.communityDefCode": {$ne: "BRW"},
           "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
-        if (_lodash.isEmpty(isAllowRegisterAs) ||  (isAllowRegisterAs.registrationInfo.communityDefCode === "BRW"))
+        if (_lodash.isEmpty(isAllowRegisterAs))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false

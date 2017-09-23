@@ -187,7 +187,7 @@ export default class MlAppRegInstitution extends Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/app/myProfile/registerAs")
+          FlowRouter.go("/app/dashboard")
         }
       },
     ]

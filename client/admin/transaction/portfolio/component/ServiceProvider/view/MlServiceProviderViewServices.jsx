@@ -10,6 +10,9 @@ import {findAnnotations} from "../../../../../../commons/annotator/findAnnotatio
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
+
+import MlFunderServicesList from "./../../Funder/Services/Container/MlFunderServicesList";
+
 var FontAwesome = require('react-fontawesome');
 
 export default class MlServiceProviderViewServices extends Component {
@@ -154,45 +157,15 @@ export default class MlServiceProviderViewServices extends Component {
     let description = this.state.data.servicesDescription ? this.state.data.servicesDescription : ''
     let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
     const showLoader = this.state.loading;
+    console.log(this.props);
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
-          <div className="main_wrap_scroll">
-            <h2>Services</h2>
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="panel panel-default">
-                    <div className="panel-heading">
-                      Services
-                    </div>
-                    <div className="panel-body" id="annotatorContent">
-                      <p>{description ? description : <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
-                      </div>}</p>
-
-                      {/*<div className="form-group nomargin-bottom">
-                       <textarea placeholder="Describe..." className="form-control" id="cl_about"
-                       defaultValue={description} name="servicesDescription"></textarea>
-                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                       id="isServicesPrivate"/>
-                       </div>*/}
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </ScrollArea>
-          </div>
-        )
-        }
-    </div>
+        <div className="clearfix"/>
+        <MlFunderServicesList
+          myPortfolio={this.props.myPortfolio}
+          createServiceMode={this.props.createServiceMode ? this.props.createServiceMode : ""}
+          portfolioDetailsId={this.props.portfolioDetailsId} />
+      </div>
     )
   }
 };

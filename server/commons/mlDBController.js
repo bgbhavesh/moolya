@@ -54,7 +54,7 @@ class MlDBController{
           var setOnInsertObject=updateOptions.setOnInsertObject;
           var  result=null;
           if(setOnInsert&&setOnInsertObject){
-            result = collection.update(docId, {$set: payload,$setOnInsert:setOnUpsertObject}, {upsert:true});
+            result = collection.update(docId, {$set: payload,$setOnInsert:setOnInsertObject}, {upsert:true});
           }else{
              result = collection.update(docId, {$set: payload}, {upsert:true});
           }

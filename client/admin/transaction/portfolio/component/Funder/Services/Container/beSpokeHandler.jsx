@@ -71,6 +71,7 @@ export default class  BeSpokeHandler extends Component {
   componentWillMount(){
     if(this.props.beSpokeDetails){
       let details = this.props.beSpokeDetails[this.props.beSpokeIndex];
+      details = JSON.parse(JSON.stringify(details));
       this.setState({details:details})
       console.log(details)
       let mode = this.props.beSpokeDetails[this.props.beSpokeIndex].mode;
@@ -135,7 +136,7 @@ export default class  BeSpokeHandler extends Component {
         if(!resp) {
           toastr.error("No response from server");
         } else {
-          toastr.error(res.result);
+          toastr.error(resp.result);
         }
       }
       return resp;
@@ -168,7 +169,7 @@ export default class  BeSpokeHandler extends Component {
    **/
 
   onOptionSelected(selectedIndustry) {
-    let details = this.state.data;
+    let details = this.state.details;
     details['industryId'] = selectedIndustry;
     this.setState({details: details})
   }

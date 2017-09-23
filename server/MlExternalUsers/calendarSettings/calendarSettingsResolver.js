@@ -197,6 +197,15 @@ MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, 
     args.calendarSetting.updatedAt = new Date();
     let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, args.calendarSetting, {$set:true}, context);
     if(result){
+      let cancelAppointmentQuery = {
+        startDate: {"$gte": new Date()},
+        "$or": [
+            {"provider.profileId": profileId},
+            {"client.profileId": profileId}
+        ]
+      };
+      mlDBController.update( 'MlAppointments', cancelAppointmentQuery, { isCancelled: true }, { $set: true, multi: true });
+      // To do for handle Appointment members collections
       let code = 200;
       let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
       return response;
@@ -245,6 +254,10 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, conte
   if(isAlreadyExist){
     isAlreadyExist.workingDays = isAlreadyExist.workingDays ? isAlreadyExist.workingDays : [];
     let workingDays = args.workingDays;
+    workingDays = workingDays ? workingDays : [];
+    let daysArray = args.workingDays.map( (day)=> {
+      return day.dayName + 1;
+    });
     isAlreadyExist.workingDays = isAlreadyExist.workingDays.map(function(day){
       let isFind = workingDays.find(function(arr){ return arr.dayName == day.dayName });
       if(isFind){
@@ -255,6 +268,37 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, conte
       }
     });
     isAlreadyExist.workingDays = isAlreadyExist.workingDays.concat(workingDays);
+    let pipeline = [
+      {
+        "$match": {
+          "startDate": {"$gte": new Date()},
+          "$or": [
+            {"provider.profileId": profileId},
+            {"client.profileId": profileId}
+          ]
+        }
+      },
+      { "$group": {
+        _id: { $dayOfWeek: "$startDate" },
+        ids: { "$push": "$appointmentId" }
+      }},
+      {
+        "$match": { "_id": { "$in": daysArray } }
+
+      },
+      {
+        "$unwind": "$ids"
+      },
+      { "$group": {
+        _id: null,
+        ids: { "$push": "$ids" }
+      }},
+    ];
+    let appointmentData = mlDBController.aggregate('MlAppointments', pipeline, context);
+    if(appointmentData && appointmentData.ids && appointmentData.ids.length){
+      mlDBController.update( 'MlAppointments', {appointmentId: { "$in": appointmentData.ids } }, { isCancelled: true }, { $set: true, multi: true });
+    };
+    console.log("appointmentData:", appointmentData);
     let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, { workingDays: isAlreadyExist.workingDays ,updatedAt: new Date()}, {$set:true}, context);
     if(result){
       let code = 200;

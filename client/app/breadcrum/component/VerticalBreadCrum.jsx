@@ -224,5 +224,5 @@ function properName(name) {
 }
 
 VerticalBreadCrum.contextTypes = {
-  breadCrum: PropTypes.Object,
+  breadCrum: PropTypes.object,
 };

@@ -43,6 +43,7 @@ class MlAppPortfolio extends Component{
     this.fetchIdeaId.bind(this);
     this.interactionActionHandler.bind(this);
     this.assignActionHandlerProxy.bind(this);
+    this.activateActionPanelAccordion.bind(this);
     return this;
   }
   // shouldComponentUpdate(nextProps, nextState){
@@ -73,16 +74,32 @@ class MlAppPortfolio extends Component{
       annotationsInfo: this.state.annotations
     }
   }
-  getSelectedAnnotation(selAnnotation){
-    if(!this.state.popoverOpen){
-      this.toggle();
-      $('.comment_wrap').slideToggle();
-     }
-    if(selAnnotation){
-      this.setState({annotationData : selAnnotation},function(){
-        this.fetchComments(selAnnotation.id);
-      })
+ /**Action panel activation for annotation*/
+  activateActionPanelAccordion(){
+    var actionPanelActivationHandler=this.state.actionPanelActivationHandler;
+    if(_.isFunction(actionPanelActivationHandler)){
+      actionPanelActivationHandler();
     }
+  }
+  activateActionPanelHandler(handler){
+    this.setState({actionPanelActivationHandler:handler});
+  }
+
+  getSelectedAnnotation(selAnnotation){
+    //activate the action panel for accordion : Issue : MOOLYA-2519
+    this.activateActionPanelAccordion();
+    var that = this;
+    setTimeout(function () {
+      if (!that.state.popoverOpen) {
+        that.toggle();
+        $('.comment_wrap').slideToggle();
+      }
+      if (selAnnotation) {
+        that.setState({annotationData: selAnnotation}, function () {
+          that.fetchComments(selAnnotation.id);
+        })
+      }
+    },500);
   }
 
   commentClicked(){
@@ -444,7 +461,7 @@ class MlAppPortfolio extends Component{
           </Popover>
         {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
         {/*{isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}*/}
-         <MlAppPortfolioAccordionContainer interactionAutoId={this.state.interactionAutoId} viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
+         <MlAppPortfolioAccordionContainer interactionAutoId={this.state.interactionAutoId} viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} activateActionPanelHandler={this.activateActionPanelHandler.bind(this)} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
       </div>
     )
   }

@@ -473,7 +473,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Linkdin URL" name="linkedinUrl" defaultValue={this.state.data.linkedinUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} />
+                        <input type="text" placeholder="LinkedIn URL" name="linkedinUrl" defaultValue={this.state.data.linkedinUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} />
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate" onClick={this.onClick.bind(this, "linkedinUrl", "isLinkedinUrlPrivate")} />
                       </div>
 

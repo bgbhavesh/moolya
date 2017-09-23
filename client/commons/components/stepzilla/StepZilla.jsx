@@ -285,18 +285,18 @@ export default class StepZilla extends Component {
 
         return (
           <div>
-            <Modal isOpen={this.state.maditoryModalOpen} onHide={this.onClose}>
-              <ModalHeader>Title</ModalHeader>
+            <Modal isOpen={this.state.maditoryModalOpen} onHide={this.onClose} className="warning_modal">
+              <ModalHeader>Warning</ModalHeader>
               <ModalBody>
-                <div>Kindly enter all manditory fields</div>
+                <div>Kindly enter all mandatory fields</div>
               </ModalBody>
               <ModalFooter>
                {/* <Button color="primary" onClick={this.onManditoryConfirm.bind(this)}>Ok</Button>{' '}*/}
                 <Button color="secondary" onClick={this.onManditoryCancel.bind(this)}>Cancel</Button>
               </ModalFooter>
             </Modal>
-            <Modal isOpen={this.state.modalOpen} onHide={this.onClose}>
-              <ModalHeader>Title</ModalHeader>
+            <Modal isOpen={this.state.modalOpen} onHide={this.onClose} className="warning_modal">
+              <ModalHeader>Warning</ModalHeader>
               <ModalBody>
                 <div>Changes made won't save.Do you want to continue?</div>
               </ModalBody>

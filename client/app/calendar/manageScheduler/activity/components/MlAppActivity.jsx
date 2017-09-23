@@ -182,7 +182,6 @@ class MlAppActivity extends Component {
 
     if (this.state.currentComponent === 0) {
       if (!activityDetails) {
-        x
         this.toastError('Activity Name');
         return false;
       }

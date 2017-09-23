@@ -780,6 +780,7 @@ let CoreModules = {
       depQuery = {$and: [{isMoolya: true}, {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}]}
     else if (!subChapter.isDefaultSubChapter)
       depQuery = {$and: [{"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}, {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', requestParams.subChapterId]}}}}]}
+    depQuery = mergeQueries(depQuery, userFilterQuery);
     let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
 
     resp.map(function (department) {
@@ -939,13 +940,31 @@ let CoreModules = {
     let piplelineQuery = [
       { "$match": {"transactionTypeId":"appointment"} },
       { "$lookup": {
+        from: "mlAppointments",
+        localField: "docId",
+        foreignField: "appointmentId",
+        as: "scAppointment"
+        }
+      },
+      {
+        "$unwind": {
+          path: "$scAppointment",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      { "$lookup": {
         from: "mlPayment",
         localField: "docId",
         foreignField: "resourceId",
         as: "scOrder"
       }
       },
-      { "$unwind": "$scOrder" },
+      {
+        "$unwind": {
+          path: "$scOrder",
+          preserveNullAndEmptyArrays: true
+        }
+      },
       { "$project" : {
         "_id": "$_id",
         "appointmentId": "$docId",
@@ -958,7 +977,7 @@ let CoreModules = {
         "subChapter": "$subChapterName",
         "community": "$communityName",
         "createdAt": "$createdAt",
-        "status": "$scOrder.status"
+        "status":  { "$ifNull" :  ["$scOrder.status", "$scAppointment.status"] }
       } }
     ];
 

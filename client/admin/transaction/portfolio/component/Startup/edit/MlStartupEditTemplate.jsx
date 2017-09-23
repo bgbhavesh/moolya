@@ -17,7 +17,7 @@ import {client} from '../../../../../core/apolloConnection'
 export default class MlStartupEditTemplate extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}};
+    this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);

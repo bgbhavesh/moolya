@@ -193,6 +193,13 @@ class MlServiceCardRepo{
             servicecard[key] = service[key];
           }
         }
+        if(!servicecard.isActive) {
+          servicecard.status = "In Active";
+        } else {
+          servicecard.status = "Active";
+        }
+        servicecard.isReview = false;
+        servicecard.isApproved = false;
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
@@ -407,8 +414,11 @@ class MlServiceCardRepo{
         service.isLive = false;
         service.isReview = false;
         service.isApproved = false;
+        service.isActive = false;
+        service.status = "In Active";
+        delete service.transactionId;
         delete service._id;
-        orderNumberGenService.createUserServiceOrderId(service);
+        orderNumberGenService.createServiceId(service);
         // Creating new version service card def
         let newScVersion = mlDBController.insert('MlServiceCardDefinition', service, context);
         if(!newScVersion){

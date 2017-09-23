@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../commons/components/MlAppSelectWrapper'
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import {mlFieldValidations, validatedPhoneNumber} from "../../../commons/validations/mlfieldValidation";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {createUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
@@ -16,6 +16,7 @@ import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 import update from 'immutability-helper';
 import _underscore from 'underscore'
 import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
+import {findCountryActionHandler} from '../../../admin/settings/countries/actions/findCountryAction';
 
 export default class AppAddressDetails extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ export default class AppAddressDetails extends React.Component {
       isDefaultAddress: null,
       countrySelectedValue:null,
       countryId:null,
+      countryCode:null,
       selectedStateValue:null,
       stateId:null,
 
@@ -61,7 +63,7 @@ export default class AppAddressDetails extends React.Component {
    * @returns set New State
    */
   optionsBySelectCountry(selectedIndex,handler,selectedObj){
-    this.setState({countrySelectedValue:selectedObj.label,countryId:selectedIndex})
+    this.setState({countrySelectedValue:selectedObj.label,countryId:selectedIndex,countryCode:selectedObj.code})
   }
 
   optionsBySelectState(selectedIndex,handler,selectedObj){
@@ -75,12 +77,12 @@ export default class AppAddressDetails extends React.Component {
     let refs = []
     refs.push(this.refs["address"])
     refs.push(this.refs["name"])
-    refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressFlat"])
     refs.push(this.refs["addressLocality"])
     refs.push(this.refs["addressCity"])
-    refs.push(this.refs["addressState"])
     refs.push(this.refs["addressCountry"])
+    refs.push(this.refs["addressState"])
+    refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressPinCode"])
     let ret = mlFieldValidations(refs)
 
@@ -89,8 +91,13 @@ export default class AppAddressDetails extends React.Component {
     let clusterCountry = clusterDetails && clusterDetails.countryName ? clusterDetails.countryName : null;
     let addressSelectedCountry = this.state.countrySelectedValue ? this.state.countrySelectedValue : null;*/
     let isDeafaultChecked = this.refs["defaultAddress"].checked;
+    let countrycode=this.state.countryCode?this.state.countryCode:null;
+    let contactNumber = this.refs["phoneNumber"] && this.refs["phoneNumber"].value;
+    let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
     if (ret) {
       toastr.error(ret);
+    }else if (countrycode && !isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
     } /*else if (clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
       toastr.error("Selected cluster and default address country should be same");
     } */else {
@@ -244,7 +251,7 @@ export default class AppAddressDetails extends React.Component {
         $splice: [[index, 1, updatedComment]]
       });
 
-      this.setState({details : newData,countrySelectedValue : selObject.label,countryId:did});
+      this.setState({details : newData,countrySelectedValue : selObject.label,countryId:did,countryCode:selObject.code});
 
     }
 
@@ -315,17 +322,21 @@ export default class AppAddressDetails extends React.Component {
         let refs = []
         refs.push(this.refs["address" + index])
         refs.push(this.refs["name" + index])
-        refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressFlat" + index])
         refs.push(this.refs["addressLocality" + index])
         refs.push(this.refs["addressCity" + index])
-        refs.push(this.refs["addressState" + index])
         refs.push(this.refs["addressCountry" + index])
+        refs.push(this.refs["addressState" + index])
+        refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressPinCode" + index])
         let ret = mlFieldValidations(refs)
-
+        let countrycode=this.state.countryCode?this.state.countryCode:null;
+        let contactNumber = this.refs["phoneNumber" + index] && this.refs["phoneNumber" + index].value;
+        let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
         if (ret) {
           toastr.error(ret);
+        }else if (countrycode && !isValidPhoneNumber) {
+          toastr.error('Please enter a valid contact number');
         }/*else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
           toastr.error("Selected cluster and default address country should be same");
         }*/ else {
@@ -372,10 +383,11 @@ export default class AppAddressDetails extends React.Component {
     }
   }
 
-  addressTabSelected(index,value){
+  async addressTabSelected(index,value){
     this.setState({selectedTab : true,activeTab : ""});
     let countryValue = this.state.countryId?this.state.countryId:this.state.details[index].addressCountryId;
-    this.setState({countryId:countryValue})
+    const response = await findCountryActionHandler(countryValue);
+    this.setState({countryId:countryValue,countryCode:response.countryCode})
   }
 
   async onDeleteAddress(index,value){
@@ -444,7 +456,8 @@ export default class AppAddressDetails extends React.Component {
     let countryQuery = gql`query{
        data:fetchCountries {
           value:_id
-          label:country
+          label:country,
+          code: countryCode
         }
       }`
 
@@ -488,9 +501,6 @@ export default class AppAddressDetails extends React.Component {
                 <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
               </div>
               <div className="form-group mandatory">
-                <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" data-required={true} data-errMsg="Phone Number is required" />
-              </div>
-              <div className="form-group mandatory">
                 <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Building No" className="form-control float-label"  data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
               </div>
               <div className="form-group mandatory">
@@ -519,6 +529,9 @@ export default class AppAddressDetails extends React.Component {
                             valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                             onSelect={this.optionsBySelectState.bind(this)} queryOptions={statesOption}
                             isDynamic={true} data-required={true} data-errMsg="State is required"/>
+              <div className="form-group mandatory">
+                <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" data-required={true} data-errMsg="Phone Number is required" />
+              </div>
               <div className="form-group mandatory">
                 <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                        className="form-control float-label" data-required={true} data-errMsg="PinCode is required" />
@@ -554,12 +567,6 @@ export default class AppAddressDetails extends React.Component {
                     <input type="text" name ={'name'} ref={'name' + key} placeholder="Name"
                            className="form-control float-label" defaultValue={options.name}
                            data-required={true} data-errMsg="Name is required"/>
-                  </div>
-
-                  <div className="form-group mandatory">
-                    <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
-                           className="form-control float-label" defaultValue={options.phoneNumber}
-                           data-required={true} data-errMsg="Phone Number is required" />
                   </div>
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressFlat' + key} name ={'addressFlat'} className="form-control float-label"
@@ -613,6 +620,11 @@ export default class AppAddressDetails extends React.Component {
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                                 onSelect={that.stateUpdateOptions.bind(that,key)} queryOptions={statesOption}
                                 isDynamic={true} data-required={true} data-errMsg="State is required"/>
+                  <div className="form-group mandatory">
+                    <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
+                           className="form-control float-label" defaultValue={options.phoneNumber}
+                           data-required={true} data-errMsg="Phone Number is required" />
+                  </div>
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
                            className="form-control float-label" defaultValue={options.addressPinCode}

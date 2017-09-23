@@ -21,8 +21,8 @@ export default class MlAppDayBackground extends Component {
       calendarInfo.map(function(info){
         let start = new Date(info.start);
         let end = new Date(info.end);
-        if( start.getDate() <= dayDate.getDate() && start.getMonth() <= dayDate.getMonth() &&
-          end.getDate() >= dayDate.getDate() && end.getMonth() >= dayDate.getMonth() ) {
+        if( (start.getDate() <= dayDate.getDate() && start.getMonth() === dayDate.getMonth() || start.getMonth() < dayDate.getMonth() )&&
+          ( (end.getDate() >= dayDate.getDate() && end.getMonth() === dayDate.getMonth()) || end.getMonth() > dayDate.getMonth() ) ) {
           that.setState({
             status: info.type
           });

@@ -11,7 +11,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
-import { fetchOfficeActionHandler, fetchMyConnectionActionHandler } from '../actions/fetchOffices';
+import { fetchOfficeActionHandler, fetchMyConnectionActionHandler, getMoolyaAdminsActionHandler } from '../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
 export default class MlAppChooseTeam extends React.Component{
@@ -29,9 +29,6 @@ export default class MlAppChooseTeam extends React.Component{
       isDataChanged:false,
       offices : []
     };
-  }
-  componentWillMount() {
-    this.props.activeComponent(2);
   }
   isUpdated() {
     return !this.state.isDataChanged;
@@ -62,6 +59,7 @@ export default class MlAppChooseTeam extends React.Component{
   componentWillMount(){
     this.getOffices();
     this.getUsers();
+    this.props.activeComponent(2);
   }
 
   /**
@@ -101,6 +99,22 @@ export default class MlAppChooseTeam extends React.Component{
             userId: user.userId
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+          if(isFind) {
+            userInfo.isAdded = true;
+            userInfo.isMandatory = isFind.isMandatory;
+          }
+          return userInfo;
+        });
+        team.users = users;
+      } else if(team.resourceType == 'moolyaAdmins'){
+        const resp = await getMoolyaAdminsActionHandler("","");
+        let users = resp.map(function (user) {
+          let userInfo = {
+            name: user.displayName,
+            profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+            userId: user._id
+          };
+          let isFind = team.users.find(function (teamUser){ return teamUser.userId == user._id });
           if(isFind) {
             userInfo.isAdded = true;
             userInfo.isMandatory = isFind.isMandatory;
@@ -220,7 +234,20 @@ export default class MlAppChooseTeam extends React.Component{
     } else if (evt.target.value == "moolyaAdmins") {
       teamData[index].resourceType="moolyaAdmins";
       delete teamData[index].resourceId;
+      const resp = await getMoolyaAdminsActionHandler();
       teamData[index].users = [];
+      if(resp) {
+        teamData[index].users = resp.map(function (user) {
+          return {
+            name: user.displayName,
+            profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+            userId: user._id
+          }
+        });
+      }
+      // teamData[index].resourceType="moolyaAdmins";
+      // delete teamData[index].resourceId;
+      // teamData[index].users = [];
     } else {
       let officeId = evt.target.value;
       teamData[index].resourceType="office";
@@ -326,8 +353,8 @@ export default class MlAppChooseTeam extends React.Component{
                           <span className="placeHolder active">Choose team Type</span>
                           <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
                             <option value="chooseTeam" disabled="disabled">Choose team Type</option>
-                            <option value="connections">My Connections</option>
-                            <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
+                            <option value="connections" hidden={!that.state.isExternal} >My Connections</option>
+                            <option   value="moolyaAdmins">Moolya Admins</option>
                             {that.state.offices.map(function (office , index) {
                               return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
                             })}

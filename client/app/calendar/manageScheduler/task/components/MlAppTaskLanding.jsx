@@ -68,14 +68,44 @@ class MlAppTaskLanding extends Component {
             return false;
           }
           if (this.state.saveType === 'taskUpdate') {
-            if (!(sendData.session && sendData.session.length
-              && sendData.session[0].activities && sendData.session[0].activities.length)) {
+            if (sendData.session && sendData.session.length) {
+              let showError = true;
+              for (let i = 0; i < sendData.session.length; i++) {
+                if (sendData.session[i].activities && sendData.session[i].activities.length) {
+                  showError = false;
+                }
+              }
+              if (showError) {
+                this.errorMsg = 'Status cannot be active without adding sessions';
+                toastr.error(this.errorMsg);
+                return false;
+              }
+            } else {
               this.errorMsg = 'Status cannot be active without adding sessions';
               toastr.error(this.errorMsg);
               return false;
             }
           }
         }
+      }
+    }
+    if (this.state.currentComponent === 1) {
+      if (sendData.session && sendData.session.length) {
+        let showError = true;
+        for (let i = 0; i < sendData.session.length; i++) {
+          if (sendData.session[i].activities && sendData.session[i].activities.length) {
+            showError = false;
+          }
+        }
+        if (showError) {
+          this.errorMsg = 'Select atleast one activity';
+          toastr.error(this.errorMsg);
+          return false;
+        }
+      } else {
+        this.errorMsg = 'Select atleast one activity';
+        toastr.error(this.errorMsg);
+        return false;
       }
     }
     if (sendData && sendData.payment && sendData.payment.isDiscount) {
@@ -268,7 +298,7 @@ class MlAppTaskLanding extends Component {
             activeComponent={this.activeComponent}
             getSessionDetails={this.getSessionDetails.bind(this)}
             taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}
-            editMode={this.props.editMode}
+            editMode={true}
             profileId={this.props.profileId} />,
           icon: <span className="ml flaticon-ml-file-1"></span>
         },

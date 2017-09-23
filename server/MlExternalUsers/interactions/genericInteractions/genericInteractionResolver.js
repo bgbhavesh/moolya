@@ -6,6 +6,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import mlInteractionAccessControlRepo from './mlInteractionAccessControlRepo';
 
 var generateConnectionCode=function(u1,u2){
   var connectionCode=u1+u2;
@@ -74,7 +75,10 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
   let hasAccess = mlSubChapterAccessControl && mlSubChapterAccessControl.hasAccess ?  mlSubChapterAccessControl.hasAccess : false;
 
-  if (context && context.userId) {
+  //check for Access Control for Interaction
+  var canPerformInteraction=mlInteractionAccessControlRepo.canPerformInteraction(resourceDetails);
+
+  if (context && context.userId &&canPerformInteraction) {
     var connectionCode=generateConnectionCode(context.userId,resourceDetails.resourceOwnerId);
     _.each(actionNames, function (action) {
       switch(action){
@@ -111,6 +115,10 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
           break;
       }
     });
+  }else{//if resource Owner is viewing his own resource
+     actionsList=[{'actionName':'collaborate',isDisabled:true,isHidden:false},{'actionName':'partner',isDisabled:true,isHidden:false},{'actionName':'comment',isDisabled:true,isHidden:false},{'actionName':'review',isDisabled:true,isHidden:false},
+      {'actionName':'enquire',isDisabled:true,isHidden:false},{'actionName':'follow',isDisabled:true,isHidden:false},{'actionName':'favourite',isDisabled:true,isHidden:false},{'actionName':'connect',isDisabled:true,isHidden:false},{'actionName':'like',isDisabled:true,isHidden:false}];
+
   }
   return actionsList;
 }

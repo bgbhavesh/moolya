@@ -626,6 +626,8 @@ let startupPortfolioSchema = `
         views               :Int
         followings          :Int
         profileImage        : String
+        isDefaultSubChapter : Boolean
+        subChapterName : String
     }
     
     type Query{

@@ -82,7 +82,9 @@ class Library extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar1 = this.handleUploadAvatar1.bind(this);
     this.toggleModal1 = this.toggleModal1.bind(this);
-    this.connectionManagement= this.connectionManagement.bind(this);
+    this.connectionManagement = this.connectionManagement.bind(this);
+    this.uploadTemplate = this.uploadTemplate.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
   }
 
   /**
@@ -292,6 +294,33 @@ class Library extends React.Component {
     }
   }
 
+  uploadImage(image, fileInfo) {
+    let file = fileInfo;
+    let fileSize = file.size / 1024 / 1024;
+    let fileType = file.type;
+    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
+    this.getCentralLibrary();
+    if (this.state.totalLibrarySize < 50) {
+      let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
+      let typeShouldBe = _.compact(fileType.split('/'));
+      if (file && typeShouldBe && typeShouldBe[0] == "image") {
+        if (!fileExists) {
+          let data = { moduleName: "PROFILE", actionName: "UPDATE" }
+          let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+        } else {
+          toastr.error("Image with the same file name already exists");
+          this.toggleModal();
+        }
+      } else {
+        toastr.error("Please select a Image Format");
+        this.toggleModal();
+      }
+    } else {
+      toastr.error("Allotted library limit exceeded");
+      this.toggleModal();
+    }
+  }
+
   /**
    * Method :: videoUpload
    * Desc   :: Handles the video uploading event
@@ -349,6 +378,33 @@ class Library extends React.Component {
       }
     } else {
       toastr.error("Allotted library limit exceeded");
+    }
+  }
+
+  uploadTemplate(image, fileInfo) {
+    let file = fileInfo;
+    let fileType = file.type;
+    let fileSize = file.size / 1024 / 1024;
+    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
+    this.getCentralLibrary();
+    if (this.state.totalLibrarySize < 50) {
+      let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
+      let typeShouldBe = _.compact(fileType.split('/'));
+      if (file && typeShouldBe && typeShouldBe[0] == "image") {
+        if (!fileExists) {
+          let data = { moduleName: "PROFILE", actionName: "UPDATE" }
+          let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "template"));
+        } else {
+          toastr.error("Template with the same file name already exists");
+          this.toggleModal1();
+        }
+      } else {
+        toastr.error("Please select a Template Format");
+        this.toggleModal1();
+      }
+    } else {
+      toastr.error("Allotted library limit exceeded");
+      this.toggleModal1();
     }
   }
 
@@ -531,11 +587,9 @@ class Library extends React.Component {
    */
 
   onFileUploadCallBack(type, resp) {
+    console.log('In callback');
     if (resp !== 'Maximum file size exceeded') {
-      this.setState({popoverOpen: !(this.state.popoverOpen)})
-      this.setState({ uploadedData: resp });
-      var link = $.parseJSON(this.state.uploadedData).result;
-      this.setState({ uploadedData: link });
+      var link = JSON.parse(resp).result;
       if (!this.state.isLibrary) {
         let userOption = confirm("Do you want to add the file into the library")
         if (userOption) {
@@ -556,7 +610,8 @@ class Library extends React.Component {
       uploadingAvatar: false,
       uploadingAvatar1: false,
       showProfileModal: false,
-      showProfileModal1: false
+      showProfileModal1: false,
+      popoverOpen: !(this.state.popoverOpen)
     });
   }
 
@@ -1016,7 +1071,7 @@ class Library extends React.Component {
   sendDataToPortfolioLibrary(dataDetail, index) {
     let portfolioId = FlowRouter.getRouteName();
     let tempObject = Object.assign({}, dataDetail);
-    this.setState({popoverOpen: !(this.state.popoverOpen)})
+    this.setState({ popoverOpen: !(this.state.popoverOpen) })
     if (dataDetail.libraryType === "image") {
       if (portfolioId === "library") {
         let data = this.state.imageDetails || [];
@@ -1125,19 +1180,19 @@ class Library extends React.Component {
       return false;
     });
 
-      $(".information").unbind("click").click(function(){
-        if($(this).hasClass('ml-information')){
-          $(this).removeClass('ml-information').addClass('ml-delete');
-          $(this).parents('.panel').find('.panel-body').css({'overflow': 'hidden'});
+    $(".information").unbind("click").click(function () {
+      if ($(this).hasClass('ml-information')) {
+        $(this).removeClass('ml-information').addClass('ml-delete');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'hidden' });
 
-        }else{
-          $(this).removeClass('ml-delete').addClass('ml-information');
-          $(this).parents('.panel').find('.panel-body').css({'overflow': 'auto'});
-        }
-        $(this).parents('.panel').find(".show-information").toggle(200);
-      });
+      } else {
+        $(this).removeClass('ml-delete').addClass('ml-information');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'auto' });
+      }
+      $(this).parents('.panel').find(".show-information").toggle(200);
+    });
 
-    }
+  }
 
   componentDidUpdate() {
     $(".icon_count").click(function () {
@@ -1266,7 +1321,7 @@ class Library extends React.Component {
   }
 
   connectionManagement(userId) {
-    this.setState({sharedFiles: []})
+    this.setState({ sharedFiles: [] })
     this.getSharedFiles(userId);
   }
 
@@ -1280,11 +1335,10 @@ class Library extends React.Component {
   }
 
   handleUploadAvatar(image, e) {
-    console.log('here');
     this.setState({
       uploadingAvatar: true,
     });
-    this.ImageUpload(e, image);
+    this.uploadImage(image, e);
   }
 
   toggleModal() {
@@ -1295,11 +1349,10 @@ class Library extends React.Component {
   }
 
   handleUploadAvatar1(image, e) {
-    console.log('here');
     this.setState({
       uploadingAvatar1: true,
     });
-    this.TemplateUpload(e, image);
+    this.uploadTemplate(image, e);
   }
 
   toggleModal1() {

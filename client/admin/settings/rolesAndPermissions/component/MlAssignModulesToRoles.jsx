@@ -268,16 +268,16 @@ export default class MlAssignModulesToRoles extends React.Component {
               statusCreate=true;
             }
           })
-
-          let validFrom=that.state.assignModulesToRoles[id].validFrom
+          let currentDate= moment().format(Meteor.settings.public.dateFormat);
+          let validFrom=that.state.assignModulesToRoles[id].validFrom || currentDate;
           let validTo=that.state.assignModulesToRoles[id].validTo
           if(validFrom&&validFrom!="Invalid date"){
-            validFrom=moment(validFrom).format('MM-DD-YYYY')
+            validFrom=moment(validFrom).format('DD-MM-YYYY')
           }else{
             validFrom=null
           }
           if(validTo&&validTo!="Invalid date"){
-            validTo=moment(validTo).format('MM-DD-YYYY')
+            validTo=moment(validTo).format('DD-MM-YYYY')
           }else {
             validTo=null
           }

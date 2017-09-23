@@ -100,7 +100,8 @@ export default class MlAppInternalMyTaskList extends React.Component{
                               </div>
                               <h3>{task.ownerName ? task.ownerName : "" }</h3>
                               <div className="list_icon">
-                                <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                                {/*<img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>*/}
+                                <span className="ml my-ml-my_list_2"></span>
                               </div>
                               <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
                               <div className="block_footer">
@@ -127,9 +128,9 @@ export default class MlAppInternalMyTaskList extends React.Component{
                 <div className="row">
                 <div className="col-lg-2 col-md-4 col-sm-4" >
                   <a href="" onClick={()=>that.updateType('new')} >
-                    <div className="list_block notrans">
-                      <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                      <h3>Add a task</h3>
+                    <div className="ideators_list_block add_task">
+                      <div><span className="ml ml-plus "></span></div>
+                      <div className="block_footer"><span>Add a task</span></div>
                     </div>
                   </a>
                 </div>
@@ -142,7 +143,8 @@ export default class MlAppInternalMyTaskList extends React.Component{
                         </div>
                         <h3>{task.ownerName ? task.ownerName : "" }</h3>
                         <div className="list_icon">
-                          <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                          {/*<img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>*/}
+                          <span className="ml my-ml-my_list_2"></span>
                         </div>
                         <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
                         <div className="block_footer">

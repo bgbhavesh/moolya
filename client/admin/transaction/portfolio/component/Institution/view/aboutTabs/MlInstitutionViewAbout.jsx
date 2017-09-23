@@ -5,6 +5,7 @@ import React from 'react';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 
 export default class MlInstitutionViewAbout extends React.Component {
   constructor(props) {
@@ -17,12 +18,23 @@ export default class MlInstitutionViewAbout extends React.Component {
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
   }
-  componentDidMount() {
+
+  componentWillMount(){
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
 
-  componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   initalizeAnnotaor(){

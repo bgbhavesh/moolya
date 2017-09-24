@@ -70,7 +70,6 @@ export default class MlAnchorInfoView extends React.Component {
   async getAnchorUserDetails(id) {
     var response = await findBackendUserActionHandler(id);
     this.setState({selectedUser: response});
-    console.log(response);
     return response;
   }
 
@@ -120,7 +119,7 @@ export default class MlAnchorInfoView extends React.Component {
       FlowRouter.go('/app/dashboard/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.subChapterId + '/' + 'communities?viewMode=' + queryParams)
   }
 
-  optionBySelectRegistrationType(value, calback, selObject) {
+  optionBySelectRegistrationType(value) {
     this.setState({registrationType: value})
   }
 
@@ -141,15 +140,13 @@ export default class MlAnchorInfoView extends React.Component {
         contactNumber: registrationInfo.contactNumber,
         email: registrationInfo.email,
         userName: registrationInfo.userName,
-        countryId: registrationInfo.countryId,
-        communityId: registrationInfo.registrationType
+        countryId: registrationInfo.countryId
       });
     }
     if (this.isAllowRegisterAs)
       this.toggle()
     else
       toastr.error('complete pending registration')
-    console.log('open the popover')
   }
 
   optionsBySelectIdentity(val) {
@@ -157,7 +154,6 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   async submitRegisterAs() {
-    console.log('save register as')
     var pickStates = pick(this.state, ['userName', 'firstName', 'lastName', 'contactNumber', 'email', 'registrationType', 'identityType', 'countryId'])
     var propsId = pick(this.props, ['clusterId', 'chapterId', 'subChapterId'])
     let finalRegData = _.extend(pickStates, propsId);
@@ -169,31 +165,6 @@ export default class MlAnchorInfoView extends React.Component {
       FlowRouter.go("/app/register/" + reg.registrationId);
     } else if (response && !response.success)
       toastr.error(response.result);
-    // let registrationInfo={
-    //   userName:this.state.userName,
-    //   firstName:this.state.firstName,
-    //   lastName:this.state.lastName,
-    //   contactNumber:this.state.contactNumber,
-    //   email:this.state.email,
-    //   registrationType:this.state.registrationType,
-    //   identityType:this.state.identityType,
-    //   clusterId:this.props.clusterId,
-    //   chapterId:this.props.chapterId,
-    //   subChapterId:this.props.subChapterId,
-    //   countryId:this.state.countryId
-    // }
-    // let registrationId=this.state.registerId
-    // const response = await registerAsInfo(registrationInfo,registrationId);
-    // if(response.success){
-    //   let registrtionId=response.result
-    //   let registrtion= JSON.parse(registrtionId)
-    //   toastr.success("user registered successfully");
-    //   FlowRouter.go("/app/register/"+registrtion.registrationId);
-    // }else{
-    //   this.toggle()
-    //   toastr.error(response.result);
-    //   FlowRouter.go("/app/myProfile/registerAs");
-    // }
   }
 
   renderCommunityCount() {
@@ -352,8 +323,9 @@ export default class MlAnchorInfoView extends React.Component {
                 subchapter</a>
             </div>
             <div className="col-md-4">
-              <a href="" id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
-                invited</a>
+              {!this.props.isAdmin ?
+                <a href="" id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
+                  invited</a> : <div></div>}
             </div>
           </div>
         </div>

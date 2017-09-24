@@ -261,6 +261,11 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.password"] = args.registration.password;
     registrationRecord["registrationInfo.countryId"] = args.registration.countryId;
     registrationRecord["registrationInfo.cityId"] = args.registration.cityId;
+
+    //Coupon Code/Campaign Code for promotions
+    registrationRecord["promoCode"] = args.registration.promoCode||null;
+    registrationRecord["campaignCode"] = args.registration.campaignCode||null;
+
     var emails = [{address: args.registration.email, verified: false}];
 
     orderNumberGenService.assignRegistrationId(args.registration);

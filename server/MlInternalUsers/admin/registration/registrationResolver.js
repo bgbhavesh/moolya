@@ -206,7 +206,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
     let communityName = communityDef&&communityDef.name?communityDef.name:""
-    // MlSMSNotification.registerAsRequest(id,communityName,context)
+    MlSMSNotification.registerAsRequest(id,communityName,context)
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
@@ -403,13 +403,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var updatedResponse;
     var validationCheck = null;
     var result = null;
-    var registerDetails = null;
+    // var registerDetails = null;
     var registrationInfo=null;
     var subChapterDetails = null;
     var id = args.registrationId;
 
     /**Get the registration Details*/
-    registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
+    var registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
     registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
 
 
@@ -420,6 +420,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        *return the error if email is not verified
        */
       validationCheck = MlRegistrationPreCondition.validateEmailVerification(registerDetails);
+      if (validationCheck && !validationCheck.isValid) {
+        return validationCheck.validationResponse;
+      }
+      validationCheck = MlRegistrationPreCondition.checkDuplicateContactNumber(details)
       if (validationCheck && !validationCheck.isValid) {
         return validationCheck.validationResponse;
       }

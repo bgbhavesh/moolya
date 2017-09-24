@@ -55,7 +55,15 @@ MlLoginContent = React.createClass({
       this.loginSubmit()
     }
   },
+  redirectRegister(){
+      if(!Meteor.isCordova){
+        window.location.href = "https://www.moolya.global/register";
+      } else{
+        window.open('https://www.moolya.global/register', '_system');
+      }
+  },
   render() {
+  
     return (
       <div>
         <div>
@@ -82,7 +90,7 @@ MlLoginContent = React.createClass({
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit}>Sign in</button>
                   <br className="brclear"/>
-                  <p><a href="/forgot-password">Forgot Password</a> | <a href="https://www.moolya.global/register">Register</a></p>
+                  <p><a href="/forgot-password">Forgot Password</a> | <a onClick={this.redirectRegister.bind(this)} href="#">Register</a></p>
                 </form>
               </div>
             </div>

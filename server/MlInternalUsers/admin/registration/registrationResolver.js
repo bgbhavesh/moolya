@@ -235,8 +235,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return response;
   }
   /**set context for systemadmin user*/
-  var user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
-  context.userId = user._id;
+  var sysAdmin = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
+  var sysAdminProfile=sysAdmin&&sysAdmin.profile&&sysAdmin.profile.InternalUprofile&&sysAdmin.profile.InternalUprofile.moolyaProfile?sysAdmin.profile.InternalUprofile.moolyaProfile:{};
+  context.userId = sysAdmin._id;
   context.browser = 'Registration API'
   context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
@@ -260,6 +261,11 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.password"] = args.registration.password;
     registrationRecord["registrationInfo.countryId"] = args.registration.countryId;
     registrationRecord["registrationInfo.cityId"] = args.registration.cityId;
+
+    //Coupon Code/Campaign Code for promotions
+    registrationRecord["promoCode"] = args.registration.promoCode||null;
+    registrationRecord["campaignCode"] = args.registration.campaignCode||null;
+
     var emails = [{address: args.registration.email, verified: false}];
 
     orderNumberGenService.assignRegistrationId(args.registration);
@@ -287,7 +293,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.chapterName"] = chapterData && chapterData.chapterName ? chapterData.chapterName : "";
     registrationRecord["registrationInfo.subChapterId"] = subChapterData && subChapterData._id ? subChapterData._id : "";
     registrationRecord["registrationInfo.subChapterName"] = subChapterData && subChapterData.subChapterName ? subChapterData.subChapterName : "";
-    registrationRecord["registrationInfo.createdBy"] = args.registration.firstName + ' ' + args.registration.lastName;
+    registrationRecord["registrationInfo.createdBy"] = (sysAdminProfile.firstName||'') + ' ' + (sysAdminProfile.lastName||'');
 
     var transactionId=args.registration.registrationId;
 

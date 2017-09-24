@@ -108,7 +108,7 @@ class MlAppServiceBasicInfo extends Component {
 
     // fetch states graphql query
     let statesQuery = gql`query ($countryId: String) {
-      data: fetchStatesPerCountry(countryId: $countryId) {
+      data: fetchStatesPerCountryWithAll(countryId: $countryId) {
         value: _id
         label: name
       }

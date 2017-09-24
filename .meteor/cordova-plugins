@@ -3,3 +3,4 @@ cordova-plugin-wkwebview-engine@https://github.com/apache/cordova-plugin-wkwebvi
 cordova-plugin-file@4.3.1
 cordova-plugin-file-transfer@1.6.1
 cordova.plugins.diagnostic@3.4.2
+cordova-plugin-inappbrowser@1.7.1

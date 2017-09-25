@@ -6,7 +6,7 @@
  * */
 import React, {Component} from "react";
 import {findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
-
+import ScrollArea from 'react-scrollbar'
 /**
  * default class export
  * */
@@ -86,7 +86,15 @@ export default class MlUsersCluster extends Component {
     return (
       <div className="row ideators_list">
         <h2> Users </h2>
+        <div className="list_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="list_scroll"
+            smoothScrolling={true}
+          >
         {list}
+          </ScrollArea>
+        </div>
       </div>
     );
   }

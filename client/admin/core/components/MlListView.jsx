@@ -189,12 +189,7 @@ export default class MlListView extends Component {
       { search ? <input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/> : '' }
           {FilterComponent}
       {loading?(<div className="loader_wrap"></div>):(
-      <div className="list_scroll">
-        <ScrollArea
-          speed={0.8}
-          className="list_scroll"
-          smoothScrolling={true}
-        >
+
         <div className="list_view_block">
 
 
@@ -205,8 +200,7 @@ export default class MlListView extends Component {
           </div>
           <Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>
         </div>
-        </ScrollArea>
-      </div>
+
         )}
       {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
         </div>)

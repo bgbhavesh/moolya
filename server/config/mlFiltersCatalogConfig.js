@@ -621,7 +621,7 @@ if(Meteor.isServer){
 
 
   // Filter
-  let auditFilterExists = MlFilters.findOne({"moduleName":"audit"});
+  let auditFilterExists = MlFiltersCatalog.findOne({"moduleName":"audit"});
   if(!auditFilterExists){
     MlFiltersCatalog.upsert({
       "_id" : "audit",
@@ -668,6 +668,79 @@ if(Meteor.isServer){
     }});
   }
 
+  // Filter
+  let serviceCardsFilterExists = MlFiltersCatalog.findOne({"moduleName":"serviceCards"});
+  if(!serviceCardsFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "serviceCards",
+      "moduleName":"serviceCards"
+    },{$set:{
+      fields:[
+        {
+          name:"createdAt",
+          type:'Date',
+          resolverName : " "
+        },
+       {
+          name:"clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+      ]
+    }});
+  }
+
+  let appointmentsFilterExists = MlFiltersCatalog.findOne({"moduleName":"appointments"});
+  if(!appointmentsFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "appointments",
+      "moduleName":"appointments"
+    },{$set:{
+      fields:[
+        {
+          name:"createdAt",
+          type:'Date',
+          resolverName : " "
+        },
+        {
+          name:"clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+        {
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+      ]
+    }});
+  }
 
 
 

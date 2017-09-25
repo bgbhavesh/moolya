@@ -890,6 +890,14 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
   let pipeLine = [
     {"$match": {"appointmentId":{$in:appointmentId }}},
     {"$lookup": {
+      from: "mlServiceCardDefinition",
+      localField: "appointmentInfo.resourceId",
+      foreignField: "_id",
+      as: "service"
+    }
+    },
+    {"$unwind": {"path": "$service", "preserveNullAndEmptyArrays": true}},
+    {"$lookup": {
       from: "mlTask",
       localField: "appointmentInfo.taskId",
       foreignField: "_id",
@@ -948,6 +956,8 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
       "userCommunity":{$first: "$userInfo.profile.externalUserProfiles.communityName"},
       "userMobileNumber":{$first: "$userInfo.profile.mobileNumber"},
       "taskName":{$first: "$taskInfo.name"},
+      "sessions": {$first: "$taskInfo.session"},
+      "serviceTasks": {$first: "$service.tasks"},
       "attendeeDetails":{$push: {
         "firstName":"$attendeeInfo.profile.firstName",
         "lastName":"$attendeeInfo.profile.lastName",
@@ -959,10 +969,44 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
         "status":"$attendeeDetails.status"
       }}
     }}
-  ]
+  ];
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine );
 
+  result.forEach(function (data, index , arr) {
+    let totalSessions = 0;
+    let currentSession = 0;
+    if(data.appointmentType === "SERVICE-TASK") {
+      if(data.serviceTasks){
+        data.serviceTasks.sort(function(a, b){
+          return a.sequence >= b.sequence;
+        }).forEach( function(task, index, array) {
+          array[index].sessions = array[index].sessions ? array[index].sessions : [];
+          array[index].sessions = task.sessions.sort((a,b) => a.sequence >= b.sequence );
+          let sessionId = data.appointmentInfo ? data.appointmentInfo.sessionId : '';
+          let sessionIndex = array[index].sessions.findIndex( ( session ) => session.id === sessionId );
+          if(sessionIndex > -1 ){
+            currentSession += totalSessions + sessionIndex + 1;
+          }
+          totalSessions += array[index].sessions.length;
+        });
+        console.log("data.serviceTasks", data.serviceTasks);
+      }
+    } else if (data.appointmentType === "INTERNAL-TASK") {
+      data.sessions = data.sessions ? data.sessions : [];
+      let sessionId = data.appointmentInfo ? data.appointmentInfo.sessionId : '';
+      let sessionIndex = data.sessions.findIndex( ( data ) => data.sessionId === sessionId );
+      totalSessions = data.sessions.length;
+      currentSession = sessionIndex + 1;
+    } else {
+      totalSessions = 1;
+      currentSession = 1;
+    }
+    arr[index].totalSessions = totalSessions;
+    arr[index].currentSession = currentSession;
+    console.log('Find Task', totalSessions, currentSession);
+  });
+  console.log(result);
     return result;
 
 };

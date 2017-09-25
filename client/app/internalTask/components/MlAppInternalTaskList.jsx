@@ -6,6 +6,8 @@ import ScrollArea from 'react-scrollbar';
 import {fetchInternalTask} from '../actions/fetchInternalTasks';
 import MlAppInternalTaskItem from './MlAppInternalTaskItem';
 import MlAppInternalAssignTaskItem from './MlAppInternalAssignTaskItem';
+import NoDataList from '../../../commons/components/noData/noDataList';
+import MlLoader from "../../../commons/components/loader/loader";
 
 export default class MlAppInternalTaskList extends React.Component{
   constructor(props){
@@ -73,12 +75,33 @@ export default class MlAppInternalTaskList extends React.Component{
       selectedTaskType: task.type
     })
   }
-
+  getTaskType(moduleName) {
+    switch (moduleName) {
+      case 'myPendingInternalTask':
+        return "Pending Tasks"
+        break;
+      case 'myCurrentInternalTask':
+        return "Current Tasks"
+        break;
+      case 'myCompletedInternalTask':
+        return "Completed Tasks"
+        break;
+      case 'myRejectedInternalTask':
+        return "Rejected Tasks"
+        break;
+      default:
+        return "Tasks"
+      // do nothing
+    }
+  }
   render(){
     const that = this;
     let tasks = that.props.data;
+    let config=this.props.config;
     return (
-      <div className="main_wrap_scroll">
+      <div>
+        {config.loading === true ? ( <MlLoader/>) : (
+           <div className="main_wrap_scroll">
         <ScrollArea
           speed={0.8}
           className="main_wrap_scroll"
@@ -94,28 +117,33 @@ export default class MlAppInternalTaskList extends React.Component{
                 <div className="row">
                   <div className="top_block_scroller" id="centered">
                     <ul className="topscroll_listblock ideators_list">
-                      {tasks.map(function (task, index) {
-                        return (
-                          <li key={index} onClick={() => that.selectTask(task)}
-                              className={task._id == that.state.selectTask ? "selected_block ideators_list_block" : 'ideators_list_block'}>
-                            <div className="premium">
-                              <span>{task.name}</span>
-                            </div>
-                            <h3>{task.ownerName ? task.ownerName : ""}</h3>
-                            <div className="list_icon">
-                              {/*<img src={task.profileImage ? task.profileImage : "/images/valuation.png"}
+                      {tasks && !tasks.length ? <NoDataList moduleName={this.getTaskType(config.moduleName)}/> : (
+                        <div>
+                          {tasks.map(function (task, index) {
+                            return (
+                              <li key={index} onClick={() => that.selectTask(task)}
+                                  className={task._id == that.state.selectTask ? "selected_block ideators_list_block" : 'ideators_list_block'}>
+                                <div className="premium">
+                                  <span>{task.name}</span>
+                                </div>
+                                <h3>{task.ownerName ? task.ownerName : ""}</h3>
+                                <div className="list_icon">
+                                  {/*<img src={task.profileImage ? task.profileImage : "/images/valuation.png"}
                                    style={{"margin": 0}} className="c_image ml ml-ideator"/>*/}
-                                   <span className="ml my-ml-my_list_2"></span>
-                            </div>
-                            <p>{task.portfolioTitle ? task.portfolioTitle : ""}</p>
-                            <div className="block_footer">
+                                  <span className="ml my-ml-my_list_2"></span>
+                                </div>
+                                <p>{task.portfolioTitle ? task.portfolioTitle : ""}</p>
+                                <div className="block_footer">
                             <span>
                               {( task.clusterName ? task.clusterName + " - " : '' ) + (task.communityName ? task.communityName : '')}
                             </span>
-                            </div>
-                          </li>
-                        )
-                      })}
+                                </div>
+                              </li>
+                            )
+                          })}
+                        </div>
+                      )
+                      }
                     </ul>
                   </div>
                 </div>
@@ -132,6 +160,8 @@ export default class MlAppInternalTaskList extends React.Component{
               <div className="requested_input ideators_list">
               <div className="col-lg-12" id="show">
                 <div className="row">
+                  {tasks && !tasks.length ? <NoDataList moduleName={this.getTaskType(config.moduleName)}/> : (
+                  <div>
                   {tasks.map(function (task, index) {
                     return (
                       <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index}
@@ -156,12 +186,16 @@ export default class MlAppInternalTaskList extends React.Component{
                       </div>
                     )
                   })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           }
         </ScrollArea>
       </div>
+        )}
+        </div>
     )
   }
 };

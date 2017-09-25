@@ -79,7 +79,7 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY"
                             timeFormat={false}
-                            inputProps={{placeholder: "Valid Till"}}
+                            inputProps={{placeholder: "Valid Till",readOnly:true}}
                             closeOnSelect={true}
                             value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}
                             disabled />

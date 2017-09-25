@@ -126,21 +126,6 @@ export default class MlAppTaskSession extends Component {
     dataList.splice(id, 0, specificDataList);
     this.setState({ sessionData: dataList })
   }
-
-  sendSessionDataToParent() {
-    let data = _.cloneDeep(this.state.sessionData);
-    data.forEach(d=> {
-      delete d.isOffline;
-    })
-    this.props.getSessionDetails(data, this.state.activities, this.state.data.isExternal);
-  }
-
-  componentDidMount() {
-    $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
-  }
-
   initilizeSwiper() {
     setTimeout(function () {
       var mySwiper = new Swiper('.manage_tasks', {
@@ -151,7 +136,23 @@ export default class MlAppTaskSession extends Component {
         paginationClickable: true
       });
     }, 100);
+  }geme
+  sendSessionDataToParent() {
+    let data = _.cloneDeep(this.state.sessionData);
+    data.forEach(d=> {
+      delete d.isOffline;
+    })
+    this.props.getSessionDetails(data, this.state.activities, this.state.data.isExternal);
   }
+
+  componentDidMount() {
+    initilizeSwiper();
+    $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (250 + $('.app_header').outerHeight(true)));
+  }
+
+
 
   addActivity(activity, index) {
     let sessionData = this.state.sessionData;
@@ -217,8 +218,8 @@ export default class MlAppTaskSession extends Component {
               return (
                 <div className="panel panel-default" key={id}>
                   <div className="panel-heading">
-                    <div className="col-md-3 nopadding-left">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
-                    <div className="col-md-3">
+                    <div className="col-md-3 nopadding">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
+                    <div className="col-md-3 nopadding">
                       <div style={{ 'marginTop': '-4px' }}>
                         <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Hours
                         <input

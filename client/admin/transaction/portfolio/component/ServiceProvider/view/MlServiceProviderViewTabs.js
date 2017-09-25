@@ -73,19 +73,19 @@ export default class MlServiceProviderViewTabs extends Component {
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
-      {
-        tabClassName: 'tab',
-        panelClassName: 'panel',
-        title: "Services",
-        component: <MlServiceProviderViewServices key="5"
-                                              portfolioDetailsId={this.props.portfolioDetailsId}
-                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
-      },
+      // {
+      //   tabClassName: 'tab',
+      //   panelClassName: 'panel',
+      //   title: "Services",
+      //   component: <MlServiceProviderViewServices key="5"
+      //                                             portfolioDetailsId={this.props.portfolioDetailsId}
+      //                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      // },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlServiceProviderViewClients key="6" isAdmin={true}
+        component: <MlServiceProviderViewClients key="5" isAdmin={true}
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -93,9 +93,17 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
-        component: <MlServiceProviderViewLookingFor key="7" tabName="Looking For"
+        component: <MlServiceProviderViewLookingFor key="6" tabName="Looking For"
                                                  portfolioDetailsId={this.props.portfolioDetailsId}
                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        component: <MlServiceProviderViewServices key="7"
+                                                  portfolioDetailsId={this.props.portfolioDetailsId}
+                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;

@@ -10,6 +10,7 @@ import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
+import moment from "moment";
 var Select = require('react-select');
 import { graphql } from 'react-apollo';
  import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount'
@@ -236,7 +237,7 @@ this.bookDetails(data)
                     </label>
                   </div>
                   <div className="form-group" id="date-time">
-                    <input  type="text" className="form-control" placeholder= "Valid Till" value={this.props.serviceBasicInfo.validTill}/>
+                    <input  type="text" className="form-control" placeholder= "Valid Till" value={moment(this.props.serviceBasicInfo.validTill).format('DD-MM-YYYY')}/>
                     <FontAwesome name="calendar" className="password_icon"/>
                   </div>
                   <div className="form-group">

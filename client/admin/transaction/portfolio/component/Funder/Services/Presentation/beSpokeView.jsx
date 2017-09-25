@@ -65,6 +65,7 @@ export default class  BeSpokeView extends Component {
     return(
       <div>
         <div className="tab_wrap_scroll">
+          <div className="col-md-12 nopadding">
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
@@ -183,11 +184,13 @@ export default class  BeSpokeView extends Component {
               </form>
             </div>
           </div>
+          </div>
+          <br className="brclear"/>
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
-        <br className="clearfix"/>
+        
           <br className="clearfix"/>
         </div>
       </div>

@@ -2,14 +2,15 @@
  * Created by kanwarjeet on 9/8/17.
  */
 import _ from 'lodash'
+import MlUserContext from '../../mlUserContext';
 async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
   try {  //Default Values
     const existsSeoName = MlSitemap.findOne({seoUrl: originalUrl});
     if (!existsSeoName) {
       return 'Next';
     }
-    let idPortFolio = existsSeoName.portFolioId;
     let userID = existsSeoName.userId;
+
     let portFolio = {
       profilePic: '',
       firstName: '',
@@ -35,18 +36,21 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     if (userObject.profile)
       portFolio.profilePic = userObject.profile.profileImage ? userObject.profile.profileImage : '';
 
-    if (!idPortFolio) {
+    let defaultProfile = new MlUserContext().userProfileDetails(userID)
+    let profileId = defaultProfile.profileId;
+
+    if (!profileId) {
       return portFolio
     }
-    let query = {
-      '_id': idPortFolio
+    let queryProfileId = {
+      'profileId': profileId
     }
-    let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
+    let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', queryProfileId);
     if (resultParentPortFolio) {
       portFolio.clusterName = resultParentPortFolio.clusterName
       portFolio.chapterName = resultParentPortFolio.chapterName
     } else {
-      return 'Redirect_to_login';
+      return 'Next';
     }
 
     //Finding fields private to User.
@@ -54,8 +58,8 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     portFolio.privateFields = privateFields
     // Store portfolio information.
 
-    query = {
-      'portfolioDetailsId': idPortFolio
+    let query = {
+      'portfolioDetailsId': resultParentPortFolio._id
     }
     let dynamicLinksClasses = getDynamicLinksClasses()
     let defaultListMenu = getDefaultMenu(dynamicLinksClasses);

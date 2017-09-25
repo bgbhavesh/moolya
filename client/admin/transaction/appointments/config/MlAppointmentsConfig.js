@@ -37,8 +37,8 @@ const mlAppointmentsTableConfig=new MlViewer.View({
   searchFields:["createdAt","userId" ,"profileId" , "chapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:false,
-  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
+  filter:true,
+  filterComponent: <MlCustomFilter module="appointments" moduleName="appointments" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "appointmentId", title: "Id",dataSort:true,selectRow:true},

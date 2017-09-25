@@ -147,6 +147,8 @@ let appointment=`
     userMobileNumber: String
     userEmail: String
     userImage: String
+    totalSessions: Int
+    currentSession: Int
   }
   
   type appointmentEvents {

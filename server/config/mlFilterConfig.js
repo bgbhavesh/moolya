@@ -929,4 +929,123 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+
+  //for service cards
+  let serviceCardsFilterExists = MlFilters.findOne({"moduleName":"serviceCards"});
+  if(!serviceCardsFilterExists){
+    MlFilters.upsert({"moduleName" : "serviceCards"},{$set:{
+      "filterName" : "Service Cards",
+      "filterDescription" : "Service Cards Filter",
+      "isActive" : true,
+      "moduleName" : "serviceCards",
+      "filterFields" : [
+        {
+          "fieldName" : "createdAt",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        /*{
+          "fieldName" : "communityName",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },*/
+      ]
+    }});
+  }
+
+  //for service cards
+  let appointmentsFilterExists = MlFilters.findOne({"moduleName":"appointments"});
+  if(!appointmentsFilterExists){
+    MlFilters.upsert({"moduleName" : "appointments"},{$set:{
+      "filterName" : "Appointments",
+      "filterDescription" : "Appointments Filter",
+      "isActive" : true,
+      "moduleName" : "appointments",
+      "filterFields" : [
+        {
+          "fieldName" : "createdAt",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        /*{
+         "fieldName" : "communityName",
+         "displayName" : "Community",
+         "isDynamic" : true,
+         "fieldType" : "List",
+         "fieldResolverName" : "Gen_Community",
+         "isActive":true
+         },*/
+      ]
+    }});
+  }
 }

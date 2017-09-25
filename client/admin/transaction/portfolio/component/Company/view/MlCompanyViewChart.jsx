@@ -10,7 +10,7 @@ var PieTooltip = require('react-d3-tooltip').PieTooltip;
 import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
 import {fetchDetailsCompanyChartsActionHandler} from '../../../actions/findCompanyPortfolioDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
-
+import MlNoDataContainer from '../../../../../../commons/containers/MlNoDataContainer.jsx';
 
 export default class MlCompanyViewChart extends React.Component{
   constructor(props, context){
@@ -292,6 +292,8 @@ export default class MlCompanyViewChart extends React.Component{
       employmentDataX = function(d) {
         return d.year;
       },
+      employmentDataXLabel = "Year",
+      employmentDataYLabel = "Value",
 
       prlTitle = "Bar Group Chart with Tooltip",
       prlChartSeries = [
@@ -328,6 +330,8 @@ export default class MlCompanyViewChart extends React.Component{
           color: '#ff7f0e'
         }
       ],
+      reviewXLabel = "Year",
+      reviewYLabel = "Value",
       reviewX = function(d) {
         return d.year;
       },
@@ -386,10 +390,14 @@ export default class MlCompanyViewChart extends React.Component{
                 width= {width}
                 height= {height}
                 xScale= {xScale}
+                xLabel = {employmentDataXLabel}
+                yLabel = {employmentDataYLabel}
                 chartSeries = {employmentDataChartSeries}
                 showXAxis= {showXAxis}
                 showYAxis= {showYAxis}
-              /></div>
+              />
+              <MlNoDataContainer dataType={'Array'} data={this.state.employmentData||[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+            </div>
           </div>
 
           <div className="col-md-6">
@@ -408,6 +416,7 @@ export default class MlCompanyViewChart extends React.Component{
                 showXAxis= {showXAxis}
                 showYAxis= {showYAxis}
               />
+              <MlNoDataContainer dataType={'Array'} data={this.state.prlData?this.state.prlData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div>
           </div>
           <br className="brclear"/>
@@ -423,7 +432,10 @@ export default class MlCompanyViewChart extends React.Component{
                 xScale= {xScale}
                 x= {reviewX}
                 y={reviewY}
+                xLabel = {reviewXLabel}
+                yLabel = {reviewYLabel}
               />
+              <MlNoDataContainer dataType={'Array'} data={this.state.reviewData?this.state.reviewData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div></div>
 
           <div className="col-md-6">
@@ -438,6 +450,7 @@ export default class MlCompanyViewChart extends React.Component{
                 value = {value}
                 name = {name}
               />
+              <MlNoDataContainer dataType={'Array'} data={this.state.empBreakUpData?this.state.empBreakUpData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div></div>
         </div>
       </div>

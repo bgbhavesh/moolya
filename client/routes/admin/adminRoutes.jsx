@@ -348,7 +348,7 @@ adminSection.route('/transactions/editApprovedRequests/:id', {
 adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
   }
 });
 
@@ -356,7 +356,7 @@ adminSection.route('/transactions/createRegistration', {
 adminSection.route('/transactions/rejectedRegistrations', {
   name: 'transaction_registration_reject',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />, adminContent:<MlRegistrationRejectedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'reject'}} />, adminContent:<MlRegistrationRejectedList/>})
   }
 });
 

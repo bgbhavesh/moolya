@@ -84,6 +84,7 @@ class MlServiceCardRepo{
         serviceCard["createdAt"]            = new Date();
         serviceCard["beSpokeCreatorUserId"] = context.userId;
         serviceCard["beSpokeCreatorProfileId"] = defaultProfile.profileId;
+        serviceCard["beSpokeCreatorProfileImage"] = defaultProfile.profileImage;
         serviceCard['isBeSpoke']             = true;
         serviceCard["versions"]             =  INITIAL_VERSION;
         serviceCard["isCurrentVersion"]     = true;

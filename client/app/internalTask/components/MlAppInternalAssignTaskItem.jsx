@@ -165,7 +165,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
               <div className="form-group">
                 <Datetime dateFormat="DD-MM-YYYY"
                           timeFormat={false}
-                          inputProps={{placeholder: "Due Date", className:"form-control float-label"}}
+                          inputProps={{placeholder: "Due Date", className:"form-control float-label",readOnly:true}}
                           closeOnSelect={true}
                           value={ task.dueDate ? moment(task.dueDate) : '' }
                           onChange={(date)=> this.dueDate(date)}/>

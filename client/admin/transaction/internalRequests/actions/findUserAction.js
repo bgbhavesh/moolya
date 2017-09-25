@@ -18,6 +18,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                 middleName,
                 lastName,
                 genderType,
+                dateOfBirth,
                 email,
                 profileImage,
                 InternalUprofile{

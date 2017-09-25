@@ -103,7 +103,7 @@ export default class MlCommunityList extends Component {
         <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
 
           <div className="ideators_list_block">
-            <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>Active</span></div>
+            <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>{`${prop.profile.isActive?"active":"inactive"}`}</span></div>
             <h3>{prop.name}</h3>
             {/*<span className={`ml2 ml-${icon}`}></span>*/}
             <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>

@@ -12,7 +12,8 @@ import _ from "lodash";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
 import MlServiceProviderMCL from "./MlServiceProviderMCL";
-import MlServiceProviderServices from "./MlServiceProviderServices";
+// import MlServiceProviderServices from "./MlServiceProviderServices";
+import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
 import MlServiceProviderClients from "./MlServiceProviderClients";
 import MlServiceProviderAbout from './MlServiceProviderAbout'
 import MlServiceProviderLookingFor from './MlServiceProviderLookingFor'
@@ -80,19 +81,19 @@ export default class MlServiceProviderEditTabs extends Component {
         component: <MlServiceProviderMCL client={client} isAdmin={true} key="4" getServiceProviderMCL={this.getServiceProviderMCL.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
-      {
-        tabClassName: 'tab',
-        panelClassName: 'panel',
-        title: "Services",
-        component: <MlServiceProviderServices key="5"client={client} isAdmin={true}
-                                              getServiceProviderServices={this.getServiceProviderServices.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
-      },
+      // {
+      //   tabClassName: 'tab',
+      //   panelClassName: 'panel',
+      //   title: "Services",
+      //   component: <MlServiceProviderServices key="5"client={client} isAdmin={true}
+      //                                         getServiceProviderServices={this.getServiceProviderServices.bind(this)}
+      //                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+      // },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlServiceProviderClients key="6" client={client}
+        component: <MlServiceProviderClients key="5" client={client}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"/>
       },
@@ -100,9 +101,17 @@ export default class MlServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
-        component: <MlServiceProviderLookingFor key="7" client={client}
+        component: <MlServiceProviderLookingFor key="6" client={client}
                                                 getLookingForDetails={this.getLookingForDetails.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        component: <MlServiceProviderViewServices key="7"client={client} isAdmin={true}
+                                                  getServiceProviderServices={this.getServiceProviderServices.bind(this)}
+                                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
     return tabs;

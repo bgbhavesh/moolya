@@ -113,6 +113,7 @@ let service=`
     finalAmount: Float
     mode : String
     beSpokeCreatorProfileId: String
+    beSpokeCreatorProfileImage: String
     beSpokeCreatorUserId: String
     industryId : [String]
     conversation : [String]
@@ -183,6 +184,7 @@ let service=`
     mode : String
     industryId : [String]
     beSpokeCreatorProfileId: String
+    beSpokeCreatorProfileImage: String
     beSpokeCreatorUserId: String
     conversation : [String]
     expectedInput : String
@@ -293,6 +295,7 @@ let service=`
         isBeSpoke : Boolean
         mode : String
         beSpokeCreatorProfileId: String
+        beSpokeCreatorProfileImage: String
         beSpokeCreatorUserId: String
         industryId : [String]
         conversation : [String]

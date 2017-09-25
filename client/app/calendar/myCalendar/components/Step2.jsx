@@ -243,10 +243,10 @@ class MlAppServiceSelectTask extends Component{
       const sessionsList = session ? session.map((data, index) => {
         if(data) {
           return(
-            <div onClick={() => this.setSession(index, data.sessionId, data.duration )}  className="panel panel-info" key={index}>
+            <div onClick={() => this.setSession(index, data.sessionId, data.duration )}  className="panel panel-default" key={index}>
               <div className="panel-heading">
-                <div className="col-md-2 nopadding-left">Session {index+1}</div>
-                <div className="col-md-4">
+                <div className="col-lg-2 col-md-2 nopadding-left">Session {index+1}</div>
+                <div className="col-lg-4 col-md-6">
                   <div  style={{'marginTop':'-4px'}}>
                     <label>Duration: &nbsp;
                       <input type="text"
@@ -258,7 +258,7 @@ class MlAppServiceSelectTask extends Component{
                     </label>
                   </div>
                 </div>
-                <div className="col-md-offset-2 col-md-3">
+                <div className="col-lg-offset-2 col-lg-3 col-md-offset-1 col-md-3">
                   <div  style={{'marginTop':'-4px'}}>
                     {/*<label>*/}
                     {/*Sequence: &nbsp;*/}

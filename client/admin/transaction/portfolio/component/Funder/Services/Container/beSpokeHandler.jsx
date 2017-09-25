@@ -126,8 +126,28 @@ export default class  BeSpokeHandler extends Component {
   async updateBeSpokeData(data){
     if(data){
       let detailsData = _.cloneDeep(this.state.details);
-       _.omit(detailsData.duration, '__typename')
+      console.log('detailsData', detailsData)
+       let temp = _.omit(detailsData.duration, '__typename')
+      let attachTemp = detailsData.attachments.map(function(info, index){
+        info.fileUrl.map(function(images){
+        if(info.fileUrl === undefined){
+          _.omit(images, _.isUndefined)
+        }
+        })
+        // for (var propName in info.fileUrl) {
+        //   if (info.fileUrl[propName] === null || info.fileUrl[propName] === undefined) {
+        //     _.omit(info.fileUrl, _.isUndefined)
+        //   }
+        // }
+        delete info['__typename']
+        return info;
+      })
+       // _.omit(detailsData.attachments, '__typename')
+      console.log('attachTemp', attachTemp)
+      detailsData.duration =  temp;
+      detailsData.attachments = attachTemp;
       let service = _.omit(detailsData, '__typename');
+       console.log('service', service)
       const resp = await updateBeSpokeServiceActionHandler(service, this.props.portfolioDetailsId)
       if(resp && resp.success) {
         toastr.success("Bespoke request updated successfully");
@@ -278,6 +298,20 @@ export default class  BeSpokeHandler extends Component {
     this.setState({attachmentDocs: attach})
   }
 
+  deleteAttachments(id, index) {
+    let details = this.state.details;
+    let attach = details.attachments;
+    if(attach) {
+      delete attach[index].fileUrl[id];
+      console.log('attach', attach)
+      if(_.isEmpty(attach)){
+        attach = [{}]
+      }
+      details.attachments = attach;
+      this.setState({details: details})
+    }
+  }
+
   DataToBeSet(response, name){
     if(name === 'mode'){
       let details = this.state.details;
@@ -310,6 +344,7 @@ export default class  BeSpokeHandler extends Component {
           fileUpload={this.onFileUpload.bind(this)}
           modeSwitchHandler={this.modeSwitchHandler.bind(this)}
           componentToView={this.props.componentToView}
+          deleteAttachments={this.deleteAttachments.bind(this)}
     />
     )
   }

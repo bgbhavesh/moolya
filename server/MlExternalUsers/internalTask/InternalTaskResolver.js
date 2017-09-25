@@ -158,7 +158,7 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
   let internalTask = [];
   if (args.internalTaskId) {
     internalTask = mlDBController.findOne('MlInternalTask', {_id: args.internalTaskId});
-    if(internalTask.stage){
+    if(internalTask && internalTask.stage){
       internalTask.stage = mlDBController.findOne('MlProcessStages', {_id: internalTask.stage}).displayName;
     }
     if(internalTask.community && internalTask.community.code == "IDE"){

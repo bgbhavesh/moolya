@@ -3,130 +3,132 @@
  */
 import _ from 'lodash'
 async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
-
-  //Default Values
-  const existsSeoName = MlSitemap.findOne({seoUrl: originalUrl});
-  if (!existsSeoName) {
-    return 'Next';
-  }
-  let idPortFolio = existsSeoName.portFolioId;
-  let userID = existsSeoName.userId;
-  let portFolio = {
-    profilePic: '',
-    firstName: '',
-    lastName: '',
-    displayName: '',
-    clusterName: '',
-    chapterName: '',
-    listView: [],
-    communityType: '',
-    pathName: pathName,
-    aboutDiscription: '',
-    management: [],
-    lookingForDescription: '',
-    privateFields: {},
-    currentUrl: fullUrl,
-    twitterHandle: '@kanwar00733',
-    branches: []
-  }
-
-  let userObject = await mlDBController.findOne('users', {'_id': userID});
-  let displayName = userObject.profile.displayName;
-  portFolio.displayName = displayName;
-  if( userObject.profile)
-    portFolio.profilePic = userObject.profile.profileImage?userObject.profile.profileImage:'';
-
-  if (!idPortFolio) {
-    return portFolio
-  }
-  let query = {
-    '_id': idPortFolio
-  }
-  let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
-  if (resultParentPortFolio) {
-    portFolio.clusterName = resultParentPortFolio.clusterName
-    portFolio.chapterName = resultParentPortFolio.chapterName
-  } else {
-    return 'Redirect_to_login';
-  }
-
-  //Finding fields private to User.
-  let privateFields = getPrivateFields(resultParentPortFolio.privateFields);
-  portFolio.privateFields = privateFields
-  // Store portfolio information.
-
-  query = {
-    'portfolioDetailsId': idPortFolio
-  }
-  let dynamicLinksClasses = getDynamicLinksClasses()
-  let defaultListMenu = getDefaultMenu(dynamicLinksClasses);
-  let dynamicListMenu = {
-    'IDE': [
-      {name: 'About', className: dynamicLinksClasses.About},
-      {name: 'Awards', className: dynamicLinksClasses.Awards},
-      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
-      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
-    ],
-    'STU': defaultListMenu,
-    'FUN': [
-      {name: 'About', className: dynamicLinksClasses.About},
-      {name: 'Management', className: dynamicLinksClasses.Management},
-      {name: 'Branches', className: dynamicLinksClasses.Branches},
-      {name: 'Awards', className: dynamicLinksClasses.Awards},
-      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
-      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
-    ],
-
-    'SPS': [
-      {name: 'About', className: dynamicLinksClasses.About},
-      {name: 'Management', className: dynamicLinksClasses.Management},
-      {name: 'Branches', className: dynamicLinksClasses.Branches},
-      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-      {name: 'Social Links', className: dynamicLinksClasses.Social_Links}
-    ],
-    'CMP': defaultListMenu,
-    'INS': defaultListMenu
-  }
-  let communityCode = ''
-  if (resultParentPortFolio) {
-    communityCode = resultParentPortFolio.communityCode;
-    if (communityCode)
-      portFolio.listView = dynamicListMenu[communityCode]
-  }
-
-
-  switch (communityCode) {
-    case 'IDE': {
-
-      return IDE(portFolio, query);
+  try {  //Default Values
+    const existsSeoName = MlSitemap.findOne({seoUrl: originalUrl});
+    if (!existsSeoName) {
+      return 'Next';
     }
-      break;
+    let idPortFolio = existsSeoName.portFolioId;
+    let userID = existsSeoName.userId;
+    let portFolio = {
+      profilePic: '',
+      firstName: '',
+      lastName: '',
+      displayName: '',
+      clusterName: '',
+      chapterName: '',
+      listView: [],
+      communityType: '',
+      pathName: pathName,
+      aboutDiscription: '',
+      management: [],
+      lookingForDescription: '',
+      privateFields: {},
+      currentUrl: fullUrl,
+      twitterHandle: '@kanwar00733',
+      branches: []
+    }
 
-    case "STU": {
-      return STU(portFolio, query)
-    }
-      break;
-    case "FUN": {
-      return FUN(portFolio, query)
-    }
-      break;
-    case "SPS": {
+    let userObject = await mlDBController.findOne('users', {'_id': userID});
+    let displayName = userObject.profile.displayName;
+    portFolio.displayName = displayName;
+    if (userObject.profile)
+      portFolio.profilePic = userObject.profile.profileImage ? userObject.profile.profileImage : '';
 
-      return ServiceProviderPortFolio(portFolio, query)
-    }
-      break;
-    case "CMP": {
-      return CMP(portFolio, query)
-    }
-      break;
-    case "INS": {
-      return INS(portFolio, query)
-    }
-      break;
-    default:
+    if (!idPortFolio) {
       return portFolio
+    }
+    let query = {
+      '_id': idPortFolio
+    }
+    let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', query);
+    if (resultParentPortFolio) {
+      portFolio.clusterName = resultParentPortFolio.clusterName
+      portFolio.chapterName = resultParentPortFolio.chapterName
+    } else {
+      return 'Redirect_to_login';
+    }
+
+    //Finding fields private to User.
+    let privateFields = getPrivateFields(resultParentPortFolio.privateFields);
+    portFolio.privateFields = privateFields
+    // Store portfolio information.
+
+    query = {
+      'portfolioDetailsId': idPortFolio
+    }
+    let dynamicLinksClasses = getDynamicLinksClasses()
+    let defaultListMenu = getDefaultMenu(dynamicLinksClasses);
+    let dynamicListMenu = {
+      'IDE': [
+        {name: 'About', className: dynamicLinksClasses.About},
+        {name: 'Awards', className: dynamicLinksClasses.Awards},
+        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+        {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
+        {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+      ],
+      'STU': defaultListMenu,
+      'FUN': [
+        {name: 'About', className: dynamicLinksClasses.About},
+        {name: 'Management', className: dynamicLinksClasses.Management},
+        {name: 'Branches', className: dynamicLinksClasses.Branches},
+        {name: 'Awards', className: dynamicLinksClasses.Awards},
+        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+        {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
+        {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+      ],
+
+      'SPS': [
+        {name: 'About', className: dynamicLinksClasses.About},
+        {name: 'Management', className: dynamicLinksClasses.Management},
+        {name: 'Branches', className: dynamicLinksClasses.Branches},
+        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+        {name: 'Social Links', className: dynamicLinksClasses.Social_Links}
+      ],
+      'CMP': defaultListMenu,
+      'INS': defaultListMenu
+    }
+    let communityCode = ''
+    if (resultParentPortFolio) {
+      communityCode = resultParentPortFolio.communityCode;
+      if (communityCode)
+        portFolio.listView = dynamicListMenu[communityCode]
+    }
+
+
+    switch (communityCode) {
+      case 'IDE': {
+
+        return IDE(portFolio, query);
+      }
+        break;
+
+      case "STU": {
+        return STU(portFolio, query)
+      }
+        break;
+      case "FUN": {
+        return FUN(portFolio, query)
+      }
+        break;
+      case "SPS": {
+
+        return ServiceProviderPortFolio(portFolio, query)
+      }
+        break;
+      case "CMP": {
+        return CMP(portFolio, query)
+      }
+        break;
+      case "INS": {
+        return INS(portFolio, query)
+      }
+        break;
+      default:
+        return portFolio
+    }
+  }catch (e){
+    console.log('Error MicroSite',e);
   }
 }
 

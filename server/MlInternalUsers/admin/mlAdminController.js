@@ -60,7 +60,7 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
-  microSite: '/*',
+  //microSite: '/*',
   view: '/view/*',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
@@ -127,7 +127,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   )
 
   // Serving static pages.
+  /*
   graphQLServer.get(config.microSite, async function (req, res, next) {
+
     console.log('Server Side Request');
       if (!(req.url.includes('login') || req.url === '/')) {
         if (typeof req.headers.cookie === 'undefined' || (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token'))) {
@@ -157,6 +159,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
     }
   )
+   */
   graphQLServer.get('/sitemap.xml', async function (req, res) {
     //Creating SiteMap.
     const siteMapUrls = await getSiteMapUrls()

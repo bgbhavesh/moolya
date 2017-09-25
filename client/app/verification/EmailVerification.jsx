@@ -11,7 +11,8 @@ export default class EmailVerification extends React.Component{
       email:"",
       mobileNumber:"",
       mobileNumberVerified:false,
-      loading:true
+      loading:true,
+      canResend:false
     }
     //this.verifyEmail.bind(this);
     this.verifyMobileNumber.bind(this);
@@ -57,6 +58,11 @@ export default class EmailVerification extends React.Component{
     }
     return response;
   }*/
+ componentDidMount(){
+   setTimeout(function(){
+     this.setState({canResend:true})
+   }.bind(this),30000)
+ }
 
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;
@@ -69,15 +75,30 @@ export default class EmailVerification extends React.Component{
         resp = JSON.parse(response.result);
         this.setState({mobileNumberVerified:resp.mobileNumberVerified});
       }else{
+        toastr.error(response.result);
         this.setState({mobileNumberVerified:false});
       }
       return response;
+    }else{
+      if(!isTermsChecked){
+        toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
+      }
+      if(!otp){
+        toastr.error("Please enter OTP");
+      }
     }
   }
   async resendSmsOTP(){
-    let mobileNumber=this.state.mobileNumber;
-    const response=await resendSmsOtpHandler(mobileNumber, appClient);
-    return response;
+    if(this.state.canResend){
+      let mobileNumber=this.state.mobileNumber;
+      const response=await resendSmsOtpHandler(mobileNumber, appClient);
+      if(response.success){
+        toastr.success("OTP Sent Successfuly");
+      }else{
+        toastr.error("Resend OTP failed");
+      }
+      return response;
+    }
   }
 
   render(){
@@ -109,7 +130,7 @@ export default class EmailVerification extends React.Component{
                 <a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
               </div><br />
                 <div className="terms">
-                  <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a href="moolya.global/terms-of-usage" target="_blank">Terms and Conditions</a> and <a href="moolya.global/privacy-policy" target="_blank"> 'Privacy Policy'</a></label>
+                  <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a href="/app/termsConditions" target="_blank">Terms and Conditions</a> and <a href="/app/privacy" target="_blank"> 'Privacy Policy'</a></label>
                 </div>
               <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
               </div>

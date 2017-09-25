@@ -474,7 +474,10 @@ let CoreModules = {
       pipeline.push({'$match': resultantQuery});
     }
 
+    pipeline.push({'$match': userFilterQuery});
+
     pipeline.push({
+
         "$group": {
           _id: "$sharedId",
           userId: { "$first": "$owner.userId" },
@@ -934,10 +937,9 @@ let CoreModules = {
 
   MlAppointmentsRepo : function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
 
-    //let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
-    //resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
 
     let piplelineQuery = [
+      {'$match': userFilterQuery},
       { "$match": {"transactionTypeId":"appointment"} },
       { "$lookup": {
         from: "mlAppointments",

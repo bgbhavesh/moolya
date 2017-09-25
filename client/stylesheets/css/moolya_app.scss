@@ -1200,7 +1200,7 @@ p{margin-top:10px;}
     }
   }
   .att_members{
-        background: #f3f3f3; margin: -5px 0 15px 0px; padding: 5px 0 0 0; border-radius: 5px; border: #ddd solid 1px;
+        background: #f3f3f3; margin: 0px 0 15px 0px; padding: 5px 0 0 0; border-radius: 5px; border: #ddd solid 1px;
   }
 }
 .moolya_app {
@@ -1311,7 +1311,7 @@ p{margin-top:10px;}
     }
     .list-group-item{border-left: 0px;border-right: 0px;border-radius: 0px !important;padding-left: 0px;padding-right: 0px;
       &:last-child{border-bottom:0px;}
-      .task_with{padding:0px 5px;
+      .task_with{padding:0px 5px;float:left;
         span{padding: 5px; background:$mlGray; color: $mlBlue; border-radius: 100%;}
       }
       .task_status{float: right;width: 20px;height: 20px;border-radius: 50%;text-align: center;line-height: 16px;margin-right: 5px;

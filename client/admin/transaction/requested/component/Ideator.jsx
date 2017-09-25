@@ -360,7 +360,7 @@ export default class Ideator extends React.Component{
                             <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Date"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onfoundationDateSelection.bind(that)}/>
+                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Date",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onfoundationDateSelection.bind(that)}/>
                             <FontAwesome name="calendar" className="password_icon"/>
                           </div>
                           <div className="form-group">
@@ -404,7 +404,7 @@ export default class Ideator extends React.Component{
                             <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
+                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth",readOnly:true}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
                             <FontAwesome name="calendar" className="password_icon"/>
                           </div>
                           <div className="form-group">
@@ -484,7 +484,7 @@ export default class Ideator extends React.Component{
                             <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
+                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date",readOnly:true}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
                             <FontAwesome name="calendar" className="password_icon"/>
                           </div>
 

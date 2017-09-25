@@ -568,12 +568,13 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-time-view {
-  display: flex;
+   /*display: flex;  commit due to height of view less in ipad*/
   flex-direction: column;
   flex: 1;
   width: 100%;
   border: 1px solid #dddddd;
   min-height: 0;
+   height: 100%;
 }
 
 .rbc-time-view .rbc-time-gutter {

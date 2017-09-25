@@ -365,7 +365,7 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                              inputProps={{ placeholder: "Select Date", className: "float-label form-control" }} ref="date"
+                              inputProps={{ placeholder: "Select Date", className: "float-label form-control",readOnly:true }} ref="date"
                               defaultValue={this.state.data.date ? this.state.data.date : ''}
                               onBlur={this.dateChange.bind(this)}
                               isValidDate={valid} /> {/**/} {/*closeOnSelect={true}*/}

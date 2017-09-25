@@ -9,10 +9,12 @@ export default class MlAppMyTransaction extends Component {
 
   componentDidMount() {
     let status = FlowRouter.getQueryParam('status');
-    if(status.toLowerCase() == "canceled"){
-      toastr.error("payment canceled");
-    }else if(status.toLowerCase() == "success"){
-      toastr.success("payment successful!!");
+    if(status){
+      if(status.toLowerCase() == "canceled"){
+        toastr.error("payment canceled");
+      }else if(status.toLowerCase() == "success"){
+        toastr.success("payment successful!!");
+      }
     }
   }
 

@@ -96,6 +96,8 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
                       userId
                       isUserIdPrivate
                     }
+                    linkedinUrl
+                    isLinkedinUrlPrivate
                     index
                     makePrivate
                     logo{
@@ -151,6 +153,8 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                     userId
                     isUserIdPrivate
                   }
+                  linkedinUrl
+                  isLinkedinUrlPrivate
                   index
                   makePrivate
                   logo{

@@ -311,13 +311,13 @@ export default class MlAssignModulesToRoles extends React.Component {
 
                   <div className="col-md-3">
                     <div className="form-group">
-                      <Datetime dateFormat={true}  timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active From"}} closeOnSelect={true} value={validFrom} onChange={that.onvalidFromChange.bind(that, id)}/>
+                      <Datetime dateFormat={true}  timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active From",readOnly:true}} closeOnSelect={true} value={validFrom} onChange={that.onvalidFromChange.bind(that, id)}/>
                       {/*<FontAwesome name="calendar" className="input_icon nomargin-right"/>*/}
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div className="form-group">
-                      <Datetime dateFormat={true} timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active Till"}}  closeOnSelect={true} value={validTo} onChange={that.onvalidToChange.bind(that, id)}/>
+                      <Datetime dateFormat={true} timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active Till",readOnly:true}}  closeOnSelect={true} value={validTo} onChange={that.onvalidToChange.bind(that, id)}/>
                     </div>
                   </div>
                   <div className="col-md-6">

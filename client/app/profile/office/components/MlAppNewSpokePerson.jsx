@@ -20,6 +20,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     this.handleBlur.bind(this)
     this.setDefaultValues.bind(this)
     this.findUserDetails.bind(this)
+    this.isSubmitDetails = false
     return this;
   }
 
@@ -108,14 +109,18 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   async createMyOfficeAction(myOffice) {
-    const response = await createOfficeActionHandler(myOffice)
-    if (response && response.success) {
-      FlowRouter.go('/app/myOffice/')
-      toastr.success(response.result);
-    } else if(response && !response.success){
-      toastr.error(response.result);
+    if (!this.isSubmitDetails) {
+      this.isSubmitDetails = true
+      const response = await createOfficeActionHandler(myOffice)
+      if (response && response.success) {
+        FlowRouter.go('/app/myOffice/')
+        toastr.success(response.result);
+      } else if (response && !response.success) {
+        this.isSubmitDetails = false
+        toastr.error(response.result);
+      }
+      return response;
     }
-    return response;
   }
 
   componentWillMount() {

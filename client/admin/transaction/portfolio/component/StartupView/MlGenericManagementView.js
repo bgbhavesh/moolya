@@ -190,15 +190,14 @@ export default class MlGenericManagementView extends React.Component {
                                     {/*onChange={_this.handleChange}/>*/}
                                     {/*<FontAwesome name='unlock' className="password_icon"/>*/}
                                     {/*</div>*/}
-                                    <div className="form-group">
                                       <Moolyaselect multiSelect={false} placeholder="Title"
-                                                    className="form-control float-label" valueKey={'value'}
+                                                    className="float-label" valueKey={'value'}
                                                     labelKey={'label'}
                                                     selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}
                                                     query={titleQuery} queryOptions={titleOption}
                                                     onSelect={function () {}} isDynamic={true} isDisabled={true}/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
-                                    </div>
+                                      <FontAwesome name='unlock' className="password_icon mselect_icon"/>
+
 
                                     <div className="form-group">
                                       <input type="text" placeholder="First name"

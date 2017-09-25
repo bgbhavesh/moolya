@@ -18,7 +18,10 @@ export default class MlAppEventComponent extends Component {
     const {calendar} = that.props;
     const className = calendar && calendar.event ? calendar.event.className : '';
     return (
-      <span className={className}> {calendar ? calendar.title : ''} </span>
+      <span>
+        <span className={className}></span>
+        <span>{calendar ? calendar.title : ''}</span>
+      </span>
     )
   }
 }

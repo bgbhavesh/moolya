@@ -96,7 +96,7 @@ export default class MlAppInvestmentItem extends Component {
                           </h3>
                           <div className="list_icon"><span className="ml ml-ideator"></span></div>
                           <p>
-                            {data.idea[0].title && data.idea[0].title.substr(0,20)}{data.idea[0].title && data.idea[0].title.length ? '...' : ''}
+                            {data.idea[0] && data.idea[0].title && data.idea[0].title.substr(0,20)}{ data.idea && data.idea[0] && data.idea[0].title && data.idea[0].title.length ? '...' : ''}
                           </p>
                           <div className="block_footer">
                           <span>

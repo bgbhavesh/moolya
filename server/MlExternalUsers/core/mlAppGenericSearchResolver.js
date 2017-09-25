@@ -1469,21 +1469,83 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         var query = JSON.parse(args.queryProperty.query);
         isListView = query.isListView;
       }
-      if(isListView){
-        var bounds = query.bounds ? query.bounds : {};
+      if(isListView && query.bounds){
+        var bounds = query.bounds;
         var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
         var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
         var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
         var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-        var clusters = mlDBController.find('MlClusters', {$and:
-          [
-            {isActive: true},
-            {longitude: {$lte: rightLng}},
-            {longitude: {$gte: leftLng}},
-            {latitude: {$lte: topLat}},
-            {latitude: {$gte: bottomLat}}
-          ]}, context).fetch();
+        if(leftLng<0 && rightLng<0){
+          if(leftLng>rightLng){
+            var clusters = mlDBController.find('MlClusters', {$and:
+              [
+                {isActive: true},
+                {$or:
+                  [
+                    {$and: [
+                      {longitude: {$gte: leftLng}},
+                      {longitude: {$lte: 180}},
+                    ]
+                    },
+                    {$and: [
+                      {longitude: {$gte: -180}},
+                      {longitude: {$lte: rightLng}},
+                    ]
+                    }
+                  ]
+                },
+                // {longitude: {$lte: rightLng}},
+                // {longitude: {$gte: leftLng}},
+                {latitude: {$lte: topLat}},
+                {latitude: {$gte: bottomLat}}
+              ]}, context).fetch();
+          }else {
+            var clusters = mlDBController.find('MlClusters', {$and:
+              [
+                {isActive: true},
+                {longitude: {$lte: rightLng}},
+                {longitude: {$gte: leftLng}},
+                {latitude: {$lte: topLat}},
+                {latitude: {$gte: bottomLat}}
+              ]}, context).fetch();
+          }
+        } else{
+          if(leftLng>rightLng){
+            var clusters = mlDBController.find('MlClusters', {$and:
+              [
+                {isActive: true},
+                {$or:
+                  [
+                    {$and: [
+                      {longitude: {$gte: leftLng}},
+                      {longitude: {$lte: 180}},
+                    ]
+                    },
+                    {$and: [
+                      {longitude: {$gte: -180}},
+                      {longitude: {$lte: rightLng}},
+                    ]
+                    }
+                  ]
+                },
+                // {longitude: {$lte: rightLng}},
+                // {longitude: {$gte: leftLng}},
+                {latitude: {$lte: topLat}},
+                {latitude: {$gte: bottomLat}}
+              ]}, context).fetch();
+          }else{
+            var clusters = mlDBController.find('MlClusters', {$and:
+              [
+                {isActive: true},
+                {longitude: {$lte: rightLng}},
+                {longitude: {$gte: leftLng}},
+                {latitude: {$lte: topLat}},
+                {latitude: {$gte: bottomLat}}
+              ]}, context).fetch();
+          }
+        }
+
       }else{
         var clusters = mlDBController.find('MlClusters', {isActive: true}, context).fetch();
       }
@@ -1503,13 +1565,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   else if(args.module === "chapter"){
       var activeChapters = [];
       var isListView = false;
+      var clusterId = null;
       if(args.queryProperty.query.indexOf("{") !== -1){
         var query = JSON.parse(args.queryProperty.query);
         isListView = query.isListView;
+        clusterId = query.clusterId;
+        var bounds = query.bounds;
       }
-      if(isListView){
-        var bounds = query.bounds ? query.bounds : {};
-        var clusterId = query.clusterId ? query.clusterId : "";
+      // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+      if(isListView && bounds && query.viewMode){
         var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
         var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
         var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
@@ -1525,7 +1589,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             {latitude: {$gte: bottomLat}}
           ]}, context).fetch();
       }else{
-        var clusterId = args.queryProperty.query
+        clusterId = clusterId?clusterId:args.queryProperty.query
         var chapters = mlDBController.find('MlChapters', {isActive: true, clusterId:clusterId}, context).fetch();
       }
 
@@ -1544,13 +1608,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   else if(args.module === "subChapter"){
     var isListView = false;
+    var chapterId = null;
     if(args.queryProperty.query.indexOf("{") !== -1){
       var query = JSON.parse(args.queryProperty.query);
       isListView = query.isListView;
+      var bounds = query.bounds;
+      chapterId = query.chapterId;
     }
-    if(isListView){
-      var bounds = query.bounds ? query.bounds : {};
-      var chapterId = query.chapterId ? query.chapterId : "";
+    // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+    if(isListView && bounds && query.viewMode){
       var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
       var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
       var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
@@ -1566,7 +1632,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           {latitude: {$gte: bottomLat}}
         ]}, context).fetch();
     }else{
-      var chapterId = args.queryProperty.query;
+      chapterId = chapterId?chapterId:args.queryProperty.query;
       var subChapters = mlDBController.find('MlSubChapters', {isActive: true,chapterId:chapterId}, context).fetch();
     }
 

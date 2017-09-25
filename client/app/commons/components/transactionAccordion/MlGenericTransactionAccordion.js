@@ -51,7 +51,7 @@ function getOfficeActivity  (data) {
     }
     case 'officeBearerInvitation':{
       console.log('officeBearerInvitation')
-      return <MlEmptyView/>
+      return <MlAppRegistrationWizard config={data.transactionType} isAccodion={true}/>
       break;
     }
     case 'officeBearerRetire':{

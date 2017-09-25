@@ -10,6 +10,16 @@ BigCalendar.setLocalizer(
   BigCalendar.momentLocalizer(moment)
 );
 
+let formats = {
+  dayRangeHeaderFormat: ({ start, end }, culture, local) => {
+    let startDateFormat = start.getYear() == end.getYear() ? 'MMM DD' : 'MMM DD YYYY';
+   return local.format(start, startDateFormat, culture) + ' — ' +
+   local.format(end, "MMM DD YYYY", culture)
+  },
+  dayHeaderFormat: "dddd MMM DD YYYY"
+};
+
+
 export default class Calender extends Component {
 
   constructor (props) {
@@ -85,7 +95,8 @@ export default class Calender extends Component {
       <a ref={(node) => {
         if (node) {
           if(today.getTime() === dayDate.getTime() ){
-            node.style.setProperty("color", "#EF4647", "important");
+            node.style.setProperty("background", "#ef4647", "important");
+            node.style.setProperty("color", "#FFF", "important");
           } else if(calDate.getMonth() !== dayDate.getMonth() ) {
             node.style.setProperty("color", "#B9C5CC", "important");
           }
@@ -101,6 +112,10 @@ export default class Calender extends Component {
     }
   }
 
+  weekHeaderComponent(){
+    console.log(this, arguments);
+  }
+
   render() {
     console.log("dayData", this.state.dayData);
     const that = this;
@@ -108,6 +123,7 @@ export default class Calender extends Component {
       <div className="col-md-12">
         <BigCalendar
           selectable
+          formats={formats}
           views={['month', 'week', 'day']}
           events={that.state.events}
           defaultView='month'
@@ -118,6 +134,7 @@ export default class Calender extends Component {
             dateCellWrapper: that.dateWrapper.bind(this),
             dateHeader: that.dateHeader.bind(this)
           }}
+
           popup
         />
       </div>

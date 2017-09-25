@@ -258,6 +258,7 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
     query($portfolioId:String) {
       fetchBeSpokeServices(portfolioId: $portfolioId) {
         profileId
+        beSpokeCreatorProfileImage
         _id
         about
         profileId

@@ -170,7 +170,7 @@ class MlAppServiceBasicInfo extends Component {
                   <span className={`placeHolder ${data.validTill ? 'active' : ''}`}>Valid Till</span>
                   <Datetime dateFormat={"DD-MM-YYYY"}
                             timeFormat={false}
-                            inputProps={{placeholder: "Valid Till", disabled: this.props.viewMode}}
+                            inputProps={{placeholder: "Valid Till", disabled: this.props.viewMode,readOnly:true}}
                             closeOnSelect={true}
                             isValidDate={(current) => this.validDate(current)}
                             value={data.validTill? new Moment(data.validTill).format('DD-MM-YY') : null}

@@ -11,7 +11,7 @@ import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
 import {fetchDetailsCompanyChartsActionHandler} from '../../../actions/findCompanyPortfolioDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 import MlCompanyChartConfig from '../edit/mlCompanyCharts/MlCompanyChartConfig'
-
+import MlNoDataContainer from '../../../../../../commons/containers/MlNoDataContainer.jsx';
 export default class MlCompanyEditChart extends Component {
   constructor(props, context){
     super(props)
@@ -244,7 +244,9 @@ export default class MlCompanyEditChart extends Component {
                       chartSeries = {employmentDataChartSeries}
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
-                    /></div>
+                    />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.employmentData||[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+                  </div>
                 </div>
 
                 <div className="col-md-6">
@@ -264,6 +266,7 @@ export default class MlCompanyEditChart extends Component {
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.prlData?this.state.prlData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div>
                 </div>
                 <br className="brclear"/>
@@ -283,6 +286,7 @@ export default class MlCompanyEditChart extends Component {
                       xLabel = {reviewXLabel}
                       yLabel = {reviewYLabel}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.reviewData?this.state.reviewData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div></div>
 
                 <div className="col-md-6">
@@ -298,6 +302,7 @@ export default class MlCompanyEditChart extends Component {
                       value = {value}
                       name = {name}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.empBreakUpData?this.state.empBreakUpData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div></div>
               </ScrollArea>
             </div>

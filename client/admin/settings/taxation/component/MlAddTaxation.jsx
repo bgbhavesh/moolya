@@ -116,13 +116,13 @@ class MlAddTaxation extends React.Component{
               <form>
                 <div className="form-group col-md-6 nopadding-left">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                            inputProps={{placeholder: "Valid From"}}
+                            inputProps={{placeholder: "Valid From",readOnly:true}}
                             closeOnSelect={true} ref="taxationValidityFrom"/>
                   <FontAwesome name='calendar' className="password_icon" />
                 </div>
                 <div className="form-group col-md-6 nopadding-right">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                            inputProps={{placeholder: "Valid to"}}
+                            inputProps={{placeholder: "Valid to",readOnly:true}}
                             closeOnSelect={true} ref="taxationValidityTo"/>
                   <FontAwesome name='calendar' className="password_icon"/>
                 </div>

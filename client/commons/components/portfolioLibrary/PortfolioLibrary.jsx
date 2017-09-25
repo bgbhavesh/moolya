@@ -69,6 +69,8 @@ class Library extends React.Component {
       showProfileModal: false,
       uploadingAvatar1: false,
       showProfileModal1: false,
+      showImageUploadCropper: false,
+      uploadingImage2: false,
     };
     this.toggle = this.toggle.bind(this);
     this.refetchData.bind(this);
@@ -85,6 +87,21 @@ class Library extends React.Component {
     this.connectionManagement = this.connectionManagement.bind(this);
     this.uploadTemplate = this.uploadTemplate.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
+    this.toggleShowImageUploadCropper = this.toggleShowImageUploadCropper.bind(this);
+  }
+
+  toggleShowImageUploadCropper(evt) {
+    if (evt && evt.preventDefault)
+      evt.preventDefault();
+    this.setState({
+      showImageUploadCropper: !this.state.showImageUploadCropper,
+    });
+  }
+
+  uploadImage2(image, fileInfo) {
+    this.setState({
+      uploadingImage2: true,
+    }, () => this.uploadImage(image, fileInfo));
   }
 
   /**
@@ -285,6 +302,11 @@ class Library extends React.Component {
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
           toastr.error("Image with the same file name already exists");
+          this.setState({
+            uploadingAvatar: false,
+            uploadingAvatar1: false,
+            uploadingImage2: false,
+          });
         }
       } else {
         toastr.error("Please select a Image Format");
@@ -309,15 +331,22 @@ class Library extends React.Component {
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
           toastr.error("Image with the same file name already exists");
-          this.toggleModal();
+          this.setState({
+            uploadingAvatar: false,
+            uploadingAvatar1: false,
+            uploadingImage2: false,
+          });
         }
       } else {
         toastr.error("Please select a Image Format");
-        this.toggleModal();
       }
     } else {
       toastr.error("Allotted library limit exceeded");
-      this.toggleModal();
+      this.setState({
+        uploadingAvatar: false,
+        uploadingAvatar1: false,
+        uploadingImage2: false,
+      });
     }
   }
 
@@ -609,6 +638,7 @@ class Library extends React.Component {
     this.setState({
       uploadingAvatar: false,
       uploadingAvatar1: false,
+      uploadingImage2: false,
       showProfileModal: false,
       showProfileModal1: false,
       popoverOpen: !(this.state.popoverOpen)
@@ -1626,7 +1656,7 @@ class Library extends React.Component {
                 <div className="fileUpload mlUpload_btn">
                   <span>Upload</span>
                   {this.state.file === "Images" ?
-                    <input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)} /> :
+                    <input type="file" className="upload" onClick={this.toggleShowImageUploadCropper} /> :
                     this.state.file === "Videos" ?
                       <input type="file" className="upload_file upload" name="video_source" id="video_upload"
                         onChange={that.videoUpload.bind(that)} /> :
@@ -1638,6 +1668,7 @@ class Library extends React.Component {
               </div>
             </div>
           </PopoverContent>
+          <CropperModal handleImageUpload={this.uploadImage2.bind(this)} toggleShow={this.toggleShowImageUploadCropper} show={this.state.showImageUploadCropper} uploadingImage={this.state.uploadingImage2} cropperStyle={'any'}/>
         </Popover>
         {this.state.isLibrary ? <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} /> : ""}
       </div>

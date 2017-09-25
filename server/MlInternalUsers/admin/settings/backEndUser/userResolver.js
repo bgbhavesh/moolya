@@ -14,6 +14,7 @@ import MlEmailNotification from "../../../../mlNotifications/mlEmailNotification
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 import portfolioValidationRepo from '../../portfolio/portfolioValidation'
+import MlSMSNotification from "../../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -1193,6 +1194,7 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
     }, {$set: true}, context)
   }
   if(resp){
+    MlSMSNotification.profileUpdated(context.userId);
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
     return resp
   }

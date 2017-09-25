@@ -298,13 +298,13 @@ class MlAppSetCalendarVacation extends Component {
                           value={vacationData.startDate}
                           isValidDate={(current) => this.validDate(current)}
                           onChange={(event) => this.selectDate(event, true)}
-                          inputProps={{ placeholder: 'Start date', className:"form-control float-label"}}/>
+                          inputProps={{ placeholder: 'Start date', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <Datetime dateFormat={false} timeFormat={'HH:mm:ss'}
                           value={vacationData.startTime}
                           onChange={(event) => this.selectTime(event, true)}
-                          inputProps={{ placeholder: 'Start time', className:"form-control float-label"}}/>
+                          inputProps={{ placeholder: 'Start time', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <div className="input_types">
@@ -331,13 +331,13 @@ class MlAppSetCalendarVacation extends Component {
                           value={vacationData.endDate}
                           isValidDate={(current) => this.validDate(current)}
                           onChange={(event) => this.selectDate(event, false)}
-                          inputProps={{ placeholder: 'End date', className:"form-control float-label"}}/>
+                          inputProps={{ placeholder: 'End date', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <Datetime dateFormat={false} timeFormat={'HH:mm:ss'}
                           value={vacationData.endTime}
                           onChange={(event) => this.selectTime(event, false)}
-                          inputProps={{ placeholder: 'end time', className:"form-control float-label"}}/>
+                          inputProps={{ placeholder: 'end time', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <div className="input_types">

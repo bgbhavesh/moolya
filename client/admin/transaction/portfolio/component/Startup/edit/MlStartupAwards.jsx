@@ -400,7 +400,7 @@ export default class MlStartupAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data&&this.state.data.year?this.state.data.year:0}
+                                  inputProps={{placeholder: "Select Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data&&this.state.data.year?this.state.data.year:0}
                                   closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={this.state.data&&this.state.data.year? valid :"" }/>
                       </div>
                       <div className="form-group">

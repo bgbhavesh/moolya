@@ -113,7 +113,7 @@ class MlAddRole extends React.Component{
         toastr.success("Role Created Successfully");
         return response;
       } else {
-        toastr.error("All Assign role fields Required");
+        toastr.error("Please fill all mandatory fields to proceed");
       }
     }
   }

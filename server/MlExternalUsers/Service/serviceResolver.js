@@ -12,14 +12,20 @@ var extendify = require('extendify');
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
-  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context)
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context);
+  let userId = context.userId;
   if(portfolio){
+    let profile = new MlUserContext().userProfileDetails(userId);
+    console.log(profile);
     let query = {
       userId: portfolio.userId,
       profileId:portfolio.profileId,
       isCurrentVersion: true,
       isBeSpoke: false,
       status: "Gone Live",
+      "community.id": { "$in" : [ 'all', profile.communityDefCode ] },
+      // "cluster.id": { "$in" : [ 'all', profile.clusterId ] },
+      // "state.id": { "$in" : [ 'all', profile.chapterId ] },
       validTill: { "$gte": new Date() }
     };
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();

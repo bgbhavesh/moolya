@@ -35,7 +35,14 @@ MlForgotPasswordContent = React.createClass({
       toastr.error('A valid email is required');
     }
   },
-
+  redirectRegister(e){
+    e.preventDefault();
+    if(!Meteor.isCordova){
+      window.location.href = "https://www.moolya.global/register";
+    } else{
+      window.open('https://www.moolya.global/register', '_system');
+    }
+  },
   render() {
     return (
       <div id="forgotpassword_wrap">
@@ -48,7 +55,7 @@ MlForgotPasswordContent = React.createClass({
               <input type="text" className="form-control" style={{'visibility':'hidden'}}/>
               <input type="text" ref="email" className="form-control" placeholder="Email"/>
               <button className="ml_submit_btn" onClick={() => this.submit()} type="button">Submit</button><br className="brclear" />
-              <p><a href="/login">Login</a> | <a href="https://www.moolya.global/register">Register</a></p>
+              <p><a href="/login">Login</a> | <a href="#" onClick={(e) => {this.redirectRegister(e)}}>Register</a></p>
             </form>
           </div>
         </div>

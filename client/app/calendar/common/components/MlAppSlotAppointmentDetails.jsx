@@ -72,6 +72,9 @@ export default class MlAppSlotAppointmentDetails extends Component {
                         <div className="form-group">
                           <input type="text" placeholder="Task Name" defaultValue={data.taskName} className="form-control float-label" id="" disabled/>
                         </div>
+                        <div className="form-group">
+                          <input type="text" placeholder="Session Number" defaultValue={data.currentSession+"/"+data.totalSessions} className="form-control float-label" id="" disabled/>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-12 naopadding att_members" >

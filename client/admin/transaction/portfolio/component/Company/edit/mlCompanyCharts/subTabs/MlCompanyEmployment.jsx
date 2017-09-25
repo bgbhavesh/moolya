@@ -196,12 +196,12 @@ export default class MlCompanyEmployment extends React.Component{
                       <div className="form-group col-lg-6">
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                    inputProps={{placeholder: "Select From Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                    inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
                         </div>
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                                    inputProps={{placeholder: "Select From Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                    inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
                         </div>
 
@@ -211,12 +211,12 @@ export default class MlCompanyEmployment extends React.Component{
                       <div className="form-group col-lg-6">
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                    inputProps={{placeholder: "Select To Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                    inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
                         </div>
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                                    inputProps={{placeholder: "Select To Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                    inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref={"eofToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
                         </div>
                       </div>
@@ -243,13 +243,13 @@ export default class MlCompanyEmployment extends React.Component{
                         <div className="form-group col-lg-6">
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                      inputProps={{placeholder: "Select From Year", className: "float-label form-control"}}
+                                      inputProps={{placeholder: "Select From Year", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofFromYear}
                                       closeOnSelect={true} ref={"eofFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
                           </div>
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                                      inputProps={{placeholder: "Select From Month", className: "float-label form-control"}}
+                                      inputProps={{placeholder: "Select From Month", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofFromMonth}
                                       closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
                           </div>
@@ -260,13 +260,13 @@ export default class MlCompanyEmployment extends React.Component{
                         <div className="form-group col-lg-6">
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                      inputProps={{placeholder: "Select To Year", className: "float-label form-control"}}
+                                      inputProps={{placeholder: "Select To Year", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofToYear}
                                       closeOnSelect={true} ref={"eofToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
                           </div>
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                                      inputProps={{placeholder: "Select To Month", className: "float-label form-control"}}
+                                      inputProps={{placeholder: "Select To Month", className: "float-label form-control",readOnly:true}}
                                       defaultValue={details.eofToMonth}
                                       closeOnSelect={true} ref={"eofToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
                           </div>

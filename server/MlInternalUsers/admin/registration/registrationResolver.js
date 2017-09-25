@@ -1527,7 +1527,12 @@ MlResolver.MlMutationResolver['sendUserSmsVerification'] = (obj, args, context, 
 
 MlResolver.MlMutationResolver['resendUserSmsVerification'] = (obj, args, context, info) => {
   // TODO : Authorization
-    return MlAccounts.resendUserVerificationSmsOtp(context.userId);
+    var resp = MlAccounts.resendUserVerificationSmsOtp(context.userId);
+    if(resp && resp.otp){
+      return {mobileNumber:resp.mobileNumber, success: true,reason:"Successfully resend OTP", code:200};
+    }else{
+      return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
+    }
 
 }
 
@@ -1561,7 +1566,12 @@ MlResolver.MlMutationResolver['verifyUserMobileNumber'] = (obj, args, context, i
 MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.mobileNumber) {
-    return MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
+    var resp = MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
+    if(resp && resp.otp){
+      return {mobileNumber:resp.mobileNumber, success: true,reason:"Successfully resend OTP", code:200};
+    }else{
+      return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
+    }
   }
 }
 

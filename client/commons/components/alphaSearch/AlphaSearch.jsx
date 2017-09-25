@@ -26,7 +26,7 @@ export default class AlphaSearch extends Component {
 
     return (
       <div className="alfa_pagination">
-        <div className="filter alfa_filter"><FontAwesome name='sort-alpha-asc'/></div>
+        <div className="filter alfa_filter"><span className="filt_text"> A-Z</span></div>
         <div className="alfa_filter_litters">
           <ul>
             {alphabetsList}

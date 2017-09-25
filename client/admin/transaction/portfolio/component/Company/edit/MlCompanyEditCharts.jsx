@@ -134,6 +134,8 @@ export default class MlCompanyEditChart extends Component {
       employmentDataX = function(d) {
         return d.year;
       },
+      employmentDataXLabel = "Year",
+      employmentDataYLabel = "Value",
 
       prlTitle = "Bar Group Chart with Tooltip",
       prlChartSeries = [
@@ -170,6 +172,8 @@ export default class MlCompanyEditChart extends Component {
           color: '#ff7f0e'
         }
       ],
+      reviewXLabel = "Year",
+      reviewYLabel = "Value",
       reviewX = function(d) {
         return d.year;
       },
@@ -235,6 +239,8 @@ export default class MlCompanyEditChart extends Component {
                       width= {width}
                       height= {height}
                       xScale= {xScale}
+                      xLabel = {employmentDataXLabel}
+                      yLabel = {employmentDataYLabel}
                       chartSeries = {employmentDataChartSeries}
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
@@ -274,6 +280,8 @@ export default class MlCompanyEditChart extends Component {
                       xScale= {xScale}
                       x= {reviewX}
                       y={reviewY}
+                      xLabel = {reviewXLabel}
+                      yLabel = {reviewYLabel}
                     />
                   </div></div>
 

@@ -17,10 +17,12 @@ export default class MlLineChart extends React.Component {
     let chartHeight = this.props.height?this.props.height:null
     let chartSeries = this.props.chartSeries?this.props.chartSeries:[]
     let xScale = this.props.xScale?this.props.xScale:""
-    let margins = this.props.margins?this.props.margins:"",
-      dataX = function(d) {
+    let margins = this.props.margins?this.props.margins:"";
+    let dataX = function(d) {
       return d.year;
-    }
+    };
+    let xLabel = this.props.xLabel?this.props.xLabel:"";
+    let yLabel = this.props.yLabel?this.props.yLabel:"";
 
     return  (<div><LineTooltip
       title= {title}
@@ -30,6 +32,8 @@ export default class MlLineChart extends React.Component {
       margins= {margins}
       chartSeries = {chartSeries}
       x= {dataX}
+      xLabel={xLabel}
+      yLabel={yLabel}
       xScale= {xScale}
      /></div>);
   }

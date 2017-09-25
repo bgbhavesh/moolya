@@ -337,9 +337,8 @@ class MlAddSubChapter extends React.Component {
                 >
                   <form>
                     <div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <button type="button" onClick={this.toggleAddPicModal} className="fileUpload mlUpload_btn">Add Pic</button>
-
+                      <div onClick={this.toggleAddPicModal} className="fileUpload mlUpload_btn">
+                        Add Pic
                         { /* <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/> */}
                       </div>
                       <CropperModal

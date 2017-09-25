@@ -320,6 +320,7 @@ class MlAppMyProfile extends Component {
     let mobileNumber=this.state.mobileNumber;
     this.setState({loading:true});
     let otp=this.refs.enteredOTP.value;
+    if(otp){
       const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
       let resp=null;
       if(response.success){
@@ -328,10 +329,14 @@ class MlAppMyProfile extends Component {
         toastr.success("Mobile Number Verified");
         this.setState({getOTPClicked:false});
         this.findUserDetails();
-      }else{
-        this.setState({loading:false,mobileNumberVerified:false});
       }
-      return response;
+    }else{
+      if(!otp){
+        toastr.error("Please enter OTP");
+      }
+      this.setState({loading:false,mobileNumberVerified:false});
+    }
+    return response;
   }
   cancelOtpRequest(){
     this.setState({getOTPClicked:false});

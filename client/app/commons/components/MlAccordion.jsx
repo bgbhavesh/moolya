@@ -14,9 +14,19 @@ export default class MlAccordion extends React.Component {
       isExpand:[true, true],
       expandClassName: ['active', 'active']
     }
-    this.onTabClick.bind(this)
+    this.onTabClick.bind(this);
+    //set action panel activation handler callback
+    if(_.isFunction(props.activateActionPanelHandler)){
+      props.activateActionPanelHandler(this.activateActionPanel.bind(this));
+    }
     return this;
   }
+
+  activateActionPanel(){
+   //$("#portfolioAccordion0").addClass("in");
+    $("#portfolioAccordion0").collapse("show");
+  }
+
   componentDidMount() {
     this.onTabClick(1);
   }

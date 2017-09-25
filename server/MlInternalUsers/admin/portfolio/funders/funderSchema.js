@@ -63,7 +63,9 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
-        socialLinks:[SocialLinks]
+        socialLinks:[SocialLinks],
+        linkedinUrl:String,
+        isLinkedinUrlPrivate:Boolean,
         index: Int,
         logo:imagesTypeSchema,
         privateFields:[PrivateKeys],
@@ -89,6 +91,8 @@ let FunderPortfolioSchema = `
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
         socialLinks:[SocialLinks],
+        linkedinUrl:String
+        isLinkedinUrlPrivate:Boolean
         index:Int,
         logo:imagesTypeSchema,
         privateFields:[PrivateKeys],
@@ -250,6 +254,8 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[socialLinks],
+        linkedinUrl:String
+        isLinkedinUrlPrivate:Boolean
         index: Int,
         makePrivate:Boolean
     }
@@ -273,6 +279,8 @@ let FunderPortfolioSchema = `
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
         socialLinks:[socialLinks],
+        linkedinUrl:String
+        isLinkedinUrlPrivate:Boolean
         index:Int,
         makePrivate: Boolean
     }

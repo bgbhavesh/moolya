@@ -17,6 +17,7 @@ class MlNotificationControllerClass {
       if (ret && ret.success) {
         let obj = {
           "notificationType": "PUSHNOTIFICATION",
+          "subNotificationType":"newUserCreation",
           "message": notifyMessage,
           "fromUserId": "system",
           "toUserId": userId
@@ -31,6 +32,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "KYC documents have been approved on " + new Date()
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"kycApprove",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -45,6 +47,7 @@ class MlNotificationControllerClass {
 
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"kycDecline",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -61,6 +64,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "Your portfolio has been updated on "+updatedDateTime+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"portfolioUpdate",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -77,6 +81,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "Your Portfolio Go-Live request has been sent to Admin on "+updatedDateTime+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"goLiveRequest",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -93,6 +98,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "Your Go-Live request has been approved by the Admin  on  "+updatedDateTime+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"goLiveRequestApproval",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -109,6 +115,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "Your Go-Live request has been declined by the Admin on "+updatedDateTime+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"goLiveRequestDecline",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId
@@ -130,6 +137,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "New connection request from  "+fromUserFirstName+" "+fromUserLastName+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"connectionRequestReceived",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: toUserId
@@ -151,12 +159,15 @@ class MlNotificationControllerClass {
     var notifyMessage = "Connection request for "+toUserFirstName+" "+toUserLastName+"sent."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"connectionRequestSent",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: fromUserId
     }
     this.createNewNotification(obj)
   }
+
+
 
   onEnquiryRequestReceived(fromUser,toUser){
     let fromUserId  = fromUser&&fromUser._id?fromUser._id:"";
@@ -168,6 +179,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "You have received an Enquiry from "+updatedDateTime+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"enquiryRequestRecieved",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: toUserId
@@ -189,6 +201,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "You have received a review from "+fromUserFirstName+" "+fromUserLastName+"."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"reviewRecieved",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: toUserId
@@ -203,6 +216,7 @@ class MlNotificationControllerClass {
     var notifyMessage = "You have been added to the "+communityName+"on "+ new Date()+".Please proceed to complete your portfolio process."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"userApproval",
       message: notifyMessage,
       fromUserId: "system",
       toUserId: userId

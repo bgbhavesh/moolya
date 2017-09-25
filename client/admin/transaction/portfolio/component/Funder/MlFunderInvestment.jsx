@@ -310,7 +310,7 @@ export default class MlFunderInvestment extends React.Component {
                               <div className="form-group">
                                 <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                               labelKey={'label'} queryType={"graphql"} query={query}
-                                              isDynamic={true} placeholder="Select Funding.."
+                                              isDynamic={true} placeholder="Type of Funding"
                                               onSelect={this.onOptionSelected.bind(this)}
                                               selectedValue={this.state.selectedVal}/>
                               </div>

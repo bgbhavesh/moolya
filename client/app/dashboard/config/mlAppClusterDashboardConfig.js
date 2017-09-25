@@ -24,6 +24,7 @@ const mlAppClusterDashboardListConfig=new MlAppViewer({
   buildQueryOptions:(config)=>{
     let queryObj = {
       bounds:config.params&&config.params.bounds?config.params.bounds:null,
+      viewMode:config.params&&config.params.viewMode?config.params.viewMode:null,
       isListView:true,
     };
     let queryString = JSON.stringify(queryObj);

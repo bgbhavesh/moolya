@@ -324,7 +324,6 @@ class MlAssignBackendUsers extends React.Component {
                         show={this.state.showProfileModal}
                         toggleShow={this.toggleProfileModal}
                         cropperStyle="circle"
-                        submitText="Crop"
                       />
                     </div>
                     <br className="brclear"/>

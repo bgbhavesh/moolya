@@ -39,7 +39,7 @@ export default class MlServiceProviderViewMCL extends Component {
   componentDidMount() {
     //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.app_header').outerHeight(true)));
     this.fetchPortfolioStartupDetails();
     this.validateUserForAnnotation();
   }
@@ -166,7 +166,7 @@ export default class MlServiceProviderViewMCL extends Component {
           {showLoader === true ? ( <MlLoader/>) : (
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
-              <div className="main_wrap_scroll" id="annotatorContent">
+              <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}
                   className="main_wrap_scroll"

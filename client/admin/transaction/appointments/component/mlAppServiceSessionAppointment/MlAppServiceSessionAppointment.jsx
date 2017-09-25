@@ -8,7 +8,7 @@ export default class MlAppServiceSessionAppointment extends Component {
       orderId: props.orderId,
       data: {
         client: {},
-        service:{},
+        service: {},
         owner: {},
         sessionInfo: []
       }
@@ -28,10 +28,8 @@ export default class MlAppServiceSessionAppointment extends Component {
 
   async fetchServiceSessionAppointments() {
     if (this.state.orderId) {
-      console.log('Fetching session appointment info');
       let response = await fetchAdminSessionAppointment(this.state.orderId);
       if (response && response.success) {
-        console.log('Got information. storing in state');
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
         data.client = data.client ? data.client : {};
@@ -39,8 +37,6 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
         this.setState({
           data
-        }, () => {
-          console.log(JSON.stringify(this.state, null, 4));
         });
       }
     }

@@ -95,7 +95,7 @@ $menuTrans:all 0.5s linear;
   form{margin-top: 20px;}
   .form-group label{font-weight: normal;}
   .form-control {height:38px;}
-  .form-control.inline_input {display: inline;width: 40px;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);border-radius: 4px;height: auto;padding: 4px;background: #fff;margin: 0px 5px;text-align: center;}
+  .form-control.inline_input {display: inline;width: 60px;border: 1px solid #ccc;box-shadow: inset 0 1px 1px rgba(0,0,0,.075);border-radius: 4px;height: auto;padding: 4px;background: #fff;margin: 0px 5px;text-align: center;}
   .inline_input.medium_in{width: 100px;}
   textarea.form-control{height: 80px;}
   .form-control:focus {border-color: #FFC20E;}
@@ -212,10 +212,10 @@ $menuTrans:all 0.5s linear;
     }
   }
   .company_block{background:$mlBlue; border:$mlBlue solid 1px; text-shadow: none; color: $mlWhite; border-radius:10px; margin-bottom: 20px;font-size: 12px;
-    h3{ font-size: 16px; padding: 4px 10px 10px 10px; line-height: 22px;
+    h3{ font-size: 14px; padding: 4px 10px 10px 10px; line-height: 22px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
       span{font-size: 14px;}
     }
-    .footer{padding:20px 0px;
+    .footer{padding:5px 0px;
       .center{border-left:#999 solid 1px; border-right:#999 solid 1px; }
     }
     .premium { position: absolute; right: 10px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right;
@@ -275,11 +275,14 @@ $menuTrans:all 0.5s linear;
               border-bottom-color:$mlRed;
             }}
           }
+          .member_status{position: absolute;background:$mlRed;height: 14px;width: 14px;border-radius: 50%;top: 0px;right: 23px;text-align: center;
+            .fa{font-size: 9px;color: #fff;display: inherit;margin-top: 2px;}
+          }
         }
 
       }
     li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;position: relative;
-        a{text-decoration: none;
+        a{text-decoration: none;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
           /*span{background:$mlGray; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlBlue;}*/
           span.green{background:#09ce09; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;}
           span.icon{background: #ef4647; position: absolute; border-radius: 50%; width: 20px; height: 20px; margin-left: 46px; color: #fff; text-shadow: none; font-size: 13px; line-height: 20px;}
@@ -288,7 +291,7 @@ $menuTrans:all 0.5s linear;
           span.icon_lg{color: $mlBlue;}
           .flaticon-ml-active-user:before{font-weight: bold;font-size: 26px;}
           }
-          .member_status{position: absolute;background: #ef4647;height: 14px;width: 14px;border-radius: 50%;top: 0px;right: 23px;text-align: center;
+          .member_status{position: absolute;background: $mlBlue;height: 14px;width: 14px;border-radius: 50%;top: 0px;right: 23px;text-align: center;
           .fa{font-size: 9px;color: #fff;display: inherit;margin-top: 2px;}
           }
         }
@@ -1098,9 +1101,16 @@ p{margin-top:10px;}
   .img_upload{
     margin:0px;padding:0px;
     li{
-      float: left;position:relative;margin-right:20px;width:50px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
-      .fa{
-          position: absolute; width: 20px; height: 20px; background: #ef4647; border-radius: 50%; color: #fff; line-height: 20px; font-size: 12px;     right: 0px; top: -5px;}
+      float: left;position:relative;margin-right:20px;width:60px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
+    .fa{
+      position: absolute; width: 20px; height: 20px;  border-radius: 50%; color: #fff; line-height: 20px; font-size: 12px;     right: 4px; top: 0px;
+      &.fa-plus{
+        background: $mlBlue;
+      }
+      &.fa-check{
+        background: $mlRed;
+      }
+    }
         img{
           width:50px;height:50px;border-radius:50%;border:$mlGray dotted 2px;display:block;
         }
@@ -1208,7 +1218,7 @@ p{margin-top:10px;}
         border: $mlBlue solid 2px;
       }
       .tooltiprefer span {
-        background: $mlBlue; color: $mlWhite;overflow: inherit; text-overflow: ellipsis;white-space: nowrap;
+        background: $mlBlue; color: $mlWhite;overflow: hidden; text-overflow: ellipsis;white-space: nowrap;
 
         &:before{border-bottom-color: $mlBlue;}
         small {
@@ -2325,4 +2335,11 @@ li.sameWorkTime:after {
 
 .add_task {margin-top: 0px;
   .ml-plus {line-height: 158px; color:#b9c5cc;font-size: 75px;background:none;border:0px;padding:0px; }
+}
+.border_top{
+  .details-panel{
+    border-top: 2px solid #ddd !important;
+    border: none;
+    border-radius: 0px;
+  }
 }

@@ -15,7 +15,8 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
     super(props);
     this.state= {
-      data: {},
+      status:(props.data||{}).status,
+      data: props.data||{},
       isGenerateLinkDisable: false,
       stages: [{
         stageId: "",
@@ -26,6 +27,10 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
           isActive:false,
         }]
       }]
+    }
+
+    if((props.data||{}).userId){
+      this.findProcessSetupDetails();
     }
     return this;
   }

@@ -17,8 +17,7 @@ let appCommunitySchema = `
     }
     
     type Query{
-        fetchCommunitiesFromDef:[appCommunities]
-        
+        fetchCommunitiesFromDef(isRegisterAs : Boolean):[appCommunities]
     }
 `
 
@@ -26,7 +25,7 @@ let appCommunitySchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appCommunitySchema]);
 
 let supportedApi = [
-  {api: 'fetchCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},
+  {api: 'fetchCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true, isWhiteList:true},
 
 ]
 

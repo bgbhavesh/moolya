@@ -32,7 +32,9 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlProcessSetupDetailsComponent,
-  showActionComponent:true,
+  asyncExpand:true,
+  asyncExpandRowKey:'_id',
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'add',
@@ -68,7 +70,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                             isTaxInclusive
                             about
                             dateTime
-                            
+
                             totalAmountPaid
                             paymentMode
                             cardNumber

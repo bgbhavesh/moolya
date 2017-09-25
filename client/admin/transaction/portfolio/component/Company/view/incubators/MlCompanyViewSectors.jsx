@@ -7,6 +7,8 @@ import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeato
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 
 const KEY = "sectorsAndServices"
 
@@ -14,7 +16,9 @@ export default class MlCompanyViewSectors extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      sectorsAndServices:{}
+      sectorsAndServices:{},
+      content:{},
+      loading: true
     }
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
@@ -126,19 +130,28 @@ export default class MlCompanyViewSectors extends React.Component{
   }
 
   render(){
+    const showLoader = this.state.loading;
     return (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent">
-        <div className="row">
-          <h2>Sectors And Services</h2>
-          <div className="panel panel-default panel-form-view">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
+          <div className="col-lg-12 col-sm-12" id="annotatorContent">
+            <div className="row">
+              <h2>Sectors And Services</h2>
+              <div className="panel panel-default panel-form-view">
 
-            <div className="panel-body">
-              <p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription : ""}</p>
+                <div className="panel-body">
+                  <p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
+                    :  <div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                    </div>
+                }  </p>
 
+                </div>
+              </div>
             </div>
           </div>
-
-        </div>
+        )
+        }
       </div>
     )
   }

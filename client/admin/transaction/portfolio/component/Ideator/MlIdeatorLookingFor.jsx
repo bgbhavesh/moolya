@@ -330,7 +330,7 @@ export default class MlIdeatorLookingFor extends Component {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Select LookingFor"
+                            <Moolyaselect multiSelect={false} placeholder="Select Looking For"
                                           className="form-control float-label" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={query}
                                           isDynamic={true}

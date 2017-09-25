@@ -1,6 +1,7 @@
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+//todo:// query are been duplicated check and remove the un-used onces
 MlResolver.MlQueryResolver['fetchCommunityDefinition'] = (obj, args, context, info) => {
   let result=MlCommunityDefinition.find({isActive:true}).fetch()||[];
   return result;

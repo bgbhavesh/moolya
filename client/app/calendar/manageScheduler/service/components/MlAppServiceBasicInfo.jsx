@@ -29,7 +29,7 @@ class MlAppServiceBasicInfo extends Component {
   constructor(props) {
     super(props);
     this.state={
-      serviceExpireTime:(props.data &&props.data.serviceExpiry) ? props.data.serviceExpiry : "",
+      serviceExpiry:(props.data &&props.data.serviceExpiry) ? props.data.serviceExpiry : "",
       currentFrequency:(this.props.data&&this.props.data.sessionFrequency)? this.props.data.sessionFrequency :'Onetime',
     }
     this.changeServiceExpireTime=this.changeServiceExpireTime.bind(this);
@@ -69,7 +69,7 @@ class MlAppServiceBasicInfo extends Component {
 
   changeServiceExpireTime(e){
     let value = e.target.value;
-    this.setState({serviceExpireTime:value});
+    this.setState({serviceExpiry:value});
     this.props.setServiceExpiry(value)
   }
 
@@ -81,10 +81,10 @@ class MlAppServiceBasicInfo extends Component {
       days=30;
     }else if(value === 'Quarterly'){
       days=120;
-    }else if(value === 'Annually'){
+    }else if(value === 'Yearly'){
       days=365;
     }
-    this.setState({currentFrequency:value,serviceExpireTime:days});
+    this.setState({currentFrequency:value,serviceExpiry:days});
     this.props.setServiceExpiry(days)
     this.props.setSessionFrequency(value);
   }
@@ -108,7 +108,7 @@ class MlAppServiceBasicInfo extends Component {
 
     // fetch states graphql query
     let statesQuery = gql`query ($countryId: String) {
-      data: fetchStatesPerCountry(countryId: $countryId) {
+      data: fetchStatesPerCountryWithAll(countryId: $countryId) {
         value: _id
         label: name
       }
@@ -259,7 +259,7 @@ class MlAppServiceBasicInfo extends Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode || data.isActive}/>
+                    <input type="checkbox" checked={data.isActive} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode && !this.props.canStatusChange }/>
                     <div className="slider"></div>
                   </label>
                 </div>

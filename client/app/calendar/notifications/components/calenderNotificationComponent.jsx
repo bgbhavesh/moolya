@@ -13,6 +13,8 @@ export default class AppMyProfileMyoffice extends React.Component{
     super(props, context);
     this.state = {loading: false, notifications: []};
     this.appNotifications.bind(this);
+    this.getsubNotificationIcon = this.getsubNotificationIcon.bind(this);
+
     return this;
   }
   componentWillMount() {
@@ -29,6 +31,19 @@ export default class AppMyProfileMyoffice extends React.Component{
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
 
+  }
+
+  getsubNotificationIcon(subNotificationType) {
+
+    //define the notificationTypes and their corresponding classes in their respective arrays, ensure the order
+
+    const notificationTypeArray = ['connectionRequestReceived','connectionRequestSent','enquiryRequestRecieved','reviewRecieved','newUserCreation','kycApprove','kycDecline','portfolioUpdate','goLiveRequest','goLiveRequestApproval','goLiveRequestDecline','userApproval'];
+    const classNames = ['ml flaticon-ml-handshake','ml flaticon-ml-handshake','ml flaticon-ml-support','ml flaticon-ml-note'];
+    const index = notificationTypeArray.indexOf(subNotificationType);
+    if(index === -1 || !classNames[index]){
+      return 'ml ml-moolya-symbol';
+    }
+    return classNames[index];
   }
   appNotifications(response) {
     var that = this;
@@ -51,6 +66,7 @@ export default class AppMyProfileMyoffice extends React.Component{
 
   render(){
     const {notifications} = this.state;
+    var vm = this;
     let that =this;
     function timeConverter(UNIX_timestamp){
       var a = new Date(UNIX_timestamp * 1000);
@@ -68,7 +84,7 @@ export default class AppMyProfileMyoffice extends React.Component{
     var notificationsList = notificationAry.map(function (options, key) {
       return (
         <li key={key} onClick={that.onChangeStatus.bind(that,options,key)} className={options.isRead ? 'read' : 'unread'}>
-          <div className="left_icon"><span className="ml ml-moolya-symbol"></span></div>
+          <div className="left_icon"><span className={vm.getsubNotificationIcon(options.subNotificationType)}></span></div>
           <div className="right_text">
             <p>
               <span>{(options.createdTS) ? timeConverter(options.createdTS) : "7 Sep 2017 21:57:40" }</span>

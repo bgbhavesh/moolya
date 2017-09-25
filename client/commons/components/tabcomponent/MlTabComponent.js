@@ -12,8 +12,17 @@ export default class MlTabComponent extends React.Component {
     if (type) {
       if (!FlowRouter.getQueryParam(type)) {
         let object = {};
-        var key= this.props.mkey || 'title';
-        if(this.state.tabs[0].name) key= 'name';
+        var key = 'title';
+        if(this.state.tabs[0].key){
+          key = 'key';
+        }
+        else if(this.props.mkey){
+          key= this.props.mkey;
+        }
+        else if(this.state.tabs[0].name){
+          key= 'name';
+        }
+
         object[type]=this.state.tabs[0][key];
         FlowRouter.setQueryParams(object);
       }
@@ -50,5 +59,5 @@ function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); }
 
 
 MlTabComponent.contextTypes = {
-  breadCrum: PropTypes.Object,
+  breadCrum: PropTypes.object,
 };

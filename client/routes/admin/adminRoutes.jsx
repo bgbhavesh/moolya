@@ -103,21 +103,21 @@ adminSection.route('/', {
 adminSection.route('/myprofile/personalInfo', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MlMyProfile/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'personalInfo'}}/>,adminContent:< MlMyProfile/>})
   }
 });
 
 adminSection.route('/myprofile/AddressBook', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileAddressBook/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'AddressBook'}}/>,adminContent:< MyProfileAddressBook/>})
   }
 });
 
 adminSection.route('/myprofile/Settings', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'Settings'}}/>,adminContent:< MyProfileSettings/>})
   }
 });
 adminSection.route('/switchprofile', {
@@ -207,7 +207,7 @@ adminSection.route('/documents/history', {
 adminSection.route('/documents/:pid/:kycid/:docid', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping processConfig={params.pid} kycConfig={params.kycid} docConfig={params.docid}/>})
+    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader breadcrum={{type:'documents','showBreadCrum':true, 'document':true}}  processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping processConfig={params.pid} kycConfig={params.kycid} docConfig={params.docid}/>})
   }
 });
 
@@ -335,13 +335,13 @@ adminSection.route('transactions/registrationRequested/edit', {
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_registration_requested_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'requested',transactionsRegistrations:'registrationRequested'}} />, adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 adminSection.route('/transactions/editApprovedRequests/:id', {
   name: 'transaction_registration_approved_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'approved',transactionsRegistrations:'registrationApprovedList'}} />, adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -432,14 +432,14 @@ adminSection.route('/templates/history', {
 adminSection.route('/templates/assignTemplate/', {
   name: 'templates_assignment',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'assignTemplate'}} />, adminContent:<MlAssignTemplate />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'template','subModule':'Add'}} />, adminContent:<MlAssignTemplate />})
   }
 });
 
 adminSection.route('/templates/assignTemplate/:id', {
   name: 'templates_assignment_edit',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'assignTemplate'}} />, adminContent:<MlEditAssignTemplate config={params.id} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'templates','showBreadCrum':true,'module':'template','subModule':'Edit'}} />, adminContent:<MlEditAssignTemplate config={params.id} />})
   }
 });
 

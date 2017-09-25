@@ -687,7 +687,6 @@ const MlEmailNotification= class MlEmailNotification {
       }, 2 * 1000);
     }
   }
-
   static officeInvitationEmail(verificationLink,registrationId,context,registrationData) {
     var address;
     var userDetails = mlDBController.findOne('users', {_id: context.userId}) || {}
@@ -779,10 +778,6 @@ const MlEmailNotification= class MlEmailNotification {
   static officePaymentLink(){
 
   }
-
-  static onOfficeUpgrade(){
-
-  }
   static UserRejectionByAdmin(userDetails){
       let user = userDetails || {}
       let regObj = {
@@ -812,8 +807,84 @@ const MlEmailNotification= class MlEmailNotification {
       });
     }, 2 * 1000);
   }
+  static PaymentLink(userId,path){
+    //let paymentDetails = mlDBController.findOne('mlPayment', userId) || {}
+    let paymentUserId = userId
+    let userDetails =  mlDBController.findOne('users', {_id: paymentUserId}) || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login'),
+      contactNumber : "+91-40-4672 5725",
+      contactEmail : "cm@moolya.global",
+      Link: path,
+      hours: 48
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_payment_link_email","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        //subject: "Payment Link!!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
 
+  static onOfficeUpgrade(officeId){
+    if(officeId){
+      let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      let userDetails =  mlDBController.findOne('users', {_id: officeUserId}) || {}
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        path : Meteor.absoluteUrl('login')
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_office_category_upgrade","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          //subject: "Office Upgrade!!!",
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+    }
+  }
+  static OfficeDeActivated(officeId){
+    if(officeId){
+      let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      let userDetails =  mlDBController.findOne('users', {_id: officeUserId}) || {}
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        contactNumber : "+91-40-4672 5725",
+        contactEmail : "cm@moolya.global"
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bespoke_customized_office_de-activated","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          //subject: "Office DeActivated!!!",
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+    }
+  }
 }
+
 
 export default MlEmailNotification;
 

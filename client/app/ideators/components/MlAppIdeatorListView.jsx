@@ -12,6 +12,8 @@ import CDNImage from '../../../commons/components/CDNImage/CDNImage';
 /**
  * export of the default component
  * */
+import MlLoader from "../../../commons/components/loader/loader";
+import NoDataList from '../../../commons/components/noData/noDataList';
 export default class MlAppIdeatorListView extends Component {
   /**
    * redirect to get the details of the portfolio
@@ -34,36 +36,45 @@ export default class MlAppIdeatorListView extends Component {
   render() {
     let that = this
     const data = this.props.data || [];
+    let loading=this.props.config&&this.props.config.loading;
     return (
       <div>
-        <div className="ideators_list">
+        {loading === true ? ( <MlLoader/>) : (
+          <div className="ideators_list">
           <div className="col-md-12">
             <h2>Ideators</h2>
           </div>
-            {data.map(function (ideator, idx) {
-              return (
-                <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-                  <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
-                    <div className="ideators_list_block">
-                      <div className="premium">
-                        <span>{ideator.accountType}</span>
-                      </div>
-                      <h3>{ideator.name}</h3>
-                      {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
-                        <div className="list_icon">
-                          <span className="ml my-ml-Ideator"></span>
-                        </div>}
-                      <p>{ideator.ideas[0].title}</p>
-                      <div className="block_footer">
-                        <span>{ideator.chapterName}{!ideator.isDefaultSubChapter?"-" +ideator.subChapterName:""}</span>
-                      </div>
+          {data && !data.length?
+            (<NoDataList moduleName="Portfolios" />):(
+              <div>
+                  {data.map(function (ideator, idx) {
+                  return (
+                    <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
+                      <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
+                        <div className="ideators_list_block">
+                          <div className="premium">
+                            <span>{ideator.accountType}</span>
+                          </div>
+                          <h3>{ideator.name}</h3>
+                          {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
+                            <div className="list_icon">
+                              <span className="ml my-ml-Ideator"></span>
+                            </div>}
+                          <p>{ideator.ideas[0].title}</p>
+                          <div className="block_footer">
+                            <span>{ideator.chapterName}</span>
+                          </div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                </div>
-              )
-            })}
+                  )
+                })};
+              </div>)
+          }
+
 
         </div>
+        )}
       </div>
     )
   }

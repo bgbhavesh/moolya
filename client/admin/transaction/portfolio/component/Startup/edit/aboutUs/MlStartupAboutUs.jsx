@@ -40,6 +40,7 @@ export default class MlStartupAboutUs extends React.Component{
     // this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
+    console.log('aboutus startup context', this.context)
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
     if(!empty){
       this.setState({loading: false, data: this.context.startupPortfolio.aboutUs});
@@ -188,4 +189,5 @@ export default class MlStartupAboutUs extends React.Component{
 }
 MlStartupAboutUs.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys : PropTypes.object
 };

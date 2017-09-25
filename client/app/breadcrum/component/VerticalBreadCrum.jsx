@@ -4,7 +4,7 @@ import { getTeamUsersActionHandler } from '../../internalTask/actions/fetchOffic
 import { fetchInternalTaskInfo } from '../../internalTask/actions/fetchInternalTaskInfo';
 import { findRegistrationActionHandler } from '../../registrations/actions/findRegistration';
 import { fetchAllOfficeMembers } from '../../investment/actions/fetchAllTeamMember';
-
+import {fetchActivitiesActionHandler} from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
@@ -60,6 +60,12 @@ export default class VerticalBreadCrum extends Component {
         object['portfolioId'] = response.portfolioUserName;
         this.setState(object);
       } else this.setDefaultName('portfolioId');
+    }else if ( FlowRouter.getParam('profileId')) {
+      var response = await fetchActivitiesActionHandler(FlowRouter.getParam('profileId'));
+      if (response) {
+        object['profileId'] = response.name;
+        this.setState(object);
+      } else this.setDefaultName('profileId');
     } else if ( FlowRouter.getParam('taskId')) {
       var response = await fetchInternalTaskInfo(FlowRouter.getParam('taskId'));
       if (response) {

@@ -22,7 +22,7 @@ const mlMyTransactionTableConfig = new MlViewer.View({
   searchFields: ['transactionId', 'transactionType','clusterName', 'chapterName', 'communityName', 'status'],
   throttleRefresh: false,
   pagination: true,//To display pagination
-  selectRow: true,  //Enable checkbox/radio button to select the row.
+  selectRow: false,  //Enable checkbox/radio button to select the row.
   isExpandableRow: (row)=> {
     return true;
   },

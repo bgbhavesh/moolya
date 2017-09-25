@@ -226,4 +226,35 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       return {'isValid':false,'validationResponse':response};
     }
   }
+  /**
+   * @params registration object from client
+   * @return isValid
+   * */
+  static checkDuplicateContactNumber(regDetails) {
+    var checkNumber = mlDBController.findOne('MlRegistration', {
+      "registrationInfo.userName": {$ne: regDetails.userName},
+      "registrationInfo.contactNumber": regDetails.contactNumber
+    })
+    if (checkNumber) {
+      var response = new MlRespPayload().errorPayload("Contact Number already used", 409);
+      return {isValid: false, validationResponse: response}
+    } else
+      return {isValid: true};
+  }
+
+  static checkActiveOfficeBearer(regData) {
+    var response = false
+    var isOFB = mlDBController.findOne('MlRegistration', {
+      "registrationInfo.email": regData.registration.email,
+      'registrationInfo.communityDefCode': 'OFB'
+    })
+    var isOFBMember = mlDBController.findOne('MlOfficeMembers', {
+      "emailId": regData.registration.email,
+      "communityType": "OFB",
+      isActive: true
+    })
+    if (isOFB && isOFBMember)
+      response = true
+    return response
+  }
 }

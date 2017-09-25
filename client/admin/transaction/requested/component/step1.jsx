@@ -84,8 +84,6 @@ export default class step1 extends React.Component{
   async fetchIdentityTypesMaster() {
     const response = await fetchIdentityTypes(this.props.config);
     this.setState({identityTypesData: response});
-    console.log(this.state.identityTypesData);
-    // this.IdentityCheckbox();
     return response;
   }
 
@@ -566,7 +564,6 @@ export default class step1 extends React.Component{
     let that=this;
 
     let identityTypez=_.filter(that.state.identityTypesData, function(i) { return _.indexOf(i.communities,that.state.registrationType)>=0?true:false;})||[];
-    console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     let referedActive='',institutionAssociationActive='',isVerified=''

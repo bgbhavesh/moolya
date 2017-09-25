@@ -76,7 +76,7 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
       else if (name === 'INS') name = 'Institute';
       else if (name === 'SPS') name = 'Service Provider';
       else if (name === 'assignusers') name = 'Backend Users';
-      if(name!==('clusters') && name!==('chapters')&& name!==('communities'))
+      //if(name!==('clusters') && name!==('chapters')&& name!==('communities'))
       list.push({
         linkUrl: path,
         linkName: properName(name),

@@ -34,7 +34,7 @@ const mlOfficeTableConfig=new MlViewer.View({
   searchFields:['profileId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  selectRow:true,  //Enable checkbox/radio button to select the row.
+  selectRow:false,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="office" moduleName="office" client={client}/>,
   isExpandableRow:(row)=>{return true;},

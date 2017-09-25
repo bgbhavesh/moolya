@@ -217,19 +217,27 @@ export default class MlCustomFilterComponent extends Component {
   }
 
   async onCancelFilter(){
-    this.setState({filterQueries : []});
-    this.props.onFilterChange(null);
+
+
     let selectedValues = this.state.selectedDropdownValues
+    let inputValues = this.state.filterQueries
     let that = this;
-    var result = _.map(selectedValues, function (currentObject) {
+     _.map(selectedValues, function (currentObject) {
       let selectedOption = currentObject["selectedOption"];
       that.setState({[selectedOption] : ""})
     });
+    _.map(inputValues, function (currentObject) {
+      if(currentObject["fieldType"] == "String"){
+        let eneteredInput = currentObject["fieldName"];
+        that.refs[eneteredInput].value = "";
+      }
+    });
     $('.filter_table').addClass('filter_hide');
-
+    this.setState({filterQueries : []});
+    this.props.onFilterChange(null);
     this.refs.fromDateInput.state.inputValue = "";
     this.refs.toDateInput.state.inputValue = "";
-    this.refs.input.value = "";
+
   }
   render(){
     let that = this;
@@ -251,8 +259,6 @@ export default class MlCustomFilterComponent extends Component {
 
 
               {fieldsData &&  fieldsData.filterFields&& fieldsData.filterFields.map(function(options,id){
-
-
 
                 let filterListQuery = null
                 let select = '';
@@ -310,10 +316,10 @@ export default class MlCustomFilterComponent extends Component {
 
 
                 return(<span key={id}>
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="MM/DD/YYYY" timeFormat={true}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from",options.displayName)}/></div>:""}
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="MM/DD/YYYY" timeFormat={true}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to",options.displayName)}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="DD/MM/YYYY" timeFormat={true}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from",options.displayName)}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="DD/MM/YYYY" timeFormat={true}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to",options.displayName)}/></div>:""}
                   {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect connection={that.props.connection} multiSelect={false} ref="listSelect" placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName,options.displayName,options.clearFields)} isDynamic={true} id={'list'+id}/></div>:""}
-                  {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName,options.displayName)} disabled={options.isRestrictedFilter}/></div>:""}
+                  {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref={options.fieldName} placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName,options.displayName)} disabled={options.isRestrictedFilter}/></div>:""}
                   {/*{booleanSelect?<div className="col-lg-3">
                     <div className="input_types label_name">
                       <label>{options.displayName} : </label>

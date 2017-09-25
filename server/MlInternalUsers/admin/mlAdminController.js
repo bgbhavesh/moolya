@@ -128,8 +128,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
   // Serving static pages.
   graphQLServer.get(config.microSite, async function (req, res, next) {
+    console.log('Server Side Request');
       if (!(req.url.includes('login') || req.url === '/')) {
         if (typeof req.headers.cookie === 'undefined' || (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token'))) {
+          console.log('Request is in Microsite path');
           const pathName = req.url;
           const originalUrl = req.originalUrl;
           let proto = req.protocol;
@@ -139,13 +141,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
           const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
           if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
+            console.log('Request should redirect to Next route');
             next()
           }
+          console.log('Request is being served by Jade');
           res.render(pathAbout, portFolio)
         } else {
+          console.log('Request should redirect to Next route(No login Token)');
           next()
         }
       } else {
+        console.log('Request should redirect to Next route(login User)');
         next()
       }
 

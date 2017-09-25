@@ -286,7 +286,7 @@ export default class MlFunderInvestment extends React.Component {
                             <div className="col-md-12">
                               <div className="form-group">
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                          inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control"}} ref="dateOfInvestment"
+                                          inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control",readOnly:true}} ref="dateOfInvestment"
                                           defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
                                           onChange={this.dateChange.bind(this)} closeOnSelect={true}
                                           isValidDate={ valid }/>
@@ -310,7 +310,7 @@ export default class MlFunderInvestment extends React.Component {
                               <div className="form-group">
                                 <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                               labelKey={'label'} queryType={"graphql"} query={query}
-                                              isDynamic={true} placeholder="Select Funding.."
+                                              isDynamic={true} placeholder="Type of Funding"
                                               onSelect={this.onOptionSelected.bind(this)}
                                               selectedValue={this.state.selectedVal}/>
                               </div>

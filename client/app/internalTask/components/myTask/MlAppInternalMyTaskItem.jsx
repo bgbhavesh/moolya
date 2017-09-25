@@ -406,7 +406,7 @@ class MlAppInternalMyTaskItem extends React.Component{
                   <Datetime dateFormat="DD-MM-YYYY"
                             isValidDate={valid}
                             timeFormat={false}
-                            inputProps={{placeholder: "Due Date"}}
+                            inputProps={{placeholder: "Due Date",readOnly:true}}
                             closeOnSelect={true}
                             value={moment( this.state.basicData.dueDate ? this.state.basicData.dueDate : '' )}
                             onChange={(date)=> this.dueDate(date)}/>

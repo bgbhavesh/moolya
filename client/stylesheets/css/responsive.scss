@@ -92,4 +92,9 @@ $menuTrans:all 0.5s linear;
   }
   .moolya_app .startup-logo{top:45%; transform: translateY(-45%); box-shadow: none !important;}
   .moolya_app .startup-logo img{ width: auto !important;}
+  .horizon-swiper .horizon-inner{padding-left:0}
+  .horizon-swiper .horizon-item {font-size: 13px; padding:12px 6px;}
+  .bottom-buttons .action_buttons ul{text-align: left; padding-left:90px;}
+  .ideas_swiper .swiper-wrapper{z-index: 0;}
+
 }

@@ -325,6 +325,12 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
         actionName: "CREATE"
       }, context, info)
 
+      addNoise = () => {
+        let x = Math.random() * 0.0007 + "";
+        return parseFloat(x.substr(0,8));
+      }
+
+
       MlResolver.MlMutationResolver['createCommunity'](obj, {
         clusterId: args.subChapter.clusterId,
         clusterName: args.subChapter.clusterName,
@@ -345,8 +351,8 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
         }
         let subChapter = MlSubChapters.findOne({"_id": subChapterId})
         if (subChapter) {
-          var latitude = data.results[0].geometry.location.lat;
-          var longitude = data.results[0].geometry.location.lng;
+          var latitude = data.results[0].geometry.location.lat + addNoise();
+          var longitude = data.results[0].geometry.location.lng +  addNoise();
           mlDBController.update('MlSubChapters', subChapterId, {
             latitude: latitude,
             longitude: longitude

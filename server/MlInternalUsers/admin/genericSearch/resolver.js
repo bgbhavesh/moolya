@@ -1040,6 +1040,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
     if(findOptions.sort) {
       pipeline.push({$sort:findOptions.sort});
+    }else{
+      pipeline.push({$sort:{'createdAt': -1}});
     }
 
     if(findOptions.skip) {

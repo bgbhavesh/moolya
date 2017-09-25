@@ -23,7 +23,8 @@ export default class CalendarSharePopOver extends React.Component {
       selectedDatasToShare: props.Details?props.Details:[],
       startDate: "",
       endDate: "",
-      isDownloadable: false
+      isDownloadable: false,
+      searchActivated: false
     };
   }
 
@@ -231,7 +232,33 @@ export default class CalendarSharePopOver extends React.Component {
     }
   }
 
+  searchFunctionality(e) {
+    console.log('e.target.value', e.target.value);
+    let value  = e.target.value;
+    this.setState({searchValue: value});
+    if(value) {
+      this.setState({searchActivated: true})
+    }else{
+      this.setState({searchActivated: false})
+    }
+    this.searchedMembers()
+  }
 
+  searchedMembers() {
+    let that = this;
+    let search = this.state.searchValue
+    let data = this.state.teamData || [];
+    let datas = data.map(function(value, index) {
+      if(value.name.match(search)) {
+        return (
+          <ul className="img_upload ul-hide" key={index}>
+            <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+          </ul>
+        )
+      }
+    })
+    return datas;
+  }
 
 
   render(){
@@ -246,16 +273,16 @@ export default class CalendarSharePopOver extends React.Component {
                          onChange={this.selectUserType.bind(this)}
           />
         </div>
-        {/*<div className="form-group">*/}
-        {/*<input type="text" placeholder="Search here" className="form-control float-label" id=""></input>*/}
-        {/*</div>*/}
-        {this.teamMembersData()}
+        <div className="form-group">
+          <input type="text" placeholder="Search here" className="form-control float-label" id="" onChange={this.searchFunctionality.bind(this)}></input>
+        </div>
+        {this.state.searchActivated?this.searchedMembers():this.teamMembersData()}
         <div className="clearfix" />
         <div className="col-md-6 nopadding-left">
           <div className="form-group" id="start-time">
             <Datetime dateFormat={"DD-MM-YYYY"}
                       timeFormat={false}
-                      inputProps={{placeholder: "Shared Start Date"}}
+                      inputProps={{placeholder: "Shared Start Date",readOnly:true}}
                       closeOnSelect={true}
                       isValidDate={(current) => this.validDate(current)}
                       onChange={(event) => this.sharedStartDate(event)}
@@ -270,7 +297,7 @@ export default class CalendarSharePopOver extends React.Component {
           <div className="form-group" id="end-time">
             <Datetime dateFormat={"DD-MM-YYYY"}
                       timeFormat={false}
-                      inputProps={{placeholder: "Shared End Date"}}
+                      inputProps={{placeholder: "Shared End Date",readOnly:true}}
                       closeOnSelect={true}
                       isValidDate={(current) => this.validDate(current)}
 
@@ -282,8 +309,7 @@ export default class CalendarSharePopOver extends React.Component {
             />
           </div>
         </div>
-        <div className="clearfix" />
-        <div className="clearfix" />
+        <br className="brclear" />
         <div className="ml_btn">
           <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Share</a>
           <a href="" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>

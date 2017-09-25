@@ -293,7 +293,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                             <div className="form-group left_al">
                               {(details.clusterId == clusterId && loggedInUser.hierarchyLevel > details.hierarchyLevel) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                          inputProps={{placeholder: "Valid From"}}
+                                          inputProps={{placeholder: "Valid From",readOnly:true}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
                                           onChange={that.onValidFromChange.bind(that, idx, id)}/> :
                                 <input type="text" defaultValue={details.validTo}
@@ -303,7 +303,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                             <div className="form-group left_al">
                               {(details.clusterId == clusterId && loggedInUser.hierarchyLevel > details.hierarchyLevel) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                          inputProps={{placeholder: "Valid To"}}
+                                          inputProps={{placeholder: "Valid To",readOnly:true}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validTo}
                                           onChange={that.onValidToChange.bind(that, idx, id)}/> :
                                 <input type="text" defaultValue={details.validTo}

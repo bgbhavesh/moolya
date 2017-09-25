@@ -14,6 +14,8 @@ export async function fetchSlotAppointmentsDetailsActionHandler (appointmentId) 
           startDate
           endDate
           status
+          totalSessions
+          currentSession
           attendeeDetails{
             firstName
             lastName

@@ -335,7 +335,7 @@ class MlAddBackendUser extends React.Component {
                     </div>
 
                     <div className="form-group mandatory">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 

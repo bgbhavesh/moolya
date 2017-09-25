@@ -79,9 +79,9 @@ export default class InteractionsCounter extends React.Component{
     return(
       <div>
         <div className="paperfold panel">
-          <a href="" className="back_btn" onClick={this.backFunction}>
+          {/*<a href="" className="back_btn" onClick={this.backFunction}>
             <span className="fa fa-angle-left fa-2x"/>
-          </a>
+          </a>*/}
           <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}>
             <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
                  data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}

@@ -17,6 +17,8 @@ export default class MlBarChart extends React.Component {
     let chartHeight = this.props.height?this.props.height:null
     let chartSeries = this.props.chartSeries&&this.props.chartSeries.length>0?this.props.chartSeries:[]
     let xScale = this.props.xScale?this.props.xScale:""
+    let xLabel = this.props.xLabel?this.props.xLabel:"";
+    let yLabel = this.props.yLabel?this.props.yLabel:"";
     let  employmentDataX = function(d) {
       return d.year;
     }
@@ -30,6 +32,8 @@ export default class MlBarChart extends React.Component {
       chartSeries = {chartSeries}
       x= {employmentDataX}
       xScale= {xScale}
+      xLabel={xLabel}
+      yLabel={yLabel}
     /></div>);
   }
 }

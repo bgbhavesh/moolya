@@ -215,7 +215,7 @@ $menuTrans:all 0.5s linear;
     h3{ font-size: 14px; padding: 4px 10px 10px 10px; line-height: 22px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
       span{font-size: 14px;}
     }
-    .footer{padding:20px 0px;
+    .footer{padding:5px 0px;
       .center{border-left:#999 solid 1px; border-right:#999 solid 1px; }
     }
     .premium { position: absolute; right: 10px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right;
@@ -1705,7 +1705,7 @@ p{margin-top:10px;}
       .bug_button:hover{color:$mlBlack;right:340px;}
     }
     h3{
-      font-size: 16px; text-align: center; color: #fff; border-radius: 4px; padding: 15px 5px; text-shadow: none;
+      font-size: 16px; text-align: center; color: #fff; border-radius: 4px; padding: 15px 5px;text-shadow: none;
     }
   .ml_btn{/*text-align: center;*/margin-top: 10px;
     .save_btn{background: $mlGray;color: $mlBlue;
@@ -2343,3 +2343,10 @@ li.sameWorkTime:after {
     border-radius: 0px;
   }
 }
+.chart_bg{
+  background: $mlWhite;border: $mlGray solid 1px;margin-bottom: 30px;position: relative;height: 465px;
+  .chart_msg{
+    position: absolute; background: $mlGray; width: 50%; left: 25%;top: 40%;font-size: 26px; text-align: center;
+  }
+}
+

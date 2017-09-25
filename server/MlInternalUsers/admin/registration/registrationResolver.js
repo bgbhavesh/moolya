@@ -224,6 +224,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
  * Registration request can be raised for specific sub chapter or for a cluster/chapter
  * */
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
+  var response = null
   var registrationRecord={};
   var requestedSubChapterId=args.registration && args.registration.subChapterId ?args.registration.subChapterId.trim() :null;
   args.registration=_lodash.omit(args.registration,'subChapterId');
@@ -249,6 +250,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   if (registrationExist || userExist._id) {
     let code = 400;
     let result = {message: "Registration Exist"}
+    var isActiveOFB = MlRegistrationPreCondition.checkActiveOfficeBearer(args)
+    if (isActiveOFB)
+      result = {message: "Sorry, your request will require Office admin attention. Please contact Office Admin"}
     let errResp = new MlRespPayload().errorPayload(result, code);
     return errResp;
   }

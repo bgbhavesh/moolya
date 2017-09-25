@@ -12,6 +12,7 @@ import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
 import Select from 'react-select';
 import { cloneDeep } from 'lodash';
+import {initalizeFloatLabel} from "../../../../../commons/utils/formElemUtil";
 
 export default class MlAppTaskMyAppointmentBasicInfo extends Component {
 
@@ -25,6 +26,7 @@ export default class MlAppTaskMyAppointmentBasicInfo extends Component {
   }
 
   componentDidMount() {
+    initalizeFloatLabel();
     // $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));

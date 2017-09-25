@@ -5,6 +5,7 @@ import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
 import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from "../../../../../commons/utils/formElemUtil";
 
 import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
 
@@ -23,6 +24,7 @@ export default class MlAppOngoingMyAppointmentSession extends Component{
   }
 
   componentDidMount() {
+    initalizeFloatLabel();
     let mySwiper = new Swiper('.manage_tasks', {
       speed: 400,
       spaceBetween:20,
@@ -112,6 +114,19 @@ export default class MlAppOngoingMyAppointmentSession extends Component{
   render() {
     let that = this;
     let appointment = this.props.appointment;
+    let data = this.props.slotInfo || {};
+
+    let appointmentType = data.appointmentType === "SERVICE-TASK" ? "External" : "Internal";
+    data.attendeeDetails = data.attendeeDetails ? data.attendeeDetails : [];
+    let user = data.attendeeDetails.find((attendee) => {
+      if(data.appointmentType === "SERVICE-TASK"){
+        return attendee.isClient
+      } else {
+        return attendee.isProvider
+      }
+    });
+    user = user ? user : {};
+    console.log('slotInfo', this.props.slotInfo);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -119,35 +134,56 @@ export default class MlAppOngoingMyAppointmentSession extends Component{
           <div className="panel panel-default">
             <div className="panel-body">
               {this.getSessionList()}
-              <form>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <input type="text" placeholder="Date"
-                           className="form-control float-label"
-                           value={appointment.startDate? new Moment(appointment.startDate).format('DD-MM-YYYY') : null}
-                           disabled />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="form-group">
-                    <input type="text" placeholder="From time"
-                           className="form-control float-label"
-                           value={appointment.startDate ? new Moment(appointment.startDate).format('HH:mm') : null}
-                           disabled />
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="form-group">
-                    <input type="text" placeholder="To time"
-                           className="form-control float-label"
-                           inputProps={{placeholder: "To time"}}
-                           value={appointment.endDate ? new Moment(appointment.endDate).format('HH:mm') : null}
-                           disabled />
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
+
+          <div className="row">
+            <div className="panel panel-default cal_view_task pending">
+              <div className="panel-body">
+                <div className="col-md-12 nopadding">
+                  <div className="col-md-3 nopadding text-center">
+                    <img src={user.profileImage?user.profileImage:'/images/img2.png'} className="image" />
+                    <div className="">
+                      <span>{`${user.firstName} ${user.lastName}`}</span>
+                    </div>
+                  </div>
+                  <div className="col-md-9">
+                    <br />
+                    <div className="form-group">
+                      <input className="form-control float-label" type="text" placeholder="Start Date Time" defaultValue={ data.startDate ?  new Moment(data.startDate).format('MM-DD-YYYY HH:mm:ss') : '' } id="" disabled/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="End Date Time" defaultValue={ data.endDate ?  new Moment(data.endDate).format('MM-DD-YYYY HH:mm:ss') : '' } className="form-control float-label" id="" disabled/>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-12 naopadding att_members" >
+                  <ul className="users_list">
+                    {data.attendeeDetails?data.attendeeDetails.map(function(info){
+                      if( data.appointmentType === "SERVICE-TASK" && info.isClient ) {
+                        return;
+                      } else if (data.appointmentType !== "SERVICE-TASK" && info.isProvider) {
+                        return;
+                      }
+                      return(
+                        <li>
+                          <a href="">
+                            {info.status === 'Accepted' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellowgreen'}}/> : info.status === 'Pending' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellow'}}/> :
+                              info.status === 'Rejected' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'red'}}/> : <FontAwesome name='circle' style={{'position': 'absolute', }}/>}
+                            <img src={info.profileImage? info.profileImage : "/images/img2.png"}/><br />
+                            <div className="tooltiprefer">
+                              <span>{`${info.firstName} ${info.lastName}`}</span>
+                            </div>
+                          </a>
+                        </li>
+                      )
+                    }):<div></div>}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </ScrollArea>
       </div>
     )

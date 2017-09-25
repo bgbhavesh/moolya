@@ -206,7 +206,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
     let communityName = communityDef&&communityDef.name?communityDef.name:""
-    // MlSMSNotification.registerAsRequest(id,communityName,context)
+    MlSMSNotification.registerAsRequest(id,communityName,context)
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
@@ -224,6 +224,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
  * Registration request can be raised for specific sub chapter or for a cluster/chapter
  * */
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
+  var response = null
   var registrationRecord={};
   var requestedSubChapterId=args.registration && args.registration.subChapterId ?args.registration.subChapterId.trim() :null;
   args.registration=_lodash.omit(args.registration,'subChapterId');
@@ -235,8 +236,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return response;
   }
   /**set context for systemadmin user*/
-  var user = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
-  context.userId = user._id;
+  var sysAdmin = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
+  var sysAdminProfile=sysAdmin&&sysAdmin.profile&&sysAdmin.profile.InternalUprofile&&sysAdmin.profile.InternalUprofile.moolyaProfile?sysAdmin.profile.InternalUprofile.moolyaProfile:{};
+  context.userId = sysAdmin._id;
   context.browser = 'Registration API'
   context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
@@ -248,6 +250,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   if (registrationExist || userExist._id) {
     let code = 400;
     let result = {message: "Registration Exist"}
+    var isActiveOFB = MlRegistrationPreCondition.checkActiveOfficeBearer(args)
+    if (isActiveOFB)
+      result = {message: "Sorry, your request will require Office admin attention. Please contact Office Admin"}
     let errResp = new MlRespPayload().errorPayload(result, code);
     return errResp;
   }
@@ -260,6 +265,11 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.password"] = args.registration.password;
     registrationRecord["registrationInfo.countryId"] = args.registration.countryId;
     registrationRecord["registrationInfo.cityId"] = args.registration.cityId;
+
+    //Coupon Code/Campaign Code for promotions
+    registrationRecord["promoCode"] = args.registration.promoCode||null;
+    registrationRecord["campaignCode"] = args.registration.campaignCode||null;
+
     var emails = [{address: args.registration.email, verified: false}];
 
     orderNumberGenService.assignRegistrationId(args.registration);
@@ -287,7 +297,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.chapterName"] = chapterData && chapterData.chapterName ? chapterData.chapterName : "";
     registrationRecord["registrationInfo.subChapterId"] = subChapterData && subChapterData._id ? subChapterData._id : "";
     registrationRecord["registrationInfo.subChapterName"] = subChapterData && subChapterData.subChapterName ? subChapterData.subChapterName : "";
-    registrationRecord["registrationInfo.createdBy"] = args.registration.firstName + ' ' + args.registration.lastName;
+    registrationRecord["registrationInfo.createdBy"] = (sysAdminProfile.firstName||'') + ' ' + (sysAdminProfile.lastName||'');
 
     var transactionId=args.registration.registrationId;
 
@@ -397,13 +407,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var updatedResponse;
     var validationCheck = null;
     var result = null;
-    var registerDetails = null;
+    // var registerDetails = null;
     var registrationInfo=null;
     var subChapterDetails = null;
     var id = args.registrationId;
 
     /**Get the registration Details*/
-    registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
+    var registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
     registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
 
 
@@ -414,6 +424,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        *return the error if email is not verified
        */
       validationCheck = MlRegistrationPreCondition.validateEmailVerification(registerDetails);
+      if (validationCheck && !validationCheck.isValid) {
+        return validationCheck.validationResponse;
+      }
+      validationCheck = MlRegistrationPreCondition.checkDuplicateContactNumber(details)
       if (validationCheck && !validationCheck.isValid) {
         return validationCheck.validationResponse;
       }
@@ -1513,7 +1527,12 @@ MlResolver.MlMutationResolver['sendUserSmsVerification'] = (obj, args, context, 
 
 MlResolver.MlMutationResolver['resendUserSmsVerification'] = (obj, args, context, info) => {
   // TODO : Authorization
-    return MlAccounts.resendUserVerificationSmsOtp(context.userId);
+    var resp = MlAccounts.resendUserVerificationSmsOtp(context.userId);
+    if(resp && resp.otp){
+      return {mobileNumber:resp.mobileNumber, success: true,reason:"Successfully resend OTP", code:200};
+    }else{
+      return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
+    }
 
 }
 
@@ -1547,7 +1566,12 @@ MlResolver.MlMutationResolver['verifyUserMobileNumber'] = (obj, args, context, i
 MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.mobileNumber) {
-    return MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
+    var resp = MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
+    if(resp && resp.otp){
+      return {mobileNumber:resp.mobileNumber, success: true,reason:"Successfully resend OTP", code:200};
+    }else{
+      return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
+    }
   }
 }
 

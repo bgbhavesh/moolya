@@ -84,7 +84,7 @@ export default class MlAppStartupViewTabs extends Component {
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {tabClassName: 'tab',
-        panelClassName: 'panel', title:"Charts" ,
+        panelClassName: 'panel', title:"Charts" ,name:"Charts" ,
         component:<MlStartupViewCharts key="5" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {
         tabClassName: 'tab',

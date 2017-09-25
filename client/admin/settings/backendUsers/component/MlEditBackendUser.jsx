@@ -587,7 +587,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
 
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={Dob} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={Dob} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
                       {/*<input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label " defaultValue={Dob} disabled="disabled" />*/}
                       <FontAwesome name="calendar" className="password_icon"/>
 

@@ -16,7 +16,7 @@ MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, i
       try {
           if (args && args.userId && args.communityType) {
               // user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
-            user = mlDBController.findOne('MlIdeatorPortfolio', {"$and": [{'userId': args.userId}, {'communityId': args.communityType}]}, context)
+            var user = mlDBController.findOne('MlIdeatorPortfolio', {"$and": [{'userId': args.userId}, {'communityId': args.communityType}]}, context)
               if (!user) {
                   // MlIdeatorPortfolio.insert({
                   //   userId: args.userId,

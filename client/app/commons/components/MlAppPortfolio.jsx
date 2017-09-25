@@ -192,8 +192,15 @@ class MlAppPortfolio extends Component{
   async fetchIdeaId(){
       let portfolioId = this.props.config;
       const response = await fetchIdeaByPortfolioId(portfolioId);
-      this.setState({loading:false, ideaId : response._id});
+    if (response)
+      this.setState({loading: false, ideaId: response._id});
+    else{
+      toastr.error('Idea is not initiated');
+      window.history.back()
+    }
+    this.setState({loading: false})
   }
+
   getIdeatorIdeaDetails(details, privateKey){
     this.setState({idea:details});
     if(!_.isEmpty(privateKey)){

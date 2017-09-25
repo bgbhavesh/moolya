@@ -46,7 +46,8 @@ export default class MlAppCommunitiesList extends Component {
           email: registrationInfo.email,
           userName: registrationInfo.userName,
           country: registrationInfo.countryId,
-          communityId: registrationInfo.registrationType
+          communityId: registrationInfo.registrationType,
+          subChapterId: registrationInfo.subChapterId
         });
         this.fetchCommunities();
       }
@@ -141,12 +142,8 @@ export default class MlAppCommunitiesList extends Component {
   optionsBySelectCountry(value){
     this.setState({country:value})
   }
-  /*optionsBySelectCity(value){
-    this.setState({selectedCity:value})
-  }*/
+
   optionBySelectRegistrationType(value, calback, selObject){
-    // this.setState({registrationType:value});
-   // this.setState({identityType:null});
     this.setState({registrationType:value, coummunityName:selObject.label})
   }
   optionsBySelectIdentity(val){
@@ -159,23 +156,17 @@ export default class MlAppCommunitiesList extends Component {
 
     render(){
 
-            let countryQuery = gql`query{
-       data:fetchCountries {
+      let countryQuery = gql`query{
+        data:fetchCountries {
           value:_id
           label:country
         }
       }`
 
-      //       let chapterQuery = gql`query($id:String){
-      //   data:fetchChaptersWithoutAll(id:$id) {
-      //     value:_id
-      //     label:chapterName
-      //   }
-      // }`;
       let fetchcommunities = gql` query{
-  data:fetchCommunityDefinition{label:name,value:code}
-} 
-`;
+        data:fetchCommunityDefinition{label:name,value:code}
+      } 
+      `;
       let fetchIdentity=gql`query($communityId:String){
         data:FetchCommunityBasedIdentity(communityId:$communityId) {
           value: identityTypeName
@@ -183,34 +174,11 @@ export default class MlAppCommunitiesList extends Component {
         }
       }`;
 
-  //     let userTypequery = gql` query($communityCode:String){
-  //   data:FetchUserType(communityCode:$communityCode) {
-  //     value:_id
-  //     label:userTypeName
-  // }  }
-  //   `;
-  //     let industriesquery=gql` query{
-  //   data:fetchIndustries{label:industryName,value:_id}
-  //   }
-  //   `;
-
-    //   let professionQuery=gql` query($industryId:String){
-    //   data:fetchIndustryBasedProfession(industryId:$industryId) {
-    //     label:professionName
-    //     value:_id
-    //   }
-    // }`;
-
-    //   let citiesquery = gql`query($countryId:String){
-    //   data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
-    // }
-    // `;
-      let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+      let clusterQuery = gql`query($subChapterId: String){data:fetchClustersForMap(subChapterId:$subChapterId){label:displayName,value:_id}}`;
 
       let identityOptions={options: {variables: {communityId:this.state.selectedCommunity}}};
-      // let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
-      // let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
-      // let countryOption = {options: { variables: {countryId:this.state.country}}};
+      var clusterOptions = {options: {variables: {subChapterId: this.state.subChapterId}}};
+
         const data = this.state.communities || [];
         const list=  data.map((prop, idx) =>
             <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
@@ -260,8 +228,11 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="email"   value={this.state.email} placeholder="Email Id" className="form-control float-label" id="" disabled="true" />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Country of Operations"  selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
-                          {/*<Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelect.bind(this)} isDynamic={true}/>*/}
+                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                        labelKey={'label'} placeholder="Country of Operations"
+                                        selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery}
+                                        isDynamic={true} queryOptions={clusterOptions}
+                                        onSelect={this.optionsBySelectOperationCountry.bind(this)}/>
                         </div>
                       </div>
                       <div className="assign-popup">

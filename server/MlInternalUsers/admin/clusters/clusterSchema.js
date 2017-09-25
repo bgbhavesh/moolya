@@ -54,7 +54,7 @@ let clusterSchema = `
     
     type Query{ 
         fetchCluster(clusterId: String!, moduleName:String!, actionName:String!):Cluster
-        fetchClustersForMap:[Cluster]
+        fetchClustersForMap(subChapterId: String):[Cluster]
         fetchActiveClusters:[Cluster]
     }
    

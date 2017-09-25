@@ -167,6 +167,26 @@ const MlSMSNotification= class MlSMSNotification{
     }
   }
 
+  static processSetupCompleted(userId){
+    if(userId){
+      var defaultProfile = new MlUserContext().userProfileDetails(userId)
+      var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:""
+      var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:""
+      var msg = 'Investor Process Setup has been completed for your moolya profile. Thank you.'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+
+  }
+
+  static onVerificationSuccess(regRecord){
+    if(regRecord){
+      var mobileNumber = regRecord&&regRecord.registrationInfo&&regRecord.registrationInfo.contactNumber?regRecord.registrationInfo.contactNumber:"";
+      var countryCode =  regRecord&&regRecord.registrationInfo&&regRecord.registrationInfo.countryId?regRecord.registrationInfo.countryId:"";
+      var msg = 'Congratulations ! Your moolya account login has now been verified and activated. Login to moolya now!'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+
 /*  static portfolioGoLiveRequestDeclined(portfolioDetailsId){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
     if(portfolioDetails){

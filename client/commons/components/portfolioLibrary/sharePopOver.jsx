@@ -298,7 +298,7 @@ render(){
             <div className="form-group" id="start-time">
               <Datetime dateFormat={"DD-MM-YYYY"}
                         timeFormat={false}
-                        inputProps={{placeholder: "Shared Start Date"}}
+                        inputProps={{placeholder: "Shared Start Date",readOnly:true}}
                         closeOnSelect={true}
                         isValidDate={(current) => this.validDate(current)}
                         onChange={(event) => this.sharedStartDate(event)}
@@ -313,23 +313,24 @@ render(){
             <div className="form-group" id="end-time">
               <Datetime dateFormat={"DD-MM-YYYY"}
                         timeFormat={false}
-                        inputProps={{placeholder: "Shared End Date"}}
+                        inputProps={{placeholder: "Shared End Date",readOnly:true}}
                         closeOnSelect={true}
                         isValidDate={(current) => this.validDate(current)}
 
                         onChange={(event) => this.sharedEndDate(event)}
-                        disabled={this.props.viewMode}/>
+                        disabled={this.props.viewMode}
+                        />
               <FontAwesome name="calendar"
                            className="password_icon"
                            onClick={this.validTillToggle.bind(this, 'end')}
                            />
             </div>
           </div>
-          <div className="clearfix" />
+          
           <div className="form-group">
             <div className="input_types"><input id="checkbox1" type="checkbox" name="isDownloadable"  onChange={this.isDownloadable.bind(this)} value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label></div>
           </div>
-          <div className="clearfix" />
+          <br className="brclear" />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Share</a>
             <a href="" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>

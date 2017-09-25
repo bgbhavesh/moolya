@@ -411,7 +411,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group" id="date-of-birth">
-                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
+                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
                 <FontAwesome name="calendar" className="password_icon"onClick={that.openDatePickerDateOfBirth.bind(that)}/>
               </div>
               <div className="form-group">

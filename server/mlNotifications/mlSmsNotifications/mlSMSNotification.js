@@ -24,7 +24,8 @@ const MlSMSNotification= class MlSMSNotification{
   static sendSMSForReviewRecvd(fromUser, portfolioId, context){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
     if(portfolioDetails){
-      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryDetails = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryCode = countryDetails&&countryDetails.countryId?countryDetails.countryId:""
       var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
       var from = new MlUserContext().userProfileDetails(fromUser._id)
       if(countryCode && defaultProfile && from){
@@ -42,7 +43,8 @@ const MlSMSNotification= class MlSMSNotification{
   static sendSMSForReviewReject(fromUser, portfolioId, context){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
     if(portfolioDetails){
-      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryDetails = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryCode = countryDetails&&countryDetails.countryId?countryDetails.countryId:""
       var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
       var from = new MlUserContext().userProfileDetails(fromUser._id)
       if(countryCode && defaultProfile && from){
@@ -91,7 +93,8 @@ const MlSMSNotification= class MlSMSNotification{
   static sendSMSonOfficeActivation(officeId, context){
     var office = mlDBController.findOne('MlOffice', officeId, context)
     if(office){
-      var countryCode = MlClusters.findOne(office.clusterId);
+      var countryDetails = MlClusters.findOne(office.clusterId);
+      var countryCode = countryDetails&&countryDetails.countryId?countryDetails.countryId:""
       var defaultProfile = new MlUserContext().userProfileDetails(office.userId)
       if(countryCode && defaultProfile){
         var mobileNumber = defaultProfile.mobileNumber
@@ -99,7 +102,7 @@ const MlSMSNotification= class MlSMSNotification{
         var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
         var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
         var updatedDateTime = date+" "+time
-        var msg = 'Your customized office has bee activated on moolya on '+updatedDateTime+' Login and check it out now.'
+        var msg = 'Your customized office has been activated on moolya on '+updatedDateTime+' Login and check it out now.'
         mlSmsController.sendSMS(msg, countryCode, mobileNumber)
       }
     }
@@ -139,7 +142,8 @@ const MlSMSNotification= class MlSMSNotification{
     var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
     if(portfolioDetails){
-      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryDetails = MlClusters.findOne(portfolioDetails.clusterId);
+      var countryCode = countryDetails&&countryDetails.countryId?countryDetails.countryId:""
       var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
       if(countryCode && defaultProfile){
         var mobileNumber = defaultProfile.mobileNumber
@@ -167,6 +171,32 @@ const MlSMSNotification= class MlSMSNotification{
     }
   }
 
+  static profileUpdated(userId){
+    if(userId){
+      var defaultProfile = new MlUserContext().userProfileDetails(userId);
+      var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:""
+      var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:""
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var msg = 'Your moolya profile has been updated on '+updatedDateTime;
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+  static errorForForgotPassword(userId,context){
+    if(userId){
+      var defaultProfile = new MlUserContext().userProfileDetails(userId);
+      var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:""
+      var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:""
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var msg = 'Your moolya account password reset was unsuccessful on '+updatedDateTime+'. Please contact support.'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
 /*  static portfolioGoLiveRequestDeclined(portfolioDetailsId){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
     if(portfolioDetails){

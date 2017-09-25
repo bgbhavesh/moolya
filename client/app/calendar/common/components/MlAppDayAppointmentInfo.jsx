@@ -103,14 +103,25 @@ export default class MlAppDayAppointmentInfo extends Component {
             <div className="row day_tab_content">
               {
                 slots.map(function (data, index) {
+                  console.log("data:",data, that.props);
+                  let date = new Date();
+                  if(data && data.slot){
+                    date = new Date(that.props.appointmentDate);
+                    let startDate =  data.slot.split('-')[0];
+                    let hours = startDate.split(':')[0];
+                    let minutes = startDate.split(':')[1];
+                    date.setHours(hours);
+                    date.setMinutes(minutes);
+                  }
+
                   let appointments = data.appointments ? data.appointments : [];
                   return (
-                    <div className="col-md-3" key={index}>
+                    <div className="col-lg-3 col-md-4" key={index}>
                       <div className="day_app_list">
                         <div className="app_list_head">
                           {data.slot}
                           <span className="pull-right">
-                            { canAdd ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
+                            { canAdd && ( date.getTime() >(new Date).getTime() ) ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
                             { appointments.length && canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>

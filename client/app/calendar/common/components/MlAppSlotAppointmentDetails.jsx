@@ -55,16 +55,16 @@ export default class MlAppSlotAppointmentDetails extends Component {
             return(
               <div className="col-md-6" key={index}>
                 <div className="panel panel-default cal_view_task pending">
-                  <div className="panel-heading">{data && data.userCommunityName ? data.userCommunityName[0] : ""}<span className="pull-right">Status : <b className="status">{data.status}</b></span></div>
+                  <div className="panel-heading">{data && data.userCommunityName ? data.userCommunityName[0] : ""}<span className="pull-right">Status : <b className="status">{data.status}</b></span><br className="brclear"/> </div>
                   <div className="panel-body">
                     <div className="col-md-12 nopadding">
-                      <div className="col-md-3 nopadding text-center">
+                      <div className="col-lg-3 col-md-4 nopadding text-center">
                         <img src={user.profileImage?user.profileImage:'/images/img2.png'} className="image" />
                         <div className="">
                           <span>{`${user.firstName} ${user.lastName}`}</span>
                         </div>
                       </div>
-                      <div className="col-md-9">
+                      <div className="col-lg-9 col-md-8">
                         <br />
                         <div className="form-group">
                           <input className="form-control float-label" type="text" placeholder="Service Name" defaultValue={data.appointmentInfo.serviceName} id="" disabled/>

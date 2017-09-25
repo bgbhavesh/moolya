@@ -34,7 +34,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   expandComponent:MlProcessSetupDetailsComponent,
   asyncExpand:true,
   asyncExpandRowKey:'_id',
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'add',
@@ -70,7 +70,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                             isTaxInclusive
                             about
                             dateTime
-                            
+
                             totalAmountPaid
                             paymentMode
                             cardNumber

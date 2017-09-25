@@ -51,7 +51,14 @@ export default class MlLogout extends Component {
       this.loginSubmit()
     }
   }
-
+  redirectRegister(e){
+    e.preventDefault();
+    if(!Meteor.isCordova){
+      window.location.href = "https://www.moolya.global/register";
+    } else{
+      window.open('https://www.moolya.global/register', '_system');
+    }
+}
   render() {
     return (
       <div className="logout">
@@ -82,7 +89,7 @@ export default class MlLogout extends Component {
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a
-                    href="https://www.moolya.global/register">Register</a></p>
+                    href="#" onClick={(e) => {this.redirectRegister(e)}}>Register</a></p>
                 </form>
               </div>
             </div>

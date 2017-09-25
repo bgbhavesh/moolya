@@ -11,7 +11,6 @@ import {passwordVerification} from '../actions/addProfilePicAction'
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateDataEntry} from '../actions/addProfilePicAction'
-import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
 import Datetime from "react-datetime";
 import moment from "moment";
 import MlLoader from '../../../commons/components/loader/loader'
@@ -19,7 +18,7 @@ import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/re
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-import {findMyProfileActionHandler} from '../actions/getProfileDetails'
+import {findBackendUserActionHandler} from '../../transaction/internalRequests/actions/findUserAction'
 import CropperModal from '../../../commons/components/cropperModal';
 
 export default class MlMyProfile extends React.Component {
@@ -93,8 +92,7 @@ export default class MlMyProfile extends React.Component {
     this.passwordCheck(digest);
   }
 
-    async passwordCheck(digest)
-    {
+    async passwordCheck(digest){
       const resp = await passwordVerification(digest)
       console.log(resp);
       if(resp.success){
@@ -115,21 +113,21 @@ export default class MlMyProfile extends React.Component {
       $(this).addClass("active");
     });
 
-    var swiper = new Swiper('.profile_container', {
-      pagination: '.swiper-pagination',
-      effect: 'coverflow',
-      grabCursor: true,
-      centeredSlides: true,
-      initialSlide: 1,
-      slidesPerView: 'auto',
-      coverflow: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true
-      }
-    });
+    // var swiper = new Swiper('.profile_container', {
+    //   pagination: '.swiper-pagination',
+    //   effect: 'coverflow',
+    //   grabCursor: true,
+    //   centeredSlides: true,
+    //   initialSlide: 1,
+    //   slidesPerView: 'auto',
+    //   coverflow: {
+    //     rotate: 50,
+    //     stretch: 0,
+    //     depth: 100,
+    //     modifier: 1,
+    //     slideShadows: true
+    //   }
+    // });
   }
 
   onFileUploadCallBack(resp) {
@@ -179,7 +177,7 @@ export default class MlMyProfile extends React.Component {
    **/
   async storeImage() {
     let Details = {
-      profileImage: this.state.responsePic,
+      profileImage: this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:this.state.responsePic,
       firstName: this.state.firstName,
       middleName: this.state.middleName,
       lastName: this.state.lastName,
@@ -203,32 +201,51 @@ export default class MlMyProfile extends React.Component {
    * returns ::  dataresponse
    **/
 
+  // async getValue() {
+  //   let userType = Meteor.userId();
+  //   let user = Meteor.user();
+  //   let isExternal = user.profile.isExternaluser;
+  //   if (isExternal) {
+  //     this.setState({
+  //       loading: false, firstName: user.profile.firstName,
+  //       middleName: user.profile.middleName,
+  //       lastName: user.profile.lastName,
+  //       userName: user.profile.displayName,
+  //       // uploadedProfilePic: response.profile.profileImage,
+  //       genderSelect: response.profile.genderType,
+  //       dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
+  //     });
+  //   } else {
+  //     let response = await findMyProfileActionHandler(userType);;
+  //     this.setState({
+  //       loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
+  //       middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
+  //       lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
+  //       userName: response.profile.InternalUprofile.moolyaProfile.email,
+  //       uploadedProfilePic: response.profile.profileImage,
+  //       genderSelect: response.profile.genderType,
+  //       dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
+  //     });
+  //   }
+  //   this.genderSelect();
+  // }
+  //todo://get the current userId from server
   async getValue() {
     let userType = Meteor.userId();
-    let user = Meteor.user();
-    let isExternal = user.profile.isExternaluser;
-    if (isExternal) {
-      this.setState({
-        loading: false, firstName: user.profile.firstName,
-        middleName: user.profile.middleName,
-        lastName: user.profile.lastName,
-        userName: user.profile.displayName,
-        // uploadedProfilePic: response.profile.profileImage,
-        genderSelect: response.profile.genderType,
-        dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
-      });
-    } else {
-      let response = await findMyProfileActionHandler(userType);;
-      this.setState({
-        loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
-        middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
-        lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
-        userName: response.profile.InternalUprofile.moolyaProfile.email,
-        uploadedProfilePic: response.profile.profileImage,
-        genderSelect: response.profile.genderType,
-        dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
-      });
+    let response = await findBackendUserActionHandler(userType);
+    let DOB = "";
+    if (response && response.profile && response.profile.dateOfBirth) {
+      DOB = moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
     }
+    this.setState({
+      loading: false, firstName: response.profile.firstName,
+      middleName: response.profile.middleName,
+      lastName: response.profile.lastName,
+      userName: response.profile.email,
+      uploadedProfilePic: response.profile.profileImage,
+      genderSelect: response.profile.genderType,
+      dateOfBirth: response.profile.dateOfBirth?DOB:""
+    });
     this.genderSelect();
   }
 
@@ -268,10 +285,6 @@ export default class MlMyProfile extends React.Component {
     else{
       toastr.error("age limit exceeded")
     }
-  }
-
-  async handleSuccess() {
-    this.resetBackendUers();
   }
 
   /**
@@ -542,7 +555,7 @@ export default class MlMyProfile extends React.Component {
 
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",readOnly:true}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

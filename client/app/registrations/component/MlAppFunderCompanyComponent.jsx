@@ -440,7 +440,7 @@ export default class MlAppFunderCompanyComponent extends React.Component {
                              placeholder="Company Email" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Foundation Year"}}
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Foundation Year",readOnly:true}}
                                 closeOnSelect={true} value={that.state.foundationDate}
                                 onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
                       <FontAwesome name="calendar" className="password_icon"

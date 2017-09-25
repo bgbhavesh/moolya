@@ -414,7 +414,7 @@ export default class Individual extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  ref={"dob"} inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid } data-required={true} data-errMsg="Date Of Birth is required"/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  ref={"dob"} inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid } data-required={true} data-errMsg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerDateOfBirth.bind(that)}/>
                   </div>
                   {/*<div className="form-group">*/}
@@ -476,7 +476,7 @@ export default class Individual extends React.Component{
                   <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)} isValidDate={ valid }/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date",readOnly:true}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)} isValidDate={ valid }/>
                   <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerEmploymentDate.bind(that)}/>
                 </div>
                 <div className="form-group">

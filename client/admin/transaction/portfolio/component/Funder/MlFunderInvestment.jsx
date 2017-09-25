@@ -286,7 +286,7 @@ export default class MlFunderInvestment extends React.Component {
                             <div className="col-md-12">
                               <div className="form-group">
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                          inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control"}} ref="dateOfInvestment"
+                                          inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control",readOnly:true}} ref="dateOfInvestment"
                                           defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
                                           onChange={this.dateChange.bind(this)} closeOnSelect={true}
                                           isValidDate={ valid }/>

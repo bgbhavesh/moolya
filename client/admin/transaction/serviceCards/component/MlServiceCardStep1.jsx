@@ -87,7 +87,7 @@ export default class MlServiceCardStep1 extends React.Component{
                   <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={serviceBasicInfo.duration.hours} disabled /> Hours <input type="text" className="form-control inline_input"  value={serviceBasicInfo.duration.minutes} disabled /> Mins </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}  value={serviceBasicInfo.validTill ? moment(serviceBasicInfo.validTill).format('DD-MM-YY') : ''} />
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till",readOnly:true}}  value={serviceBasicInfo.validTill ? moment(serviceBasicInfo.validTill).format('DD-MM-YY') : ''} />
                   <FontAwesome name="calendar" className="password_icon" />
                 </div>
               </form>

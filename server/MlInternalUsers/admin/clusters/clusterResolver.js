@@ -3,6 +3,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import MlAuthorization from '../../../mlAuthorization/mlAuthorization'
 import geocoder from 'geocoder'
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import {filter} from 'lodash'
 
 
 MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
@@ -106,7 +107,6 @@ MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
-  // TODO : Authorization
   if (args.clusterId) {
     var id = args.clusterId;
     // let updatedResponse= MlClusters.update({_id:id}, {$set: args.clusterDetails});
@@ -115,12 +115,19 @@ MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
   }
 }
 
-
-
+/**
+ * @Note [condition Extended]
+ * for the case of non-moolya subChapters in the registerAs functionality from the app side
+ * */
 MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
-      // let result=MlClusters.find({isActive:true}).fetch()||[];
-      let result = mlDBController.find('MlClusters', {isActive:true}, context).fetch()||[];
-      return result;
+  let result = mlDBController.find('MlClusters', {isActive: true}, context).fetch() || [];
+  if (args && args.subChapterId) {
+    var subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId})
+    if (subChapterDetails && !subChapterDetails.isDefaultSubChapter) {
+      result = filter(result, {'_id': subChapterDetails.clusterId});
+    }
+  }
+  return result;
 }
 
 MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) => {
@@ -133,17 +140,6 @@ MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) =
   }
     return result;
 }
-
-/*MlResolver.MlQueryResolver['fetchAllActiveClusters'] = (obj, args, context, info) => {
-  let result = [];
-  clusterData = MlClusters.find({isActive:true}).fetch()||[];
-  if(clusterData.length>0){
-    result = clusterData;
-    result.push({"countryName" : "All", "_id" : "All"});
-  }
-  return result;
-}*/
-
 
  let createcluster = (cluster) =>{
     // if(MlClusters.find({countryId:cluster.countryId}).count() > 0){

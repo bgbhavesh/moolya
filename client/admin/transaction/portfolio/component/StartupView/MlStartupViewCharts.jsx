@@ -295,6 +295,8 @@ export default class MlStartupViewCharts extends React.Component{
       employmentDataX = function(d) {
         return d.year;
       },
+      employmentDataXLabel = "Year",
+      employmentDataYLabel = "Value",
 
       prlTitle = "Bar Group Chart with Tooltip",
       prlChartSeries = [
@@ -331,6 +333,8 @@ export default class MlStartupViewCharts extends React.Component{
           color: '#ff7f0e'
         }
       ],
+      reviewXLabel = "Year",
+      reviewYLabel = "Value",
       reviewX = function(d) {
         return d.year;
       },
@@ -389,6 +393,8 @@ export default class MlStartupViewCharts extends React.Component{
                       width= {width}
                       height= {height}
                       xScale= {xScale}
+                      xLabel = {employmentDataXLabel}
+                      yLabel = {employmentDataYLabel}
                       chartSeries = {employmentDataChartSeries}
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
@@ -426,6 +432,8 @@ export default class MlStartupViewCharts extends React.Component{
                       xScale= {xScale}
                       x= {reviewX}
                       y={reviewY}
+                      xLabel = {reviewXLabel}
+                      yLabel = {reviewYLabel}
                     />
                   </div></div>
 

@@ -241,4 +241,20 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     } else
       return {isValid: true};
   }
+
+  static checkActiveOfficeBearer(regData) {
+    var response = false
+    var isOFB = mlDBController.findOne('MlRegistration', {
+      "registrationInfo.email": regData.registration.email,
+      'registrationInfo.communityDefCode': 'OFB'
+    })
+    var isOFBMember = mlDBController.findOne('MlOfficeMembers', {
+      "emailId": regData.registration.email,
+      "communityType": "OFB",
+      isActive: true
+    })
+    if (isOFB && isOFBMember)
+      response = true
+    return response
+  }
 }

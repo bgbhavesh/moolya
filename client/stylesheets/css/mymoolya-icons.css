@@ -13,6 +13,43 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.my-ml-add_user:before {
+  content: "\e9fa";
+}
+.my-ml-approve_user:before {
+  content: "\e9fb";
+}
+.my-ml-connection_request_recvd:before {
+  content: "\e9fc";
+}
+.my-ml-connection_request_sent:before {
+  content: "\e9fd";
+}
+.my-ml-enquiry_request:before {
+  content: "\e9fe";
+}
+.my-ml-go_live_request:before {
+  content: "\e9ff";
+}
+.my-ml-go_live_request_approved:before {
+  content: "\ea00";
+}
+.my-ml-go_live_request_declined:before {
+  content: "\ea01";
+}
+.my-ml-kyc_approve:before {
+  content: "\ea02";
+}
+.my-ml-kyc_decline:before {
+  content: "\ea03";
+}
+.my-ml-portfolio_update:before {
+  content: "\ea04";
+}
+.my-ml-review_recvd:before {
+  content: "\ea05";
+}
 .my-ml-public_profile:before {
   content: "\e9f9";
 }

@@ -68,7 +68,6 @@ const defaultServerConfig = {
 };
 
 
-
 // default graphql options to enhance the graphQLExpress server
 const defaultGraphQLOptions = {
   context: {},
@@ -110,17 +109,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
    */
 
   graphQLServer.get(config.view, async function (req, res, next) {
-    let path = Meteor.absoluteUrl();
-    let pathAbout = process.cwd() + '/../web.browser/app/microSite/views/about.pug';
-
-    const pathName = req.url;
+      console.log('View Path Entering');
+      let pathAbout = process.cwd() + '/../web.browser/app/microSite/views/about.pug';
+    console.log('Path of Jade files',pathAbout);
+      const pathName = req.url;
       const originalUrl = req.originalUrl.replace('/view', '');
       let proto = req.protocol;
       if (req.get('x-forwarded-proto').includes('https')) {
         proto = 'https'
       }
       const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
+      console.log('In Express Path ', fullUrl);
+
       const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+      console.log('After FindPortFolioDetails', portFolio);
       if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
         res.redirect('/login');
       }
@@ -130,37 +132,37 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
   // Serving static pages.
   /*
-  graphQLServer.get(config.microSite, async function (req, res, next) {
+   graphQLServer.get(config.microSite, async function (req, res, next) {
 
-    console.log('Server Side Request');
-      if (!(req.url.includes('login') || req.url === '/')) {
-        if (typeof req.headers.cookie === 'undefined' || (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token'))) {
-          console.log('Request is in Microsite path');
-          const pathName = req.url;
-          const originalUrl = req.originalUrl;
-          let proto = req.protocol;
-          if (req.get('x-forwarded-proto').includes('https')) {
-            proto = 'https'
-          }
-          const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
-          const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
-          if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
-            console.log('Request should redirect to Next route');
-            next()
-          }
-          console.log('Request is being served by Jade');
-          res.render(pathAbout, portFolio)
-        } else {
-          console.log('Request should redirect to Next route(No login Token)');
-          next()
-        }
-      } else {
-        console.log('Request should redirect to Next route(login User)');
-        next()
-      }
+   console.log('Server Side Request');
+   if (!(req.url.includes('login') || req.url === '/')) {
+   if (typeof req.headers.cookie === 'undefined' || (req.headers.cookie && !req.headers.cookie.includes('meteor_login_token'))) {
+   console.log('Request is in Microsite path');
+   const pathName = req.url;
+   const originalUrl = req.originalUrl;
+   let proto = req.protocol;
+   if (req.get('x-forwarded-proto').includes('https')) {
+   proto = 'https'
+   }
+   const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
+   const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+   if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
+   console.log('Request should redirect to Next route');
+   next()
+   }
+   console.log('Request is being served by Jade');
+   res.render(pathAbout, portFolio)
+   } else {
+   console.log('Request should redirect to Next route(No login Token)');
+   next()
+   }
+   } else {
+   console.log('Request should redirect to Next route(login User)');
+   next()
+   }
 
-    }
-  )
+   }
+   )
    */
   graphQLServer.get('/sitemap.xml', async function (req, res) {
     //Creating SiteMap.

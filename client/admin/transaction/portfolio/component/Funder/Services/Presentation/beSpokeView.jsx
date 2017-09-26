@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {render} from "react-dom";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
@@ -21,7 +20,6 @@ export default class  BeSpokeView extends Component {
   }
 
   saveData() {
-    console.log("this.props.data:",this.props.data);
     if(this.props.data && this.props.data._id) {
       this.props.updateBeSpokeData(true);
     }else {
@@ -118,6 +116,7 @@ export default class  BeSpokeView extends Component {
                     multi
                     options={options}
                     placeholder='Conversation Type'
+                    disabled={this.props.data.mode === 'online'?false: true}
                     defaultValue={ this.props.data ? this.props.data.conversation : ""}
                     value={ this.props.data ? this.props.data.conversation : ""}
                     onChange={(e)=>this.props.conversation(e,'conversation')} >

@@ -88,9 +88,9 @@ export default class  BeSpokeView extends Component {
                   <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.props.dataToSet(e.target.value,"noOfSession")} defaultValue={this.props.data.noOfSession}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration &nbsp;
+                  <label>Duration &nbsp;</label>
                     <input type="number" value={this.props.data.duration && this.props.data.duration.hours ? this.props.data.duration.hours : '' }  min="0"  name="hours" onChange={(e)=>this.props.duration(e.target.value,"hours")} className="form-control inline_input"/> Hours
-                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} className="form-control inline_input"/> Mins </label>
+                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} className="form-control inline_input"/> Mins 
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" defaultValue={this.props.data.expectedInput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedInput")} ></textarea>

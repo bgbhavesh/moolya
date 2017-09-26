@@ -1200,7 +1200,7 @@ p{margin-top:10px;}
     }
   }
   .att_members{
-        background: #f3f3f3; margin: -5px 0 15px 0px; padding: 5px 0 0 0; border-radius: 5px; border: #ddd solid 1px;
+        background: #f3f3f3; margin: 0px 0 15px 0px; padding: 5px 0 0 0; border-radius: 5px; border: #ddd solid 1px;
   }
 }
 .moolya_app {
@@ -1311,7 +1311,7 @@ p{margin-top:10px;}
     }
     .list-group-item{border-left: 0px;border-right: 0px;border-radius: 0px !important;padding-left: 0px;padding-right: 0px;
       &:last-child{border-bottom:0px;}
-      .task_with{padding:0px 5px;
+      .task_with{padding:0px 5px;float:left;
         span{padding: 5px; background:$mlGray; color: $mlBlue; border-radius: 100%;}
       }
       .task_status{float: right;width: 20px;height: 20px;border-radius: 50%;text-align: center;line-height: 16px;margin-right: 5px;
@@ -1705,7 +1705,7 @@ p{margin-top:10px;}
       .bug_button:hover{color:$mlBlack;right:340px;}
     }
     h3{
-      font-size: 16px; text-align: center; color: #fff; border-radius: 4px; padding: 15px 5px; text-shadow: none;
+      font-size: 16px; text-align: center; color: #fff; border-radius: 4px; padding: 15px 5px;text-shadow: none;
     }
   .ml_btn{/*text-align: center;*/margin-top: 10px;
     .save_btn{background: $mlGray;color: $mlBlue;
@@ -2344,7 +2344,9 @@ li.sameWorkTime:after {
   }
 }
 .chart_bg{
-  background: $mlWhite;
-  border: $mlGray solid 1px;
-  margin-bottom: 25px;
+  background: $mlWhite;border: $mlGray solid 1px;margin-bottom: 30px;position: relative;height: 465px;
+  .chart_msg{
+    position: absolute; background: $mlGray; width: 50%; left: 25%;top: 40%;font-size: 26px; text-align: center;
+  }
 }
+

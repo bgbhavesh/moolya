@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper'
 import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 
 
 var Select = require('react-select');
@@ -13,6 +14,10 @@ export default class  BeSpokeView extends Component {
   constructor(props) {
     super(props)
     this.state = {updateMode: false}
+  }
+
+  componentDidMount() {
+    $('.float-label').jvFloat();
   }
 
   saveData() {
@@ -60,6 +65,7 @@ export default class  BeSpokeView extends Component {
     return(
       <div>
         <div className="tab_wrap_scroll">
+          <div className="col-md-12 nopadding">
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
@@ -145,24 +151,27 @@ export default class  BeSpokeView extends Component {
                           </div>
                           <div className="pull-right">
                             {/*style={{'marginTop': '-15px'}}*/}
-                            <input type="text" placeholder="Document Name" />
+                            {/*<input type="text" placeholder="Document Name" />*/}
                           </div>
                         </div>
                         <div className="panel-body nopadding">
                           <div className="upload-file-wrap">
+                            {/*<input type="file" name="logo" id="logoFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={(e)=>that.props.fileUpload(e, index)} multiple />*/}
+                            {/*<label htmlFor="logoFileinput">*/}
                             <input type="file" className="inputfile inputfile-upload"  name="fileinput[]" id="fileinput" onChange={(e)=>that.props.fileUpload(e, index)}  />
                             {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
                             {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
                             {/*multiple/>*/}
-                            <label for="fileinput">
+                            <label htmlFor="fileinput">
                               <figure>
                                 <i className="fa fa-upload" aria-hidden="true"></i>
                               </figure>
                             </label>
                           </div>
-                          {details.fileUrl ? details.fileUrl.map(function(image){
+                          {details.fileUrl ? details.fileUrl.map(function(image, id){
                             return(
                               <div className="upload-image">
+                                <FontAwesome className="pull-right" onClick={()=>that.props.deleteAttachments(id, index)} name='minus'/>
                                 <img src={image} id="output"/>
                               </div>
                             )
@@ -175,11 +184,13 @@ export default class  BeSpokeView extends Component {
               </form>
             </div>
           </div>
+          </div>
+          <br className="brclear"/>
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
-        <br className="clearfix"/>
+        
           <br className="clearfix"/>
         </div>
       </div>

@@ -19,6 +19,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import {updateAppointmentActionHandler} from '../../actions/appointmentActionHandler';
+import {fetchSlotAppointmentsDetailsActionHandler} from './../../actions/fetchSlotDetails';
 
 class MlAppOngoingSelectedMyAppointment extends Component {
 
@@ -29,15 +30,20 @@ class MlAppOngoingSelectedMyAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      service: {}
+      service: {},
+      slotInfo:{
+        attendeeDetails: []
+      }
     };
     this.serviceId = this.props.appointment.resourceId;
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.setServiceSteps = this.setServiceSteps.bind(this);
+    this.getSlotDetails = this.getSlotDetails.bind(this);
   }
 
   componentWillMount() {
     this.getServiceDetails();
+    this.getSlotDetails();
   }
 
   componentDidMount() {
@@ -56,7 +62,7 @@ class MlAppOngoingSelectedMyAppointment extends Component {
    */
   setServiceSteps() {
     const {appointment} = this.props;
-    const {service, daysRemaining} = this.state;
+    const {service, daysRemaining, slotInfo} = this.state;
     const steps = [
       {
         name: 'Services',
@@ -70,6 +76,7 @@ class MlAppOngoingSelectedMyAppointment extends Component {
         name: 'Sessions',
         component: <MlAppOngoingMyAppointmentSession
           service={service}
+          slotInfo={slotInfo}
           appointment={appointment}/>,
         icon: <span className="ml flaticon-ml-file-1"></span>
       },
@@ -101,6 +108,22 @@ class MlAppOngoingSelectedMyAppointment extends Component {
         service: service || {},
         daysRemaining: remainingDate
       });
+    }
+  }
+
+  /**
+   * Method :: getSlotInfo
+   * Desc   :: fetch the current slot details from server and set in state
+   * @returns Void
+   */
+  async getSlotDetails() {
+    if ( this.props.appointment  && this.props.appointment.appointmentId) {
+      let slotInfo = await fetchSlotAppointmentsDetailsActionHandler([this.props.appointment.appointmentId]);
+      if(slotInfo && slotInfo[0]) {
+        this.setState({
+          slotInfo: slotInfo[0]
+        });
+      }
     }
   }
 

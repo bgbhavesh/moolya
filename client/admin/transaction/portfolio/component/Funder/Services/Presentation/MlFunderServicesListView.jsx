@@ -61,11 +61,11 @@ export default class  MlFunderServicesListView extends Component {
                    {/*<span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>*/}
                     <button className={`btn ${service.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{service.mode}</button>
                     <div className="clearfix"></div>
-                    <i className="c_image ml my-ml-Ideator"></i>
+                    <img className="c_image" src={service.beSpokeCreatorProfileImage?service.beSpokeCreatorProfileImage:'/images/def_profile.png'}/>
                     <div className="clearfix"></div>
                     <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
                     <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>
-                  </div><div className="block_footer"><span>{'BeSpoke'}</span></div></div>
+                  </div><div className="block_footer"><span>{"BeSpoke"}</span></div></div>
               </div>
               )})}
           </div>

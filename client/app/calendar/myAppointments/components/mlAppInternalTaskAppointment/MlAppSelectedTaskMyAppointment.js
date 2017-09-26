@@ -17,6 +17,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import {updateAppointmentActionHandler} from '../../actions/appointmentActionHandler';
+import {fetchSlotAppointmentsDetailsActionHandler} from './../../actions/fetchSlotDetails';
 
 class MlAppSelectedTaskMyAppointment extends Component {
 
@@ -27,15 +28,20 @@ class MlAppSelectedTaskMyAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      task: {}
+      task: {},
+      slotInfo:{
+        attendeeDetails: []
+      }
     };
     this.taskId = this.props.appointment.resourceId;
     this.getTaskDetails = this.getTaskDetails.bind(this);
     this.setTaskSteps = this.setTaskSteps.bind(this);
+    this.getSlotDetails = this.getSlotDetails.bind(this);
   }
 
   componentWillMount() {
     this.getTaskDetails();
+    this.getSlotDetails();
   }
 
   componentDidMount() {
@@ -54,7 +60,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
    */
   setTaskSteps() {
     const {appointment} = this.props;
-    const {task} = this.state;
+    const {task, slotInfo} = this.state;
     const steps = [
       {
         name: 'Task',
@@ -67,6 +73,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
         name: 'Sessions',
         component: <MlAppTaskMyAppointmentSession
           task={task}
+          slotInfo={slotInfo}
           appointment={appointment}/>,
         icon: <span className="ml my-ml-sessions"></span>
       },
@@ -112,6 +119,22 @@ class MlAppSelectedTaskMyAppointment extends Component {
       this.props.resetSelectedAppointment();
     } else {
       toastr.error(response.result);
+    }
+  }
+
+  /**
+   * Method :: getSlotInfo
+   * Desc   :: fetch the current slot details from server and set in state
+   * @returns Void
+   */
+  async getSlotDetails() {
+    if ( this.props.appointment  && this.props.appointment.appointmentId) {
+      let slotInfo = await fetchSlotAppointmentsDetailsActionHandler([this.props.appointment.appointmentId]);
+      if(slotInfo && slotInfo[0]) {
+        this.setState({
+          slotInfo: slotInfo[0]
+        });
+      }
     }
   }
 

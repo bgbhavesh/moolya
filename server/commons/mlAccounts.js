@@ -645,7 +645,6 @@ export default MlAccounts=class MlAccounts {
     if(res){
       let emailSent = MlEmailNotification.forgotPassword(context, Meteor.absoluteUrl('reset')+'/'+token);
       let userId = user&&user._id?user._id:""
-      MlSMSNotification.forgotPassword(userId,context)
     /*  var emailOptions={};
       //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
       emailOptions.from=fromEmail;
@@ -670,7 +669,14 @@ export default MlAccounts=class MlAccounts {
     let salted = passwordUtil.hashPassword(password);
     let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
     if(res){
+      if(user._id){
+        MlSMSNotification.forgotPassword(user._id,context)
+      }
       return {error: false,reason:"Password reset successfully", code:200};
+    }else{
+      if(user._id){
+        MlSMSNotification.errorForForgotPassword(user._id,context)
+      }
     }
   }
 

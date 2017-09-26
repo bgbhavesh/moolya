@@ -14,7 +14,7 @@ import MlPieChart from '../../../../../../../commons/components/d3/MlPieChart'
 import MlStartupChartSubTabs from '../MlStartupCharts/MlStartupChartSubTabs'*/
 import {fetchDetailsStartupChartsActionHandler} from '../../../../../admin/transaction/portfolio/actions/findPortfolioStartupDetails'
 import MlStartupCharts from '../Startup/edit/MlStartupCharts/MlStartupCharts'
-
+import MlNoDataContainer from '../../../../../commons/containers/MlNoDataContainer.jsx';
 export default class MlStartupViewCharts extends React.Component{
   constructor(props, context){
     super(props)
@@ -398,7 +398,9 @@ export default class MlStartupViewCharts extends React.Component{
                       chartSeries = {employmentDataChartSeries}
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
-                    /></div>
+                    />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.employmentData||[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+                  </div>
                 </div>
 
                 <div className="col-md-6">
@@ -417,6 +419,7 @@ export default class MlStartupViewCharts extends React.Component{
                       showXAxis= {showXAxis}
                       showYAxis= {showYAxis}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.prlData?this.state.prlData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div>
                 </div>
                 <br className="brclear"/>
@@ -435,6 +438,7 @@ export default class MlStartupViewCharts extends React.Component{
                       xLabel = {reviewXLabel}
                       yLabel = {reviewYLabel}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.reviewData?this.state.reviewData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div></div>
 
                 <div className="col-md-6">
@@ -449,6 +453,7 @@ export default class MlStartupViewCharts extends React.Component{
                       value = {value}
                       name = {name}
                     />
+                    <MlNoDataContainer dataType={'Array'} data={this.state.empBreakUpData?this.state.empBreakUpData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
                   </div></div>
             </div>
           </div>

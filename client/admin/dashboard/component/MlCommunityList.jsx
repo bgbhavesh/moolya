@@ -103,6 +103,7 @@ export default class MlCommunityList extends Component {
         <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
 
           <div className="ideators_list_block">
+            <a href={prop.profile.isInternaluser?dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId, prop._id):""}>
             <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>{`${prop.profile.isActive?"active":"inactive"}`}</span></div>
             <h3>{prop.name}</h3>
             {/*<span className={`ml2 ml-${icon}`}></span>*/}
@@ -110,6 +111,7 @@ export default class MlCommunityList extends Component {
             <div className="block_footer">
               <span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>
             </div>
+            </a>
           </div>
       </div>
       )}

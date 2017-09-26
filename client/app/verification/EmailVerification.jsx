@@ -47,6 +47,60 @@ export default class EmailVerification extends React.Component{
     });
   }
 
+
+  async resendSmsOTP(mobileNumber){
+
+    if(this.state.canResend) {
+      let mobileNumber = this.state.mobileNumber;
+      let data = {mobileNumber: mobileNumber};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('resendOTP'),
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+          if (response.success) {
+            toastr.success("OTP Sent Successfuly");
+          } else {
+            toastr.error("Resend OTP failed");
+          }
+        }.bind(this)
+      });
+    }
+  }
+
+  async verifyMobileNumber(){
+      let mobileNumber=this.state.mobileNumber;
+      let otp=this.refs.otpValue.value;
+      let isTermsChecked= this.refs.isTermsChecked.checked;
+      let data = {mobileNumber: mobileNumber, otp:otp};
+      if(isTermsChecked && otp) {
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: Meteor.absoluteUrl('verifyMobileNumber'),
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          success: function (response) {
+            if (response.success) {
+              this.setState({mobileNumberVerified:true});
+            } else {
+              toastr.error(response.result);
+              this.setState({mobileNumberVerified:false});
+            }
+          }.bind(this)
+        });
+      }else{
+        if(!isTermsChecked){
+          toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
+        }
+        if(!otp){
+          toastr.error("Please enter OTP");
+        }
+      }
+  }
+
  /* async verifyEmail(token){
     const response=await verifyEmailHandler(token,appClient);
     let resp=null;
@@ -64,31 +118,31 @@ export default class EmailVerification extends React.Component{
    }.bind(this),30000)
  }
 
-  async verifyMobileNumber(){
-    let mobileNumber=this.state.mobileNumber;
-    let otp=this.refs.otpValue.value;
-    let isTermsChecked= this.refs.isTermsChecked.checked;
-    if(isTermsChecked && otp) {
-      const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
-      let resp=null;
-      if(response.success){
-        resp = JSON.parse(response.result);
-        this.setState({mobileNumberVerified:resp.mobileNumberVerified});
-      }else{
-        toastr.error(response.result);
-        this.setState({mobileNumberVerified:false});
-      }
-      return response;
-    }else{
-      if(!isTermsChecked){
-        toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
-      }
-      if(!otp){
-        toastr.error("Please enter OTP");
-      }
-    }
-  }
-  async resendSmsOTP(){
+  // async verifyMobileNumber(){
+  //   let mobileNumber=this.state.mobileNumber;
+  //   let otp=this.refs.otpValue.value;
+  //   let isTermsChecked= this.refs.isTermsChecked.checked;
+  //   if(isTermsChecked && otp) {
+  //     const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
+  //     let resp=null;
+  //     if(response.success){
+  //       resp = JSON.parse(response.result);
+  //       this.setState({mobileNumberVerified:resp.mobileNumberVerified});
+  //     }else{
+  //       toastr.error(response.result);
+  //       this.setState({mobileNumberVerified:false});
+  //     }
+  //     return response;
+  //   }else{
+  //     if(!isTermsChecked){
+  //       toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
+  //     }
+  //     if(!otp){
+  //       toastr.error("Please enter OTP");
+  //     }
+  //   }
+  // }
+  /*async resendSmsOTP(){
     if(this.state.canResend){
       let mobileNumber=this.state.mobileNumber;
       const response=await resendSmsOtpHandler(mobileNumber, appClient);
@@ -99,7 +153,7 @@ export default class EmailVerification extends React.Component{
       }
       return response;
     }
-  }
+  }*/
 
   render(){
 

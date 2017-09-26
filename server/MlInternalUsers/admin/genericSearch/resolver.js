@@ -818,7 +818,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   //internal user
   if (args.module == "officeTransaction") {
-    let finalQuery = mergeQueries(query, );
 
     let pipeline = [
       { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
@@ -829,7 +828,25 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       }
       },
       {'$lookup':{from:'mlTransactionsLog',localField:'officeId',foreignField:'docId', as:'transactionLog'}},
-
+      {"$unwind": "$transactionLog"},
+      {
+        '$lookup': {
+          from: 'mlOfficeMembers',
+          localField: 'transactionLog.activityDocId',
+          foreignField: '_id',
+          as: 'member'
+        }
+      },
+      {"$unwind": "$member"},
+      {"$addFields": {"transactionLog.registrationId": "$member.registrationId"}},
+      {
+        "$group": {
+          _id: null,
+          officeId: {"$first": "$officeId"},
+          officeTrans: {"$first": "$officeTrans"},
+          transactionLog: {$push: "$transactionLog"}
+        }
+      },
       {'$project': {
         "officeTrans": {
           '$map':
@@ -870,7 +887,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "userId": '$_id',
                 "status": "$$trans.status",
                 "activity": "$$trans.activity",
-                "activityDocId": "$$trans.activityDocId"
+                "activityDocId": "$$trans.activityDocId",
+                "registrationId": "$$trans.registrationId",
               }
             }
           }

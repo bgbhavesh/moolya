@@ -67,7 +67,7 @@ export default class MlAppStep1ExternalUser extends Component {
   componentWillMount() {
     this.fetchIdentityTypesMaster();
 
-    let details = this.props.registrationInfo;
+    let details = this.props.registrationInfo || {}
     this.setState({
       loading: false,
       registrationDetails: details,

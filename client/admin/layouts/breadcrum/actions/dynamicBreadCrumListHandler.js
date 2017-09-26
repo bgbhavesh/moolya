@@ -29,6 +29,9 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
     const path = Object.assign(FlowRouter._current.path);
     let pathHierarchy = (path.split('?')[0]).split('/');
 
+    const routePath = Object.assign(FlowRouter._current.route.path);
+
+
     if(module === 'clusterHierarchy'){
       _.forEach(result, (detail, index) => {
         list.push({
@@ -64,23 +67,54 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
         });
       });
     }
-
+    var dynamicLink = list[0].linkUrl || list[1].linkUrl || pathHierarchy;
+    dynamicLink = dynamicLink.split('/');
     list = list.reverse();
 
     if (path.includes('clusters') || path.includes('chapters')|| path.includes('communities')) {
       let name = pathHierarchy[pathHierarchy.length - 1];
-      if (name === 'STU') name = 'Startup';
-      else if (name === 'FUN') name = 'Investor';
-      else if (name === 'IDE') name = 'Ideator';
-      else if (name === 'CMP') name = 'Company';
-      else if (name === 'INS') name = 'Institute';
-      else if (name === 'SPS') name = 'Service Provider';
-      else if (name === 'assignusers') name = 'Backend Users';
+      if( path.includes('communities') && name !== 'communities'){
+        let index = list.length-1;
+        let link='';
+        let flag = 0;
+
+        for(let i=0;i<dynamicLink.length;i++){
+          if(dynamicLink[i].includes('Details')){
+            link+='communities';
+            flag=1;
+            break;
+          }
+          link+=dynamicLink[i]+'/';
+        }
+        if(!flag){
+          link = path.split('communities')[0]+'communities';
+        }
+        list.push({
+          linkUrl:link,
+          linkName: properName(nameFix('communities')),
+        });
+      }
+      if( path.includes('communities') && name ==='assignusers'){
+        list.push({
+          linkUrl: path.split('/assignusers')[0],
+          linkName: properName(nameFix(pathHierarchy[pathHierarchy.length - 2])),
+        });
+      }
       //if(name!==('clusters') && name!==('chapters')&& name!==('communities'))
       list.push({
         linkUrl: path,
-        linkName: properName(name),
+        linkName: properName(nameFix(name)),
       });
+
+      if(routePath){
+        let hierarchy = routePath.split('/');
+        if(hierarchy[hierarchy.length-1]===':communityId'){
+          list.push({
+            linkUrl: path,
+            linkName: properName(nameFix('Community Details')),
+          });
+        }
+      }
     }
 
     if (callback) {
@@ -122,5 +156,17 @@ function generateLinkForDashboardUrl(path, RefID, moduleType, index) {
 
 function properName(name) {
   if (name) { return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/([A-Z])/g, ' $1').trim(); }
+  return name;
+}
+
+function nameFix(name) {
+  if (name === 'STU') name = 'Startup';
+  else if (name === 'FUN') name = 'Investor';
+  else if (name === 'IDE') name = 'Ideator';
+  else if (name === 'CMP') name = 'Company';
+  else if (name === 'INS') name = 'Institute';
+  else if (name === 'SPS') name = 'Service Provider';
+  else if (name === 'assignusers') name = 'Backend Users';
+
   return name;
 }

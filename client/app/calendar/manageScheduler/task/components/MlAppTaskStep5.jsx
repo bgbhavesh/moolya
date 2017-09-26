@@ -1,5 +1,4 @@
 import React from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 
@@ -13,12 +12,13 @@ export default class MlAppTaskStep5 extends React.Component {
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
+    this.props.activeComponent(4);
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
   }
-  isUpdated(){
-   return true;
+  isUpdated() {
+    return true;
   }
   render() {
     return (

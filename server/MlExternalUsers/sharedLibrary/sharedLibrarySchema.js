@@ -31,6 +31,7 @@ let sharedLibrarySchema = `
       subChapter : String
       community : String
       transactionType : String
+      displayName: String
     }
     
     type ShareOwnerInfo {
@@ -59,6 +60,7 @@ let sharedLibrarySchema = `
     }
     
     type SharedOutputAdmin {
+      _id: String
       users: [userDetails]
       files: [fileDetails]
       sharedEndDate: Date
@@ -67,6 +69,7 @@ let sharedLibrarySchema = `
       isSignedUrl: Boolean
       isDownloadable: Boolean
       createdAt:Date
+      isActive: Boolean
       ownerInfo: ShareOwnerInfo
     }
     

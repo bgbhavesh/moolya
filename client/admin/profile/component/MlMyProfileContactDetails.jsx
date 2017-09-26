@@ -8,6 +8,7 @@ import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -24,9 +25,10 @@ export default class ContactDetails extends React.Component{
     this.findRegistration.bind(this);
     return this;
   }
-/*  componentDidMount(){
-    this.findRegistration.bind(this);
-  }*/
+  componentDidMount(){
+    // this.findRegistration.bind(this);
+    initalizeFloatLabel();
+  }
 
   componentWillMount(){
     this.findRegistration()

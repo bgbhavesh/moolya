@@ -63,7 +63,7 @@ export default class MlAppEditOffice extends React.Component{
     if (response && response.success) {
       let data = JSON.parse(response.result)
       let obj = data [0];
-      let availableCommunities = obj.office.availableCommunities && obj.office.availableCommunities.length ? obj.office.availableCommunities : [];
+      let availableCommunities = obj && obj.office && obj.office.availableCommunities && obj.office.availableCommunities.length ? obj.office.availableCommunities : [];
       // availableCommunities.push({communityId:'officeBairer',communityName:'Office Bairer'});
       // availableCommunities.push({communityId:'consultant',communityName:'Consultant'});
       this.setState({loading: false, office: obj.office, availableCommunities:availableCommunities})

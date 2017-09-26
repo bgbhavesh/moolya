@@ -1,39 +1,39 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
+import React, { Component } from "react";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchServicesActionHandler, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
-import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper'
+import { multipartASyncFormHandler } from '../../../../../../../commons/MlMultipartFormAction'
+import { fetchServicesActionHandler, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler } from '../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+import Moolyaselect from '../../../../../../commons/components/MlAdminSelectWrapper'
 import _ from "lodash";
 import BeSpokeView from '../Presentation/beSpokeView'
 
 
 var Select = require('react-select');
 
-export default class  BeSpokeHandler extends Component {
-  constructor(props){
+export default class BeSpokeHandler extends Component {
+  constructor(props) {
     super(props)
-    this.state={
-      selectedIndustryType:[],
-      responsePic:[],
-      attachmentDocs:[{}],
-      uploadedProfilePic:"",
-      data:{},
-      emptyData:{},
+    this.state = {
+      selectedIndustryType: [],
+      responsePic: [],
+      attachmentDocs: [{}],
+      uploadedProfilePic: "",
+      data: {},
+      emptyData: {},
       selectedIndex: 0,
       funderService: [],
-      selectedFrequencyType:[],
+      selectedFrequencyType: [],
       saveData: false,
       updateData: false,
       mode: false,
-      details:{
+      details: {
         mode: 'offline'
       }
     };
     this.handleBlur.bind(this);
     this.onOptionSelected.bind(this);
     this.saveBeSpokeServiceDetails.bind(this)
+    this.isValidBeSpoke = this.isValidBeSpoke.bind(this);
   }
 
   componentDidMount() {
@@ -64,23 +64,23 @@ export default class  BeSpokeHandler extends Component {
 
     $('.tab_wrap_scroll').height(WinHeight - ($('.app_header').outerHeight(true) + 120));
     if (WinWidth > 768) {
-      $(".tab_wrap_scroll").mCustomScrollbar({theme: "minimal-dark"});
+      $(".tab_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
     }
   }
 
-  componentWillMount(){
-    if(this.props.beSpokeDetails){
+  componentWillMount() {
+    if (this.props.beSpokeDetails) {
       let details = this.props.beSpokeDetails[this.props.beSpokeIndex];
       details = JSON.parse(JSON.stringify(details));
-      this.setState({details:details})
+      this.setState({ details: details })
       console.log(details)
       let mode = this.props.beSpokeDetails[this.props.beSpokeIndex].mode;
-      if(mode === 'offline')
-        this.setState({mode: true})
-        else
-          this.setState({mode: false})
-      }
+      if (mode === 'offline')
+        this.setState({ mode: true })
+      else
+        this.setState({ mode: false })
     }
+  }
 
   /**
    * Method :: handleBlur
@@ -93,26 +93,53 @@ export default class  BeSpokeHandler extends Component {
   handleBlur(value, name) {
     let details = this.state.details;
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: value});
-    this.setState({details: details})
-    if(name === "hours"){
-      this.setState({hour: value})
+    details = _.extend(details, { [name]: value });
+    this.setState({ details: details })
+    if (name === "hours") {
+      this.setState({ hour: value })
       this.handleDuration()
-    }else if(name === "minutes"){
-      this.setState({minute: value})
+    } else if (name === "minutes") {
+      this.setState({ minute: value })
       this.handleDuration();
     }
   }
 
   handleDuration() {
     let duration = {
-      hours: this.state.hour?parseInt(this.state.hour):0,
-      minutes: this.state.minute?parseInt(this.state.minute):0
+      hours: this.state.hour ? parseInt(this.state.hour) : 0,
+      minutes: this.state.minute ? parseInt(this.state.minute) : 0
     }
     let details = this.state.details;
     details = _.omit(details, ['duration']);
-    details = _.extend(details, {['duration']:duration});
-    this.setState({details: details})
+    details = _.extend(details, { ['duration']: duration });
+    this.setState({ details: details })
+  }
+
+  /**
+   * Validate the form data for mandatory fields
+   * return: boolean
+   */
+  isValidBeSpoke() {
+    const formInputs = this.state.details;
+    if (!formInputs.displayName) {
+      toastr.error('Display name is mandatory');
+      return false;
+    }
+    if (!formInputs.noOfSession) {
+      toastr.error('Required number of sessions is mandatory');
+      return false;
+    }
+    if (!formInputs.duration
+      || (formInputs.duration && !formInputs.duration.hours && !formInputs.duration.minutes)) {
+      toastr.error('Duration is mandatory');
+      return false;
+    }
+    if (formInputs.mode === 'online'
+      && !(formInputs.conversation && formInputs.conversation.length)) {
+      toastr.error('Conversations is mandatory');
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -123,37 +150,40 @@ export default class  BeSpokeHandler extends Component {
    **/
 
 
-  async updateBeSpokeData(data){
-    if(data){
+  async updateBeSpokeData(data) {
+    if (data && this.isValidBeSpoke()) {
       let detailsData = _.cloneDeep(this.state.details);
       console.log('detailsData', detailsData)
-       let temp = _.omit(detailsData.duration, '__typename')
-      let attachTemp = detailsData.attachments.map(function(info, index){
-        info.fileUrl.map(function(images){
-        if(info.fileUrl === undefined){
-          _.omit(images, _.isUndefined)
-        }
+      let temp = _.omit(detailsData.duration, '__typename');
+      let attachTemp = [];
+      if (detailsData.attachments && detailsData.attachments.length) {
+        attachTemp = detailsData.attachments.map(function (info, index) {
+          info.fileUrl.map(function (images) {
+            if (info.fileUrl === undefined) {
+              _.omit(images, _.isUndefined)
+            }
+          })
+          // for (var propName in info.fileUrl) {
+          //   if (info.fileUrl[propName] === null || info.fileUrl[propName] === undefined) {
+          //     _.omit(info.fileUrl, _.isUndefined)
+          //   }
+          // }
+          delete info['__typename']
+          return info;
         })
-        // for (var propName in info.fileUrl) {
-        //   if (info.fileUrl[propName] === null || info.fileUrl[propName] === undefined) {
-        //     _.omit(info.fileUrl, _.isUndefined)
-        //   }
-        // }
-        delete info['__typename']
-        return info;
-      })
-       // _.omit(detailsData.attachments, '__typename')
+      }
+      // _.omit(detailsData.attachments, '__typename')
       console.log('attachTemp', attachTemp)
-      detailsData.duration =  temp;
+      detailsData.duration = temp;
       detailsData.attachments = attachTemp;
       let service = _.omit(detailsData, '__typename');
-       console.log('service', service)
+      console.log('service', service)
       const resp = await updateBeSpokeServiceActionHandler(service, this.props.portfolioDetailsId)
-      if(resp && resp.success) {
+      if (resp && resp.success) {
         toastr.success("Bespoke request updated successfully");
         this.props.componentToView('landingPage');
       } else {
-        if(!resp) {
+        if (!resp) {
           toastr.error("No response from server");
         } else {
           toastr.error(resp.result);
@@ -164,14 +194,14 @@ export default class  BeSpokeHandler extends Component {
   }
 
 
-   async saveBeSpokeServiceDetails(data){
-    if(data){
+  async saveBeSpokeServiceDetails(data) {
+    if (data && this.isValidBeSpoke()) {
       const res = await createBeSpokeServiceActionHandler(this.state.details, this.props.portfolioDetailsId);
-      if(res && res.success) {
+      if (res && res.success) {
         toastr.success("Bespoke request created successfully");
         this.props.componentToView('landingPage');
       } else {
-        if(!res) {
+        if (!res) {
           toastr.error("No response from server");
         } else {
           toastr.error(res.result);
@@ -191,7 +221,7 @@ export default class  BeSpokeHandler extends Component {
   onOptionSelected(selectedIndustry) {
     let details = this.state.details;
     details['industryId'] = selectedIndustry;
-    this.setState({details: details})
+    this.setState({ details: details })
   }
 
   /**
@@ -204,12 +234,12 @@ export default class  BeSpokeHandler extends Component {
 
   onConversationSelected(selectedConversation) {
     let temp = []
-    selectedConversation.map(function(data){
+    selectedConversation.map(function (data) {
       temp.push(data.label)
     })
     let details = this.state.details;
     details['conversation'] = temp;
-    this.setState({details: details}, function(){
+    this.setState({ details: details }, function () {
       console.log(this.state.details)
     })
   }
@@ -218,7 +248,7 @@ export default class  BeSpokeHandler extends Component {
   onFrequencySelected(selectedFrequency) {
     let details = this.state.details;
     details['sessionFrequency'] = selectedFrequency.value;
-    this.setState({details: details}, function () {
+    this.setState({ details: details }, function () {
       console.log(this.state.details)
     })
   }
@@ -230,11 +260,11 @@ export default class  BeSpokeHandler extends Component {
    * returns ::  data is redirected to sendDataToParent()
    **/
 
-  modeSwitchHandler(response, name){
+  modeSwitchHandler(response, name) {
     let details = this.state.details;
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: response?"offline":"online"});
-    this.setState({details: details})
+    details = _.extend(details, { [name]: response ? "offline" : "online" });
+    this.setState({ details: details })
   }
 
   /**
@@ -246,30 +276,30 @@ export default class  BeSpokeHandler extends Component {
   async onFileUpload(e, index) {
     let user = {
       profile: {
-        InternalUprofile: {moolyaProfile: {profileImage: " "}}
+        InternalUprofile: { moolyaProfile: { profileImage: " " } }
       }
     }
     let file = e.target.files[0];//document.getElementById("fileinput").files[0];
     if (file) {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user}
+      let data = { moduleName: "PROFILE", actionName: "UPDATE", user: user }
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, index));
       return response;
     }
   }
 
-  onFileUploadCallBack(index,resp) {
+  onFileUploadCallBack(index, resp) {
     let details = this.state.details;
     let tempObject = [];
     if (resp) {
-      this.setState({uploadedProfilePic: resp});
+      this.setState({ uploadedProfilePic: resp });
       var temp = $.parseJSON(resp).result;
-      if(details['attachments'] && Object.keys(details['attachments'][index]).length > 0 && details['attachments'][index].fileUrl.length > 0) {
-        tempObject.push({fileUrl: temp})
+      if (details['attachments'] && Object.keys(details['attachments'][index]).length > 0 && details['attachments'][index].fileUrl.length > 0) {
+        tempObject.push({ fileUrl: temp })
         details['attachments'][index].fileUrl.push(temp);
         // attach[index].images = tempObject
-      }else {
+      } else {
         tempObject.push(temp)
-        if(!details['attachments']){
+        if (!details['attachments']) {
           details['attachments'] = [{}];
         }
         details['attachments'][index].fileUrl = tempObject;
@@ -279,14 +309,14 @@ export default class  BeSpokeHandler extends Component {
   }
 
   addComponent() {
-    let details =  this.state.details;
-    if(details['attachments']){
+    let details = this.state.details;
+    if (details['attachments']) {
       details['attachments'].push({})
-      this.setState({details: details})
-    }else{
+      this.setState({ details: details })
+    } else {
       details['attachments'] = [{}];
       details['attachments'].push({})
-      this.setState({details: details})
+      this.setState({ details: details })
     }
     // details['attachments'] = [{}
   }
@@ -295,57 +325,57 @@ export default class  BeSpokeHandler extends Component {
     let attach = this.state.attachmentDocs;
     let temp = e.target.value;
     attach[index].documentName = temp;
-    this.setState({attachmentDocs: attach})
+    this.setState({ attachmentDocs: attach })
   }
 
   deleteAttachments(id, index) {
     let details = this.state.details;
     let attach = details.attachments;
-    if(attach) {
+    if (attach) {
       delete attach[index].fileUrl[id];
       console.log('attach', attach)
-      if(_.isEmpty(attach)){
+      if (_.isEmpty(attach)) {
         attach = [{}]
       }
       details.attachments = attach;
-      this.setState({details: details})
+      this.setState({ details: details })
     }
   }
 
-  DataToBeSet(response, name){
-    if(name === 'mode'){
+  DataToBeSet(response, name) {
+    if (name === 'mode') {
       let details = this.state.details;
       details = _.omit(details, [name]);
-      details = _.extend(details, {[name]: response?'offline':'online'});
-      this.setState({details: details})
+      details = _.extend(details, { [name]: response ? 'offline' : 'online' });
+      this.setState({ details: details })
       console.log(this.state.details)
-    }else{
+    } else {
       let details = this.state.details;
       details = _.omit(details, [name]);
-      details = _.extend(details, {[name]: response});
-      this.setState({details: details}, function(){
+      details = _.extend(details, { [name]: response });
+      this.setState({ details: details }, function () {
         console.log(this.state.details)
       })
     }
   }
 
   render() {
-    return(
+    return (
       <BeSpokeView
-          saveBeSpokeServiceDetails={this.saveBeSpokeServiceDetails.bind(this)}
-          updateBeSpokeData={this.updateBeSpokeData.bind(this)}
-          dataToSet={this.DataToBeSet.bind(this)}
-          data={this.state.details}
-          addComponent={this.addComponent.bind(this)}
-          conversation={this.onConversationSelected.bind(this)}
-          frequency={this.onFrequencySelected.bind(this)}
-          industry={this.onOptionSelected.bind(this)}
-          duration={this.handleBlur.bind(this)}
-          fileUpload={this.onFileUpload.bind(this)}
-          modeSwitchHandler={this.modeSwitchHandler.bind(this)}
-          componentToView={this.props.componentToView}
-          deleteAttachments={this.deleteAttachments.bind(this)}
-    />
+        saveBeSpokeServiceDetails={this.saveBeSpokeServiceDetails.bind(this)}
+        updateBeSpokeData={this.updateBeSpokeData.bind(this)}
+        dataToSet={this.DataToBeSet.bind(this)}
+        data={this.state.details}
+        addComponent={this.addComponent.bind(this)}
+        conversation={this.onConversationSelected.bind(this)}
+        frequency={this.onFrequencySelected.bind(this)}
+        industry={this.onOptionSelected.bind(this)}
+        duration={this.handleBlur.bind(this)}
+        fileUpload={this.onFileUpload.bind(this)}
+        modeSwitchHandler={this.modeSwitchHandler.bind(this)}
+        componentToView={this.props.componentToView}
+        deleteAttachments={this.deleteAttachments.bind(this)}
+      />
     )
   }
 };

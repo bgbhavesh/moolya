@@ -128,7 +128,9 @@ export default class SharePopOver extends React.Component {
   validTillToggle(type){
     if(type == "start") {
       $('#start-time').toggleClass('rdtOpen');
+      $('#end-time').removeClass('rdtOpen');
     } else {
+      $('#start-time').removeClass('rdtOpen');
       $('#end-time').toggleClass('rdtOpen');
     }
   }
@@ -326,7 +328,7 @@ render(){
                            />
             </div>
           </div>
-          
+
           <div className="form-group">
             <div className="input_types"><input id="checkbox1" type="checkbox" name="isDownloadable"  onChange={this.isDownloadable.bind(this)} value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label></div>
           </div>

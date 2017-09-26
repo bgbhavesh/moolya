@@ -13,7 +13,8 @@ export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
   switch (data.transactionType) {
     case 'officeRequest': {
-      return <MlOffice config={data}/>
+      // return <MlOffice config={data}/>
+      return <MlEmptyView config={data}/>
       break;
     }
     case 'office': {
@@ -51,7 +52,7 @@ function getOfficeActivity  (data) {
     }
     case 'officeBearerInvitation':{
       console.log('officeBearerInvitation')
-      return <MlEmptyView/>
+      return <MlAppRegistrationWizard config={data.registrationId} isAccodion={true}/>
       break;
     }
     case 'officeBearerRetire':{

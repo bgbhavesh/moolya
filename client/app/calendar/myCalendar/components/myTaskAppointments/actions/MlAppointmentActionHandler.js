@@ -48,6 +48,7 @@ export async function fetchTaskActionHandler(taskId) {
                   mode
                   name
                   displayName
+                  deliverable
                   duration {
                     hours
                     minutes

@@ -883,6 +883,54 @@ const MlEmailNotification= class MlEmailNotification {
       }, 2 * 1000);
     }
   }
+  static onAdminAssigned(collectionName,transactionId){
+    let userDetails= mlDBController.findOne(collectionName,{"transactionId":transactionId})||{};
+    let userId='';
+    //receiver user details
+    if(userDetails && userDetails.registrationInfo){
+      userId = userDetails&&userDetails.registrationInfo&&userDetails&&userDetails.registrationInfo.userId?userDetails.registrationInfo.userId:'';
+    }else{
+      userId = userDetails&&userDetails.userId?userDetails.userId:'';
+    }
+
+    let userInfo=mlDBController.findOne('users', {_id: userId}) || {};
+
+    //let allocationId =  userDetails&&userDetails.allocation&&userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:''
+    //let userInfo =  mlDBController.findOne('users', {_id: userId}) || {}
+    let firstName = userInfo&&userInfo.profile&&userInfo.profile.firstName?userInfo.profile.firstName:"";
+    let lastName = userInfo&&userInfo.profile&&userInfo.profile.lastName?userInfo.profile.lastName:"";
+
+    // community manager details
+    let allocationId = userDetails&&userDetails.allocation && userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:'';
+    let allocationUserDetails =  mlDBController.findOne('users', {_id: allocationId}) || {}
+    let comMngFirstName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.firstName?allocationUserDetails.profile.firstName:"";
+    let comMngLastName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.lastName?allocationUserDetails.profile.lastName:"";
+    let genderType = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.genderType?allocationUserDetails.profile.genderType:"";
+    let gender;
+    if(genderType == "male"){
+      gender = "Mr"
+    }else{
+      gender = "Ms"
+    }
+      let regObj = {
+        userName : firstName+" "+lastName,
+        contactNumber : "+91-40-4672 5725",
+        communitymanagerName : comMngFirstName+""+comMngLastName,
+        gender : gender
+      }
+
+      let toEmail = userInfo&&userInfo.username?userInfo.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_admin_assigned","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          //subject: "Admin Assigned To User!!!",
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+    }
 }
 
 

@@ -10,6 +10,7 @@ import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'
 import gql from 'graphql-tag';
 import __ from "lodash";  // double underscore
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
 
 export default class AddressDetails extends React.Component{
   constructor(props){
@@ -207,6 +208,10 @@ export default class AddressDetails extends React.Component{
   }
   componentWillMount(){
     this.findRegistration()
+  }
+
+  componentDidMount(){
+    initalizeFloatLabel();
   }
 
   async findRegistration(){

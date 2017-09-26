@@ -206,7 +206,13 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
     let communityName = communityDef&&communityDef.name?communityDef.name:""
-    MlSMSNotification.registerAsRequest(id,communityName,context)
+    if(updatedResponse){
+      MlSMSNotification.registerAsRequest(id,communityName,context)
+      MlEmailNotification.registerAsRequestSent(id,communityName,context)
+      MlNotificationController.onNewRegistrationRequest(id,communityName,context)
+    }
+
+
 
     /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);

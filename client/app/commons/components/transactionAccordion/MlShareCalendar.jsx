@@ -5,7 +5,7 @@ import MlShareDetailsComponent from "../../../../admin/transaction/share/compone
 // import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 // // import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 // import {graphql} from "react-apollo";
-import {fetchSharedCalendarDetails} from '../../../../admin/transaction/share/actions/MlShareUserActionHandler'
+import {fetchSharedCalendarDetails, deactivateSharedDetailsHandler} from '../../../../admin/transaction/share/actions/MlShareUserActionHandler'
 // import moment from "moment";
 // import gql from "graphql-tag";
 // import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
@@ -20,6 +20,8 @@ export default class MlShareCalendar extends React.Component {
       sharedData: {}
     }
     this.getShareDetails.bind(this);
+    this.deactivateCalendar.bind(this);
+    this.deactivateLink = this.deactivateLink.bind(this);
     return this;
   }
 
@@ -44,9 +46,23 @@ export default class MlShareCalendar extends React.Component {
 
   async getShareDetails() {
     const response  = await fetchSharedCalendarDetails(this.state.shareId)
-    console.log('---response---', response)
     this.setState({sharedData: response})
     return response;
+  }
+
+  deactivateLink(item) {
+    this.deactivateCalendar(item._id)
+  }
+
+  async deactivateCalendar(sharedId) {
+    const resp = await deactivateSharedDetailsHandler(sharedId)
+    if(resp) {
+    if(resp.success) {
+      toastr.success(resp.result)
+    } else {
+      toastr.error('Error Deactivating')
+    }
+    }
   }
 
 
@@ -55,7 +71,9 @@ export default class MlShareCalendar extends React.Component {
     let data = that.state && that.state.sharedData? that.state.sharedData : {};
     return (
       <div>
-        <MlShareCalendarPresentation propsData={that.state.sharedData}/>
+        <MlShareCalendarPresentation
+          propsData={that.state.sharedData}
+          deactivateLink={this.deactivateLink}/>
       </div>
     );
   }

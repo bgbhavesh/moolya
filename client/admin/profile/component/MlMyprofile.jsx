@@ -305,7 +305,7 @@ export default class MlMyProfile extends React.Component {
         if (this.state.pwdErrorMsg)
           toastr.error("Confirm Password does not match with  New Password");
         else if(this.state.newpwdErrorMsg){
-          toastr.error("Existing password and New Password should not match");
+          toastr.error("The new password cannot be same as your previous 3 passwords. Please select a new password.");
         }else{
           const response = await resetPasswordActionHandler(userDetails);
           // this.refs.id.value='';

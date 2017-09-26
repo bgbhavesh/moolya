@@ -9,6 +9,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     if (!existsSeoName) {
       return 'Next';
     }
+    console.log('MlSiteExists',existsSeoName);
     let userID = existsSeoName.userId;
 
     let portFolio = {
@@ -31,6 +32,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     }
 
     let userObject = await mlDBController.findOne('users', {'_id': userID});
+    console.log('users',userObject.profile.displayName);
     let displayName = userObject.profile.displayName;
     portFolio.displayName = displayName;
     if (userObject.profile)
@@ -46,6 +48,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
       'profileId': profileId
     }
     let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', queryProfileId);
+    console.log('MlPortfolioDetails',resultParentPortFolio.clusterName);
     if (resultParentPortFolio) {
       portFolio.clusterName = resultParentPortFolio.clusterName
       portFolio.chapterName = resultParentPortFolio.chapterName

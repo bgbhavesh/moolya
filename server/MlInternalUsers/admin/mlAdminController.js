@@ -108,10 +108,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
   /**
    *  MICROSITE  STATIC SERVER PATHS STARTS HERE
    */
-  let pathAbout = Assets.absoluteFilePath('microSite/views/about.pug')
-  graphQLServer.get(config.view, async function (req, res, next) {
 
-      const pathName = req.url;
+  graphQLServer.get(config.view, async function (req, res, next) {
+    let path = Meteor.absoluteUrl();
+    let pathAbout = process.cwd() + '/../web.browser/app/microSite/views/about.pug';
+
+    const pathName = req.url;
       const originalUrl = req.originalUrl.replace('/view', '');
       let proto = req.protocol;
       if (req.get('x-forwarded-proto').includes('https')) {
@@ -122,7 +124,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
       if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
         res.redirect('/login');
       }
-      res.render(pathAbout, portFolio)
+      res.render(pathAbout, portFolio);
     }
   )
 

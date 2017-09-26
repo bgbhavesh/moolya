@@ -345,7 +345,7 @@
 					ch = evs[i][1];
 					ev = evs[i][2];
 				}
-				el.off(ev, ch);
+        el ? el.off(ev, ch) : '';
 			}
 		},
 		_buildEvents: function(){

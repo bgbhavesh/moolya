@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import chapterRoutes from '../actions/chapterRoutes';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import ScrollArea from 'react-scrollbar'
 export default class MlChapterList extends Component {
 
   render(){
@@ -41,7 +42,15 @@ export default class MlChapterList extends Component {
     return (
       <div className="row">
         <h2> Chapters </h2>
+        <div className="list_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="list_scroll"
+            smoothScrolling={true}
+          >
           {list}
+          </ScrollArea>
+        </div>
       </div>
     );
   }

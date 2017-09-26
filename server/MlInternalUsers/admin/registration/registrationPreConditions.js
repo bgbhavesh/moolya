@@ -257,4 +257,17 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       response = true
     return response
   }
+
+  static isUserCanUpdate(regDetails, context) {
+    var user = mlDBController.findOne('users', {_id: context.userId})
+    if (user && user.profile && !user.profile.isInternaluser) {
+      if (regDetails.status === "REG_USER_APR" || regDetails.status ==="REG_ADM_REJ" || regDetails.status ==="REG_USER_REJ") {
+        var response = new MlRespPayload().errorPayload("Can not update registration contact admin", 409);
+        return {isValid: false, validationResponse: response}
+      } else {
+        return {isValid: true};
+      }
+    } else
+      return {isValid: true};
+  }
 }

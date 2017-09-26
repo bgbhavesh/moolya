@@ -8,7 +8,7 @@ export default class MlMicroSitePreview extends React.Component {
     super(props);
     this.state = {
       src: '',
-      loading:true
+      loading: true
     }
     return this;
   }
@@ -16,42 +16,37 @@ export default class MlMicroSitePreview extends React.Component {
   componentWillMount() {
     const resp = this.getSrcUrl()
   }
-  componentDidMount() {
-
-  }
 
   async getSrcUrl() {
     const response = await fetchMicroSiteUrl()
-    if (response) {
-      let absoluteUrl = window.location.origin + '/' + response.url
-      if(!absoluteUrl)
-      {
-        this.setState({src: false})
-      }
-      else
-      {
-        this.setState({src: absoluteUrl})
-      }
+    const url = response.url
 
-      this.setState({loading: false})
+    if (url) {
+      let absoluteUrl = window.location.origin + '/view' + url
+      this.setState({src: absoluteUrl})
 
     }
-    return response
+    else {
+      this.setState({src: false})
+    }
+
+    this.setState({loading: false})
+
   }
 
 
   render() {
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
     return (
       <div>
         {showLoader === true ? ( <MlLoader />) :
-            (this.state.src) ?
-              (<form>
-                <iframe src={this.state.src} style={{'height': '550px', 'width': '93%'}}>
-                 </iframe>
-              </form>)
+          (this.state.src) ?
+            (<form>
+              <iframe src={this.state.src} style={{'height': '550px', 'width': '93%'}}>
+              </iframe>
+            </form>)
             :
-            (<div align="center" style={{fontSize:'30px'}}>Portifolio not requested for Live</div>)
+            (<div align="center" style={{fontSize: '30px'}}>Portifolio not requested for Live</div>)
         }
       </div>)
   }

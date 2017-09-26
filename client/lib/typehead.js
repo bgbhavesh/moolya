@@ -426,7 +426,9 @@
                     })
                 }
                 , destroy: function () {
-                    this.$hint.off(".tt"), this.$input.off(".tt"), this.$hint = this.$input = this.$overflowHelper = null
+                  this.$hint ? this.$hint.off(".tt") : '';
+                  this.$input ? this.$input.off(".tt") : '';
+                  this.$hint = this.$input = this.$overflowHelper = null
                 }
                 , focus: function () {
                     this.$input.focus()
@@ -526,7 +528,8 @@
                     0 > d ? this.$menu.scrollTop(c + d) : e > b && this.$menu.scrollTop(c + (e - b))
                 }
                 , destroy: function () {
-                    this.$menu.off(".tt"), this.$menu = null
+                  this.$menu ? this.$menu.off(".tt") : '';
+                  this.$menu = null
                 }
                 , isVisible: function () {
                     return this.isOpen && !this.isEmpty

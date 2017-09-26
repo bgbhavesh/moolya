@@ -187,7 +187,7 @@ class MlAppMyProfile extends Component {
     var ageDifMs = Date.now() - event._d.getTime();
     var ageDate = new Date(ageDifMs);
     if (event._d) {
-      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      let value = moment(event._d).format("DD-MM-YYYY");
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
@@ -320,8 +320,9 @@ class MlAppMyProfile extends Component {
     let mobileNumber=this.state.mobileNumber;
     this.setState({loading:true});
     let otp=this.refs.enteredOTP.value;
+    let response = null;
     if(otp){
-      const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
+      response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
       let resp=null;
       if(response.success){
         resp = JSON.parse(response.result);
@@ -329,6 +330,9 @@ class MlAppMyProfile extends Component {
         toastr.success("Mobile Number Verified");
         this.setState({getOTPClicked:false});
         this.findUserDetails();
+      }else{
+        toastr.error(response.result);
+        this.setState({loading:false,mobileNumberVerified:false});
       }
     }else{
       if(!otp){
@@ -502,8 +506,8 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",className:"form-control float-label",readOnly:true}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
-                      <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
+                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): ""} className="form-control float-label" readOnly="true" />
+                      <FontAwesome name="calendar" placeholder="Date of Birth" className="form-control float-label" readOnly="true" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
 

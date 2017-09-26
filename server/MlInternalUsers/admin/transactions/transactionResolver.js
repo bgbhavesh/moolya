@@ -6,7 +6,9 @@ import MlAdminContextQueryConstructor from '../../admin/core/repository/mlAdminC
 import _ from "underscore";
 import _lodash from 'lodash'
 import MlStatusRepo from '../../../../server/commons/mlStatus'
-
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) => {
 
   if(!args.transaction.requestTypeId){
@@ -59,6 +61,9 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
     }
     if(hierarchyDesicion===true){
       successCount++
+      MlEmailNotification.onAdminAssigned(collection,transaction);
+      MlSMSNotification.AdminAssignedToUser(collection,transaction);
+      MlNotificationController.onUserAssigned(collection,transaction);
     }
   })
   //get user details iterate through profiles match with role and get department and update allocation details.

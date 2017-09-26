@@ -64,8 +64,31 @@ export default class VerticalBreadCrum extends Component {
           );
           return;
         }
+        let breadCrumObject = [];
 
-        let breadCrumObject = [
+        if(breadCrum.type === 'transaction'&&breadCrum.module === 'portfolio' &&(breadCrum.subModule ==='edit'||breadCrum.subModule ==='view')){
+          breadCrumObject = [
+            { linkName: properName(breadCrum.module), linkId: breadCrum.type , linkUrl:path.split('portfolio')[0]+'portfolio/requestedPortfolioList'}
+          ];
+
+          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
+            breadCrumObject.push({
+              linkName: properName((FlowRouter._current.oldRoute.path.split('portfolio/')[1]).split('PortfolioList')[0]),linkUrl :FlowRouter._current.oldRoute.path
+            });
+          }
+
+          breadCrumObject.push({
+            linkName:properName(breadCrum.subModule)
+          });
+
+          this.setBreadCrumHierarchyCallback(
+            breadCrumObject
+          );
+          return;
+        }
+
+
+        breadCrumObject = [
           { linkName: properName(breadCrum.type), linkId: breadCrum.type },
           { linkName: module, linkId: 'module' },
         ];

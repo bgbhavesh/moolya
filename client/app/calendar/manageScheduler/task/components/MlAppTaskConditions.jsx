@@ -22,6 +22,7 @@ export default class MlAppTaskConditions extends Component {
   }
   componentWillMount() {
     const resp = this.findTaskDetails();
+    this.props.activeComponent(2);
     return resp;
   }
 

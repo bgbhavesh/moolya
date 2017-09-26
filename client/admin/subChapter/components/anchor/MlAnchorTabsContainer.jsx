@@ -77,6 +77,12 @@ class MlAnchorTabsContainer extends React.Component {
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
           stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
         }
+        console.log('############################3')
+        console.log(this.state.contactDetailsFormData.formData);
+        if (this.state.contactDetailsFormData.formData.contactPersonRole && ! this.state.contactDetailsFormData.formData.addressTypeId) {
+          toastr.error('Address type is required in contact form');
+          return
+        }
         const contactDetails = (stateContactDetails && stateContactDetails.length) ? stateContactDetails : undefined;
         const { clusterId, chapterId, subChapterId } = this.props;
         const objective = stateObjective && stateObjective.length && stateObjective.filter((ob) => {
@@ -90,7 +96,30 @@ class MlAnchorTabsContainer extends React.Component {
           contactDetails,
         });
         const resp = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
-        this.setState({ subChapter: resp });
+        this.setState({
+          subChapter: resp,
+          contactDetailsFormData: {
+            selectedIndex: -1,
+            formData: {
+              contactPersonRole: '',
+              addressTypeId: '',
+              addressTypeName: '',
+              contactNumber: '',
+              emailId: '',
+              buildingNumber: '',
+              street: '',
+              landmark: '',
+              area: '',
+              cityId: '',
+              stateId: '',
+              countryId: '',
+              pincode: '',
+              latitude: '',
+              longitude: '',
+              status: false,
+            },
+          },
+        });
         return response;
       case 'users':
         const { profile } = this.state.contact;

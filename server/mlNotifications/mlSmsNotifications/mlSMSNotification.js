@@ -171,6 +171,26 @@ const MlSMSNotification= class MlSMSNotification{
     }
   }
 
+  static processSetupCompleted(userId){
+    if(userId){
+      var defaultProfile = new MlUserContext().userProfileDetails(userId)
+      var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:""
+      var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:""
+      var msg = 'Investor Process Setup has been completed for your moolya profile. Thank you.'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+
+  }
+
+  static onVerificationSuccess(regRecord){
+    if(regRecord){
+      var mobileNumber = regRecord&&regRecord.registrationInfo&&regRecord.registrationInfo.contactNumber?regRecord.registrationInfo.contactNumber:"";
+      var countryCode =  regRecord&&regRecord.registrationInfo&&regRecord.registrationInfo.countryId?regRecord.registrationInfo.countryId:"";
+      var msg = 'Congratulations ! Your moolya account login has now been verified and activated. Login to moolya now!'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+
   static profileUpdated(userId){
     if(userId){
       var defaultProfile = new MlUserContext().userProfileDetails(userId);
@@ -196,6 +216,52 @@ const MlSMSNotification= class MlSMSNotification{
       var msg = 'Your moolya account password reset was unsuccessful on '+updatedDateTime+'. Please contact support.'
       mlSmsController.sendSMS(msg, countryCode, mobileNumber)
     }
+  }
+  static AdminAssignedToUser(collectionName,transactionId) {
+    if (transactionId) {
+      let userDetails = mlDBController.findOne(collectionName, {"transactionId": transactionId}) || {};
+      let userId = '';
+      //receiver user details
+      if (userDetails && userDetails.registrationInfo) {
+        userId = userDetails && userDetails.registrationInfo && userDetails && userDetails.registrationInfo.userId ? userDetails.registrationInfo.userId : '';
+      } else {
+        userId = userDetails && userDetails.userId ? userDetails.userId : '';
+      }
+      let userInfo = new MlUserContext().userProfileDetails(userId);
+      let countryCode = userInfo && userInfo.countryId ? userInfo.countryId : "";
+      let mobileNumber = userInfo && userInfo.mobileNumber ? userInfo.mobileNumber : "";
+
+      // community manager details
+      let allocationId = userDetails && userDetails.allocation && userDetails.allocation.assigneeId ? userDetails.allocation.assigneeId : '';
+      let allocationUserDetails = mlDBController.findOne('users', {_id: allocationId}) || {}
+      let comMngFirstName = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.firstName ? allocationUserDetails.profile.firstName : "";
+      let comMngLastName = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.lastName ? allocationUserDetails.profile.lastName : "";
+      let genderType = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.genderType ? allocationUserDetails.profile.genderType : "";
+      let gender;
+      if (genderType == "male") {
+        gender = "Mr"
+      } else {
+        gender = "Ms"
+      }
+      // var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:""
+      // var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:""
+      var msg = gender+" "+comMngFirstName+'. will be your Community Manager on moolya and will help you complete your moolya profile. Login now to explore more..'
+      mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+    }
+  }
+
+  static newOfficeRequestSent(context){
+    let userId = context&&context.userId?context.userId:"";
+    var defaultProfile = new MlUserContext().userProfileDetails(userId);
+    var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:"";
+    var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:"";
+    var communityName = defaultProfile&&defaultProfile.communityName?defaultProfile.communityName:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var msg = "New registration request for "+communityName+" on moolya has been submitted on "+updatedDateTime;
+    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
   }
 /*  static portfolioGoLiveRequestDeclined(portfolioDetailsId){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};

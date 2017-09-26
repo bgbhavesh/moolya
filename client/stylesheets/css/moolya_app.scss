@@ -239,8 +239,8 @@ $menuTrans:all 0.5s linear;
         }
     }
     span{ color: $mlYellow; }
-      .company_header{background:$mlWhite; border-radius:10px 10px 0 0; padding:5px 10px;height:53px;
-        img{height: 45px;border-radius: 5px;}
+      .company_header{background:$mlWhite; border-radius:10px 10px 0 0; padding:5px 10px;height:45px;
+        img{height: 35px;border-radius: 5px;}
       }
       .pie-title-center {display: inline-block; position: relative; text-align: center;
         span{
@@ -2207,6 +2207,7 @@ p{margin-top:10px;}
   text-shadow: none;
   margin-top:15px;
 }
+.card_block.swiper-slide {height: 200px;}
 .card_block .active, .card_block .inactive{
   width: 20px;
   height: 20px;
@@ -2351,4 +2352,9 @@ li.sameWorkTime:after {
 }
 .mselect_icon{
   margin-top: -50px;margin-right: 35px;
+}
+.task_tabs{
+  .panel-body{
+    height: 245px;
+  }
 }

@@ -224,6 +224,80 @@ class MlNotificationControllerClass {
     this.createNewNotification(obj)
   }
 
+  onNewRegistrationRequest(registrationId,communityName,context){
+    let payload  = mlDBController.findOne('MlRegistration',registrationId,context)
+    let userName = payload && payload.registrationInfo && payload.registrationInfo.userName ? payload.registrationInfo.userName : ""
+    let userDetails =  mlDBController.findOne('users', {username: userName}) || {}
+    let userId = userDetails&&userDetails._id?userDetails._id:""
+    let notifyMessage = "Your new registration request for "+communityName+ " has been submitted successfully."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"newRegistrationRequest",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onNewOfficeRequest(payload){
+    let userId = payload&&payload.userId?payload.userId:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    let notifyMessage = "New Office Request has been sent on "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"newOfficeRequest",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+/*
+  onPricipalInvitation(officeId){
+    if(officeId){
+      let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      let notifyMessage = "You have been invited to be the Principal on "+updatedDateTime+"."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"onPrincipalInvitation",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: officeUserId
+      }
+      this.createNewNotification(obj)
+    }
+  }
+*/
+
+  officeBearerApprovedByAdmin(userId){
+    if(userId){
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      let notifyMessage = "Office Bearer request has been approved on  "+updatedDateTime+"."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"officeBearerApproved",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: userId
+      }
+      this.createNewNotification(obj)
+    }
+
+  }
+
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
   }

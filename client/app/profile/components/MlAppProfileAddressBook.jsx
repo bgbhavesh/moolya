@@ -49,6 +49,7 @@ export default class MlAppProfileAddressBook extends React.Component {
     const showLoader=this.state.loading;
     let clusterId=this.state.data?this.state.data.clusterId:'';
     let contactInfo= this.state.data?this.state.data.contactInfo:''
+    let verifiedMobileNumbers = this.state.data&&this.state.data.mobileNumbers?this.state.data.mobileNumbers:[];
     let emailInfo= this.state.data?this.state.data.emailInfo:''
     let addressInfo = this.state.data?this.state.data.addressInfo:''
     let registerId = this.state.data?this.state.data.registrationId:''
@@ -73,7 +74,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Numbers
                       </div>
-                      <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
+                      <AppContactDetails clusterId={clusterId} verifiedMobileNumbers={verifiedMobileNumbers} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">

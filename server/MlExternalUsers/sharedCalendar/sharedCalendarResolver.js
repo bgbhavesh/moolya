@@ -62,7 +62,6 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
       'transactionTypeId': args.detailsInput.sharedId,
       'fromUserType': 'user'
     })
-    console.log('transactionEntry', transactionEntry)
     let code = 200;
     let resp = new MlRespPayload().successPayload("Shared successfully", code);
     return resp;
@@ -72,6 +71,41 @@ MlResolver.MlMutationResolver['createSharedCalendar'] = (obj, args, context, inf
     return resp;
   }
 }
+
+MlResolver.MlMutationResolver['deactivateSharedCalendar'] = (obj, args, context, info) => {
+  let activityStatus;
+  let data = mlDBController.find('MlSharedCalendar', {sharedId: args.sharedId}).fetch();
+  if(data){
+    data.map(function(info){
+      info.isActive = info.isActive ? false : true;
+      if(info.isActive) {
+        activityStatus = 'activate'
+      } else {
+        activityStatus = 'deactivate'
+      }
+      let updateData = mlDBController.update('MlSharedCalendar', {_id: info._id}, info ,{$set:true}, context);
+      return updateData;
+    });
+  }
+  let transactionEntry = new MlTransactionsHandler().recordTransaction({
+    'fromUserId': context.userId,
+    'moduleName': 'share',
+    'activity': activityStatus,
+    'transactionType': 'sharing',
+    'userId': context.userId,
+    // 'activityDocId': resourceId,
+    // 'docId': portfolioId,
+    'transactionDetails': 'sharing',
+    'context': context || {},
+    'transactionTypeId': args.sharedId,
+    'fromUserType': 'user'
+  })
+    let code = 200;
+    let resp = new MlRespPayload().successPayload("Deactivated successfully", code);
+    return resp;
+
+}
+
 
 MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, info) => {
 

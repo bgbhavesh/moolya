@@ -17,7 +17,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
   if(portfolio){
     let profile = new MlUserContext().userProfileDetails(userId);
     console.log(profile);
-    let query = {
+    var query = {
       userId: portfolio.userId,
       profileId:portfolio.profileId,
       isCurrentVersion: true,

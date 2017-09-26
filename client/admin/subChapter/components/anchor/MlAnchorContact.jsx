@@ -43,7 +43,7 @@ export default class MlAnchorContact extends React.Component {
 
   selectContact(index) {
     // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
-    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });
+    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });ml
   }
 
   onOptionSelectedCountry(val) {

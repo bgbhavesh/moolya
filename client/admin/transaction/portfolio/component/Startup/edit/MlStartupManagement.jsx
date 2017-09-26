@@ -46,6 +46,7 @@ export default class MlStartupManagement extends React.Component{
     this.handleBlur.bind(this);
     this.addManagement.bind(this);
     this.onSelectUser.bind(this);
+    this.imagesDisplay.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -61,7 +62,7 @@ export default class MlStartupManagement extends React.Component{
     $('#testing').click(function(){
       $('#management-form').slideDown();
     });
-
+    this.imagesDisplay()
 
   }
   componentDidUpdate()
@@ -300,6 +301,7 @@ export default class MlStartupManagement extends React.Component{
       details=_.extend(details,{[name]:{fileName: file.fileName,fileUrl: temp}});
       that.setState({data: details,responseImage: temp}, function () {
         that.sendDataToParent()
+        that.imagesDisplay()
       })
       // if(result.success){
       //   that.setState({loading:true})
@@ -336,6 +338,22 @@ export default class MlStartupManagement extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response) {
+      let detailsArray = response.management?response.management:[]
+      let dataDetails =this.state.startupManagement
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      // listDetails = this.state.startupManagementList || [];
+      let listDetails = cloneBackUp || [];
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupManagement:cloneBackUp,startupManagementList:cloneBackUpList});
+    }
+  }
+
   toggleModal() {
     const that = this;
     this.setState({
@@ -365,7 +383,6 @@ export default class MlStartupManagement extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.startupManagementList || [];
-    let genderImage = this.state.data && this.state.data.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
 
     return (
       <div>
@@ -385,6 +402,7 @@ export default class MlStartupManagement extends React.Component{
                     </a>
                   </div>
                   {managementArr.map(function (user, index) {
+                    let genderImage = user.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>

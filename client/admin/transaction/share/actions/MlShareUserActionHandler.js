@@ -6,6 +6,7 @@ export async function fetchSharedCalendarDetails (sharedId) {
     query: gql`
 query ($sharedId: String) {
   fetchSharedCalendarDetails(sharedId: $sharedId) {
+     _id
      users{
       userId
       profileId
@@ -43,5 +44,24 @@ query ($sharedId: String) {
   });
   const shareDetails = result.data.fetchSharedCalendarDetails;
   return shareDetails
+}
+
+export async function deactivateSharedDetailsHandler(sharedId) {
+  const result = await client.mutate({
+    mutation: gql`
+      mutation($sharedId:String){
+        deactivateSharedCalendar(sharedId:$sharedId) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      sharedId
+    }
+  });
+  const id = result.data.deactivateSharedCalendar;
+  return id;
 }
 

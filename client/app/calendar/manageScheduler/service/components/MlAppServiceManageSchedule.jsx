@@ -142,7 +142,7 @@ class MlAppServiceManageSchedule extends Component {
    * Desc :: Sets components steps for stepzila to create and update service data
    */
   setServiceSteps() {
-    let canStatusChange = this.state.serviceBasicInfo.isLive && FlowRouter.getQueryParam("id");
+    let canStatusChange = (this.state.serviceBasicInfo.isLive || this.state.serviceBasicInfo.isApproved ) && FlowRouter.getQueryParam("id")  ;
     const {
       serviceBasicInfo,
       daysRemaining,
@@ -176,7 +176,7 @@ class MlAppServiceManageSchedule extends Component {
           options={this.options}
           checkBoxHandler={this.checkBoxHandler}
           validTill={this.validTill}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && this.state.serviceBasicInfo.isLive)}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
           canStatusChange={ canStatusChange }
           setSessionFrequency={this.setSessionFrequency}
           onChangeFormField={this.onChangeFormField}
@@ -193,7 +193,7 @@ class MlAppServiceManageSchedule extends Component {
           getRedirectServiceList={this.getRedirectServiceList}
           deleteSelectedTask={this.deleteSelectedTask}
           getServiceDetails={this.getServiceDetails}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && this.state.serviceBasicInfo.isLive)}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
           saveService={this.saveService}
           selectedTaskId={serviceTask.selectedTaskId}
           optionsBySelectService={this.optionsBySelectService}
@@ -205,7 +205,7 @@ class MlAppServiceManageSchedule extends Component {
         name: 'Terms & Conditions',
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
           attachments={attachments}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && this.state.serviceBasicInfo.isLive)}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
           activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           onChangeCheckBox={this.onChangeCheckBox}

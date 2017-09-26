@@ -307,11 +307,11 @@ export default class MlAnchorList extends React.Component {
             <input type="text" value={this.state.socialLinkForm.socialLinkUrl || ''} onChange={(evt) => this.onSocialFormChange('socialLinkUrl', evt.target.value)} placeholder="Enter URL" className="form-control float-label"/>
           </div>
           <div className="ml_icon_btn">
-            <a href="#" onClick={this.onSaveSocialLink}
+            <a onClick={this.onSaveSocialLink}
                className="save_btn">
               <span className="ml ml-save"></span>
             </a>
-            <a href="#" className="cancel_btn" onClick={this.onClearSocialLink}><span className="ml ml-delete"></span></a>
+            <a className="cancel_btn" onClick={this.onClearSocialLink}><span className="ml ml-delete"></span></a>
           </div>
           {/*<div className="form-group">*/}
             {/*<button onClick={this.onSaveSocialLink} type="button">Save</button>*/}

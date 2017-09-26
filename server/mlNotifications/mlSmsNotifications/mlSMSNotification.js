@@ -217,6 +217,20 @@ const MlSMSNotification= class MlSMSNotification{
       mlSmsController.sendSMS(msg, countryCode, mobileNumber)
     }
   }
+
+  static newOfficeRequestSent(context){
+    let userId = context&&context.userId?context.userId:"";
+    var defaultProfile = new MlUserContext().userProfileDetails(userId);
+    var countryCode = defaultProfile&&defaultProfile.countryId?defaultProfile.countryId:"";
+    var mobileNumber = defaultProfile&&defaultProfile.mobileNumber?defaultProfile.mobileNumber:"";
+    var communityName = defaultProfile&&defaultProfile.communityName?defaultProfile.communityName:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var msg = "New registration request for "+communityName+" on moolya has been submitted on "+updatedDateTime;
+    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+  }
 /*  static portfolioGoLiveRequestDeclined(portfolioDetailsId){
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioId) || {};
     if(portfolioDetails){

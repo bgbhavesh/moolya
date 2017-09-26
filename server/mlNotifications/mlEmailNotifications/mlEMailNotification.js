@@ -883,6 +883,92 @@ const MlEmailNotification= class MlEmailNotification {
       }, 2 * 1000);
     }
   }
+
+  static registerAsRequestSent(registrationId,communityName,context){
+    var regRecord  = mlDBController.findOne('MlRegistration',registrationId,context)
+    let userId = regRecord&&regRecord.registrationInfo&&regRecord.registrationInfo.userName?regRecord.registrationInfo.userName:"";
+    let userDetails =  mlDBController.findOne('users', {username: userId}) || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+
+    let regObj = {
+      userName : firstName+" "+lastName,
+      registrationType : communityName,
+      time : time,
+      date : date
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_registeras_request","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        //subject: "Live on Moolya!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static goIndependentRequest(userId,memberData){
+    if(userId){
+      let userDetails =  mlDBController.findOne('users', {_id: userId}) || {}
+      if(userDetails){
+        let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+        let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+        var currentdate = new Date();
+        let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+        let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+        let memfirstName = memberData&&memberData.firstName?memberData.firstName:"";
+        let memlastName = memberData&&memberData.lastName?memberData.lastName:"";
+        let regObj = {
+          userName : firstName+" "+lastName,
+          teamMemberName : memfirstName+" "+memlastName,
+          time : time,
+          date : date
+        }
+        let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+        let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_GO_Independent_Request_received","email",regObj)
+        Meteor.setTimeout(function () {
+          mlEmail.sendHtml({
+            from: fromEmail,
+            to: toEmail,
+            //subject: "Live on Moolya!!",
+            subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+            html : mail_body&&mail_body.content
+          });
+        }, 2 * 1000);
+
+      }
+
+    }
+
+  }
+
+  static onSuccessfulProfileUpdate(userId){
+    let userDetails =  mlDBController.findOne('users', {_id: userId}) || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_Profile_Updated","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        //subject: "Office Upgrade!!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
 }
 
 

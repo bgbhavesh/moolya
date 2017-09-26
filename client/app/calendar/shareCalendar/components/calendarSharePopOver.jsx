@@ -126,8 +126,14 @@ export default class CalendarSharePopOver extends React.Component {
     return current.isAfter(yesterday);
   }
 
-  validTillToggle(id){
-    $('#'+id).toggleClass('rdtOpen');
+  validTillToggle(type){
+    if(type == "start") {
+      $('#start-time').toggleClass('rdtOpen');
+      $('#end-time').removeClass('rdtOpen');
+    } else {
+      $('#start-time').removeClass('rdtOpen');
+      $('#end-time').toggleClass('rdtOpen');
+    }
   }
 
   isDownloadable(e) {
@@ -289,7 +295,7 @@ export default class CalendarSharePopOver extends React.Component {
             />
             <FontAwesome name="calendar"
                          className="password_icon"
-                         onClick={this.validTillToggle.bind(this, "start-time")}
+                         onClick={this.validTillToggle.bind(this, "start")}
             />
           </div>
         </div>

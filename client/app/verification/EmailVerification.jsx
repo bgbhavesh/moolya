@@ -62,6 +62,10 @@ export default class EmailVerification extends React.Component{
         success: function (response) {
           if (response.success) {
             toastr.success("OTP Sent Successfuly");
+            this.setState({canResend:false})
+            setTimeout(function(){
+              this.setState({canResend:true})
+            }.bind(this),30000)
           } else {
             toastr.error("Resend OTP failed");
           }

@@ -47,6 +47,29 @@ export default class EmailVerification extends React.Component{
     });
   }
 
+
+  async resendSmsOTP(mobileNumber){
+
+    if(this.state.canResend) {
+      let mobileNumber = this.state.mobileNumber;
+      let data = {mobileNumber: mobileNumber};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('resendOTP'),
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+          if (response.success) {
+            toastr.success("OTP Sent Successfuly");
+          } else {
+            toastr.error("Resend OTP failed");
+          }
+        }.bind(this)
+      });
+    }
+  }
+
  /* async verifyEmail(token){
     const response=await verifyEmailHandler(token,appClient);
     let resp=null;
@@ -88,7 +111,7 @@ export default class EmailVerification extends React.Component{
       }
     }
   }
-  async resendSmsOTP(){
+  /*async resendSmsOTP(){
     if(this.state.canResend){
       let mobileNumber=this.state.mobileNumber;
       const response=await resendSmsOtpHandler(mobileNumber, appClient);
@@ -99,7 +122,7 @@ export default class EmailVerification extends React.Component{
       }
       return response;
     }
-  }
+  }*/
 
   render(){
 

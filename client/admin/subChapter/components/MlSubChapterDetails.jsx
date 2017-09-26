@@ -11,6 +11,7 @@ import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartF
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
+import CropperModal from '../../../commons/components/cropperModal';
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 // import {getAdminUserContext} from "../../../commons/getAdminUserContext";
@@ -26,7 +27,9 @@ class MlSubChapterDetails extends React.Component {
       moolyaSubChapterAccess: {},
       backendUser: {},
       externalUser: {},
-      data: {}
+      data: {},
+      showImageUploadModal: false,
+      uploadingImage: false,
     };
     this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
     this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
@@ -35,7 +38,9 @@ class MlSubChapterDetails extends React.Component {
     this.onStatusChangeBespokeRegistration = this.onStatusChangeBespokeRegistration.bind(this);
     this.findSubChapter.bind(this);
     this.updateSubChapter.bind(this)
-    this.anchorRedirect = this.anchorRedirect.bind(this)
+    this.anchorRedirect = this.anchorRedirect.bind(this);
+    this.toggleImageUpload = this.toggleImageUpload.bind(this);
+    this.onImageFileUpload=this.onImageFileUpload.bind(this);
     return this;
   }
 
@@ -201,13 +206,15 @@ class MlSubChapterDetails extends React.Component {
     FlowRouter.go('/admin/' + '/' + basePath + '/' + this.props.clusterId + '/' + this.props.chapterId + '/' + this.props.params + '/' + this.props.subChapterName + '/' + "anchorDetails")
   }
 
-  async onImageFileUpload(e) {
-    if (e.target.files[0].length == 0)
-      return;
-    let file = e.target.files[0];
+  async onImageFileUpload(file) {
+
+    this.setState({
+      uploadingImage: true,
+    });
+
     if (file) {
-      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId: this.state.data.id}
-      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      const data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId: this.state.data.id}
+      const response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
       return response;
     }
   }
@@ -223,10 +230,20 @@ class MlSubChapterDetails extends React.Component {
         let dataDetails = this.state.data
         let cloneBackUp = _.cloneDeep(dataDetails);
         cloneBackUp['subChapterImageLink'] = response['subChapterImageLink']
-        this.setState({data: cloneBackUp});
+        this.setState({data: cloneBackUp, uploadingImage: false, showImageUploadModal: false});
       }
     }
+    this.setState({
+      uploadingImage: false,
+    });
   }
+
+  toggleImageUpload() {
+    this.setState({
+      showImageUploadModal: !this.state.showImageUploadModal,
+    });
+  }
+
 
   render() {
     let MlActionConfig = [
@@ -405,16 +422,15 @@ class MlSubChapterDetails extends React.Component {
                   >
                     <form>
                       <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
+                        <div onClick={this.toggleImageUpload} className="fileUpload mlUpload_btn">
                           <span>Profile Pic</span>
-                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
                             src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
                         </div>
                       </div>
-
+                      <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload} show={this.state.showImageUploadModal} uploadingImage={this.state.uploadingImage} cropperStyle={"circle"}/>
                       <br className="brclear"/>
 
                       <div className="panel panel-default">
@@ -465,7 +481,7 @@ class MlSubChapterDetails extends React.Component {
                           </div>
                         </div>
                       </div>
-                      {/*<div className="panel panel-default">*/}
+                      {/* <div className="panel panel-default"> */}
                         {/*<div className="form-group">*/}
                           {/*<Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters"*/}
                                         {/*className="form-control float-label" valueKey={'value'} labelKey={'label'}*/}

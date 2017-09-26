@@ -40,6 +40,13 @@ export async function findAddressBookActionHandler() {
           countryCode
           contactNumber
         }
+        mobileNumbers {
+          verified
+          countryId
+          mobileNumber
+          phoneNumberCode
+          numberType
+        }
       }
     }
     `,

@@ -85,6 +85,14 @@ MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
       }
     })*/
     infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
+    var mobileNumbs = [];
+    _.each(user.mobileNumbers, function (mob) {
+      var country = mlDBController.findOne('MlCountries',{_id:mob.countryId}) || {};
+      mob.phoneNumberCode = country.phoneNumberCode;
+      mob.numberType = "Official";
+      mobileNumbs.push(mob)
+    })
+    infoDetails.mobileNumbers = mobileNumbs;
     return infoDetails;
   }else {
     let code = 409;

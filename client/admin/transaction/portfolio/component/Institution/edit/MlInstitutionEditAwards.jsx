@@ -366,7 +366,7 @@ export default class MlInstitutionEditAwards extends React.Component{
                         </div>
                         <div className="form-group">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                    inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                    inputProps={{placeholder: "Select Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                     closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
                         </div>
                         <div className="form-group">

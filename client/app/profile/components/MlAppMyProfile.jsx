@@ -320,8 +320,9 @@ class MlAppMyProfile extends Component {
     let mobileNumber=this.state.mobileNumber;
     this.setState({loading:true});
     let otp=this.refs.enteredOTP.value;
+    let response = null;
     if(otp){
-      const response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
+      response=await verifyUserMobileNumberHandler(mobileNumber,otp,appClient);
       let resp=null;
       if(response.success){
         resp = JSON.parse(response.result);
@@ -329,6 +330,9 @@ class MlAppMyProfile extends Component {
         toastr.success("Mobile Number Verified");
         this.setState({getOTPClicked:false});
         this.findUserDetails();
+      }else{
+        toastr.error(response.result);
+        this.setState({loading:false,mobileNumberVerified:false});
       }
     }else{
       if(!otp){
@@ -502,7 +506,7 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",className:"form-control float-label"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",className:"form-control float-label",readOnly:true}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

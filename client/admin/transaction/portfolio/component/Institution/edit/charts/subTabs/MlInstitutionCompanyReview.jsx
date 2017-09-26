@@ -162,7 +162,7 @@ export default class MlInstitutionCompanyReview extends React.Component{
                       <div className="form-group col-lg-6  col-md-6 col-sm-6">
 
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                  inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
                                   closeOnSelect={true} ref={"rofYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this, defaultIndex)}/>
 
 
@@ -191,7 +191,7 @@ export default class MlInstitutionCompanyReview extends React.Component{
                         <div className="form-group col-lg-6  col-md-6 col-sm-6">
 
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
                                     defaultValue={details.rofYear}
                                     closeOnSelect={true} ref={"rofYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
 

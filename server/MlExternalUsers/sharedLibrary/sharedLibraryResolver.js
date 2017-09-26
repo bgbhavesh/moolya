@@ -127,7 +127,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
       "users": {
         "userId": 1,
         "profileId":1,
-        "displayName": "$usersInfo.profile.displayName",
+        "displayName": "$usersInfo.profile.firstName",
         "profilePic": "$usersInfo.profile.profileImage"
       }
     }
@@ -172,7 +172,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
           userId: "$userId",
           profileId: "$profileId",
           email : "$contactInfo.profile.email",
-          name : "$contactInfo.profile.displayName",
+          name : "$contactInfo.profile.firstName",
           mobileNumber: "$contactInfo.profile.mobileNumber",
           cluster: "$userProfiles.clusterName",
           chapter: "$userProfiles.chapterName",

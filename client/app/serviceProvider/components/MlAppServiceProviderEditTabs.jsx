@@ -13,11 +13,14 @@ import MlFunderAbout from "../../../admin/transaction/portfolio/component/Funder
 import MlServiceProviderAbout from '../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAbout'
 import MlServiceProviderAwards from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAwards";
 import MlServiceProviderMCL from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
-import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
+// import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
+import MlServiceProviderViewServices from "../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewServices";
 import MlServiceProviderClients from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
 import MlServiceProviderLookingFor from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderLookingFor";
 import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import MlFunderServices from '../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
 import {appClient} from '../../core/appConnection'
+import {getProfileBasedOnPortfolio} from '../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 
 export default class MlAppServiceProviderEditTabs extends Component {
   constructor(props) {
@@ -26,7 +29,9 @@ export default class MlAppServiceProviderEditTabs extends Component {
       removePrivateKeys: []}, activeTab:'About'};
     this.getChildContext.bind(this)
     this.getAwardsDetails.bind(this);
-    this.getFunderLibrary.bind(this)
+    this.getFunderLibrary.bind(this);
+    this.saveDataToServices = this.saveDataToServices.bind(this);
+    this.getServiceDetails = this.getServiceDetails.bind(this);
   }
 
   getChildContext() {
@@ -82,19 +87,19 @@ export default class MlAppServiceProviderEditTabs extends Component {
         component: <MlServiceProviderMCL isAdmin={false} client={appClient} key="4" getServiceProviderMCL={this.getServiceProviderMCL.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
-      {
-        tabClassName: 'tab',
-        panelClassName: 'panel',
-        title: "Services",
-        component: <MlServiceProviderServices key="5" client={appClient} isAdmin={false}
-                                              getServiceProviderServices={this.getServiceProviderServices.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
-      },
+      // {
+      //   tabClassName: 'tab',
+      //   panelClassName: 'panel',
+      //   title: "Services",
+      //   component: <MlServiceProviderServices key="5" client={appClient} isAdmin={false}
+      //                                         getServiceProviderServices={this.getServiceProviderServices.bind(this)}
+      //                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+      // },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlServiceProviderClients key="6" client={appClient} isAdmin={false}
+        component: <MlServiceProviderClients key="5" client={appClient} isAdmin={false}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"/>
       },
@@ -102,12 +107,39 @@ export default class MlAppServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
-        component: <MlServiceProviderLookingFor key="7" client={appClient} isAdmin={false}
+        component: <MlServiceProviderLookingFor key="6" client={appClient} isAdmin={false}
                                              getLookingForDetails={this.getLookingForDetails.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Services",
+        component: <MlFunderServices myPortfolio={true} createServiceMode={true} client={appClient} isAdmin={false}
+                                     key="10" getServiceDetails={this.getServiceDetails.bind(this)}
+                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="Services"/>
       }
     ];
     return tabs;
+  }
+
+  getServiceDetails(details, privatekey) {
+    if (details.services) {
+      let portfolioId = details.portfolioId;
+      console.log()
+      this.saveDataToServices(portfolioId)
+    }
+    console.log(details)
+    let data = this.state.funderPortfolio;
+    data['services'] = details;
+    this.setState({funderPortfolio: data})
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+  }
+
+  async saveDataToServices(portfolioId) {
+    const resp = await getProfileBasedOnPortfolio(portfolioId)
+    // this.saveServiceDetails()
+    return resp
   }
 
   getLookingForDetails(details, privatekey) {

@@ -301,6 +301,47 @@ class MlNotificationControllerClass {
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
   }
+  onUserAssigned(collectionName,transactionId) {
+    if (transactionId) {
+      let userDetails= mlDBController.findOne(collectionName,{"transactionId":transactionId})||{};
+      let userId='';
+      //receiver user details
+      if(userDetails && userDetails.registrationInfo){
+        userId = userDetails&&userDetails.registrationInfo&&userDetails&&userDetails.registrationInfo.userId?userDetails.registrationInfo.userId:'';
+      }else{
+        userId = userDetails&&userDetails.userId?userDetails.userId:'';
+      }
+      //
+      // let userInfo=mlDBController.findOne('users', {_id: userId}) || {};
+
+      //let allocationId =  userDetails&&userDetails.allocation&&userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:''
+      //let userInfo =  mlDBController.findOne('users', {_id: userId}) || {}
+      // let firstName = userInfo&&userInfo.profile&&userInfo.profile.firstName?userInfo.profile.firstName:"";
+      // let lastName = userInfo&&userInfo.profile&&userInfo.profile.lastName?userInfo.profile.lastName:"";
+
+      // community manager details
+      let allocationId = userDetails&&userDetails.allocation && userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:'';
+      let allocationUserDetails =  mlDBController.findOne('users', {_id: allocationId}) || {}
+      let comMngFirstName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.firstName?allocationUserDetails.profile.firstName:"";
+      let comMngLastName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.lastName?allocationUserDetails.profile.lastName:"";
+      let genderType = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.genderType?allocationUserDetails.profile.genderType:"";
+      let gender;
+      if(genderType == "male"){
+        gender = "Mr"
+      }else{
+        gender = "Ms"
+      }
+      var notifyMessage = gender+" "+comMngFirstName+"will be your Community Manager and will help you complete your moolya profile."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType": "onUserAssigned",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: userId
+      }
+      this.createNewNotification(obj)
+    }
+  }
 }
 
 const MlNotificationController = new MlNotificationControllerClass();

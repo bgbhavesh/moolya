@@ -139,9 +139,11 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-    let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
-    if (resp) {
+  let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+  if (resp) {
       let emailSent = MlEmailNotification.onChangePassword(context);
+      MlSMSNotification.forgotPassword(context.userId,context)
+      
       let code = 200;
       let passwordalert =  MlAlertNotification. onPasswordAlert()
       let response = new MlRespPayload().successPayload(passwordalert, code);

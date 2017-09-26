@@ -126,7 +126,13 @@ export default class MlAppTaskSession extends Component {
     dataList.splice(id, 0, specificDataList);
     this.setState({ sessionData: dataList })
   }
-
+  initilizeSwiper() {
+      var mySwiper = new Swiper('.manage_tasks', {
+        speed: 400,
+        spaceBetween: 15,
+        slidesPerView: 'auto'
+      });
+  }
   sendSessionDataToParent() {
     let data = _.cloneDeep(this.state.sessionData);
     data.forEach(d=> {
@@ -136,22 +142,19 @@ export default class MlAppTaskSession extends Component {
   }
 
   componentDidMount() {
-    $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
-  }
-
-  initilizeSwiper() {
     setTimeout(function () {
       var mySwiper = new Swiper('.manage_tasks', {
         speed: 400,
-        spaceBetween: 20,
-        slidesPerView: 5,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
+        spaceBetween: 15,
+        slidesPerView: 'auto'
       });
-    }, 100);
+    },500);
+    $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (250 + $('.app_header').outerHeight(true)));
   }
+
+
 
   addActivity(activity, index) {
     let sessionData = this.state.sessionData;
@@ -215,10 +218,10 @@ export default class MlAppTaskSession extends Component {
           <div className="form_bg">
             {this.state.sessionData.map(function (session, id) {
               return (
-                <div className="panel panel-default" key={id}>
+                <div className="panel panel-default task_tabs" key={id}>
                   <div className="panel-heading">
-                    <div className="col-md-3 nopadding-left">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
-                    <div className="col-md-3">
+                    <div className="col-md-3 nopadding">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
+                    <div className="col-md-3 nopadding">
                       <div style={{ 'marginTop': '-4px' }}>
                         <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Hours
                         <input
@@ -255,26 +258,29 @@ export default class MlAppTaskSession extends Component {
                           console.log(activity);
                           if (activity) {
                             return (
-                              <div className="col-lg-2 col-md-4 col-sm-4 swiper-slide" key={idx}>
-                                <div className="card_block"><h3>Name of the Task</h3>
-                                  <div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>
-                                  <div className="clearfix"></div>
-                                  <div className="list_icon mart0">
-                                    <span className="price">Rs. 18,500</span>
-                                    <span className="price pull-right">4 Sessions</span>
+                              <div className="card_block swiper-slide" key={idx}>
+                                <div className="">
+                                    <h3>Name of the Task</h3>
+                                    <div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>
                                     <div className="clearfix"></div>
-                                    <i className="c_image ml my-ml-Ideator"></i>
-                                    <div className="clearfix"></div>
-                                    <span className="price"><div className="form-group">
-                                      <label>
-                                        <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
-                                <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                          className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
-                                        Mins
-                              </label>
-                                    </div></span>
-                                    <button className="btn btn-danger pull-right">{activity.mode}</button>
-                                  </div><div className="block_footer"><span> {activity.displayName} </span></div></div>
+                                    <div className="list_icon mart0">
+                                      <span className="price">Rs. 18,500</span>
+                                      <span className="price pull-right">4 Sessions</span>
+                                      <div className="clearfix"></div>
+                                      <i className="c_image ml my-ml-Ideator"></i>
+                                      <div className="clearfix"></div>
+                                      <span className="price"><div className="form-group">
+                                        <label>
+                                          <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
+                                      <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                            className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
+                                          Mins
+                                        </label>
+                                      </div></span>
+                                      <button className="btn btn-danger pull-right">{activity.mode}</button>
+                                    </div>
+                                    <div className="block_footer"><span> {activity.displayName} </span></div>
+                                </div>
                               </div>
                             )
                           }

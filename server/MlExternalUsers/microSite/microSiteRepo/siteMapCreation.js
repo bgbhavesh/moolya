@@ -10,10 +10,10 @@ async function getSiteMapUrls() {
   const siteMapUrls = MlSitemap.find({},{sort:{"$natural": 1}}).fetch();
   _.forEach(siteMapUrls, (sMapUrl) => {
     urls.push({
-      url: sMapUrl.seoUrl,
+      url: '/view' +sMapUrl.seoUrl,
       changefreq: sMapUrl.changeFreq,
       priority: sMapUrl.priority,
-      lastmod: '2005-01-01'
+      lastmodISO: '2015-06-27T15:30:00.000Z',
     })
   })
   return urls

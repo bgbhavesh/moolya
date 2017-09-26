@@ -233,7 +233,8 @@ export default class AppContactDetails extends React.Component {
 
   render() {
     let that = this;
-    let details = that.state.details
+    let details = that.state.details;
+    let verifiedMobileNumbers = this.props.verifiedMobileNumbers;
     let clusterId = this.props.clusterId || ""
     let numberTypeQuery = gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -264,6 +265,14 @@ export default class AppContactDetails extends React.Component {
             <li className={this.state.activeTab}>
               <a href="#contactA" data-toggle="tab"><b><FontAwesome name='plus-square'/></b></a>
             </li>
+            {/* FOR VIERIFIED MOBILE NUMBERS */}
+            {verifiedMobileNumbers && (verifiedMobileNumbers.map(function (options, key) {
+              return (
+                <li key={key} onClick={that.tabSelected.bind(that, key)}>
+                  <a data-toggle="pill" href={'#Official' + key} className="add-contact">{options.numberType}</a>
+                </li>
+              )
+            }))}
             {details && (details.map(function (options, key) {
               return (
                 <li key={key} onClick={that.tabSelected.bind(that, key)}>
@@ -300,6 +309,30 @@ export default class AppContactDetails extends React.Component {
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>
+
+
+            {/* FOR VIERIFIED MOBILE NUMBERS */}
+            {verifiedMobileNumbers && (verifiedMobileNumbers.map(function (options, key) {
+
+              return (<div className="tab-pane" id={'Official' + key} key={key}>
+                <div className="form-group mandatory">
+                  <input type="text" placeholder="Select Number Type" value={options.numberType}
+                         className="form-control float-label" readOnly={true}/>
+                </div>
+                <div className="form-group">
+                  <input type="text" placeholder="Enter Country Code" value={options.phoneNumberCode}
+                         className="form-control float-label" readOnly={true}/>
+                </div>
+                {/*defaultValue={countryPhoneCode} valueKey={countryPhoneCode}*/}
+                <div className="form-group mandatory">
+                  <input type="text" placeholder="Enter Number" id="phoneNumber" value={options.mobileNumber}
+                         className="form-control float-label" readOnly={true}/>
+                </div>
+              </div>)
+            }))}
+
+
+
             {details && (details.map(function (options, key) {
 
               return (<div className="tab-pane" id={'numberType' + key} key={key}>

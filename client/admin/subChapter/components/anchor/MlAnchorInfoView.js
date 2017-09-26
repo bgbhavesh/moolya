@@ -252,7 +252,12 @@ export default class MlAnchorInfoView extends React.Component {
 
                   <p>
                     <br />
-                    <b>Email : </b>{this.state.selectedUser.profile.email}
+                    <b>First Name : </b>{this.state.selectedUser.profile.firstName} <br />
+                    <b>Last Name : </b>{this.state.selectedUser.profile.lastName} <br />
+                    <b>Email : </b>{this.state.selectedUser.profile.email} <br />
+                    <b>Date of Birth : </b>{new Date(this.state.selectedUser.profile.dateOfBirth).toDateString()} <br />
+                    <b>Gender : </b>{this.state.selectedUser.profile.genderType} <br />
+                    {console.log(this.state.selectedUser)}
                   </p>
 
                 </div>
@@ -298,19 +303,21 @@ export default class MlAnchorInfoView extends React.Component {
                 {
                   !this.state.contactDetails.length && <p>No contact details added</p>
                 }
+                <ul className={'list-info'}>
                 {
                   this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
                     const {emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber} = cd;
                     return (
-                      <p key={index}>
+                      <li key={index}>
                         {buildingNumber}, {street}, {area}, {landmark}, {town}, {stateId}, {countryId}-{pincode}`
                         <br />
                         Tel: {contactNumber}
                         <br />
                         Email: {emailId}
-                      </p>);
+                      </li>);
                   })
                 }
+                </ul>
               </ScrollArea>
             </div>
           </div>

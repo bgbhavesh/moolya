@@ -1057,7 +1057,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = data.map(function (doc) {
 
       let transactionType = doc.transactionType;
-      if(transactionType == "connectionRequest" || transactionType == "interaction" || transactionType == "investments") {
+      let transactionsTypeCheck = [
+        'connectionRequest',
+        'interaction',
+        'investments',
+        'appointment'
+      ];
+      if( transactionsTypeCheck.indexOf(transactionType) >= 0 ) {
         if(doc.fromUserType === 'user') {
           let fromUserProfile;
           if(doc.fromProfileId) {

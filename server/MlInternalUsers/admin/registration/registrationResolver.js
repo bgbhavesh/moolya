@@ -1630,7 +1630,8 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
 MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.mobileNumber && args.otp) {
-    const result = MlAccounts.verifyMobileNumberOtp(args.mobileNumber, args.otp);
+    var otp = args.otp?Number(args.otp):null;
+    const result = MlAccounts.verifyMobileNumberOtp(args.mobileNumber,otp);
     if (result && result.error) {
       let response = new MlRespPayload().errorPayload(result.reason || "", result.code);
       return response;

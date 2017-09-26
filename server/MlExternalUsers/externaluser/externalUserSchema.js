@@ -79,6 +79,14 @@ let externalUser = `
         
     }
     
+    type mobileNumbersSchema{ 
+      countryId         : String
+      mobileNumber      : String
+      verified          : Boolean
+      phoneNumberCode   : String
+      numberType        : String
+    }
+    
      type EmailInfoSchema{
       emailIdType        : String
       emailIdTypeName        : String
@@ -116,6 +124,7 @@ let externalUser = `
        emailInfo          : [EmailInfoSchema]
        contactInfo        : [ContactInfoSchema]
        socialLinkInfo     : [SocialLinkInfoSchema]
+       mobileNumbers      : [mobileNumbersSchema]
     }
     
     type externalUserProfiles{

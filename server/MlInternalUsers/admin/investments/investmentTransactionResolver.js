@@ -4,6 +4,7 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
 }
@@ -122,6 +123,7 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
       let userId = processSetup&&processSetup.userId?processSetup.userId:""
        var userDetails = mlDBController.findOne('users', {_id:userId}, context)
        MlEmailNotification.processSetupCompletedByAdmin(userDetails)
+       MlSMSNotification.processSetupCompleted(userId)
      }
 
     let code = 200;

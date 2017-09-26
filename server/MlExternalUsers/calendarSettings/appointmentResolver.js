@@ -1332,3 +1332,19 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
   let response = new MlRespPayload().successPayload(result, code);
   return response;
 };
+
+MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, context, info) => {
+
+};
+
+MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, args, context, info) => {
+
+};
+
+MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, context, info) => {
+
+};
+
+MlResolver.MlMutationResolver["signOffUserServiceCardOrder"] = (obj, args, context, info) => {
+
+};

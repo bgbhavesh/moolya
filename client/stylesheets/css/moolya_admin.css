@@ -102,7 +102,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .admin_main_wrap .form-control:focus {border-color: #FFC20E;}
 
 .cluster_status{width: 15px;height: 15px;position: absolute;left: 2px;top: 2px;z-index: 2;border-radius: 50%;line-height: 23px;}
-.list_block .list-moolya-icon .ml{position: absolute; color: #ef4647; font-size: 20px; top: 1px; z-index: 9999; left: 5px; line-height: normal; text-shadow: none;}
+.list_block .list-moolya-icon .ml{position: absolute; color: #ef4647; font-size: 20px; top: 1px; z-index: 9999; right: 3px; line-height: normal; text-shadow: none;}
 .cluster_flag{width: 35px;background: #ccc;height: 22px;position: absolute;z-index: 3;margin: 2px;border-radius: 4px;    background-repeat: no-repeat;background-size: contain;background-position: center center;}
 .cluster_status.active_cl{color: #fff;background: #4cae4c; font-size: 14px;}
 .cluster_status.inactive_cl{color: #fff;background: #ff0000; font-size: 14px;}

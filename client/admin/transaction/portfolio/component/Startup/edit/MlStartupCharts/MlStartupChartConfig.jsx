@@ -127,7 +127,7 @@ export default class MlStartupChartConfig extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.props.selectedTabKey}/>
   }
 
 }

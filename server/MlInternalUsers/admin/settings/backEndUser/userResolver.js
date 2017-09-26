@@ -1199,6 +1199,7 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   if(resp){
     MlNotificationController.profileUpdated(context.userId);
     MlSMSNotification.profileUpdated(context.userId);
+    MlEmailNotification.onSuccessfulProfileUpdate(context.userId);
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
     return resp
   }

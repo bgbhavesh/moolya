@@ -291,8 +291,124 @@ class MlNotificationControllerClass {
       this.createNewNotification(obj)
     }
   }
+
+  onNewRegistrationRequest(registrationId,communityName,context){
+    let payload  = mlDBController.findOne('MlRegistration',registrationId,context)
+    let userName = payload && payload.registrationInfo && payload.registrationInfo.userName ? payload.registrationInfo.userName : ""
+    let userDetails =  mlDBController.findOne('users', {username: userName}) || {}
+    let userId = userDetails&&userDetails._id?userDetails._id:""
+    let notifyMessage = "Your new registration request for "+communityName+ " has been submitted successfully."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"newRegistrationRequest",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onNewOfficeRequest(payload){
+    let userId = payload&&payload.userId?payload.userId:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    let notifyMessage = "New Office Request has been sent on "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"newOfficeRequest",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+/*
+  onPricipalInvitation(officeId){
+    if(officeId){
+      let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      let notifyMessage = "You have been invited to be the Principal on "+updatedDateTime+"."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"onPrincipalInvitation",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: officeUserId
+      }
+      this.createNewNotification(obj)
+    }
+  }
+*/
+
+  officeBearerApprovedByAdmin(userId){
+    if(userId){
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      let notifyMessage = "Office Bearer request has been approved on  "+updatedDateTime+"."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"officeBearerApproved",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: userId
+      }
+      this.createNewNotification(obj)
+    }
+
+  }
+
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
+  }
+  onUserAssigned(collectionName,transactionId) {
+    if (transactionId) {
+      let userDetails= mlDBController.findOne(collectionName,{"transactionId":transactionId})||{};
+      let userId='';
+      //receiver user details
+      if(userDetails && userDetails.registrationInfo){
+        userId = userDetails&&userDetails.registrationInfo&&userDetails&&userDetails.registrationInfo.userId?userDetails.registrationInfo.userId:'';
+      }else{
+        userId = userDetails&&userDetails.userId?userDetails.userId:'';
+      }
+      //
+      // let userInfo=mlDBController.findOne('users', {_id: userId}) || {};
+
+      //let allocationId =  userDetails&&userDetails.allocation&&userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:''
+      //let userInfo =  mlDBController.findOne('users', {_id: userId}) || {}
+      // let firstName = userInfo&&userInfo.profile&&userInfo.profile.firstName?userInfo.profile.firstName:"";
+      // let lastName = userInfo&&userInfo.profile&&userInfo.profile.lastName?userInfo.profile.lastName:"";
+
+      // community manager details
+      let allocationId = userDetails&&userDetails.allocation && userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:'';
+      let allocationUserDetails =  mlDBController.findOne('users', {_id: allocationId}) || {}
+      let comMngFirstName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.firstName?allocationUserDetails.profile.firstName:"";
+      let comMngLastName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.lastName?allocationUserDetails.profile.lastName:"";
+      let genderType = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.genderType?allocationUserDetails.profile.genderType:"";
+      let gender;
+      if(genderType == "male"){
+        gender = "Mr"
+      }else{
+        gender = "Ms"
+      }
+      var notifyMessage = gender+" "+comMngFirstName+"will be your Community Manager and will help you complete your moolya profile."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType": "onUserAssigned",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: userId
+      }
+      this.createNewNotification(obj)
+    }
   }
 
 }

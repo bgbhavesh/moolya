@@ -56,8 +56,13 @@ export default class MlShareCalendar extends React.Component {
 
   async deactivateCalendar(sharedId) {
     const resp = await deactivateSharedDetailsHandler(sharedId)
-    console.log('resp', resp);
-    return resp;
+    if(resp) {
+    if(resp.success) {
+      toastr.success(resp.result)
+    } else {
+      toastr.error('Error Deactivating')
+    }
+    }
   }
 
 

@@ -109,24 +109,37 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
    */
 
   graphQLServer.get(config.view, async function (req, res, next) {
-      console.log('View Path Entering');
-      let pathAbout = process.cwd() + '/../web.browser/app/microSite/views/about.pug';
-    console.log('Path of Jade files',pathAbout);
-      const pathName = req.url;
-      const originalUrl = req.originalUrl.replace('/view', '');
-      let proto = req.protocol;
-      if (req.get('x-forwarded-proto').includes('https')) {
-        proto = 'https'
-      }
-      const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
-      console.log('In Express Path ', fullUrl);
+      try {
+        console.log('View Path Entering');
+        let pathAbout = process.cwd() + '/../web.browser/app/microSite/views/about.pug';
 
-      const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
-      console.log('After FindPortFolioDetails', portFolio);
-      if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
-        res.redirect('/login');
+        console.log('Path of Jade files', pathAbout);
+        console.log('URL', req.url);
+        console.log('originalUrl', req.originalUrl);
+        console.log('proto', req.protocol);
+        console.log('forward-proto', req.get('x-forwarded-proto'));
+        console.log('host', req.get('host'));
+
+        const pathName = req.url;
+        const originalUrl = req.originalUrl.replace('/view', '');
+        let proto = req.protocol;
+        if (req.get('x-forwarded-proto').includes('https')) {
+          proto = 'https'
+        }
+        const fullUrl = proto + '://' + req.get('host') + req.originalUrl;
+        console.log('In Express Path ', fullUrl);
+
+        const portFolio = await findPortFolioDetails(pathName, fullUrl, originalUrl);
+        console.log('After FindPortFolioDetails', portFolio);
+        if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
+          res.redirect('/login');
+        }
+        res.render(pathAbout, portFolio);
+      } catch (e) {
+        console.log(e)
+        next();
       }
-      res.render(pathAbout, portFolio);
+
     }
   )
 

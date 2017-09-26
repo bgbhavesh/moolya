@@ -17,5 +17,5 @@ export async function fetchMicroSiteUrl() {
     forceFetch: true
   })
   const id = result.data.getMySiteMapUrl;
- return id
+  return id
 }

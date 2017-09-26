@@ -223,10 +223,78 @@ class MlNotificationControllerClass {
     }
     this.createNewNotification(obj)
   }
-
+  profileUpdated(userId){
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "Your profile has been updated by you on  "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      "subNotificationType":"profileUpdate",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+  changePassword(userId){
+    if(userId){
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var notifyMessage = "Your password was last changed on "+updatedDateTime+"."
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"changePassword",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: userId
+      }
+      this.createNewNotification(obj)
+    }
+  }
+  officeActivation(officeId) {
+    if (officeId){
+      var office = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      if (office) {
+        var notifyMessage = "Your customized office has been activated."
+        let obj = {
+          notificationType: "PUSHNOTIFICATION",
+          "subNotificationType":"officeActivation",
+          message: notifyMessage,
+          fromUserId: "system",
+          toUserId: office.userId
+        }
+        this.createNewNotification(obj)
+      }
+    }
+  }
+  officeMemberIndependent(officeMemberId,userId) {
+    if(userId && officeMemberId){
+      var defaultProfile = new MlUserContext().userProfileDetails(userId);
+      let firstName=defaultProfile && defaultProfile.firstName?defaultProfile.firstName:'';
+      let lastName=defaultProfile && defaultProfile.lastName?defaultProfile.lastName:'';
+      var currentdate = new Date();
+      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      var updatedDateTime = date+" "+time
+      var notifyMessage = "Go Independent request for "+firstName+" "+lastName +" has been received on "+updatedDateTime+".";
+      let obj = {
+        notificationType: "PUSHNOTIFICATION",
+        "subNotificationType":"officeMemberIndependent",
+        message: notifyMessage,
+        fromUserId: "system",
+        toUserId: officeMemberId
+      }
+      this.createNewNotification(obj)
+    }
+  }
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
   }
+
 }
 
 const MlNotificationController = new MlNotificationControllerClass();

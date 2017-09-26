@@ -10,5 +10,5 @@ var _ = require('lodash');
 MlResolver.MlQueryResolver['getMySiteMapUrl'] = (obj, args, context, info) => {
   let siteMapObject = MlSitemap.findOne({userId: context.userId}) || {}
   let seoUrl = siteMapObject.seoUrl;
-  return {url:'view' + seoUrl}
+  return {url:seoUrl}
 }

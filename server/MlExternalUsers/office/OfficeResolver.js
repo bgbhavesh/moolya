@@ -13,6 +13,7 @@ import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAl
 import mlOfficeInteractionService from './mlOfficeInteractionRepo'
 import MlAccounts from '../../commons/mlAccounts';
 import MlSMSNotification from '../../mlNotifications/mlSmsNotifications/mlSMSNotification'
+import MlNotificationController from '../../mlNotifications/mlAppNotifications/mlNotificationsController';
 
 let request = require('request');
 var base64 = require('base64-min');
@@ -330,6 +331,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
     }else if(result){
         MlEmailNotification.bespokeOfficeActivated( args.id);
         MlSMSNotification.sendSMSonOfficeActivation(args.id, context);
+        MlNotificationController.officeActivation(args.id)
      }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){
@@ -864,7 +866,14 @@ MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context
       }, context);
 
       let resp = mlDBController.update('MlOfficeMembers', memberId, {isIndependent : true}, {$set: true}, context);
-
+      // if(resp){
+      //   if(finalRegData&&finalRegData.userName){
+      //     let userInfo=mlDBController.findOne('users', {username: finalRegData.userName}) || {}
+      //     if(userInfo){
+      //       MlNotificationController.officeMemberIndependent(userInfo._id,context.userId)
+      //     }
+      //   }
+      // }
       let code = 200;
       let response = new MlRespPayload().successPayload('Go independent requested successfully', code);
       return response;

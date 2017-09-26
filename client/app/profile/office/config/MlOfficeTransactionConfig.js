@@ -52,6 +52,7 @@ const mlOfficeTransactionConfig = new MlViewer.View({
                               communityName
                               transactionType
                               activity
+                              registrationId
                             }
                           }
                         }

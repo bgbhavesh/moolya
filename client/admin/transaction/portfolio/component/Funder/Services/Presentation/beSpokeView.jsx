@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {render} from "react-dom";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
@@ -21,7 +20,6 @@ export default class  BeSpokeView extends Component {
   }
 
   saveData() {
-    console.log("this.props.data:",this.props.data);
     if(this.props.data && this.props.data._id) {
       this.props.updateBeSpokeData(true);
     }else {
@@ -65,6 +63,7 @@ export default class  BeSpokeView extends Component {
     return(
       <div>
         <div className="tab_wrap_scroll">
+          <div className="col-md-12 nopadding">
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
@@ -117,6 +116,7 @@ export default class  BeSpokeView extends Component {
                     multi
                     options={options}
                     placeholder='Conversation Type'
+                    disabled={this.props.data.mode === 'online'?false: true}
                     defaultValue={ this.props.data ? this.props.data.conversation : ""}
                     value={ this.props.data ? this.props.data.conversation : ""}
                     onChange={(e)=>this.props.conversation(e,'conversation')} >
@@ -183,11 +183,13 @@ export default class  BeSpokeView extends Component {
               </form>
             </div>
           </div>
+          </div>
+          <br className="brclear"/>
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
-        <br className="clearfix"/>
+        
           <br className="clearfix"/>
         </div>
       </div>

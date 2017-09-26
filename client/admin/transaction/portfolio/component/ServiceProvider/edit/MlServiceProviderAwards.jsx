@@ -408,7 +408,7 @@ export default class MlServiceProviderAwards extends Component {
                           </div>
                           <div className="form-group">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                      inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                      inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
                                       defaultValue={this.state.data.year}
                                       closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                           </div>

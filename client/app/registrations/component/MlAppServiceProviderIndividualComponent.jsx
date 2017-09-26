@@ -425,7 +425,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
                            data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" ref={"dob"} timeFormat={false} inputProps={{placeholder: "Date Of Birth"}}
+                    <Datetime dateFormat="DD-MM-YYYY" ref={"dob"} timeFormat={false} inputProps={{placeholder: "Date Of Birth",readOnly:true}}
                               closeOnSelect={true} value={that.state.dateOfBirth}
                               onChange={that.ondateOfBirthSelection.bind(that)} isValidDate={ valid }
                               data-required={true} data-errMsg="Date Of Birth is required"/>
@@ -494,7 +494,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
                          placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Employment Date"}}
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Employment Date",readOnly:true}}
                             closeOnSelect={true} value={that.state.employmentDate}
                             onChange={that.onemploymentDateSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"

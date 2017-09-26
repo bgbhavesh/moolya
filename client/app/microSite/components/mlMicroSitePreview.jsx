@@ -24,10 +24,15 @@ export default class MlMicroSitePreview extends React.Component {
     const response = await fetchMicroSiteUrl()
     if (response) {
       let absoluteUrl = window.location.origin + '/' + response.url
-      if(typeof absoluteUrl =='undefined')
-        this.setState({src: absoluteUrl})
-      else
+      if(!absoluteUrl)
+      {
         this.setState({src: false})
+      }
+      else
+      {
+        this.setState({src: absoluteUrl})
+      }
+
       this.setState({loading: false})
 
     }

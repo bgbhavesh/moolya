@@ -12,7 +12,7 @@ export default class MlShareCalendarPresentation extends React.Component {
 
   render() {
     let that = this;
-    const { propsData } = this.props || {
+    const { propsData, deactivateLink } = this.props || {
       propsData: {
         ownerInfo: {}
       }
@@ -101,7 +101,7 @@ export default class MlShareCalendarPresentation extends React.Component {
                 </div>
               </div>
               <div className="col-md-6">
-                <a href="#" className="fileUpload mlUpload_btn release_cancel">Deactivate</a>
+                {propsData.isActive ? <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={()=>deactivateLink(propsData)}>Deactivate</a> : <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={()=>deactivateLink(propsData)}>Activate</a> }
               </div>
             </div>
           </div>

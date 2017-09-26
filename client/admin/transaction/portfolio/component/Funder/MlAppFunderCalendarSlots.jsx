@@ -104,19 +104,45 @@ export default class MlAppFunderCalendarSlots extends Component {
       return slot.shift === that.state.shift;
     });
     const slotTimings = slots.map(function(slot, index){
-      return(
-        <div className="col-md-4 col-sm-4 col-lg-3" key={index} >
-          <a href="">
-            <div className="funders_list_block" onClick={that.bookSlot.bind(that, slot.slotTime, index)}>
-              <h3>{slot.slotTime}</h3>
-              <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
-              <div className="block_footer">
-                <span>{slot.status === 0?"Available":slot.status===1?"Filling Fast":slot.status===2?"Busy":""}</span>
+      let date = new Date();
+      if(slot && slot.slotTime){
+        date = new Date(that.state.date);
+        let startDate =  slot.slotTime.split('-')[0];
+        let hours = startDate.split(':')[0];
+        let minutes = startDate.split(':')[1];
+        date.setHours(hours);
+        date.setMinutes(minutes);
+      }
+
+      if(date.getTime() >(new Date).getTime()) {
+        return (
+          <div className="col-md-4 col-sm-4 col-lg-3" key={index}>
+            <a href="">
+              <div className="funders_list_block" onClick={that.bookSlot.bind(that, slot.slotTime, index)}>
+                <h3>{slot.slotTime}</h3>
+                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+                <div className="block_footer">
+                  <span>{slot.status === 0 ? "Available" : slot.status === 1 ? "Filling Fast" : slot.status === 2 ? "Busy" : ""}</span>
+                </div>
               </div>
-            </div>
-          </a>
-        </div>
-      )
+            </a>
+          </div>
+        )
+      } else {
+        return (
+          <div className="col-md-4 col-sm-4 col-lg-3" key={index}>
+            <a href="">
+              <div className="funders_list_block" onClick={() => toastr.error("Slot not available") }>
+                <h3>{slot.slotTime}</h3>
+                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+                <div className="block_footer">
+                  <span> Not Available </span>
+                </div>
+              </div>
+            </a>
+          </div>
+        );
+      }
     });
 
     return (

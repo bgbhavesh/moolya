@@ -101,7 +101,7 @@ MlResolver.MlMutationResolver['deactivateSharedCalendar'] = (obj, args, context,
     'fromUserType': 'user'
   })
     let code = 200;
-    let resp = new MlRespPayload().successPayload("Deactivated successfully", code);
+    let resp = new MlRespPayload().successPayload(`${activityStatus}d successfully`, code);
     return resp;
 
 }
@@ -123,7 +123,8 @@ MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, 
         shareStartDate: { "$first": "$sharedStartDate"},
         shareEndDate: { "$first": "$sharedEndDate"},
         isDownloadable: { "$first": "$isDownloadable"},
-        createdAt: { "$first": "$createdAt"}
+        createdAt: { "$first": "$createdAt"},
+        isActive: {"$first": "$isActive"}
       }
     },
     { "$unwind": "$users" },
@@ -138,6 +139,7 @@ MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, 
       "shareEndDate": 1,
       "isDownloadable": 1,
       "createdAt": 1,
+      "isActive":1,
       "users": {
         "userId": 1,
         "profileId":1,
@@ -156,7 +158,8 @@ MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, 
         sharedStartDate: { "$first": "$shareStartDate"},
         sharedEndDate: { "$first": "$shareStartDate"},
         isDownloadable: { "$first": "$isDownloadable"},
-        createdAt: { "$first": "$createdAt"}
+        createdAt: { "$first": "$createdAt"},
+        isActive: {"$first": "$isActive"}
       }
     },
     { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
@@ -182,6 +185,7 @@ MlResolver.MlQueryResolver['fetchSharedCalendarDetails'] = (obj, args, context, 
         sharedEndDate: 1,
         isDownloadable: 1,
         createdAt:1,
+        isActive: 1,
         ownerInfo: {
           userId: "$userId",
           profileId: "$profileId",

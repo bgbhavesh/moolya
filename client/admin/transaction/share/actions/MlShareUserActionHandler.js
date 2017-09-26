@@ -19,6 +19,7 @@ query ($sharedId: String) {
         fileType
         libraryDocumentId
      }
+      isActive
       sharedEndDate
       sharedStartDate
       isDownloadable

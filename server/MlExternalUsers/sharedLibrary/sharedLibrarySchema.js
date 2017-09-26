@@ -69,6 +69,7 @@ let sharedLibrarySchema = `
       isSignedUrl: Boolean
       isDownloadable: Boolean
       createdAt:Date
+      isActive: Boolean
       ownerInfo: ShareOwnerInfo
     }
     

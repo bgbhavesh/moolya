@@ -234,7 +234,7 @@ export default class AppContactDetails extends React.Component {
   render() {
     let that = this;
     let details = that.state.details;
-    let verifiedMobileNumbers = this.props.verifiedMobileNumbers;
+    let verifiedMobileNumbers = this.props.verifiedMobileNumbers?this.props.verifiedMobileNumbers:[];
     let clusterId = this.props.clusterId || ""
     let numberTypeQuery = gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {

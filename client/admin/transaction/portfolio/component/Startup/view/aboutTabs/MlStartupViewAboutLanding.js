@@ -8,7 +8,7 @@ import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlStartupViewAboutusTabs from './MlStartupViewAboutusTabs'
-import {fetchDetailsStartupActionHandler} from '../../../../portfolio/actions/findPortfolioStartupDetails'
+import {fetchDetailsStartupActionHandler} from '../../../../../portfolio/actions/findPortfolioStartupDetails'
 
 
 export default class MlStartupViewAboutLanding extends Component {

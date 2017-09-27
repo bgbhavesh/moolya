@@ -3,10 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails';
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails';
+import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 var Rating = require('react-rating');
 

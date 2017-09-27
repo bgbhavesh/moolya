@@ -2,20 +2,27 @@
  * Created by vishwadeep on 14/6/17.
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 // import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
 import MlAppRegistrationWizard from '../../../registrations/component/MlAppRegistrationWizard'
 import MlConnectionRequest from './MlConnectionRequest';
 import MlInvestmentRequest from './MlInvestmentRequest'
-import MlShareCalendar from './MlShareCalendar'
+import MlShareCalendar from './MlShareCalendar';
+import MlAppointmentsDetailsComponent from '../../../myTransaction/component/appointments/component/MlAppointmentsDetailsComponent';
 
 export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
   switch (data.transactionType) {
     case 'officeRequest': {
       // return <MlOffice config={data}/>
-      return <MlEmptyView config={data}/>
+      return <MlEmptyView config={data} />
       break;
+    }
+    case 'appointment': {
+      // return (<h1>appointment testing</h1>);
+      return (
+        <MlAppointmentsDetailsComponent transactionType={data.transactionType} appointmentId={data._id} />
+      );
     }
     case 'office': {
       return getOfficeActivity(data)
@@ -23,52 +30,52 @@ export default function MlGenericTransactionAccordion(props) {
     }
     case 'registration': {
       // return <MlAppTransaction config={data}/>
-      return <MlAppRegistrationWizard config={data._id} isAccodion={true}/>
+      return <MlAppRegistrationWizard config={data._id} isAccodion={true} />
       break;
     }
     case 'sharing':
-      return <MlShareCalendar data={data}/>
+      return <MlShareCalendar data={data} />
       break;
     case 'connectionRequest':
     case 'interaction': {
-      return <MlConnectionRequest data={data}/>
+      return <MlConnectionRequest data={data} />
       break;
     }
     case 'investments': {
-      return <MlInvestmentRequest data={data}/>
+      return <MlInvestmentRequest data={data} />
       break;
     }
-    default :
-      return <MlEmptyView/>
+    default:
+      return <MlEmptyView />
   }
 }
 
-function getOfficeActivity  (data) {
-  switch(data.activity){
-    case 'officeDeactivate':{
+function getOfficeActivity(data) {
+  switch (data.activity) {
+    case 'officeDeactivate': {
       console.log('officeDeactivate')
-      return <MlEmptyView/>
+      return <MlEmptyView />
       break;
     }
-    case 'officeBearerInvitation':{
+    case 'officeBearerInvitation': {
       console.log('officeBearerInvitation')
-      return <MlAppRegistrationWizard config={data.registrationId} isAccodion={true}/>
+      return <MlAppRegistrationWizard config={data.registrationId} isAccodion={true} />
       break;
     }
-    case 'officeBearerRetire':{
+    case 'officeBearerRetire': {
       console.log('officeBearerRetire')
       break;
     }
-    case 'principal':{
+    case 'principal': {
       console.log('principal')
       break;
     }
-    case 'officeBearerGoIndependent':{
+    case 'officeBearerGoIndependent': {
       console.log('officeBearerGoIndependent')
       break;
     }
-    default :
-      return <MlEmptyView/>
+    default:
+      return <MlEmptyView />
   }
 }
 

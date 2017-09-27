@@ -182,7 +182,7 @@ export default class MlCompanyEmployment extends React.Component{
           default={true}
         >
         <div className="panel panel-default">
-          <div className="panel-heading">Company Employment{
+          <div className="panel-heading">Employment Of Company{
             <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
               src="/images/add.png"/></div>}
           </div>

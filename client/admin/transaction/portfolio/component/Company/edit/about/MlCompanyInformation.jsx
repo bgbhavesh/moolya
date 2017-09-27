@@ -50,6 +50,8 @@ export default class MlCompanyInformation extends React.Component{
         delete data[propName];
       }
     }
+    data = _.omit(data, "__typename");
+    data = _.omit(data, ["privateFields"]);
     this.props.getInfo(data,this.state.privateKey)
   }
   onLockChange(fieldName,field, e){

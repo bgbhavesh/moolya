@@ -183,6 +183,24 @@ export default class MlAnchorInfoView extends React.Component {
     })
   }
 
+  renderSocialLinks(profile) {
+    let linkComponent = [];
+    if (profile && profile.InternalUprofile && profile.InternalUprofile.moolyaProfile && profile.InternalUprofile.moolyaProfile.socialLinksInfo) {
+      linkComponent = profile.InternalUprofile.moolyaProfile.socialLinksInfo.map((link) => (
+        <li><strong>{link.socialLinkTypeName}</strong>: {link.socialLinkUrl}</li>
+      ));
+    }
+    if (linkComponent.length) {
+      return (
+        <div>
+          <strong><center>Social Links</center></strong>
+          {linkComponent}
+        </div>
+      )
+    }
+    return '';
+  }
+
   render() {
 
     let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
@@ -257,6 +275,7 @@ export default class MlAnchorInfoView extends React.Component {
                     <b>Email : </b>{this.state.selectedUser.profile.email} <br />
                     <b>Date of Birth : </b>{new Date(this.state.selectedUser.profile.dateOfBirth).toDateString()} <br />
                     <b>Gender : </b>{this.state.selectedUser.profile.genderType} <br />
+                    {this.renderSocialLinks(this.state.selectedUser.profile)}
                     {console.log(this.state.selectedUser)}
                   </p>
 
@@ -329,10 +348,10 @@ export default class MlAnchorInfoView extends React.Component {
               <a onClick={this.changePath} href="" className="fileUpload mlUpload_btn">Enter into
                 subchapter</a>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 text-center">
               {!this.props.isAdmin ?
-                <a href="" id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
-                  invited</a> : <div></div>}
+                <span id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
+                  invited</span> : <div></div>}
             </div>
           </div>
         </div>

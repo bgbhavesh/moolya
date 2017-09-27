@@ -131,18 +131,25 @@ class MlAppServiceSelectTask extends Component{
                 <div className="swiper-wrapper">
                   { data.activities && data.activities.map((activity, index) => {
                     return (
-                      <div className="swiper-slide funding_list list_block notrans" key={index}>
-                        <p className="online">{activity.mode}</p>
-                        <span>Duration:</span><br />
-                        <div className="form-group">
-                          <label><input type="text" className="form-control inline_input"
-                                        value={activity.duration.hours || 0} disabled /> Hours
-                                 <input type="text" className="form-control inline_input"
-                                        value={activity.duration.minutes || 0} disabled /> Mins
+                    <div className="col-lg-2 col-md-4 col-sm-4">
+                      <div className="card_block"><h3>Name of the Task</h3>
+                        <div className="active"></div>
+                        <div className="clearfix"></div>
+                        <div className="list_icon mart0">
+                          <span className="price">Rs. 18,500</span>
+                          <span className="price pull-right">4 Sessions</span>
+                          <div className="clearfix"></div>
+                          <i className="c_image ml my-ml-Ideator"></i>
+                          <div className="clearfix"></div>
+                          <span className="price"> <div className="form-group">
+                          <label><span>{activity.duration.hours || 0} Hours</span>
+                                 <span> {activity.duration.minutes || 0} Mins </span>
                           </label>
-                        </div>
-                        <h3>{activity.displayName}</h3>
-                      </div>
+                        </div></span>
+                          <button className="btn btn-danger pull-right">{activity.mode}</button>
+                        </div><div className="block_footer"><span>{activity.displayName}</span></div></div>
+                    </div>
+
                     )
                   })}
                 </div>
@@ -282,3 +289,15 @@ MlAppServiceSelectTask.propTypes = {
 };
 export default MlAppServiceSelectTask;
 
+{ /* <div className="swiper-slide funding_list list_block notrans" key={index}>
+ <p className="online">{activity.mode}</p>
+ <span>Duration:</span><br />
+ <div className="form-group">
+ <label><input type="text" className="form-control inline_input"
+ value={activity.duration.hours || 0} disabled /> Hours
+ <input type="text" className="form-control inline_input"
+ value={activity.duration.minutes || 0} disabled /> Mins
+ </label>
+ </div>
+ <h3>{activity.displayName}</h3>
+ </div>*/}

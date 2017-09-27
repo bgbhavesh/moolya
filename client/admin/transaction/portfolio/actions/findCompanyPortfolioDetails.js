@@ -20,6 +20,8 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
                   rating{
@@ -28,6 +30,8 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
                   serviceProducts{
@@ -36,6 +40,8 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       privateFields{
                           keyName,
                           booleanKey
+                          index
+                          tabName
                       }
                   },
                   information{
@@ -44,6 +50,8 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
                   clients{
@@ -60,6 +68,8 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
             }

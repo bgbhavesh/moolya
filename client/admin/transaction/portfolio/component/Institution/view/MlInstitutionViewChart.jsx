@@ -311,7 +311,7 @@ export default class MlInstitutionViewChart extends React.Component{
           name:"Revenue"
         },
         {
-          field:"Liablity",
+          field:"Liability",
           name:"Liability"
         }
       ],

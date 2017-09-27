@@ -229,7 +229,7 @@ export default class MlAppCommunitiesList extends Component {
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                        labelKey={'label'} placeholder="Country of Operations"
+                                        labelKey={'label'} placeholder="Country of Operations" mandatory={true}
                                         selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery}
                                         isDynamic={true} queryOptions={clusterOptions}
                                         onSelect={this.optionsBySelectOperationCountry.bind(this)}/>

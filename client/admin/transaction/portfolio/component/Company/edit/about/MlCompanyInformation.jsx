@@ -50,6 +50,8 @@ export default class MlCompanyInformation extends React.Component{
         delete data[propName];
       }
     }
+    data = _.omit(data, "__typename");
+    data = _.omit(data, ["privateFields"]);
     this.props.getInfo(data,this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
@@ -64,7 +66,7 @@ export default class MlCompanyInformation extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName}
     this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()

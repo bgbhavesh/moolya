@@ -1335,6 +1335,52 @@ MlResolver.MlMutationResolver["fetchAdminSessionAppointment"] = (obj, args, cont
 
 MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, context, info) => {
 
+  let appointmentId = args.appointmentId;
+  let appointmentInfo = mlDBController.findOne('MlAppointments', {appointmentId: appointmentId}, context);
+  if(!appointmentInfo || !appointmentInfo.appointmentInfo || appointmentInfo.appointmentInfo.resourceType !== "ServiceCard" ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not found', code);
+    return response;
+  }
+
+  let serviceId = appointmentInfo.appointmentInfo.serviceCardId;
+  let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+  if( !serviceInfo ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    return response;
+  }
+
+  if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isReschedulable ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule', code);
+    return response;
+  }
+
+  let noOfReschedule = serviceInfo.termsAndCondition.noOfReschedulable || 0;
+  let rescheduleTrails = appointmentInfo.rescheduleTrail ? rescheduleTrail.rescheduleTrail.length : 0;
+  if( noOfReschedule <= rescheduleTrails ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule due to max no of reschedule already done', code);
+    return response;
+  }
+
+  let memberResponse = mlDBController.update('MlAppointmentMembers', {appointmentId: appointmentId}, { isCancelled: true }, {$set:true, multi: true}, context);
+  if(!memberResponse){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Unable to cancel appointment', code);
+    return response;
+  }
+  let appointmentResponse = mlDBController.update('MlAppointments', {appointmentId: appointmentId}, { isCancelled: true }, {$set:true, multi: true}, context);
+  if(!response) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Unable to cancel appointment', code);
+    return response;
+  }
+
+  let result = new MlRespPayload().successPayload('Appointment Cancel Successfully', 200);
+  return result;
+
 };
 
 MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, args, context, info) => {

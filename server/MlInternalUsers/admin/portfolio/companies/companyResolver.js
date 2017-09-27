@@ -149,18 +149,26 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioCharts'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
-    let startAboutUsArray = {}
+    let companyAboutUsArray = {}
     let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startAboutUsArray["aboutUs"] = portfolio&&portfolio.aboutUs?portfolio.aboutUs:{};
-    startAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
-    startAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
-    startAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
-    startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    companyAboutUsArray["aboutUs"] = portfolio&&portfolio.aboutUs?portfolio.aboutUs:{};
+    companyAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
+    companyAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
+    companyAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
+    companyAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
 
     //private keys for service products
-    var object = startAboutUsArray["serviceProducts"];
+    var object = companyAboutUsArray["serviceProducts"];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
-    startAboutUsArray["serviceProducts"] = filteredObject
+    companyAboutUsArray["serviceProducts"] = filteredObject
+
+    var aboutUsObject = companyAboutUsArray["aboutUs"];
+    var aboutUsFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, aboutUsObject, context)
+    companyAboutUsArray["aboutUs"] = aboutUsFilteredObject
+
+    var infoObject = companyAboutUsArray["information"];
+    var infoFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, infoObject, context)
+    companyAboutUsArray["information"] = infoFilteredObject
 
     // if(startAboutUsArray && startAboutUsArray.clients){
     //   startAboutUsArray.clients.map(function(client,index) {
@@ -173,8 +181,8 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
     //for view action
     MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
 
-    if (startAboutUsArray) {
-      return startAboutUsArray
+    if (companyAboutUsArray) {
+      return companyAboutUsArray
     }
 
   }

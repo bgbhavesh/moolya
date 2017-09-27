@@ -329,10 +329,10 @@ export default class MlAnchorInfoView extends React.Component {
               <a onClick={this.changePath} href="" className="fileUpload mlUpload_btn">Enter into
                 subchapter</a>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 text-center">
               {!this.props.isAdmin ?
-                <a href="" id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
-                  invited</a> : <div></div>}
+                <span id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
+                  invited</span> : <div></div>}
             </div>
           </div>
         </div>

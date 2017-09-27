@@ -5,8 +5,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../../../../commons/utils/formElemUtil'
 
 var FontAwesome = require('react-fontawesome');
 

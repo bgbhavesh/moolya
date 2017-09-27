@@ -200,7 +200,7 @@ export default class MlStartupEmployeeBreakup extends React.Component{
           default={true}
         >
         <div className="panel panel-default">
-          <div className="panel-heading">Employee Breakup{
+          <div className="panel-heading">Employee Breakup At Department{
             <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
             src="/images/add.png"/></div>}
 

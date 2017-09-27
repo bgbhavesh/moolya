@@ -83,8 +83,7 @@ export default class MlAppInvestmentItem extends Component {
     }, 0 );
     console.log("stageDataLegth",stageDataLegth)
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
+      <div>
           <div className="col-md-12 ideators_list">
             <div className="row">
               {stageDataLegth==0?<NoDataList moduleName={currentStage.stageName}/>:(
@@ -101,7 +100,7 @@ export default class MlAppInvestmentItem extends Component {
                     if( (currentStageIndex == 0 && !stageIndex ) || stageIndex == currentStageIndex ) {
                       switch(data.portfolio.communityCode){
                         case "IDE":
-                          return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
+                          return (<div className="col-md-3 col-sm-4 col-lg-2" key={idx} onClick={()=>that.selectPortfolio(data)}>
                             <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                               <div className="premium">
                           <span>
@@ -160,7 +159,6 @@ export default class MlAppInvestmentItem extends Component {
 
             </div>
           </div>
-        </div>
 
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>

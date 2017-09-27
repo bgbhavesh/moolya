@@ -308,7 +308,7 @@ class MlAssignBackendUsers extends React.Component {
               <div className="left_wrap">
                 <ScrollArea speed={0.8} className="left_wrap">
 
-                  <h2>Details</h2>
+                  {/*<h2>Details</h2>*/}
                   <form>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">

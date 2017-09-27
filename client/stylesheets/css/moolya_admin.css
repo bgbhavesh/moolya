@@ -1147,8 +1147,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .library-wrap .thumbnail .library_actions .fa.fa-share-alt{ margin-right: 5px; font-size: 12px;position:static;color:#fff;background:transparent;width:auto;height:auto;text-align:center;line-height:normal;border-radius:0%;cursor:pointer}
 .library-wrap .thumbnail .library_actions .fa.fa-minus{ margin-right: 5px; font-size: 12px;position:static;color:#fff;background:transparent;width:auto;height:auto;text-align:center;line-height:normal;border-radius:0%;cursor:pointer}*/
 .library-wrap .thumbnail .title{position:absolute;background:#273545;color:#fff;text-align:center;font-size:13px;bottom:0;width:100%;border-radius:0 0 4px 4px;text-shadow:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;padding:0 5px;line-height:25px}
-.library-wrap .thumbnail .fa.fa-lock{position:absolute;left:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
-.library-wrap .thumbnail .fa.fa-unlock{position:absolute;left:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-lock{position:absolute;left:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer;z-index: 9;}
+.library-wrap .thumbnail .fa.fa-unlock{position:absolute;left:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer;z-index: 9;}
 .library-wrap .thumbnail .icon_count{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647;height: 20px; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px; padding: 0px 5px;}
 .library-wrap .thumbnail .icon_count .fa.fa-share-alt{padding-right: 5px;}
 .library-wrap .thumbnail .icon_count_times{position: absolute; left: 0px; top: -6px; color: #FFF; background: #EF4647;height: 20px; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px; padding: 0px 5px;}
@@ -1156,7 +1156,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 /*.library-wrap .thumbnail .fa.fa-share-alt{position: absolute; right: 30px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}*/
 .library-wrap .thumbnail .fa.fa-minus{position: absolute; right: 6px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-times{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
-.library-wrap .thumbnail .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer;z-index: 1;}
+.library-wrap .thumbnail .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer;z-index: 9;}
 .library-wrap .thumbnail .fa.fa-clock-o{position:absolute;left:-6px;top:-6px;color:#fff;background:#273545;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .fa.fa-download{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .input_types {

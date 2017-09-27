@@ -991,8 +991,22 @@ class Library extends React.Component {
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
+
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleVideoLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+              ""
+              :
+              <FontAwesome name='trash-o' onClick={() =>  that.delete(id, "video")} />
+          }
+
+
+
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
               <source src={show.fileUrl} type="video/mp4"></source>
@@ -1064,8 +1078,21 @@ class Library extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
+
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleDocumentLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+              ""
+              :
+              <FontAwesome name='trash-o' onClick={() =>  that.delete(id, "document")} />
+          }
+
+
           <a href="" data-toggle="modal" data-target=".documentpop"
             onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>
           <div id="images" className="title">{show.fileName}</div>

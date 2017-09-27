@@ -1166,7 +1166,7 @@ MlResolver.MlMutationResolver["fetchAdminServiceAppointment"] = (obj, args, cont
         }
       }
     },
-    { "$project": { "service": 0, "task": 0, "isSameSession": 0 } },
+    { "$project": { "task": 0, "isSameSession": 0 } },
     {
       "$lookup":
       {

@@ -1385,6 +1385,74 @@ MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, 
 
 MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, args, context, info) => {
 
+  let appointmentId = args.appointmentId;
+  let appointmentInfo = mlDBController.findOne('MlAppointments', {appointmentId: appointmentId}, context);
+  if(!appointmentInfo || !appointmentInfo.appointmentInfo || appointmentInfo.appointmentInfo.resourceType !== "ServiceCard" ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not found', code);
+    return response;
+  }
+
+  let serviceId = appointmentInfo.appointmentInfo.serviceCardId;
+  let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+  if( !serviceInfo ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    return response;
+  }
+
+  if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isReschedulable ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule', code);
+    return response;
+  }
+
+  let noOfReschedule = serviceInfo.termsAndCondition ? serviceInfo.termsAndCondition.noOfReschedulable : 0;
+  let rescheduleTrails = appointmentInfo.rescheduleTrail ? rescheduleTrail.rescheduleTrail.length : 0;
+  if( noOfReschedule <= rescheduleTrails ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule due to max no of reschedule already done', code);
+    return response;
+  }
+  let taskId = appointmentInfo.appointmentInfo.taskId;
+  let sessionId = appointmentInfo.appointmentInfo.sessionId;
+
+  let day = args.userServiceCardAppointmentInfo.day; //date.getDate();
+  let month = args.userServiceCardAppointmentInfo.month; //date.getMonth();
+  let year = args.userServiceCardAppointmentInfo.year; //date.getFullYear();
+  let hours = args.userServiceCardAppointmentInfo.hours; //9;
+  let minutes = args.userServiceCardAppointmentInfo.minutes; // 0;
+  let appointment = MlAppointment.bookAppointment('appointmentId', taskId, sessionId, hours, minutes, day, month, year);
+  if(!appointment.success){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(appointment.message, code);
+    return response;
+  }
+
+  let update = mlDBController.update('MlAppointments', {
+     $set: {
+       isRescheduled: true,
+       startDate: appointment.start,
+       endDate: appointment.end
+     },
+    $push: {
+      rescheduleTrail : {
+        startDate: appointmentInfo.startDate,
+        endDate: appointmentInfo.endDate,
+        rescheduleBy: context.userId,
+        rescheduleAt: new Date()
+      }
+    }
+  }, { blackbox: true },  context);
+
+  if(!update){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Unable to reschedule appointment', code);
+    return response;
+  }
+  let code = 400;
+  let response = new MlRespPayload().errorPayload('Appointment reschedule successfully', code);
+  return response;
 };
 
 MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, context, info) => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { fetchAdminSessionAppointment } from '../../action/fetchAdminSessionAppointment';
+import { fetchAppAppointmentByTransactionId } from '../../action/fetchAppointment';
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class MlAppServiceSessionAppointment extends Component {
 
   async fetchServiceSessionAppointments() {
     if (this.state.orderId) {
-      let response = await fetchAdminSessionAppointment(this.state.orderId);
+      let response = await fetchAppAppointmentByTransactionId(this.state.orderId);
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};

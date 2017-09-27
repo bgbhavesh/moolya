@@ -35,6 +35,7 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.client = data.client ? data.client : {};
         data.owner = data.owner ? data.owner : {};
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
+        data.service = data.service ? data.service : {};
         this.setState({
           data
         });

@@ -97,7 +97,7 @@ export default class EmailVerification extends React.Component{
         });
       }else{
         if(!isTermsChecked){
-          toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
+          toastr.error("Please agree to 'Terms and Conditions' and 'Privacy Policy'");
         }
         if(!otp){
           toastr.error("Please enter OTP");

@@ -11,6 +11,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import { updateSubChapterActionHandler } from '../../actions/updateSubChapter'
 import { updateBackendUserActionHandler } from '../../../settings/backendUsers/actions/updateBackendUserAction'
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
+import moment from "moment";
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
@@ -77,8 +78,6 @@ class MlAnchorTabsContainer extends React.Component {
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
           stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
         }
-        console.log('############################3')
-        console.log(this.state.contactDetailsFormData.formData);
         if (this.state.contactDetailsFormData.formData.contactPersonRole && ! this.state.contactDetailsFormData.formData.addressTypeId) {
           toastr.error('Address type is required in contact form');
           return
@@ -123,6 +122,8 @@ class MlAnchorTabsContainer extends React.Component {
         return response;
       case 'users':
         const { profile } = this.state.contact;
+        // profile.dateOfBirth = profile.dateOfBirth ? new Date(profile.dateOfBirth) : null;
+        profile.dateOfBirth= profile.dateOfBirth?moment(profile.dateOfBirth).format(Meteor.settings.public.dateFormat):""
         const updateUserObject = {
           userId: this.state.contact._id,
           userObject: { profile, username: profile.email },

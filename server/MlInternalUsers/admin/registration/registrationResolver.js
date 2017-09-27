@@ -12,6 +12,7 @@ import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import {getCommunityName} from '../../../commons/utils';
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
 
 
@@ -172,6 +173,12 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   registrationInfo = _lodash.extend(registrationInfo, regDetails)
   registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName
   if (registrationInfo.subChapterId) {
+    let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, registrationInfo.subChapterId);
+    if (!mlSubChapterAccessControl.hasAccess) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+      return response;
+    }
     var subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: registrationInfo.subChapterId}) || {}
     registrationInfo.chapterName = subChapterDetails.chapterName
     registrationInfo.subChapterName = subChapterDetails.subChapterName

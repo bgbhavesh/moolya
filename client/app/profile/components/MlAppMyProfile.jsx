@@ -414,7 +414,7 @@ class MlAppMyProfile extends Component {
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" id="first_name" placeholder="First Name" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.firstName}/>
                     </div>
@@ -422,12 +422,12 @@ class MlAppMyProfile extends Component {
                       {/*<input type="text" placeholder="Middle Name" className="form-control float-label"*/}
                              {/*defaultValue={this.state.middleName}/>*/}
                     {/*</div>*/}
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" placeholder="Last Name" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.lastName}/>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.username}/>
                     </div>
@@ -451,7 +451,7 @@ class MlAppMyProfile extends Component {
                       </div>
                     </div>
                     <br className="brclear" /><br/>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" placeholder="Mobile Number" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.mobileNumber}/>
 
@@ -516,14 +516,14 @@ class MlAppMyProfile extends Component {
 
                     {/*</div>*/}
 
-                    <div className="form-group" id="date-of-birth">
+                    <div className="form-group mandatory" id="date-of-birth">
                       <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): ""} className="form-control float-label" readOnly="true" />
                       <FontAwesome name="calendar" placeholder="Date of Birth" className="form-control float-label password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
 
                     {this.state.showPasswordFields ?
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
                         <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
 
@@ -531,12 +531,12 @@ class MlAppMyProfile extends Component {
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
                     {this.state.PasswordReset?(
                       <div>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                         <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>
 
                       </div>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                         <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
 

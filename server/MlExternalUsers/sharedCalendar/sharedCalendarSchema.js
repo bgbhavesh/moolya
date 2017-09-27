@@ -47,6 +47,7 @@ let sharedCalendarSchema = `
  
  type Mutation{
      createSharedCalendar(detailsInput:calendarInput):response
+     deactivateSharedCalendar(sharedId:String):response
   }`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedCalendarSchema ]);
@@ -54,7 +55,8 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedCalendarSchem
 let supportedApi = [
   {api:'fetchSharedCalendarDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'getMySharedCalendarConnections', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'createSharedCalendar', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {api:'createSharedCalendar', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'deactivateSharedCalendar', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true}
 ];
 
 MlResolver.MlModuleResolver.push(supportedApi);

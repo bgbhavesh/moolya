@@ -5,6 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {fetchCommunityUsersHandler} from '../actions/fetchCommunityUsersActions'
+import ScrollArea from 'react-scrollbar'
 export default class MlCommunityList extends Component {
 
   constructor(props){
@@ -149,7 +150,15 @@ export default class MlCommunityList extends Component {
           </div>
           <div className="row ideators_list">
             <h2>Communities</h2>
+            <div className="list_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="list_scroll"
+                smoothScrolling={true}
+              >
             {list}
+              </ScrollArea>
+            </div>
           </div>
       </div>
         );

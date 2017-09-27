@@ -60,6 +60,8 @@ const defaultServerConfig = {
   resetPassword: '/resetPassword',
   forgotPassword: '/forgotPassword',
   verifyEmail: '/verifyEmail',
+  verifyMobileNumber: '/verifyMobileNumber',
+  resendOTP: '/resendOTP',
   //microSite: '/*',
   view: '/view/*',
   graphiqlOptions: {
@@ -813,6 +815,46 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
     }))
   }
 
+  if (config.verifyMobileNumber) {
+    graphQLServer.options('/verifyMobileNumber', cors());
+    graphQLServer.post(config.verifyMobileNumber, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if (req) {
+        let data = req.body;
+        let response;
+        response = MlResolver.MlMutationResolver['verifyMobileNumber'](null, data, context, null);
+        //response = response.data&&response.data.verifyEmail?response.data.verifyEmail:{}
+        res.send(response);
+      } else {
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message: "Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if (config.resendOTP) {
+    graphQLServer.options('/resendOTP', cors());
+    graphQLServer.post(config.resendOTP, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if (req) {
+        let data = req.body;
+        let response;
+        response = MlResolver.MlMutationResolver['resendSmsVerification'](null, data, context, null);
+        res.send(response);
+      } else {
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message: "Request Payload not provided"}, 400));
+      }
+    }))
+  }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

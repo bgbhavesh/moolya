@@ -247,6 +247,11 @@ let appointment=`
      
      fetchAdminServiceAppointment( orderId: String! ): response
      fetchAdminSessionAppointment( orderId: String! ): response
+          
+     cancelUserServiceCardAppointment( appointmentId: String! ): response
+     rescheduleUserServiceCardAppointment( appointmentId: String!, userServiceCardAppointmentInfo: userServiceCardAppointmentInfo! ): response
+     cancelUserServiceCardOrder( orderId: String! ): response
+     signOffUserServiceCardOrder( orderId: String! ): response
   }
 `;
 

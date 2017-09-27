@@ -13,6 +13,8 @@ import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAl
 import mlOfficeInteractionService from './mlOfficeInteractionRepo'
 import MlAccounts from '../../commons/mlAccounts';
 import MlSMSNotification from '../../mlNotifications/mlSmsNotifications/mlSMSNotification'
+import MlNotificationController from '../../mlNotifications/mlAppNotifications/mlNotificationsController';
+
 
 let request = require('request');
 var base64 = require('base64-min');
@@ -283,6 +285,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       }
        if(ret){
          MlEmailNotification.newOfficeRequestSent(context);
+         MlSMSNotification.newOfficeRequestSent(context);
+         MlNotificationController.onNewOfficeRequest(context)
        }
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName','communityCode']);
       let officeTransaction = _.extend(details, extendObj)
@@ -330,6 +334,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
     }else if(result){
         MlEmailNotification.bespokeOfficeActivated( args.id);
         MlSMSNotification.sendSMSonOfficeActivation(args.id, context);
+        MlNotificationController.officeActivation(args.id)
      }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){
@@ -499,7 +504,6 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       // officeMember['userId'] = userId
       officeMember['createdDate'] = new Date()
       let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
-
       let fromUserType = 'user';     //to userId is not available as user is not created till
       mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerInvitation', officeMember.officeId, ret, context.userId, fromUserType, context);
       // update ledger balance and journal
@@ -620,6 +624,8 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
         let ret = mlDBController.update('MlOfficeMembers', {registrationId: args.registrationId}, args.officeMember, {$set: true}, context);
          if(ret){
            MlEmailNotification.officeBearerApprovedByAdmin(officeMember)
+           let userId = officeMember&&officeMember.userId?officeMember.userId:""
+           MlNotificationController.officeBearerApprovedByAdmin(userId)
          }
       }else {
         let code = 400;
@@ -864,7 +870,17 @@ MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context
       }, context);
 
       let resp = mlDBController.update('MlOfficeMembers', memberId, {isIndependent : true}, {$set: true}, context);
-
+      if(resp){
+        MlEmailNotification.goIndependentRequest(context.userId,registrationData)
+      }
+      // if(resp){
+      //   if(finalRegData&&finalRegData.userName){
+      //     let userInfo=mlDBController.findOne('users', {username: finalRegData.userName}) || {}
+      //     if(userInfo){
+      //       MlNotificationController.officeMemberIndependent(userInfo._id,context.userId)
+      //     }
+      //   }
+      // }
       let code = 200;
       let response = new MlRespPayload().successPayload('Go independent requested successfully', code);
       return response;

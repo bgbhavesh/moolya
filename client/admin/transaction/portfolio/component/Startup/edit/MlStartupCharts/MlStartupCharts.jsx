@@ -26,6 +26,7 @@ export default class MlStartupCharts extends React.Component{
     this.getProfitRevenueLiability.bind(this)
     this.getReviewOfCompany.bind(this)
     this.getEmployeeBreakUpDepartment.bind(this)
+    this.selectedGraph = this.selectedGraph.bind(this);
 
   }
 
@@ -261,8 +262,8 @@ export default class MlStartupCharts extends React.Component{
     this.setState({empBreakUpData:barChartData})
   }
 
-  selectedGraph(){
-    this.setState({"graphSelected" :  true})
+  selectedGraph(index) {
+    this.setState({"graphSelected": true,selectedTabKey:index})
     $('.last-item').removeClass('menunone');
     //this.props.backClickHandler()
   }
@@ -385,7 +386,7 @@ export default class MlStartupCharts extends React.Component{
 
             <div className="col-md-6">
               <div className="chart_bg">
-                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <a onClick={e=>this.selectedGraph(0)}>Edit</a>
                 <MlBarChart
           title= {employmentDataTitle}
           data= {this.state.employmentData}
@@ -404,7 +405,7 @@ export default class MlStartupCharts extends React.Component{
 
             <div className="col-md-6">
               <div className="chart_bg">
-                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <a onClick={e=>this.selectedGraph(1)}>Edit</a>
               <BarGroupTooltip
                 title= {prlTitle}
                 data= {this.state.prlData}
@@ -425,7 +426,7 @@ export default class MlStartupCharts extends React.Component{
               <br className="brclear"/>
             <div className="col-md-6">
               <div className="chart_bg">
-                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <a onClick={e=>this.selectedGraph(2)}>Edit</a>
                 <LineTooltip
               title= {reviewTitle}
               data= {this.state.reviewData}
@@ -445,7 +446,7 @@ export default class MlStartupCharts extends React.Component{
 
             <div className="col-md-6">
               <div className="chart_bg">
-                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <a onClick={e=>this.selectedGraph(3)}>Edit</a>
                 <p className="text-center">Employee breakup at Department level</p>
                 <PieTooltip
               title= {title}
@@ -479,7 +480,12 @@ export default class MlStartupCharts extends React.Component{
           value = {value}
           name = {name}
         />*/
-        ):(<div>{<MlStartupChartConfig getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlStartupChartConfig> }</div>)}
+        ) : (
+          <div>{<MlStartupChartConfig getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)}
+                                      portfolioDetailsId={this.props.portfolioDetailsId}
+                                      startupChartsDetails={this.state.startupCharts}
+                                      isApp={this.props.isApp}
+                                      selectedTabKey={this.state.selectedTabKey}></MlStartupChartConfig>}</div>)}
 
       </div>
     )

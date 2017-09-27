@@ -53,6 +53,7 @@ MlResolver.MlMutationResolver['updateOfficeTransactionOrderSubscriptionDetail'] 
   }
   let result = mlDBController.update('MlOfficeTransaction', args.id, dataToUpdate, {$set:true}, context)
   if(result){
+    let paymentLink = "";
     let code = 200;
     let response = new MlRespPayload().successPayload('Payment link generated successfully', code);
     return response;

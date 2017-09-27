@@ -6,7 +6,8 @@ import React, {Component} from "react";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 import MlAccordion from '../../commons/components/MlAccordion';
 import MlAppInvestAction from './MlAppInvestActions';
-
+import NoDataList from '../../../commons/components/noData/noDataList';
+import MlLoader from "../../../commons/components/loader/loader";
 export default class MlAppInvestmentItem extends Component {
 
   constructor(props){
@@ -66,26 +67,43 @@ export default class MlAppInvestmentItem extends Component {
     export const genericPortfolioAccordionConfig= {id:'myInvestmentAccordion',
       panelItems:[{'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent  actionOptions={mlAppActionConfig}  />}]
     };
+    let stageDataLegth =  props.portfolio.reduce( (count, port) => {
+      let stageIndex;
+      if(port.stage.length) {
+        stageIndex = props.stages.findIndex(function (stage) {
+          return stage.stageName == port.stage[0].resourceStage
+        });
+      }
+      if( (currentStageIndex == 0 && !stageIndex ) || stageIndex == currentStageIndex ) {
+        if( port.portfolio && (port.portfolio.communityCode == "IDE" || port.portfolio.communityCode == "STU" )){
+          count += 1;
+        }
+      }
+      return count;
+    }, 0 );
+    console.log("stageDataLegth",stageDataLegth)
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12 ideators_list">
             <div className="row">
-              {props.portfolio.map(function (data, idx) {
-                let stageIndex;
-                if(data.stage.length) {
-                  stageIndex = props.stages.findIndex(function (stage) {
-                    return stage.stageName == data.stage[0].resourceStage
-                  });
-                }
-                // > incase need to display at lower index tabs
-                // remove stageIndex < 0 incase all visible in index 0
-                if( (currentStageIndex == 0 && !stageIndex ) || stageIndex == currentStageIndex ) {
-                  switch(data.portfolio.communityCode){
-                    case "IDE":
-                      return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
-                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
-                          <div className="premium">
+              {stageDataLegth==0?<NoDataList moduleName={currentStage.stageName}/>:(
+                <div>
+                  {props.portfolio.map(function (data, idx) {
+                    let stageIndex;
+                    if(data.stage.length) {
+                      stageIndex = props.stages.findIndex(function (stage) {
+                        return stage.stageName == data.stage[0].resourceStage
+                      });
+                    }
+                    // > incase need to display at lower index tabs
+                    // remove stageIndex < 0 incase all visible in index 0
+                    if( (currentStageIndex == 0 && !stageIndex ) || stageIndex == currentStageIndex ) {
+                      switch(data.portfolio.communityCode){
+                        case "IDE":
+                          return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
+                            <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
+                              <div className="premium">
                           <span>
                             { data.portfolio && data.portfolio.accountType ? data.portfolio.accountType : '' }
                             {/*{ideator.accountType}*/}
@@ -102,41 +120,44 @@ export default class MlAppInvestmentItem extends Component {
                           <span>
                             {data.portfolio.chapterName}
                           </span>
-                          </div>
-                        </div>
-                      </div>)
-                      break;
-                    case "STU":
-                      return (<div className="col-md-3 col-sm-4 col-lg-2" key={idx} onClick={()=>that.selectPortfolio(data)}>
-                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
-                          <div className="premium">
+                              </div>
+                            </div>
+                          </div>)
+                          break;
+                        case "STU":
+                          return (<div className="col-md-3 col-sm-4 col-lg-2" key={idx} onClick={()=>that.selectPortfolio(data)}>
+                            <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
+                              <div className="premium">
                           <span>
                             { data.portfolio && data.portfolio.accountType ? data.portfolio.accountType : '' }
                             {/*{ideator.accountType}*/}
                             </span>
-                          </div>
-                          <h3>
-                            {data.user.name}
-                          </h3>
-                          <div className="list_icon"><span className="ml ml-ideator"></span></div>
-                          <p>
-                            { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description ? data.startup[0].aboutUs.description.substr(0,30) : '' }
-                            { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description && data.startup[0].aboutUs.description.length ? (data.startup[0].aboutUs.description.length>30 ? '...':'') : ''}
-                          </p>
-                          <div className="block_footer">
+                              </div>
+                              <h3>
+                                {data.user.name}
+                              </h3>
+                              <div className="list_icon"><span className="ml ml-ideator"></span></div>
+                              <p>
+                                { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description ? data.startup[0].aboutUs.description.substr(0,30) : '' }
+                                { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description && data.startup[0].aboutUs.description.length ? (data.startup[0].aboutUs.description.length>30 ? '...':'') : ''}
+                              </p>
+                              <div className="block_footer">
                           <span>
                             {data.portfolio.chapterName}
                           </span>
-                          </div>
-                        </div>
-                      </div>)
-                      break;
-                    default:
-                      return ''
-                      break
-                  }
-                }
-              })}
+                              </div>
+                            </div>
+                          </div>)
+                          break;
+                        default:
+                          return ''
+                          break
+                      }
+                    }
+                  })}
+                </div>
+              )}
+
             </div>
           </div>
         </div>

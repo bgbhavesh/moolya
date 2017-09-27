@@ -154,6 +154,7 @@ export default MlAccounts=class MlAccounts {
 
     if(emailVerified){
        let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
+      // let smsSent = MlSMSNotification.onVerificationSuccess(user);
        //otp sms has to be send
       this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
 

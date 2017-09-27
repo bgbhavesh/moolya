@@ -21,6 +21,7 @@ export default class MlAppTaskPayment extends Component {
   }
   componentWillMount() {
     const resp = this.findTaskDetails();
+    this.props.activeComponent(3);
     return resp;
   }
 

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import ScrollArea from 'react-scrollbar'
 
 export default class MlClustersList extends Component {
 
@@ -40,7 +41,15 @@ export default class MlClustersList extends Component {
     return (
     <div className="row">
       <h2> Cluster </h2>
+      <div className="list_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="list_scroll"
+          smoothScrolling={true}
+        >
           {list}
+        </ScrollArea>
+      </div>
       </div>
     );
 

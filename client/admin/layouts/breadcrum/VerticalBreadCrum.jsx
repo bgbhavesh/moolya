@@ -32,7 +32,7 @@ export default class VerticalBreadCrum extends Component {
         ()=>{
         this.getHierarchyDetails();
         });
-    }
+    }else  this.getHierarchyDetails();
   }
 
   componentWillUnmount() {

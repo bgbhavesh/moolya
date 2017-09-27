@@ -24,7 +24,7 @@ export default class MlStartupCompanyReview extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
-  
+
   componentDidUpdate(){
     initalizeFloatLabel();
   }
@@ -147,7 +147,7 @@ export default class MlStartupCompanyReview extends React.Component{
           default={true}
         >
         <div className="panel panel-default">
-          <div className="panel-heading">Company Review{
+          <div className="panel-heading">Review Of Company{
             <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
               src="/images/add.png"/></div>}
           </div>

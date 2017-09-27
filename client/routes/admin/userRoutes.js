@@ -40,7 +40,7 @@ adminSection.route('/users/:registrationId/:portfolioId/aboutuser', {
   name: 'users_about',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'about'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'clusters', 'subModule': 'aboutuser'}}/>,
       adminContent: <MlUsersAbout config={params}/>
     })
   }
@@ -50,7 +50,7 @@ adminSection.route('/users/:registrationId/:portfolioId/addressBook', {
   name: 'users_addressBook',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'addressBook'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'clusters', 'subModule':'addressBook'}}/>,
       adminContent: <MlUsersAddressBook config={params}/>
     })
   }
@@ -60,7 +60,7 @@ adminSection.route('/users/:registrationId/:portfolioId/portfolio', {
   name: 'users_portfolio',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'portfolio'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module':'clusters', 'subModule': 'portfolio'}}/>,
       adminContent: <MlUsersPortfolioLanding config={params}/>
     })
   }
@@ -70,7 +70,7 @@ adminSection.route('/users/:registrationId/:portfolioId/connections', {
   name: 'users_connections',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'connections'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module':'clusters', 'subModule': 'connections'}}/>,
       adminContent: <MlUsersConnectionsTabs config={params}/>
     })
   }
@@ -80,7 +80,7 @@ adminSection.route('/users/:registrationId/:portfolioId/favourites', {
   name: 'users_favourites',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'favourites'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module':'clusters', 'subModule': 'favourites'}}/>,
       adminContent: <MlUsersFavouriteTabs config={params}/>
     })
   }
@@ -100,7 +100,7 @@ adminSection.route('/users/:registrationId/:portfolioId/transactions', {
   name: 'users_transactions',
   action(params){
     mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'transactions'}}/>,
+      headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module':'clusters', 'subModule': 'transactions'}}/>,
       adminContent: <MlUsersTransactions config={params}/>
     })
   }

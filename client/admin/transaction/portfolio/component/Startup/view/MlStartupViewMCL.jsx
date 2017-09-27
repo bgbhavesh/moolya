@@ -3,12 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations';
-import NoData from '../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../commons/components/loader/loader";
+import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
+import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations';
+import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 import _ from 'lodash'
 
 const MEMBERKEY = 'memberships'

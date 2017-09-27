@@ -13,9 +13,9 @@ import MlStartupViewLegalIssues from "./MlStartupViewLegalIssues"
 import MlStartupViewAssets from "./MlStartupViewAssets"
 import MlStartupViewBranches from "./MlStartupViewBranches"
 import MlStartupViewTechnologies from "./MlStartupViewTechnologies"
-import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../admin/core/apolloConnection'
-import {appClient} from '../../../../../../app/core/appConnection'
+import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
+import {client} from '../../../../../../../admin/core/apolloConnection'
+import {appClient} from '../../../../../../../app/core/appConnection'
 
 export default class MlStartupViewAboutusTabs extends React.Component {
   constructor(props) {

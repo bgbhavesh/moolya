@@ -62,6 +62,10 @@ export default class EmailVerification extends React.Component{
         success: function (response) {
           if (response.success) {
             toastr.success("OTP Sent Successfuly");
+            this.setState({canResend:false})
+            setTimeout(function(){
+              this.setState({canResend:true})
+            }.bind(this),30000)
           } else {
             toastr.error("Resend OTP failed");
           }
@@ -93,7 +97,7 @@ export default class EmailVerification extends React.Component{
         });
       }else{
         if(!isTermsChecked){
-          toastr.error("Please agree to the Terms and Conditions and 'Privacy Policy'");
+          toastr.error("Please agree to 'Terms and Conditions' and 'Privacy Policy'");
         }
         if(!otp){
           toastr.error("Please enter OTP");

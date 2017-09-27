@@ -55,7 +55,7 @@ export default class MlStartupChartConfig extends React.Component{
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Profit,Revenue & Liability",
+        title: "Profit, Revenue & Liability",
         component: <MlStartupProfitRevenue key="2" client={client} isAdmin={true}
                                     getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
@@ -127,7 +127,7 @@ export default class MlStartupChartConfig extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.props.selectedTabKey}/>
   }
 
 }

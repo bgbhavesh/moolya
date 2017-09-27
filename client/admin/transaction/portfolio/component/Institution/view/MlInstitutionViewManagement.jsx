@@ -6,7 +6,7 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
-import MlGenericManagementView from "../../StartupView/MlGenericManagementView";
+import MlGenericManagementView from "../../Startup/view/MlGenericManagementView";
 
 const KEY = 'management'
 export default class MlInstitutionViewManagement extends React.Component {

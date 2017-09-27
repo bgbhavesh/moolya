@@ -50,7 +50,7 @@ export default class MlTabComponent extends React.Component {
       return <Tabs items={tabs} selectedTabKey={selectedTabKey ||this.props.selectedTabKey} onChange={this.onActivate.bind(this)} />;
     }
     else{
-      return <Tabs items={tabs} onChange={this.onActivate.bind(this)} />;
+      return <Tabs items={tabs} selectedTabKey={this.props.selectedTabKey || 0} onChange={this.onActivate.bind(this)} />;
     }
   }
 }

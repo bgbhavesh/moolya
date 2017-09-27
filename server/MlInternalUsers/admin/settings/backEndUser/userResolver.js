@@ -15,6 +15,7 @@ import MlAlertNotification from '../../../../mlNotifications/mlAlertNotification
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 import portfolioValidationRepo from '../../portfolio/portfolioValidation'
 import MlSMSNotification from "../../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -143,7 +144,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
   if (resp) {
       let emailSent = MlEmailNotification.onChangePassword(context);
       MlSMSNotification.forgotPassword(context.userId,context)
-      
+      MlNotificationController.changePassword(context.userId)
       let code = 200;
       let passwordalert =  MlAlertNotification. onPasswordAlert()
       let response = new MlRespPayload().successPayload(passwordalert, code);
@@ -1196,7 +1197,9 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
     }, {$set: true}, context)
   }
   if(resp){
+    MlNotificationController.profileUpdated(context.userId);
     MlSMSNotification.profileUpdated(context.userId);
+    MlEmailNotification.onSuccessfulProfileUpdate(context.userId);
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
     return resp
   }

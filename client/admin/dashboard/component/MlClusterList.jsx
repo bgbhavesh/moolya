@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import dashboardRoutes from '../actions/routesActionHandler';
+import ScrollArea from 'react-scrollbar'
 export default class MlClusterList extends Component {
 
   constructor(props){ 
@@ -27,7 +28,15 @@ export default class MlClusterList extends Component {
     return (
       <div className="row">
         <h2> Cluster </h2>
+        <div className="list_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="list_scroll"
+            smoothScrolling={true}
+          >
       {list}
+          </ScrollArea>
+        </div>
       </div>);
 
   }

@@ -5,7 +5,7 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
-import MlGenericAwardsView from "../../StartupView/MlGenericAwardsView";
+import MlGenericAwardsView from "../../Startup/view/MlGenericAwardsView";
 
 const KEY = 'awardsRecognition'
 

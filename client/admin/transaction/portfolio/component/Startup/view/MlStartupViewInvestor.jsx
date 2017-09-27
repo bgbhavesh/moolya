@@ -1,20 +1,18 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+import React from "react";
+import {render} from "react-dom";
+import {fetchStartupDetailsHandler} from "../../../actions/findPortfolioStartupDetails";
+import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
+import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
+import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
+import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import NoData from '../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../commons/components/loader/loader";
 
-const KEY = "lookingFor"
-export default class MlStartupViewLookingFor extends React.Component {
+const KEY = 'investor'
+export default class MlStartupViewInvestor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupLookingforList: [],loading:true};
-    this.fetchPortfolioStartupDetails.bind(this);
+    this.state = {startupInvestorList: [],loading:true};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -29,7 +27,6 @@ export default class MlStartupViewLookingFor extends React.Component {
   componentWillMount(){
     this.fetchPortfolioStartupDetails();
   }
-
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -63,7 +60,7 @@ export default class MlStartupViewLookingFor extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupLookingFor", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupInvestors", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -74,7 +71,7 @@ export default class MlStartupViewLookingFor extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupLookingFor");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "startupInvestors");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -102,44 +99,50 @@ export default class MlStartupViewLookingFor extends React.Component {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
-    if (response && response.lookingFor) {
-      this.setState({startupLookingforList: response});
+    if (response && response.investor) {
+      this.setState({startupInvestorList: response.investor});
     }
 
     this.setState({loading:false})
 
   }
+
   render(){
     let that = this;
-    let lookingforArray = that.state.startupLookingforList && that.state.startupLookingforList.lookingFor  || [];
+    let investorArray = that.state.startupInvestorList || [];
     let loading = this.state.loading;
-    return ( <div>
-      {loading === true ? ( <MlLoader/>) : (
+    return (
         <div>
-          {_.isEmpty(lookingforArray) ?(
-            <div className="portfolio-main-wrap">
-              <NoData tabName={this.props.tabName}/>
-            </div>):(
-              <div id="annotatorContent">
-                <h2>Looking For</h2>
-                <div className="col-lg-12">
-                  <div className="row">
-                    {lookingforArray && lookingforArray.map(function (details, idx) {
-                      return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                        <div className="team-block">
-                          <span className="ml my-ml-browser_3" />
-                          <h3>
-                            {details.lookingForName&&details.lookingForName}
-                          </h3>
-                        </div>
-                      </div>)
-                    })}
+          {loading === true ? ( <MlLoader/>) : (
+            <div>
+              {_.isEmpty(investorArray) ? (
+                <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
+                </div>) : (
+                <div id="annotatorContent">
+                  <h2>Investor</h2>
+                  <div className="col-lg-12">
+                    <div className="row">
+                      {investorArray && investorArray.map(function (details, idx) {
+                        return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                          <div className="team-block">
+                            <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}
+                                 className="team_img"/>
+                            <h3>
+                              {details.investorName} <br /><b>Investor</b>
+                            </h3>
+                          </div>
+                        </div>)
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>)
+              )
+              }
+            </div>
+          )
           }
-        </div>)}
-      </div>
-      )
-    }
+        </div>
+    )
+  }
 }

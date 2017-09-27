@@ -3,7 +3,7 @@ import MlIdeatorPortfolioEditTabs from '../component/Ideator/MlIdeatorPortfolioE
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
-import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
+import MlViewStartupPortfolioTemplate from '../component/Startup/view/MlViewStartupPortfolioTemplate'
 import MlServiceProviderEditTabs from '../component/ServiceProvider/edit/MlServiceProviderEditTabs'
 import MlServiceProviderViewTabs from '../component/ServiceProvider/view/MlServiceProviderViewTabs'
 import MlInstitutionEditTabs from '../component/Institution/edit/MlInstitutionEditTabs'

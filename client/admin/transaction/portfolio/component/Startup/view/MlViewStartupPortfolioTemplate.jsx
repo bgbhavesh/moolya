@@ -6,10 +6,10 @@ import MlStartupViewInvestor from './MlStartupViewInvestor';
 import MlStartupViewAwards from './MlStartupViewAwards';
 import MlStartupViewMCL from './MlStartupViewMCL';
 import MlStartupViewLookingFor from './MlStartupViewLookingFor';
-import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTabComponent";
-import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import {client} from '../../../../core/apolloConnection'
-import MlStartupViewCharts from '../StartupView/MlStartupViewCharts'
+import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
+import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import {client} from '../../../../../core/apolloConnection'
+import MlStartupViewCharts from './MlStartupViewCharts'
 
 export default class MlViewStartupPortfolioTemplate extends React.Component {
   constructor(props){

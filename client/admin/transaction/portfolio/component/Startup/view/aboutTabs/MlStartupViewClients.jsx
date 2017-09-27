@@ -4,9 +4,9 @@
 import React from 'react';
 import {render} from 'react-dom';
 // import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 
 const KEY = 'clients'
 

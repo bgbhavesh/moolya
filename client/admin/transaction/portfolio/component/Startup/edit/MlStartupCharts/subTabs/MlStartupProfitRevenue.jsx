@@ -234,7 +234,7 @@ export default class MlStartupProfitRevenue extends React.Component{
           default={true}
         >
         <div className="panel panel-default">
-          <div className="panel-heading">Profit Revenue{
+          <div className="panel-heading">Profit, Revenue & Liability{
             <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
               src="/images/add.png"/></div>}
           </div>

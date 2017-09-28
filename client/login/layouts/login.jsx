@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
-
+import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
+import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 MlLoginLayout = React.createClass({
   render(){
     return <main>{this.props.content}</main>
@@ -21,12 +22,24 @@ MlLoginContent = React.createClass({
     let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
     this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
     if (!this.validationMessage) {
-      this.props.formSubmit({
-        username: this.refs.username.value,
-        password: this.refs.password.value
-      }, function (result) {
-        toastr.error(result);
-      })
+      let emailId=this.refs.username.value
+      let passwordValid = this.refs.password.value
+      let validate = passwordSAS_validate(passwordValid)
+      let isValidEmail = validatedEmailId(emailId);
+      if (emailId && !isValidEmail) {
+        toastr.error('Please enter a valid EmailId');
+      }else
+      if (!validate.isValid && typeof (validate) == 'object') {
+        toastr.error('Password '+ validate.errorMsg);
+      }
+      else {
+        this.props.formSubmit({
+          username: this.refs.username.value,
+          password: this.refs.password.value
+        }, function (result) {
+          toastr.error(result);
+        })
+      }
     }
     else {
       if (this.validationMessage.userName == true)
@@ -63,7 +76,7 @@ MlLoginContent = React.createClass({
       }
   },
   render() {
-  
+
     return (
       <div>
         <div>

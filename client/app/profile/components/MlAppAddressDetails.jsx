@@ -22,7 +22,7 @@ export default class AppAddressDetails extends React.Component {
   constructor(props) {
     super(props);
     let addressInfoObject = {
-      "addressType": " ", "addressTypeName": "Add New", 'name': '', 'phoneNumber': '', 'addressFlat': '',
+      "addressType": " ", "addressTypeName": "Add New", 'name': '', 'addressFlat': '',
       'addressLocality': '', 'addressLandmark': '', 'addressArea': '',
       'addressCity': '', 'addressState': '', 'addressCountry': '', 'addressPinCode': ''
     }
@@ -82,7 +82,7 @@ export default class AppAddressDetails extends React.Component {
     refs.push(this.refs["addressCity"])
     refs.push(this.refs["addressCountry"])
     refs.push(this.refs["addressState"])
-    refs.push(this.refs["phoneNumber"])
+   // refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressPinCode"])
     let ret = mlFieldValidations(refs)
 
@@ -91,21 +91,24 @@ export default class AppAddressDetails extends React.Component {
     let clusterCountry = clusterDetails && clusterDetails.countryName ? clusterDetails.countryName : null;
     let addressSelectedCountry = this.state.countrySelectedValue ? this.state.countrySelectedValue : null;*/
     let isDeafaultChecked = this.refs["defaultAddress"].checked;
-    let countrycode=this.state.countryCode?this.state.countryCode:null;
-    let contactNumber = this.refs["phoneNumber"] && this.refs["phoneNumber"].value;
-    let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
+    // let countrycode=this.state.countryCode?this.state.countryCode:null;
+    // let contactNumber = this.refs["phoneNumber"] && this.refs["phoneNumber"].value;
+    // let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
     if (ret) {
       toastr.error(ret);
-    }else if (countrycode && !isValidPhoneNumber) {
-      toastr.error('Please enter a valid contact number');
-    } /*else if (clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
+    }
+    // }else if (countrycode && !isValidPhoneNumber) {
+    //   toastr.error('Please enter a valid contact number');
+    // }
+    /*else if (clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
       toastr.error("Selected cluster and default address country should be same");
-    } */else {
+    } */
+    else {
       let addressDetailsObject = this.state.addressInformation;
       addressDetailsObject.addressType = this.state.selectedValue,
         addressDetailsObject.addressTypeName = this.state.selectedAddressLabel,
         addressDetailsObject.name = this.refs["name"].value,
-        addressDetailsObject.phoneNumber = this.refs["phoneNumber"].value,
+      //  addressDetailsObject.phoneNumber = this.refs["phoneNumber"].value,
         addressDetailsObject.addressFlat = this.refs["addressFlat"].value,
         addressDetailsObject.addressLocality = this.refs["addressLocality"].value,
         addressDetailsObject.addressLandmark = this.refs["addressLandmark"].value,
@@ -128,7 +131,7 @@ export default class AppAddressDetails extends React.Component {
           this.findRegistration()
           this.props.registrationDetails();
           this.refs["name"].value = ""
-          this.refs["phoneNumber"].value = "";
+         // this.refs["phoneNumber"].value = "";
           this.refs["addressFlat"].value = "";
           this.refs["addressLocality"].value = "";
           this.refs["addressLandmark"].value = "";
@@ -194,7 +197,7 @@ export default class AppAddressDetails extends React.Component {
         addressTypeName : {$set: selObject.label},
         addressType : {$set: did},
         name : {$set: this.refs["name"+index].value},
-        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+        //phoneNumber : {$set: this.refs["phoneNumber"+index].value},
         addressFlat : {$set: this.refs["addressFlat"+index].value},
         addressLocality : {$set: this.refs["addressLocality"+index].value},
         addressLandmark : {$set: this.refs["addressLandmark"+index].value},
@@ -234,7 +237,7 @@ export default class AppAddressDetails extends React.Component {
         addressTypeName : {$set: this.state.details[index].addressTypeName},
         addressType : {$set: this.state.details[index].addressType},
         name : {$set: this.refs["name"+index].value},
-        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+      //  phoneNumber : {$set: this.refs["phoneNumber"+index].value},
         addressFlat : {$set: this.refs["addressFlat"+index].value},
         addressLocality : {$set: this.refs["addressLocality"+index].value},
         addressLandmark : {$set: this.refs["addressLandmark"+index].value},
@@ -271,7 +274,7 @@ export default class AppAddressDetails extends React.Component {
         addressTypeName : {$set: this.state.details[index].addressTypeName},
         addressType : {$set: this.state.details[index].addressType},
         name : {$set: this.refs["name"+index].value},
-        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+       // phoneNumber : {$set: this.refs["phoneNumber"+index].value},
         addressFlat : {$set: this.refs["addressFlat"+index].value},
         addressLocality : {$set: this.refs["addressLocality"+index].value},
         addressLandmark : {$set: this.refs["addressLandmark"+index].value},
@@ -327,17 +330,19 @@ export default class AppAddressDetails extends React.Component {
         refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["addressCountry" + index])
         refs.push(this.refs["addressState" + index])
-        refs.push(this.refs["phoneNumber" + index])
+      //  refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressPinCode" + index])
         let ret = mlFieldValidations(refs)
-        let countrycode=this.state.countryCode?this.state.countryCode:null;
-        let contactNumber = this.refs["phoneNumber" + index] && this.refs["phoneNumber" + index].value;
-        let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
+        // let countrycode=this.state.countryCode?this.state.countryCode:null;
+        // let contactNumber = this.refs["phoneNumber" + index] && this.refs["phoneNumber" + index].value;
+        // let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
         if (ret) {
           toastr.error(ret);
-        }else if (countrycode && !isValidPhoneNumber) {
-          toastr.error('Please enter a valid contact number');
-        }/*else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
+        }
+        // else if (countrycode && !isValidPhoneNumber) {
+        //   toastr.error('Please enter a valid contact number');
+        // }
+        /*else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
           toastr.error("Selected cluster and default address country should be same");
         }*/ else {
           let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.details[index].addressTypeName;
@@ -350,7 +355,7 @@ export default class AppAddressDetails extends React.Component {
             addressTypeName: {$set: labelValue},
             addressType: {$set: valueSelected},
             name: {$set: this.refs["name" + index].value},
-            phoneNumber: {$set: this.refs["phoneNumber" + index].value},
+          //  phoneNumber: {$set: this.refs["phoneNumber" + index].value},
             addressFlat: {$set: this.refs["addressFlat" + index].value},
             addressLocality: {$set: this.refs["addressLocality" + index].value},
             addressLandmark: {$set: this.refs["addressLandmark" + index].value},
@@ -411,7 +416,7 @@ export default class AppAddressDetails extends React.Component {
   async onClear(index,value){
     if(index == null){
       this.refs["name"].value = "";
-      this.refs["phoneNumber"].value = "";
+    //  this.refs["phoneNumber"].value = "";
       this.refs["addressFlat"].value = "";
       this.refs["addressLocality"].value = "";
       this.refs["addressLandmark"].value = "";
@@ -423,7 +428,7 @@ export default class AppAddressDetails extends React.Component {
 
     }else{
       this.refs["name"+index].value = "";
-      this.refs["phoneNumber"+index].value = "";
+      //this.refs["phoneNumber"+index].value = "";
       this.refs["addressFlat"+index].value = "";
       this.refs["addressLocality"+index].value = "";
       this.refs["addressLandmark"+index].value = "";
@@ -529,9 +534,9 @@ export default class AppAddressDetails extends React.Component {
                             valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                             onSelect={this.optionsBySelectState.bind(this)} queryOptions={statesOption}
                             isDynamic={true} data-required={true} data-errMsg="State is required"/>
-              <div className="form-group mandatory">
-                <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" data-required={true} data-errMsg="Phone Number is required" />
-              </div>
+              {/*<div className="form-group mandatory">*/}
+                {/*<input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" data-required={true} data-errMsg="Phone Number is required" />*/}
+              {/*</div>*/}
               <div className="form-group mandatory">
                 <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                        className="form-control float-label" data-required={true} data-errMsg="PinCode is required" />
@@ -620,11 +625,11 @@ export default class AppAddressDetails extends React.Component {
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                                 onSelect={that.stateUpdateOptions.bind(that,key)} queryOptions={statesOption}
                                 isDynamic={true} data-required={true} data-errMsg="State is required"/>
-                  <div className="form-group mandatory">
-                    <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
-                           className="form-control float-label" defaultValue={options.phoneNumber}
-                           data-required={true} data-errMsg="Phone Number is required" />
-                  </div>
+                  {/*<div className="form-group mandatory">*/}
+                    {/*<input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"*/}
+                           {/*className="form-control float-label" defaultValue={options.phoneNumber}*/}
+                           {/*data-required={true} data-errMsg="Phone Number is required" />*/}
+                  {/*</div>*/}
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
                            className="form-control float-label" defaultValue={options.addressPinCode}

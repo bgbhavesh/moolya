@@ -35,7 +35,7 @@ export default class MlAppMapMarker extends Component {
       <div>
         <div className="map_profiles">
           <span className={`ml ${status}`}></span>
-          <img src="/images/def_profile.png" />
+          <img src={`${this.props.status&&this.props.status.profileImage?this.props.status.profileImage:"/images/def_profile.png"}`}/>
         </div>
       </div>
     );

@@ -11,7 +11,7 @@ var _ = require('lodash')
 MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
   try {
     if (args && args.userId && args.communityType) {
-      user = MlStartupPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+      var user = MlStartupPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
       if (!user) {
         mlDBController.insert('MlStartupPortfolio', {
           userId: args.userId,

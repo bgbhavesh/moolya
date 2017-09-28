@@ -55,7 +55,7 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlCompanyClients client={client} isAdmin={true} key="3" getClients={this.getClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.clients}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlCompanySP key="4"  getServiceProducts={this.getServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.serviceProducts}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlCompanyInformation  key="5" getInfo={this.getInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.information}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlCompanyInformation  key="5" getInfo={this.getInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.information} tabName="information"/>},
     ]
     return tabs;
   }

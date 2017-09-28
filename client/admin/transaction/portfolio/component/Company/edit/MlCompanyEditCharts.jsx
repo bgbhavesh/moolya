@@ -148,7 +148,7 @@ export default class MlCompanyEditChart extends Component {
           name:"Revenue"
         },
         {
-          field:"Liablity",
+          field:"Liability",
           name:"Liability"
         }
       ],

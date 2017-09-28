@@ -309,7 +309,7 @@ export default class MlStartupViewCharts extends React.Component{
           name:"Revenue"
         },
         {
-          field:"Liablity",
+          field:"Liability",
           name:"Liability"
         }
       ],

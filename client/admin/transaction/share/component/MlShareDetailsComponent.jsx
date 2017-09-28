@@ -43,10 +43,10 @@ export default class MlShareDetailsComponent extends React.Component {
   componentWillMount() {
     let shareId= this.props && this.props.data ? this.props.data._id : '';
     if(shareId){
-       this.setState({shareId: shareId}, function () {
-         const resp = this.getShareDetails()
-         return resp;
-       }.bind(this));
+      this.setState({shareId: shareId}, function () {
+        const resp = this.getShareDetails()
+        return resp;
+      }.bind(this));
     }
   }
 
@@ -139,7 +139,7 @@ export default class MlShareDetailsComponent extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ user.profilePic ? user.profilePic : "/images/data_balance.jpg"}/>
+                          <img src={ user.profilePic ? user.profilePic : "/images/def_profile.png"}/>
                           <span>{user.displayName}</span>
                         </li>
                       )
@@ -160,7 +160,10 @@ export default class MlShareDetailsComponent extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ file.url ? file.url : "/images/data_balance.jpg"}/>
+                          {file.fileType === "image" || file.fileType === "template" ?
+                            <img src={ file.url ? file.url : "/images/doc.png"}/> :
+                            file.fileType === "document" ? <img src="/images/doc.png"/> :
+                              <img src="/images/video_1.jpg"/> }
                         </li>
                       )
                     })

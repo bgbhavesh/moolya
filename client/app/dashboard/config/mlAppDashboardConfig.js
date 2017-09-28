@@ -109,6 +109,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
                           text:communityCode
                           isActive:isActive
                           name:name
+                          status:profile{profileImage}
                       }
                    }                                                                                                     
                 }

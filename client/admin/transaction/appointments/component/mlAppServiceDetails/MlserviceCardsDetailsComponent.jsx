@@ -114,7 +114,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
   async getServiceDetails() {
-    let resp = await getServiceBasedOnServiceId(this.serviceId, this.loggedUserDetails);
+    let resp = await getServiceBasedOnServiceId(this.state.serviceId, this.loggedUserDetails);
     if (resp) {
       this.constructServiceData(resp);
     }
@@ -130,7 +130,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
     let { data } = this.state;
     const resp = await fetchTaskDetailsForAdminServiceCard(this.state.profileId, this.state.serviceId, this.loggedUserDetails);
     serviceTask.serviceTaskDetails = resp;
-    if (this.serviceId && serviceDeatails) {
+    if (this.state.serviceId && serviceDeatails) {
       service = serviceDeatails;
       tasks = [];
       let { state, city, community } = service;

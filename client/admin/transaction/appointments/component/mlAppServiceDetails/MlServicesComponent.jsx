@@ -8,15 +8,15 @@
 /**
  * Imports libs and components
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import _ from 'lodash';
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlServiceCardStep1 from './MlServiceCardStep1';
 import MlServiceCardStep2 from './MlserviceCardStep2';
 import MlServiceCardStep3 from './MlServiceCardStep3';
 import MlServiceCardStep4 from './MlServiceCardStep4';
-import {updateServiceActionHandler} from './../../../serviceCards/actions/mlFindService';
-import {getAdminUserContext} from '../../../../../commons/getAdminUserContext'
+import { updateServiceActionHandler } from './../../../serviceCards/actions/mlFindService';
+import { getAdminUserContext } from '../../../../../commons/getAdminUserContext'
 
 
 export default class MlServiceManageSchedule extends Component {
@@ -37,6 +37,10 @@ export default class MlServiceManageSchedule extends Component {
     this.checkChargeStatus = this.checkChargeStatus.bind(this);
     this.calculateCharges = this.calculateCharges.bind(this);
     //this.getCreatedId.bind(this)
+  }
+
+  componentWillReceiveProps({ data }) {
+    this.setState({ data });
   }
 
   /**
@@ -70,8 +74,8 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Set the current selected task and tab
    */
   optionsBySelectService(taskId) {
-    let {data} = this.state;
-    let {serviceTask, service, tasks } = data;
+    let { data } = this.state;
+    let { serviceTask, service, tasks } = data;
     let task, sequence;
     let session = [];
     if (taskId) {
@@ -109,7 +113,7 @@ export default class MlServiceManageSchedule extends Component {
         displayName: '',
         noOfSession: '',
         sessionFrequency: '',
-        duration: {hours: '', minutes: ''},
+        duration: { hours: '', minutes: '' },
         session: []
       };
       serviceTask.selectedTaskId = '';
@@ -129,18 +133,18 @@ export default class MlServiceManageSchedule extends Component {
     data.facilitationCharge.amount = 0;
     if (data.facilitationCharge.type && data.facilitationCharge.amount <= 0) {
       data.finalAmount = parseFloat(data.servicePayment.tasksDerived);
-      if (data.servicePayment.discountValue > 0 ) {
+      if (data.servicePayment.discountValue > 0) {
         if (data.servicePayment.discountType === 'amount') {
           let value = data.finalAmount - parseFloat(data.servicePayment.discountValue);
           data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         } else if (data.servicePayment.discountType === 'percent') {
-          let prevAmount =  (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
+          let prevAmount = (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
           let value = data.finalAmount - prevAmount;
           data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         }
       }
     }
-    this.setState({data: data});
+    this.setState({ data: data });
   }
 
   /**
@@ -148,7 +152,7 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Calculate the charges as per charge type
    */
   calculateCharges(event) {
-    let {data} = this.state;
+    let { data } = this.state;
     data.finalAmount = data.servicePayment.tasksDerived;
     data.facilitationCharge.amount = 0;
     this.errorMsg = '';
@@ -179,17 +183,17 @@ export default class MlServiceManageSchedule extends Component {
       default:
       // do nothing
     }
-    if (data.servicePayment.discountValue > 0 ) {
+    if (data.servicePayment.discountValue > 0) {
       if (data.servicePayment.discountType === 'amount') {
         let value = data.finalAmount - parseFloat(data.servicePayment.discountValue);
         data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
       } else if (data.servicePayment.discountType === 'percent') {
-        let prevAmount =  (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
+        let prevAmount = (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
         let value = data.finalAmount - prevAmount;
         data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
       }
     }
-    this.setState({data: data});
+    this.setState({ data: data });
   }
 
   /**
@@ -199,16 +203,16 @@ export default class MlServiceManageSchedule extends Component {
   async saveServicePaymentDetails(type) {
     if (!this.errorMsg) {
       this.errorMsg = '';
-      let {data} = this.state;
-      let {servicePayment, finalAmount, facilitationCharge} = data;
+      let { data } = this.state;
+      let { servicePayment, finalAmount, facilitationCharge } = data;
       if ((facilitationCharge.type && facilitationCharge.amount <= 0) || !facilitationCharge.amount) {
-        if (servicePayment.discountValue > 0 ) {
+        if (servicePayment.discountValue > 0) {
           finalAmount = parseFloat(servicePayment.tasksDerived);
           if (servicePayment.discountType === 'amount') {
             let value = finalAmount - parseFloat(servicePayment.discountValue);
             finalAmount = value ? parseFloat(value).toFixed(2) : null;
           } else if (servicePayment.discountType === 'percent') {
-            let prevAmount =  (parseFloat(servicePayment.tasksDerived) * parseFloat(servicePayment.discountValue) / 100);
+            let prevAmount = (parseFloat(servicePayment.tasksDerived) * parseFloat(servicePayment.discountValue) / 100);
             let value = finalAmount - prevAmount;
             finalAmount = value ? parseFloat(value).toFixed(2) : null;
           }
@@ -226,7 +230,7 @@ export default class MlServiceManageSchedule extends Component {
       const response = await updateServiceActionHandler(this.props.serviceId, service);
       if (response.success) {
         data.prevFinalAmount = service.finalAmount;
-        this.setState({data: data});
+        this.setState({ data: data });
       }
       this.showResponseMsg(response, type);
     } else {
@@ -255,25 +259,28 @@ export default class MlServiceManageSchedule extends Component {
     const steps = [
       {
         name: 'Create',
-        component: <MlServiceCardStep1 data={this.state.data}/>,
+        component: <MlServiceCardStep1 data={this.state.data} />,
         icon: <span className="ml my-ml-add_tasks"></span>
       },
       {
         name: 'Select Tasks',
         component: <MlServiceCardStep2 data={this.state.data}
-                                       optionsBySelectService={this.optionsBySelectService}
-                                       profileId={this.props.profileId}
-                                       serviceId={this.props.serviceId} />,
+          optionsBySelectService={this.optionsBySelectService}
+          profileId={this.props.profileId}
+          serviceId={this.props.serviceId} />,
         icon: <span className="ml fa fa-users"></span>
       },
-      {name: 'Terms & Conditions',
+      {
+        name: 'Terms & Conditions',
         component: <MlServiceCardStep3 data={this.state.data} />,
-        icon: <span className="ml ml-payments"></span>},
-      {name: 'Payment',
+        icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: 'Payment',
         component: <MlServiceCardStep4 data={this.state.data}
-                                       checkChargeStatus={this.checkChargeStatus}
-                                       calculateCharges={this.calculateCharges}
-                                       saveServicePaymentDetails={this.saveServicePaymentDetails} />,
+          checkChargeStatus={this.checkChargeStatus}
+          calculateCharges={this.calculateCharges}
+          saveServicePaymentDetails={this.saveServicePaymentDetails} />,
         icon: <span className="ml ml-payments"></span>
       }
     ];
@@ -288,14 +295,14 @@ export default class MlServiceManageSchedule extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <div className="clearfix"/>
-           <div className="col-md-12">
+          <div className="clearfix" />
+          <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
-                           stepsNavigation={true}
-                           showNavigation={false}
-                           prevBtnOnLastStep={false}/>
+                  stepsNavigation={true}
+                  showNavigation={false}
+                  prevBtnOnLastStep={false} />
               </div>
             </div>
           </div>

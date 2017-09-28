@@ -1429,7 +1429,7 @@ MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, 
     return response;
   }
   let appointmentResponse = mlDBController.update('MlAppointments', {appointmentId: appointmentId}, { isCancelled: true }, {$set:true, multi: true}, context);
-  if(!response) {
+  if(!appointmentResponse) {
     let code = 400;
     let response = new MlRespPayload().errorPayload('Unable to cancel appointment', code);
     return response;
@@ -1514,8 +1514,58 @@ MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, ar
 
 MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, context, info) => {
 
+  let orderId = args.orderId;
+  let orderInfo = mlDBController.findOne('MlUserServiceCardOrder', {orderId: orderId}, context);
+  let serviceId = orderInfo.serviceId;
+  let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+  if( !serviceInfo ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    return response;
+  }
+
+  if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isCancelable || !serviceInfo.termsAndCondition.noOfDaysBeforeCancelation ) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Order not allow to cancel', code);
+    return response;
+  }
+
+  let currentDate = new Date();
+  let orderCancelableDate = new Date(orderInfo.createdAt);
+  orderCancelableDate.setDate( orderCancelableDate.getDate() + serviceInfo.termsAndCondition.noOfDaysBeforeCancelation );
+  if(currentDate.getTime() > orderCancelableDate.getTime()) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Order not allow to cancel, Please contact admin', code);
+    return response;
+  }
+  let findAppoinmtent = mlDBController.findOne('MlAppointments', { 'appointmentInfo.serviceOrderId': orderId }, context);
+
+  if(findAppoinmtent){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Order not allow to cancel due, you already consume the service', code);
+    return response;
+  }
+
+  let orderResponse = mlDBController.update('MlUserServiceCardOrder', {orderId: orderId}, { isCancelled: true }, {$set:true}, context);
+  if(!orderResponse) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Unable to cancel appointment', code);
+    return response;
+  }
+
+  let result = new MlRespPayload().successPayload('Order Cancel Successfully', 200);
+  return result;
+
 };
 
 MlResolver.MlMutationResolver["signOffUserServiceCardOrder"] = (obj, args, context, info) => {
-
+  let orderId = args.orderId;
+  let orderResponse = mlDBController.update('MlUserServiceCardOrder', {orderId: orderId}, { isSignOff: true }, {$set:true}, context);
+  if(!orderResponse) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Unable to sign off', code);
+    return response;
+  }
+  let result = new MlRespPayload().successPayload('SignOff successfully', 200);
+  return result;
 };

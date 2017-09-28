@@ -115,7 +115,8 @@ export default class MlServiceProviderViewAwards extends React.Component {
     const response = await fetchServiceProviderPortfolioAwards(portfoliodetailsId);
     if (response) {
       this.setState({loading: false, serviceProviderAwardsList: response});
-    }
+    }else
+      this.setState({loading: false})
 
   }
 

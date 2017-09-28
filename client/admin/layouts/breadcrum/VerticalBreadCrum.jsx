@@ -188,7 +188,7 @@ export default class VerticalBreadCrum extends Component {
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
-      return (<li key={prop.linkId} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
+      return (<li key={id} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
     });
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 

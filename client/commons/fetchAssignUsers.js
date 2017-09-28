@@ -19,6 +19,7 @@ export async function fetchAssignUsersActionHandler(clusterId, chapterId, subCha
             username,
             profile{
               isActive
+              profileImage
             }
         }
       }

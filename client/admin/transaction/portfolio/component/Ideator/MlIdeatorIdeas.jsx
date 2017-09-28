@@ -210,11 +210,11 @@ export default class MlIdeatorIdeas extends React.Component{
         />
         <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
           <form>
-            <div className="form-group">
+            <div className="form-group mandatory">
               <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeaTitlePrivate")}/>
             </div>
-            <div className="form-group">
+            <div className="form-group mandatory">
               <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur.bind(this)}></textarea>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, "ideaDescription", "isIdeaPrivate")}/>
             </div>

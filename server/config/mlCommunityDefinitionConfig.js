@@ -3,7 +3,7 @@
  */
 
 let communityDef = [{_id:"ideators",name:"Ideators","code":"IDE",displayName:"Ideators","showOnMap":false,"aboutCommunity":"Ideator","communityImageLink" : "ml my-ml-Ideator","isActive":true},
-  {_id:"funders",name:"Investors","code":"FUN",displayName:"Investors","showOnMap":false,"aboutCommunity":"Funder","communityImageLink" : "ml my-ml-Investor","isActive":true},
+  {_id:"funders",name:"Investors","code":"FUN",displayName:"Investors","showOnMap":false,"aboutCommunity":"Funder","communityImageLink" : "ml my-ml-Investors","isActive":true},
   {_id:"startups",name:"Startups","code":"STU",displayName:"Startups","showOnMap":false,"aboutCommunity":"Startups","communityImageLink" : "ml my-ml-Startups","isActive":true},
   {_id:"companies",name:"Companies","code":"CMP",displayName:"Companies","showOnMap":false,"aboutCommunity":"Companies","communityImageLink" : "ml my-ml-Company","isActive":true},
   {_id:"serviceproviders",name:"Service Providers","code":"SPS",displayName:"Service Providers","showOnMap":false,"aboutCommunity":"Service Providers","communityImageLink" : "ml my-ml-Service-Providers","isActive":true},

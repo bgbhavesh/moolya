@@ -170,14 +170,15 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
     var infoFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, infoObject, context)
     companyAboutUsArray["information"] = infoFilteredObject
 
-    // if(startAboutUsArray && startAboutUsArray.clients){
-    //   startAboutUsArray.clients.map(function(client,index) {
-    //     let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
-    //     if(startAboutUsArray.clients[index]){
-    //       startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
-    //     }
-    //   })
-    // }
+    if(companyAboutUsArray && companyAboutUsArray.clients){
+      companyAboutUsArray.clients = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, companyAboutUsArray.clients, context)
+      companyAboutUsArray.clients.map(function(client,index) {
+        let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
+        if(companyAboutUsArray.clients[index]){
+          companyAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
+        }
+      })
+    }
     //for view action
     MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
 

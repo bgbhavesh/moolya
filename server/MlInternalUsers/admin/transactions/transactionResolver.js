@@ -54,7 +54,7 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
   var transactions = args.transactionId
   transactions.map(function (transaction) {
     let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
-    if(trans.allocation){
+    if(trans && trans.allocation && trans.allocation.assigneeId){
        hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(transaction,collection,context.userId,trans.allocation.assigneeId)
     }else{
        hierarchyDesicion = mlHierarchyAssignment.assignTransaction(transaction,collection,context.userId,params.user)
@@ -172,7 +172,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
   var transactions = args.transactionId
   transactions.map(function (transaction) {
     let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
-    if(trans&&trans.allocation){
+    if(trans&&trans.allocation&&trans.allocation.assigneeId){
       hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(trans,collection,context.userId,trans.allocation.assigneeId)
     }else{
       hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(trans,collection,context.userId)

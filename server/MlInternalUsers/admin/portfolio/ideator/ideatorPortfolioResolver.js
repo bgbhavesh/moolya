@@ -710,38 +710,49 @@ MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
-    let ideas = [];
-    let  userId;
-    if(args.portfolioId){
-      userId = MlPortfolioDetails.findOne({_id:args.portfolioId}).userId;
-    }else if(context.userId){
-      userId=context.userId
+  let ideas = [];
+  let userId;
+  var mongoQuery = {}
+  if (args.portfolioId) {
+    var portfolio = MlPortfolioDetails.findOne({_id: args.portfolioId}) || {}
+    userId = portfolio.userId
+    mongoQuery = {"$and": [{"userId": userId}, {"communityCode": "IDE"}]}
+  } else if (context.userId) {
+    userId = context.userId
+    var defaultProfile = new MlUserContext(userId).userProfileDetails(userId)
+    mongoQuery = {userId: userId, communityCode: "IDE", profileId: defaultProfile.profileId}
+    if (!defaultProfile)
+      return ideas;
+  }
+  if (!context.userId) {
+    return ideas;
+  }
+
+  // let defaultProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+  // if(!defaultProfile)
+  //     return ideas;
+
+  // let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
+  // let portfolios = MlPortfolioDetails.find({"$and": [{"userId": userId}, {"communityType": "Ideators"}]}).fetch()
+  let portfolios = MlPortfolioDetails.find(mongoQuery).fetch()
+  if (!portfolios)
+    return ideas;
+
+  _.each(portfolios, function (portfolio) {
+    let idea = MlIdeas.findOne({"portfolioId": portfolio._id})
+    if (idea) {
+      idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
+      idea.createdAt = portfolio ? portfolio.createdAt : null;
+      idea.updatedAt = portfolio ? portfolio.transactionUpdatedDate : null;
+      ideas.push(idea);
     }
-    if(!context.userId){
-        return ideas;
-    }
-
-    let defaultProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-    if(!defaultProfile)
-        return ideas;
-
-    // let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
-    let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"communityType":"Ideators"}]}).fetch()
-    if(!portfolios)
-        return ideas;
-
-    _.each(portfolios, function (portfolio) {
-          let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
-          if(idea){
-            idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
-            idea.createdAt = portfolio?portfolio.createdAt:null;
-            idea.updatedAt = portfolio?portfolio.transactionUpdatedDate:null;
-            ideas.push(idea);
-          }
-    })
+  })
 
   //for view action
-  MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfolioId,resourceType:'portfolio'}, context, info);
+  MlResolver.MlMutationResolver['createView'](obj, {
+    resourceId: args.portfolioId,
+    resourceType: 'portfolio'
+  }, context, info);
 
   return ideas;
 }

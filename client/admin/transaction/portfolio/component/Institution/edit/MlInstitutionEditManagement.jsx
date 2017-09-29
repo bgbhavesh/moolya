@@ -29,7 +29,8 @@ export default class MlInstitutionEditManagement extends React.Component{
       clusterId:'',
       // arrIndex:"",
       managementIndex:"",
-      responseImage:""
+      responseImage:"",
+      gender:null,
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -300,6 +301,9 @@ export default class MlInstitutionEditManagement extends React.Component{
       }
     }
   }
+  optionsBySelectGender(val){
+    this.setState({gender:val.value})
+  }
 
   render(){
     let titlequery=gql`query($type:String,$hierarchyRefId:String){
@@ -310,6 +314,13 @@ export default class MlInstitutionEditManagement extends React.Component{
      }
      `;
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.state.clusterId}}};
+
+    let genderValues = [
+      {value: 'male', label: 'Male'},
+      {value: 'female', label: 'Female'},
+      {value: 'others', label: 'Others'}
+    ];
+
     var yesterday = Datetime.moment().subtract(0,'day');
     var valid = function( current ){
       return current.isBefore( yesterday );
@@ -377,9 +388,14 @@ export default class MlInstitutionEditManagement extends React.Component{
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")}/>
                       </div>
 
-                      <div className="form-group">
-                        <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>*/}
+                      {/*</div>*/}
+                      <div className="form-group mandatory">
+                        <Select name="form-field-name"  ref={"gender"} placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" data-required={true} data-errMsg="Gender is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
+
                       </div>
 
                       <div className="form-group">

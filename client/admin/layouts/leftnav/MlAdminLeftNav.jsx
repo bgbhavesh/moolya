@@ -9,7 +9,7 @@ class MlAdminLeftNavScroll extends Component {
 
   constructor(props){
     super(props);
-    console.log('Props',props);
+    // console.log('Props',props);
   }
 
   componentDidMount(){
@@ -62,10 +62,6 @@ export default class MlAdminLeftNav extends Component {
     });
   }
 
-  onClickItem(e) {
-    console.log(e.target.id)
-  }
-
   render() {
     let path = FlowRouter.current().route.name;
     if(path == 'clusterview')
@@ -93,7 +89,7 @@ export default class MlAdminLeftNav extends Component {
     }
 
     let testFunction =  function (that) {
-      console.log(this ,that);
+      // console.log(this ,that);
     };
 
     let activeIndex = 0;
@@ -104,7 +100,7 @@ export default class MlAdminLeftNav extends Component {
         activeClass = 'active_menu';
         activeIndex = index;
       }
-      console.log(navOptions);
+      // console.log(navOptions);
       return (
         <li className={`menu_item ${activeClass} `} key={dataItem.uniqueId}>
           <a href={dataItem.link} id={dataItem.uniqueId}>
@@ -119,7 +115,7 @@ export default class MlAdminLeftNav extends Component {
     });
 
     let scrollTo = activeIndex*108;
-    console.log(scrollTo, activeIndex);
+    // console.log(scrollTo, activeIndex);
 
     return (
       <div className="admin_menu">

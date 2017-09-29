@@ -13,3 +13,4 @@ MlResolver.MlQueryResolver['fetchConversationAuthToken'] = (obj, args, context, 
     var result = mlConversationsRepo.login(user.username)
     return result;
 }
+/**this resolver have no use need to remove it*/

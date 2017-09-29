@@ -485,7 +485,7 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
  * @params portfolioId
  * @moduleUsage[PORTFOLIO && principleTeam in funder portfolio]
  * */
-MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['findPortfolioDetails'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
     var subChapterId = portfolio?portfolio.subChapterId:''

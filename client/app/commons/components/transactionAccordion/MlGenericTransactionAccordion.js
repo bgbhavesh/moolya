@@ -21,7 +21,7 @@ export default function MlGenericTransactionAccordion(props) {
     case 'appointment': {
       // return (<h1>appointment testing</h1>);
       return (
-        <MlAppointmentsDetailsComponent transactionType={data.transactionType} appointmentId={data._id} />
+        <MlAppointmentsDetailsComponent transactionType={data.activity} appointmentId={data._id} />
       );
     }
     case 'office': {

@@ -1848,10 +1848,16 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   kycDocumentObject.isActive = true
   kycDocumentObject.isMandatory = false
   kycDocumentObject.status = "Awaiting upload"
-
+  kycDocumentObject.docFiles = [];
 
   let id;
   let registrationDetails;
+
+  let sameKYCEXist =  MlRegistration.findOne({"_id": args.registrationId,"kycDocuments.documentId" : kycDocumentObject.documentId });
+
+  if(sameKYCEXist){
+    return new MlRespPayload().errorPayload("Document Already Exist", 403);
+  }
   if (args.registrationId) {
     registrationDetails = MlRegistration.findOne({"_id": args.registrationId});
   }

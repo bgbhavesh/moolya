@@ -36,9 +36,8 @@ export default class AppMyProfileMyoffice extends React.Component{
   getsubNotificationIcon(subNotificationType) {
 
     //define the notificationTypes and their corresponding classes in their respective arrays, ensure the order
-
-    const notificationTypeArray = ['connectionRequestReceived','connectionRequestSent','enquiryRequestRecieved','reviewRecieved','newUserCreation','kycApprove','kycDecline','portfolioUpdate','goLiveRequest','goLiveRequestApproval','goLiveRequestDecline','userApproval'];
-    const classNames = ['ml flaticon-ml-handshake','ml flaticon-ml-handshake','ml flaticon-ml-support','ml flaticon-ml-note'];
+    const notificationTypeArray = ['connectionRequestReceived', 'connectionRequestSent', 'enquiryRequestRecieved', 'reviewRecieved', 'newUserCreation', 'kycApprove', 'kycDecline', 'portfolioUpdate', 'goLiveRequest', 'goLiveRequestApproval', 'goLiveRequestDecline', 'userApproval'];
+    const classNames = ['ml my-ml-connection_request_recvd', 'ml my-ml-connection_request_sent', 'ml my-ml-enquiry_request', 'ml my-ml-review_recvd', 'ml my-ml-add_user', 'ml my-ml-kyc_approve', 'ml my-ml-kyc_decline', 'ml my-ml-portfolio_update', 'ml my-ml-go_live_request', 'ml my-ml-go_live_request_approved', 'ml my-ml-go_live_request_declined', 'ml my-ml-approve_user'];
     const index = notificationTypeArray.indexOf(subNotificationType);
     if(index === -1 || !classNames[index]){
       return 'ml ml-moolya-symbol';

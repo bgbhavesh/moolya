@@ -5,6 +5,7 @@
 import React from 'react';
 import AppointmentSes from './appointmentSession';
 import { fetchAdminServiceAppointment } from "../../action/fetchAdminServiceAppointment";
+import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCardsDetailsComponent';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -15,7 +16,8 @@ export default class MlAppServicePurchasedDetail extends React.Component {
       data: {
         client: {},
         owner: {},
-        sessionInfo: []
+        sessionInfo: [],
+        service: {}
       }
     };
   }
@@ -42,6 +44,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
         data.client = data.client ? data.client : {};
         data.owner = data.owner ? data.owner : {};
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
+        data.service = data.service ? data.service : {};
         that.setState({
           data: data
         });
@@ -174,7 +177,8 @@ export default class MlAppServicePurchasedDetail extends React.Component {
 
           {/*fourth tab*/}
           <div className="tab-pane" id={`${data.orderId}4a`}>
-            <p>Take from this page "appFunderMyAppointment"</p>
+            {/* <p>Take from this page "appFunderMyAppointment"</p> */}
+            <MlServiceCardsDetailsComponent data={{ profileId: this.state.data.service.profileId, _id: this.state.data.service._id, userDetails: {} }} />
           </div>
           {/*fivth tab*/}
           <div className="tab-pane" id={`${data.orderId}5a`}>

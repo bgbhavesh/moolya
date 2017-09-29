@@ -213,7 +213,7 @@ class MlNotificationControllerClass {
   onUserApproval(payload) {
     var userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ""
     var communityName = payload && payload.registrationInfo && payload.registrationInfo.communityDefName ? payload.registrationInfo.communityDefName : ""
-    var notifyMessage = "You have been added to the "+communityName+"on "+ new Date()+".Please proceed to complete your portfolio process."
+    var notifyMessage = "You have been added to the "+communityName+" on "+ new Date()+".Please proceed to complete your portfolio process."
     let obj = {
       notificationType: "PUSHNOTIFICATION",
       "subNotificationType":"userApproval",

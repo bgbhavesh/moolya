@@ -46,7 +46,7 @@ export default function MlGenericTransactionAccordion(props) {
       break;
     }
     default:
-      return <MlEmptyView />
+      return <MlEmptyView {...data}/>
   }
 }
 
@@ -91,8 +91,9 @@ export class MlOffice extends Component {
 
 export class MlEmptyView extends Component {
   render() {
+    var props = this.props
     return (<div>
-      UI Not available
+      Transaction record of : {props.transactionType}
     </div>)
   }
 }

@@ -1,22 +1,40 @@
 import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHandler';
 import ScrollArea from 'react-scrollbar'
+import { fetchPortfolioImageHandler } from '../../../app/ideators/actions/ideatorActionHandler';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
     this.state = { breadCrumList: [] };
-    this.getHierarchyDetails.bind(this);
+    this.getHierarchyDetails = this.getHierarchyDetails.bind(this);
     this.setBreadCrumHierarchyCallback.bind(this);
     return this;
   }
 
   componentDidMount() {
     this._isMounted = true;
-    this.getHierarchyDetails();
+    let porfolioId = FlowRouter.getParam('portfolioId');
+    if(porfolioId)
+      this.getUserName(porfolioId);
+    else
+      this.getHierarchyDetails();
   }
-  componentDidUpdate() {var WinHeight = $(window).height();
-    $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));}
+  componentDidUpdate() {
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));
+  }
+
+  async getUserName(porfolioId){
+    var response = await fetchPortfolioImageHandler(porfolioId);
+    if (response) {
+      this.setState({user:response.portfolioUserName},
+        ()=>{
+        this.getHierarchyDetails();
+        });
+    }else  this.getHierarchyDetails();
+  }
+
   componentWillUnmount() {
     this._isMounted = false;
 
@@ -80,6 +98,19 @@ export default class VerticalBreadCrum extends Component {
           breadCrumObject.push({
             linkName:properName(breadCrum.subModule)
           });
+
+          this.setBreadCrumHierarchyCallback(
+            breadCrumObject
+          );
+          return;
+        }
+
+        if(breadCrum.type === 'users' && breadCrum.module ==='clusters' && breadCrum.subModule){
+          breadCrumObject = [
+            { linkName: properName(breadCrum.module),  linkUrl:path.split('users')[0]+'users/clusters'},
+            { linkName: properName(this.state.user || 'User'),  linkUrl:path.split(breadCrum.subModule)[0]+'aboutuser'},
+            { linkName: properName(fixName(breadCrum.subModule)),  linkUrl:path},
+          ];
 
           this.setBreadCrumHierarchyCallback(
             breadCrumObject
@@ -157,7 +188,7 @@ export default class VerticalBreadCrum extends Component {
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
-      return (<li key={prop.linkId} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
+      return (<li key={id} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
     });
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 
@@ -295,6 +326,12 @@ function StaticBreadCrumListHandlerWithNoBredcum() {
 
 function properName(name) {
   if (name) { return (name.charAt(0).toUpperCase() + name.slice(1)).replace(/([A-Z])/g, ' $1').trim(); }
+  return name;
+}
+
+function fixName(name) {
+  if(name === 'aboutuser')
+    return  'about';
   return name;
 }
 

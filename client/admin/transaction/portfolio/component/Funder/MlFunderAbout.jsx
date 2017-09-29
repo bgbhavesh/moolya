@@ -339,14 +339,14 @@ export default class MlFunderAbout extends React.Component {
                   <div className="form_bg">
                     <form>
 
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} />
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isFirstNamePrivate")} />
+                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isFirstNamePrivate")} />*/}
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} />
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")} />
+                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")} />*/}
                       </div>
 
                       {/*<div className="form-group">*/}

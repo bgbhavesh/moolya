@@ -9,7 +9,7 @@ import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignBackendUserList from "./MlAssignBackendUserList";
 import MlAssignBackednUserRoles from "./MlAssignBackendUserRoles";
 import {mlClusterConfig} from "../config/mlClusterConfig";
-import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
+import {multipartFormHandler, multipartASyncFormHandler} from "../../../commons/MlMultipartFormAction";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {findClusterTypeActionHandler} from "../actions/findCluster";
@@ -39,6 +39,7 @@ class MlAssignBackendUsers extends React.Component {
       this.assignBackendUsers.bind(this);
       this.updateSelectedBackEndUser.bind(this);
       this.filterClusterBasedRoles.bind(this);
+      this.onFileUpload = this.onFileUpload.bind(this);
       this.toggleProfileModal = this.toggleProfileModal.bind(this);
       this.onUploadAvatar = this.onUploadAvatar.bind(this);
       // this.findCluster.bind(this);
@@ -155,6 +156,29 @@ class MlAssignBackendUsers extends React.Component {
       return response;
   }
 
+  async onFileUpload(imageFile){
+    let user = {
+      profile:{
+       profileImage:" "
+      }
+    }
+    let file=imageFile || document.getElementById("profilePic").files[0];
+    if(file) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  onFileUploadCallBack(output) {
+    if ( output ) {
+      this.setState({
+        profileImage: JSON.parse(output).result,
+        profilePic: null
+      })
+    }
+  }
+
   /**
    * @handlerSuccess under different conditions
    * */
@@ -197,6 +221,7 @@ class MlAssignBackendUsers extends React.Component {
   }
 
   onUploadAvatar(image) {
+    this.onFileUpload(image);
     this.setState({
       profilePic: image,
     });
@@ -308,7 +333,7 @@ class MlAssignBackendUsers extends React.Component {
               <div className="left_wrap">
                 <ScrollArea speed={0.8} className="left_wrap">
 
-                  <h2>Details</h2>
+                  {/*<h2>Details</h2>*/}
                   <form>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">

@@ -207,7 +207,7 @@ class MlAppointment {
    * @param profileId  :: String - ProfileId of user
    * @returns {Array}
    */
-  getUserAvailabilityOfDifferentSlotOnDay(date, slotsInfo, userId, profileId){
+  getUserAvailabilityOfDifferentSlotOnDay(appointmentId, date, slotsInfo, userId, profileId){
 
     /**
      * Check slot is active or not
@@ -220,6 +220,18 @@ class MlAppointment {
       let endDate = new Date(date);
       endDate.setDate(endDate.getDate()+1);
       endDate.setSeconds(0,0);
+      let matchQuery = {
+        "$match": {
+          'members.userId':userId,
+          'isInternal':false,
+          'members.profileId':profileId,
+          startDate: { $gte:date } ,
+          endDate: {$lt:endDate} }
+      };
+      if(appointmentId) {
+        matchQuery["$match"]["appointmentId"] = { "$ne": appointmentId };
+      }
+
       let appointments = mlDBController.aggregate( 'MlAppointments', [
         {
           $lookup: {
@@ -230,7 +242,7 @@ class MlAppointment {
           }
         },
         { "$unwind": "$members" },
-        { "$match": {'members.userId':userId, 'isInternal':false, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+        matchQuery
       ]);
 
       /**
@@ -286,7 +298,7 @@ class MlAppointment {
    * @param month
    * @param year
    */
-  getSessionTimeSlots(taskId, sessionId, day, month, year){
+  getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year){
     const that = this;
     /**
      * Initialize the date object and set date month and year
@@ -315,7 +327,7 @@ class MlAppointment {
       return []
     }
 
-    let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
+    let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(appointmentId, date, serviceProviderSlots, task.userId, task.profileId);
     let teamSlotsAvailabilities = [];
 
     /**
@@ -451,7 +463,7 @@ class MlAppointment {
       let canAppoinmentBook = true;
       let isStartTimeFind = false;
       let totalSlotsDuration = 0;
-      let availableSlots = that.getSessionTimeSlots(taskId, sessionId, day, month, year);
+      let availableSlots = that.getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year);
       if(!availableSlots || !availableSlots.length) {
         canAppoinmentBook = false;
       }

@@ -15,6 +15,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {mlFieldValidations, validatedPhoneNumber,validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
 import {fetchSubChapterDetails} from "../../requested/actions/findRegistration"
+import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
 export default class MlCreateRegistration extends React.Component{
 
   constructor(props){
@@ -36,6 +37,7 @@ export default class MlCreateRegistration extends React.Component{
       userName : '',
       selectedAccountsType:" ",
       countryCode: '',
+      passwordValidation:false
     }
     this.createRegistration.bind(this);
     return this;
@@ -62,7 +64,9 @@ export default class MlCreateRegistration extends React.Component{
       toastr.error('Please enter a valid contact number');
     }else if (!isValidEmail) {
       return toastr.error('Please enter a valid EmailId');
-    }else {
+    }else if(this.state.pwdValidationMsg){
+      return toastr.error("Password "+this.state.pwdValidationMsg);
+    } else{
       let Details = {
 
         firstName: this.refs.firstName.value,
@@ -164,6 +168,20 @@ export default class MlCreateRegistration extends React.Component{
       this.setState({"isEcoSystem" : false})
     }
   }
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": '', passwordValidation: true})
+      }else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
+    }
+  }
+
 
   /**
    * changing all emailId to the Lowercase only
@@ -323,9 +341,13 @@ export default class MlCreateRegistration extends React.Component{
                 <div className="form-group mandatory">
                   <input type="text" placeholder="User name" ref="userName"  value={this.state.userName} className="form-control float-label" id="" disabled="disabled" data-required={true} data-errMsg="UserName is required"/>
                 </div>
-                <div className="form-group mandatory">
-                  <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id="" data-required={true} data-errMsg="Password is required"/>
-                </div>
+                {/*<div className="form-group mandatory">*/}
+                  {/*<input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id="" data-required={true} data-errMsg="Password is required"/>*/}
+                {/*</div>*/} <div className="form-group mandatory">
+                <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                <input type="Password" ref="password"  onBlur={this.passwordValidation.bind(this)} placeholder="Password" className="form-control float-label" id="" data-required={true} data-errMsg="Password is required"/>
+
+              </div>
                 <div className="form-group">
                   <Moolyaselect  placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery} onSelect={this.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                 </div>

@@ -503,10 +503,11 @@ class Library extends React.Component {
       privacyState: privacyState,
       portfolioId: this.props.portfolioDetailsId
     }
-    this.dataPrivacyHandler(imageDetails)
-    images[id].isPrivate = privacyState;
-    this.setState({ imageSpecifications: images })
-    this.privacySeggregation();
+    this.dataPrivacyHandler(imageDetails,(res)=>{
+      images[id].isPrivate = privacyState;
+      this.setState({ imageSpecifications: images })
+      this.privacySeggregation();
+    })
   }
   // let imageLock = this.state.imagesLock;
   // // if(Object.keys(imageLock).length === 0) {
@@ -541,10 +542,11 @@ class Library extends React.Component {
       privacyState: privacyState,
       portfolioId: this.props.portfolioDetailsId
     }
-    this.dataPrivacyHandler(templateDetails)
-    templates[id].isPrivate = privacyState;
-    this.setState({ templateSpecifications: templates })
-    this.privacySeggregation();
+    this.dataPrivacyHandler(templateDetails,(res)=>{
+      templates[id].isPrivate = privacyState;
+      this.setState({ templateSpecifications: templates })
+      this.privacySeggregation();
+    })
   }
 
   /**
@@ -569,10 +571,11 @@ class Library extends React.Component {
       privacyState: privacyState,
       portfolioId: this.props.portfolioDetailsId
     }
-    this.dataPrivacyHandler(videoDetails)
-    videos[id].isPrivate = privacyState;
-    this.setState({ videoSpecifications: videos })
-    this.privacySeggregation();
+    this.dataPrivacyHandler(videoDetails,(res)=>{
+      videos[id].isPrivate = privacyState;
+      this.setState({ videoSpecifications: videos })
+      this.privacySeggregation();
+    })
   }
 
   /**
@@ -597,15 +600,16 @@ class Library extends React.Component {
       privacyState: privacyState,
       portfolioId: this.props.portfolioDetailsId
     }
-    this.dataPrivacyHandler(documentDetails)
-    documents[id].isPrivate = privacyState;
-    this.setState({ documentSpecifications: documents })
-    this.privacySeggregation();
+    this.dataPrivacyHandler(documentDetails,(res)=>{
+      documents[id].isPrivate = privacyState;
+      this.setState({ documentSpecifications: documents })
+      this.privacySeggregation();
+    });
   }
 
-  async dataPrivacyHandler(detailsInput) {
+  async dataPrivacyHandler(detailsInput,callback) {
     const response = await updatePrivacyDetails(detailsInput, this.props.client)
-    return response;
+    return callback(response);
   }
 
   /**
@@ -816,12 +820,22 @@ class Library extends React.Component {
 
   images() {
     let that = this;
-    let imageData = this.state.isLibrary ? this.state.imageDetails || [] : this.state.imageSpecifications || [];
+    let imageData =  this.state.imageSpecifications || [];
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />}
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleImageLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+            ""
+            :
+            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
+          }
           <a href="" data-toggle="modal" data-target=".imagepop"
             onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
           <div id="images" className="title">{show.fileName}</div>
@@ -900,8 +914,20 @@ class Library extends React.Component {
     const Templates = templateData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template")} />}
+
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleTemplateLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+              ""
+              :
+              <FontAwesome name='trash-o' onClick={() =>  that.delete(id, "template")} />
+          }
+
           <a href="" data-toggle="modal" data-target=".templatepop"
             onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
           <div id="templates" className="title">{show.fileName}</div>
@@ -965,8 +991,22 @@ class Library extends React.Component {
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
+
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleVideoLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+              ""
+              :
+              <FontAwesome name='trash-o' onClick={() =>  that.delete(id, "video")} />
+          }
+
+
+
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
               <source src={show.fileUrl} type="video/mp4"></source>
@@ -1038,8 +1078,21 @@ class Library extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='unlock' /> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show, id)} name='lock' /> : ""}
-          {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
+
+          {
+            !that.state.explore && !that.state.hideLock ?
+              <FontAwesome onClick={() => that.toggleDocumentLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
+              :
+              ""
+          }
+          {
+            that.state.explore ?
+              ""
+              :
+              <FontAwesome name='trash-o' onClick={() =>  that.delete(id, "document")} />
+          }
+
+
           <a href="" data-toggle="modal" data-target=".documentpop"
             onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>
           <div id="images" className="title">{show.fileName}</div>

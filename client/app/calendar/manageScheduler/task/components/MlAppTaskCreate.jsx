@@ -29,17 +29,19 @@ export default class MlAppTaskCreate extends Component {
       loading: true,
       data: {},
       oldData: {},
+      dataChanged:false,
     };
     return this;
   }
 
   isUpdated() {
     var differences = diff(this.state.oldData, this.state.data);
-    if (differences && differences.length > 0) {
-      return false
-    } else {
-      return true
-    }
+    return !this.state.dataChanged;
+    // if (this.state.dataChanged) {
+    //   return false
+    // } else {
+    //   return true
+    // }
   }
 
   /**
@@ -48,7 +50,8 @@ export default class MlAppTaskCreate extends Component {
    */
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    var WinHeight = $(window).height()
+    this.setState({dataChanged:false});
     $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
   }
 
@@ -62,6 +65,13 @@ export default class MlAppTaskCreate extends Component {
     return resp;
   }
 
+  componentWillReceiveProps(nextProps){
+    if(this.props.saved){
+      this.props.resetSaved();
+      this.setState({dataChanged:false});
+    }
+  }
+
   componentDidUpdate() {
     initalizeFloatLabel();
   }
@@ -71,11 +81,11 @@ export default class MlAppTaskCreate extends Component {
     if (taskId) {
       var response = await findTaskActionHandler(taskId);
       if (!_.isEmpty(response)) {
-        this.setState({ loading: false, data: response, oldData: response }, this.sendTaskDataToParent);
+        this.setState({ loading: false, data: response, oldData: response,dataChanged:false }, this.sendTaskDataToParent);
       }
       return response
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false ,dataChanged:false });
     }
   }
 
@@ -85,11 +95,11 @@ export default class MlAppTaskCreate extends Component {
     details = _.omit(details, [name]);
     if (val) {
       details = _.extend(details, { [name]: val.value });
-      this.setState({ data: details }, function () {
+      this.setState({ data: details,dataChanged:true }, function () {
         this.sendTaskDataToParent()
       })
     } else {
-      this.setState({ data: details }, function () {
+      this.setState({ data: details ,dataChanged:true}, function () {
         this.sendTaskDataToParent()
       })
     }
@@ -108,7 +118,7 @@ export default class MlAppTaskCreate extends Component {
     }
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: value });
-    this.setState({ data: details }, function () {
+    this.setState({ data: details,dataChanged:true }, function () {
       this.sendTaskDataToParent()
     })
   }
@@ -118,7 +128,7 @@ export default class MlAppTaskCreate extends Component {
     let name = 'isActive';
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: e.currentTarget.checked });
-    this.setState({ data: details }, function () {
+    this.setState({ data: details,dataChanged:true }, function () {
       this.sendTaskDataToParent()
     })
   }

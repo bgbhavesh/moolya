@@ -521,7 +521,7 @@ class MlAppMyProfile extends Component {
 
                     <div className="form-group mandatory" id="date-of-birth">
                       <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): ""} className="form-control float-label" readOnly="true" />
-                      <FontAwesome name="calendar" placeholder="Date of Birth" className="form-control float-label password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
+                      <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
 

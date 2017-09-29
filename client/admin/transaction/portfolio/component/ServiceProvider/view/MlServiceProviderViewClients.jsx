@@ -155,8 +155,8 @@ export default class MlServiceProviderViewClients extends React.Component {
         let index = response&&response[0].index
         this.setState({"selectedAbout" : about,"tabIndex":0})
       }
-    }
-
+    }else
+      this.setState({loading: false})
   }
 
   onChangeAbout(data,index,e){

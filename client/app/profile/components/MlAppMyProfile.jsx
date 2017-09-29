@@ -159,7 +159,10 @@ class MlAppMyProfile extends Component {
             toastr.error("Confirm Password does not match with Password");
           else if(this.state.newpwdErrorMsg){
             toastr.error("Existing password and New Password should not match");
-          }else{
+          }else if(this.state.pwdValidationMsg){
+            return toastr.error("Password "+this.state.pwdValidationMsg);
+          }
+          else{
             const response = await resetPasswordActionHandler(userDetails);
             // this.refs.id.value='';
             this.refs.confirmPassword.value = '';

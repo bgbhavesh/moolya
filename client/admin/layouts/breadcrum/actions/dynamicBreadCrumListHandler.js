@@ -67,8 +67,12 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
         });
       });
     }
-    var dynamicLink = list[0].linkUrl || list[1].linkUrl || pathHierarchy;
-    dynamicLink = dynamicLink.split('/');
+    var dynamicLink=[];
+    if(list && list.length>0){
+      let tmp = list[0].linkUrl || list[1].linkUrl || pathHierarchy;
+      dynamicLink = tmp.split('/');
+    }
+
     list = list.reverse();
 
     if (path.includes('clusters') || path.includes('chapters')|| path.includes('communities')) {

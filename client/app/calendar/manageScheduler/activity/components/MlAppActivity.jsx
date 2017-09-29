@@ -43,6 +43,7 @@ class MlAppActivity extends Component {
         isDiscount: false
       },
       activeComponent: 0,
+      saved:false,
     };
     this.getActivityDetails = this.getActivityDetails.bind(this);
     this.setActivityDetails = this.setActivityDetails.bind(this);
@@ -63,6 +64,10 @@ class MlAppActivity extends Component {
       }
     });
     this.getActivityDetails();
+  }
+
+  resetSaved(){
+    this.setState({saved:false});
   }
 
   componentWillUpdate() {
@@ -177,9 +182,6 @@ class MlAppActivity extends Component {
       return false;
     }
 
-    console.log('activityDetails=', activityDetails);
-    console.log('state=', this.state);
-
     if (this.state.currentComponent === 0) {
       if (!activityDetails) {
         this.toastError('Activity Name');
@@ -256,12 +258,14 @@ class MlAppActivity extends Component {
       const res = await updateActivityActionHandler(id, activityDetails);
       if (res) {
         toastr.success("Updated Successfully");
+        this.setState({saved:true});
       }
       this.getActivityDetails();
     } else {
       const res = await createActivityActionHandler(activityDetails);
       if (res) {
         toastr.success("Created Successfully");
+        this.setState({saved:true});
         FlowRouter.setQueryParams({ id: res.result });
       }
     }
@@ -296,6 +300,8 @@ class MlAppActivity extends Component {
         <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
           setActivityDetails={that.setActivityDetails}
           activeComponent={this.activeComponent}
+          resetSaved={this.resetSaved.bind(this)}
+          saved={this.state.saved}
           data={this.state.paymentInfo} />,
         icon: <span className="ml ml-payments"></span>
       },

@@ -6,6 +6,8 @@ import {findProcessSetupActionHandler} from "../actions/findProcessSetupAction";
 import {fetchLikePortfolioActionHandler} from '../actions/fetchLikePortfolio';
 import Tabs from 'react-responsive-tabs';
 import MlAppInvestmentItem from './MlAppInvestmentItem';
+import NoDataList from '../../../commons/components/noData/noDataList';
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlAppInvestment extends Component {
   constructor(props) {
@@ -66,14 +68,19 @@ export default class MlAppInvestment extends Component {
     }
 
     const App = () => <Tabs items={getTabs()} />;
+    const showLoader=this.state.loading;
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
-          <div className="col-md-12">
-            <App/>
-          </div>
+      <div>
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="app_main_wrap">
+            <div className="app_padding_wrap">
+              <div className="col-md-12">
+                {MlTabs.length ? <App/> : <NoDataList moduleName="Investments"/>}
+              </div>
+            </div>
+          </div>)
+        }
         </div>
-      </div>
     )
   }
 }

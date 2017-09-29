@@ -1,6 +1,7 @@
 {
   "public": {
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
+    "conversationsBaseURL":"https://qarkc.moolya.global",
     "isLeadSquaredTrackingEnabled":true,
     "dateFormat":"MM-DD-YYYY hh:mm:ss",
     "createNewUser":{

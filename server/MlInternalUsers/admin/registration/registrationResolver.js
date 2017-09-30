@@ -255,8 +255,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   context.browser = 'Registration API'
   context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
+  /**fix:MOOLYA-3391*/
   var registrationExist = MlRegistration.findOne({
-    "registrationInfo.email": args.registration.email,
+    $or:[{"registrationInfo.email": args.registration.email},{"registrationInfo.contactNumber": args.registration.contactNumber}],
     status: {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}
   })
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};

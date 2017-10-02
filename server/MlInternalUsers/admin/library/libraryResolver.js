@@ -61,7 +61,7 @@ MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
     let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile[6]}, context)
     let tempObject = {
       portfolioId:portfolioDetails._id,
-      isPrivate: false,
+      isPrivate: true,
     }
     let tempArray= []
     tempArray.push(tempObject)

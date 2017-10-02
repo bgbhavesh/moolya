@@ -28,6 +28,16 @@ export default class Step4 extends React.Component{
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(260+$('.admin_app').outerHeight(true)));
     this.props.getActivityDetails();
+    this.props.setActivityDetails({payment:this.state.paymentData}, false);
+    // this.saveDetails();
+    this.setState({isDataChanged:false});
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.saved){
+      this.setState({isDataChanged:false});
+      this.props.resetSaved();
+    }
   }
 
   /**

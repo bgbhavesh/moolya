@@ -19,10 +19,15 @@ class MlAppTaskLanding extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: false
+      loading: false,
+      saved:false,
     }
     this.activeComponent = this.activeComponent.bind(this);
     return this;
+  }
+
+  resetSaved(){
+    this.setState({saved:false});
   }
 
   async saveTaskDetails() {
@@ -180,12 +185,15 @@ class MlAppTaskLanding extends Component {
       switch (this.state.saveType) {
         case 'taskCreate': {
           response = await createTaskActionHandler(sendData)
+          this.setState({saved:true});
           return response
         }
           break;
         case 'taskUpdate': {
-          if (taskId)
+          if (taskId){
             response = await updateTaskActionHandler(taskId, sendData)
+            this.setState({saved:true});
+          }
           else
             toastr.error("Invalid Request");
           return response
@@ -288,6 +296,8 @@ class MlAppTaskLanding extends Component {
           name: 'Create Task',
           component: <MlAppTaskCreate
             activeComponent={this.activeComponent}
+            saved={this.state.saved}
+            resetSaved={this.resetSaved.bind(this)}
             getCreateDetails={this.getCreateDetails.bind(this)}
             taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')} />,
           icon: <span className="ml my-ml-add_tasks"></span>

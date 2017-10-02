@@ -68,7 +68,7 @@ export default class MlAppIdeatorListView extends Component {
                       </a>
                     </div>
                   )
-                })};
+                })}
               </div>)
           }
 

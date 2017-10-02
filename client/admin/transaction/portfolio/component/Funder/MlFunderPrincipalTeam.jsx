@@ -8,7 +8,7 @@ import { multipartASyncFormHandler } from "../../../../../../client/commons/MlMu
 import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from "../../actions/findPortfolioFunderDetails";
 import { fetchPortfolioActionHandler } from '../../actions/findClusterIdForPortfolio'
 import { putDataIntoTheLibrary } from '../../../../../commons/actions/mlLibraryActionHandler';
-import NoData from '../../../../../commons/components/noData/noData'
+// import NoData from '../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -45,8 +45,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       teamAvatar :false
     }
     this.handleBlur = this.handleBlur;
-    this.onSavePrincipalAction.bind(this);
-    this.onSaveTeamAction.bind(this);
+    this.onSavePrincipalAction = this.onSavePrincipalAction.bind(this);
+    this.onSaveTeamAction = this.onSaveTeamAction.bind(this);
     this.fetchPrincipalDetails.bind(this);
     this.fetchTeamDetails.bind(this);
     this.libraryAction.bind(this);
@@ -69,10 +69,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchClusterId();
+    this.fetchPortfolioDetails();
     return [this.fetchPrincipalDetails(), this.fetchTeamDetails()];
   }
-  async fetchClusterId() {
+  async fetchPortfolioDetails() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({ loading: false, clusterId: response.clusterId });
@@ -762,7 +762,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
                           {/*</div>*/}
                           <div className="ml_btn" style={{ 'textAlign': 'center' }}>
-                            <a className="save_btn" onClick={this.onSavePrincipalAction.bind(this)}>Save</a>
+                            <a className="save_btn" onClick={this.onSavePrincipalAction}>Save</a>
                           </div>
                         </div>
                       </div>
@@ -911,7 +911,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
                           {/*</div>*/}
                           <div className="ml_btn" style={{ 'textAlign': 'center' }}>
-                            <a className="save_btn" onClick={this.onSaveTeamAction.bind(this)}>Save</a>
+                            <a className="save_btn" onClick={this.onSaveTeamAction}>Save</a>
                           </div>
                         </div>
                       </div>

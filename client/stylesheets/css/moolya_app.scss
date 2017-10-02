@@ -1110,12 +1110,16 @@ p{margin-top:10px;}
       &.fa-check{
         background: $mlRed;
       }
+      &.fa-minus{
+        background: $mlRed;
+      }
     }
         img{
           width:50px;height:50px;border-radius:50%;border:$mlGray dotted 2px;display:block;
         }
     }
   }
+
 }
 .padding10{padding:10px !important;}
 .conversation-block{
@@ -2358,3 +2362,4 @@ li.sameWorkTime:after {
     height: 245px;
   }
 }
+.clear_all{position: absolute;right:8px;top:8px;padding:0px 5px;background: $mlGray; color:$mlBlue;border-radius: 5px;font-size: 12px;cursor: pointer}

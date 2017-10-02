@@ -159,7 +159,10 @@ class MlAppMyProfile extends Component {
             toastr.error("Confirm Password does not match with Password");
           else if(this.state.newpwdErrorMsg){
             toastr.error("Existing password and New Password should not match");
-          }else{
+          }else if(this.state.pwdValidationMsg){
+            return toastr.error("Password "+this.state.pwdValidationMsg);
+          }
+          else{
             const response = await resetPasswordActionHandler(userDetails);
             // this.refs.id.value='';
             this.refs.confirmPassword.value = '';
@@ -517,8 +520,8 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group mandatory" id="date-of-birth">
-                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): ""} className="form-control float-label" readOnly="true" />
-                      <FontAwesome name="calendar" placeholder="Date of Birth" className="form-control float-label password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
+                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format(Meteor.settings.public.dateFormat): ""} className="form-control float-label" readOnly="true" />
+                      <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
 

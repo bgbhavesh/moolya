@@ -255,8 +255,9 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   context.browser = 'Registration API'
   context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
+  /**fix:MOOLYA-3391*/
   var registrationExist = MlRegistration.findOne({
-    "registrationInfo.email": args.registration.email,
+    $or:[{"registrationInfo.email": args.registration.email},{"registrationInfo.contactNumber": args.registration.contactNumber}],
     status: {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}
   })
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};
@@ -1033,7 +1034,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
 
             let code = 200;
             let result = {registrationId: response}
-            MlNotificationController.onKYCApprove(user);
+
             updatedResponse = new MlRespPayload().successPayload(result, code);
 
           }
@@ -1047,7 +1048,10 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
       let code = 409;
       updatedResponse = new MlRespPayload().errorPayload("Please select the kyc documents!!!!");
     }
-
+    if(updatedResponse && updatedResponse.success){
+      let user = MlRegistration.findOne({_id: args.registrationId}) || {}
+      MlNotificationController.onKYCApprove(user);
+    }
     return updatedResponse;
   }
 }
@@ -1848,10 +1852,16 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   kycDocumentObject.isActive = true
   kycDocumentObject.isMandatory = false
   kycDocumentObject.status = "Awaiting upload"
-
+  kycDocumentObject.docFiles = [];
 
   let id;
   let registrationDetails;
+
+  let sameKYCEXist =  MlRegistration.findOne({"_id": args.registrationId,"kycDocuments.documentId" : kycDocumentObject.documentId });
+
+  if(sameKYCEXist){
+    return new MlRespPayload().errorPayload("Document Already Exist", 403);
+  }
   if (args.registrationId) {
     registrationDetails = MlRegistration.findOne({"_id": args.registrationId});
   }

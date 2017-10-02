@@ -1,19 +1,19 @@
-Arguments: 
-  /usr/bin/node /usr/local/bin/yarn config set registry http://cipocdev.moolya.global:8081/repository/npm-group
+Arguments:
+  /usr/bin/node /usr/local/bin/yarn config set registry http://meteorcipocdev.moolya.global:8081/repository/npm-group
 
-PATH: 
+PATH:
   /home/amit/bin:/home/amit/.local/bin:/home/amit/bin:/home/amit/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/amit/Android/Sdk/tools:/home/amit/Android/Sdk/platform-tools:/snap/bin:/home/amit/Android/Sdk/tools:/home/amit/Android/Sdk/platform-tools:/home/amit/Android/Sdk/tools:/home/amit/Android/Sdk/platform-tools
 
-Yarn version: 
+Yarn version:
   0.24.6
 
-Node version: 
+Node version:
   6.11.3
 
-Platform: 
+Platform:
   linux x64
 
-npm manifest: 
+npm manifest:
   {
     "name": "application-name",
     "version": "1.0.0",
@@ -177,13 +177,13 @@ npm manifest:
     }
   }
 
-yarn manifest: 
+yarn manifest:
   No manifest
 
-Lockfile: 
+Lockfile:
   No lockfile
 
-Trace: 
+Trace:
   SyntaxError: Invalid value type 3:0 in /home/amit/Documents/RakSan-Projects/Marketing_Testing/moolya-core/.yarnrc
       at Parser.unexpected (/usr/local/lib/node_modules/yarn/lib/lockfile/parse.js:229:11)
       at Parser.parse (/usr/local/lib/node_modules/yarn/lib/lockfile/parse.js:331:16)

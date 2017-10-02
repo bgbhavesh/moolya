@@ -230,7 +230,7 @@ updateArrayofObjects = (updateFor, source) =>{
 /**
  * moving it from here to portfolioResolver
  * */
-// MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
+// MlResolver.MlQueryResolver['findPortfolioDetails'] = (obj, args, context, info) => {
 //   if (args.portfoliodetailsId) {
 //     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId})
 //     if (portfolio.clusterId) {

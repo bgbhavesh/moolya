@@ -192,7 +192,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
 MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info) => {
   let userId = context.userId;
   let pipeline = [
-    {"$match": { "user.userId": userId } },
+    {"$match": { "user.userId": userId , "isExpired": false} },
     {"$group": { _id: "$owner.userId" } },
     {"$lookup": { from: "users", localField: "_id", foreignField: "_id", as: "user" } },
     {"$unwind": "$user"},
@@ -220,6 +220,8 @@ MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) =>
       info.daysToExpire = expiryDate;
       if(expiryDate < 0 || expiryDate === 0) {
          info.isExpired = true;
+       let updatedValue =  mlDBController.update('MlSharedLibrary',{'_id':info._id}, info , {$set:1}, context);
+       console.log(updatedValue)
       }
       let status = ((!info.isExpired) || new Date(info.sharedStartDate) === new Date())
     let yetToBeShared = new Date(info.sharedStartDate) > new Date()

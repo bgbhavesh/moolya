@@ -120,7 +120,7 @@ let portfolioSchema = `
     type Query{
           fetchPortfolioDetailsByUserId:Portfoliodetails
           fetchPortfolioByReg(registrationId: String): Portfoliodetails
-          fetchPortfolioClusterId(portfoliodetailsId: String): Portfoliodetails
+          findPortfolioDetails(portfoliodetailsId: String): Portfoliodetails
           fetchPortfolioImage(portfoliodetailsId: String): Portfoliodetails 
     }
     
@@ -147,7 +147,7 @@ let supportedApi = [
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api: 'fetchPortfolioClusterId', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},   //temp making white list
+  {api: 'findPortfolioDetails', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},   //temp making white list
   {api: 'fetchPortfolioImage', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

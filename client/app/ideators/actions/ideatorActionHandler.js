@@ -129,7 +129,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
   const result = await appClient.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchPortfolioClusterId(portfoliodetailsId: $portfoliodetailsId) {
+            findPortfolioDetails(portfoliodetailsId: $portfoliodetailsId) {
                   clusterId
                   communityType
                   communityCode
@@ -142,7 +142,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchPortfolioClusterId;
+  const id = result.data.findPortfolioDetails;
   return id
 }
 

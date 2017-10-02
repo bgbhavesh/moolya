@@ -1320,7 +1320,7 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
 
 
 MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
-  let rest = null;
+  // let rest = null;
   let user = mlDBController.findOne('users', {_id: context.userId}, context);
   return user.profile;
 }

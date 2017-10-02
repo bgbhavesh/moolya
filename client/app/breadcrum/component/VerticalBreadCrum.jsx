@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { fetchPortfolioImageHandler } from '../../ideators/actions/ideatorActionHandler';
+import { fetchPortfolioImageHandler } from '../../portfolio/ideators/actions/ideatorActionHandler';
 import { getTeamUsersActionHandler } from '../../internalTask/actions/fetchOffices';
 import { fetchInternalTaskInfo } from '../../internalTask/actions/fetchInternalTaskInfo';
 import { findRegistrationActionHandler } from '../../registrations/actions/findRegistration';

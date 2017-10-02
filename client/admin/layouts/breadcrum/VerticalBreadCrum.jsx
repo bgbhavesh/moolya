@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHandler';
 import ScrollArea from 'react-scrollbar'
-import { fetchPortfolioImageHandler } from '../../../app/ideators/actions/ideatorActionHandler';
+import { fetchPortfolioImageHandler } from '../../../app/portfolio/ideators/actions/ideatorActionHandler';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {

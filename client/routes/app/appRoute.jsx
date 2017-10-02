@@ -2,11 +2,11 @@ import React from "react";
 import {render} from "react-dom";
 import {mount} from "react-mounter";
 import AppLayout from "../../app/layouts/appLayout";
-import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
+import MlAppIdeatorTabs from "../../app/portfolio/ideators/components/MlAppIdeatorTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
-import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
+import MlAppIdeatorAddIdea from "../../app/portfolio/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
 import Library from '../../commons/components/portfolioLibrary/libraryRoute'
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
@@ -40,7 +40,7 @@ import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorI
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
-import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
+import {mlAppFunderConfig} from "../../app/portfolio/funders/config/mlAppFunderConfig";
 import MLAppMyCalendar from "../../app/calendar/myCalendar/components/calendarParentComponent";
 import ShareCalendar from "../../app/calendar/shareCalendar/components/shareCalendar"
 
@@ -80,15 +80,15 @@ import AppMyProfileMyoffice from '../../app/calendar/notifications/components/ca
 import _ from "lodash";
 import MlAppExplore from "../../app/explore/components/MlAppExplore";
 
-import {mlAppServiceProviderConfig} from '../../app/serviceProvider/config/mlAppServiceProviderConfig'
-import  {mlAppStartupConfig} from '../../app/startup/config/mlAppStartupConfig'
-import  {mlAppIdeatorConfig} from '../../app/ideators/config/mlAppIdeatorConfig'
+import {mlAppServiceProviderConfig} from '../../app/portfolio/serviceProvider/config/mlAppServiceProviderConfig'
+import  {mlAppStartupConfig} from '../../app/portfolio/startup/config/mlAppStartupConfig'
+import  {mlAppIdeatorConfig} from '../../app/portfolio/ideators/config/mlAppIdeatorConfig'
 
 /**
  * Import infinite scroll component
  */
 import MlInfiniteScroll from '../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
-import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
+import {mlAppFunderConfig2} from "../../app/portfolio/funders/config/mlAppFunderConfig2";
 
 /**
  * Import My Appointment routes

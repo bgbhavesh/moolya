@@ -4,7 +4,7 @@
 import React, {Component, PropTypes} from "react";
 import {graphql} from "react-apollo";
 import {render} from "react-dom";
-import MlAppIdeatorIdeas from "../../ideators/components/MlAppIdeatorIdeas";
+import MlAppIdeatorIdeas from "../../portfolio/ideators/components/MlAppIdeatorIdeas";
 // import MlAppPortfolio from "../../../app/commons/components/MlAppPortfolio";
 import {fetchPortfolioDetails} from "../actions/fetchUserDetails";
 import MlLoader from "../../../commons/components/loader/loader";

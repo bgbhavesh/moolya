@@ -20,6 +20,7 @@ MlResolver.MlMutationResolver['createBugReport'] = (obj, args, context, info) =>
   let result = mlDBController.insert('MlBugReport',bugReportData, context);
   if (result) {
     MlEmailNotification.sendBugReportToAdmin(bugReportData);
+    MlEmailNotification.sendBugReportFeedbackToUser(bugReportData);
     let code = 200;
     let result = {bugReportId: result};
     let response = new MlRespPayload().successPayload(result, code);

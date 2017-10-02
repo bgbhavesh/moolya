@@ -492,6 +492,7 @@ MlResolver.MlMutationResolver['updateUserShowOnMap'] = (obj, args, context, info
   }
 }
 
+//todo:// need to use default way of geeting default profile from api "need to remove this login"
 MlResolver.MlQueryResolver['findDefaultUserProfile'] = (obj, args, context, info) => {
   var defaultProfile = {};
   var user = Meteor.users.findOne({_id:context.userId});

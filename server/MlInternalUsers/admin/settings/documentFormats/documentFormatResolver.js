@@ -36,6 +36,16 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
     return response;
   } else {
     if (args._id) {
+
+      //check for exists condition
+      var existingDocFormat = mlDBController.findOne('MlDocumentFormats', {_id:{$ne:args._id},docFormatName: args.docFormatName}, context)
+      if (existingDocFormat) {
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        return response;
+      }
+
+
       var id = args._id;
       args = _.omit(args, '_id');
       let result = MlDocumentFormats.update(id, {$set: args});
@@ -71,7 +81,7 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
   } else {
     if (MlDocumentFormats.find({docFormatName: args.documentFormat.docFormatName}).count() > 0) {
       let code = 409;
-      let response = MlRespPayload().errorPayload("Already Exist", code);
+      let response = new MlRespPayload().errorPayload("Already Exist", code);
       return response;
     }
     var firstName='';var lastName='';

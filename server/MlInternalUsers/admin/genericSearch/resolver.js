@@ -1119,8 +1119,14 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlNotificationTemplates.find(query,findOptions).count();
   }
 
+  /**
+   * Fetching only admin created office packages
+   * */
   if(args.module == 'OFFICEPACKAGE'){
-    data= MlOfficeSCDef.find(query,findOptions).fetch();
+    var queryChange = {"isBSpoke" : false}
+    var queryList = mergeQueries(query, queryChange);
+    data= MlOfficeSCDef.find(queryList,findOptions).fetch();
+    // data= MlOfficeSCDef.find(query,findOptions).fetch();
     totalRecords = MlOfficeSCDef.find(query,findOptions).count();
   }
 

@@ -30,11 +30,13 @@ class MlAddDocumentFormat extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
+    if (response) {
+      if (response.success) {
+        toastr.success("Document format created");
         FlowRouter.go("/admin/settings/documentProcess/documentFormatList");
-      else
+      } else {
         toastr.error(response.result);
+      }
     }
   };
 
@@ -50,7 +52,6 @@ class MlAddDocumentFormat extends React.Component{
       isActive: this.refs.status.checked,
     }
       const response = await addDocumentFormatActionHandler(DocFormatDetails);
-      toastr.success("Document format created");
       return response;
   }
 

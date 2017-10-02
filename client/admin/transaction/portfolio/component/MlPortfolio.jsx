@@ -17,7 +17,7 @@ import {
 } from "../../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/ideatorActionHandler";
+import {fetchIdeaByPortfolioId} from "../../../../app/portfolio/ideators/actions/ideatorActionHandler";
 import MlLoader from "../../../../commons/components/loader/loader";
 import _ from "lodash";
 import {client} from "../../../core/apolloConnection";

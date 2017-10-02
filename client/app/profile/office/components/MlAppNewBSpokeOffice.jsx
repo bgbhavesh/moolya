@@ -3,7 +3,7 @@
  */
 
 import React from "react";
-import {render} from "react-dom";
+// import {render} from "react-dom";
 import gql from 'graphql-tag'
 import _ from "lodash";
 import MoolyaSelect from '../../../commons/components/MlAppSelectWrapper'

@@ -61,6 +61,7 @@ export async function fetchOfficePackages() {
               totalCount,
               principalUserCount,
               teamUserCount
+              isBSpoke
             }
           }
           `,

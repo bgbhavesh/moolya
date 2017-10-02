@@ -213,33 +213,33 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="User Id" defaultValue=' ' value={this.state.userInfo.profileId?this.state.userInfo.profileId:''} className="form-control float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email Id" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email Id" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" defaultValue=" " value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Phone no" defaultValue=" " value={this.state.userInfo.mobile} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue=" " value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" defaultValue=" " value={this.state.transInfo.clusterName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue=" " value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" defaultValue=" " value={this.state.transInfo.chapterName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue=" " value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub Chapter" defaultValue=" " value={this.state.transInfo.subChapterName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue=" " value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" defaultValue=" " value={this.state.transInfo.communityName} className="form-control float-label" />
                 </div>
               </div>
             </div>
@@ -248,19 +248,19 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeSCDef.serviceCardName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeSCDef.serviceCardName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeSC.totalusercount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeSC.totalusercount} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeSC.principalcount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeSC.principalcount} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeSC.teamMembercount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeSC.teamMembercount} className="form-control float-label" />
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
@@ -298,31 +298,31 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Office location</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" />
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue=" " value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " value={this.state.duration} placeholder ="" className="form-control float-label" />
                     </div>
                   </div>
                 </div>
@@ -332,7 +332,7 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label" id="" />
+                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label"  />
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
@@ -344,7 +344,7 @@ export default class MlOfficeItem extends React.Component {
                       </div>
                     </div>
                     <div className="form-group">
-                      <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" ></textarea>
                     </div>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
@@ -357,36 +357,36 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" defaultValue="Rs 25,000" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total amount paid" defaultValue="Rs 25,000" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card number" defaultValue="1234 2545 2565 4585" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card number" defaultValue="1234 2545 2565 4585" className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" defaultValue="Kiran Kumar" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card Holder name" defaultValue="Kiran Kumar" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Promotion Code" defaultValue="Null" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Code Amount" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Code Amount" defaultValue="Null" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Status" defaultValue="Null" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" defaultValue="Null" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Voucher Code" defaultValue="Null" className="form-control float-label" />
                 </div>
               </div>
             </div>
@@ -395,18 +395,18 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device name" defaultValue="Ipad air 2" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device name" defaultValue="Ipad air 2" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Device ID" defaultValue="L8125#585" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device ID" defaultValue="L8125#585" className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device IP" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device IP" defaultValue="10.20.1.6" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="IP Location" defaultValue="Hyderabad" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="IP Location" defaultValue="Hyderabad" className="form-control float-label" />
                 </div>
               </div>
             </div>

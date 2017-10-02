@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
+// import {render} from "react-dom";
 import officePackageRoute from '../actions/officePackageRoutes'
-let FontAwesome = require('react-fontawesome');
+// let FontAwesome = require('react-fontawesome');
 
 
 export default class MlOfficePackageListView extends Component {

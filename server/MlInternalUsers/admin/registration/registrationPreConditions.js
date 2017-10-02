@@ -234,7 +234,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     var checkNumber = mlDBController.findOne('MlRegistration', {
       "registrationInfo.userName": {$ne: regDetails.userName},
       "registrationInfo.contactNumber": regDetails.contactNumber,
-      "status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}
+       "status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}
     })
     if (checkNumber) {
       var response = new MlRespPayload().errorPayload("Contact Number already used", 409);

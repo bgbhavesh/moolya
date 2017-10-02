@@ -5,7 +5,7 @@ import {findAnnotations} from "../../../../../commons/annotator/findAnnotations"
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
-import {fetchIdeaActionHandler} from "../../../../../app/ideators/actions/ideatorActionHandler";
+import {fetchIdeaActionHandler} from "../../../../../app/portfolio/ideators/actions/ideatorActionHandler";
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');

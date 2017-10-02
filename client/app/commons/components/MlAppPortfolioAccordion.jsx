@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import _ from 'lodash';
 import MlAppActionComponent from './MlAppActionComponent';
 import MlAccordion from './MlAccordion';
-import MlIdeatorRelatedIdeas from '../../../app/ideators/components/MlAppIdeatorRelatedIdeas';
+import MlIdeatorRelatedIdeas from '../../portfolio/ideators/components/MlAppIdeatorRelatedIdeas';
 import {GenericPortfolioActionsConfig} from '../config/mlPortfolioConfig';
 import {fetchInteractionActionAttributesHandler} from '../actions/fetchActionAttributesActionHandler';
 export default class MlAppPortfolioAccordionContainer extends React.Component{

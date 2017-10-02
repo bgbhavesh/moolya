@@ -798,12 +798,29 @@ const MlEmailNotification= class MlEmailNotification {
     }
 
   static sendBugReportToAdmin(bugDetails){
+    //bugDetails clusterName,chapterName,subChapterName should not be empty
+    bugDetails.clusterName=bugDetails.clusterName||"";bugDetails.chapterName=bugDetails.chapterName||"";bugDetails.subChapterName=bugDetails.subChapterName||"";bugDetails.userName=bugDetails.userName||"";
+    var mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bugreport_user","email",bugDetails)
     Meteor.setTimeout(function () {
       mlEmail.sendHtml({
         from: (bugDetails||{}).emailId,
         to: bugReportEmail,
-        subject:'Bug Report',
-        html : (bugDetails||{}).details
+        subject:mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:'Bug Report',
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static sendBugReportFeedbackToUser(bugDetails){
+    //bugDetails username should not be empty
+    bugDetails.userName=bugDetails.userName||"";
+    var mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bugreport_user_thanks","email",bugDetails);
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: bugReportEmail,
+        to: (bugDetails||{}).emailId,
+        subject:mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:'Thanks for feedback',
+        html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
   }

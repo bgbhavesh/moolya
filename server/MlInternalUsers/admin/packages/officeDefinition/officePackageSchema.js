@@ -51,6 +51,7 @@ let officePackage = `
     chapters : [Chapter],
     subChapters: [SubChapter],
     barerCount:Int
+    isBSpoke :Boolean
   }
   
   input applicableCommunity{

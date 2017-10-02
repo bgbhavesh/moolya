@@ -2,16 +2,13 @@
  * import of libs and routes
  * */
 import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';
-export default class MlAppInstitutionListView extends Component {
-  /**
-   * @props isExplore
-   * Note: routes [deciding] based on isExplore
-   * cheking [permissions to view the portfolio]
-   * */
+
+export default class MlAppStartupListView extends Component {
   componentDidUpdate(){
     $('.pie-passion').pieChart({
       barColor: '#ef4647',
@@ -41,12 +38,17 @@ export default class MlAppInstitutionListView extends Component {
       }
     });
   }
+  /**
+   * @props isExplore
+   * Note: routes [deciding] based on isExplore
+   * cheking [permissions to view the portfolio]
+   * */
   async viewDetails(portfolioId, e) {
     const response = await fetchPortfolioActionHandler(portfolioId);
     if (this.props.config.isExplore && response && response.canAccess)
-      FlowRouter.go('/app/explore/institution/' + portfolioId)
+      FlowRouter.go('/app/explore/startup/' + portfolioId)
     else if (response && response.canAccess)
-      FlowRouter.go('/app/institution/' + portfolioId)
+      FlowRouter.go('/app/startup/' + portfolioId)
     else if(response && !response.canAccess)
       toastr.error('Portfolio not available for view')
   }
@@ -55,30 +57,30 @@ export default class MlAppInstitutionListView extends Component {
     let that = this
     const data=this.props.data||[];
     let loading=this.props.config&&this.props.config.loading;
-    const list=  data.map((intitution, idx) =>
+    const list=  data.map((startup, idx) =>
       <div className="col-md-2 col-sm-4 col-lg-2" key={idx}>
-        <a href='' onClick={that.viewDetails.bind(that, intitution.portfolioDetailsId)}>
+        <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
           <div className="company_block">
-            <div className="regular"><span>{intitution.accountType}</span></div>
-            <div className="company_header">
-              {intitution.profileImage && intitution.profileImage ?
-                <CDNImage src={intitution.profileImage} className="c_image"/> :
-                <CDNImage src="/images/no_image.png" />}
+            <div className="regular"><span>{startup.accountType}</span></div>
+           <div className="company_header">
+             {startup.aboutUs && startup.aboutUs.logo && startup.aboutUs.logo.length ?
+               <CDNImage src={startup.aboutUs.logo[0].fileUrl} className="c_image"/> :
+               <CDNImage src="/images/no_image.png" />}
             </div>
-            <h3>{intitution.firstName}<br/>
-              <span>{intitution.chapterName}{!intitution.isDefaultSubChapter?"-" +intitution.subChapterName:""}</span>
+            <h3><span>{startup.firstName}</span><br/>
+              {startup.chapterName}{!startup.isDefaultSubChapter?"-" +startup.subChapterName:""}
             </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-passion" data-percent={intitution.views}> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-passion" data-percent={startup.views}> <span className="pie-value"></span> </div><br/>
                 Views
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-rating" data-percent={intitution.followings}> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-rating" data-percent={startup.followings}> <span className="pie-value"></span> </div><br/>
                 Followings
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <div className="pie-title-center pie-like" data-percent={intitution.likes}> <span className="pie-value"></span> </div><br/>
+                <div className="pie-title-center pie-like" data-percent={startup.likes}> <span className="pie-value"></span> </div><br/>
                 Likes
               </div>
             </div>
@@ -92,7 +94,7 @@ export default class MlAppInstitutionListView extends Component {
                 Projects
               </div>
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
-                <span>{intitution.connections}</span><br />
+                <span>{startup.connections}</span><br />
                 Connects
               </div>
             </div>
@@ -100,38 +102,22 @@ export default class MlAppInstitutionListView extends Component {
         </a>
       </div>
     );
-    // const list=  data.map((intitution, idx) =>
-    //   <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-    //     <a href='' onClick={that.viewDetails.bind(that, intitution.portfolioDetailsId)}>
-    //       <div className="ideators_list_block">
-    //         {/*<div className="premium"><span>Starter</span></div>*/}
-    //         {/*<h3>{intitution.aboutUs&&intitution.aboutUs.institutionDescription?intitution.aboutUs.institutionDescription:""}</h3>*/}
-    //         <div className="premium">
-    //           <span>{intitution.accountType}</span>
-    //         </div>
-    //         <h3>{intitution.firstName}</h3>
-    //         <div className="list_icon"><span className="ml my-ml-Institutions"></span></div>
-    //         <div className="block_footer">
-    //           <span>{intitution.chapterName} - {intitution.communityType}</span>
-    //         </div>
-    //       </div>
-    //     </a>
-    //   </div>
-    // );
 
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-      <div className="ideators_list">
-      <div className="col-md-12"> <h2>Institutions</h2> </div>
-      {data && !data.length?(
-        <NoDataList moduleName="Portfolios"/>
-      ):(<div>{list}</div>)
-      }
-      </div>
+          <div className="ideators_list">
+          <div className="col-md-12"> <h2>Startups</h2></div>
+            {data && !data.length?(
+              <NoDataList moduleName="Portfolios" />
+            ):(<div>{list}</div>)
+            }
+          </div>
         )}
       </div>
     );
+
   }
+
 }
 

@@ -756,7 +756,10 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       if(cluster.isActive && chapter.isActive && subChapter.isActive){
 
           queryObj.clusterId = clusterId;
+          queryObj.chapterId = chapterId;
+          queryObj.subChapterId = subChapterId;
           queryObj.isApprove = true;
+          queryObj.isActive = true;
 
           // FOR SPECIFIC COMMUNITY
           if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
@@ -766,23 +769,32 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
-              { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              // { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              // { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+              // {
+              //   $unwind :"$profile.externalUserProfiles"
+              // },
+              // {
+              //   "$group": {
+              //     _id: "$_id",
+              //     data: {"$first": "$$ROOT"}
+              //   }
+              // },
+              // { "$replaceRoot": { "newRoot" : "$data" }  },
+              // {
+              //   $unwind :"$profile.externalUserProfiles"
+              // },
+              {
+                $unwind :"$profile.externalUserProfiles"
+              },
+
+              { "$lookup": { from: "mlPortfolioDetails", localField: "profile.externalUserProfiles.profileId", foreignField: "profileId", as: "portfolio" } },
+
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+
               { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
-              {
-                $unwind :"$profile.externalUserProfiles"
-              },
-              {
-                "$group": {
-                  _id: "$_id",
-                  data: {"$first": "$$ROOT"}
-                }
-              },
-              { "$replaceRoot": { "newRoot" : "$data" }  },
-              {
-                $unwind :"$profile.externalUserProfiles"
-              },
-              {$match:{"profile.externalUserProfiles.clusterId":clusterId, "profile.externalUserProfiles.communityDefName":userType, "profile.externalUserProfiles.isApprove":true,"profile.externalUserProfiles.isActive":true}},  // Filter out specific community
+
+              {$match:{"profile.externalUserProfiles.clusterId":clusterId, "profile.externalUserProfiles.chapterId":chapterId, "profile.externalUserProfiles.subChapterId":subChapterId, "profile.externalUserProfiles.communityDefName":userType, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}},  // Filter out specific community
               {
                 $project:{
                   _id : 1,
@@ -855,23 +867,33 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
-              { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              // { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              // { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+              // {
+              //   $unwind :"$profile.externalUserProfiles"
+              // },
+              // {
+              //   "$group": {
+              //     _id: "$_id",
+              //     data: {"$first": "$$ROOT"}
+              //   }
+              // },
+              // { "$replaceRoot": { "newRoot" : "$data" }  },
+              // {
+              //   $unwind :"$profile.externalUserProfiles"
+              // },
+              {
+                $unwind :"$profile.externalUserProfiles"
+              },
+
+              { "$lookup": { from: "mlPortfolioDetails", localField: "profile.externalUserProfiles.profileId", foreignField: "profileId", as: "portfolio" } },
+
               { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+
               { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
-              {
-                $unwind :"$profile.externalUserProfiles"
-              },
-              {
-                "$group": {
-                  _id: "$_id",
-                  data: {"$first": "$$ROOT"}
-                }
-              },
-              { "$replaceRoot": { "newRoot" : "$data" }  },
-              {
-                $unwind :"$profile.externalUserProfiles"
-              },
-              {$match:{"profile.externalUserProfiles.clusterId":clusterId,"profile.externalUserProfiles.isApprove":true,"profile.externalUserProfiles.isActive":true}},
+
+              {$match:{"profile.externalUserProfiles.clusterId":clusterId, "profile.externalUserProfiles.chapterId":chapterId, "profile.externalUserProfiles.subChapterId":subChapterId, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}},
+
               {
                 $project:{
                   _id : 1,
@@ -1465,90 +1487,106 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   else if(args.module === "cluster"){
       var activeClusters = [];
       var isListView = false;
+      var clusters = [];
+      let userId = context.userId;
+      let userProfile = new MlUserContext().userProfileDetails(userId);
+      var clusterId = userProfile.clusterId;
+      var userSubChapterId = userProfile.subChapterId;
+      let userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+      var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+
+
       if(args.queryProperty&&args.queryProperty.query&&args.queryProperty.query.indexOf("{") !== -1){
         var query = JSON.parse(args.queryProperty.query);
         isListView = query.isListView;
       }
-      if(isListView && query.bounds){
-        var bounds = query.bounds;
-        var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
-        var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
-        var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
-        var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-        if(leftLng<0 && rightLng<0){
-          if(leftLng>rightLng){
-            var clusters = mlDBController.find('MlClusters', {$and:
-              [
-                {isActive: true},
-                {$or:
+      if(isDefaultSubChapter){
+          if(isListView && query.bounds){
+            var bounds = query.bounds;
+            var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+            var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+            var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+            var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+
+            if(leftLng<0 && rightLng<0){
+              if(leftLng>rightLng){
+                clusters = mlDBController.find('MlClusters', {$and:
                   [
-                    {$and: [
-                      {longitude: {$gte: leftLng}},
-                      {longitude: {$lte: 180}},
-                    ]
+                    {isActive: true},
+                    {$or:
+                      [
+                        {$and: [
+                          {longitude: {$gte: leftLng}},
+                          {longitude: {$lte: 180}},
+                        ]
+                        },
+                        {$and: [
+                          {longitude: {$gte: -180}},
+                          {longitude: {$lte: rightLng}},
+                        ]
+                        }
+                      ]
                     },
-                    {$and: [
-                      {longitude: {$gte: -180}},
-                      {longitude: {$lte: rightLng}},
-                    ]
-                    }
-                  ]
-                },
-                // {longitude: {$lte: rightLng}},
-                // {longitude: {$gte: leftLng}},
-                {latitude: {$lte: topLat}},
-                {latitude: {$gte: bottomLat}}
-              ]}, context).fetch();
-          }else {
-            var clusters = mlDBController.find('MlClusters', {$and:
-              [
-                {isActive: true},
-                {longitude: {$lte: rightLng}},
-                {longitude: {$gte: leftLng}},
-                {latitude: {$lte: topLat}},
-                {latitude: {$gte: bottomLat}}
-              ]}, context).fetch();
-          }
-        } else{
-          if(leftLng>rightLng){
-            var clusters = mlDBController.find('MlClusters', {$and:
-              [
-                {isActive: true},
-                {$or:
+                    // {longitude: {$lte: rightLng}},
+                    // {longitude: {$gte: leftLng}},
+                    {latitude: {$lte: topLat}},
+                    {latitude: {$gte: bottomLat}}
+                  ]}, context).fetch();
+              }else {
+                clusters = mlDBController.find('MlClusters', {$and:
                   [
-                    {$and: [
-                      {longitude: {$gte: leftLng}},
-                      {longitude: {$lte: 180}},
-                    ]
+                    {isActive: true},
+                    {longitude: {$lte: rightLng}},
+                    {longitude: {$gte: leftLng}},
+                    {latitude: {$lte: topLat}},
+                    {latitude: {$gte: bottomLat}}
+                  ]}, context).fetch();
+              }
+            } else{
+              if(leftLng>rightLng){
+                clusters = mlDBController.find('MlClusters', {$and:
+                  [
+                    {isActive: true},
+                    {$or:
+                      [
+                        {$and: [
+                          {longitude: {$gte: leftLng}},
+                          {longitude: {$lte: 180}},
+                        ]
+                        },
+                        {$and: [
+                          {longitude: {$gte: -180}},
+                          {longitude: {$lte: rightLng}},
+                        ]
+                        }
+                      ]
                     },
-                    {$and: [
-                      {longitude: {$gte: -180}},
-                      {longitude: {$lte: rightLng}},
-                    ]
-                    }
-                  ]
-                },
-                // {longitude: {$lte: rightLng}},
-                // {longitude: {$gte: leftLng}},
-                {latitude: {$lte: topLat}},
-                {latitude: {$gte: bottomLat}}
-              ]}, context).fetch();
+                    // {longitude: {$lte: rightLng}},
+                    // {longitude: {$gte: leftLng}},
+                    {latitude: {$lte: topLat}},
+                    {latitude: {$gte: bottomLat}}
+                  ]}, context).fetch();
+              }else{
+                clusters = mlDBController.find('MlClusters', {$and:
+                  [
+                    {isActive: true},
+                    {longitude: {$lte: rightLng}},
+                    {longitude: {$gte: leftLng}},
+                    {latitude: {$lte: topLat}},
+                    {latitude: {$gte: bottomLat}}
+                  ]}, context).fetch();
+              }
+            }
+
           }else{
-            var clusters = mlDBController.find('MlClusters', {$and:
-              [
-                {isActive: true},
-                {longitude: {$lte: rightLng}},
-                {longitude: {$gte: leftLng}},
-                {latitude: {$lte: topLat}},
-                {latitude: {$gte: bottomLat}}
-              ]}, context).fetch();
+            clusters = mlDBController.find('MlClusters', {isActive: true}, context).fetch();
           }
-        }
-
       }else{
-        var clusters = mlDBController.find('MlClusters', {isActive: true}, context).fetch();
+          clusters = mlDBController.find('MlClusters', {_id:clusterId, isActive: true}, context).fetch();
       }
+
+
 
       _.each(clusters, function (cluster) {
         let country = mlDBController.findOne('MlCountries', {isActive: true, _id:cluster.countryId}, context, {sort: {country: 1}});
@@ -1566,33 +1604,46 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       var activeChapters = [];
       var isListView = false;
       var clusterId = null;
+      var chapters = [];
+      let userId = context.userId;
+      let userProfile = new MlUserContext().userProfileDetails(userId);
+      var chapterId = userProfile.chapterId;
+      var userSubChapterId = userProfile.subChapterId;
+      let userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+      var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+
       if(args.queryProperty.query.indexOf("{") !== -1){
         var query = JSON.parse(args.queryProperty.query);
         isListView = query.isListView;
         clusterId = query.clusterId;
         var bounds = query.bounds;
       }
-      // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
-      if(isListView && bounds && query.viewMode){
-        var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
-        var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
-        var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
-        var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-        var chapters = mlDBController.find('MlChapters', {$and:
-          [
-            {isActive: true},
-            {clusterId:clusterId},
-            {longitude: {$lte: rightLng}},
-            {longitude: {$gte: leftLng}},
-            {latitude: {$lte: topLat}},
-            {latitude: {$gte: bottomLat}}
-          ]}, context).fetch();
+
+      if(isDefaultSubChapter){
+          // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+          if(isListView && bounds && query.viewMode){
+            var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+            var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+            var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+            var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+
+            chapters = mlDBController.find('MlChapters', {$and:
+              [
+                {isActive: true},
+                {clusterId:clusterId},
+                {longitude: {$lte: rightLng}},
+                {longitude: {$gte: leftLng}},
+                {latitude: {$lte: topLat}},
+                {latitude: {$gte: bottomLat}}
+              ]}, context).fetch();
+          }else{
+            clusterId = clusterId?clusterId:args.queryProperty.query
+            chapters = mlDBController.find('MlChapters', {isActive: true, clusterId:clusterId}, context).fetch();
+          }
       }else{
-        clusterId = clusterId?clusterId:args.queryProperty.query
-        var chapters = mlDBController.find('MlChapters', {isActive: true, clusterId:clusterId}, context).fetch();
+          chapters = mlDBController.find('MlChapters', {isActive: true, _id:chapterId}, context).fetch();
       }
-
 
       _.each(chapters, function (chapter) {
         let city = mlDBController.findOne('MlCities', {isActive: true, _id:chapter.cityId}, context, {sort: {country: 1}});
@@ -1609,35 +1660,198 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   else if(args.module === "subChapter"){
     var isListView = false;
     var chapterId = null;
+    var subChapters = [];
+    var pipeLine = [];
+    let userId = context.userId;
+    let userProfile = new MlUserContext().userProfileDetails(userId);
+    var userSubChapterId = userProfile.subChapterId;
+    let userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+    var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+
     if(args.queryProperty.query.indexOf("{") !== -1){
       var query = JSON.parse(args.queryProperty.query);
       isListView = query.isListView;
       var bounds = query.bounds;
       chapterId = query.chapterId;
     }
-    // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
-    if(isListView && bounds && query.viewMode){
-      var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
-      var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
-      var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
-      var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
 
-      var subChapters = mlDBController.find('MlSubChapters', {$and:
-        [
-          {isActive: true},
-          {chapterId:chapterId},
-          {longitude: {$lte: rightLng}},
-          {longitude: {$gte: leftLng}},
-          {latitude: {$lte: topLat}},
-          {latitude: {$gte: bottomLat}}
-        ]}, context).fetch();
+    if(isDefaultSubChapter){
+        // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+        if(isListView && bounds && query.viewMode){
+            var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+            var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+            var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+            var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+            pipeLine = [
+                {$match:{chapterId:chapterId, isActive:true}},
+                {$match:{$or:[{isDefaultSubChapter:true}, {isDefaultSubChapter:false, "moolyaSubChapterAccess.externalUser.canView":true}]}},
+                {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
+            ]
+            subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+        }else{
+            chapterId = chapterId?chapterId:args.queryProperty.query;
+            pipeLine = [
+                {$match:{chapterId:chapterId, isActive:true}},
+                {$match:{$or:[{isDefaultSubChapter:true}, {isDefaultSubChapter:false, "moolyaSubChapterAccess.externalUser.canView":true}]}}
+            ]
+            subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+        }
     }else{
-      chapterId = chapterId?chapterId:args.queryProperty.query;
-      var subChapters = mlDBController.find('MlSubChapters', {isActive: true,chapterId:chapterId}, context).fetch();
+        if(userSubChapter.moolyaSubChapterAccess.externalUser.canView){
+            // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+            if(isListView && bounds && query.viewMode){
+              var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+              var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+              var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+              var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+              pipeLine = [
+                {$match:{$or:[{isDefaultSubChapter:true, chapterId:chapterId, isActive:true}, {_id:userSubChapterId, isActive:true}]}},
+                {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
+              ]
+              subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
+              // _.remove(relatedIds, {subChapterId: userSubChapterId})
+              // relatedIds = _.uniq(relatedIds);
+
+              var relatedIds = [];
+
+              _.each(relatedSubChapters, function(obj){
+                let ids = _.map(obj.subChapters, "subChapterId");
+                relatedIds = _.concat(relatedIds, ids)
+              })
+
+              relatedIds = _.uniq(relatedIds);
+              let index = _.indexOf(relatedIds, userSubChapterId);
+              relatedIds.splice(index, 1);
+
+              var relatedSC = mlDBController.find('MlSubChapters', {$and:
+                  [
+                    {_id:{$in:relatedIds}},
+                    {isActive: true},
+                    {chapterId:chapterId},
+                    {longitude: {$lte: rightLng}},
+                    {longitude: {$gte: leftLng}},
+                    {latitude: {$lte: topLat}},
+                    {latitude: {$gte: bottomLat}}
+                  ]}, context).fetch();
+
+              subChapters = _.concat(subChapters, relatedSC)
+
+            }else{
+              pipeLine = [
+                {$match:{$or:[{isDefaultSubChapter:true, chapterId:chapterId, isActive:true}, {_id:userSubChapterId, isActive:true}]}},
+              ]
+              subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
+              // _.remove(relatedIds, {subChapterId: userSubChapterId})
+              // relatedIds = _.uniq(relatedIds);
+
+              var relatedIds = [];
+
+              _.each(relatedSubChapters, function(obj){
+                let ids = _.map(obj.subChapters, "subChapterId");
+                relatedIds = _.concat(relatedIds, ids)
+              })
+
+              relatedIds = _.uniq(relatedIds);
+              let index = _.indexOf(relatedIds, userSubChapterId);
+              relatedIds.splice(index, 1);
+
+              var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedIds}, chapterId:chapterId}).fetch()
+              subChapters = _.concat(subChapters, relatedSC)
+            }
+        }else{
+            if(isListView && bounds && query.viewMode){
+              var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+              var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+              var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+              var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+              pipeLine = [
+                {$match:{_id:userSubChapterId, isActive:true}},
+                {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
+              ]
+              subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
+              // _.remove(relatedIds, {subChapterId: userSubChapterId})
+              // relatedIds = _.uniq(relatedIds);
+
+              var relatedIds = [];
+
+              _.each(relatedSubChapters, function(obj){
+                let ids = _.map(obj.subChapters, "subChapterId");
+                relatedIds = _.concat(relatedIds, ids)
+              })
+
+              relatedIds = _.uniq(relatedIds);
+              let index = _.indexOf(relatedIds, userSubChapterId);
+              relatedIds.splice(index, 1);
+
+              var relatedSC = mlDBController.find('MlSubChapters', {$and:
+                [
+                  {_id:{$in:relatedIds}},
+                  {isActive: true},
+                  {chapterId:chapterId},
+                  {longitude: {$lte: rightLng}},
+                  {longitude: {$gte: leftLng}},
+                  {latitude: {$lte: topLat}},
+                  {latitude: {$gte: bottomLat}}
+                ]}, context).fetch();
+
+              subChapters = _.concat(subChapters, relatedSC)
+            }else{
+              pipeLine = [
+                {$match:{_id:userSubChapterId, isActive:true}},
+              ]
+              subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
+
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+
+              var relatedIds = [];
+
+              _.each(relatedSubChapters, function(obj){
+                let ids = _.map(obj.subChapters, "subChapterId");
+                relatedIds = _.concat(relatedIds, ids)
+              })
+
+              relatedIds = _.uniq(relatedIds);
+              let index = _.indexOf(relatedIds, userSubChapterId);
+              relatedIds.splice(index, 1);
+
+              var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedIds}, chapterId:chapterId}).fetch()
+
+              subChapters = _.concat(subChapters, relatedSC)
+            }
+        }
     }
 
-
+    // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
+    // if(isListView && bounds && query.viewMode){
+    //   var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
+    //   var bottomLat = bounds.se && bounds.se.lat ? bounds.se.lat : null;
+    //   var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
+    //   var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
+    //
+    //   var subChapters = mlDBController.find('MlSubChapters', {$and:
+    //     [
+    //       {isActive: true},
+    //       {chapterId:chapterId},
+    //       {longitude: {$lte: rightLng}},
+    //       {longitude: {$gte: leftLng}},
+    //       {latitude: {$lte: topLat}},
+    //       {latitude: {$gte: bottomLat}}
+    //     ]}, context).fetch();
+    // }else{
+    //   chapterId = chapterId?chapterId:args.queryProperty.query;
+    //   var subChapters = mlDBController.find('MlSubChapters', {isActive: true,chapterId:chapterId}, context).fetch();
     // }
+
+
 
     const data = subChapters;
     const totalRecords = subChapters.length

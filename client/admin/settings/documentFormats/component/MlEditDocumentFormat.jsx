@@ -45,10 +45,12 @@ class MlEditDocumentFormat extends React.Component{
 
   async handleSuccess(response) {
     if (response){
-      if(response.success)
+      if(response.success){
+        toastr.success("Edited Successfully");
         FlowRouter.go("/admin/settings/documentProcess/documentFormatList");
-      else
+      }else{
         toastr.error(response.result);
+      }
     }
   };
 
@@ -71,7 +73,6 @@ class MlEditDocumentFormat extends React.Component{
         isActive: this.refs.status.checked,
       }
       const response = await updateDocumentFormatActionHandler(Details);
-      toastr.success("Edited Successfully");
       return response;
 
     }
@@ -118,7 +119,7 @@ class MlEditDocumentFormat extends React.Component{
               <form>
                 <div className="form-group mandatory">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
-                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docFormatName} className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
+                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docFormatName} readOnly="true" disabled="disabled" className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
                 </div>
                 <div className="form-group">
                   <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label" id=""></textarea>

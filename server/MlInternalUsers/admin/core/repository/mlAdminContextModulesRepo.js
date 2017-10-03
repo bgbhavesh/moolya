@@ -739,7 +739,8 @@ let CoreModules = {
       userData.map(function (list) {
         data[index].email = list.username;
         list.profile.externalUserProfiles.map(function (user) {
-          data[index].userDetails = user;
+          if(details.profileId ===  user.profileId)
+            data[index].userDetails = user;
         });
       });
     });

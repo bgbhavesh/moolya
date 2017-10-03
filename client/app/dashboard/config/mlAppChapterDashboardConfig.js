@@ -1,6 +1,7 @@
 import {MlAppViewer} from "../../../commons/core/MlAppViewer";
 import MlAppChapterList from '../components/MlAppChapterList'
 import MlAppClusterMapView from '../components/MlAppClusterMapView'
+import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../actions/fetchDashboardDetails"
 import React from 'react';
 import gql from 'graphql-tag'
@@ -89,30 +90,30 @@ const mlAppChapterDashboardMapConfig=new MlAppViewer({
   mapMarkerComponent:<MlAppClusterMapMarker/>,
   // mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
-    // {
-    //   actionName: 'onMouseEnter',
-    //   hoverComponent: <MapDetails />,
-    //   handler:  function (reqParams,mapHoverHandlerCallback) {
-    //     let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams.markerId};
-    //     const mapDataPromise =  maphandler.findMapDetailsTypeActionHandler(mapDetailsQuery);
-    //     mapDataPromise.then(data =>{
-    //          //console.log(data);
-    //           if(mapHoverHandlerCallback){
-    //                  mapHoverHandlerCallback(data);
-    //           };
-    //     });
-    //     return null;
-    //   }
-    // },
-    // {
-    //   actionName: 'onMouseLeave',
-    //   // hoverComponent:<MapDetails />,
-    //   handler:  (data)=>{
-    //     if(data&&data.id){
-    //       // console.log('on leave called')
-    //     }
-    //   }
-    // },
+    {
+      actionName: 'onMouseEnter',
+      hoverComponent: <MapDetails />,
+      handler:  function (reqParams,mapHoverHandlerCallback) {
+        let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams.markerId};
+        const mapDataPromise =  maphandler.findMapDetailsTypeActionHandler(mapDetailsQuery);
+        mapDataPromise.then(data =>{
+             //console.log(data);
+              if(mapHoverHandlerCallback){
+                     mapHoverHandlerCallback(data);
+              };
+        });
+        return null;
+      }
+    },
+    {
+      actionName: 'onMouseLeave',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data&&data.id){
+          // console.log('on leave called')
+        }
+      }
+    },
     {
       actionName: 'onMarkerClick',
       // hoverComponent:<MapDetails />,

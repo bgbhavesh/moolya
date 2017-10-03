@@ -21,3 +21,25 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   result=result&&result.data&&result.data.data?result.data.data:null;
   return result;
 }
+
+export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
+  let did=ModuleTypeDetails
+  const result = await appClient.query({
+    query: gql`
+        query ($moduleName: String, $id: String) {
+         data: fetchAppMapData(moduleName: $moduleName, id: $id){
+          key
+          count
+          icon
+      }
+    }
+    `,
+    variables: {
+      id:did.id,
+      moduleName:did.moduleName
+    },
+    forceFetch:true
+  })
+  const totalResult = result.data.data;
+  return totalResult
+}

@@ -520,7 +520,7 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group mandatory" id="date-of-birth">
-                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format(Meteor.settings.public.dateFormat): ""} className="form-control float-label" readOnly="true" />
+                      <input placeholder="Date of Birth" type="text" value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD/MM/YYYY'): ""} className="form-control float-label" readOnly="true" />
                       <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

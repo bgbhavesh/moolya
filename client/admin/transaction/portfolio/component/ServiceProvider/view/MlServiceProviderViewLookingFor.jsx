@@ -120,7 +120,8 @@ export default class MlServiceProviderLookingForView extends React.Component {
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }
+    }else
+      this.setState({loading: false})
   }
 
   render() {

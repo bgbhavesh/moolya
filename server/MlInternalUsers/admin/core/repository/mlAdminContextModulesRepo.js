@@ -273,6 +273,10 @@ let CoreModules = {
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
 
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'transactionCreatedDate': -1}
+    }
+
     var data = MlRequests.find(resultantQuery, fieldsProj).fetch() || [];
     var totalRecords = MlRequests.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};

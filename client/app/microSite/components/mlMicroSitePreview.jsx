@@ -38,13 +38,13 @@ export default class MlMicroSitePreview extends React.Component {
   render() {
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div className="app_main_wrap">
         {showLoader === true ? ( <MlLoader />) :
           (this.state.src) ?
-            (<form>
-              <iframe src={this.state.src} style={{'height': '550px', 'width': '93%'}}>
+            (<div className="app_padding_wrap">
+              <iframe src={this.state.src} style={{'height': '550px', 'width': '100%'}}>
               </iframe>
-            </form>)
+            </div>)
             :
             (<div align="center" style={{fontSize: '30px'}}>Portifolio not requested for Live</div>)
         }

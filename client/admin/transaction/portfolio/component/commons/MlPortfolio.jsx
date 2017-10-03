@@ -1,27 +1,27 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
-import formHandler from "../../../../commons/containers/MlFormHandler";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
 import {
   updatePortfolioActionHandler,
   updateIdeatorIdeaActionHandler,
   approvePortfolio,
   rejectPortfolio
-} from "../actions/updatePortfolioDetails";
-import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
-import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
-import {findComments} from "../../../../commons/annotaterComments/findComments";
+} from "../../actions/updatePortfolioDetails";
+import {fetchTemplateHandler} from "../../../../../commons/containers/templates/mltemplateActionHandler";
+import MlActionComponent from "../../../../../commons/components/actions/ActionComponent";
+import {findComments} from "../../../../../commons/annotaterComments/findComments";
 import {
   createCommentActionHandler,
   resolveCommentActionHandler,
   reopenCommentActionHandler
-} from "../../../../commons/annotaterComments/createComment";
+} from "../../../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../../../app/portfolio/ideators/actions/ideatorActionHandler";
-import MlLoader from "../../../../commons/components/loader/loader";
+import {fetchIdeaByPortfolioId} from "../../../../../app/portfolio/ideators/actions/ideatorActionHandler";
+import MlLoader from "../../../../../commons/components/loader/loader";
 import _ from "lodash";
-import {client} from "../../../core/apolloConnection";
-import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import {client} from "../../../../core/apolloConnection";
+import {getAdminUserContext} from "../../../../../commons/getAdminUserContext";
 
 class MlPortfolio extends React.Component {
   constructor(props) {

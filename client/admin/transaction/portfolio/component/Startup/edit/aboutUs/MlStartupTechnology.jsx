@@ -11,11 +11,12 @@ import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipar
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import { connect } from 'react-redux';
 var FontAwesome = require('react-fontawesome');
 
 const KEY = "technologies"
 
-export default class MlStartupTechnology extends React.Component{
+class MlStartupTechnology extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -343,3 +344,12 @@ export default class MlStartupTechnology extends React.Component{
 MlStartupTechnology.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupTechnology);
+export default MlStartupTechnology;

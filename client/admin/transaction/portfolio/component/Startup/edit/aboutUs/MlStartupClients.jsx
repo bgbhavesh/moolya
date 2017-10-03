@@ -2,6 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
+import { connect } from 'react-redux';
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
@@ -16,7 +17,7 @@ import MlLoader from '../../../../../../../commons/components/loader/loader'
 
 const KEY = 'clients'
 
-export default class MlStartupClients extends React.Component{
+class MlStartupClients extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -315,3 +316,12 @@ export default class MlStartupClients extends React.Component{
 MlStartupClients.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupClients);
+export default MlStartupClients;

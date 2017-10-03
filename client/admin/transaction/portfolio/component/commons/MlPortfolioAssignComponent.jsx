@@ -3,9 +3,9 @@ import {render} from 'react-dom';
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
-import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction,validateAssignmentsDataContext} from '../actions/assignUserforTransactionAction'
-import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
+import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction,validateAssignmentsDataContext} from '../../actions/assignUserforTransactionAction'
+import hierarchyValidations from "../../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlPortfolioAssignComponent extends React.Component {
 

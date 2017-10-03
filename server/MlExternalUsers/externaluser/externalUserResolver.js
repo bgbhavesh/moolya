@@ -450,7 +450,7 @@ MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, c
 }
 
 /**
- * @module [users / LEFT NAV]
+ * @module [users / LEFT NAV / Office Member Freeze or Retire]
  * Note: Status change of user profile coming in there context
  * */
 MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, context, info) => {
@@ -533,3 +533,99 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
   var response = mlDBController.aggregate('users', query, context)
   return response
 }
+
+
+MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let query={};
+  var chapterCount=0
+
+  let userId = context.userId;
+  let userProfile = new MlUserContext().userProfileDetails(userId);
+  var userSubChapterId = userProfile.subChapterId;
+  let userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+  var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+
+  if(!isDefaultSubChapter){
+    var relatedSubChapterIds = [];
+    var chapterCount = mlDBController.find('MlChapters', {_id:userSubChapter.chapterId, isActive:true}).count();
+    var subChapterCount = mlDBController.find('MlSubChapters', {_id:userSubChapterId, isActive:true}).count();
+
+    var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+    if(relatedSubChapters&&relatedSubChapters.length>0){
+      _.each(relatedSubChapters, function(obj){
+        let ids = _.map(obj.subChapters, "subChapterId");
+        relatedSubChapterIds = _.concat(relatedSubChapterIds, ids)
+      })
+
+      relatedSubChapterIds = _.uniq(relatedSubChapterIds);
+
+      var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}}).fetch()
+      var relatedChapterId = _.map(relatedSC, "chapterId");
+      relatedChapterId = _.uniq(relatedChapterId);
+
+      if(relatedChapterId&&relatedChapterId.length>0){
+        chapterCount = relatedChapterId.length
+      }
+
+      if(relatedSubChapterIds&&relatedSubChapterIds.length>0){
+        subChapterCount = relatedSubChapterIds.length
+      }
+    }
+  }
+
+  switch(args.moduleName){
+    case "cluster":
+      query={"clusterId":args.id};
+      chapterCount = isDefaultSubChapter?mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count():chapterCount;
+      break;
+    case "chapter":
+      query={"chapterId":args.id};
+      chapterCount = isDefaultSubChapter?mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count():subChapterCount;
+      break;
+    case "subChapter":
+      query={"subChapterId":args.id};
+      break;
+    case "community":
+      query={"communityDefId":args.id};
+      break;
+    default:
+      query={"noSuchQuery":args.id};
+  }
+  query.isActive=true;
+
+  let response=[];
+
+  let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
+
+  _.each(communityData,function (item,value) {
+    query.communityDefName = item.name;
+    query.isApprove=true;
+    if(item.communityImageLink!="ml my-ml-browser_5" && item.communityImageLink!="ml ml-moolya-symbol"){
+      response.push({
+        key: item._id,
+        count: mlDBController.find('users', {'profile.externalUserProfiles':{$elemMatch: query}}, context).count(),
+        icon: item.communityImageLink
+      })
+    }
+  });
+
+  let TU = _.map(response, 'count');
+  let totalUsers = _.sum(TU);
+
+  // response.push({
+  //   key: '123',
+  //   count: totalUsers,
+  //   icon: "ml my-ml-browser_5"
+  // })
+
+  if(chapterCount>=0){
+    response.push({
+      key: '321',
+      count: args&&args.moduleName=="subChapter"?0:chapterCount,
+      icon: "ml ml-chapter"
+    })
+  }
+
+  return response;
+};

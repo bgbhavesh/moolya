@@ -7,7 +7,7 @@ import ScrollArea from "react-scrollbar";
 import "react-responsive-tabs/styles.css";
 import {fetchIdeaActionHandler} from "../actions/findUsersHandlers";
 import MlLoader from "../../../commons/components/loader/loader";
-import MlPortfolio from "../../transaction/portfolio/component/MlPortfolio";
+import MlPortfolio from "../../transaction/portfolio/component/commons/MlPortfolio";
 
 /**
  * Export of Ideator Ideas UI

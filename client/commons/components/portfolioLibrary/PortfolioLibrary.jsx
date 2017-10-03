@@ -1222,6 +1222,8 @@ class Library extends React.Component {
 
   async updateLibraryPortfolioLibrary(id, data) {
     const resp = await updateLibrary(id, data, this.props.client)
+    this.refetchData();
+    this.getCentralLibrary();
     // if(!resp.success){
     //   toastr.error("Image already Exists in library")
     // }

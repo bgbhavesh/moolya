@@ -273,6 +273,10 @@ let CoreModules = {
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
 
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'transactionCreatedDate': -1}
+    }
+
     var data = MlRequests.find(resultantQuery, fieldsProj).fetch() || [];
     var totalRecords = MlRequests.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
@@ -561,6 +565,8 @@ let CoreModules = {
     }
     pipleline.push({'$lookup': {from: 'users', localField: 'userId', 'foreignField': '_id', as: 'user'}},
       {'$unwind': '$user'},
+      {'$lookup':{ from: 'mlOffice', localField: 'officeId', foreignField: '_id', as: 'office'}},
+      {'$unwind':'$office'},
       {
         '$project': {
           'userName': '$user.profile.displayName',
@@ -573,7 +579,7 @@ let CoreModules = {
           'subChapterName': 1,
           'communityName': 1,
           'status': 1,
-          'profileId': '$user.profile.externalUserProfiles.profileId'
+          'profileId': '$office.profileId'
         }
       })
 
@@ -735,7 +741,8 @@ let CoreModules = {
       userData.map(function (list) {
         data[index].email = list.username;
         list.profile.externalUserProfiles.map(function (user) {
-          data[index].userDetails = user;
+          if(details.profileId ===  user.profileId)
+            data[index].userDetails = user;
         });
       });
     });

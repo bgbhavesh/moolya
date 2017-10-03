@@ -46,9 +46,13 @@ class MlEditOfficePackage extends Component{
       }
     });
 
-    this.fetchOfficePackageDetails();
+    // this.fetchOfficePackageDetails();
   }
 
+  componentWillMount() {
+    const resp = this.fetchOfficePackageDetails();
+    return resp
+  }
   componentDidUpdate(){
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
@@ -166,7 +170,7 @@ class MlEditOfficePackage extends Component{
   }
 
   async handleError(response) {
-
+    console.log('error', response)
   }
 
   optionsBySelectApplicableCommunity(Idx, calback, selObject){
@@ -194,8 +198,8 @@ class MlEditOfficePackage extends Component{
       clusterIds.push(cluster.clusterId)
     })
 
-    this.setState({clusters:clusters});
-    this.setState({clusterIds:clusterIds})
+    // this.setState({clusters:clusters});
+    this.setState({clusters: clusters, clusterIds: clusterIds})
   }
 
   optionsBySelectChapters(Idx, calback, selObject){
@@ -206,8 +210,8 @@ class MlEditOfficePackage extends Component{
       chapterIds.push(chapter.chapterId)
     })
 
-    this.setState({chapters:chapters});
-    this.setState({chapterIds:chapterIds})
+    // this.setState({chapters:chapters});
+    this.setState({chapters: chapters, chapterIds: chapterIds})
   }
 
   optionsBySelectSubChapters(Idx, calback, selObject){
@@ -219,19 +223,19 @@ class MlEditOfficePackage extends Component{
   }
 
   optionsBySelectAccountTypes(Idx, calback, selObject){
-    this.setState({account:Idx});
-    this.setState({accounts:selObject});
+    // this.setState({account:Idx});
+    this.setState({account: Idx, accounts: selObject});
   }
 
   optionsBySelectServiceCardTypes(Idx, calback, selObject){
-    this.setState({serviceCard:Idx});
-    this.setState({serviceCardType:selObject});
+    // this.setState({serviceCard:Idx});
+    this.setState({serviceCard: Idx, serviceCardType: selObject});
   }
 
   optionsBySelectFrequencyTypes(Idx, calback, selObject){
     var frequencyType = selObject
-    this.setState({frequency:Idx});
-    this.setState({frequencyType:frequencyType});
+    // this.setState({frequency:Idx});
+    this.setState({frequency: Idx, frequencyType: frequencyType});
   }
 
   onStatusChange(e){
@@ -328,23 +332,23 @@ class MlEditOfficePackage extends Component{
                 <div className="form-group">
                   <tetxtarea className="form-control float-label" type='text' value={this.state.about} onChange={this.onTextChange.bind(this)}></tetxtarea>
                 </div>
-                <div className="panel panel-default uploaded_files">
-                  <div className="panel-heading">
-                    Terms & Conductions
-                    <div className="pull-right block_action">
-                      <div className="fileUpload upload_file_mask">
-                        <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                          <input type="file" className="upload_file upload" name="file_source" /></a>
-                      </div>
-                    </div>
+                {/*<div className="panel panel-default uploaded_files">*/}
+                  {/*<div className="panel-heading">*/}
+                    {/*Terms & Conductions*/}
+                    {/*<div className="pull-right block_action">*/}
+                      {/*<div className="fileUpload upload_file_mask">*/}
+                        {/*<a href="javascript:void(0);"><span className="ml ml-upload"></span>*/}
+                          {/*<input type="file" className="upload_file upload" name="file_source" /></a>*/}
+                      {/*</div>*/}
+                    {/*</div>*/}
 
-                  </div>
-                  <div className="panel-body uploaded_files_swiper">
-                    <ul className="swiper-wrapper">
-                      <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                    </ul>
-                  </div>
-                </div>
+                  {/*</div>*/}
+                  {/*<div className="panel-body uploaded_files_swiper">*/}
+                    {/*<ul className="swiper-wrapper">*/}
+                      {/*<li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>*/}
+                    {/*</ul>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
                 <div className="clearfix" />
                 <div className="form-group">
                   <MoolyaSelect multiSelect={false} placeholder={"Account Type"} className="form-control float-label"
@@ -352,15 +356,15 @@ class MlEditOfficePackage extends Component{
                                 query={accountsquery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectAccountTypes.bind(this)}
                   />
                 </div>
-                <div className="form-group">
-                  <div className="fileUpload mlUpload_btn">
-                    <span>Profile Pic</span>
-                    <input type="file" className="upload" />
-                  </div>
-                  <div className="previewImg ProfileImg">
-                    <img src="/images/ideator_01.png"/>
-                  </div>
-                </div>
+                {/*<div className="form-group">*/}
+                  {/*<div className="fileUpload mlUpload_btn">*/}
+                    {/*<span>Profile Pic</span>*/}
+                    {/*<input type="file" className="upload" />*/}
+                  {/*</div>*/}
+                  {/*<div className="previewImg ProfileImg">*/}
+                    {/*<img src="/images/ideator_01.png"/>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
                 <div className="clearfix"/>
                 <div className="form-group">
                   <div className="input_types"><input type="checkbox" name="moolya" ref="isMoolya" onChange={this.onAvailabilityChange.bind(this)} /><label htmlFor="checkbox1"><span></span>Moolya</label></div>
@@ -406,11 +410,10 @@ class MlEditOfficePackage extends Component{
                   <div className="swiper-container blocks_in_form">
                     <div className="swiper-wrapper">
                       {this.state.communities.map(function (options, id) {
-                        var classname = "ml ml-"+options.communityName
                         return(
                           <div className="swiper-slide" key={id}>
                             <div className="team-block marb0">
-                              <span className="ml ml-ideator"></span>
+                              <span className="ml ml-moolya-symbol"></span>
                               <h3>{options.communityName}</h3>
                             </div>
                             <div className="form-group mart20">

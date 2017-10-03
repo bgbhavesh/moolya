@@ -4,8 +4,9 @@ import gql from "graphql-tag";
 import ScrollArea from "react-scrollbar";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
-import MoolyaSelect from '../../../commons/components/MlAdminSelectWrapper'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import {createOfficePackageHandler} from '../actions/officePackageHandler'
+import {mlFieldValidations} from "../../../../commons/validations/mlfieldValidation"
 
 import _ from 'lodash'
 
@@ -30,6 +31,13 @@ class MlAddOfficePackage extends Component{
         frequency:"",
         frequencyType:{}
       }
+      this.optionsBySelectFrequencyTypes = this.optionsBySelectFrequencyTypes.bind(this)
+      this.optionsBySelectAccountTypes = this.optionsBySelectAccountTypes.bind(this)
+      this.optionsBySelectClusters = this.optionsBySelectClusters.bind(this)
+      this.optionsBySelectChapters = this.optionsBySelectChapters.bind(this)
+      this.optionsBySelectSubChapters = this.optionsBySelectSubChapters.bind(this)
+      this.onStatusChange = this.onStatusChange.bind(this)
+      this.optionsBySelectServiceCardTypes = this.optionsBySelectServiceCardTypes.bind(this)
     }
 
     componentDidMount(){
@@ -55,49 +63,93 @@ class MlAddOfficePackage extends Component{
       });
     }
 
-    async createOfficePackage(){
-        var communities = _.uniqBy(this.state.communities, 'communityId');
-        communities = communities.filter(function (data) {
-            return typeof data.userCount !== undefined && data.userCount !== 0;
-        });
-
-        var officePackage = {
-            serviceCardName : this.refs.officeName.value,
-            displayName:this.refs.displayName.value,
-            cardType:this.state.serviceCardType.value,
-            frequencyType:this.state.frequencyType.value,
-            // officeAbout:this.refs.about.value,
-            accountType:this.state.accounts.value,
-            isMoolya:this.state.isMoolya,
-            isOthers:this.state.isOthers,
-            isActive:this.state.isActive,
-            applicableCommunity:this.state.applicableCommunities,
-            availableCommunities:communities,
-            clusters:this.state.clusters,
-            chapters:this.state.chapters,
-            subChapters:this.state.subChapters,
-            totalCount:this.refs.totalCount.value,
-            principalUserCount:this.refs.principalCount.value,
-            teamUserCount:this.refs.teamUserCount.value
-        };
-        console.log(officePackage)
-        var response = await createOfficePackageHandler(officePackage);
-        if(response && response.success){
-            FlowRouter.go("/admin/packages/officeList");
-        }
-        else if(response && !response.success){
-          toastr.error(response.result);
-        }else{
-          toastr.error("Error In Creating Office Package");
-        }
+  createOfficePackage() {
+    var ret = mlFieldValidations(this.refs);
+    if(ret){
+      toastr.error(ret)
+      return;
     }
 
-    async handleSuccess(response) {
+    var communities = _.uniqBy(this.state.communities, 'communityId');
+    communities = communities.filter(function (data) {
+        return typeof data.userCount !== undefined && data.userCount !== 0;
+    });
+
+    var officePackage = {
+      serviceCardName: this.refs.serviceCardName.value,
+      displayName: this.refs.displayName.value,
+      cardType: this.state.serviceCardType.value,
+      frequencyType: this.state.frequencyType.value,
+      accountType: this.state.accounts.value,
+      isMoolya: this.state.isMoolya,
+      isOthers: this.state.isOthers,
+      isActive: this.state.isActive,
+      applicableCommunity: this.state.applicableCommunities,
+      availableCommunities: communities,
+      clusters: this.state.clusters,
+      chapters: this.state.chapters,
+      subChapters: this.state.subChapters,
+      totalCount: this.refs.totalCount.value,
+      principalUserCount: this.refs.principalCount.value,
+      teamUserCount: this.refs.teamUserCount.value
+    };
+    console.log(officePackage)
+    let isValid = this.validateUserData(officePackage)
+    if (isValid && isValid.success)
+      this.createNewPackage(officePackage)
+    else if(isValid && !isValid.success)
+      toastr.error(isValid.result);
+
+    // var response = await createOfficePackageHandler(officePackage);
+    // if(response && response.success){
+    //     FlowRouter.go("/admin/packages/officeList");
+    // }
+    // else if(response && !response.success){
+    //   toastr.error(response.result);
+    // }else{
+    //   toastr.error("Error In Creating Office Package");
+    // }
+  }
+
+  async createNewPackage(officePackage) {
+    var response = await createOfficePackageHandler(officePackage);
+    if (response && response.success) {
+      FlowRouter.go("/admin/packages/officeList");
+    }
+    else if (response && !response.success) {
+      toastr.error(response.result);
+    } else {
+      toastr.error("Error In Creating Office Package");
+    }
+  }
+
+  validateUserData(usersData) {
+    if (usersData && usersData.principalUserCount && usersData.teamUserCount && usersData.totalCount) {
+      let PUC = usersData.principalUserCount ? Number(usersData.principalUserCount) : 0
+      let TUC = usersData.teamUserCount ? Number(usersData.teamUserCount) : 0
+      let TC = usersData.totalCount ? Number(usersData.totalCount) : 0
+      if ((PUC + TUC) != TC)
+        return {success: false, result: 'Total user count should be equal to principal and team'}
+      else if (!_.isEmpty(usersData.availableCommunities)) {
+        let communities = usersData.availableCommunities
+        let arrayCount = _.map(communities, 'userCount')
+        let addArray = _.sum(arrayCount)
+        if (Number(addArray) != TUC)
+          return {success: false, result: 'Communities Users count should be equal to Team user count'}
+        else
+          return {success: true}
+      } else
+        return {success: false, result: 'Please select the available communities'}
+    } else
+      return {success: false, result: 'Please enter users Data'}
+  }
+
+    handleSuccess(response) {
 
     }
 
-    async handleError(response) {
-
+    handleError(response) {
+      console.log('error', response)
     }
 
     optionsBySelectApplicableCommunity(Idx, calback, selObject){
@@ -108,11 +160,11 @@ class MlAddOfficePackage extends Component{
       this.setState({applicableCommunities:communities});
     }
 
-    optionsBySelectCommunity(Idx, calback, selObject)
-    {
+    optionsBySelectCommunity(Idx, calback, selObject){
       var communities = [];
       _.each(selObject, function (community) {
-          communities.push({communityName:community.communityName, communityId:community.communityId})
+        var count = community.userCount?community.userCount:0
+        communities.push({communityName: community.communityName, communityId: community.communityId, userCount: count})
       })
       this.setState({communities:communities});
     }
@@ -125,8 +177,8 @@ class MlAddOfficePackage extends Component{
           clusterIds.push(cluster.clusterId)
         })
 
-        this.setState({clusters:clusters});
-        this.setState({clusterIds:clusterIds})
+        // this.setState({clusters:clusters});
+      this.setState({clusters: clusters, clusterIds: clusterIds})
     }
 
     optionsBySelectChapters(Idx, calback, selObject){
@@ -137,8 +189,8 @@ class MlAddOfficePackage extends Component{
           chapterIds.push(chapter.chapterId)
         })
 
-        this.setState({chapters:chapters});
-        this.setState({chapterIds:chapterIds})
+        // this.setState({chapters:chapters});
+      this.setState({chapters: chapters, chapterIds: chapterIds})
     }
 
     optionsBySelectSubChapters(Idx, calback, selObject){
@@ -150,19 +202,19 @@ class MlAddOfficePackage extends Component{
     }
 
     optionsBySelectAccountTypes(Idx, calback, selObject){
-        this.setState({account:Idx});
-        this.setState({accounts:selObject});
+        // this.setState({account:Idx});
+      this.setState({account: Idx, accounts: selObject});
     }
 
     optionsBySelectServiceCardTypes(Idx, calback, selObject){
-      this.setState({serviceCard:Idx});
-      this.setState({serviceCardType:selObject});
+      // this.setState({serviceCard:Idx});
+      this.setState({serviceCard: Idx, serviceCardType: selObject});
     }
 
     optionsBySelectFrequencyTypes(Idx, calback, selObject){
       var frequencyType = selObject
-      this.setState({frequency:Idx});
-      this.setState({frequencyType:frequencyType});
+      // this.setState({frequency:Idx});
+      this.setState({frequency: Idx, frequencyType: frequencyType});
     }
 
     onStatusChange(e){
@@ -181,9 +233,9 @@ class MlAddOfficePackage extends Component{
       }
     }
 
-    onTextChange(e){
-      this.setState({about:e.target.value})
-    }
+    // onTextChange(e){
+    //   this.setState({about:e.target.value})
+    // }
 
     handleBlur(id, e){
         let data            =   this.state.communities;
@@ -233,76 +285,82 @@ class MlAddOfficePackage extends Component{
                   speed={0.8}
                   className="left_wrap"
                 >
-                  <div className="form-group">
-                    <input type="text" placeholder="Name" className="form-control float-label" ref="officeName"/>
+                  <div className="form-group mandatory">
+                    <input type="text" placeholder="Name" className="form-control float-label" ref="serviceCardName" data-required={true} data-errMsg="Name is required"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" className="form-control float-label" ref="displayName"/>
                   </div>
                   <div className="form-group">
-                    <MoolyaSelect multiSelect={false} placeholder={"Service Card Type"} className="form-control float-label"
+                    <Moolyaselect multiSelect={false} placeholder={"Service Card Type"} className="form-control float-label"
                       valueKey={'value'} labelKey={'label'} selectedValue={this.state.serviceCard} queryType={"graphql"}
-                      query={serviceTypeQuery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectServiceCardTypes.bind(this)}
+                      query={serviceTypeQuery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectServiceCardTypes}
                     />
                   </div>
                   <div className="form-group">
-                    {/*<MoolyaSelect multiSelect={false} placeholder={"Frequency Type"} className="form-control float-label"*/}
+                    {/*<Moolyaselect multiSelect={false} placeholder={"Frequency Type"} className="form-control float-label"*/}
                       {/*valueKey={'value'} labelKey={'label'} selectedValue={frequency} queryType={"graphql"}*/}
                       {/*query={frequencyTypeQuery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectFrequencyTypes.bind(this)}*/}
                     {/*/>*/}
-                    <MoolyaSelect multiSelect={false} className="form-field-name" valueKey={'value'}
+                    <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} query={frequencyTypeQuery}
                                   isDynamic={true} placeholder="Frequency Type"
-                                  onSelect={this.optionsBySelectFrequencyTypes.bind(this)}
+                                  onSelect={this.optionsBySelectFrequencyTypes}
                                   selectedValue={frequency}/>
                   </div>
-                  <div className="form-group">
-                    <tetxtarea className="form-control float-label" type='text' value={this.state.about} onChange={this.onTextChange.bind(this)}></tetxtarea>
-                  </div>
-                  <div className="panel panel-default uploaded_files">
-                    <div className="panel-heading">
-                      Terms & Conductions
-                      <div className="pull-right block_action">
-                        <div className="fileUpload upload_file_mask">
-                          <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                            <input type="file" className="upload_file upload" name="file_source" /></a>
-                        </div>
-                      </div>
+                  {/*<div className="form-group">*/}
+                    {/*<tetxtarea className="form-control float-label" type='text' placeholder="About package" ref="about"></tetxtarea>*/}
+                  {/*</div>*/}
+                  {/*<div className="panel panel-default uploaded_files">*/}
+                    {/*<div className="panel-heading">*/}
+                      {/*Terms & Conductions*/}
+                      {/*<div className="pull-right block_action">*/}
+                        {/*<div className="fileUpload upload_file_mask">*/}
+                          {/*<a href="javascript:void(0);"><span className="ml ml-upload"></span>*/}
+                            {/*<input type="file" className="upload_file upload" name="file_source" /></a>*/}
+                        {/*</div>*/}
+                      {/*</div>*/}
 
-                    </div>
-                    <div className="panel-body uploaded_files_swiper">
-                      <ul className="swiper-wrapper">
-                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                      </ul>
-                    </div>
-                  </div>
+                    {/*</div>*/}
+                    {/*<div className="panel-body uploaded_files_swiper">*/}
+                      {/*<ul className="swiper-wrapper">*/}
+                        {/*<li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>*/}
+                      {/*</ul>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
                   <div className="clearfix" />
                   <div className="form-group">
-                    <MoolyaSelect multiSelect={false} placeholder={"Account Type"} className="form-control float-label"
+                    <Moolyaselect multiSelect={false} placeholder={"Account Type"} className="form-control float-label"
                       valueKey={'value'} labelKey={'label'} selectedValue={this.state.account} queryType={"graphql"}
-                      query={accountsquery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectAccountTypes.bind(this)}
+                      query={accountsquery} isDynamic={true} id={'query'} onSelect={this.optionsBySelectAccountTypes}
                     />
                   </div>
-                  <div className="form-group">
-                    <div className="fileUpload mlUpload_btn">
-                      <span>Profile Pic</span>
-                      <input type="file" className="upload" />
-                    </div>
-                    <div className="previewImg ProfileImg">
-                      <img src="/images/ideator_01.png"/>
-                    </div>
-                  </div>
+                  {/*<div className="form-group">*/}
+                    {/*<div className="fileUpload mlUpload_btn">*/}
+                      {/*<span>Profile Pic</span>*/}
+                      {/*<input type="file" className="upload" />*/}
+                    {/*</div>*/}
+                    {/*<div className="previewImg ProfileImg">*/}
+                      {/*<img src="/images/ideator_01.png"/>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
                   <div className="clearfix"/>
                   <div className="form-group">
-                    <div className="input_types"><input type="checkbox" name="moolya" ref="isMoolya" onChange={this.onAvailabilityChange.bind(this)} /><label htmlFor="checkbox1"><span></span>Moolya</label></div>
-                    <div className="input_types"><input type="checkbox" name="others" ref="isOthers" onChange={this.onAvailabilityChange.bind(this)}/><label htmlFor="checkbox1"><span></span>Others</label></div>
+                    <div className="input_types"><input type="checkbox" name="moolya" ref="isMoolya"
+                                                        onChange={this.onAvailabilityChange.bind(this)}/>
+                      <label htmlFor="checkbox1"><span></span>Moolya</label>
+                    </div>
+                    <div className="input_types"><input type="checkbox" name="others" ref="isOthers"
+                                                        onChange={this.onAvailabilityChange.bind(this)}/>
+                      <label htmlFor="checkbox1"><span></span>Others</label>
+                    </div>
                     {/*<div className="input_types"><input type="checkbox" name="both" ref="isBoth" value="both" onChange={this.onAvailabilityChange.bind(this)}/><label htmlFor="checkbox1"><span></span>Both</label></div>*/}
                   </div>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">
                     <label className="">Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={this.state.isActive} onChange={this.onStatusChange.bind(this)}/>
+                      <input type="checkbox" ref="isActive" checked={this.state.isActive} onChange={this.onStatusChange}/>
                       <div className="slider"></div>
                     </label>
                   </div>
@@ -318,34 +376,37 @@ class MlAddOfficePackage extends Component{
                 >
                   <form>
                     <div className="form-group">
-                      <MoolyaSelect multiSelect={true} className="form-control float-label" valueKey={'communityId'} labelKey={'communityName'} queryType={"graphql"} query={communityQuery} isDynamic={true}
+                      <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'communityId'} labelKey={'communityName'} queryType={"graphql"} query={communityQuery} isDynamic={true}
                                     onSelect={this.optionsBySelectApplicableCommunity.bind(this)} placeholder="Applicable Community" selectedValue={this.state.applicableCommunities}/>
                     </div>
-                    <div className="form-group">
-                      <input type="Number" placeholder="Total number users" className="form-control float-label" ref="totalCount"/>
+                    <div className="form-group mandatory">
+                      <input type="Number" placeholder="Total number users" className="form-control float-label" ref="totalCount" data-required={true} data-errMsg="Total count is required"/>
                     </div>
-                    <div className="form-group">
-                      <input type="Number" placeholder="Number of principal" className="form-control float-label" ref="principalCount"/>
+                    <div className="form-group mandatory">
+                      <input type="Number" placeholder="Number of principal" className="form-control float-label" ref="principalCount" data-required={true} data-errMsg="Principle Count is required"/>
                     </div>
-                    <div className="form-group">
-                      <input type="Number" placeholder="Number of Team members" className="form-control float-label" ref="teamUserCount"/>
+                    <div className="form-group mandatory">
+                      <input type="Number" placeholder="Number of Team members" className="form-control float-label" ref="teamUserCount" data-required={true} data-errMsg="Team user count is required"/>
                     </div>
-                    <div className="form-group">
-                      <MoolyaSelect multiSelect={true} className="form-control float-label" valueKey={'communityId'} labelKey={'communityName'} queryType={"graphql"} query={communityQuery} isDynamic={true}
-                         onSelect={this.optionsBySelectCommunity.bind(this)} placeholder="Select Community" selectedValue={this.state.communities}/>
-                    </div>
+                    <Moolyaselect multiSelect={true} mandatory={true} className="form-control float-label"
+                                  valueKey={'communityId'} labelKey={'communityName'} queryType={"graphql"}
+                                  query={communityQuery} isDynamic={true}
+                                  onSelect={this.optionsBySelectCommunity.bind(this)}
+                                  placeholder="Select available communities" selectedValue={this.state.communities}
+                                  data-required={true} data-errMsg="Available communiites required"/>
                     <div className="swiper-container blocks_in_form">
                       <div className="swiper-wrapper">
                         {this.state.communities.map(function (options, id) {
-                          var classname = "ml ml-"+options.communityName
                           return(
                             <div className="swiper-slide" key={id}>
                               <div className="team-block marb0">
-                                <span className="ml ml-ideator"></span>
+                                <span className="ml ml-moolya-symbol"></span>
                                 <h3>{options.communityName}</h3>
                               </div>
                               <div className="form-group mart20">
-                                <input type="Number" defaultValue={options.userCount} placeholder="No of Users" className="form-control float-label" onBlur={that.handleBlur.bind(that, id)}/>
+                                <input type="Number" defaultValue={options.userCount} placeholder="No of Users"
+                                       className="form-control float-label" onBlur={that.handleBlur.bind(that, id)}
+                                       min="0"/>
                               </div>
                             </div>
                           )
@@ -353,23 +414,21 @@ class MlAddOfficePackage extends Component{
                       </div>
                     </div>
                     <div className="clearfix" />
-                    <div className="form-group">
-                      <MoolyaSelect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
+                      <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
                           valueKey={'clusterId'} labelKey={'clusterName'} selectedValue={this.state.clusters}
                           queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                          onSelect={this.optionsBySelectClusters.bind(this)}/>
-                    </div>
-                    <div className="form-group">
-                      <MoolyaSelect multiSelect={true} placeholder={"Chapter"} className="form-control float-label" valueKey={'chapterId'} labelKey={'chapterName'}
+                          onSelect={this.optionsBySelectClusters}/>
+                      <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label" valueKey={'chapterId'} labelKey={'chapterName'}
                           selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}isDynamic={true}
-                          id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
-                    </div>
-                    <div className="form-group">
-                      <MoolyaSelect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
+                          id={'query'} onSelect={this.optionsBySelectChapters}/>
+                      <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
                         valueKey={'subChapterId'} labelKey={'subChapterName'} selectedValue={this.state.subChapters}
                         queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
-                        isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}/>
-                    </div>
+                        isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters}/>
+                    <br className="clearfix"/>
+                    <br className="clearfix"/>
+                    <br className="clearfix"/>
+                    <br className="clearfix"/>
                   </form>
                 </ScrollArea>
               </div>

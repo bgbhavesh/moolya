@@ -3,29 +3,30 @@
  */
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import omitDeep from 'omit-deep-lodash';
 
-export async function fetchCommunitiesHandler() {
-  const result = await client.query({
-    query: gql`
-           query {
-            data: fetchCommunitiesDef {
-                _id,
-                name,
-                communityName,
-                displayName,
-                code,
-                communityImageLink,
-                aboutCommunity,
-                isActive,
-            }
-          }
-        `,
-    forceFetch:true
-  })
-
-  const communities = result.data.data;
-  return communities;
-}
+// export async function fetchCommunitiesHandler() {
+//   const result = await client.query({
+//     query: gql`
+//            query {
+//             data: fetchCommunitiesDef {
+//                 _id,
+//                 name,
+//                 communityName,
+//                 displayName,
+//                 code,
+//                 communityImageLink,
+//                 aboutCommunity,
+//                 isActive,
+//             }
+//           }
+//         `,
+//     forceFetch:true
+//   })
+//
+//   const communities = result.data.data;
+//   return communities;
+// }
 
 
 export async function createOfficePackageHandler(officePackage) {
@@ -41,8 +42,7 @@ export async function createOfficePackageHandler(officePackage) {
     `,
     variables:{
       package:officePackage
-    },
-    forceFetch:true
+    }
   })
 
   const communities = result.data.data;
@@ -63,8 +63,7 @@ export async function updateOfficePackageHandler(officePackageId, officePackage)
     variables:{
       packageId:officePackageId,
       package:officePackage
-    },
-    forceFetch:true
+    }
   })
 
   const communities = result.data.data;
@@ -118,6 +117,7 @@ export async function fetchOfficePackageHandler(officeId) {
     forceFetch:true
   })
 
-  const communities = result.data.fetchOfficePackageById;
+  var communities = result.data.fetchOfficePackageById;
+  communities = omitDeep(communities, '__typename')
   return communities;
 }

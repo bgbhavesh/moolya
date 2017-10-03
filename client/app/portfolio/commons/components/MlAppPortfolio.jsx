@@ -1,19 +1,19 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import  _ from "lodash";
-import formHandler from "../../../commons/containers/MlFormHandler";
-import {updatePortfolioActionHandler,updateIdeatorIdeaActionHandler} from "../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails";
-import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
-import {findComments} from "../../../commons/annotaterComments/findComments";
-import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import {updatePortfolioActionHandler,updateIdeatorIdeaActionHandler} from "../../../../admin/transaction/portfolio/actions/updatePortfolioDetails";
+import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
+import {findComments} from "../../../../commons/annotaterComments/findComments";
+import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId, fetchPortfolioImageHandler} from "../../portfolio/ideators/actions/ideatorActionHandler";
-import MlLoader from "../../../commons/components/loader/loader";
-import InteractionsCounter from "../../commons/components/InteractionsCounter";
-import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
-import {requestPortfolioForGoLive} from "../actions/fetchUserDetails";
-import {appClient} from "../../core/appConnection";
+import {fetchIdeaByPortfolioId, fetchPortfolioImageHandler} from "../../ideators/actions/ideatorActionHandler";
+import MlLoader from "../../../../commons/components/loader/loader";
+import InteractionsCounter from "../../../commons/components/InteractionsCounter";
+import MlAppPortfolioAccordionContainer from "../../../commons/components/MlAppPortfolioAccordion";
+import {requestPortfolioForGoLive} from "../../../commons/actions/fetchUserDetails";
+import {appClient} from "../../../core/appConnection";
 
 class MlAppPortfolio extends Component{
   constructor(props){

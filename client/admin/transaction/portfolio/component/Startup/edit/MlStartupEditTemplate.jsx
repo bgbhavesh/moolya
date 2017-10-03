@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
+import React, { Component, PropTypes } from "react";
+import { connect } from 'react-redux';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupManagement from "./MlStartupManagement";
 import _ from "lodash";
@@ -14,7 +14,7 @@ import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
 import {client} from '../../../../../core/apolloConnection'
 
 
-export default class MlStartupEditTemplate extends React.Component {
+class MlStartupEditTemplate extends React.Component {
   constructor(props) {
     super(props)
     this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
@@ -212,12 +212,14 @@ export default class MlStartupEditTemplate extends React.Component {
       privateKeys:privateKeys,
       removePrivateKeys:removePrivateKeys
     }
-    this.setState({portfolioKeys: obj});
+    this.setState({portfolioKeys: obj}, () => {
+      this.props.onChangePrivateKeys(obj)
+    });
     return obj
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
+    // console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp
@@ -247,3 +249,20 @@ MlStartupEditTemplate.childContextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object
 };
+
+const mapStateToProps = (state) => {
+  return {
+    mlStartupEditTemplate: state,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onChangePrivateKeys: (keys) => dispatch({
+      type: 'CHANGE_PRIVATE_KEYS',
+      payload: keys,
+    }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);

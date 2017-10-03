@@ -15,6 +15,7 @@ import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
+import _ from 'lodash';
 
 class MlEditDocumentMapping extends React.Component{
   constructor(props){
@@ -37,6 +38,7 @@ class MlEditDocumentMapping extends React.Component{
       documentType   : [],
       allowableSize  : '',
       issuingAuthority   : '',
+      allowableUnit : ''
     }
     // this.addEventHandler.bind(this);
     return this;
@@ -69,9 +71,23 @@ class MlEditDocumentMapping extends React.Component{
   async findDocument(){
     let id=this.props.config
     const response = await findDocumentMappingActionHandler(id);
-
+    let allowableUnit;let allowableSize;
     if(response) {
-      this.setState({loading:false,data:response});
+      allowableUnit = response&&response.allowableMaxSize?response.allowableMaxSize:"";
+      allowableUnit = allowableUnit.replace(/[0-9]/g, '');
+
+      allowableSize = response&&response.allowableMaxSize?parseInt(response.allowableMaxSize):""
+      let dataDetails = response
+
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      if (cloneBackUp) {
+        cloneBackUp.allowableMaxSize = allowableSize;
+
+
+      }
+
+      this.setState({ allowableUnit : allowableUnit,data: cloneBackUp,loading : false})
+      //this.setState({loading:false,data:response});
       // this.setState({documentId: this.state.data.documentId});
       // this.setState({id: this.state.data._id});
       if (this.state.data.documentType) {
@@ -98,8 +114,10 @@ class MlEditDocumentMapping extends React.Component{
         let subChaptersId = this.state.data.subChapters;
         this.setState({subChapters: subChaptersId});
       }
+
+
     }
-    this.setState({loading:false,data:response});
+
 
   }
 
@@ -131,7 +149,7 @@ class MlEditDocumentMapping extends React.Component{
         documentName: this.refs.documentName.value,
         kycCategory: this.state.kycCategory,
         documentType: this.state.documentType,
-        allowableMaxSize: this.refs.allowableSize.value,
+        allowableMaxSize: this.refs.allowableSize.value+this.state.allowableUnit,
         issuingAuthority: this.refs.issuingAuthority.value,
         isActive: this.refs.status.checked,
       }
@@ -183,6 +201,13 @@ class MlEditDocumentMapping extends React.Component{
     }else{
       this.setState({"data":{"isActive":false}});
     }
+  }
+
+  optionsByAllowableSizeUnit(data){
+    /*let subChapters=this.state.subChapters
+    subChapters[0]['id']=val;*/
+    let value = data&&data.value
+    this.setState({allowableUnit:value})
   }
   componentDidUpdate()
   {
@@ -259,6 +284,13 @@ class MlEditDocumentMapping extends React.Component{
 
     let chapterOption={options: { variables: {clusters:this.state.clusters,displayAllOption:true}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters,displayAllOption:true}}};
+
+    let unitTypes = [
+      {value: 'KB', label: 'KB'},
+      {value: 'MB', label: 'MB'},
+      {value: 'GB', label: 'GB'},
+      {value: 'TB', label: 'TB'},
+    ];
 
     const showLoader=this.state.loading;
     return (
@@ -340,10 +372,23 @@ class MlEditDocumentMapping extends React.Component{
                   <Moolyaselect  ref="kycCategory" multiSelect={true}  placeholder={"KYC Categories"} mandatory={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)}  data-required={true} data-errMsg="kyc Category is required"/>
 
                   <Moolyaselect  ref="documentType" multiSelect={true}  placeholder={"Type of Document"} mandatory={true}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)}  data-required={true} data-errMsg="Document Type is required"/>
+                  <div className="col-md-8 nopadding-left">
+                    <div className="form-group mandatory">
+                      <input type="text"  ref="allowableSize" defaultValue={this.state.data&&this.state.data.allowableMaxSize} placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
+                    </div>
+                  </div>
+                    <div className="col-md-4 nopadding-right">
+                      <div className="form-group mandatory">
+                        <Select name="form-field-name"
+                                ref = {"unit"}
+                                options={unitTypes}
+                                value={this.state.allowableUnit}
+                                placeholder='Select Unit'
+                                onChange={this.optionsByAllowableSizeUnit.bind(this)}
+                                data-required={true} data-errMsg="Unit is required"/>
+                      </div>
+                    </div>
 
-                <div className="form-group mandatory">
-                  <input type="text"  ref="allowableSize" defaultValue={this.state.data&&this.state.data.allowableMaxSize} placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
-                </div>
                 <div className="form-group">
                   <input type="text"  ref="issuingAuthority" defaultValue={this.state.data&&this.state.data.issuingAuthority} placeholder="Issuing Authority" className="form-control float-label" id=""/>
                 </div>

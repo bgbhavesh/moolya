@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import { connect } from 'react-redux';
 import ScrollArea from "react-scrollbar";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
@@ -7,11 +8,12 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formE
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash'
 var Select = require('react-select');
 
 const KEY = 'aboutUs'
 
-export default class MlStartupAboutUs extends React.Component{
+class MlStartupAboutUs extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -37,14 +39,32 @@ export default class MlStartupAboutUs extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
+    // this.lockPrivateKeys()
     // this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
-    console.log('aboutus startup context', this.context)
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
     if(!empty){
       this.setState({loading: false, data: this.context.startupPortfolio.aboutUs});
     }
+  }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.props.keys.privateKeys, { tabName: this.props.tabName })
+    var filterRemovePrivateKeys = _.filter(this.props.keys.removePrivateKeys, { tabName: this.props.tabName })
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.data.privateFields, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // console.log(nextProps);
   }
 
   handleBlur(e){
@@ -132,10 +152,10 @@ export default class MlStartupAboutUs extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:KEY}
-    this.setState({privateKey:privateKey})
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName}
+    // this.setState({privateKey:privateKey})
 
-    this.setState({data:details}, function () {
+    this.setState({data:details,privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -191,3 +211,12 @@ MlStartupAboutUs.contextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys : PropTypes.object
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+
+// export default connect(mapStateToProps)(MlStartupAboutUs);
+export default MlStartupAboutUs;

@@ -2,7 +2,7 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
+import MlPortfolioAssignComponent from '../component/commons/MlPortfolioAssignComponent'
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
 import moment from "moment";
 import {client} from '../../../core/apolloConnection';

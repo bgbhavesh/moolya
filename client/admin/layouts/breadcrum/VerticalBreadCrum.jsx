@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHandler';
 import ScrollArea from 'react-scrollbar'
 import { fetchPortfolioImageHandler } from '../../../app/portfolio/ideators/actions/ideatorActionHandler';
+import { findUserRegistrationActionHandler } from '../../users/actions/findUsersHandlers';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export default class VerticalBreadCrum extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    let porfolioId = FlowRouter.getParam('portfolioId');
+    let porfolioId = FlowRouter.getParam('registrationId');
     if(porfolioId)
       this.getUserName(porfolioId);
     else
@@ -26,9 +27,9 @@ export default class VerticalBreadCrum extends Component {
   }
 
   async getUserName(porfolioId){
-    var response = await fetchPortfolioImageHandler(porfolioId);
-    if (response) {
-      this.setState({user:response.portfolioUserName},
+    var response = await findUserRegistrationActionHandler(porfolioId);
+    if (response && response.registrationInfo) {
+      this.setState({user:response.registrationInfo.firstName || 'User',cluster:response.registrationInfo.clusterName || 'Cluster'},
         ()=>{
         this.getHierarchyDetails();
         });
@@ -107,7 +108,7 @@ export default class VerticalBreadCrum extends Component {
 
         if(breadCrum.type === 'users' && breadCrum.module ==='clusters' && breadCrum.subModule){
           breadCrumObject = [
-            { linkName: properName(breadCrum.module),  linkUrl:path.split('users')[0]+'users/clusters'},
+            { linkName: properName(this.state.cluster)||'Cluster',  linkUrl:path.split('users')[0]+'users/clusters'},
             { linkName: properName(this.state.user || 'User'),  linkUrl:path.split(breadCrum.subModule)[0]+'aboutuser'},
             { linkName: properName(fixName(breadCrum.subModule)),  linkUrl:path},
           ];

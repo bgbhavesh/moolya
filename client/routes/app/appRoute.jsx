@@ -271,7 +271,7 @@ appSection.route('/editOffice/:officeId', {
 });
 
 appSection.route('/officeMember/:officeId/:memberId', {
-  name: 'officeMember',
+  name: 'addOffice',
   action(){
     mount(AppLayout, {appContent: <MlAppMember />, isProfileMenu: true})
   }

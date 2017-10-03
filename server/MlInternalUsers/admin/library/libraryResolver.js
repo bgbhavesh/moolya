@@ -104,14 +104,14 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
     }else{
       let tempObject = {
         portfolioId:portfolioDetails._id,
-        isPrivate: false
+        isPrivate: true
       }
       args.files.portfolioReference.push(tempObject)
     }
   }else {
     let tempObject = {
       portfolioId: portfolioDetails._id,
-      isPrivate: false
+      isPrivate: true
     }
     let tempArray = []
     tempArray.push(tempObject)

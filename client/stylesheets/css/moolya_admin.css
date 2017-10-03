@@ -281,38 +281,11 @@ table{background: #fff;}
 .scrollarea{width: 100%;}
 .scrollarea .scrollbar-container.vertical .scrollbar{width: 4px !important;margin-left: 6px !important;background: #ef4647 !important;}
 .scrollarea .scrollbar-container.active, .scrollarea .scrollbar-container:hover{background: transparent !important;}
-/*
 .vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px;}
 .vTimeline ul{margin: -7px 0px 0px -6px;}
+/*.moolya_app .vTimeline ul{height: 62px;overflow: auto;}*/
 .vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 12px; line-height: 20px;}
-*/
-.vTimeline {
-  /* border-left: 2px solid #67cbe5; */
-  position: absolute;
-  top: 3px;
-  left: 78px;
-  height: 60px;
-  overflow-y: auto;
-  /* margin-left: 20px; */
-  overflow-x: hidden;
-  z-index: 10;
-  /*width: 150px;*/
-}
-.vTimeline ul {
-  margin: 0px 0px 0px 8px;
-  border-left: 2px solid #67cbe5;
-  width: 100%;
-}
 
-.vTimeline li {
-  background: url(images/timeline_bg.png) left center no-repeat;
-  padding-left: 15px;
-  color: #fff;
-  text-shadow: none;
-  font-size: 12px;
-  line-height: 20px;
-  margin-left: -6px;
-}
 .vTimeline li a{text-decoration: none;color: #fff;}
 .vTimeline li.current{background: url(images/timeline_ac.png) left center no-repeat;color: #ef4647;}
 .vTimeline li.current a{text-decoration: none;color: #ef4647;}

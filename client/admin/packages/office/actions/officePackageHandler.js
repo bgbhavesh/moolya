@@ -28,7 +28,6 @@ import omitDeep from 'omit-deep-lodash';
 //   return communities;
 // }
 
-
 export async function createOfficePackageHandler(officePackage) {
   const result = await client.mutate({
     mutation : gql`

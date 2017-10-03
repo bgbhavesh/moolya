@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import _ from "lodash";
 import MoolyaSelect from '../../../commons/components/MlAppSelectWrapper'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation'
-import {fetchAllCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
+import {fetchOfficeUserTypes} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 import {findDefaultProfile} from '../../../commons/actions/fetchUserDetails'
@@ -146,7 +146,7 @@ export default class MlAppNewSpokePerson extends React.Component {
 
 
   async fetchCommunities(specCode) {
-    let communities = await fetchAllCommunitiesHandler();
+    let communities = await fetchOfficeUserTypes();
     if (communities) {
       let communityList = []
       if (!specCode) {

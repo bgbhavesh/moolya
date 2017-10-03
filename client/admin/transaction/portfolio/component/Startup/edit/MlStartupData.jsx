@@ -19,9 +19,10 @@ export default class MlStartupData extends React.Component{
 
   }
 
-  async componentWillMount() {
-    this.fetchPortfolioData()
-    console.log('---response from server---',resp)
+  componentWillMount() {
+    const resp = this.fetchPortfolioData()
+    return resp
+    // console.log('---response from server---',resp)
   }
   async fetchPortfolioData(){
     const resp = await fetchStartupPortfolioData(this.props.portfolioDetailsId,this.props.client)

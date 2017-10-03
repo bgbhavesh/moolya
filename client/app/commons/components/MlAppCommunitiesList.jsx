@@ -35,7 +35,7 @@ export default class MlAppCommunitiesList extends Component {
       this.isAllowRegisterAs = response.isAllowRegisterAs
       if(response.isAllowRegisterAs){
         let registrationInfo = response.registrationInfo
-        toastr.success("set another registerAs");
+        // toastr.success("set another registerAs");
 
         this.setState({
           status: response.status,

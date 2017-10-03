@@ -2,7 +2,7 @@
  * import of libs and routes
  * */
 import React, {Component, PropTypes} from "react";
-import {fetchPortfolioActionHandler} from '../../../ideators/actions/ideatorActionHandler'
+import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';

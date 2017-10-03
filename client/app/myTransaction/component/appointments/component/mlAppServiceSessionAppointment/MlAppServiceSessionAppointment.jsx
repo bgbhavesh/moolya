@@ -56,9 +56,9 @@ export default class MlAppServiceSessionAppointment extends Component {
           <li>
             <a href={`#${this.state.orderId}3a`} data-toggle="tab">Service Details</a>
           </li>
-          <li>
-            <a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a>
-          </li>
+          {/*<li>*/}
+            {/*<a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a>*/}
+          {/*</li>*/}
         </ul>
         <div className="tab-content clearfix">
           <div className="tab-pane active" id={`${this.state.orderId}1a`}>

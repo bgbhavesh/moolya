@@ -78,9 +78,9 @@ export default class MlAppServicePurchasedDetail extends React.Component {
           <li>
             <a href={`#${data.orderId}6a`} data-toggle="tab">Payment Details</a>
           </li>
-          <li>
-            <a href={`#${data.orderId}7a`} data-toggle="tab">Device Details</a>
-          </li>
+          {/*<li>*/}
+            {/*<a href={`#${data.orderId}7a`} data-toggle="tab">Device Details</a>*/}
+          {/*</li>*/}
         </ul>
 
         <div className="tab-content clearfix">

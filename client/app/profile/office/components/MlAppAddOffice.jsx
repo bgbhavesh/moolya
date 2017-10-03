@@ -2,10 +2,10 @@
  * Created by vishwadeep on 12/5/17.
  */
 import React from "react";
-import {render} from "react-dom";
+// import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import MlAppNewSpokePerson from "./MlAppNewSpokePerson";
-import MlSpokePersonDetail from "./MlSpokePersonDetail";
+import MlAppNewBSpokeOffice from "./MlAppNewBSpokeOffice";
+import MlAppBSpokeOfficeDetails from "./MlAppBSpokeOfficeDetails";
 import {fetchOfficePackages} from "../actions/findOfficeAction";
 
 export default class MlAppAddOffice extends React.Component {
@@ -49,7 +49,6 @@ export default class MlAppAddOffice extends React.Component {
 
   async getUserPackages() {
     var response = await fetchOfficePackages()
-    console.log(response)
     this.setState({data: response})
   }
 
@@ -147,7 +146,7 @@ export default class MlAppAddOffice extends React.Component {
                 </div>
               </div>
 
-              {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail officeData={this.detailData}/>}
+              {isShowNewSpoke ? <MlAppNewBSpokeOffice/> : <MlAppBSpokeOfficeDetails officeData={this.detailData}/>}
 
             </div>
           </ScrollArea>

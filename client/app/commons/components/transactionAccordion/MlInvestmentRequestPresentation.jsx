@@ -24,9 +24,9 @@ export default class MlConnectionRequestPresentation extends React.Component {
           <li>
             <a href={"#2a"+transId} data-toggle="tab">Activity Log</a>
           </li>
-          <li>
-            <a href={"#3a"+transId} data-toggle="tab">Device Details</a>
-          </li>
+          {/*<li>*/}
+            {/*<a href={"#3a"+transId} data-toggle="tab">Device Details</a>*/}
+          {/*</li>*/}
           <li>
             <a href={"#4a"+transId} data-toggle="tab">History</a>
           </li>
@@ -116,11 +116,8 @@ export default class MlConnectionRequestPresentation extends React.Component {
           </div>
           <div className="tab-pane" id={"4a"+transId}>
             <div className="row">
-              <div className="col-md-6">
-                One
-              </div>
-              <div className="col-md-6">
-                Two
+              <div className="col-md-12">
+                <b>No data available.</b>
               </div>
             </div>
           </div>

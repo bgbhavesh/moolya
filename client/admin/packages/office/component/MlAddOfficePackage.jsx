@@ -38,6 +38,7 @@ class MlAddOfficePackage extends Component{
       this.optionsBySelectSubChapters = this.optionsBySelectSubChapters.bind(this)
       this.onStatusChange = this.onStatusChange.bind(this)
       this.optionsBySelectServiceCardTypes = this.optionsBySelectServiceCardTypes.bind(this)
+      this.optionsBySelectCommunity = this.optionsBySelectCommunity.bind(this)
     }
 
     componentDidMount(){
@@ -114,6 +115,7 @@ class MlAddOfficePackage extends Component{
   async createNewPackage(officePackage) {
     var response = await createOfficePackageHandler(officePackage);
     if (response && response.success) {
+      toastr.success(response.result);
       FlowRouter.go("/admin/packages/officeList");
     }
     else if (response && !response.success) {
@@ -249,6 +251,7 @@ class MlAddOfficePackage extends Component{
       let frequencyTypeQuery = gql `query{data:fetchFrequencyTypes {label:displayName, value: _id}}`;
       let accountsquery = gql `query{data: FetchAccount {label:accountName,value: _id}}`;
       let communityQuery = gql`query{data:fetchCommunitiesDef {communityId:_id, communityName:name}}`;
+      let officeCommunityQuery = gql`query {data: getOfficeUserTypes {communityId:code,communityName:displayName}}`;
       let clusterquery = gql` query{data:fetchClustersForMap{clusterName:displayName,clusterId:_id}}`;
       let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusterIds}}}:{options: {variables: {clusters: []}}};
       let chapterquery = gql`query($clusters:[String]){  
@@ -388,12 +391,11 @@ class MlAddOfficePackage extends Component{
                     <div className="form-group mandatory">
                       <input type="Number" placeholder="Number of Team members" className="form-control float-label" ref="teamUserCount" data-required={true} data-errMsg="Team user count is required"/>
                     </div>
-                    <Moolyaselect multiSelect={true} mandatory={true} className="form-control float-label"
-                                  valueKey={'communityId'} labelKey={'communityName'} queryType={"graphql"}
-                                  query={communityQuery} isDynamic={true}
-                                  onSelect={this.optionsBySelectCommunity.bind(this)}
+                    <Moolyaselect multiSelect={true} mandatory={true} className="form-control float-label" queryType={"graphql"}
+                                  query={officeCommunityQuery} isDynamic={true}
+                                  onSelect={this.optionsBySelectCommunity} valueKey={'communityId'} labelKey={'communityName'}
                                   placeholder="Select available communities" selectedValue={this.state.communities}
-                                  data-required={true} data-errMsg="Available communiites required"/>
+                                  data-required={true} data-errMsg="Available communites required"/>
                     <div className="swiper-container blocks_in_form">
                       <div className="swiper-wrapper">
                         {this.state.communities.map(function (options, id) {

@@ -3,29 +3,32 @@
  */
 import React, {Component} from 'react';
 import MlConnectionRequestPresentation from './MlConnectionRequestPresentation';
+import MlLoader from '../../../../commons/components/loader/loader';
 import {fetchConnectionRequestHandler,acceptConnectionActionHandler,rejectConnectionActionHandler} from '../../../appActions/actions/connectActionHandler';
 
 export default class MlConnectionRequest extends Component{
   constructor(props){
     super(props);
     this.fetchConnectionDetails.bind(this);
-    this.state={'connectionId':null,'data':{}};
+    this.state = {'connectionId': null, 'data': {}, loading: true};
     this.acceptConnectionHandler = this.acceptConnectionHandler.bind(this);
     this.rejectConnectionHandler = this.rejectConnectionHandler.bind(this);
     return this;
   }
 
   async fetchConnectionDetails(){
-
     let transactionId=this.props.data&&this.props.data._id?this.props.data._id:null;
     if( transactionId && this.props.data.transactionType == "connectionRequest" ){
       let connection  = await fetchConnectionRequestHandler(transactionId);
-      this.setState({data:connection||{},connectionId:(connection||{})._id});
-    }
+      this.setState({data:connection||{},connectionId:(connection||{})._id,loading:false});
+    }else
+      this.setState({loading: false})
   };
 
-  async componentWillMount(){
-    await this.fetchConnectionDetails();
+  componentWillMount(){
+    // await this.fetchConnectionDetails();
+    const resp = this.fetchConnectionDetails();
+    return resp
   }
 
   async acceptConnectionHandler(){
@@ -52,9 +55,6 @@ export default class MlConnectionRequest extends Component{
 
     const {data} = this.props;
     // var data=this.state.data;
-    console.log('State:', data);
-    console.log('Props:', data);
-
     let userDetails = {
       userId: data && data.fromProfileId ? data.fromProfileId : '',
       transactionId: data && data.transactionId ? data.transactionId : '',
@@ -74,16 +74,19 @@ export default class MlConnectionRequest extends Component{
       status: data && data.status ? data.status : ''
     };
 
+    const showLoader=this.state.loading;
     return(
       <div>
-        <MlConnectionRequestPresentation
-          userDetails={userDetails}
-          activityLog={activityLog}
-          canAccept={this.state.data.canAccept}
-          canReject={this.state.data.canReject}
-          acceptConnectionHandler={this.acceptConnectionHandler}
-          rejectConnectionHandler={this.rejectConnectionHandler}
-        />
+        {showLoader===true?(<MlLoader/>):(
+          <MlConnectionRequestPresentation
+            userDetails={userDetails}
+            activityLog={activityLog}
+            canAccept={this.state.data.canAccept}
+            canReject={this.state.data.canReject}
+            acceptConnectionHandler={this.acceptConnectionHandler}
+            rejectConnectionHandler={this.rejectConnectionHandler}
+          />
+        )}
       </div>
     )
   }

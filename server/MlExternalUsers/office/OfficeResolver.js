@@ -138,6 +138,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
   let pipeline = [
     // { $match: { userId: context.userId } },
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
+    { $unwind: "$office" },
     { $match: { 'office.userId': context.userId } },
     { $lookup:
       {
@@ -149,7 +150,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
     },
     { $unwind:"$user"},
     { $match: { 'user.profile.isActive':true } },
-    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
+    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage', officeName: "$office.officeName"} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
   if(!response || !response.length ) {
@@ -160,7 +161,8 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
         name: profile.firstName + " " + profile.lastName,
         userId: userId,
         profileImage: profile.profileImage,
-        profileId: profile.profileId
+        profileId: profile.profileId,
+        officeName: ''
       }];
     }
 
@@ -537,10 +539,74 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
         return response;
       }
     }
-    let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set:true}, context);
-    let code = 200;
-    let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
-    return response;
+    if(args.officeMember.isRetire || args.officeMember.isFreeze){
+      let memberInfo = mlDBController.findOne('MlOfficeMembers', args.memberId);
+      if(!memberInfo.profileId){
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("User not activated", code);
+        return response;
+      }
+      var myOffice = mlDBController.findOne('MlOffice', {_id: args.officeId});
+      if(myOffice.profileId == memberInfo.profileId) {
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("Office owner can't freeze/retire", code);
+        return response;
+      }
+      console.log(memberInfo);
+      let userInfo = {
+        userProfiles: {
+          profileId: memberInfo.profileId,
+          isActive: false
+        }
+      };
+      let userResponse = MlResolver.MlMutationResolver["deActivateUserProfileByContext"](obj, userInfo, context, info);
+      console.log(userResponse);
+      if(!userResponse.success){
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("Unable to freeze/retire, Please contact admin", code);
+        return response;
+      }
+      let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set: true}, context);
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+      return response;
+
+    } else if (args.officeMember.isFreeze == false) {
+      let memberInfo = mlDBController.findOne('MlOfficeMembers', args.memberId);
+      if(!memberInfo.profileId){
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("User not activated", code);
+        return response;
+      }
+      var myOffice = mlDBController.findOne('MlOffice', {_id: args.officeId});
+      if(myOffice.profileId == memberInfo.profileId) {
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("Office owner can't unfreeze", code);
+        return response;
+      }
+      let userInfo = {
+        userProfiles: {
+          profileId: memberInfo.profileId,
+          isActive: true
+        }
+      };
+      let userResponse = MlResolver.MlMutationResolver["deActivateUserProfileByContext"](obj, userInfo, context, info);
+      console.log(userResponse);
+      if(!userResponse.success){
+        let code = 200;
+        let response = new MlRespPayload().errorPayload("Unable to unfreeze, Please contact admin", code);
+        return response;
+      }
+      let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set: true}, context);
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+      return response;
+    } else {
+      let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set: true}, context);
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+      return response;
+    }
   } catch (e){
     let code = 400;
     let response = new MlRespPayload().successPayload(e.message, code);

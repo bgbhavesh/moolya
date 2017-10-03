@@ -71,7 +71,7 @@ export default class MlAssignTask extends React.Component {
       let options = response.map(function (user) {
         return {
           value:user.userId,
-          label:user.name
+          label:user.name + (user.officeName ? (" - " + user.officeName ) : '' )
         }
       });
       this.setState({

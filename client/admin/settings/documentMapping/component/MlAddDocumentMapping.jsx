@@ -33,6 +33,7 @@ class MlAddDocumentMapping extends React.Component{
       documentType   : [],
       allowableSize  : '',
       issuingAuthority   : '',
+      allowableUnit : ''
     }
     this.addEventHandler.bind(this);
     return this;
@@ -89,7 +90,7 @@ class MlAddDocumentMapping extends React.Component{
         documentName: this.refs.documentName.value,
         kycCategory: this.state.kycCategory,
         documentType: this.state.documentType,
-        allowableMaxSize: this.refs.allowableSize.value,
+        allowableMaxSize: this.refs.allowableSize.value+this.state.allowableUnit,
         issuingAuthority: this.refs.issuingAuthority.value,
         isActive: this.refs.status.checked,
       }
@@ -133,6 +134,13 @@ class MlAddDocumentMapping extends React.Component{
     /*let subChapters=this.state.subChapters
     subChapters[0]['id']=val;*/
     this.setState({subChapters:val})
+  }
+
+  optionsByAllowableSizeUnit(data){
+    /*let subChapters=this.state.subChapters
+    subChapters[0]['id']=val;*/
+    let value = data&&data.value
+    this.setState({allowableUnit:value})
   }
   render(){
     let MlActionConfig = [
@@ -192,6 +200,13 @@ class MlAddDocumentMapping extends React.Component{
 
     let chapterOption={options: { variables: {clusters:this.state.clusters,displayAllOption:true}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters,displayAllOption:true}}};
+
+    let unitTypes = [
+      {value: 'KB', label: 'KB'},
+      {value: 'MB', label: 'MB'},
+      {value: 'GB', label: 'GB'},
+      {value: 'TB', label: 'TB'},
+    ];
 
     return (
       <div className="admin_main_wrap">
@@ -270,9 +285,25 @@ class MlAddDocumentMapping extends React.Component{
             <div className="form-group">
               <Moolyaselect ref="documentType" multiSelect={true} mandatory={true} placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} data-required={true} data-errMsg="Document Type is required" />
             </div>
-            <div className="form-group mandatory">
-              <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
-            </div>
+                <div className="col-md-8 nopadding-left">
+                  <div className="form-group mandatory">
+                    <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
+                  </div>
+                </div>
+                <div className="col-md-4 nopadding-right">
+                  <div className="form-group mandatory">
+                    <Select name="form-field-name"
+                            ref = {"unit"}
+                            options={unitTypes}
+                            value={this.state.allowableUnit}
+                            placeholder='Select Unit'
+                            onChange={this.optionsByAllowableSizeUnit.bind(this)}
+                            data-required={true} data-errMsg="Unit is required"/>
+                  </div>
+                </div>
+                <br className="brclear"/>
+
+
             <div className="form-group">
               <input type="text"  ref="issuingAuthority" placeholder="Issuing Authority" className="form-control float-label" id=""/>
             </div>

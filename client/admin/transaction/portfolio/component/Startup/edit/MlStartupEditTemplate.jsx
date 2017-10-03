@@ -219,7 +219,7 @@ class MlStartupEditTemplate extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
+    // console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp

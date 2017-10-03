@@ -345,10 +345,11 @@ MlStartupTechnology.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    keys: state.mlStartupEditTemplateReducer.privateKeys
-  };
-}
-
-export default connect(mapStateToProps)(MlStartupTechnology);
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupTechnology);
+export default MlStartupTechnology;

@@ -250,7 +250,7 @@ appSection.route('/addOffice', {
 });
 
 appSection.route('/officeMembersDetails/:officeId', {
-  name: 'officeMembersDetails',
+  name: 'addOffice',
   action(params){
     mount(AppLayout, {appContent: <MlAppOfficeMembersDetails config={params.officeId}/>, isProfileMenu: true})
   }

@@ -15,7 +15,7 @@ export default function MlGenericTransactionAccordion(props) {
   switch (data.transactionType) {
     case 'officeRequest': {
       // return <MlOffice config={data}/>
-      return <MlEmptyView config={data} />
+      return <MlEmptyView config={data} data={data} />
       break;
     }
     case 'appointment': {
@@ -46,7 +46,7 @@ export default function MlGenericTransactionAccordion(props) {
       break;
     }
     default:
-      return <MlEmptyView {...data}/>
+      return <MlEmptyView data={data}/>
   }
 }
 
@@ -54,7 +54,7 @@ function getOfficeActivity(data) {
   switch (data.activity) {
     case 'officeDeactivate': {
       console.log('officeDeactivate')
-      return <MlEmptyView />
+      return <MlEmptyView data={data} />
       break;
     }
     case 'officeBearerInvitation': {
@@ -75,7 +75,7 @@ function getOfficeActivity(data) {
       break;
     }
     default:
-      return <MlEmptyView />
+      return <MlEmptyView data={data} />
   }
 }
 
@@ -91,9 +91,12 @@ export class MlOffice extends Component {
 
 export class MlEmptyView extends Component {
   render() {
-    var props = this.props
+    let {data} = this.props;
+    data = data ? data : {};
+    console.log(data);
     return (<div>
-      Transaction record of : {props.transactionType}
+      {data.transactionType} { data.status ?  '- '+ data.status :  '' }
+      {/*UI Not available*/}
     </div>)
   }
 }

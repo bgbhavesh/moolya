@@ -210,7 +210,7 @@ export default class MlOfficeItem extends React.Component {
               <div className="col-md-6">
                 <div className="form-group">
                   {/*<input type="text" placeholder="User Id" defaultValue=' ' value={this.state.transInfo.userId} className="form-control float-label"/>*/}
-                  <input type="text" placeholder="User Id" defaultValue=' ' value={this.state.userInfo.profileId?this.state.userInfo.profileId:''} className="form-control float-label"/>
+                  <input type="text" placeholder="User Id" defaultValue=' ' value={ this.state.officeSCDef && this.state.officeSCDef.profileId?this.state.officeSCDef.profileId:''} className="form-control float-label"/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" />

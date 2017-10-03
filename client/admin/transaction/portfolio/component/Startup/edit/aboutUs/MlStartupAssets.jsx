@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from "react";
+import { connect } from 'react-redux';
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
@@ -14,7 +15,7 @@ import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 const KEY = 'assets'
-export default class MlStartupAssets extends React.Component{
+class MlStartupAssets extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -341,3 +342,11 @@ export default class MlStartupAssets extends React.Component{
 MlStartupAssets.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    keys: state.mlStartupEditTemplateReducer.privateKeys
+  };
+}
+
+export default connect(mapStateToProps)(MlStartupAssets);

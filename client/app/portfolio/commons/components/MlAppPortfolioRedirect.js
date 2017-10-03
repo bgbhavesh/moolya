@@ -2,7 +2,7 @@
  * Created by vishwadeep on 11/7/17.
  */
 import React from "react";
-import {render} from 'react-dom';
+// import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import 'react-responsive-tabs/styles.css'
 

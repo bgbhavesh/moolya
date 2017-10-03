@@ -5,9 +5,9 @@ import AppLayout from "../../app/layouts/appLayout";
 import MlAppIdeatorTabs from "../../app/portfolio/ideators/components/MlAppIdeatorTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
-import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
+import MlPortfolioLanding from "../../app/portfolio/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/portfolio/ideators/components/MlAppIdeatorAddIdea";
-import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
+import MlAppPortfolio from "../../app/portfolio/commons/components/MlAppPortfolio";
 import Library from '../../commons/components/portfolioLibrary/libraryRoute'
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
@@ -271,7 +271,7 @@ appSection.route('/editOffice/:officeId', {
 });
 
 appSection.route('/officeMember/:officeId/:memberId', {
-  name: 'officeMember',
+  name: 'addOffice',
   action(){
     mount(AppLayout, {appContent: <MlAppMember />, isProfileMenu: true})
   }

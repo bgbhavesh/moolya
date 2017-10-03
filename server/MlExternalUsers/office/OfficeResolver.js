@@ -138,6 +138,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
   let pipeline = [
     // { $match: { userId: context.userId } },
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
+    { $unwind: "$office" },
     { $match: { 'office.userId': context.userId } },
     { $lookup:
       {
@@ -149,7 +150,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
     },
     { $unwind:"$user"},
     { $match: { 'user.profile.isActive':true } },
-    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
+    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage', officeName: "$office.officeName"} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
   if(!response || !response.length ) {
@@ -160,7 +161,8 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
         name: profile.firstName + " " + profile.lastName,
         userId: userId,
         profileImage: profile.profileImage,
-        profileId: profile.profileId
+        profileId: profile.profileId,
+        officeName: ''
       }];
     }
 

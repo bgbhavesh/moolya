@@ -1,4 +1,5 @@
 import React, { Component, PropTypes }  from "react";
+import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -9,7 +10,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formE
 
 const KEY = 'rating'
 
-export default class MlStartupRating extends React.Component{
+class MlStartupRating extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -105,3 +106,12 @@ export default class MlStartupRating extends React.Component{
 MlStartupRating.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    keys: state.mlStartupEditTemplateReducer.privateKeys
+  };
+}
+
+export default connect(mapStateToProps)(MlStartupRating);

@@ -14,6 +14,7 @@ export async function fetchAllOfficeMembers(resourceType) {
           userId
           profileId
           profileImage
+          officeName
         }
       }
     `,

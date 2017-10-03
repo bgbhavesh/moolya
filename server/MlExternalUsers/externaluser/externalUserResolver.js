@@ -450,7 +450,7 @@ MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, c
 }
 
 /**
- * @module [users / LEFT NAV]
+ * @module [users / LEFT NAV / Office Member Freeze or Retire]
  * Note: Status change of user profile coming in there context
  * */
 MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, context, info) => {

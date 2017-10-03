@@ -114,6 +114,7 @@ class MlAddOfficePackage extends Component{
   async createNewPackage(officePackage) {
     var response = await createOfficePackageHandler(officePackage);
     if (response && response.success) {
+      toastr.success(response.result);
       FlowRouter.go("/admin/packages/officeList");
     }
     else if (response && !response.success) {

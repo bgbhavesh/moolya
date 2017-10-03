@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import { connect } from 'react-redux';
 import ScrollArea from "react-scrollbar";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
@@ -11,7 +12,7 @@ var Select = require('react-select');
 
 const KEY = 'aboutUs'
 
-export default class MlStartupAboutUs extends React.Component{
+class MlStartupAboutUs extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -40,11 +41,14 @@ export default class MlStartupAboutUs extends React.Component{
     // this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
-    console.log('aboutus startup context', this.context)
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
     if(!empty){
       this.setState({loading: false, data: this.context.startupPortfolio.aboutUs});
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
   }
 
   handleBlur(e){
@@ -191,3 +195,11 @@ MlStartupAboutUs.contextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys : PropTypes.object
 };
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    keys: state.mlStartupEditTemplateReducer.privateKeys
+  };
+}
+
+export default connect(mapStateToProps)(MlStartupAboutUs);

@@ -195,17 +195,9 @@ export default class VerticalBreadCrum extends Component {
     return (
 
       <div className="vTimeline">
-        <div className="main_wrap_scroll">
-        <ScrollArea
-          speed={0.8}
-          className="main_wrap_scroll"
-          smoothScrolling={true}
-        >
         <ul>
           {list}
         </ul>
-        </ScrollArea>
-        </div>
       </div>
 
     );

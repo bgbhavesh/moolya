@@ -5,6 +5,7 @@ import { fetchInternalTaskInfo } from '../../internalTask/actions/fetchInternalT
 import { findRegistrationActionHandler } from '../../registrations/actions/findRegistration';
 import { fetchAllOfficeMembers } from '../../investment/actions/fetchAllTeamMember';
 import {fetchActivitiesActionHandler} from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
+import ScrollArea from 'react-scrollbar'
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);

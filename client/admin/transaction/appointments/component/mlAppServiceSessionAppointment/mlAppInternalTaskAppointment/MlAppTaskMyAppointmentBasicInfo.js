@@ -7,12 +7,10 @@
 // import NPM module(s)
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
 import Select from 'react-select';
 import { cloneDeep } from 'lodash';
-import {initalizeFloatLabel} from "../../../../../commons/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../../../../commons/utils/formElemUtil";
 
 export default class MlAppTaskMyAppointmentBasicInfo extends Component {
 
@@ -26,6 +24,7 @@ export default class MlAppTaskMyAppointmentBasicInfo extends Component {
   }
 
   componentDidMount() {
+    initalizeFloatLabel();
     // $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
@@ -37,9 +36,6 @@ export default class MlAppTaskMyAppointmentBasicInfo extends Component {
    * @returns {XML}
    */
   render(){
-    setTimeout(()=>{
-      initalizeFloatLabel();
-    });
     const { task } = this.props;
     return (
       <div className="step_form_wrap step1">

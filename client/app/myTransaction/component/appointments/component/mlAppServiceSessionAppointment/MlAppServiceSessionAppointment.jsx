@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { fetchAppAppointmentByTransactionId } from '../../action/fetchAppointment';
+import MlAppSelectedTaskMyAppointment from '../../../../../calendar/myAppointments/components/mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {
@@ -7,6 +8,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     this.state = {
       orderId: props.orderId,
       data: {
+        appointmentInfo: {},
         client: {},
         service: {},
         owner: {},
@@ -36,6 +38,7 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.owner = data.owner ? data.owner : {};
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
         data.service = data.service ? data.service : {};
+        data.appointmentInfo = data.appointmentInfo || {};
         this.setState({
           data
         });
@@ -57,7 +60,7 @@ export default class MlAppServiceSessionAppointment extends Component {
             <a href={`#${this.state.orderId}3a`} data-toggle="tab">Service Details</a>
           </li>
           {/*<li>*/}
-            {/*<a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a>*/}
+          {/*<a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a>*/}
           {/*</li>*/}
         </ul>
         <div className="tab-content clearfix">
@@ -194,7 +197,12 @@ export default class MlAppServiceSessionAppointment extends Component {
             </div>
           </div>
           <div className="tab-pane" id={`${this.state.orderId}3a`}>
-            <p>Take from this page "appFunderMyAppointment"</p>
+            {/* <p>Take from this page "appFunderMyAppointment"</p> */}
+            <MlAppSelectedTaskMyAppointment appointment={{
+              appointmentId: this.state.orderId,
+              resourceId: this.state.data.appointmentInfo.taskId,
+              sessionId: this.state.data.appointmentInfo.sessionId
+            }} />
           </div>
           <div className="tab-pane" id={`${this.state.orderId}4a`}>
             <div className="row">

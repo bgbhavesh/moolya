@@ -11,7 +11,7 @@ import MlCompanyCSRReports from '../../edit/CSR/MlCompanyCSRReports'
 export default class MlCSRViewTabs extends Component {
   constructor(props){
     super(props);
-    this.state =  {tabs: []};
+    this.state =  {tabs: [], activeTab: 'Achievements',admin:true};
   }
   componentDidMount(){
     var props = this.props
@@ -40,16 +40,32 @@ export default class MlCSRViewTabs extends Component {
   }
   componentWillMount()
   {
+    let admin=true;
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      admin = false;
+    }
     let tabs = this.getTabComponents();
+
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.title,
         getContent: () => tab.component
       }));
     }
-    this.setState({tabs:getTabs() ||[]});
+
+    let AllTabs =getTabs() ||[];
+    if(admin){
+      AllTabs.forEach(function(v){ delete v.key });
+    }
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      this.setState({activeTab,tabs:AllTabs,admin});
+    }else
+    this.setState({tabs:AllTabs,admin});
     this.setBackTab()
   }
   setBackTab(e) {
@@ -75,8 +91,24 @@ export default class MlCSRViewTabs extends Component {
     ]
     return tabs;
   }
+
+  updateTab(index){
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
+  }
+
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    if(this.state.admin){
+      return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    }
+    else{
+      return <MlTabComponent tabs={tabs}
+                             selectedTabKey={this.state.activeTab}
+                             onChange={this.updateTab}
+                             backClickHandler={this.props.backClickHandler}
+                             type="subtab" mkey="title"
+      />
+    }
   }
 }

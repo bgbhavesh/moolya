@@ -1,18 +1,17 @@
 import React, { Component, PropTypes } from "react";
 import { render } from "react-dom";
+import gql from 'graphql-tag'
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
+var Select = require('react-select');
 import ScrollArea from "react-scrollbar";
 import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
 import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
-import _ from "lodash";
 import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
 import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from "../../../actions/findPortfolioFunderDetails";
 import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPortfolio'
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler';
-// import NoData from '../../../../../commons/components/noData/noData'
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import MlLoader from '../../../../../../commons/components/loader/loader'
-import gql from 'graphql-tag'
 import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper'
 import CropperModal from '../../../../../../commons/components/cropperModal';
 
@@ -44,7 +43,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       showProfileModal1: false,
       teamAvatar :false
     }
-    this.handleBlur = this.handleBlur;
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSavePrincipalAction = this.onSavePrincipalAction.bind(this);
     this.onSaveTeamAction = this.onSaveTeamAction.bind(this);
     this.fetchPrincipalDetails.bind(this);
@@ -117,22 +116,26 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   onLockChange(fieldName, field, tabName, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
+    // let details = this.state.data || {};
+    // let key = e.target.id;
     var isPrivate = false;
-    details = _.omit(details, [key]);
-    let className = e.target.className;
+    // details = _.omit(details, [key]);
+    const className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, { [key]: true });
+      // details = _.extend(details, { [key]: true });
       isPrivate = true;
-    } else {
-      details = _.extend(details, { [key]: false });
     }
+      // else {
+    //   details = _.extend(details, { [key]: false });
+    // }
 
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: tabName }
     // this.setState({privateKey:privateKey})
-    this.setState({ data: details, privateKey: privateKey }, function () {
+    // this.setState({ data: details, privateKey: privateKey }, function () {
       // this.sendDataToParent()
+    // })
+    this.setState({privateKey: privateKey }, function () {
+      this.sendDataToParent()
     })
   }
 
@@ -182,7 +185,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   onSavePrincipalAction(e) {
-    this.sendDataToParent();
+    this.sendDataToParent(true);
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.principal) {
       this.setState({ funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false });
     }
@@ -191,7 +194,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   onSaveTeamAction(e) {
-    this.sendDataToParent();
+    this.sendDataToParent(true);
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.team) {
       this.setState({ funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false });
     }
@@ -302,22 +305,23 @@ export default class MlFunderPrincipalTeam extends React.Component {
     // "selectedVal": details.typeOfFundingId
 
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
 
-  sendDataToParent() {
-    let data = this.state.data;
+  sendDataToParent(isSaveClicked) {
+    var data = this.state.data;
     var selectedTab = this.state.selectedTab;
     if (selectedTab == "principal") {
       let fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogo;
-      funderPrincipal[this.state.selectedIndex] = data;
+      if (isSaveClicked)
+        funderPrincipal[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderPrincipal, function (item) {
         for (var propName in item) {
@@ -327,11 +331,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
         }
         let newItem = _.omit(item, "__typename");
         newItem = _.omit(newItem, "privateFields");
-        // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
       funderPrincipal = arr;
-      // funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
       this.setState({ funderPrincipal: funderPrincipal })
       this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
 
@@ -341,7 +343,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogoTeam;
-      funderTeam[this.state.selectedIndex] = data;
+      if (isSaveClicked)
+        funderTeam[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderTeam, function (item) {
         for (var propName in item) {
@@ -351,11 +354,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
         }
         let newItem = _.omit(item, "__typename");
         newItem = _.omit(newItem, "privateFields");
-        // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
       funderTeam = arr;
-      // funderTeam=_.omit(funderTeam,["privateFields"]);
       this.setState({ funderTeam: funderTeam })
       this.props.getTeamDetails(funderTeam, this.state.privateKey);
     }
@@ -494,7 +495,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   handleTeamAvatar(image, e) {
-    console.log('here');
     this.setState({
       uploadingAvatar1: true,
     });
@@ -560,7 +560,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onPrincipalTileClick.bind(that, idx, principal)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={principal.logo && principal.logo.fileUrl ? principal.logo.fileUrl : "/images/def_profile.png"} />
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                     </div>
@@ -600,7 +600,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onTeamTileClick.bind(that, idx, team)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={team.logo && team.logo.fileUrl ? team.logo.fileUrl : "/images/def_profile.png"} />
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>
                                     {/*<div className="ml_icon_btn">*/}
@@ -799,6 +799,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               </div>
                             </div> : <div></div>
                           }
+                          <div className="clearfix"></div>
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
                                           valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
@@ -815,7 +816,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*/!*<input type="checkbox" className="lock_input"*!/*/}
                           {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
                           {/*</div>*/}
-                          <div className="clearfix"></div>
+
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName"
                                    defaultValue={this.state.data.firstName} className="form-control float-label"

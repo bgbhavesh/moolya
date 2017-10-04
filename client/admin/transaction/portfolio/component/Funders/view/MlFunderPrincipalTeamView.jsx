@@ -203,17 +203,18 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-heading"> Principal </div>
                   <div className="panel-body">
-                    <div className="col-lg-12 top-content">
+                    <div className="col-lg-12 top-content ideators_list">
                       <div className="row">
                         {that.state.funderPrincipalList.map(function (principal, idx) {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectPrincipal.bind(that, idx)}>
-                                <div className="list_block notrans two funding_list">
-                                  <FontAwesome name='lock'/>
-                                  <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                  <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
-                                  <div><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
+                                <div className="ideators_list_block two">
+                                  <div>
+                                  <FontAwesome className='pull-left' name='trash-o'/>
+                                  <FontAwesome className='pull-right' name='lock'/></div>
+                                  <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} className="c_image"/>
+                                  <div className="block_footer nopadding"><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                     className="small">{principal.designation}</p></div>
                                   {/*<div className="ml_icon_btn">*/}
                                   {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
@@ -348,17 +349,19 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-heading"> Team </div>
                   <div className="panel-body">
-                    <div className="col-lg-12 top-content2">
+                    <div className="col-lg-12 top-content2 ideators_list">
                       <div className="row">
                         {that.state.funderTeamList.map(function (team, idx) {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectTeam.bind(that, idx)}>
-                                <div className="list_block notrans one funding_list">
-                                  <FontAwesome name='lock'/>
-                                  <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                  <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
-                                  <div><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
+                                <div className="ideators_list_block one">
+                                  <div>
+                                    <FontAwesome className='pull-left' name='trash-o'/>
+                                    <FontAwesome className='pull-right' name='lock'/>
+                                  </div>
+                                  <img className="c_image" src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
+                                  <div className="block_footer nopadding"><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
                                     <p className="small">{team.designation}</p>
                                   </div>
                                 </div>

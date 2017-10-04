@@ -3,13 +3,13 @@ import { render } from "react-dom";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
-import { fetchfunderPortfolioAbout } from '../../actions/findPortfolioFunderDetails'
-import { multipartASyncFormHandler } from '../../../../../commons/MlMultipartFormAction'
-import { putDataIntoTheLibrary } from '../../../../../commons/actions/mlLibraryActionHandler'
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../../utils/formElemUtil';
+import { fetchfunderPortfolioAbout } from '../../../actions/findPortfolioFunderDetails'
+import { multipartASyncFormHandler } from '../../../../../../commons/MlMultipartFormAction'
+import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
 import _ from 'lodash';
-import MlLoader from '../../../../../commons/components/loader/loader';
-import CropperModal from '../../../../../commons/components/cropperModal';
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import CropperModal from '../../../../../../commons/components/cropperModal';
 
 const genderValues = [
   { value: 'male', label: 'Male' },

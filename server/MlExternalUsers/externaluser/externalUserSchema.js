@@ -228,6 +228,11 @@ let externalUser = `
       _id: String
       userName: String
     }
+    type MapData {
+        key:String,
+        count:Int,
+        icon :String
+    }
     
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
@@ -242,6 +247,7 @@ let externalUser = `
     }
     
     type Query{
+        fetchAppMapData(moduleName:String,id:String):[MapData]
         fetchIdeatorUsers:response
         findAddressBook:externalUserAdditionalInfoSchema
         fetchUserProfiles:[externalUserProfiles]
@@ -256,6 +262,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
 let supportedApi = [
     {api:'fetchMapCenterCordsForExternalUser', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'fetchAppMapData', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findDefaultUserProfile', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},

@@ -11,6 +11,7 @@ import gql from "graphql-tag";
 import Moolyaselect from  '../../../../../commons/containers/select/MlSelectComposer';
 import {appClient} from '../../../../core/appConnection';
 import {setOfficeMemberIndependent} from '../../actions/setOfficeMemberIndependent';
+import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class MlAppMemberDetails extends React.Component{
   constructor(props){
@@ -51,6 +52,7 @@ export default class MlAppMemberDetails extends React.Component{
   async getMemberDetail(){
     let id = FlowRouter.getParam('memberId');
     let response = await fetchOfficeMember(id);
+    console.log(response);
     if(response) {
       this.setState({
         memberInfo: response
@@ -59,6 +61,14 @@ export default class MlAppMemberDetails extends React.Component{
   }
 
   async updateMemberFlags(type){
+    const that = this;
+    if(that.state.memberInfo.isRetire){
+      return false;
+    }
+    const isView = that.state.memberInfo.isFreeze || that.state.memberInfo.isRetire || that.state.memberInfo.isPrincipal;
+    if(type == "isPrincipal" && isView ){
+      return false;
+    }
     let update = {};
     update[type] = true;
     let id = FlowRouter.getParam('memberId');
@@ -66,6 +76,24 @@ export default class MlAppMemberDetails extends React.Component{
     let response = await updateOfficeMemberActionHandler(officeId, id, update);
     if(response.success){
       toastr.success(response.result);
+      this.getMemberDetail();
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
+  async unFreezeUser(){
+    if(this.state.memberInfo.isRetire){
+      return false;
+    }
+    let update = {};
+    update["isFreeze"] = false;
+    let id = FlowRouter.getParam('memberId');
+    let officeId = FlowRouter.getParam('officeId');
+    let response = await updateOfficeMemberActionHandler(officeId, id, update);
+    if(response.success){
+      toastr.success(response.result);
+      this.getMemberDetail();
     } else {
       toastr.error(response.result);
     }
@@ -110,6 +138,7 @@ export default class MlAppMemberDetails extends React.Component{
 
   render() {
     const that = this;
+    const isView = that.state.memberInfo.isFreeze || that.state.memberInfo.isRetire;
     let community = this.state.office.availableCommunities.find(function (item) {
       return item.communityId == that.state.memberInfo.communityType;
     });
@@ -161,7 +190,7 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form-group switch_wrap inline_switch">
                 <label>Show Independent</label>
                 <label className="switch">
-                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} disabled={this.state.memberInfo.isIndependent || !this.state.memberInfo.isActive ? true : false } />
+                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} disabled={this.state.memberInfo.isIndependent || !this.state.memberInfo.isActive || isView ? true : false } />
                   <div className="slider"></div>
                 </label>
               </div>
@@ -218,10 +247,29 @@ export default class MlAppMemberDetails extends React.Component{
           </div>
         </div>
         <div className="col-md-12 text-right well padding10">
-          <a href="" onClick={()=>this.updateMemberFlags('isFreeze')} className="mlUpload_btn">Freeze</a>
-          <a href="" onClick={()=>this.updateMemberFlags('isPrincipal')} className="mlUpload_btn">Make Principal</a>
-          <a href="" onClick={()=>this.updateMemberFlags('isRetire')} className="mlUpload_btn">Retire</a>
+          {
+            !that.state.memberInfo.isFreeze
+              ?
+                <a href="" onClick={()=>this.updateMemberFlags('isFreeze')} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Freeze</a>
+              :
+                <a href="" onClick={()=>this.unFreezeUser()} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Unfreeze</a>
+          }
+
+          <a href="" onClick={()=>this.updateMemberFlags('isPrincipal')} className={ isView || that.state.memberInfo.isPrincipal ? "disabled mlUpload_btn" : "mlUpload_btn" }>Make Principal</a>
+          <a href="" onClick={()=>that.setState({modalOpen:true})} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Retire</a>
         </div>
+
+        <Modal isOpen={that.state.modalOpen && !that.state.memberInfo.isRetire} onHide={this.onClose}>
+          <ModalHeader>Are you sure</ModalHeader>
+          <ModalBody>
+            <div>After retire member can not access the office?</div>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={ () => this.updateMemberFlags('isRetire') }>Ok</Button>{' '}
+            <Button color="secondary" onClick={() => that.setState({modalOpen:false}) }>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+
       </div>
     )
   }

@@ -176,7 +176,7 @@ export default class MlAnchorInfoView extends React.Component {
           </span>
           <br />
           <div className="tooltiprefer">
-            <span><small>{value.communityType}</small> <b>{value.count}</b></span>
+            <span title={value.communityType}><small>{value.communityType}</small> <b>{value.count}</b></span>
           </div>
         </a>
       </li>)

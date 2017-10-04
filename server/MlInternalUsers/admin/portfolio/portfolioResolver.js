@@ -43,14 +43,13 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
  * request for portfolio creation
  * */
 
-//todo://changing communitytype to communitycode
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;
   let portfolioDetails = args.portfoliodetails
   let ret;
   let updateRecord = {}
   try {
-      if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityType) {
+      if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityCode) {
         /** introducing profile Id based on registration in portfolio from users and creating portfolio based on profileId*/
         let userDetails = mlDBController.findOne('users', {_id: portfolioDetails.userId}, context)
         if(userDetails && userDetails.profile && userDetails.profile.externalUserProfiles){
@@ -58,7 +57,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
           portfolioDetails['profileId'] = reqProfile.profileId || ''
         }
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
-          if (!user || portfolioDetails.communityType == 'Ideators') {
+          if (!user || portfolioDetails.communityCode == 'IDE') {
             portfolioDetails['createdAt'] = new Date();
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
@@ -66,8 +65,8 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                   mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_KICKOFF');
                   let updatedResponse = mlDBController.update('MlPortfolioDetails',ret,updateRecord, {$set: true}, context)
 
-                  switch (portfolioDetails.communityType){
-                      case "Ideators":{
+                  switch (portfolioDetails.communityCode){
+                      case "IDE":{
                           let ideatorInfo = {}
                           let fb = "";
                           let linkedIn="";
@@ -121,7 +120,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       }
                       break;
 
-                      case "Startups":
+                      case "STU":
                           let portfolio = {
                               userId: portfolioDetails.userId,
                               communityType: portfolioDetails.communityType,
@@ -130,8 +129,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
 
-                      case "Investors": {
-
+                      case "FUN": {
                           let funderInfo = {}
                           let fb = "";
                           let linkedIn="";
@@ -189,7 +187,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createFunderPortfolio'](obj, portfolio, context, info)
                       }
                       break;
-                    case "Service Providers": {
+                    case "SPS": {
                       let portfolio = {
                         userId: portfolioDetails.userId,
                         communityType: portfolioDetails.communityType,
@@ -198,7 +196,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       MlResolver.MlMutationResolver['createServiceProviderPortfolio'](obj, portfolio, context, info)
                       console.log("creating service provider")
                     }
-                    case "Companies": {
+                    case "CMP": {
                       let portfolio = {
                         userId: portfolioDetails.userId,
                         communityType: portfolioDetails.communityType,
@@ -207,7 +205,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       MlResolver.MlMutationResolver['createCompanyPortfolio'](obj, portfolio, context, info)
                     }
                       break;
-                    case "Institutions": {
+                    case "INS": {
                       let portfolio = {
                         userId: portfolioDetails.userId,
                         communityType: portfolioDetails.communityType,

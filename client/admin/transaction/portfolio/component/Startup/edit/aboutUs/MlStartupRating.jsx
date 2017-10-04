@@ -108,10 +108,11 @@ MlStartupRating.contextTypes = {
 };
 
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    keys: state.mlStartupEditTemplateReducer.privateKeys
-  };
-}
-
-export default connect(mapStateToProps)(MlStartupRating);
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupRating);
+export default MlStartupRating;

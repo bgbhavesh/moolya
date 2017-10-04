@@ -8,7 +8,7 @@ import React, {Component} from "react";
 import MlUsersIdeatorIdeas from "../components/MlUsersIdeatorIdeas";
 import MlLoader from "../../../commons/components/loader/loader";
 import {fetchPortfolioActionHandler} from "../../transaction/portfolio/actions/findClusterIdForPortfolio";
-import MlPortfolio from "../../transaction/portfolio/component/MlPortfolio";
+import MlPortfolio from "../../transaction/portfolio/component/commons/MlPortfolio";
 import {isEmpty} from "lodash";
 
 /**

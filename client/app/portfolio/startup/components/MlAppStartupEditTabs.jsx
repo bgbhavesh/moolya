@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
+// import { connect } from 'react-redux';
 import _ from 'lodash'
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupAboutUs from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
 import MlStartupManagement from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
 import MlStartupInvestor from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
@@ -14,7 +14,7 @@ import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/Po
 import {appClient} from '../../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
-export default class MlAppStartupEditTabs extends React.Component {
+class MlAppStartupEditTabs extends React.Component {
 
   constructor(props) {
     super(props)
@@ -234,7 +234,10 @@ export default class MlAppStartupEditTabs extends React.Component {
       privateKeys:privateKeys,
       removePrivateKeys:removePrivateKeys
     }
-    this.setState({portfolioKeys: obj});
+    // this.setState({portfolioKeys: obj}, () => {
+    //   this.props.onChangePrivateKeys(obj)
+    // });
+    this.setState({portfolioKeys: obj})
     return obj
   }
 
@@ -278,3 +281,21 @@ MlAppStartupEditTabs.childContextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object
 };
+// const mapStateToProps = (state) => {
+//   return {
+//     mlStartupEditTemplate: state,
+//   };
+// }
+//
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onChangePrivateKeys: (keys) => dispatch({
+//       type: 'CHANGE_PRIVATE_KEYS',
+//       payload: keys,
+//     }),
+//   };
+// };
+
+// export default connect(mapStateToProps, mapDispatchToProps)(MlAppStartupEditTabs);
+export default MlAppStartupEditTabs
+

@@ -8,6 +8,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formE
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash'
 var Select = require('react-select');
 
 const KEY = 'aboutUs'
@@ -38,6 +39,7 @@ class MlStartupAboutUs extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
+    // this.lockPrivateKeys()
     // this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
@@ -47,8 +49,22 @@ class MlStartupAboutUs extends React.Component{
     }
   }
 
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.props.keys.privateKeys, { tabName: this.props.tabName })
+    var filterRemovePrivateKeys = _.filter(this.props.keys.removePrivateKeys, { tabName: this.props.tabName })
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.data.privateFields, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+    // console.log(nextProps);
   }
 
   handleBlur(e){
@@ -136,10 +152,10 @@ class MlStartupAboutUs extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:KEY}
-    this.setState({privateKey:privateKey})
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName}
+    // this.setState({privateKey:privateKey})
 
-    this.setState({data:details}, function () {
+    this.setState({data:details,privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -196,10 +212,11 @@ MlStartupAboutUs.contextTypes = {
   portfolioKeys : PropTypes.object
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    keys: state.mlStartupEditTemplateReducer.privateKeys
-  };
-}
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
 
-export default connect(mapStateToProps)(MlStartupAboutUs);
+// export default connect(mapStateToProps)(MlStartupAboutUs);
+export default MlStartupAboutUs;

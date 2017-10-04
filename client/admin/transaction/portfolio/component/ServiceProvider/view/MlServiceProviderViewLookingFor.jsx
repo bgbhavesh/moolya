@@ -120,7 +120,8 @@ export default class MlServiceProviderLookingForView extends React.Component {
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }
+    }else
+      this.setState({loading: false})
   }
 
   render() {
@@ -143,7 +144,7 @@ export default class MlServiceProviderLookingForView extends React.Component {
                       return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                         <div className="team-block">
                           <span className="ml my-ml-browser_3"/>
-                          <h3>
+                          <h3 title={details.lookingForName}>
                             {details.lookingForName && details.lookingForName}
                           </h3>
                         </div>

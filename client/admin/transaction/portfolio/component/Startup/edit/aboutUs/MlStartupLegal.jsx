@@ -120,10 +120,11 @@ MlStartupLegal.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    keys: state.mlStartupEditTemplateReducer.privateKeys
-  };
-}
-
-export default connect(mapStateToProps)(MlStartupLegal);
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupLegal);
+export default MlStartupLegal;

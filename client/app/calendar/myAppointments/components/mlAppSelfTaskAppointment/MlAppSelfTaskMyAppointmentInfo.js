@@ -12,6 +12,8 @@ import React, {Component} from "react";
 import ScrollArea from "react-scrollbar";
 import gql from 'graphql-tag'
 import Moolyaselect from '../../../../commons/components/MlAppSelectWrapper'
+import {initalizeFloatLabel} from "../../../../../commons/utils/formElemUtil";
+
 let Select = require('react-select');
 
 export default class MlAppSelfTaskMyAppointmentInfo extends Component {
@@ -45,6 +47,9 @@ export default class MlAppSelfTaskMyAppointmentInfo extends Component {
   }
 
   render() {
+    setTimeout(()=>{
+      initalizeFloatLabel();
+    });
     const that = this;
     const {selfTask} = this.props;
     /**

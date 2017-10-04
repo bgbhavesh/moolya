@@ -129,7 +129,7 @@ export default class IdeatorIndividualComponent extends React.Component{
       displayName: existingObject.displayName?existingObject.displayName:null,
       dateOfBirth: existingObject.dateOfBirth?existingObject.dateOfBirth:null,
       gender: existingObject.gender?existingObject.gender:null,
-      citizenships: existingObject.citizenships?existingObject.citizenships:null,
+      //citizenships: existingObject.citizenships?existingObject.citizenships:null,
       qualification: existingObject.qualification?existingObject.qualification:null,
       employmentStatus: existingObject.employmentStatus?existingObject.employmentStatus:null,
       professionalTag: existingObject.professionalTag?existingObject.professionalTag:null,
@@ -148,7 +148,7 @@ export default class IdeatorIndividualComponent extends React.Component{
       displayName: this.refs.displayName.value?this.refs.displayName.value:null,
       dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth:null,
       gender: this.state.gender?this.state.gender:null,
-      citizenships: this.state.citizenships?this.state.citizenships:null,
+      //citizenships: this.state.citizenships?this.state.citizenships:null,
       qualification: this.refs.qualification.value?this.refs.qualification.value:null,
       employmentStatus: this.state.employmentStatus?this.state.employmentStatus:null,
       professionalTag: this.refs.professionalTag.value?this.refs.professionalTag.value:null,
@@ -161,6 +161,8 @@ export default class IdeatorIndividualComponent extends React.Component{
     var differences = diff(oldObject, newObject);
     //console.log(differences)
     var filteredObject = _underscore.where(differences, {kind: "E"});
+    console.log("///////////////////////////////////////////////")
+    console.log(differences)
     if(filteredObject && filteredObject.length>0){
       return false
     }else{

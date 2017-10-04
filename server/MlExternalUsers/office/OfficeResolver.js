@@ -137,6 +137,7 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, context, info) => {
   let pipeline = [
     // { $match: { userId: context.userId } },
+    { $match: { isFreeze: { "$ne": true }, isRetire: { "$ne": true } } },
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
     { $unwind: "$office" },
     { $match: { 'office.userId': context.userId } },
@@ -535,7 +536,12 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
       var myOffice = mlDBController.findOne('MlOffice', {_id: args.officeId});
       let principalUserCount = MlOfficeMembers.find({officeId:args.officeId , isPrincipal:true}).count();
       if(principalUserCount == myOffice.principalUserCount){
-        let response = new MlRespPayload().errorPayload('Limit Exceeded', code);
+        let response = new MlRespPayload().errorPayload('Limit Exceeded', 400);
+        return response;
+      }
+      let memberInfo = mlDBController.findOne('MlOfficeMembers', args.memberId);
+      if(!memberInfo.isActive){
+        let response = new MlRespPayload().errorPayload('User not activated', 400);
         return response;
       }
     }

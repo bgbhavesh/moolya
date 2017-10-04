@@ -6,7 +6,7 @@ export default class MlAnchorUserGrid extends PureComponent {
 
   render() {
     return (
-      <ScrollArea speed={0.8} className="left_wrap">
+      <div>
         {
           !this.props.users.length && <div className={this.props.classNames || 'col-md-6 col-sm-6'} key="1">
             <div className="list_block provider_block">
@@ -29,7 +29,7 @@ export default class MlAnchorUserGrid extends PureComponent {
             </div>
           ))
         }
-      </ScrollArea>
+      </div>
     );
   }
 }

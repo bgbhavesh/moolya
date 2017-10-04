@@ -9,7 +9,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import _ from "lodash";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlFunderAbout from "../../../../admin/transaction/portfolio/component/Funder/MlFunderAbout";
+import MlFunderAbout from "../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderAbout";
 import MlServiceProviderAbout from '../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAbout'
 import MlServiceProviderAwards from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAwards";
 import MlServiceProviderMCL from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
@@ -18,7 +18,7 @@ import MlServiceProviderViewServices from "../../../../admin/transaction/portfol
 import MlServiceProviderClients from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
 import MlServiceProviderLookingFor from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderLookingFor";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
 import {appClient} from '../../../core/appConnection'
 import {getProfileBasedOnPortfolio} from '../../../calendar/manageScheduler/service/actions/MlServiceActionHandler'
 

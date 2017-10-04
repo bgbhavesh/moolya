@@ -103,6 +103,11 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
   }
 
   componentWillMount() {
+    let admin=true;
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      admin = false;
+    }
     let tabs = this.getTabComponents();
 
     function getTabs() {
@@ -115,11 +120,15 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
       }));
     }
 
+    let AllTabs =getTabs() ||[];
+    if(admin){
+      AllTabs.forEach(function(v){ delete v.key });
+    }
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
-      this.setState({activeTab});
-    }
-    this.setState({tabs: getTabs() || []});
+      this.setState({activeTab,admin,tabs:AllTabs});
+    }else
+    this.setState({tabs:AllTabs,admin});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
   updateTab(index){
@@ -128,7 +137,16 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
   }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}
-    type="subtab" mkey="title"/>
+    if(this.state.admin){
+      return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} />
+    }
+    else{
+      return <MlTabComponent tabs={tabs}
+                             selectedTabKey={this.state.activeTab}
+                             onChange={this.updateTab}
+                             backClickHandler={this.props.getStartUpState}
+                             type="subtab" mkey="title"
+      />
+    }
   }
 }

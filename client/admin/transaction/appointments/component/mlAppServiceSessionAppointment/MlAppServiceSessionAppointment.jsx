@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import { fetchAdminSessionAppointment } from '../../action/fetchAdminSessionAppointment';
 
 export default class MlAppServiceSessionAppointment extends Component {
@@ -7,6 +8,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     this.state = {
       orderId: props.orderId,
       data: {
+        appointmentInfo: {},
         client: {},
         service: {},
         owner: {},
@@ -194,7 +196,12 @@ export default class MlAppServiceSessionAppointment extends Component {
             </div>
           </div>
           <div className="tab-pane" id={`${this.state.orderId}3a`}>
-            <p>Take from this page "appFunderMyAppointment"</p>
+            {/* <p>Take from this page "appFunderMyAppointment"</p> */}
+            <MlAppSelectedTaskMyAppointment appointment={{
+              appointmentId: this.state.orderId,
+              resourceId: this.state.data.appointmentInfo.taskId,
+              sessionId: this.state.data.appointmentInfo.sessionId
+            }} />
           </div>
           <div className="tab-pane" id={`${this.state.orderId}4a`}>
             <div className="row">

@@ -268,6 +268,7 @@ let supportedApi = [
   // { api: 'fetchAppSessionAppointmentByTransactionId', actionName: 'READ', moduleName: "OFFICE", isWhiteList: true },
   { api: 'bookUserServiceCardAppointment', actionName: 'CREATE', userAction: "CREATEAPPOINTMENT", resourceName: "SERVICECARD", isWhiteList: true },
   { api: 'updateAppointmentByStatus', actionName: 'UPDATE', resourceName: "SERVICECARD" },
+  { api: 'fetchSlotDetails', actionName: 'READ', moduleName: "APPOINTMENT"},
 ];
 
 MlResolver.MlModuleResolver.push(supportedApi);

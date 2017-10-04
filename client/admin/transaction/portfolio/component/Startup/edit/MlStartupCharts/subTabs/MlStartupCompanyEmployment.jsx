@@ -18,7 +18,7 @@ export default class MlCompanyEmployment extends React.Component{
       //employmentList : this.props.employmentDetails || []
       employmentList : []
     }
-    this.fetchDetails.bind(this);
+    // this.fetchDetails.bind(this);
   }
 
   componentDidMount(){
@@ -27,18 +27,14 @@ export default class MlCompanyEmployment extends React.Component{
   }
 
   componentWillMount(){
-    this.fetchDetails();
-   /* let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.employmentOfCompanyChart)
-    if(!empty){
-      this.setState({loading: false, startupCompanyEmployment: this.context.startupPortfolio.employmentOfCompanyChart, employmentList:this.context.startupPortfolio.employmentOfCompanyChart});
-    }*/
+    const resp = this.fetchDetails();
+    return resp
   }
   componentDidUpdate(){
     initalizeFloatLabel();
   }
   fetchDetails(){
     let that = this;
-    //let portfoliodetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.employmentOfCompanyChart)
     if(empty){
       this.setState({loading: false, startupCompanyEmployment: that.props.employmentDetails, employmentList: that.props.employmentDetails});
@@ -124,7 +120,6 @@ export default class MlCompanyEmployment extends React.Component{
       this.setState({startupCompanyEmployment:clients})
       this.props.getStartupCompanyEmployment(clients);
     }
-
   }
 
   onSaveAction(index,e){
@@ -135,6 +130,7 @@ export default class MlCompanyEmployment extends React.Component{
     data["eofToMonth"] =  this.refs["eofToMonth"+index].state.inputValue;
     data["eofNumberOfEmployment"] =  this.refs["eofNumberOfEmployment"+index].value
     data["eofAbout"] =  this.refs["eofAbout"+index].value
+    // data["index"] = this.state.selectedIndex
     let clients = this.state.startupCompanyEmployment;
     clients[index] = data
     this.setState({startupCompanyEmployment:clients})
@@ -151,8 +147,8 @@ export default class MlCompanyEmployment extends React.Component{
     this.refs["eofToMonth"+index].state.inputValue = ""
     this.refs["eofNumberOfEmployment"+index].value = ""
     this.refs["eofAbout"+index].value = ""
-
   }
+
   onUpdateAction(){
     if(this.state.startupCompanyEmployment){
       this.setState({selectedIndex:this.state.startupCompanyEmployment.length})
@@ -161,13 +157,6 @@ export default class MlCompanyEmployment extends React.Component{
     }
   }
 
-  /*onRemoveAction(index,e){
-    let updatedData = this.state.startupCompanyEmployment || [];
-    updatedData.splice(updatedData.indexOf(index), 1);
-    this.setState({employmentList: updatedData}, function () {
-      this.sendDataToParent()
-    });
-  }*/
 
   render(){
     let that = this;
@@ -183,12 +172,12 @@ export default class MlCompanyEmployment extends React.Component{
         >
         <div className="panel panel-default">
           <div className="panel-heading">Employment Of Company{
-            <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
-              src="/images/add.png"/></div>}
+            <div className="pull-right block_action" onClick={this.onSaveAction.bind(this, defaultIndex)}>
+              <img src="/images/add.png"/>
+            </div>}
           </div>
           <div className="panel-body">
             <div className="office-members-detail">
-
             <div className="form_inner_block">
               {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
 
@@ -205,10 +194,7 @@ export default class MlCompanyEmployment extends React.Component{
                                 inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                 closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
                     </div>
-
                   </div>
-
-
                   <div className="form-group col-lg-6">
                     <div className="form-group col-md-6 col-sm-6">
                       <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
@@ -223,21 +209,18 @@ export default class MlCompanyEmployment extends React.Component{
                   </div>
                   <div className="form-group col-lg-6 col-md-6 col-sm-6">
                     <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+defaultIndex} className="form-control float-label"
-                           id="" name="eofNumberOfEmployment" onBlur={this.employeementHandleBlur.bind(this,defaultIndex)}/>
+                           name="eofNumberOfEmployment" onBlur={this.employeementHandleBlur.bind(this,defaultIndex)}/>
                   </div>
 
                   <div className="form-group col-lg-6 col-md-6 col-sm-6">
                     <textarea rows="1" placeholder="About" ref={"eofAbout"+defaultIndex} className="form-control float-label"
-                              id="" name="eofAbout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
+                              name="eofAbout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
                   </div>
                 </div>
               </div>
             </div>
               {that.state.employmentList.map(function (details, idx) {
-
-
-                return(<div className="form_inner_block">
-
+                return(<div className="form_inner_block" key={idx}>
                   {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
                 <div className="col-lg-12 col-md-12 col-sm-10">
                   <div className="row">
@@ -254,10 +237,7 @@ export default class MlCompanyEmployment extends React.Component{
                                   defaultValue={details.eofFromMonth}
                                   closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
                       </div>
-
                     </div>
-
-
                     <div className="form-group col-lg-6">
                       <div className="form-group col-md-6 col-sm-6">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
@@ -274,18 +254,15 @@ export default class MlCompanyEmployment extends React.Component{
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
                       <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+idx}
-                             className="form-control float-label" id="" defaultValue={details.eofNumberOfEmployment} name="eofNumberOfEmployment" onBlur={that.employeementHandleBlur.bind(that,idx)}/>
+                             className="form-control float-label" defaultValue={details.eofNumberOfEmployment} name="eofNumberOfEmployment" onBlur={that.employeementHandleBlur.bind(that,idx)}/>
                     </div>
-
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
                       <textarea rows="1" placeholder="About" ref={"eofAbout"+idx} className="form-control float-label"
-                                id="" name="eofAbout"   defaultValue={details.eofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
+                                 name="eofAbout" defaultValue={details.eofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
                     </div>
                   </div>
                 </div>
-
                 </div>)
-
               })}
             </div>
           </div>
@@ -297,6 +274,5 @@ export default class MlCompanyEmployment extends React.Component{
 }
 
 MlCompanyEmployment.contextTypes = {
-  //institutionPortfolio: PropTypes.object,
   startupPortfolio: PropTypes.object,
 };

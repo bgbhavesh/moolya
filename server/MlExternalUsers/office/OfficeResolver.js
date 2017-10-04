@@ -137,6 +137,7 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, context, info) => {
   let pipeline = [
     // { $match: { userId: context.userId } },
+    { $match: { isFreeze: { "$ne": true }, isRetire: { "$ne": true } } },
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
     { $unwind: "$office" },
     { $match: { 'office.userId': context.userId } },

@@ -12,6 +12,8 @@ import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
 import { cloneDeep } from 'lodash';
 import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
+import {initalizeFloatLabel} from "../../../../../commons/utils/formElemUtil";
+
 
 
 export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component {
@@ -39,6 +41,9 @@ export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component
    * @returns {XML}
    */
   render(){
+    setTimeout(()=>{
+      initalizeFloatLabel();
+    });
     const {service, daysRemaining} = this.props;
     return (
       <div className="step_form_wrap step1">
@@ -77,12 +82,13 @@ export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component
                   </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY"
-                            timeFormat={false}
-                            inputProps={{placeholder: "Valid Till",readOnly:true}}
-                            closeOnSelect={true}
-                            value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}
-                            disabled />
+                  {/*<Datetime dateFormat="DD-MM-YYYY"*/}
+                            {/*timeFormat={false}*/}
+                            {/*inputProps={{placeholder: "Valid Till",readOnly:true}}*/}
+                            {/*closeOnSelect={true}*/}
+                            {/*value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}*/}
+                            {/*disabled />*/}
+                  <input type="text" placeholder="Valid Till" defaultValue={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null} value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null} className="form-control float-label" id="" disabled/>
                   <FontAwesome name="calendar"
                                className="password_icon"
                                disabled />

@@ -18,7 +18,7 @@ import MlStartupEditTemplate from '../MlStartupEditTemplate'
 export default class MlStartupTab extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
+    this.state =  {activeTab:"About Us",tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
                     portfolioStartupSP:{}, portfolioStartupInfo:{},portfolioStartupBranches:[],
                     portfolioStartupTechnologies:[],portfolioStartupLegal:{}, portfolioStartupRating:{}, admin: true,
                     client:client}
@@ -147,23 +147,51 @@ export default class MlStartupTab extends React.Component{
 
   componentWillMount()
   {
+    let admin=true;
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      admin = false;
+    }
     let tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
-
-    this.setState({tabs:getTabs() ||[]});
+    let AllTabs =getTabs() ||[];
+    if(admin){
+      AllTabs.forEach(function(v){ delete v.key });
+    }
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      this.setState({activeTab,tabs:AllTabs,admin});
+    }else
+    this.setState({tabs:AllTabs,admin});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
 
+  updateTab(index){
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
+  }
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+
+    if(this.state.admin){
+      return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    }
+    else{
+      return <MlTabComponent tabs={tabs}
+                             selectedTabKey={this.state.activeTab}
+                             onChange={this.updateTab}
+                             backClickHandler={this.props.getStartUpState}
+                             type="subtab" mkey="title"
+      />
+    }
   }
 }
 

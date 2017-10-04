@@ -2,7 +2,7 @@
  * Created by pankaj on 31/7/17.
  */
 import React, {Component} from "react";
-import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
+import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 let FontAwesome = require('react-fontawesome');
 import Days from "./Days.jsx";
 import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';

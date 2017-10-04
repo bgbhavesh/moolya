@@ -1,10 +1,10 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import MlLoader from "../../../../../commons/components/loader/loader";
-import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
-import NoData from '../../../../../commons/components/noData/noData';
-import {initalizeFloatLabel } from "../../../../../../client/admin/utils/formElemUtil";
+import MlLoader from "../../../../../../commons/components/loader/loader";
+import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../../actions/findPortfolioFunderDetails";
+import NoData from '../../../../../../commons/components/noData/noData';
+import {initalizeFloatLabel } from "../../../../../utils/formElemUtil";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var options = [

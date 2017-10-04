@@ -1,13 +1,13 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
-import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
-import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
-import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
-import MlLoader from '../../../../../commons/components/loader/loader'
-import NoData from '../../../../../commons/components/noData/noData'
+import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
+import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
+import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
+import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import NoData from '../../../../../../commons/components/noData/noData'
 
 export default class MlFunderInvestmentView extends React.Component {
   constructor(props, context) {

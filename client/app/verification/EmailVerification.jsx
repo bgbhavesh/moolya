@@ -177,9 +177,15 @@ export default class EmailVerification extends React.Component{
               <h3 style={{'marginBottom':'20px'}}>Congratulations!!</h3>
              {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
                 Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
-                <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
+
+                /* Old Email Text*/
+               {/* <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
                 We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
-                  Good day and God speed to all your efforts.</p>
+                  Good day and God speed to all your efforts.</p>*/}
+
+                <p>Your email Id has been successfully verified. <br/>If you are from India, you can verify your mobile number below to receive SMS notifications. <br/>
+                  <b>If you are outside India</b>, please click the '<b>Verify Later</b>' Button below. We are working on SMS notifications for all countries. This will be available in the upcoming versions.
+                  Email notifications will be sent to users from all countries.<br /><br /></p>
               <div className="form-group">
                 <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
               </div>

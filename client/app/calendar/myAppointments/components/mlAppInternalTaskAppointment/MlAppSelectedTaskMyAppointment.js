@@ -5,19 +5,19 @@
  */
 
 // import NPM module(s)
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 // import custom method(s) and component(s)
 import StepZilla from '../../../../../commons/components/stepzilla/StepZilla';
 import MlAppTaskMyAppointmentBasicInfo from './MlAppTaskMyAppointmentBasicInfo';
 import MlAppTaskMyAppointmentSession from './MlAppTaskMyAppointmentSession';
 import MlAppTaskMyAppointmentTermAndCondition from './MlAppTaskMyAppointmentTermAndCondition';
-import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
+import { findTaskActionHandler } from '../../actions/fetchOngoingAppointments';
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
-import {updateAppointmentActionHandler} from '../../actions/appointmentActionHandler';
-import {fetchSlotAppointmentsDetailsActionHandler} from './../../actions/fetchSlotDetails';
+import { updateAppointmentActionHandler } from '../../actions/appointmentActionHandler';
+import { fetchSlotAppointmentsDetailsActionHandler } from './../../actions/fetchSlotDetails';
 
 class MlAppSelectedTaskMyAppointment extends Component {
 
@@ -29,7 +29,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
     super(props);
     this.state = {
       task: {},
-      slotInfo:{
+      slotInfo: {
         attendeeDetails: []
       }
     };
@@ -37,6 +37,12 @@ class MlAppSelectedTaskMyAppointment extends Component {
     this.getTaskDetails = this.getTaskDetails.bind(this);
     this.setTaskSteps = this.setTaskSteps.bind(this);
     this.getSlotDetails = this.getSlotDetails.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.taskId = nextProps.appointment.resourceId;
+    this.getTaskDetails();
+    this.getSlotDetails();
   }
 
   componentWillMount() {
@@ -59,8 +65,8 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * Desc :: Sets components steps for stepzila to create and update task data
    */
   setTaskSteps() {
-    const {appointment} = this.props;
-    const {task, slotInfo} = this.state;
+    const { appointment } = this.props;
+    const { task, slotInfo } = this.state;
     const steps = [
       {
         name: 'Task',
@@ -74,14 +80,14 @@ class MlAppSelectedTaskMyAppointment extends Component {
         component: <MlAppTaskMyAppointmentSession
           task={task}
           slotInfo={slotInfo}
-          appointment={appointment}/>,
+          appointment={appointment} />,
         icon: <span className="ml my-ml-sessions"></span>
       },
       {
         name: 'Info',
         component: <MlAppTaskMyAppointmentTermAndCondition
           task={task}
-          appointment={appointment}/>,
+          appointment={appointment} />,
         icon: <span className="ml my-ml-info"></span>
       }
 
@@ -128,9 +134,9 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * @returns Void
    */
   async getSlotDetails() {
-    if ( this.props.appointment  && this.props.appointment.appointmentId) {
+    if (this.props.appointment && this.props.appointment.appointmentId) {
       let slotInfo = await fetchSlotAppointmentsDetailsActionHandler([this.props.appointment.appointmentId]);
-      if(slotInfo && slotInfo[0]) {
+      if (slotInfo && slotInfo[0]) {
         this.setState({
           slotInfo: slotInfo[0]
         });
@@ -155,12 +161,12 @@ class MlAppSelectedTaskMyAppointment extends Component {
           {
             showAction: true,
             actionName: 'accept',
-            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
+            handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
           },
           {
             showAction: true,
             actionName: 'reject',
-            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Rejected'))
+            handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Rejected'))
           }
         ];
         break;
@@ -169,7 +175,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           {
             showAction: true,
             actionName: 'complete',
-            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Completed'))
+            handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Completed'))
           }
         ];
         break;
@@ -178,7 +184,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           {
             showAction: true,
             actionName: 'accept',
-            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
+            handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
           }
         ];
         break;
@@ -191,23 +197,23 @@ class MlAppSelectedTaskMyAppointment extends Component {
         {
           'title': 'Actions',
           isText: false,
-          style: {'background': '#ef4647'},
+          style: { 'background': '#ef4647' },
           contentComponent: <MlAppActionComponent
-            resourceDetails={{resourceId: 'internaltask', resourceType: 'internaltask'}}   //resource id need to be given
-            actionOptions={appActionConfig}/>
+            resourceDetails={{ resourceId: 'internaltask', resourceType: 'internaltask' }}   //resource id need to be given
+            actionOptions={appActionConfig} />
         }]
     };
     return (
       <div className="col-lg-12">
         <div className="app_padding_wrap">
-          <div className="clearfix"/>
+          <div className="clearfix" />
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setTaskSteps()}
-                           stepsNavigation={true}
-                           showNavigation={false}
-                           prevBtnOnLastStep={false}/>
+                  stepsNavigation={true}
+                  showNavigation={false}
+                  prevBtnOnLastStep={false} />
               </div>
             </div>
           </div>

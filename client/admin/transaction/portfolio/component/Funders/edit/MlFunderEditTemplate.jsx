@@ -2,6 +2,7 @@ import React, {Component, PropTypes}  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
+import omitDeep from 'omit-deep-lodash';
 import MlFunderAbout from './MlFunderAbout'
 import MlFunderAreaOfInterest from './MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from './MlFunderEngagementMethod'
@@ -167,13 +168,15 @@ export default class MlFunderEditTemplate extends React.Component {
     }
     data['principal'] = details;
     this.setState({funderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['principal'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['principal'] = arr;
+    // this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
+    var object = omitDeep(details, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
   }
 
   getTeamDetails(details, privateKey) {
@@ -183,13 +186,14 @@ export default class MlFunderEditTemplate extends React.Component {
     }
     data['team'] = details;
     this.setState({funderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['team'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['team'] = arr;
+    var object = omitDeep(details, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
   }
 
   getAreaOfInterestDetails(details, privateKey) {

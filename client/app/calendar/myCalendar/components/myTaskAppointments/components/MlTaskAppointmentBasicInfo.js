@@ -45,7 +45,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
     let options = [];
     if (tasks && tasks.length > 0) {
       tasks.map((task) => {
-        options.push({value: task.taskId, label: task.displayName});
+        task.isActive ? options.push({value: task.taskId, label: task.displayName}) : '';
       });
     }
     return options;

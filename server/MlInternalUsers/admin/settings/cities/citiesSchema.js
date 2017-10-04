@@ -36,6 +36,7 @@ let citiesSchema = `
         fetchCity(cityId: String): Cities
         fetchCities:[Cities]
         fetchCitiesPerState(stateId: String):[Cities]
+        fetchCitiesPerStates(stateIds: [String]):[Cities]
         fetchCitiesPerCountry(countryId: String):[Cities]
         searchCities(searchQuery:String,displayAllOption:Boolean):[Cities]
         fetchCitiesPerCountryAPI(countryId: String,cityName:String,limit:Int):citiesSearchResult
@@ -52,6 +53,7 @@ let supportedApi = [
   {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
   {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+  {api:'fetchCitiesPerStates', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}

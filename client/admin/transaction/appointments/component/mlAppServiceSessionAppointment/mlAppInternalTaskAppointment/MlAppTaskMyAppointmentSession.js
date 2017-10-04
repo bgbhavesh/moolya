@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import ScrollArea from 'react-scrollbar';
 import Moment from "moment";
-import { initalizeFloatLabel } from "../../../../../commons/utils/formElemUtil";
+import { initalizeFloatLabel } from "../../../../../../commons/utils/formElemUtil";
 import FontAwesome from 'react-fontawesome';
 
 export default class MlAppTaskMyAppointmentSession extends Component {
@@ -43,10 +43,10 @@ export default class MlAppTaskMyAppointmentSession extends Component {
                   <label>Duration: &nbsp;
                     <input type="text"
                       className="form-control inline_input"
-                      value={data.duration.hours || 0} /> Hours
+                      value={data.duration.hours || 0} disabled /> Hours
                     <input type="text"
                       className="form-control inline_input"
-                      value={data.duration.minutes || 0} /> Mins
+                      value={data.duration.minutes || 0} disabled /> Mins
                   </label>
                 </div>
               </div>

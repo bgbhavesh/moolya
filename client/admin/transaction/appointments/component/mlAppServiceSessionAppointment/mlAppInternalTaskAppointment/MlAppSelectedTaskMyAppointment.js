@@ -8,16 +8,15 @@
 import React, { Component } from "react";
 
 // import custom method(s) and component(s)
-import StepZilla from '../../../../../commons/components/stepzilla/StepZilla';
+import StepZilla from '../../../../../../commons/components/stepzilla/StepZilla';
 import MlAppTaskMyAppointmentBasicInfo from './MlAppTaskMyAppointmentBasicInfo';
 import MlAppTaskMyAppointmentSession from './MlAppTaskMyAppointmentSession';
 import MlAppTaskMyAppointmentTermAndCondition from './MlAppTaskMyAppointmentTermAndCondition';
-import { findTaskActionHandler } from '../../actions/fetchOngoingAppointments';
-import MlAccordion from "../../../../commons/components/MlAccordion";
-import formHandler from "../../../../../commons/containers/MlFormHandler";
-import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
-import { updateAppointmentActionHandler } from '../../actions/appointmentActionHandler';
-import { fetchSlotAppointmentsDetailsActionHandler } from './../../actions/fetchSlotDetails';
+import { findTaskActionHandler } from '../actions/fetchOngoingAppointments';
+import formHandler from "../../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../../../commons/components/actions/ActionComponent";
+import { updateAppointmentActionHandler } from '../actions/appointmentActionHandler';
+import { fetchSlotAppointmentsDetailsActionHandler } from '../actions/fetchSlotDetails';
 
 class MlAppSelectedTaskMyAppointment extends Component {
 
@@ -41,11 +40,6 @@ class MlAppSelectedTaskMyAppointment extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.taskId = nextProps.appointment.resourceId;
-    this.getTaskDetails();
-    this.getSlotDetails();
-  }
-
-  componentWillMount() {
     this.getTaskDetails();
     this.getSlotDetails();
   }
@@ -101,8 +95,8 @@ class MlAppSelectedTaskMyAppointment extends Component {
    * @returns Void
    */
   async getTaskDetails() {
-    if (this.props.appointment.resourceId) {
-      let task = await findTaskActionHandler(this.taskId, this.props.appointment.sessionId);
+    if (this.props.appointment.sessionId) {
+      let task = await findTaskActionHandler(this.props.appointment.resourceId, this.props.appointment.sessionId);
       this.setState({
         task: task || {}
       });
@@ -152,7 +146,6 @@ class MlAppSelectedTaskMyAppointment extends Component {
   render() {
     // const status = this.props.status;
     let status = FlowRouter.getQueryParam('tab');
-    console.log(status);
     let appActionConfig = [];
     const that = this;
     switch (status) {
@@ -217,9 +210,6 @@ class MlAppSelectedTaskMyAppointment extends Component {
               </div>
             </div>
           </div>
-          {status !== 'completed' &&
-            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-          }
         </div>
       </div>
     )

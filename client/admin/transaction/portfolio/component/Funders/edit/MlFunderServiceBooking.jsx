@@ -5,14 +5,14 @@ import ScrollArea from 'react-scrollbar';
 // import InlineCalender from '../../../../app/views/inlineCalender';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {fetchTasksInBookingActionHandler} from '../../../../../app/calendar/manageScheduler/task/actions/fetchTaskDetails'
-import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormAction";
-import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
+import {fetchTasksInBookingActionHandler} from '../../../../../../app/calendar/manageScheduler/task/actions/fetchTaskDetails'
+import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
+import MlAppMyCalendarDayComponent from '../../../../../../app/calendar/myCalendar/components/dayComponent'
 var _ = require('lodash');
-import Calender from '../../../../../commons/calendar/calendar'
+import Calender from '../../../../../../commons/calendar/calendar'
 import MlAppMyCalendar from './MlFunderServiceCalendar'
-import {fetchServiceCalendarActionHandler} from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
-import {bookUserServiceCardActionHandler, userServiceCardPaymentActionHandler} from '../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+import {fetchServiceCalendarActionHandler} from '../../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
+import {bookUserServiceCardActionHandler, userServiceCardPaymentActionHandler} from '../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 
 ;
 export default class FunderAboutView extends React.Component{

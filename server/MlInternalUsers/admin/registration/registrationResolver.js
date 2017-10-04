@@ -263,7 +263,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};
   if (registrationExist || userExist._id) {
     let code = 400;
-    let result = {message: "Registration Exist"}
+    let result = {message: "Registration Exist with same  email Id/mobile number"}
     var isActiveOFB = MlRegistrationPreCondition.checkActiveOfficeBearer(args)
     if (isActiveOFB)
       result = {message: "Sorry, your request will require Office admin attention. Please contact Office Admin"}
@@ -331,7 +331,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
          MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: regRec._id}, context, info);
          // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
         let code = 200;
-        let result = {message: "Registration Successful", registrationId: args.registration.registrationId}
+        let result = {message: "you have successfully registered with moolya. please check your email for verification link", registrationId: args.registration.registrationId}
         let succResp = new MlRespPayload().successPayload(result, code);
         return succResp;
       }else{

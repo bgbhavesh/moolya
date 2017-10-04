@@ -2,19 +2,19 @@ import React, { Component, PropTypes } from "react";
 import { render } from "react-dom";
 import ScrollArea from "react-scrollbar";
 import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
-import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../client/admin/utils/formElemUtil";
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
-import { multipartASyncFormHandler } from "../../../../../../client/commons/MlMultipartFormAction";
-import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from "../../actions/findPortfolioFunderDetails";
-import { fetchPortfolioActionHandler } from '../../actions/findClusterIdForPortfolio'
-import { putDataIntoTheLibrary } from '../../../../../commons/actions/mlLibraryActionHandler';
+import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
+import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from "../../../actions/findPortfolioFunderDetails";
+import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPortfolio'
+import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler';
 // import NoData from '../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import MlLoader from '../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
-import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
-import CropperModal from '../../../../../commons/components/cropperModal';
+import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper'
+import CropperModal from '../../../../../../commons/components/cropperModal';
 
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {

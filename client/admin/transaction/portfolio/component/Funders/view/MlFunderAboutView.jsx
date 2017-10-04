@@ -4,9 +4,9 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
-import MlLoader from '../../../../../commons/components/loader/loader'
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import {fetchfunderPortfolioAbout} from '../../../actions/findPortfolioFunderDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader'
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},

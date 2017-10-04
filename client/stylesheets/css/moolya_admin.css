@@ -284,7 +284,7 @@ table{background: #fff;}
 .vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px;}
 .vTimeline ul{margin: -7px 0px 0px -6px;}
 /*.moolya_app .vTimeline ul{height: 62px;overflow: auto;}*/
-.vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 12px; line-height: 20px;}
+.vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 11px; line-height: 17px;}
 
 .vTimeline li a{text-decoration: none;color: #fff;}
 .vTimeline li.current{background: url(images/timeline_ac.png) left center no-repeat;color: #ef4647;}

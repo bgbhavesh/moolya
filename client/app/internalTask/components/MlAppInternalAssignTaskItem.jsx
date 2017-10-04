@@ -74,7 +74,8 @@ class MlAppInternalAssignTaskItem extends React.Component {
     };
     let response = await updateInternalTaskInfo(taskId, dataToUpdata);
     if(response.success){
-      toastr.success('Task Updated Successfully');
+      toastr.success('Successfully moved '+ status);
+      //toastr.success('Task Updated Successfully');
       this.props.fetchTaskList();
     }
   }
@@ -178,7 +179,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
                 <div className="panel-body">
                   <div className="swiper-container conversation-slider blocks_in_form">
                     <div className="swiper-wrapper">
-                      {task.docs.map(function(doc) {
+                      {task.docs && task.docs.map(function(doc) {
                         return(
                           <div className="swiper-slide">
                             <a href={doc.fileUrl} target="_blank">

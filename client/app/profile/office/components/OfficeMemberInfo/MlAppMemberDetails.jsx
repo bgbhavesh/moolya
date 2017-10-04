@@ -150,8 +150,9 @@ export default class MlAppMemberDetails extends React.Component{
                   }
                 }
               `,
-    communityName = community ?  community.communityName : '';
-    communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
+    communityName = community ?  community.communityName : ' ';
+    //communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
+    communityName =  this.state.memberInfo.isPrincipal ? 'Principal': communityName ;
     return (
       <div>
         <div className="investement-view-content">

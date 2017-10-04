@@ -576,12 +576,22 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
   switch(args.moduleName){
     case "cluster":
-      query={"clusterId":args.id};
-      chapterCount = isDefaultSubChapter?mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count():chapterCount;
+      if(isDefaultSubChapter){
+        query={"clusterId":args.id};
+        chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
+      }else{
+        chapterCount = chapterCount;
+        query={"clusterId":args.id, "chapterId":{$in:relatedChapterId}, "subChapterId":{$in:relatedSubChapterIds}};
+      }
       break;
     case "chapter":
-      query={"chapterId":args.id};
-      chapterCount = isDefaultSubChapter?mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count():subChapterCount;
+      if(isDefaultSubChapter){
+        query={"chapterId":args.id};
+        chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count();
+      }else{
+        chapterCount = subChapterCount;
+        query={"chapterId":args.id, "subChapterId":{$in:relatedSubChapterIds}};
+      }
       break;
     case "subChapter":
       query={"subChapterId":args.id};

@@ -269,11 +269,11 @@ export default class MlIdeatorDetails extends React.Component{
                   <form id="ideatorDetails">
                     <div className="form-group mandatory">
                       <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome htmlFor="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>
+                      {/*<FontAwesome htmlFor="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>*/}
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>
+                      {/*<FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>*/}
                     </div>
 
                     {/*<div className="form-group">

@@ -52,6 +52,8 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId)
                     privateFields{
                       keyName,
                       booleanKey,
+                      index
+                      tabName
                     }
             }
           }
@@ -120,8 +122,6 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.data && result.data.data.principal;
-  // let data = _.omit(id,'__typename')
-  // return data
   return id
 }
 
@@ -164,6 +164,8 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                   privateFields{
                     keyName,
                     booleanKey
+                    index
+                    tabName
                   }
                 }  
             }
@@ -175,8 +177,6 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.data && result.data.data.team;
-  // let data = _.omit(id,'__typename')
-  // return data
   return id
 }
 
@@ -274,6 +274,8 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
                 privateFields{
                   keyName,
                   booleanKey
+                  index
+                  tabName
                 }
               }    
             }

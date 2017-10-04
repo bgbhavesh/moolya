@@ -5,11 +5,11 @@ import _ from "lodash";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
-import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
-import MlLoader from '../../../../../commons/components/loader/loader'
-import NoData from '../../../../../commons/components/noData/noData'
+import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../../client/admin/utils/formElemUtil";
+import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import NoData from '../../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderAreaOfInterest extends React.Component {

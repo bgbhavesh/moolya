@@ -1,9 +1,9 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
-import MlLoader from '../../../../../commons/components/loader/loader'
-import NoData from '../../../../../commons/components/noData/noData'
+import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import NoData from '../../../../../../commons/components/noData/noData'
 
 
 export default class MlFunderAreaOfInterestView extends React.Component {
@@ -61,7 +61,8 @@ export default class MlFunderAreaOfInterestView extends React.Component {
 
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
@@ -70,8 +71,8 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     if (response) {
       this.setState({loading: false, funderAreaOfInterestList: response});
     }
-
-    _.each(response.privateFields, function (pf) {
+    const privateFields = response && response.privateFields.length?response.privateFields:[]
+    _.each(privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }

@@ -4,13 +4,13 @@ import ScrollArea from "react-scrollbar";
 import Datetime from "react-datetime";
 import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
 import _ from "lodash";
-import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../client/admin/utils/formElemUtil";
-import { multipartASyncFormHandler } from "../../../../../../client/commons/MlMultipartFormAction";
-import { fetchfunderPortfolioSuccess } from "../../actions/findPortfolioFunderDetails";
-import { putDataIntoTheLibrary } from '../../../../../commons/actions/mlLibraryActionHandler'
-import MlLoader from '../../../../../commons/components/loader/loader'
-import NoData from '../../../../../commons/components/noData/noData'
-import CropperModal from '../../../../../commons/components/cropperModal';
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
+import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
+import { fetchfunderPortfolioSuccess } from "../../../actions/findPortfolioFunderDetails";
+import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import NoData from '../../../../../../commons/components/noData/noData'
+import CropperModal from '../../../../../../commons/components/cropperModal';
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderSuccessStories extends React.Component {

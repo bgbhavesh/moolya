@@ -1,18 +1,18 @@
 import React, {Component, PropTypes}  from "react";
 import {render} from "react-dom";
-import MlTabComponent from "../../../../.././commons/components/tabcomponent/MlTabComponent";
+import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
 import MlFunderAbout from './MlFunderAbout'
 import MlFunderAreaOfInterest from './MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from './MlFunderEngagementMethod'
 import MlFunderInvestment from './MlFunderInvestment'
-import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlFunderNews from './MlFunderNews'
 import MlFunderPrincipalTeam from './MlFunderPrincipalTeam'
 import MlFunderSuccessStories from './MlFunderSuccessStories'
 import MlFunderServices from './MlFunderServices'
 import MlFunderLookingFor from './MlFunderLookingFor'
-import {client} from '../../../../core/apolloConnection'
+import {client} from '../../../../../core/apolloConnection'
 
 export default class MlFunderEditTemplate extends React.Component {
   constructor(props) {

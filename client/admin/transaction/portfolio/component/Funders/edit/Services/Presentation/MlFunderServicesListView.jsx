@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import BeSpokeHandler from '../Container/beSpokeHandler'
 import FunderAboutView from '../../MlFunderServiceBooking'
-import MlAppServiceManageSchedule from '../../../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
+import MlAppServiceManageSchedule from '../../../../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
 
 
 export default class  MlFunderServicesListView extends Component {

@@ -4,7 +4,7 @@
 
 import React, {Component} from "react";
 import moment from "moment";
-import {fetchSessionDayActionHandler } from '../../actions/fetchSessionDayActionHandler';
+import {fetchSessionDayActionHandler } from '../../../actions/fetchSessionDayActionHandler';
 
 export default class MlFunderDayComponent extends Component {
 

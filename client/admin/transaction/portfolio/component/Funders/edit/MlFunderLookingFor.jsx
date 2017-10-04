@@ -6,10 +6,10 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 import {Popover, PopoverTitle, PopoverContent} from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findFunderLookingForActionHandler} from '../../actions/findPortfolioFunderDetails'
-import MlLoader from '../../../../../commons/components/loader/loader'
-import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import {findFunderLookingForActionHandler} from '../../../actions/findPortfolioFunderDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader'
+import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
 var FontAwesome = require('react-fontawesome');
 

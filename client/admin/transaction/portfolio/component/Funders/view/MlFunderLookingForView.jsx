@@ -4,13 +4,13 @@
 
 import React from 'react';
 import {render} from 'react-dom';
-import {findFunderLookingForActionHandler} from '../../actions/findPortfolioFunderDetails'
-import {initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
-import NoData from '../../../../../commons/components/noData/noData';
+import {findFunderLookingForActionHandler} from '../../../actions/findPortfolioFunderDetails'
+import {initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import NoData from '../../../../../../commons/components/noData/noData';
 
 export default class MlFunderLookingForView extends React.Component {
   constructor(props) {
@@ -146,7 +146,7 @@ export default class MlFunderLookingForView extends React.Component {
                     return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                       <div className="team-block">
                         <span className="ml my-ml-browser_3"/>
-                        <h3>
+                        <h3 title={details.lookingForName}>
                           {details.lookingForName && details.lookingForName}
                         </h3>
                       </div>

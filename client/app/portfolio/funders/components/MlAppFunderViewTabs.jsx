@@ -1,16 +1,16 @@
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlFunderAboutView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderAboutView'
-import MlFunderInvestmentView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderInvestmentView'
-import MlFunderEngagementMethodView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderEngagementMethodView'
-import MlFunderAreaOfInterestView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderAreaOfInterestView'
-import MlFunderLibraryView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderLibraryView'
-import MlFunderNewsView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderNewsView'
-import MlFunderPrincipalTeamView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderPrincipalTeamView'
-import MlFunderSuccessStoriesView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderSuccessStoriesView'
-import MlFunderLookingForView from '../../../../admin/transaction/portfolio/component/FunderView/MlFunderLookingForView'
-import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funder/Services/Container/MlFunderServicesList'
+import MlFunderAboutView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderAboutView'
+import MlFunderInvestmentView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderInvestmentView'
+import MlFunderEngagementMethodView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderEngagementMethodView'
+import MlFunderAreaOfInterestView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderAreaOfInterestView'
+import MlFunderLibraryView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderLibraryView'
+import MlFunderNewsView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderNewsView'
+import MlFunderPrincipalTeamView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderPrincipalTeamView'
+import MlFunderSuccessStoriesView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderSuccessStoriesView'
+import MlFunderLookingForView from '../../../../admin/transaction/portfolio/component/Funders/view/MlFunderLookingForView'
+import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funders/edit/Services/Container/MlFunderServicesList'
 import {appClient} from '../../../core/appConnection'
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary';
 

@@ -74,6 +74,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
+    this.getServiceDetails();    
   }
 
   /**
@@ -91,7 +92,6 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
   componentWillMount() {
     this.loggedUserDetails = getAdminUserContext();
-    this.getServiceDetails();
   }
 
   /**

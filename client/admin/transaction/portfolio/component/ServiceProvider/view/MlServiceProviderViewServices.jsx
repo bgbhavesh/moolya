@@ -11,7 +11,7 @@ import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnot
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
 
-import MlFunderServicesList from "./../../Funder/Services/Container/MlFunderServicesList";
+import MlFunderServicesList from "../../Funders/edit/Services/Container/MlFunderServicesList";
 
 var FontAwesome = require('react-fontawesome');
 

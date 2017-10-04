@@ -74,18 +74,20 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
+    this.getServiceDetails();    
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(`Received updated props again ${nextProps.data.profileId}`);
     this.setState({
       profileId: nextProps.data.profileId,
       serviceId: nextProps.data._id
+    }, () => {
+      if (nextProps.data.profileId) {
+        this.loggedUserDetails = getAdminUserContext();
+        this.getServiceDetails();
+      }
     });
-    if (nextProps.data.profileId) {
-      this.loggedUserDetails = getAdminUserContext();
-      this.getServiceDetails();
-    }
+
   }
 
   /**
@@ -103,7 +105,6 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
   componentWillMount() {
     this.loggedUserDetails = getAdminUserContext();
-    this.getServiceDetails();
   }
 
   /**

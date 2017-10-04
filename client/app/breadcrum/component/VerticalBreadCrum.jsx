@@ -129,84 +129,124 @@ export default class VerticalBreadCrum extends Component {
       // const name = this.state[cname];
     }
 
-    for (const index in routePathHierarchy) {
-      if (routePathHierarchy[index] === ':communityType') {
-        const tempList = list;
-        list = [];
-        list.push(tempList[0]);
-      }
-      if (routePathHierarchy[index] === 'manageSchedule') {
-        list.push({
-          name: properName(routePathHierarchy[index]),
-          link: '/app/calendar/manageSchedule/all/activityList',
-        });
-      } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' ||routePathHierarchy[index] === ':isFirst'
-        || routePathHierarchy[index - 1] === 'manageSchedule') {
-        // do nothing
-      } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')
-        && (routePathHierarchy[index - 1] === 'portfolio')) {
+    if(routePath.includes('/calendar/manageSchedule')&&FlowRouter.getParam('profileId')){
+      if(routePath.endsWith('createTask')){
+        list.push({name: 'Task Master', link: path.replace('createTask','taskList')});
+        list.push({name: 'Create', link: path});
 
-      } else if (routePathHierarchy[index].startsWith(':')) {
-        if (routePathHierarchy[index] === ':officeId') {
-          list[list.length - 1].link = path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0];
-        } else {
-          const cname = routePathHierarchy[index].split(':')[1];
-          const name = this.state[cname];    // get name from DATABASE using ID and set here
-          // if (routePathHierarchy[index-2] === 'view' || routePathHierarchy[index-2] === 'edit'){
-          //   name += ' ('+routePathHierarchy[index-2] +')';
-          // }
-          // else if(routePathHierarchy[index-2] === 'explore'){
-          //   name += ' ('+properName(routePathHierarchy[index-1]) +')';
-          // }
+      }else if(routePath.endsWith('activityList')){
+        list.push({name: 'Activity', link: path});
+
+      }else if(routePath.endsWith('createActivity')){
+        list.push({name: 'Activity', link: path.replace('createActivity','activityList')});
+        list.push({name: 'Create', link: path});
+
+      }else if(routePath.endsWith('createService')){
+        list.push({name: 'Services', link: path.replace('createService','serviceList')});
+        list.push({name: 'Create', link: path});
+
+      }else if(routePath.endsWith('editService')){
+        list.push({name: 'Services', link: path.split('editService')[0]+'serviceList'});
+        list.push({name: 'Edit', link: path});
+
+      }else if(routePath.endsWith('editActivity')){
+        list.push({name: 'Activity', link: path.split('editActivity')[0]+'activityList'});
+        list.push({name: 'Edit', link: path});
+
+      }else if(routePath.endsWith('taskList')){
+        list.push({name: 'Task Master', link: path});
+
+      }else if(routePath.endsWith('serviceList')){
+        list.push({name: 'Services', link: path});
+
+      }else if(routePath.endsWith('setCalendar')){
+        list.push({name: 'Calendar', link: path});
+
+      }else if(routePath.endsWith('editTask/:taskId')){
+        list.push({name: 'Task Master', link: path.split('editTask')[0]+'taskList'});
+        list.push({name: 'Edit', link: path});
+      }
+    }
+    else{
+      for (const index in routePathHierarchy) {
+        if (routePathHierarchy[index] === ':communityType') {
+          const tempList = list;
+          list = [];
+          list.push(tempList[0]);
+        }
+        if (routePathHierarchy[index] === 'manageSchedule') {
           list.push({
-            name,
-            link: path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0],
+            name: properName(routePathHierarchy[index]),
+            link: '/app/calendar/manageSchedule/all/activityList',
+          });
+        } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' ||routePathHierarchy[index] === ':isFirst'
+          || routePathHierarchy[index - 1] === 'manageSchedule') {
+          // do nothing
+        } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')
+          && (routePathHierarchy[index - 1] === 'portfolio')) {
+
+        } else if (routePathHierarchy[index].startsWith(':')) {
+          if (routePathHierarchy[index] === ':officeId') {
+            list[list.length - 1].link = path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0];
+          } else {
+            const cname = routePathHierarchy[index].split(':')[1];
+            const name = this.state[cname];    // get name from DATABASE using ID and set here
+            // if (routePathHierarchy[index-2] === 'view' || routePathHierarchy[index-2] === 'edit'){
+            //   name += ' ('+routePathHierarchy[index-2] +')';
+            // }
+            // else if(routePathHierarchy[index-2] === 'explore'){
+            //   name += ' ('+properName(routePathHierarchy[index-1]) +')';
+            // }
+            list.push({
+              name,
+              link: path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0],
+            });
+          }
+        } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')) {
+          list.push({
+            name: properName(routePathHierarchy[index]),
+            link: path,
+          });
+          break;
+        } else if (routePathHierarchy[index] === 'all' && routePathHierarchy[index - 1] !== 'manageSchedule') {
+          list[index - 1].link = path;
+          break;
+        } else if (routePathHierarchy[index] === 'addOffice' || routePathHierarchy[index] === 'editOffice') {
+          list.push({
+            name: properName('myOffice'),
+            link: `${path.split(routePathHierarchy[index])[0]}myOffice`,
+          });
+          list.push({
+            name: properName(routePathHierarchy[index]),
+            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
+          });
+        } else {
+          list.push({
+            name: properName(routePathHierarchy[index]),
+            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
           });
         }
-      } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')) {
-        list.push({
-          name: properName(routePathHierarchy[index]),
-          link: path,
-        });
-        break;
-      } else if (routePathHierarchy[index] === 'all' && routePathHierarchy[index - 1] !== 'manageSchedule') {
-        list[index - 1].link = path;
-        break;
-      } else if (routePathHierarchy[index] === 'addOffice' || routePathHierarchy[index] === 'editOffice') {
-        list.push({
-          name: properName('myOffice'),
-          link: `${path.split(routePathHierarchy[index])[0]}myOffice`,
-        });
-        list.push({
-          name: properName(routePathHierarchy[index]),
-          link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
-        });
-      } else {
-        list.push({
-          name: properName(routePathHierarchy[index]),
-          link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
-        });
       }
-    }
 
-    if (tab) {
-      list.push({
-        name: properName(tab),
-        link: path.split('&')[0],
-      });
-      if (subtab && tab !== 'about') {
+      if (tab) {
         list.push({
-          name: properName(subtab),
-          link: '',
+          name: properName(tab),
+          link: path.split('&')[0],
         });
+        if (subtab && tab !== 'about') {
+          list.push({
+            name: properName(subtab),
+            link: '',
+          });
+        }
       }
-    }
 
-    if (list[0].name === 'Calendar') {
+      if (list[0].name === 'Calendar') {
+        list.splice(0, 1);
+      }
+
       list.splice(0, 1);
     }
-
-    list.splice(0, 1);
 
     let currentClassName = '';
     const mlist = list.map((obj, index) => {

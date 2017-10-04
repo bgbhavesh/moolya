@@ -37,7 +37,7 @@ export default class MlIdeatorRelatedIdeas extends React.Component {
               <li onClick={that.selectedIdea.bind(that, idea._id, idea.portfolioId)} key={idx}><a href=""><span
                 className="ml my-ml-Ideator"></span><br />{idea.title}</a></li>
             )
-          }):<li style={{'width':'95%'}}><div className="notext">No Related Data Available</div></li> }
+          }):<li style={{'width':'95%'}} className="notext"><span>No Related Data Available</span></li> }
         </ul>
       </div>
     )

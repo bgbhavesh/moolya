@@ -495,7 +495,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   handleTeamAvatar(image, e) {
-    console.log('here');
     this.setState({
       uploadingAvatar1: true,
     });
@@ -561,7 +560,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onPrincipalTileClick.bind(that, idx, principal)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={principal.logo && principal.logo.fileUrl ? principal.logo.fileUrl : "/images/def_profile.png"} />
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                     </div>
@@ -601,7 +600,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onTeamTileClick.bind(that, idx, team)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={team.logo && team.logo.fileUrl ? team.logo.fileUrl : "/images/def_profile.png"} />
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>
                                     {/*<div className="ml_icon_btn">*/}
@@ -800,6 +799,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               </div>
                             </div> : <div></div>
                           }
+                          <div className="clearfix"></div>
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
                                           valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
@@ -816,7 +816,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*/!*<input type="checkbox" className="lock_input"*!/*/}
                           {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
                           {/*</div>*/}
-                          <div className="clearfix"></div>
+
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName"
                                    defaultValue={this.state.data.firstName} className="form-control float-label"

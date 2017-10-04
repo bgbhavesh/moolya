@@ -829,7 +829,7 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50p
     }
   ul{margin: 0px; padding:3px;
     li{display: inline-block; text-align: center;margin-right:5px;background:#dc3b3c;
-      .notext{    width: 90%; color: #fff; line-height: 40px; font-size: 18px; margin: 0 auto;}
+      &.notext{background: none;text-shadow: none;line-height: 43px;width: 95%;}
       a{display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
 
         .team-block{margin-bottom:0px;background:$mlGray;

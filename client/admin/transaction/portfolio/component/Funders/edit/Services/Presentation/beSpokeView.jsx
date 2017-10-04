@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper'
+import {multipartASyncFormHandler} from '../../../../../../../../commons/MlMultipartFormAction'
+import Moolyaselect from '../../../../../../../commons/components/MlAdminSelectWrapper'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 
@@ -90,7 +90,7 @@ export default class  BeSpokeView extends Component {
                 <div className="form-group">
                   <label>Duration &nbsp;</label>
                     <input type="number" value={this.props.data.duration && this.props.data.duration.hours ? this.props.data.duration.hours : '' }  min="0"  name="hours" onChange={(e)=>this.props.duration(e.target.value,"hours")} className="form-control inline_input"/> Hours
-                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} className="form-control inline_input"/> Mins 
+                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} className="form-control inline_input"/> Mins
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" defaultValue={this.props.data.expectedInput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedInput")} ></textarea>
@@ -189,7 +189,7 @@ export default class  BeSpokeView extends Component {
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
-        
+
           <br className="clearfix"/>
         </div>
       </div>

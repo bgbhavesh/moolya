@@ -1,8 +1,8 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
-import NoData from '../../../../../commons/components/noData/noData'
+import {fetchfunderPortfolioSuccess} from "../../../actions/findPortfolioFunderDetails";
+import NoData from '../../../../../../commons/components/noData/noData'
 
 export default class MlFunderSuccessStoriesView extends React.Component {
   constructor(props, context) {

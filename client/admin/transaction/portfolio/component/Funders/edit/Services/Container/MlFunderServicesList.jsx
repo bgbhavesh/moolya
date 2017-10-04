@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {fetchServicesActionHandler, checkServiceSubChapterAccessControl, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+import {fetchServicesActionHandler, checkServiceSubChapterAccessControl, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 import MlFunderServicesListView from '../Presentation/MlFunderServicesListView'
 
 export default class  MlFunderServicesList extends Component {

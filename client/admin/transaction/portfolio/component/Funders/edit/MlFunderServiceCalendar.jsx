@@ -2,8 +2,8 @@
  * Created by Mukhil on 19/6/17.
  */
 import React, {Component} from "react";
-import Calender from '../../../../../commons/calendar/calendar'
-import { fetchServiceCalendarActionHandler } from './../../actions/fetchServiceCalendarActionHandler';
+import Calender from '../../../../../../commons/calendar/calendar'
+import { fetchServiceCalendarActionHandler } from './../../../actions/fetchServiceCalendarActionHandler';
 import MlFunderDayComponent from './MlFunderdayComponent';
 import _ from "lodash";
 import MlAppFunderCalendarSlots from './MlAppFunderCalendarSlots';

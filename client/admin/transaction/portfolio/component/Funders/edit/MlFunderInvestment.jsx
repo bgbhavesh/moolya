@@ -2,15 +2,15 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../client/admin/utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import moment from "moment";
-import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
-import MlLoader from "../../../../../commons/components/loader/loader";
-import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
+import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
+import MlLoader from "../../../../../../commons/components/loader/loader";
+import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderInvestment extends React.Component {

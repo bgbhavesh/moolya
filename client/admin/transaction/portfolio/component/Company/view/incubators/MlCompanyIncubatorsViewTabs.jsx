@@ -78,7 +78,7 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        // key:tab.title,
         getContent: () => tab.component
       }));
     }
@@ -102,7 +102,8 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
     let tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}
                            // selectedTabKey={this.state.activeTab}
-                           onChange={this.updateTab} backClickHandler={this.props.backClickHandler}
+                           // onChange={this.updateTab}
+                           backClickHandler={this.props.backClickHandler}
                            // type="subtab" mkey="title"
     />
   }

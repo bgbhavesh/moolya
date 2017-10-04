@@ -203,17 +203,18 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-heading"> Principal </div>
                   <div className="panel-body">
-                    <div className="col-lg-12 top-content">
+                    <div className="col-lg-12 top-content ideators_list">
                       <div className="row">
                         {that.state.funderPrincipalList.map(function (principal, idx) {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectPrincipal.bind(that, idx)}>
-                                <div className="list_block notrans two funding_list">
-                                  {/*<FontAwesome name='lock'/>*/}
-                                  {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
-                                  <div><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
+                                <div className="ideators_list_block two">
+                                  <div>
+                                  <FontAwesome className='pull-left' name='trash-o'/>
+                                  <FontAwesome className='pull-right' name='lock'/></div>
+                                  <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} className="c_image"/>
+                                  <div className="block_footer nopadding"><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                     className="small">{principal.designation}</p></div>
                                   {/*<div className="ml_icon_btn">*/}
                                   {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
@@ -254,8 +255,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div className="col-lg-12 col-md-12 col-sm-12">
                                     <div>
                                       <div className="list_block notrans funding_list">
-                                        {/*<FontAwesome name='lock'/>*/}
-                                        {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
+                                        <FontAwesome name='lock'/>
+                                        <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                         <img src={selectedPrincipal.logo ? selectedPrincipal.logo.fileUrl : "/images/def_profile.png"}/>
                                         <div><p>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</p><p
                                           className="small">{selectedPrincipal.designation}</p></div>
@@ -274,19 +275,21 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Name" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Company" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Year of Experience"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"/>
@@ -298,7 +301,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Disignation"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.designation ? selectedPrincipal.designation : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"/>
@@ -306,13 +309,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Duration" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedPrincipal.duration ? selectedPrincipal.duration : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isDurationPrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Qualification"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedPrincipal.qualification ? selectedPrincipal.qualification : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"/>
@@ -325,6 +329,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="About" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"/>
@@ -344,17 +349,19 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                 <div className="panel panel-default">
                   <div className="panel-heading"> Team </div>
                   <div className="panel-body">
-                    <div className="col-lg-12 top-content2">
+                    <div className="col-lg-12 top-content2 ideators_list">
                       <div className="row">
                         {that.state.funderTeamList.map(function (team, idx) {
                           return (
                             <div className="col-lg-4 col-md-4 col-sm-4" key={idx}>
                               <div onClick={that.onSelectTeam.bind(that, idx)}>
-                                <div className="list_block notrans one funding_list">
-                                  {/*<FontAwesome name='lock'/>*/}
-                                  {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
-                                  <div><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
+                                <div className="ideators_list_block one">
+                                  <div>
+                                    <FontAwesome className='pull-left' name='trash-o'/>
+                                    <FontAwesome className='pull-right' name='lock'/>
+                                  </div>
+                                  <img className="c_image" src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
+                                  <div className="block_footer nopadding"><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
                                     <p className="small">{team.designation}</p>
                                   </div>
                                 </div>
@@ -391,8 +398,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div className="col-lg-12 col-md-12 col-sm-12">
                                     <div>
                                       <div className="list_block notrans funding_list">
-                                        {/*<FontAwesome name='lock'/>*/}
-                                        {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
+                                        <FontAwesome name='lock'/>
+                                        <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                         <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
                                         <div>
                                           <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>
@@ -413,6 +420,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <form>
                                       <div className="form-group">
                                         <input type="text" placeholder="Name" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisFirstNamePrivate"/>
@@ -420,13 +428,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Company" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisCompanyNamePrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Year of Experience"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisYearsOfExperiencePrivate"/>
@@ -434,7 +443,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Designation"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.designation ? selectedTeam.designation : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDesignationPrivate"/>
@@ -442,13 +451,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="Duration" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedTeam.duration ? selectedTeam.duration : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDurationPrivate"/>
                                       </div>
                                       <div className="form-group">
                                         <input type="text" placeholder="Qualification"
-                                               className="form-control float-label"
+                                               className="form-control float-label" id="cluster_name"
                                                value={selectedTeam.qualification ? selectedTeam.qualification : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisQualificationPrivate"/>
@@ -456,6 +466,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
                                       <div className="form-group">
                                         <input type="text" placeholder="About" className="form-control float-label"
+                                               id="cluster_name"
                                                value={selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}
                                                disabled='disabled'/>
                                         <FontAwesome name='unlock' className="input_icon un_lock" id="teamisAboutTeamPrivate"/>

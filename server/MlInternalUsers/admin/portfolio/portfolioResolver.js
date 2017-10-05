@@ -545,56 +545,36 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['removePortfolioDataFile'] = (obj, args, context, info) => {
   let response
+  let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
   if(args.portfoliodetailsId) {
-    switch (args.communityType) {
-      case "Startups":
-          if (args.isData) {
+    switch (portfolio.communityCode) {
+      case "STU":
+          if (args.tabName==="data") {
             let startupPortfolioData = MlStartupPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
             if (startupPortfolioData && startupPortfolioData.data) {
-              var index = startupPortfolioData.data[args.typeOfData].findIndex(function (d) {
-                if (d.fileUrl === args.fileUrl) {
-                  return d
-                }
-              })
-              if (index >= 0) {
-                startupPortfolioData.data[args.typeOfData].splice(index, 1);
-                response = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, startupPortfolioData, {$set: true}, context)
-                return response
-              }
+              _.remove(startupPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
+              response = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data:startupPortfolioData.data}, {$set: true}, context)
+              return response
             }
           }
           break;
-      case "Companies":
-        if (args.isData) {
+      case "CMP":
+        if (args.tabName==="data") {
           let companyPortfolioData = MlCompanyPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
           if (companyPortfolioData && companyPortfolioData.data) {
-            var index = companyPortfolioData.data[args.typeOfData].findIndex(function (d) {
-              if (d.fileUrl === args.fileUrl) {
-                return d
-              }
-            })
-            if (index >= 0) {
-              companyPortfolioData.data[args.typeOfData].splice(index, 1);
-              response = mlDBController.update('MlCompanyPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, companyPortfolioData, {$set: true}, context)
-              return response
-            }
+            _.remove(companyPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlCompanyPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data:companyPortfolioData.data}, {$set: true}, context)
+            return response
           }
         }
         break;
-      case "Institutions":
-        if (args.isData) {
+      case "INS":
+        if (args.tabName==="data") {
           let institutionPortfolioData = MlInstitutionPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
           if (institutionPortfolioData && institutionPortfolioData.data) {
-            var index = companyPortfolioData.data[args.typeOfData].findIndex(function (d) {
-              if (d.fileUrl === args.fileUrl) {
-                return d
-              }
-            })
-            if (index >= 0) {
-              institutionPortfolioData.data[args.typeOfData].splice(index, 1);
-              response = mlDBController.update('MlInstitutionPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, institutionPortfolioData, {$set: true}, context)
-              return response
-            }
+            _.remove(institutionPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlInstitutionPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data:institutionPortfolioData.data}, {$set: true}, context)
+            return response
           }
         }
         break;

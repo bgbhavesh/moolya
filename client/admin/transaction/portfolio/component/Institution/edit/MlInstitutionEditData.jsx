@@ -106,12 +106,13 @@ export default class MlInstitutionEditData extends React.Component{
   async removeDataDocument(type,fileUrl){
     if(type && fileUrl){
       let portfolioDetailsId = this.props.portfolioDetailsId;
-      const resp = await removePortfolioDataFile(portfolioDetailsId , "Institutions", fileUrl, true, type, this.props.client);
-      this.fetchPortfolioData();
+      const resp =await removePortfolioDataFile(portfolioDetailsId , fileUrl, "data", type);
+      this.fetchInstitutionPortfolioData();
     }
   }
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
+    let that=this;
     switch(type){
       case 'balanceSheet':
         if(data) {

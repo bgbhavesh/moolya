@@ -396,7 +396,7 @@ export default class MlCompanyAwards extends React.Component{
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
                                       isDynamic={true} placeholder="Select Award.."
-                                      onSelect={this.onOptionSelected.bind(this)}
+                                      onSelect={this.onOptionSelected.bind(this)} mandatory={true}
                                       selectedValue={this.state.selectedVal}/>
                       </div>
                       <div className="form-group">

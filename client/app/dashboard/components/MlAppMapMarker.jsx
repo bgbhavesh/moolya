@@ -10,6 +10,9 @@ export default class MlAppMapMarker extends Component {
     super(props);
   }
 
+  markerClickActionHandler(){
+    this.props.markerClickActionHandler(this.props.data)
+  }
 
   render() {
     let status = "";
@@ -33,7 +36,7 @@ export default class MlAppMapMarker extends Component {
     }
     return (
       <div>
-        <div className="map_profiles">
+        <div className="map_profiles" onClick={this.markerClickActionHandler.bind(this, this.props)} id={this.props.markerId}>
           <span className={`ml ${status}`}></span>
           <img src={`${this.props.status&&this.props.status.profileImage?this.props.status.profileImage:"/images/def_profile.png"}`}/>
         </div>

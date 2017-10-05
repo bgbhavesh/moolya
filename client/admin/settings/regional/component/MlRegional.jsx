@@ -271,7 +271,7 @@ class MlRegional extends React.Component{
                       <input type="text" ref="cluster" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" readOnly="readOnly"  id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capitalName" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label"/>
+                      <input type="text" ref="capitalName" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label" disabled="disabled"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Length" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>

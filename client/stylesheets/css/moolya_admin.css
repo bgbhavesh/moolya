@@ -169,6 +169,7 @@ span.actions_switch.show_act{bottom: 0px;background:url(../images/actions_block_
 .panel-heading .block_action img{width: 25px; margin-top: -2px;}
 .form-control{padding: 6px 0px;border: 0px; border-bottom: 2px solid #273545;box-shadow: none;color: #273545;background-color: transparent;border-radius: 0px;font-size: 15px;}
 .mandatory:after{content: "";width: 10px;height: 10px;background: #ef4647;border-radius: 50%;position: absolute;margin-top: -6px;}
+.popover-content .mandatory:after{left: 0;}
 .form-control:focus{box-shadow: none; border-color: #FFC20E;}
 .admin_main_wrap textarea.form-control{height: 80px;}
 .form-group{margin-bottom: 22px;position: relative;}

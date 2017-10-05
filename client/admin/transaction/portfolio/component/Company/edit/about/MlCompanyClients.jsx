@@ -281,7 +281,7 @@ export default class MlCompanyClients extends React.Component{
                 <div className="ml_create_client">
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" name="clientName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.clientName} onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon" id="isClientNamePrivate"  defaultValue={this.state.data.isClientNamePrivate}  onClick={this.onLockChange.bind(this, "clientName", "isClientNamePrivate")}/>
                       </div>

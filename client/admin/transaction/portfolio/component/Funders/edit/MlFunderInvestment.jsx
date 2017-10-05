@@ -284,7 +284,7 @@ export default class MlFunderInvestment extends React.Component {
                         <div className="medium-popover">
                           <div className="row">
                             <div className="col-md-12">
-                              <div className="form-group">
+                              <div className="form-group mandatory">
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                           inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control",readOnly:true}} ref="dateOfInvestment"
                                           defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
@@ -293,14 +293,14 @@ export default class MlFunderInvestment extends React.Component {
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfInvestmentPrivate"
                                              onClick={this.onLockChange.bind(this, "dateOfInvestment", "isDateOfInvestmentPrivate")}/>
                               </div>
-                              <div className="form-group">
+                              <div className="form-group mandatory  ">
                                 <input type="text" placeholder="Company Name" name="investmentcompanyName"
                                        defaultValue={this.state.data.investmentcompanyName}
                                        className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
                                              onClick={this.onLockChange.bind(this, "investmentcompanyName", "isCompanyNamePrivate")}/>
                               </div>
-                              <div className="form-group">
+                              <div className="form-group mandatory">
                                 <input type="text" placeholder="Investment Amount" name="investmentAmount"
                                        defaultValue={this.state.data.investmentAmount}
                                        className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
@@ -309,7 +309,7 @@ export default class MlFunderInvestment extends React.Component {
                               </div>
                               <div className="form-group">
                                 <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
-                                              labelKey={'label'} queryType={"graphql"} query={query}
+                                              labelKey={'label'} queryType={"graphql"} query={query} mandatory={true}
                                               isDynamic={true} placeholder="Type of Funding"
                                               onSelect={this.onOptionSelected.bind(this)}
                                               selectedValue={this.state.selectedVal}/>

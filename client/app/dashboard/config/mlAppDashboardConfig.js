@@ -47,7 +47,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
   viewComponent:<MlDashboardMapView params={this.params}/>,
     mapMarkerComponent:<MlAppMapMarker/>,
 
-  // actionConfiguration:[
+  actionConfiguration:[
   //   {
   //     actionName: 'onMouseEnter',
   //     hoverComponent: <MapDetails />,
@@ -72,31 +72,15 @@ export const mlDashboardMapConfig=new MlAppViewer({
   //       }
   //     }
   //   },
-  //   {
-  //     actionName: 'onMarkerClick',
-  //     // hoverComponent:<MapDetails />,
-  //     handler:  (data)=>{
-  //       if(data.module == 'cluster')
-  //         FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
-  //       if(data.module == 'chapter')
-  //       {
-  //         if(data&&data.params)
-  //         {
-  //           if(data.params.clusterId)
-  //             FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
-  //         }
-  //         else
-  //         {
-  //           let loggedInUser = getAdminUserContext();
-  //           FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
-  //         }
-  //       }
-  //
-  //       if(data.module == 'subChapter')
-  //         FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
-  //     }
-  //   }
-  // ],
+    {
+      actionName: 'onMarkerClick',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data.module == "externalUsers")
+          FlowRouter.go('/app/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.params.subChapterId+'/'+data.desc+'/'+data.isActive);
+      }
+    }
+  ],
   graphQlQuery:gql`
     query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
@@ -107,7 +91,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
                           lat:latitude
                           lng:longitude
                           text:communityCode
-                          isActive:isActive
+                          isActive:portfolioId
                           name:name
                           status:profile{profileImage}
                       }

@@ -114,7 +114,7 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
           </div>
           <div className="col-md-6 col-sm-6 nopadding"><div className="panel panel-default panel-form-view">
             <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-            <div className="panel-body">
+            <div className="panel-body panel-body-scroll">
               <ul className="list-info">
                 <li>{this.state.aboutUs.information&&this.state.aboutUs.information.informationDescription}</li>
               </ul>

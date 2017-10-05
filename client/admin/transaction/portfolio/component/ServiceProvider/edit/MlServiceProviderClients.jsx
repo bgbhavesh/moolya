@@ -216,7 +216,7 @@ export default class MlServiceProviderClients extends Component {
     //let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
-   
+
     let file = image;
     let fileName = fileInfo.name;
     if(file){
@@ -376,7 +376,7 @@ export default class MlServiceProviderClients extends Component {
                   <div className="medium-popover">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="form-group">
+                        <div className="form-group mandatory">
                           <input type="text" name="companyName" placeholder="Company Name"
                                  className="form-control float-label" defaultValue={this.state.data.companyName}
                                  onBlur={this.handleBlur.bind(this)}/>

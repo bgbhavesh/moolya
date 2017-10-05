@@ -157,7 +157,7 @@ export default class MlAppTaskCreate extends Component {
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Task Name" name="name" defaultValue={this.state.data.name}
                       className="form-control float-label" onBlur={this.handleBlur.bind(this)} />
                   </div>
@@ -198,7 +198,7 @@ export default class MlAppTaskCreate extends Component {
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Display Name" className="form-control float-label"
                       name="displayName"
                       defaultValue={this.state.data.displayName} onBlur={this.handleBlur.bind(this)} />

@@ -53,6 +53,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.handleTeamAvatar = this.handleTeamAvatar.bind(this);
     this.toggleModal1 = this.toggleModal1.bind(this);
+    this.optionsBySelectTitle = this.optionsBySelectTitle.bind(this);
+    this.onStatusChangeNotify = this.onStatusChangeNotify.bind(this)
     return this;
   }
 
@@ -187,19 +189,19 @@ export default class MlFunderPrincipalTeam extends React.Component {
   onSavePrincipalAction(e) {
     this.sendDataToParent(true);
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.principal) {
-      this.setState({ funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false });
+      this.setState({funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false, selectLogo: {}});
     }
     else {
-      this.setState({ funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false });
+      this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false, selectLogo: {}});
     }
   }
   onSaveTeamAction(e) {
     this.sendDataToParent(true);
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.team) {
-      this.setState({ funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false });
+      this.setState({funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false, selectLogoTeam: {}});
     }
     else {
-      this.setState({ funderTeamList: this.state.funderTeam, popoverOpenT: false });
+      this.setState({funderTeamList: this.state.funderTeam, popoverOpenT: false, selectLogoTeam: {}});
     }
   }
 
@@ -664,7 +666,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
                                           valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
                                           queryType={"graphql"} query={titlequery} queryOptions={titleOption}
-                                          onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true} />
+                                          onSelect={that.optionsBySelectTitle} isDynamic={true} />
 
                           </div>
                           <div className="form-group">
@@ -743,7 +745,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input id="makePrivate" type="checkbox"
                                    checked={this.state.data.makePrivate && this.state.data.makePrivate}
                                    name="checkbox"
-                                   onChange={this.onStatusChangeNotify.bind(this)} />
+                                   onChange={this.onStatusChangeNotify} />
                             <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           {/*<div className="form-group">*/}
                           {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
@@ -787,7 +789,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       <div className="row">
                         <div className="col-md-12">
                           {this.state.selectedObject != "default" ?
-                            <div className="form-group"  onClick={this.toggleModal1.bind(this)}>
+                            <div className="form-group"  onClick={this.toggleModal1}>
                               <div className="fileUpload mlUpload_btn">
                                 <span>Upload Pic</span>
                                 {/* <input type="file" className="upload"
@@ -804,7 +806,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
                                           valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
                                           queryType={"graphql"} query={titlequery} queryOptions={titleOption}
-                                          onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true} />
+                                          onSelect={that.optionsBySelectTitle} isDynamic={true} />
 
                           </div>
                           {/*<div className="form-group">*/}
@@ -893,7 +895,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input id="makePrivate" type="checkbox"
                                    checked={this.state.data.makePrivate && this.state.data.makePrivate}
                                    name="checkbox"
-                                   onChange={this.onStatusChangeNotify.bind(this)} />
+                                   onChange={this.onStatusChangeNotify} />
                             <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           {/*<div className="form-group">*/}
                           {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}

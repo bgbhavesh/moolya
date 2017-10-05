@@ -83,7 +83,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 
   // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   args.registration.registrationDate = date
-  let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
+  // let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails = [{address: args.registration.email, verified: false}];
   var user = mlDBController.findOne('users', {_id: context.userId}) || {}
@@ -108,7 +108,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     status: "REG_EMAIL_P",
     emails: emails,
     transactionId: args.registration.registrationId,
-    transactionCreatedDate: transactionCreatedDate
+    transactionCreatedDate: new Date()
   }, context)
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');

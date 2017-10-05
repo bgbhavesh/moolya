@@ -28,8 +28,9 @@ export default class MlFunderSuccessStories extends React.Component {
       uploadingAvatar: false,
       showProfileModal: false,
     }
-    this.handleBlur.bind(this);
-    this.onSaveAction.bind(this);
+    this.curSelectLogo = {}
+    this.handleBlur = this.handleBlur.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.dateChange.bind(this)
     this.fetchPortfolioDetails.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -89,6 +90,7 @@ export default class MlFunderSuccessStories extends React.Component {
     if (details && details.logo) {
       delete details.logo['__typename'];
     }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -194,6 +196,7 @@ export default class MlFunderSuccessStories extends React.Component {
     else {
       this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false });
     }
+    this.curSelectLogo = {}
   }
 
   onLogoFileUpload(fileInfo, image) {
@@ -223,6 +226,10 @@ export default class MlFunderSuccessStories extends React.Component {
         this.libraryAction(fileObjectStructure)
       }
       if (result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        }
         this.setState({ loading: true })
         this.fetchOnlyImages();
       }
@@ -260,6 +267,7 @@ export default class MlFunderSuccessStories extends React.Component {
     let success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     funderSuccess[this.state.selectedIndex] = data;
     let arr = [];
     _.each(funderSuccess, function (item) {
@@ -270,7 +278,7 @@ export default class MlFunderSuccessStories extends React.Component {
       }
       let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, "privateFields");
-      newItem = _.omit(newItem, 'logo');
+      // newItem = _.omit(newItem, 'logo');
       arr.push(newItem)
     })
     funderSuccess = arr;
@@ -280,7 +288,6 @@ export default class MlFunderSuccessStories extends React.Component {
   }
 
   handleUploadAvatar(image, e) {
-    console.log('here');
     this.setState({
       uploadingAvatar: true,
     });
@@ -332,8 +339,9 @@ export default class MlFunderSuccessStories extends React.Component {
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
                               </div>
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                              <div className="" onClick={that.onTileClick.bind(that, idx)}><img
-                                src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} /></div>
+                              <div className="" onClick={that.onTileClick.bind(that, idx)}>
+                                <img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} />
+                              </div>
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
@@ -381,7 +389,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             toggleShow={this.toggleModal}
                           />
                           {this.state.selectedObject != "default" ?
-                            <div className="form-group" onClick={this.toggleModal.bind(this)}>
+                            <div className="form-group" onClick={this.toggleModal}>
                               <div className="fileUpload mlUpload_btn">
                                 <span>Upload Pic</span>
                                 {/* <input type="file" className="upload" name="logo" id="logo" accept="image/*"
@@ -397,7 +405,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           <div className="form-group mandatory">
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                               name="storyTitle" defaultValue={this.state.data.storyTitle}
-                              onBlur={this.handleBlur.bind(this)} />
+                              onBlur={this.handleBlur} />
                             <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
                               onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")} />
 
@@ -405,7 +413,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           <div className="form-group mandatory">
                             <input type="text" placeholder="Description" className="form-control float-label"
                               name="description" defaultValue={this.state.data.description}
-                              onBlur={this.handleBlur.bind(this)} />
+                              onBlur={this.handleBlur} />
                             <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
                               onClick={this.onLockChange.bind(this, "description", "isDescPrivate")} />
 
@@ -414,7 +422,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate && this.state.data.makePrivate} name="checkbox" onChange={this.onStatusChangeNotify.bind(this)} /><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           </div>
                           <div className="ml_btn" style={{ 'textAlign': 'center' }}>
-                            <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                            <a className="save_btn" href="" onClick={this.onSaveAction}>Save</a>
                           </div>
                         </div>
                       </div>

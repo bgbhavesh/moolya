@@ -17,6 +17,7 @@ export default class MlInvestmentRequest extends Component{
       canAccept: false,
       canReject: false
     };
+    this.OnBoardHandler = this.OnBoardHandler.bind(this);
     // this.acceptConnectionHandler = this.acceptConnectionHandler.bind(this);
     // this.rejectConnectionHandler = this.rejectConnectionHandler.bind(this);
     return this;

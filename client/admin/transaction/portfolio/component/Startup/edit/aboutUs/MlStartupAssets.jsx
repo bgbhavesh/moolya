@@ -297,13 +297,13 @@ class MlStartupAssets extends React.Component{
                   <div className="col-md-12">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={assetsQuery}
+                                    labelKey={'label'} queryType={"graphql"} query={assetsQuery} mandatory={true}
                                     isDynamic={true} placeholder={'Select  Asset..'}
                                     onSelect={this.assetTypeOptionSelected.bind(this)}
                                     selectedValue={this.state.selectedVal}/>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" name="quantity" placeholder="Enter Number of Quantity"
                              className="form-control float-label" defaultValue={this.state.data.quantity}
                              onBlur={this.handleBlur.bind(this)}/>

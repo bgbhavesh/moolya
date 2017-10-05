@@ -130,9 +130,9 @@ export default class MlAppRegAddressDetails extends React.Component {
         addressLocality: {$set: this.refs["addressLocality" + index].value},
         addressLandmark: {$set: this.refs["addressLandmark" + index].value},
         addressArea: {$set: this.refs["addressArea" + index].value},
-        addressCity: {$set: this.refs["addressCity" + index].value},
-        addressState: {$set: this.refs["addressState" + index].value},
         addressCountry: {$set: this.refs["addressCountry" + index].value},
+        addressState: {$set: this.refs["addressState" + index].value},
+        addressCity: {$set: this.refs["addressCity" + index].value},
         addressPinCode: {$set: this.refs["addressPinCode" + index].value}
       });
 
@@ -257,9 +257,9 @@ export default class MlAppRegAddressDetails extends React.Component {
    // refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressFlat"])
     refs.push(this.refs["addressLocality"])
-    refs.push(this.refs["addressCity"])
-    refs.push(this.refs["addressState"])
     refs.push(this.refs["addressCountry"])
+    refs.push(this.refs["addressState"])
+    refs.push(this.refs["addressCity"])
     refs.push(this.refs["addressPinCode"])
     let ret = mlFieldValidations(refs)
 
@@ -362,9 +362,9 @@ export default class MlAppRegAddressDetails extends React.Component {
         refs.push(this.refs["name" + index])
         refs.push(this.refs["addressFlat" + index])
         refs.push(this.refs["addressLocality" + index])
-        refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["addressCountry" + index])
         refs.push(this.refs["addressState" + index])
+        refs.push(this.refs["addressCity" + index])
        // refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressPinCode" + index])
         let ret = mlFieldValidations(refs)
@@ -438,9 +438,9 @@ export default class MlAppRegAddressDetails extends React.Component {
     this.refs["addressLocality" + index].value = "";
     this.refs["addressLandmark" + index].value = "";
     this.refs["addressArea" + index].value = "";
-    this.refs["addressCity" + index].value = "";
-    this.refs["addressState" + index].value = "";
     this.refs["addressCountry" + index].value = "";
+    this.refs["addressState" + index].value = "";
+    this.refs["addressCity" + index].value = "";
     this.refs["addressPinCode" + index].value = "";
 
   }
@@ -535,10 +535,6 @@ export default class MlAppRegAddressDetails extends React.Component {
                 <input type="text" ref={'addressArea'} placeholder="Area"
                        className="form-control float-label" id=""/>
               </div>
-              <div className="form-group mandatory">
-                <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label"
-                       id="" data-required={true} data-errMsg="Town/City is required"/>
-              </div>
               {/* <div className="form-group mandatory">
                <input type="text" ref={'addressState'} placeholder="State" className="form-control float-label" id="" data-required={true} data-errMsg="State is required" />
                </div>*/}
@@ -561,6 +557,10 @@ export default class MlAppRegAddressDetails extends React.Component {
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                               onSelect={this.optionsBySelectState.bind(this)} queryOptions={statesOption}
                               isDynamic={true} data-required={true} data-errMsg="State is required"/>
+              </div>
+              <div className="form-group mandatory">
+                <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label"
+                       id="" data-required={true} data-errMsg="Town/City is required"/>
               </div>
               {/*<div className="form-group mandatory">*/}
                 {/*<input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label"*/}

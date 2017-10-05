@@ -146,8 +146,8 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     return {'isValid':true};
   }
   static  validateMobile(registration) {
-    var validate = MlRegistration.findOne({"registrationInfo.contactNumber":registration.contactNumber})
-    if(validate && (validate.status != 'REG_ADM_REJ'||validate.status != 'REG_USER_REJ')){
+    var validate = MlRegistration.findOne({"registrationInfo.contactNumber":registration.contactNumber,"status": {$nin: ['REG_ADM_REJ','REG_USER_REJ']}})
+    if(validate){
       let code = 409;
       let message ="Registration Exist with the Mobile Number"
       let errResp = new MlRespPayload().errorPayload(message, code);

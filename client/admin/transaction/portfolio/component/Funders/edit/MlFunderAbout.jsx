@@ -457,12 +457,12 @@ export default class MlFunderAbout extends React.Component {
                         <input type="text" placeholder="Number of Investments" name="investmentCount" defaultValue={this.state.data.investmentCount} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} />
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isInvestmentCountPrivate" onClick={this.onClick.bind(this, "investmentCount", "isInvestmentCountPrivate")} />
                       </div>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled" />
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this, "mobileNumber", "isMobileNumberPrivate")} />
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled" />
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "emailId", "isEmailIdPrivate")} />
                       </div>

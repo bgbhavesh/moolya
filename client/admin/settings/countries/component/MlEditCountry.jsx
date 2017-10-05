@@ -124,7 +124,7 @@ class MlEditCountry extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" disabled="disabled"/>
+                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label"/>
                     </div>
                   </form>
                 </div>

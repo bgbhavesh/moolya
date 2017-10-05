@@ -13,7 +13,6 @@ export default class MlStartupEmployeeBreakup extends React.Component{
     this.state={
       data:{},
       startupCompanyData:this.props.dataDetails || [],
-      selectedIndex:0,
       selectedVal:null,
       selectedObject:"default",
       dataList : this.props.dataDetails || []
@@ -140,16 +139,12 @@ export default class MlStartupEmployeeBreakup extends React.Component{
     data["ebdToYear"] =   this.refs["ebdToYear"+index].state.inputValue;
     data["ebdNumberOfEmployment"] =  this.refs["ebdNumberOfEmployment"+index].value;
     data["ebdAbout"] = this.state.selectedVal;
+    data["index"] =  this.state.startupCompanyData&&this.state.startupCompanyData.length?this.state.startupCompanyData.length:0
     let clients = this.state.startupCompanyData;
     clients[index] = data
     this.setState({startupCompanyData:clients})
     this.props.getStartupEmployeeBreakup(clients);
     this.setState({dataList:this.state.startupCompanyData})
-    if(this.state.startupCompanyData){
-      this.setState({selectedIndex:this.state.startupCompanyData.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
     this.refs["ebdFromMonth"+index].state.inputValue = ""
     this.refs["ebdFromYear"+index].state.inputValue = ""
     this.refs["ebdToMonth"+index].state.inputValue = ""

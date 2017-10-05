@@ -371,7 +371,7 @@ export default class MlFunderSuccessStories extends React.Component {
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                               inputProps={{ placeholder: "Select Date", className: "float-label form-control",readOnly:true }} ref="date"
                               defaultValue={this.state.data.date ? this.state.data.date : ''}
@@ -402,7 +402,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           }
                           <br />
                           <br className="brclear" />
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                               name="storyTitle" defaultValue={this.state.data.storyTitle}
                               onBlur={this.handleBlur} />
@@ -410,7 +410,7 @@ export default class MlFunderSuccessStories extends React.Component {
                               onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")} />
 
                           </div>
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Description" className="form-control float-label"
                               name="description" defaultValue={this.state.data.description}
                               onBlur={this.handleBlur} />

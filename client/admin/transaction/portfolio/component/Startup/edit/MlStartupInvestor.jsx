@@ -355,14 +355,14 @@ export default class MlStartupInvestor extends React.Component{
                 <div  className="ml_create_client">
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" name="investorName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.investorName}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate}  onClick={this.onLockChange.bind(this, "investorName", "isNamePrivate")}/>
                       </div>
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Funding..'}
-                                      isDynamic={true}
+                                      isDynamic={true} mandatory={true}
                                       onSelect={this.onOptionSelected.bind(this)}
                                       selectedValue={this.state.selectedVal}/>
                       </div>

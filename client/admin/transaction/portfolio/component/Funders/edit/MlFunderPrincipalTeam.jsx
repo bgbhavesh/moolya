@@ -669,7 +669,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                           onSelect={that.optionsBySelectTitle} isDynamic={true} />
 
                           </div>
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="First Name" name="firstName"
                                    defaultValue={this.state.data.firstName} className="form-control float-label"
                                    id="cluster_name" onBlur={this.handleBlur} />
@@ -677,14 +677,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                          onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "principal")} />
                           </div>
 
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Last Name" name="lastName"
                                    defaultValue={this.state.data.lastName} className="form-control float-label"
                                    id="cluster_name" onBlur={this.handleBlur} />
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
                                          onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "principal")} />
                           </div>
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Designation" name="designation"
                                    defaultValue={this.state.data.designation}
                                    className="form-control float-label" onBlur={this.handleBlur} />
@@ -819,7 +819,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
                           {/*</div>*/}
 
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="First Name" name="firstName"
                                    defaultValue={this.state.data.firstName} className="form-control float-label"
                                    id="cluster_name" onBlur={this.handleBlur} />
@@ -827,7 +827,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                          onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "team")} />
                           </div>
 
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Last Name" name="lastName"
                                    defaultValue={this.state.data.lastName} className="form-control float-label"
                                    id="cluster_name" onBlur={this.handleBlur} />
@@ -835,7 +835,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                          onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "team")} />
                           </div>
 
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" placeholder="Designation" name="designation"
                                    defaultValue={this.state.data.designation}
                                    className="form-control float-label" onBlur={this.handleBlur} />

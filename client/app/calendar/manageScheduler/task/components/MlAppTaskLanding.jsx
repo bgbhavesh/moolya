@@ -37,7 +37,6 @@ class MlAppTaskLanding extends Component {
     var response;
     this.errorMsg = '';
 
-    console.log('send=', this.state);
     if (this.state.currentComponent === 0) {
       if (!sendData || !this.state.saveType) {
         this.errorMsg = 'No changes to save';
@@ -97,10 +96,19 @@ class MlAppTaskLanding extends Component {
     if (this.state.currentComponent === 1) {
       if (sendData.session && sendData.session.length) {
         let showError = true;
+        let durationError=false;
         for (let i = 0; i < sendData.session.length; i++) {
           if (sendData.session[i].activities && sendData.session[i].activities.length) {
             showError = false;
           }
+          if(!sendData.session[i].duration || (!sendData.session[i].duration.hours&&!sendData.session[i].duration.minutes)){
+            durationError=true;
+          }
+        }
+        if (durationError) {
+          this.errorMsg = 'Select validate duration';
+          toastr.error(this.errorMsg);
+          return false;
         }
         if (showError) {
           this.errorMsg = 'Select atleast one activity';

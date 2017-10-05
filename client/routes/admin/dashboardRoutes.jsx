@@ -164,24 +164,24 @@ adminSection.route('/dashboard/:clusterId/:chapterId/communities', {
 adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/:clusterId/:chapterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/:clusterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });

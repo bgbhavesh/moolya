@@ -87,10 +87,12 @@ export default class MlConnectionRequestPresentation extends React.Component {
                 <div className="clearfix" />
               </div>
               <div className="col-md-6">
+                { showAcceptAndReject ?
                 <div className="ml_btn">
                   {canAccept ? <a href="" className="save_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'accept')}>Accept</a>:""}
                   {canReject ? <a href="" className="cancel_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'reject')}>Reject</a>:""}
                 </div>
+                  : '' }
               </div>
             </div>
           </div>

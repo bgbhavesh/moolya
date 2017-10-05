@@ -150,8 +150,9 @@ export default class MlAppMemberDetails extends React.Component{
                   }
                 }
               `,
-    communityName = community ?  community.communityName : '';
-    communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
+    communityName = community ?  community.communityName : ' ';
+    //communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
+    communityName =  this.state.memberInfo.isPrincipal ? 'Principal': communityName ;
     return (
       <div>
         <div className="investement-view-content">
@@ -255,7 +256,12 @@ export default class MlAppMemberDetails extends React.Component{
                 <a href="" onClick={()=>this.unFreezeUser()} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Unfreeze</a>
           }
 
-          <a href="" onClick={()=>this.updateMemberFlags('isPrincipal')} className={ isView || that.state.memberInfo.isPrincipal ? "disabled mlUpload_btn" : "mlUpload_btn" }>Make Principal</a>
+          {
+            that.state.memberInfo.isPrincipal ? ''
+              : <a href="" onClick={() => this.updateMemberFlags('isPrincipal')}
+                 className={isView || that.state.memberInfo.isPrincipal ? "disabled mlUpload_btn" : "mlUpload_btn"}>Make
+                Principal</a>
+          }
           <a href="" onClick={()=>that.setState({modalOpen:true})} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Retire</a>
         </div>
 

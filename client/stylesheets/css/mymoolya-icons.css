@@ -14,6 +14,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.my-ml-holiday:before {
+  content: "\ea06";
+}
+.my-ml-travel:before {
+  content: "\ea07";
+}
 .my-ml-add_user:before {
   content: "\e9fa";
 }

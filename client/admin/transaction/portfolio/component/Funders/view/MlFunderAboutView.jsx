@@ -86,12 +86,6 @@ export default class MlFunderAboutView extends React.Component{
           <div>
             <h2>About Us</h2>
             <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
                 <div className="col-md-6 nopadding-left">
                       <div className="form_bg">
                         <form>
@@ -172,11 +166,11 @@ export default class MlFunderAboutView extends React.Component{
                             <div className="panel-heading"> Investment Budget Per Year:</div>
 
                             <div className="panel-body">
-                              <div className="form-group">
+                              <div className="form-group col-md-6 nomargin-bottom nopadding-left">
                                 <input type="text" placeholder="From" name="from" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isFromPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isFromPrivate?this.state.data.investmentBudget.isFromPrivate:""}/>
                               </div>
-                              <div className="form-group">
+                              <div className="form-group col-md-6 nomargin-bottom nopadding-right">
                                 <input type="text" placeholder="To" name="to" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.to?this.state.data.investmentBudget.to:""} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isToPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isToPrivate?this.state.data.investmentBudget.isToPrivate:""}/>
                               </div>
@@ -241,7 +235,6 @@ export default class MlFunderAboutView extends React.Component{
                       </div>
                 </div>
               <br className="brclear"/>
-                </ScrollArea>
             </div>
           </div>
         )}

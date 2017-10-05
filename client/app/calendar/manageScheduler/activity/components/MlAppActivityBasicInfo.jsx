@@ -127,9 +127,14 @@ export default class MlAppBasicInfo extends React.Component {
    * @returns Void
    */
   updateDuration(evt, type) {
-    if (evt.target.value >= 0) {
+    let value=Number.parseInt(evt.target.value);
+    if(value >59 && type ==='minutes'){
+      return;
+    }
+
+    if (value >= 0) {
       let data = this.state.basicData;
-      data.duration[type] = evt.target.value;
+      data.duration[type] = value;
       this.setState({
         isDataChanged: true, basicData: data
       }, () => {
@@ -398,12 +403,12 @@ export default class MlAppBasicInfo extends React.Component {
                 </div>
                 <div className="form-group">
                   <label>Duration: &nbsp;</label>
-                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : ''} className="form-control inline_input" />
+                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : ''} className="form-control inline_input" pattern="[0-9]" min={0}/>
                     Hours
 
 
 
-                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : ''} className="form-control inline_input" />
+                      <input type="Number" onChange={(evt) => that.updateDuration(evt, 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : ''} className="form-control inline_input"  max={59} min={0}/>
                     Mins
 
                 </div>

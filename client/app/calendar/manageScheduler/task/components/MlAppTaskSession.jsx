@@ -104,7 +104,10 @@ export default class MlAppTaskSession extends Component {
 
   handelBlur(id, e) {
     let name = e.target.name;
-    var value = e.target.value
+    let value = Number.parseInt(e.target.value);
+
+    if(name === 'minutes'&& value>59) return;
+
     let data = this.state.sessionData
     let cloneBackUp = _.cloneDeep(data);
     let specificData = cloneBackUp[id]
@@ -159,7 +162,6 @@ export default class MlAppTaskSession extends Component {
   addActivity(activity, index) {
     let sessionData = this.state.sessionData;
     // sessionData[index].activities = (new Array(sessionData[index].activities))[0];
-    console.log(sessionData);
     const that = this;
     sessionData[index].activities.push(activity.value);
     sessionData[index].isOffline = this.isOfflineSession(sessionData[index].activities);
@@ -223,9 +225,9 @@ export default class MlAppTaskSession extends Component {
                     <div className="col-md-3 nopadding">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
                     <div className="col-md-3 nopadding">
                       <div style={{ 'marginTop': '-4px' }}>
-                        <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Hours
+                        <label>Duration: &nbsp; <input type="Number" pattern="[0-9]" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min={0} /> Hours
                         <input
-                            type="Number" className="form-control inline_input" key={session.duration ? 'snotLoadedYetMin' : 'sloadedMin'} name="minutes" value={session.duration ? session.duration.minutes : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Mins </label>
+                            type="Number" pattern="[0-9]" className="form-control inline_input" key={session.duration ? 'snotLoadedYetMin' : 'sloadedMin'} name="minutes" value={session.duration ? session.duration.minutes : 0} onChange={that.handelBlur.bind(that, id)} min={0}  max={59} /> Mins </label>
                       </div>
                     </div>
                     <div className="col-md-3">

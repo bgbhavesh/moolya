@@ -333,7 +333,7 @@ export default class MlComapanyLookingFor extends Component {
                             <Moolyaselect multiSelect={false} placeholder="Select Looking For"
                                           className="form-control float-label" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={query}
-                                          isDynamic={true}
+                                          isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
                                           selectedValue={this.state.selectedVal}/>

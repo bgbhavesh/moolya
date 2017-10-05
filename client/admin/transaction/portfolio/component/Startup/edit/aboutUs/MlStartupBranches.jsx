@@ -371,13 +371,13 @@ class MlStartupBranches extends React.Component{
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isPhoneNumberPrivate" defaultValue={this.state.data.isPhoneNumberPrivate} onClick={this.onLockChange.bind(this, "branchPhoneNumber", "isPhoneNumberPrivate")}/>
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-group mandatory">
                           <input type="text" name="branchAddress1" placeholder="Flat/House/Floor/Building" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress1} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressOnePrivate" defaultValue={this.state.data.isAddressOnePrivate} onClick={this.onLockChange.bind(this, "branchAddress1", "isAddressOnePrivate")}/>
                         </div>
 
 
-                        <div className="form-group">
+                        <div className="form-group mandatory">
                           <input type="text" name="branchAddress2" placeholder="Colony/Street/Locality" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressTwoPrivate" defaultValue={this.state.data.isAddressTwoPrivate} onClick={this.onLockChange.bind(this, "branchAddress2", "isAddressTwoPrivate")}/>
                         </div>
@@ -400,13 +400,13 @@ class MlStartupBranches extends React.Component{
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} ref="state" className="form-control float-label"
                                         valueKey={'value'} labelKey={'label'} placeholder="State" queryOptions={statesOption}
-                                        selectedValue={this.state.stateId} queryType={"graphql"} query={statesQuery}
+                                        selectedValue={this.state.stateId} queryType={"graphql"} query={statesQuery} mandatory={true}
                                         isDynamic={true}  onSelect={this.onOptionSelectedStates.bind(this)}/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} ref="town" className="form-control float-label"
                                         valueKey={'value'} labelKey={'label'} placeholder="Town/City" queryOptions={citiesOption}
-                                        selectedValue={this.state.cityId} queryType={"graphql"} query={citiesQuery}
+                                        selectedValue={this.state.cityId} queryType={"graphql"} query={citiesQuery} mandatory={true}
                                         isDynamic={true}  onSelect={this.onOptionSelectedCities.bind(this)}/>
                         </div>
                         {displayUploadButton?<div className="form-group">

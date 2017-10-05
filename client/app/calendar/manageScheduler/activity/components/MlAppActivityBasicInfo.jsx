@@ -357,7 +357,7 @@ export default class MlAppBasicInfo extends React.Component {
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input className="form-control float-label" placeholder="Activity Name" value={(that.state.basicData.name ? that.state.basicData.name : '')} onChange={this.textFieldSaves.bind(that, "name")} />
                 </div>
                 <div className="form-group">
@@ -381,7 +381,7 @@ export default class MlAppBasicInfo extends React.Component {
                 </div>
                 <div className="form-group">
                   <span className="placeHolder active">Conversation type</span>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <Select name="form-field-name"
                       multi={true}
                       disabled={that.state.basicData.mode !== 'online'}
@@ -413,7 +413,7 @@ export default class MlAppBasicInfo extends React.Component {
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input className="form-control float-label" placeholder="Display Name" value={that.state.basicData.displayName} onChange={that.textFieldSaves.bind(that, "displayName")} />
                 </div>
                 <br className="brclear" />
@@ -486,7 +486,7 @@ export default class MlAppBasicInfo extends React.Component {
                     <FontAwesome name='minus-square' hidden={index == 0} onClick={that.removeDeliverables.bind(that, index)} />
                   </span>
                 </div>
-                <div className="panel-body">
+                <div className="panel-body mandatory">
                   <textarea className="form-control" value={data} onChange={(evt) => that.deliverableData(evt, index)}></textarea>
                 </div>
               </div>

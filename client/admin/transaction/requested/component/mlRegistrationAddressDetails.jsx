@@ -95,9 +95,9 @@ export default class AddressDetails extends React.Component{
         addressLocality : {$set: this.refs["addressLocality"+index].value},
         addressLandmark : {$set: this.refs["addressLandmark"+index].value},
         addressArea : {$set: this.refs["addressArea"+index].value},
-        addressCity : {$set: this.refs["addressCity"+index].value},
-        addressState : {$set: this.refs["addressState"+index].value},
         addressCountry : {$set: this.refs["addressCountry"+index].value},
+        addressState : {$set: this.refs["addressState"+index].value},
+        addressCity : {$set: this.refs["addressCity"+index].value},
         addressPinCode : {$set: this.refs["addressPinCode"+index].value}
       });
 
@@ -266,9 +266,9 @@ export default class AddressDetails extends React.Component{
     refs.push(this.refs["addressLocality"])
     refs.push(this.refs["addressLandmark"])
     refs.push(this.refs["addressArea"])
-    refs.push(this.refs["addressCity"])
     refs.push(this.refs["addressCountry"])
     refs.push(this.refs["addressState"])
+    refs.push(this.refs["addressCity"])
     refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressPinCode"])
     let ret = mlFieldValidations(refs)
@@ -367,9 +367,9 @@ export default class AddressDetails extends React.Component{
         refs.push(this.refs["addressLocality" + index])
         refs.push(this.refs["addressLandmark" + index])
         refs.push(this.refs["addressArea" + index])
-        refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["addressCountry" + index])
         refs.push(this.refs["addressState" + index])
+        refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressPinCode" + index])
         let ret = mlFieldValidations(refs)
@@ -443,9 +443,9 @@ export default class AddressDetails extends React.Component{
     this.refs["addressLocality"+index].value = "";
     this.refs["addressLandmark"+index].value = "";
     this.refs["addressArea"+index].value = "";
-    this.refs["addressCity"+index].value = "";
-    this.refs["addressState"+index].value = "";
     this.refs["addressCountry"+index].value = "";
+    this.refs["addressState"+index].value = "";
+    this.refs["addressCity"+index].value = "";
     this.refs["addressPinCode"+index].value = "";
 
   }
@@ -618,10 +618,6 @@ export default class AddressDetails extends React.Component{
                     <input type="text" ref={'addressArea' + key} placeholder="Area" name ={'addressArea'}
                            className="form-control float-label" id="" defaultValue={options.addressArea}/>
                   </div>
-                  <div className="form-group mandatory">
-                    <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}
-                           className="form-control float-label" id="" defaultValue={options.addressCity} data-required={true} data-errMsg="Town/City is required"/>
-                  </div>
                 {/*  <div className="form-group mandatory">
                     <input type="text" ref={'addressState' + key} placeholder="State" name ={'addressState'}
                            className="form-control float-label" id="" defaultValue={options.addressState}  data-required={true} data-errMsg="State is required"/>
@@ -648,6 +644,11 @@ export default class AddressDetails extends React.Component{
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                                 onSelect={that.stateUpdateOptions.bind(that,key)} queryOptions={statesOption}
                                 isDynamic={true} data-required={true} data-errMsg="State is required"/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}
+                           className="form-control float-label" id="" defaultValue={options.addressCity} data-required={true} data-errMsg="Town/City is required"/>
+                  </div>
+
                   <div className="form-group mandatory">
                     <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
                            className="form-control float-label" id="" defaultValue={options.phoneNumber} data-required={true} data-errMsg="Phone Number is required" />

@@ -271,7 +271,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
                           <div className="col-md-12">
                             <div className="form-group">
                               <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
-                                            labelKey={'label'} queryType={"graphql"} query={industriesquery}
+                                            labelKey={'label'} queryType={"graphql"} query={industriesquery} mandatory={true}
                                             isDynamic={true} placeholder="Select Industry.."
                                             onSelect={this.onOptionSelectedIndustry.bind(this)}
                                             selectedValue={this.state.selectedVal}/>

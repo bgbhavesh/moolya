@@ -24,6 +24,7 @@ import MlAdminHeader from "../../admin/layouts/header/MlAdminHeader";
 import {getAdminUserContext} from "../../commons/getAdminUserContext";
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
+import MlPortfolio from '../../admin/transaction/portfolio/component/commons/MlPortfolio'
 
 adminSection.route('/dashboard', {
   triggersEnter: [function (context, redirect) {
@@ -123,6 +124,16 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
       adminContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
                              listConfig={mlCommunityDashboardListConfig} params={params}/>
+    })
+  }
+});
+
+adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });

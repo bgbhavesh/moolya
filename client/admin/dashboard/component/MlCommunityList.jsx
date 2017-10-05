@@ -83,28 +83,37 @@ export default class MlCommunityList extends Component {
     let chapterId = this.props.config.params&&this.props.config.params.chapterId?this.props.config.params.chapterId:"";
     let subChapterId = this.props.config.params&&this.props.config.params.subChapterId?this.props.config.params.subChapterId:"";
     var icon = "";
+    var type = ""
     const list=  data.map(function(prop, idx){
 
-     if(prop.communityCode == "IDE")
-       icon = "ideator"
-     else if(prop.communityCode == "FUN")
-        icon = "funder"
-     else if(prop.communityCode == "STU")
-       icon = "startup"
-     else if(prop.communityCode == "CMP")
-       icon = "company"
-     else if(prop.communityCode == "SPS")
-       icon = "users"
-     else if(prop.communityCode == "INS")
-       icon = "institutions"
-     else if(prop.profile.isInternaluser)
+     if(prop.communityCode == "IDE"){
+       icon = "ideator"; type = "ideator"
+     }
+     else if(prop.communityCode == "FUN"){
+       icon = "funder"; type = "funder"
+     }
+     else if(prop.communityCode == "STU"){
+       icon = "startup"; type = "startup"
+     }
+     else if(prop.communityCode == "CMP"){
+       icon = "company"; type = "company"
+     }
+     else if(prop.communityCode == "SPS"){
+       icon = "users"; type = "serviceProviders"
+     }
+     else if(prop.communityCode == "INS"){
+       icon = "institutions"; type = "institutions"
+     }
+     else if(prop.profile.isInternaluser){
        icon = "moolya-symbol"
+     }
+
 
       return (
         <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
 
           <div className="ideators_list_block">
-            <a href={prop.profile.isInternaluser?dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId, prop._id):""}>
+            <a href={prop.profile.isInternaluser?dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId, prop._id):dashboardRoutes.externalUserRoute(clusterId,chapterId,subChapterId, type, prop.portfolioId)}>
             <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>{`${prop.profile.isActive?"active":"inactive"}`}</span></div>
             <h3>{prop.name}</h3>
             {/*<span className={`ml2 ml-${icon}`}></span>*/}

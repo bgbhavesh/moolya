@@ -29,6 +29,9 @@ const dashboardRoutes = {
       return `/admin/dashboard/communities/${backendUserId}/backendUserDetails`;
     }
   },
+  externalUserRoute:(clusterId, chapterId, subChapterId, communityType, portfolioId,route)=>{
+    return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/${communityType}/${portfolioId}`
+  }
 }
 
 export default dashboardRoutes;

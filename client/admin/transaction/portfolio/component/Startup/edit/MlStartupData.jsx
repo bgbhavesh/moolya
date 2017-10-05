@@ -69,7 +69,7 @@ export default class MlStartupData extends React.Component{
   async removeDataDocument(type,fileUrl){
     if(type && fileUrl){
       let portfolioDetailsId = this.props.portfolioDetailsId;
-      const resp = await removePortfolioDataFile(portfolioDetailsId , "Startups", fileUrl, true, type, this.props.client);
+      const resp = await removePortfolioDataFile(portfolioDetailsId , fileUrl, "data", type);
       this.fetchPortfolioData();
     }
   }

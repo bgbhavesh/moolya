@@ -132,7 +132,7 @@ let portfolioSchema = `
           requestForGoLive(portfoliodetailsId:String):response
           updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
           removeIdetaorProfilePic(portfoliodetailsId:String):response
-          removePortfolioDataFile(portfoliodetailsId:String,communityType:String,fileUrl:String,isData:Boolean,typeOfData:String):response
+          removePortfolioDataFile(portfoliodetailsId:String,fileUrl:String,tabName:String,typeOfData:String):response
           
     }
 `

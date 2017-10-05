@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary,removePortfolioDataFile} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchStartupPortfolioData} from '../../../actions/findPortfolioStartupDetails'
 
 
@@ -19,10 +19,9 @@ export default class MlStartupData extends React.Component{
 
   }
 
-  componentWillMount() {
-    const resp = this.fetchPortfolioData()
-    return resp
-    // console.log('---response from server---',resp)
+  async componentWillMount() {
+    this.fetchPortfolioData()
+    console.log('---response from server---',resp)
   }
   async fetchPortfolioData(){
     const resp = await fetchStartupPortfolioData(this.props.portfolioDetailsId,this.props.client)
@@ -67,6 +66,13 @@ export default class MlStartupData extends React.Component{
     //   toastr.error("Please select a Document Format")
     // }
   }
+  async removeDataDocument(type,fileUrl){
+    if(type && fileUrl){
+      let portfolioDetailsId = this.props.portfolioDetailsId;
+      const resp = await removePortfolioDataFile(portfolioDetailsId , "Startups", fileUrl, true, type, this.props.client);
+      this.fetchPortfolioData();
+    }
+  }
 
 
   onFileUploadCallBack(type, file, resp) {
@@ -94,12 +100,14 @@ export default class MlStartupData extends React.Component{
 
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
+    let that=this;
     switch(type){
       case 'balanceSheet':
         if(data) {
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"balanceSheet",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -113,6 +121,7 @@ export default class MlStartupData extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"profitAndLoss",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -126,6 +135,7 @@ export default class MlStartupData extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"quaterlyReport",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -139,6 +149,7 @@ export default class MlStartupData extends React.Component{
          const display = data.map(function(docs){
           return(
             <div className="thumbnail">
+              <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"yearlyReport",docs.fileUrl)}/>
               <img src={docs.fileUrl} style={{'width':'100px'}} />
               <div id="images" className="title">{docs.fileName}</div>
             </div>
@@ -152,6 +163,7 @@ export default class MlStartupData extends React.Component{
         const display = data.map(function(docs){
           return(
             <div className="thumbnail">
+              <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"halfYearlyReport",docs.fileUrl)}/>
               <img src={docs.fileUrl} style={{'width':'100px'}} />
               <div id="images" className="title">{docs.fileName}</div>
             </div>
@@ -165,6 +177,7 @@ export default class MlStartupData extends React.Component{
         const display = data.map(function(docs){
           return(
             <div className="thumbnail">
+              <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"annualReport",docs.fileUrl)} />
               <img src={docs.fileUrl} style={{'width':'100px'}} />
               <div id="images" className="title">{docs.fileName}</div>
             </div>
@@ -178,6 +191,7 @@ export default class MlStartupData extends React.Component{
         const display = data.map(function(docs){
           return(
             <div className="thumbnail">
+              <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"cashFlow",docs.fileUrl)}/>
               <img src={docs.fileUrl} style={{'width':'100px'}} />
               <div id="images" className="title">{docs.fileName}</div>
             </div>
@@ -191,6 +205,7 @@ export default class MlStartupData extends React.Component{
         const display = data.map(function(docs){
           return(
             <div className="thumbnail">
+              <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"shareHoldings",docs.fileUrl)}/>
               <img src={docs.fileUrl} style={{'width':'100px'}} />
               <div id="images" className="title">{docs.fileName}</div>
             </div>
@@ -204,6 +219,7 @@ export default class MlStartupData extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"capitalStructure",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -217,6 +233,7 @@ export default class MlStartupData extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"ratio",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -234,8 +251,8 @@ export default class MlStartupData extends React.Component{
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
           <div className="main_wrap_scroll">
-            <div className="col-md-6 col-sm-6 nopadding-left">
-              <div className="panel panel-default panel-form-view">
+            <div className="col-md-6 col-sm-6 nopadding-left library-wrap">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Balance Sheet
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -247,7 +264,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('balanceSheet')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Quaterly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -259,7 +276,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('quaterlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Yearly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -271,7 +288,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('yearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Half Yearly Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -283,7 +300,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('halfYearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Annual Report
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -296,8 +313,8 @@ export default class MlStartupData extends React.Component{
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-sm-6 nopadding-right">
-              <div className="panel panel-default panel-form-view">
+            <div className="col-md-6 col-sm-6 nopadding-right library-wrap">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Profit and Loss
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -309,7 +326,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('profitAndLoss')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Cash Flow
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -321,7 +338,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('cashFlow')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Share Holdings
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -333,7 +350,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('shareHoldings')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Capital Structure
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -345,7 +362,7 @@ export default class MlStartupData extends React.Component{
                   {this.loopingTheUploadedData('capitalStructure')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Ratio
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">

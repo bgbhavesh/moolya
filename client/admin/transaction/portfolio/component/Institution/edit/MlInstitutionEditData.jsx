@@ -1,9 +1,9 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary,removePortfolioDataFile} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
 import ScrollArea from "react-scrollbar";
-
+var FontAwesome = require('react-fontawesome');
 
 export default class MlInstitutionEditData extends React.Component{
   constructor(props){
@@ -103,7 +103,13 @@ export default class MlInstitutionEditData extends React.Component{
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
-
+  async removeDataDocument(type,fileUrl){
+    if(type && fileUrl){
+      let portfolioDetailsId = this.props.portfolioDetailsId;
+      const resp = await removePortfolioDataFile(portfolioDetailsId , "Institutions", fileUrl, true, type, this.props.client);
+      this.fetchPortfolioData();
+    }
+  }
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
     switch(type){
@@ -112,6 +118,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"balanceSheet",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -125,6 +132,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"profitAndLoss",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -138,6 +146,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"quaterlyReport",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -151,6 +160,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"yearlyReport",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -164,6 +174,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"halfYearlyReport",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -177,6 +188,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"annualReport",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -190,6 +202,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"cashFlow",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -203,6 +216,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"shareHoldings",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -216,6 +230,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"capitalStructure",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -229,6 +244,7 @@ export default class MlInstitutionEditData extends React.Component{
           const display = data.map(function(docs, id){
             return(
               <div className="thumbnail" key={id}>
+                <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"ratio",docs.fileUrl)}/>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -251,8 +267,8 @@ export default class MlInstitutionEditData extends React.Component{
               className="main_wrap_scroll"
               smoothScrolling={true}
               default={true}>
-            <div className="col-md-6 col-sm-6 nopadding-left">
-              <div className="panel panel-default panel-form-view">
+            <div className="col-md-6 col-sm-6 nopadding-left library-wrap">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Balance Sheet
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -264,7 +280,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('balanceSheet')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Quaterly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -276,7 +292,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('quaterlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Yearly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -288,7 +304,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('yearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Half Yearly Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -300,7 +316,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('halfYearlyReport')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Annual Report
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -313,8 +329,8 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-sm-6 nopadding-right">
-              <div className="panel panel-default panel-form-view">
+            <div className="col-md-6 col-sm-6 nopadding-right library-wrap">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Profit and Loss
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -326,7 +342,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('profitAndLoss')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Cash Flow
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -338,7 +354,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('cashFlow')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Share Holdings
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -350,7 +366,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('shareHoldings')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Capital Structure
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -362,7 +378,7 @@ export default class MlInstitutionEditData extends React.Component{
                   {this.loopingTheUploadedData('capitalStructure')}
                 </div>
               </div>
-              <div className="panel panel-default panel-form-view">
+              <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Ratio
                   {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">

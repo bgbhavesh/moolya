@@ -542,3 +542,62 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
     return portfolio;
   }
 }
+
+MlResolver.MlMutationResolver['removePortfolioDataFile'] = (obj, args, context, info) => {
+  let response
+  if(args.portfoliodetailsId) {
+    switch (args.communityType) {
+      case "Startups":
+          if (args.isData) {
+            let startupPortfolioData = MlStartupPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+            if (startupPortfolioData && startupPortfolioData.data) {
+              var index = startupPortfolioData.data[args.typeOfData].findIndex(function (d) {
+                if (d.fileUrl === args.fileUrl) {
+                  return d
+                }
+              })
+              if (index >= 0) {
+                startupPortfolioData.data[args.typeOfData].splice(index, 1);
+                response = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, startupPortfolioData, {$set: true}, context)
+                return response
+              }
+            }
+          }
+          break;
+      case "Companies":
+        if (args.isData) {
+          let companyPortfolioData = MlCompanyPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (companyPortfolioData && companyPortfolioData.data) {
+            var index = companyPortfolioData.data[args.typeOfData].findIndex(function (d) {
+              if (d.fileUrl === args.fileUrl) {
+                return d
+              }
+            })
+            if (index >= 0) {
+              companyPortfolioData.data[args.typeOfData].splice(index, 1);
+              response = mlDBController.update('MlCompanyPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, companyPortfolioData, {$set: true}, context)
+              return response
+            }
+          }
+        }
+        break;
+      case "Institutions":
+        if (args.isData) {
+          let institutionPortfolioData = MlInstitutionPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (institutionPortfolioData && institutionPortfolioData.data) {
+            var index = companyPortfolioData.data[args.typeOfData].findIndex(function (d) {
+              if (d.fileUrl === args.fileUrl) {
+                return d
+              }
+            })
+            if (index >= 0) {
+              institutionPortfolioData.data[args.typeOfData].splice(index, 1);
+              response = mlDBController.update('MlInstitutionPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, institutionPortfolioData, {$set: true}, context)
+              return response
+            }
+          }
+        }
+        break;
+    }
+  }
+}

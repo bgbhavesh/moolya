@@ -316,7 +316,6 @@ class MlStartupClients extends React.Component{
 MlStartupClients.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
-
 // const mapStateToProps = (state, ownProps) => {
 //   return {
 //     keys: state.mlStartupEditTemplateReducer.privateKeys

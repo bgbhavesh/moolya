@@ -9,6 +9,7 @@ export async function fetchAllTaskActionHandler(profileId) {
       fetchTasks(profileId: $profileId) {
         taskId: _id
         displayName
+        isActive
       }
     }
     `,

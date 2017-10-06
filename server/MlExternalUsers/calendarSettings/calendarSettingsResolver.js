@@ -28,7 +28,36 @@ MlResolver.MlQueryResolver['fetchMyCalendarSetting'] = (obj, args, context, info
     let response = new MlRespPayload().errorPayload(result, code);
     return response;
   }
-  return mlDBController.findOne('MlCalendarSettings', { userId: userId, profileId: profileId }, context);
+  let result = mlDBController.findOne('MlCalendarSettings', { userId: userId, profileId: profileId }, context);
+  let pipeline = [
+    {
+      "$match": {
+        "startDate": { "$gte": new Date() },
+        "$or": [
+          { "provider.profileId": profileId },
+          { "client.profileId": profileId }
+        ]
+      }
+    },
+    {
+      "$group": {
+        _id: { $dayOfWeek: "$startDate" },
+        ids: { "$push": "$appointmentId" }
+      }
+    },
+    {
+      "$unwind": "$ids"
+    },
+    {
+      "$group": {
+        _id: null,
+        ids: { "$push": "$ids" }
+      }
+    },
+  ];
+  let appointmentData = mlDBController.aggregate('MlAppointments', pipeline, context);
+  result.hasAppointment = appointmentData && appointmentData.length ? true : false;
+  return result;
 
 };
 

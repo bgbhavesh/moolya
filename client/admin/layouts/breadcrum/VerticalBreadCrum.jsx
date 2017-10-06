@@ -68,14 +68,13 @@ export default class VerticalBreadCrum extends Component {
 
         if(breadCrum.type === 'documents' && breadCrum.document){
           let breadCrumObject=[];
-          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
-            breadCrumObject.push({
-              linkName: properName((FlowRouter._current.oldRoute.path.split('documents/')[1]).split('List')[0]), linkId: breadCrum.type,linkUrl :FlowRouter._current.oldRoute.path
-            });
-          }
+          breadCrumObject.push({
+            linkName: 'Cluster',
+            linkUrl :path.split('/documents')[0]+'/documents/clusterList',
+          });
 
           breadCrumObject.push({
-            linkName: properName(FlowRouter.getParam('docid')), linkId: 'module'
+            linkName: properName(FlowRouter.getParam('docid')), linkUrl: ''
           });
 
           this.setBreadCrumHierarchyCallback(

@@ -109,19 +109,19 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
     return tabs;
   }
 
-  getIdeatorDetails(details, privateKey) {
+  getIdeatorDetails(details, privateKey, requiredFields) {
     let data = this.state.ideatorPortfolio;
     data['portfolioIdeatorDetails'] = details;
     this.setState({ideatorPortfolio: data})
-    this.props.getPortfolioDetails({ideatorPortfolio: this.state.ideatorPortfolio}, privateKey);
+    this.props.getPortfolioDetails({ideatorPortfolio: this.state.ideatorPortfolio}, privateKey, requiredFields);
   }
 
-  getIdeas(details, privateKey) {
+  getIdeas(details, privateKey, requiredFields) {
     var data = this.state.idea;
     data = details;
     this.setState({idea: data})
     let updateItem = _.omit(data, 'ideaImage');
-    this.props.getIdeatorIdeaDetails(updateItem, privateKey);
+    this.props.getIdeatorIdeaDetails(updateItem, privateKey, requiredFields);
   }
 
   getProblemSolution(details, privateKey) {

@@ -111,6 +111,7 @@ export default class MlInstitutionCompanyReview extends React.Component{
     this.refs["rofYear"+index].state.inputValue = ""
     this.refs["rofValue"+index].value = ""
     this.refs["rofAbout"+index].value = ""
+    this.setState({data : {}})
 
   }
 

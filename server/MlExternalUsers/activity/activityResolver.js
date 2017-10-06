@@ -72,6 +72,22 @@ MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {
   if (args.Details) {
+    let name = args.Details.name;
+    let displayName = args.Details.displayName;
+    let profileId = args.Details.profileId;
+    let activity = mlDBController.findOne('MlActivity', { profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+    if(activity) {
+      let code = 400;
+      let response;
+      if(activity.name == name){
+        // response = new MlRespPayload().errorPayload('Activity already exists', code)
+        response = new MlRespPayload().errorPayload('Activity name already exists', code)
+      } else {
+       response = new MlRespPayload().errorPayload('Activity display name already exists', code)
+      }
+      return response
+    }
+
     args.Details.userId = context.userId;
     args.Details.isCurrentVersion = true;
     args.Details.createdAt = new Date();
@@ -117,6 +133,23 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
       //args.Details = _.cloneDeep(activity);
     }
     args.Details = _.cloneDeep(activity); */
+
+    let name = args.Details.name;
+    let displayName = args.Details.displayName;
+    let profileId = args.Details.profileId;
+    let activity = mlDBController.findOne('MlActivity', { transactionId:{$ne: oldActiveActivity.transactionId }, profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+    if(activity) {
+      let code = 400;
+      let response;
+      if(activity.name == name){
+        // response = new MlRespPayload().errorPayload('Activity already exists', code)
+        response = new MlRespPayload().errorPayload('Activity name already exists', code)
+      } else {
+        response = new MlRespPayload().errorPayload('Activity display name already exists', code)
+      }
+      return response
+    }
+
     oldActiveActivity.isCurrentVersion = false;
     let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
     args.Details.isCurrentVersion = true;

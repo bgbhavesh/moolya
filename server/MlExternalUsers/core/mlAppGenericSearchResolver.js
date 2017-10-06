@@ -1501,7 +1501,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         isListView = query.isListView;
       }
 
-      if(isDefaultSubChapter){
+      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView){
           if(isListView && query.bounds){
             var bounds = query.bounds;
             var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
@@ -1634,7 +1634,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       }
 
 
-      if(isDefaultSubChapter){
+      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView){
           // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
           if(isListView && bounds && query.viewMode){
             var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
@@ -1745,7 +1745,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
               var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
               pipeLine = [
-                {$match:{$or:[{isDefaultSubChapter:true, chapterId:userSubChapter.chapterId, isActive:true}, {_id:userSubChapterId, isActive:true, chapterId:chapterId}]}},
+                {$match:{$or:[{isDefaultSubChapter:true, chapterId:chapterId, isActive:true}, {_id:userSubChapterId, isActive:true, chapterId:chapterId}]}},
                 {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
@@ -1781,7 +1781,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
             }else{
               pipeLine = [
-                {$match:{$or:[{isDefaultSubChapter:true, chapterId:userSubChapter.chapterId, isActive:true}, {_id:userSubChapterId, isActive:true, chapterId:chapterId}]}},
+                {$match:{$or:[{isDefaultSubChapter:true, chapterId:chapterId, isActive:true}, {_id:userSubChapterId, isActive:true, chapterId:chapterId}]}},
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
@@ -1811,7 +1811,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               var leftLng = bounds.nw && bounds.nw.lng ? bounds.nw.lng : null;
               var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
               pipeLine = [
-                {$match:{_id:userSubChapterId, isActive:true}},
+                {$match:{_id:userSubChapterId, isActive:true, chapterId:chapterId}},
                 {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
@@ -1846,7 +1846,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               subChapters = _.concat(subChapters, relatedSC)
             }else{
               pipeLine = [
-                {$match:{_id:userSubChapterId, isActive:true}},
+                {$match:{_id:userSubChapterId, isActive:true, chapterId:chapterId}},
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 

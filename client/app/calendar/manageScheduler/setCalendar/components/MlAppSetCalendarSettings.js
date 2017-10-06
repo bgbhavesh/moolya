@@ -52,7 +52,8 @@ export default class MlAppSetCalendarSettings extends React.Component {
       this.setState({
         primarySettings : primarySettings,
         timingInfo      : timingInfo,
-        vacations       : vacations
+        vacations       : vacations,
+        hasAppointment  : response.hasAppointment
       });
 
     }
@@ -60,9 +61,9 @@ export default class MlAppSetCalendarSettings extends React.Component {
 
   render(){
     const steps = [
-        {name: 'Primary', component: <MlAppSetCalendarPrimarySettings fetchCalendarSettings={this.fetchCalendarSettings} primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
-        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} fetchCalendarSettings={this.fetchCalendarSettings} />,icon:<span className="ml fa fa-plane"></span>},
+        {name: 'Primary', component: <MlAppSetCalendarPrimarySettings fetchCalendarSettings={this.fetchCalendarSettings} hasAppointment={this.state.hasAppointment} primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
+        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
+        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings} />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
       <div className="app_main_wrap">

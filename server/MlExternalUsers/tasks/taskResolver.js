@@ -36,6 +36,23 @@ MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
   if (args.taskDetails) {
+
+    let name = args.taskDetails.name;
+    let displayName = args.taskDetails.displayName;
+    let profileId = args.taskDetails.profileId;
+    let taskInfo = mlDBController.findOne('MlTask', { profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+    if(taskInfo) {
+      let code = 400;
+      let response;
+      if(taskInfo.name == name){
+        // response = new MlRespPayload().errorPayload('Activity already exists', code)
+        response = new MlRespPayload().errorPayload('Task name already exists', code)
+      } else {
+        response = new MlRespPayload().errorPayload('Task display name already exists', code)
+      }
+      return response
+    }
+
     orderNumberGenService.createTaskId(args.taskDetails);
     args.taskDetails.userId = context.userId;
     args.taskDetails.createdAt = new Date ();
@@ -44,7 +61,7 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
     let res = mlDBController.insert('MlTask', args.taskDetails, context)
     if (res) {
       let code = 200;
-      let result = res
+      let result = res;
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }
@@ -60,6 +77,22 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
     let oldTask = mlDBController.findOne('MlTask', {_id: args.taskId}, context);
     let task;
     if (oldTask) {
+      let name = args.taskDetails.name;
+      let displayName = args.taskDetails.displayName;
+      let profileId = args.taskDetails.profileId;
+      let taskInfo = mlDBController.findOne('MlTask', { transactionId:{$ne: oldTask.transactionId }, profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+      if(taskInfo) {
+        let code = 400;
+        let response;
+        if(taskInfo.name == name){
+          // response = new MlRespPayload().errorPayload('Activity already exists', code)
+          response = new MlRespPayload().errorPayload('Activity name already exists', code)
+        } else {
+          response = new MlRespPayload().errorPayload('Activity display name already exists', code)
+        }
+        return response
+      }
+
       let query = {
         transactionId: oldTask.transactionId,
         isCurrentVersion: true

@@ -50,6 +50,23 @@ class MlServiceCardRepo{
     createServiceCardDefinition(service, context){
         var result;
         try {
+
+            let name = service.name;
+            let displayName = service.displayName;
+            let profileId = service.profileId;
+            let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', { profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+            if(serviceInfo) {
+              let code = 400;
+              let response;
+              if(serviceInfo.name == name){
+                // response = new MlRespPayload().errorPayload('Activity already exists', code)
+                response = new MlRespPayload().errorPayload('Service name already exists', code)
+              } else {
+                response = new MlRespPayload().errorPayload('Service display name already exists', code)
+              }
+              return response
+            }
+
             var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName'];
             var serviceCard                 = service;
             serviceCard["createdAt"]        = new Date();
@@ -125,6 +142,22 @@ class MlServiceCardRepo{
         if(!service){
           return new MlRespPayload().errorPayload("Invalid Service Card", 400);
         }
+        let name = servicecard.name;
+        let displayName = servicecard.displayName;
+        let profileId = servicecard.profileId;
+        let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', { transactionId:{$ne: service.transactionId }, profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
+        if(serviceInfo) {
+          let code = 400;
+          let response;
+          if(serviceInfo.name == name){
+            // response = new MlRespPayload().errorPayload('Activity already exists', code)
+            response = new MlRespPayload().errorPayload('Service name already exists', code)
+          } else {
+            response = new MlRespPayload().errorPayload('Service display name already exists', code)
+          }
+          return response
+        }
+
 
         if(servicecard.tasks){
           let taskIds = servicecard.tasks.map(function (task) { return task.id; });

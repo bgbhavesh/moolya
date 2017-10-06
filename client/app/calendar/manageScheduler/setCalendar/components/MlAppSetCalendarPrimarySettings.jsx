@@ -141,11 +141,19 @@ class MlAppCalendarPrimarySettings extends React.Component {
 
   render() {
     const that = this;
+    console.log("props.primarySettings:",that.props.primarySettings);
     /**
      * Setting up action handler for activity different event
      */
-    let appActionConfig = [
-      {
+    let appActionConfig = [];
+    if( !that.props.hasAppointment ) {
+      appActionConfig.push({
+        showAction: true,
+        actionName: 'save',
+        handler: async (event) => that.props.handler(that.updateCalendarSetting.bind(this))
+      });
+    } else {
+      appActionConfig.push({
         showAction: true,
         actionName: 'save',
         hasPopOver: true,
@@ -155,8 +163,8 @@ class MlAppCalendarPrimarySettings extends React.Component {
         popOverComponent: <CalendarPopOver save={this.updateCalendarSetting.bind(this)} />,
         actionComponent: PopoverActionIcon,
         handler: this.portfolioShareHandler.bind(this),
-      }
-    ];
+      });
+    }
     export const genericPortfolioAccordionConfig = {
       id: 'portfolioAccordion',
       panelItems: [

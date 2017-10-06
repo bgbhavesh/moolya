@@ -50,6 +50,7 @@ let calendarSettingSlot=`
     appointmentCountPerSlots: Int
     slotBreakTime           : Int
     isOverlappingSchedule   : Int
+    hasAppointment          : Boolean
     workingDays             : [CalendarSettingWorkingDays]
     vacations               : [CalendarSettingVacation]
   }

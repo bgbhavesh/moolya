@@ -29,6 +29,20 @@ const dashboardRoutes = {
       return `/admin/dashboard/communities/${backendUserId}/backendUserDetails`;
     }
   },
+  externalUserRoute:(clusterId, chapterId, subChapterId, communityType, portfolioId,route)=>{
+    if(clusterId!="" && chapterId!="" && subChapterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/${communityType}/portfolio/${portfolioId}`;
+    }
+    else if(clusterId!="" && chapterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/${communityType}/portfolio/${portfolioId}`
+    }
+    else if(clusterId!=""){
+      return `/admin/dashboard/${clusterId}/${communityType}/portfolio/${portfolioId}`
+    }
+    else{
+      return `/admin/dashboard/${communityType}/portfolio/${portfolioId}`
+    }
+  }
 }
 
 export default dashboardRoutes;

@@ -1,22 +1,44 @@
 import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from '../actions/dynamicBreadCrumListHandler';
+import { fetchPortfolioImageHandler } from '../../portfolio/ideators/actions/ideatorActionHandler';
 
 export default class DynamicBreadcrum extends Component {
   constructor(props) {
     super(props);
-    this.state = { breadCrumList: [] };
+    this.state = { breadCrumList: [], toggle: 1};
     this.getHierarchyDetails.bind(this);
     this.setBreadCrumHierarchyCallback.bind(this);
     return this;
   }
 
+  renderBreadcrumb() {
+    this.getHierarchyDetails();
+    this.setState({ toggle: !this.state.toggle });
+  }
+
   componentDidMount() {
     this._isMounted = true;
+    this.context.breadCrum.subscribe(this.renderBreadcrumb.bind(this));
     this.getHierarchyDetails();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  componentWillMount(){
+    this.fetchNameToDisplay();
+  }
+
+  async fetchNameToDisplay() {
+    if (FlowRouter.getParam('portfolioId')) {
+      var response = await fetchPortfolioImageHandler(FlowRouter.getParam('portfolioId'));
+      if (response) {
+        this.setState({portfolioId:response.portfolioUserName});
+      }else{
+        this.setState({portfolioId:'User'});
+      }
+    }
   }
 
   setBreadCrumHierarchyCallback(list) {
@@ -31,11 +53,12 @@ export default class DynamicBreadcrum extends Component {
 
   getHierarchyDetails() {
     const params = FlowRouter.current().params;
-    getBreadCrumListBasedOnhierarchy( params, this.setBreadCrumHierarchyCallback.bind(this));
+    getBreadCrumListBasedOnhierarchy( params,this.state.portfolioId, this.setBreadCrumHierarchyCallback.bind(this));
   }
 
   render() {
     let counter = 0;
+    let that =this;
     const linksLength = this.state.breadCrumList.length;
     const list = this.state.breadCrumList.map((prop, id) => {
       ++counter;
@@ -44,8 +67,10 @@ export default class DynamicBreadcrum extends Component {
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
+      var name = prop.linkName;
+      if(name === 'User') name = that.state.portfolioId;
       return (<li key={id} className={lastLinkClass}>
-        <a href={linkUrl}>{prop.linkName}</a></li>);
+        <a href={linkUrl}>{name}</a></li>);
     });
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 
@@ -109,4 +134,5 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
 
 DynamicBreadcrum.contextTypes = {
   menu: React.PropTypes.object,
+  breadCrum: PropTypes.object,
 };

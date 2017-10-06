@@ -50,6 +50,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           profileImage
                       }
                       communityCode
+                      portfolioId
                       roleNames
                       clusterName
                   }

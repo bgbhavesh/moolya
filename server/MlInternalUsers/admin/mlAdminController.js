@@ -62,6 +62,7 @@ const defaultServerConfig = {
   verifyEmail: '/verifyEmail',
   verifyMobileNumber: '/verifyMobileNumber',
   resendOTP: '/resendOTP',
+  verifyLaterUserMobileNumber: '/verifyLaterUserMobileNumber',
   //microSite: '/*',
   view: '/view/*',
   graphiqlOptions: {
@@ -848,6 +849,26 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
         let data = req.body;
         let response;
         response = MlResolver.MlMutationResolver['resendSmsVerification'](null, data, context, null);
+        res.send(response);
+      } else {
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message: "Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if (config.verifyLaterUserMobileNumber) {
+    graphQLServer.options('/verifyLaterUserMobileNumber', cors());
+    graphQLServer.post(config.verifyLaterUserMobileNumber, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if (req) {
+        let data = req.body;
+        let response;
+        response = MlResolver.MlMutationResolver['verifyLaterUserMobileNumber'](null, data, context, null);
         res.send(response);
       } else {
         console.log("Request Payload not provided");

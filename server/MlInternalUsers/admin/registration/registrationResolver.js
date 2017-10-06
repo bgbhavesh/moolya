@@ -1595,6 +1595,10 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
     }
   }
 }
+MlResolver.MlMutationResolver['verifyLaterUserMobileNumber'] = (obj, args, context, info) => {
+  // TODO : Authorization
+    return MlAccounts.verifyLaterUserMobileNumber(args.mobileNumber);
+}
 
 
 /*MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {

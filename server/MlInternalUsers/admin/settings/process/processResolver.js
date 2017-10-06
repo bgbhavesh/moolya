@@ -669,6 +669,10 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   } else {
    let userKYC=getTheUserKYC()
+    userKYC = _underscore.uniq(userKYC, function (kyc) {
+      let docId = kyc&&kyc.documentId?kyc.documentId:""
+      return docId;
+    });
     return userKYC
   }
     function getTheUserKYC() {

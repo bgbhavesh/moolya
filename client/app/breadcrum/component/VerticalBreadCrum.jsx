@@ -272,6 +272,15 @@ export default class VerticalBreadCrum extends Component {
             link: '',
           });
         }
+
+        const add = FlowRouter.getQueryParam('add');
+        list[list.length-1].link=path.split('?')[0];
+        if(add){
+          list.push({
+            name: 'Add Task',
+            link: '',
+          });
+        }
       }
 
       if (list[0].name === 'Calendar') {

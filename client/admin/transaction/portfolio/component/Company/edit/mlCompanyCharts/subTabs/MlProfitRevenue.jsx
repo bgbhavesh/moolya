@@ -26,7 +26,6 @@ export default class MlProfitRevenue extends React.Component{
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
-
   handleFromYearChange(index,e){
     let details =this.state.data;
     let name  = 'prlFromYear';
@@ -115,7 +114,7 @@ export default class MlProfitRevenue extends React.Component{
     data["prlToYear"] =  this.refs["prlToYear"+index].state.inputValue;
     data["prlValue"] =  this.refs["prlValue"+index].value;
     data["prlabout"] =  this.refs["prlabout"+index].value;
-    data["pelValueType"] =  this.state.selectedValType;
+    data["pelValueType"] = this.state.selectedValType;
     data["prlValue"] =  this.refs["prlValue"+index].value;
     data["index"] =  this.state.startupCompanyRevenue&&this.state.startupCompanyRevenue.length?this.state.startupCompanyRevenue.length:0
     let clients = this.state.startupCompanyRevenue;
@@ -131,27 +130,22 @@ export default class MlProfitRevenue extends React.Component{
     this.refs["prlabout"+index].value = ""
     this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
+    this.setState({data : {}})
 
   }
-/*  onUpdateAction(){
-    if(this.state.startupCompanyRevenue){
-      this.setState({selectedIndex:this.state.startupCompanyRevenue.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
-  }*/
+
 
   componentWillMount(){
     this.fetchDetails()
     /* let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.profitRevenueLiabilityChart)
      if(!empty){
-     this.setState({loading: false, startupCompanyRevenue: this.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:this.context.startupPortfolio.profitRevenueLiabilityChart});
+       this.setState({loading: false, startupCompanyRevenue: this.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:this.context.startupPortfolio.profitRevenueLiabilityChart});
      }*/
   }
+
   componentDidUpdate(){
     initalizeFloatLabel();
   }
-
   fetchDetails(){
     let that = this;
     //let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -164,12 +158,12 @@ export default class MlProfitRevenue extends React.Component{
   }
 
   /*onRemoveAction(index,e){
-   let updatedData = this.state.startupCompanyRevenue || [];
-   updatedData.splice(updatedData.indexOf(index), 1);
-   this.setState({revenuList: updatedData}, function () {
-   this.sendDataToParent()
-   });
-   }*/
+    let updatedData = this.state.startupCompanyRevenue || [];
+    updatedData.splice(updatedData.indexOf(index), 1);
+    this.setState({revenuList: updatedData}, function () {
+      this.sendDataToParent()
+    });
+  }*/
   optionsBySelectTypeOfEntity(index,val){
     let details =this.state.data;
     details=_.omit(details,["prlEntityType"]);
@@ -230,7 +224,7 @@ export default class MlProfitRevenue extends React.Component{
           default={true}
         >
           <div className="panel panel-default">
-            <div className="panel-heading">Profit Revenue{
+            <div className="panel-heading">Profit, Revenue & Liability{
               <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
                 src="/images/add.png"/></div>}
             </div>
@@ -244,10 +238,10 @@ export default class MlProfitRevenue extends React.Component{
                     <div className="row">
                       <div className="form-group col-lg-6 col-md-6 col-sm-6">
                         {/*    <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
-                         className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                         selectedValue={this.state.selectedVal} queryType={"graphql"}
-                         query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
-                         isDynamic={true}/>*/}
+                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                    selectedValue={this.state.selectedVal} queryType={"graphql"}
+                                    query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
+                                    isDynamic={true}/>*/}
                         <span className={`placeHolder ${selectedEntityTypesActive}`}>Select Entity Type</span>
                         <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
                                 value={this.state.selectedVal}
@@ -309,10 +303,10 @@ export default class MlProfitRevenue extends React.Component{
                       <div className="row">
                         <div className="form-group col-lg-6 col-md-6 col-sm-6">
                           {/*<Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
-                           className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                           selectedValue={details.prlEntityType} queryType={"graphql"}
-                           query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,idx)}
-                           isDynamic={true}/>*/}
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={details.prlEntityType} queryType={"graphql"}
+                                      query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,idx)}
+                                      isDynamic={true}/>*/}
                           <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
                                   value={details.prlEntityType}
                                   onChange={that.optionsBySelectTypeOfEntity.bind(that,idx)}  className="float-label"/>

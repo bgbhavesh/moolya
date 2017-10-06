@@ -1,15 +1,15 @@
 import React, { Component, PropTypes }  from "react";
-import { render } from 'react-dom';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
 import CropperModal from '../../../../../commons/components/cropperModal';
+import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
 
-export default class MlIdeatorIdeas extends React.Component{
+export default class MlIdeatorIdeas extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -20,8 +20,9 @@ export default class MlIdeatorIdeas extends React.Component{
       showProfileModal: false,
       uploadingAvatar: false,
     }
+    this.tabName = this.props.tabName || ''
     this.onClick.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -110,17 +111,22 @@ export default class MlIdeatorIdeas extends React.Component{
   }
 
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     for (var propName in data) {
       if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'privateFields') {
         delete data[propName];
       }
     }
-
     data=_.omit(data,["privateFields"]);
-
-    this.props.getIdeas(data, this.state.privateKey)
+    this.props.getIdeas(data, this.state.privateKey, requiredFields)
   }
+
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret}
+  }
+
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
@@ -211,11 +217,15 @@ export default class MlIdeatorIdeas extends React.Component{
         <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
           <form>
             <div className="form-group mandatory">
-              <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>
+              <input type="text" placeholder="Title" className="form-control float-label" ref="title"
+                     defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur}
+                     data-required={true} data-errMsg="Idea Title is required"/>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeaTitlePrivate")}/>
             </div>
             <div className="form-group mandatory">
-              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur.bind(this)}></textarea>
+              <textarea placeholder="Describe..." className="form-control float-label" ref="ideaDescription"
+                        defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur}
+                        data-required={true} data-errMsg="Idea Description is required"></textarea>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, "ideaDescription", "isIdeaPrivate")}/>
             </div>
           </form>

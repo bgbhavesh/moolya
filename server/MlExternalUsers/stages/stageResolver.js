@@ -46,6 +46,10 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
   if(stageDetails) {
     if(args.stage.resourceStage === 'onboard') {
       if (stageDetails && stageDetails.hasInvested) {
+        if(stageDetails.onBoardRequest){
+          let response = new MlRespPayload().errorPayload('Onboard request is already pending', 400);
+          return response
+        }
         args.stage.onBoardRequest = true;
         result = mlDBController.update('MlStage', {_id:args.stageId} , {onBoardRequest: true}, {$set:true}, context);
       let user = mlDBController.findOne('MlPortfolioDetails', {_id: args.stage.resourceId}, context);
@@ -80,6 +84,7 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
         if(stageDetails.onBoardStatus == "accept"){
           stageDetails.resourceStage = 'onboard';
         }
+        stageDetails.onBoardRequest = false;
         result = mlDBController.update('MlStage', {_id:transactionLogDetails.activityDocId} , stageDetails, {$set:true}, context);
         // let user = mlDBController.findOne('MlPortfolioDetails', {_id: transactionLogDetails.docId}, context);
         // new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)

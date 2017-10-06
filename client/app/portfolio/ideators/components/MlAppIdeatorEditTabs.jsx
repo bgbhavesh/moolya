@@ -113,19 +113,19 @@ export default class MlAppIdeatorEditTabs extends React.Component {
     return tabs;
   }
 
-  getIdeatorDetails(details, privatekey) {
+  getIdeatorDetails(details, privatekey, requiredFields) {
     let data = this.state.ideatorPortfolio;
     data['portfolioIdeatorDetails'] = details;
     this.setState({ideatorPortfolio: data})
-    this.props.getPortfolioDetails({ideatorPortfolio: this.state.ideatorPortfolio}, privatekey);
+    this.props.getPortfolioDetails({ideatorPortfolio: this.state.ideatorPortfolio}, privatekey, requiredFields);
   }
 
-  getIdeas(details, privatekey) {
+  getIdeas(details, privatekey, requiredFields) {
     let data = this.state.idea;
     data = details;
     this.setState({idea: data})
     let updateItem = _.omit(data, 'ideaImage');
-    this.props.getIdeatorIdeaDetails(updateItem, privatekey);
+    this.props.getIdeatorIdeaDetails(updateItem, privatekey, requiredFields);
   }
 
   getProblemSolution(details, privatekey) {

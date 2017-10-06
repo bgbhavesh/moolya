@@ -616,6 +616,15 @@ MlResolver.MlQueryResolver['getUserActiveProfileDetails'] = (obj, args, context,
   let pipleline = [
     { "$match": { _id: userId } },
     { "$unwind": "$profile.externalUserProfiles" },
+    { "$lookup" : {
+      from: "mlRegistration",
+      localField: "profile.externalUserProfiles.registrationId",
+      foreignField: "_id",
+      as: "regInfo"
+    }
+    },
+    { "$unwind": "$regInfo" },
+    { "$match" : { "regInfo.status": "REG_USER_APR"} },
     {
       "$lookup": {
         "from": "mlSubChapters",

@@ -18,6 +18,7 @@ let BackEndUser = `
         name: String,
         clusterName:String
         communityCode : String
+        portfolioId:String,
     }
     type ExternalUsers{
         _id: String,

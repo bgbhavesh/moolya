@@ -34,6 +34,7 @@ export default class InteractionsCounter extends React.Component{
 
   onBackHandler(e){
     console.log("on BackClick")
+    FlowRouter.setQueryParams({'tab':null,'subtab':null});
     this.props.backHandler();
   }
   backFunction(){

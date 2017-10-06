@@ -85,6 +85,18 @@ class MlAppInternalMyTaskItem extends React.Component{
     });
     // this.fetchMasterTasks();
     this.getOffices();
+
+    $(".information").unbind("click").click(function () {
+      if ($(this).hasClass('ml-information')) {
+        $(this).removeClass('ml-information').addClass('ml-delete');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'hidden' });
+
+      } else {
+        $(this).removeClass('ml-delete').addClass('ml-information');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'auto' });
+      }
+      $(this).parents('.panel').find(".show-information").toggle(200);
+    });
   }
 
 
@@ -464,6 +476,7 @@ class MlAppInternalMyTaskItem extends React.Component{
                 </div>
               </div>
               <div className="panel-body">
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /></p>
                 {this.attachedDocuments()}
               </div>
             </div>

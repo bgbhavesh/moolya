@@ -67,6 +67,16 @@ adminSection.route('/dashboard/communities', {
   }
 });
 
+adminSection.route('/dashboard/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
+
 adminSection.route('/dashboard/:clusterId/chapters', {
   name: 'dashboard_specChapters', action(params, queryParams){
     let viewMode;
@@ -128,7 +138,7 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
   }
 });
 
-adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/:portfolioId', {
+adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/portfolio/:portfolioId', {
   name: 'dashboard_communities',
   action(params, queryParams){
     mount(AdminLayout, {
@@ -154,6 +164,15 @@ adminSection.route('/dashboard/:clusterId/communities', {
     })
   }
 });
+adminSection.route('/dashboard/:clusterId/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
 
 adminSection.route('/dashboard/:clusterId/:chapterId/communities', {
   name: 'dashboard_communities',
@@ -168,6 +187,16 @@ adminSection.route('/dashboard/:clusterId/:chapterId/communities', {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
       adminContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
                              listConfig={mlCommunityDashboardListConfig} params={params}/>
+    })
+  }
+});
+
+adminSection.route('/dashboard/:clusterId/:chapterId/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });

@@ -30,7 +30,18 @@ const dashboardRoutes = {
     }
   },
   externalUserRoute:(clusterId, chapterId, subChapterId, communityType, portfolioId,route)=>{
-    return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/${communityType}/${portfolioId}`
+    if(clusterId!="" && chapterId!="" && subChapterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/${communityType}/portfolio/${portfolioId}`;
+    }
+    else if(clusterId!="" && chapterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/${communityType}/portfolio/${portfolioId}`
+    }
+    else if(clusterId!=""){
+      return `/admin/dashboard/${clusterId}/${communityType}/portfolio/${portfolioId}`
+    }
+    else{
+      return `/admin/dashboard/${communityType}/portfolio/${portfolioId}`
+    }
   }
 }
 

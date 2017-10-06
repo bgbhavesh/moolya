@@ -126,7 +126,7 @@
     "react-apollo": "0.8.3",
     "react-big-calendar": "^0.14.4",
     "react-bootstrap": "0.31.2",
-    "react-bootstrap-table": "^3.5.1",
+    "react-bootstrap-table": "4.0.6",
     "react-composer": "1.0.1",
     "react-controllables": "0.6.0",
     "react-cropper": "^1.0.0",

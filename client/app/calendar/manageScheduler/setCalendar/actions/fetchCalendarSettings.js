@@ -10,6 +10,7 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
     query($profileId:String) {
       fetchMyCalendarSetting(profileId: $profileId) {
         _id
+        hasAppointment
         slotDuration{
           hours
           minutes

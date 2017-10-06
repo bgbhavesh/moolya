@@ -35,6 +35,8 @@ class MlAppComponent extends Component{
       return true;
     }
 
+    if(FlowRouter.getQueryParam('add')) return true;
+
     if(!FlowRouter.getQueryParam('tab')) return true;
 
     return !isEqualWith(this.props, nextProps) ||

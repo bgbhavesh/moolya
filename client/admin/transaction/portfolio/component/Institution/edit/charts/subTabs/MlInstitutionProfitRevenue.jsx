@@ -14,7 +14,6 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     this.state={
       data:{},
       startupCompanyRevenue: [],
-      selectedIndex:0,
       selectedVal:null,
       selectedObject:"default",
       revenuList : []
@@ -118,16 +117,12 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     data["prlabout"] =  this.refs["prlabout"+index].value;
     data["pelValueType"] =  this.state.selectedValType;;
     data["prlValue"] =  this.refs["prlValue"+index].value;
+    data["index"] =  this.state.startupCompanyRevenue&&this.state.startupCompanyRevenue.length?this.state.startupCompanyRevenue.length:0
     let clients = this.state.startupCompanyRevenue;
     clients[index] = data
     this.setState({startupCompanyRevenue:clients})
     this.props.getStartupProfitRevenue(clients);
     this.setState({revenuList:this.state.startupCompanyRevenue})
-    if(this.state.startupCompanyRevenue){
-      this.setState({selectedIndex:this.state.startupCompanyRevenue.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
     this.refs["prlFromMonth"+index].state.inputValue = ""
     this.refs["prlFromYear"+index].state.inputValue = ""
     this.refs["prlToMonth"+index].state.inputValue = ""
@@ -136,15 +131,10 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     this.refs["prlabout"+index].value = ""
     this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
+    this.setState({data : {}})
 
   }
-  onUpdateAction(){
-    if(this.state.startupCompanyRevenue){
-      this.setState({selectedIndex:this.state.startupCompanyRevenue.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
-  }
+
 
   componentWillMount(){
     this.fetchDetails()

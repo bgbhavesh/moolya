@@ -398,6 +398,19 @@ if (Meteor.isServer) {
               ]
               //   }
               // ]
+            },
+            {
+              "link" : "/admin/chapters/subChapters",
+              "name": "Sub Chapters",
+              "uniqueId": "chapter_subChapters",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "dynamicLink": true,
+              "hideSubMenu": true,
+              "dynamicLinkHandler": "",
+              "subMenusId": "chapter",
+              "subMenuMappingId":"chapter_subChapters"
             }
           ]
         },

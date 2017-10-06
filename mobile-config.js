@@ -3,9 +3,9 @@ App.info({
     description: 'moolya',
     author: 'raksan',
     email: 'contactus@raksan.in',
-    website: 'https://moolya.in',
+    website: 'https://moolya.global',
     version: '1.0',
-    id:"com.raksan.moolyaui"
+    id:"com.raksan.moolya"
 });
 App.icons({
     // iOS

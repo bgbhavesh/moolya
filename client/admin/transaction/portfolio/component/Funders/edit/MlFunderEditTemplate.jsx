@@ -138,20 +138,21 @@ export default class MlFunderEditTemplate extends React.Component {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['successStories'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['successStories'] = arr;
+    var object = omitDeep(details, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
   }
 
-  getAboutus(details, privateKey) {
+  getAboutus(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['funderAbout'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
   getInvestmentsDetails(details, privateKey) {
@@ -209,9 +210,9 @@ export default class MlFunderEditTemplate extends React.Component {
   getFunderNewsDetails(details, privateKey) {
     let data = this.state.funderPortfolio;
     if (data && !data.lookingFor) {
-      data['lookingFor'] = [];
+      data['news'] = [];
     }
-    data['lookingFor'] = details;
+    data['news'] = details;
     this.setState({funderPortfolio: data})
     this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
   }

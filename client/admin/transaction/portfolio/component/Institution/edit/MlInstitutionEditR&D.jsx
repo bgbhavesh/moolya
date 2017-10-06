@@ -363,7 +363,7 @@ export default class MlInstitutionEditRD extends React.Component{
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <div className="form-group">
+                          <div className="form-group mandatory">
                             <input type="text" name="researchAndDevelopmentName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.researchAndDevelopmentName}  onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>

@@ -22,6 +22,7 @@ const mlEmailTypeTableConfig=new MlViewer.View({
     // {dataField: "addressUploadIcon", title: "Icon",dataSort:true,customComponent:FlagFormatter},
     // {dataField: "isActive", title: "Available in System",dataSort:true,customComponent:ActiveFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,

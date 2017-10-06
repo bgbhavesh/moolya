@@ -307,7 +307,7 @@ class MlStartupTechnology extends React.Component{
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Technology'}
-                                    isDynamic={true}
+                                    isDynamic={true} mandatory={true}
                                     onSelect={this.onOptionSelected.bind(this)}
                                     selectedValue={this.state.selectedVal}/>
                     </div>

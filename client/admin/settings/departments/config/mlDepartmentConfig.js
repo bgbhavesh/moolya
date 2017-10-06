@@ -32,8 +32,11 @@ function departmentsFormatter (data){
   }else{
     return <div>All</div>;
   }
+}
 
-  //return <div>{departments.join()}</div>;
+function titleFormatter(data){
+  let departments=data&&data.length>0?data:[];
+  if(departments){return `${departments.join()}`;}else{return `All`;}
 }
 
 //@for displaying chapters under dep in departments list
@@ -73,9 +76,9 @@ const mlDepartmentTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "departmentName", title: "Department Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:departmentsFormatter},
-    {dataField: "chaptersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
+    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:departmentsFormatter,customTitleFormatter:titleFormatter},
+    {dataField: "chaptersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter,customTitleFormatter:titleFormatter},
+    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter,customTitleFormatter:titleFormatter},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
     {dataField: "updatedBy", title: "Updated By",dataSort:true},

@@ -166,8 +166,41 @@ export default class VerticalBreadCrum extends Component {
         list.push({name: 'Task Master', link: path.split('editTask')[0]+'taskList'});
         list.push({name: 'Edit', link: path});
       }
-    }
-    else{
+    }else if(routePath.includes('/portfolio/edit/')){
+      list.push({name: 'Edit Portfolio', link: path.split('/portfolio')[0]+'/portfolio'});
+      if (tab) {
+        list.push({
+          name: properName(tab),
+          link: path.split('&')[0],
+        });
+        if (subtab) {
+          if(tab === 'About'){
+            FlowRouter.setQueryParams({'subtab':null});
+          }else
+          list.push({
+            name: properName(subtab),
+            link: '',
+          });
+        }
+      }
+    }else if(routePath.includes('/portfolio/view/')){
+      list.push({name: 'View Portfolio', link: path.split('/portfolio')[0]+'/portfolio'});
+      if (tab) {
+        list.push({
+          name: properName(tab),
+          link: path.split('&')[0],
+        });
+        if (subtab) {
+          if(tab === 'About'){
+            FlowRouter.setQueryParams({'subtab':null});
+          }else
+            list.push({
+              name: properName(subtab),
+              link: '',
+            });
+        }
+      }
+    }else{
       for (const index in routePathHierarchy) {
         if (routePathHierarchy[index] === ':communityType') {
           const tempList = list;
@@ -236,6 +269,15 @@ export default class VerticalBreadCrum extends Component {
         if (subtab && tab !== 'about') {
           list.push({
             name: properName(subtab),
+            link: '',
+          });
+        }
+
+        const add = FlowRouter.getQueryParam('add');
+        list[list.length-1].link=path.split('?')[0];
+        if(add){
+          list.push({
+            name: 'Add Task',
             link: '',
           });
         }

@@ -145,6 +145,7 @@ export default class MlCompanyEmployment extends React.Component{
     this.refs["eofToMonth"+index].state.inputValue = ""
     this.refs["eofNumberOfEmployment"+index].value = ""
     this.refs["eofAbout"+index].value = ""
+    this.setState({data : {}})
 
   }
 

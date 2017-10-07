@@ -1,23 +1,19 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import { connect } from 'react-redux';
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'clients'
 
-class MlStartupClients extends React.Component{
+class MlStartupClients extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -31,6 +27,7 @@ class MlStartupClients extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
@@ -127,7 +124,13 @@ class MlStartupClients extends React.Component{
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
@@ -148,8 +151,7 @@ class MlStartupClients extends React.Component{
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
-    this.props.getStartupClients(startupClients, this.state.privateKey);
-
+    this.props.getStartupClients(startupClients, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -283,7 +285,11 @@ class MlStartupClients extends React.Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group mandatory">
-                      <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" defaultValue={this.state.data.companyName} onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" name="companyName" placeholder="Company Name" ref={"companyName"}
+                             className="form-control float-label" defaultValue={this.state.data.companyName}
+                             onBlur={this.handleBlur.bind(this)}
+                             data-required={true}
+                             data-errMsg="Company Name is required"/>
                       <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                     </div>
                     <div className="form-group">

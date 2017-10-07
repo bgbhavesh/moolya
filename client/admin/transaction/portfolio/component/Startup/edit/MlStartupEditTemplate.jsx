@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from 'react-redux';
+import _ from "lodash";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupManagement from "./MlStartupManagement";
-import _ from "lodash";
 import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
 import MlStartupInvestor from "./MlStartupInvestor";
 import MlStartupData from "./MlStartupData";
@@ -14,7 +14,7 @@ import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
 import {client} from '../../../../../core/apolloConnection'
 
 
-class MlStartupEditTemplate extends React.Component {
+class MlStartupEditTemplate extends Component {
   constructor(props) {
     super(props)
     this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
@@ -124,10 +124,10 @@ class MlStartupEditTemplate extends React.Component {
     return tabs;
   }
 
-  getAboutus(details, tabName, privateKey) {
+  getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey);
+    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
   }
 
   getDataDetails(details, tabName) {
@@ -136,17 +136,17 @@ class MlStartupEditTemplate extends React.Component {
     this.props.getPortfolioDetails({startupPortfolio: data});
   }
 
-  getManagementDetails(details, privateKey) {
+  getManagementDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.management) {
       data['management'] = [];
     }
     data['management'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
   }
 
-  getInvestorDetails(details, privateKey) {
+  getInvestorDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data['investor'] = details;
     this.setState({startupPortfolio: data})
@@ -156,10 +156,10 @@ class MlStartupEditTemplate extends React.Component {
       arr.push(updateItem)
     })
     data['investor'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey);
+    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
   }
 
-  getAwardsDetails(details, privateKey) {
+  getAwardsDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -171,18 +171,17 @@ class MlStartupEditTemplate extends React.Component {
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
   }
 
-  getLookingForDetails(details, privateKey) {
-
+  getLookingForDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
   }
 
   getStartupMCL(details, privateKey) {

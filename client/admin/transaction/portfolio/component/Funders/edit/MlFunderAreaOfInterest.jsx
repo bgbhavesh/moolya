@@ -1,18 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import _ from "lodash";
 import gql from "graphql-tag";
-import {graphql} from "react-apollo";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../../commons/components/loader/loader'
-import NoData from '../../../../../../commons/components/noData/noData'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-export default class MlFunderAreaOfInterest extends React.Component {
+export default class MlFunderAreaOfInterest extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -24,7 +22,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
       funderAreaOfInterestList: [],
       selectedObject: "default",
       privateKey:{}
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.dateChange.bind(this)
@@ -157,8 +156,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let details = this.state.data;
     details = _.omit(details, ["industryTypeId"]);
     details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
+    this.setState({data: details, "selectedVal": selectedFunding, "industryTypeName": selObject.label}, function () {
+      // this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
       this.sendDataToParent()
     })
   }
@@ -173,7 +172,13 @@ export default class MlFunderAreaOfInterest extends React.Component {
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderAreaOfInterest;
     let funderAreaOfInterest = _.cloneDeep(investment);
@@ -192,9 +197,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;
-    // funderAreaOfInterest=_.omit(funderAreaOfInterest,["privateFields"]);
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
-    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
+    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey, requiredFields);
   }
 
 
@@ -270,11 +274,12 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         <div className="row">
                           <div className="col-md-12">
                             <div className="form-group">
-                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'} ref={"industryTypeId"}
                                             labelKey={'label'} queryType={"graphql"} query={industriesquery} mandatory={true}
                                             isDynamic={true} placeholder="Select Industry.."
                                             onSelect={this.onOptionSelectedIndustry.bind(this)}
-                                            selectedValue={this.state.selectedVal}/>
+                                            selectedValue={this.state.selectedVal} data-required={true}
+                                            data-errMsg="Industry is required"/>
                             </div>
                             <div className="form-group">
                               <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}

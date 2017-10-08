@@ -43,6 +43,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   var moduleName=args.module;
   //to resolve the type in data _resolveType for Union
   context.module=args.module;
+  console.log("ContextResolverArgs-"+args.module);
   console.log("ContextResolverModule-"+context.module);
 
   //Authorization layer

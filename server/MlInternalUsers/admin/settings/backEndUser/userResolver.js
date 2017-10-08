@@ -1139,7 +1139,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  //context.module = "Users"; //commented to check if it causing the map issue.
+  context.module = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

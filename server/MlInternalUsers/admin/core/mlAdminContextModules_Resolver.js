@@ -43,6 +43,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   var moduleName=args.module;
   //to resolve the type in data _resolveType for Union
   context.module=args.module;
+  console.log("ContextResolverModule-"+context.module);
 
   //Authorization layer
   var transactionModules = ['registrationInfo', 'registrationApprovedInfo', 'registrationRejectedInfo', 'internalRequests', "share", "userTransaction", "ConversationsLog", "portfolioApproved", "portfolioRequests", "internalRejectedRequests", "internalApprovedRequests", "officeTransaction"]
@@ -189,6 +190,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
   __resolveType(data, context, info){
 
     var module=context.module||"";
+    console.log("UnionResolverModule-"+module);
     var resolveType='';
     switch(module) {
       case "cluster":resolveType= 'Cluster';break;
@@ -221,7 +223,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "userTransaction":resolveType='myTransaction';break;
       case "appointment":resolveType='AppointmentAdmin';break;
     }
-
+    console.log("UnionResolverType-"+resolveType);
     if(resolveType){
       return resolveType;
     }else{

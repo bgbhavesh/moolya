@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlStartupViewInformation extends React.Component {
   componentDidMount() {
@@ -16,7 +17,7 @@ export default class MlStartupViewInformation extends React.Component {
           <h2>Information</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body panel-body-scroll">
-              <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : ""}</p>
+              <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p>
             </div>
           </div>
         </div>

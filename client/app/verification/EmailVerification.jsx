@@ -194,7 +194,7 @@ export default class EmailVerification extends React.Component{
              {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
                 Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
 
-                /* Old Email Text*/
+                {/* Old Email Text*/}
                {/* <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
                 We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
                   Good day and God speed to all your efforts.</p>*/}

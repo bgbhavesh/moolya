@@ -1,4 +1,3 @@
-
 /**
  * Import of all the usable components
  * */
@@ -23,8 +22,10 @@ import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/Po
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []},
-      activeTab:'About'};
+    this.state = {
+      tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []},
+      activeTab: 'About'
+    };
     this.getChildContext.bind(this)
   }
 
@@ -34,11 +35,13 @@ export default class MlAppCompaniesEditTabs extends Component {
       portfolioKeys: this.state.portfolioKeys
     }
   }
-  setBackHandler(backMethod){
+
+  setBackHandler(backMethod) {
     this.props.setBackHandler(backMethod);
     $('.RRT__tabs').removeClass('menunone');
   }
-  backClickHandler(){
+
+  backClickHandler() {
     let tabs = this.state.tabs;
     this.setState({tabs: tabs})
   }
@@ -61,19 +64,121 @@ export default class MlAppCompaniesEditTabs extends Component {
    * */
   getTabComponents() {
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About" ,  component:<MlCompanyAboutUsLandingPage key="1" client={appClient} getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , name:"Management" , component:<MlCompanyManagement  client={appClient} isAdmin={true} key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , name:"Data" , component:<MlCompanyData key="4" isApp={false} client={appClient} getDataDetails={this.getDataDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , name:"Charts" , component:<MlCompanyCharts key="5" client={appClient} isAdmin={false}  getChartDetails={this.getChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}  backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" ,name:"Awards" ,  component:<MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , name:"Library" , component:<PortfolioLibrary key="7" client={appClient} isAdmin={false} portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
-      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , name:"M C And L" ,component:<MlCompanyMCL key="8" client={appClient} getMCL={this.getMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , name:"Incubators" ,  component:<MlCompanyIncubatorsEditTabs key="9" client={appClient} getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Partners" ,name:"Partners" , component:<MlCompanyPartners key="10" client={appClient} getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" ,name:"CSR" , component:<MlCompanyCSREditTabs key="11" client={appClient} getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" ,name:"R And D" , component:<MlCompanyRAndD key="13" client={appClient} getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , name:"Intrapreneur" , component:<MlCompanyIntrapreneur key="12" client={appClient} getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="intrapreneurRecognition"/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , name:"Looking For" ,component:<MlCompanyLookingFor key="14" client={appClient} getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "About",
+        name: "About",
+        component: <MlCompanyAboutUsLandingPage key="1" client={appClient} getAboutus={this.getAboutus.bind(this)}
+                                                portfolioDetailsId={this.props.portfolioDetailsId}
+                                                backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Management",
+        name: "Management",
+        component: <MlCompanyManagement client={appClient} isAdmin={false} key="2" tabName={"management"}
+                                        getManagementDetails={this.getManagementDetails.bind(this)}
+                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Data",
+        name: "Data",
+        component: <MlCompanyData key="4" isApp={false} client={appClient}
+                                  getDataDetails={this.getDataDetails.bind(this)}
+                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Charts",
+        name: "Charts",
+        component: <MlCompanyCharts key="5" client={appClient} isAdmin={false}
+                                    getChartDetails={this.getChartDetails.bind(this)}
+                                    portfolioDetailsId={this.props.portfolioDetailsId}
+                                    backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Awards",
+        name: "Awards",
+        component: <MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
+                                    portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Library",
+        name: "Library",
+        component: <PortfolioLibrary key="7" client={appClient} isAdmin={false}
+                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+      }, //
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "M C & L",
+        name: "M C And L",
+        component: <MlCompanyMCL key="8" client={appClient} getMCL={this.getMCL.bind(this)}
+                                 portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Incubators",
+        name: "Incubators",
+        component: <MlCompanyIncubatorsEditTabs key="9" client={appClient} getIncubators={this.getIncubators.bind(this)}
+                                                portfolioDetailsId={this.props.portfolioDetailsId}
+                                                backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Partners",
+        name: "Partners",
+        component: <MlCompanyPartners key="10" client={appClient}
+                                      getPartnersDetails={this.getPartnersDetails.bind(this)}
+                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "CSR",
+        name: "CSR",
+        component: <MlCompanyCSREditTabs key="11" client={appClient} getCSRDetails={this.getCSRDetails.bind(this)}
+                                         portfolioDetailsId={this.props.portfolioDetailsId}
+                                         backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "R&D",
+        name: "R And D",
+        component: <MlCompanyRAndD key="13" client={appClient} getRDDetails={this.getRDDetails.bind(this)}
+                                   portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Intrapreneur",
+        name: "Intrapreneur",
+        component: <MlCompanyIntrapreneur key="12" client={appClient}
+                                          getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)}
+                                          portfolioDetailsId={this.props.portfolioDetailsId}
+                                          tabName="intrapreneurRecognition"/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        name: "Looking For",
+        component: <MlCompanyLookingFor key="14" client={appClient}
+                                        getLookingForDetails={this.getLookingForDetails.bind(this)}
+                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
+      },
     ]
     return tabs;
   }
@@ -81,35 +186,34 @@ export default class MlAppCompaniesEditTabs extends Component {
   /**
    * getting all values from the child components and passing all to Main component through props
    * */
-  getAboutus(details,tabName, privateKey){
+  getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio : data}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
   }
 
-  getDataDetails(details,tabName){
+  getDataDetails(details, tabName) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio : data});
+    this.props.getPortfolioDetails({companyPortfolio: data});
   }
 
-  getManagementDetails(details, privateKey){
+  getManagementDetails(details, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
-    if(data && !data.management){
-      data['management']=[];
+    if (data && !data.management) {
+      data['management'] = [];
     }
     data['management'] = details;
-    this.setState({companyPortfolio : data})
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.setState({companyPortfolio: data})
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
   }
 
-  getAwardsDetails(details, privateKey){
-
+  getAwardsDetails(details, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
-    if(data && !data.awardsRecognition){
-      data['awardsRecognition']=[];
+    if (data && !data.awardsRecognition) {
+      data['awardsRecognition'] = [];
     }
-    this.setState({companyPortfolio : data})
+    this.setState({companyPortfolio: data})
     let arr = [];
     _.each(details, function (obj) {
       let updateItem = _.omit(obj, 'logo');
@@ -117,43 +221,43 @@ export default class MlAppCompaniesEditTabs extends Component {
     })
     data['awardsRecognition'] = arr;
 
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
   }
 
-  getMCL(details, privateKey){
+  getMCL(details, privateKey) {
     let data = this.state.companyPortfolio;
-    if(details.memberships){
+    if (details.memberships) {
       data['memberships'] = details.memberships;
     }
-    if(details.compliances){
+    if (details.compliances) {
       data['compliances'] = details.compliances;
     }
-    if(details.licenses){
+    if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({companyPortfolio : data})
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.setState({companyPortfolio: data})
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey);
   }
 
-  getChartDetails(details,tabName){
+  getChartDetails(details, tabName) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio : data});
+    this.props.getPortfolioDetails({companyPortfolio: data});
   }
 
-  getIncubators (details,tabName, privateKey){
+  getIncubators(details, tabName, privateKey) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio : data}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey);
   }
 
-  getPartnersDetails(details, privateKey){
+  getPartnersDetails(details, privateKey) {
 
     let data = this.state.companyPortfolio;
-    if(data && !data.partners){
-      data['partners']=[];
+    if (data && !data.partners) {
+      data['partners'] = [];
     }
-    this.setState({companyPortfolio : data})
+    this.setState({companyPortfolio: data})
     let arr = [];
     _.each(details, function (obj) {
       let updateItem = _.omit(obj, 'logo');
@@ -161,43 +265,42 @@ export default class MlAppCompaniesEditTabs extends Component {
     })
     data['partners'] = arr;
 
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey);
   }
-  getCSRDetails(details,tabName, privateKey){
-    if(tabName == "reports"){
+
+  getCSRDetails(details, tabName, privateKey, requiredFields) {
+    if (tabName == "reports") {
       let data = this.state.companyPortfolio;
       data[tabName] = details;
-      this.props.getPortfolioDetails({companyPortfolio : data});
-    }else{
+      this.props.getPortfolioDetails({companyPortfolio: data});
+    } else {
       let data = this.state.companyPortfolio;
       data[tabName] = details;
-      this.props.getPortfolioDetails({companyPortfolio : data}, privateKey);
+      this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
     }
   }
-  getRDDetails(details, privateKey){
+
+  getRDDetails(details, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
-    if(data && !data.awardsRecognition){
-      data['researchAndDevelopment']=[];
+    if (data && !data.awardsRecognition) {
+      data['researchAndDevelopment'] = [];
     }
-    this.setState({companyPortfolio : data})
+    this.setState({companyPortfolio: data})
     let arr = [];
     _.each(details, function (obj) {
       let updateItem = _.omit(obj, 'logo');
       arr.push(updateItem)
     })
     data['researchAndDevelopment'] = arr;
-
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
-
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
   }
 
-  getIntrapreneurDetails(details, privateKey){
-
+  getIntrapreneurDetails(details, privateKey) {
     let data = this.state.companyPortfolio;
-    if(data && !data.intrapreneurRecognition){
-      data['intrapreneurRecognition']=[];
+    if (data && !data.intrapreneurRecognition) {
+      data['intrapreneurRecognition'] = [];
     }
-    this.setState({companyPortfolio : data})
+    this.setState({companyPortfolio: data})
     let arr = [];
     _.each(details, function (obj) {
       let updateItem = _.omit(obj, 'logo');
@@ -205,19 +308,19 @@ export default class MlAppCompaniesEditTabs extends Component {
     })
     data['intrapreneurRecognition'] = arr;
 
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey);
   }
 
-  getLookingForDetails(details, privatekey) {
-
+  getLookingForDetails(details, privatekey, requiredFields) {
     let data = this.state.companyPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({companyPortfolio: data})
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privatekey);
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privatekey, requiredFields);
   }
+
   /**
    * tab mounting component
    * */
@@ -233,8 +336,9 @@ export default class MlAppCompaniesEditTabs extends Component {
         getContent: () => tab.component
       }));
     }
+
     let activeTab = FlowRouter.getQueryParam('tab');
-    if(activeTab){
+    if (activeTab) {
       this.setState({activeTab});
     }
     this.setState({tabs: getTabs() || []});
@@ -242,28 +346,30 @@ export default class MlAppCompaniesEditTabs extends Component {
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
     let obj = {
-      privateKeys:privateKeys,
-      removePrivateKeys:removePrivateKeys
+      privateKeys: privateKeys,
+      removePrivateKeys: removePrivateKeys
     }
     this.setState({portfolioKeys: obj});
     return obj
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
+    // console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp
     }
   }
-  updateTab(index){
-    let tab =  this.state.tabs[index].title;
-    FlowRouter.setQueryParams({ tab: tab });
+
+  updateTab(index) {
+    let tab = this.state.tabs[index].title;
+    FlowRouter.setQueryParams({tab: tab});
   }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab} onChange={this.updateTab} type="tab"
+                           mkey="title"/>
   }
 }
 

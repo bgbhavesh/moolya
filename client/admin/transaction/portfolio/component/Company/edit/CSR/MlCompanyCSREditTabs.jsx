@@ -1,6 +1,4 @@
-
 import React from "react";
-import {render} from "react-dom";
 import MlCompanyEvolution from "./MlCompanyEvolution";
 import MlCompanyPolicy from "./MlCompanyPolicy";
 import MlCompanyAchivements from "./MlCompanyAchivements";
@@ -63,7 +61,13 @@ export default class MlCompanyCSREditTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlCompanyEvolution client={client} isAdmin={true} key="1"  getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Achivements" , component:<MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Achivements",
+        component: <MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} tabName={"achievements"}
+                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports", component:<MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlCompanyPolicy client={client} isAdmin={true} key="3" getPolicy={this.getPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
     ]
@@ -77,11 +81,11 @@ export default class MlCompanyCSREditTabs extends React.Component{
     this.props.getCSRDetails(data,"evolution", privateKey);
 
   }
-  getAchivements(details, privateKey){
+  getAchivements(details, privateKey, requiredFields){
     let data = this.state.achivements;
     data=details;
     this.setState({achivements : data})
-    this.props.getCSRDetails(data,"achievements", privateKey);
+    this.props.getCSRDetails(data,"achievements", privateKey, requiredFields);
   }
   getPolicy(details, privateKey){
     let data = this.state.listOfIncubators;

@@ -2,12 +2,13 @@ import React, {Component, PropTypes}  from "react";
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 import {Popover, PopoverTitle, PopoverContent} from 'reactstrap';
+import gql from 'graphql-tag';
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {fetchCompanyDetailsHandler} from '../../../actions/findCompanyPortfolioDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'lookingFor';
 
@@ -25,7 +26,7 @@ export default class MlComapanyLookingFor extends Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    // this.handleBlur.bind(this)
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
   }
 
@@ -215,13 +216,19 @@ export default class MlComapanyLookingFor extends Component {
       ["lookingForName"]: selObject.label,
       lookingDescription: selObject.about
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
       this.sendDataToParent()
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let companyLookingFor1 = this.state.companyLookingFor;
     let companyLookingFor = _.cloneDeep(companyLookingFor1);
@@ -241,31 +248,9 @@ export default class MlComapanyLookingFor extends Component {
 
     companyLookingFor = arr;
     this.setState({companyLookingFor: companyLookingFor})
-    this.props.getLookingForDetails(companyLookingFor, this.state.privateKey);
+    this.props.getLookingForDetails(companyLookingFor, this.state.privateKey, requiredFields);
 
   }
-
-  // handleBlur(e){
-  //   let details =this.state.data;
-  //   let name  = e.target.name;
-  //   details=_.omit(details,[name]);
-  //   details=_.extend(details,{[name]:e.target.value});
-  //   this.setState({data:details}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
-  //
-  // sendDataToParent(){
-  //   let data = this.state.data;
-  //   for (var propName in data) {
-  //     if (data[propName] === null || data[propName] === undefined) {
-  //       delete data[propName];
-  //     }
-  //   }
-  //   data=_.omit(data,["privateFields"]);
-  //   this.props.getLookingFor(data, this.state.privateKey)
-  // }
-
 
   render() {
     let query = gql`query($communityCode:String){
@@ -336,7 +321,9 @@ export default class MlComapanyLookingFor extends Component {
                                           isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
+                                          selectedValue={this.state.selectedVal} ref={"lookingForId"}
+                                          data-required={true}
+                                          data-errMsg="Looking For is required"/>
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"

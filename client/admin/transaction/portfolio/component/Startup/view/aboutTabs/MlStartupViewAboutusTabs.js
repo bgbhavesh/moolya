@@ -66,6 +66,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
+        name: "About Us",
         component: <MlStartupViewAbout client={client} isAdmin={true} key="1"
                                        portfolioDetailsId={this.props.portfolioDetailsId}
                                        getSelectedAnnotations={this.props.getSelectedAnnotations}
@@ -75,6 +76,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Rating",
+        name: "Rating",
         component: <MlStartupViewRating key="2" portfolioDetailsId={this.props.portfolioDetailsId}
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}
                                         ratingDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.rating}/>
@@ -83,6 +85,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
+        name: "Clients",
         component: <MlStartupViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          clientsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.clients}/>
@@ -91,6 +94,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
+        name: "Services And Products",
         component: <MlStartupViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId}
                                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                      serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
@@ -99,6 +103,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
+        name: "Information",
         component: <MlStartupViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              informationDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.information}/>
@@ -107,6 +112,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Assets",
+        name: "Assets",
         component: <MlStartupViewAssets key="2" portfolioDetailsId={this.props.portfolioDetailsId}
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}
                                         assetsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.assets}/>
@@ -115,6 +121,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Branches",
+        name: "Branches",
         component: <MlStartupViewBranches key="8" portfolioDetailsId={this.props.portfolioDetailsId}
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}
                                           branchesDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.branches}/>
@@ -123,6 +130,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Technologies",
+        name: "Technologies",
         component: <MlStartupViewTechnologies key="2" portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}
                                               technologiesDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.technologies}/>
@@ -131,6 +139,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Legal Issue",
+        name: "Legal Issue",
         component: <MlStartupViewLegalIssues key="9" portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              legalIssueDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.legalIssue}/>
@@ -152,7 +161,8 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        key:tab.name,
+        name:tab.name,
         getContent: () => tab.component
       }));
     }
@@ -176,11 +186,16 @@ export default class MlStartupViewAboutusTabs extends React.Component {
   render() {
     let tabs = this.state.tabs;
     if(this.state.admin){
+      if(this.props.activeTab){
+        let index = tabs.findIndex(i => i.name === this.props.activeTab);
+        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getStartUpState}/>
+      }else
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
     }
     else{
+      let activeTab =  this.props.activeTab || this.state.activeTab;
       return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
+                             selectedTabKey={activeTab}
                              onChange={this.updateTab}
                              backClickHandler={this.props.getStartUpState}
                              type="subtab" mkey="title"

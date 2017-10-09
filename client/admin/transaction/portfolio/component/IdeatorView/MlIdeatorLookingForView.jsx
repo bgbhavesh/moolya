@@ -7,13 +7,15 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 export default class MlIdeatorLookingForView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ideatorLookingFor: [],
-      isUserValidForAnnotation: false
+      isUserValidForAnnotation: false,
+      loading : true
     }
     this.fetchPortfolioInfo.bind(this);
     // this.fetchAnnotations.bind(this);
@@ -114,7 +116,7 @@ export default class MlIdeatorLookingForView extends React.Component {
   async fetchPortfolioInfo() {
     const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      this.setState({ideatorLookingFor: response});
+      this.setState({ideatorLookingFor: response,loading : false});
     }
     _.each(response.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')

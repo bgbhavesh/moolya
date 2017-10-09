@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary,removePortfolioDataFile} from '../../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../../commons/actions/mlLibraryActionHandler'
 
 import {fetchCompanyPortfolioData} from "../../../actions/findCompanyPortfolioDetails";
 
@@ -107,7 +107,7 @@ export default class MlCompanyData extends React.Component{
   async removeDataDocument(type,fileUrl){
     if(type && fileUrl){
       let portfolioDetailsId = this.props.portfolioDetailsId;
-      const resp = await removePortfolioDataFile(portfolioDetailsId , fileUrl, "data", type);
+      const resp = await removePortfolioFileUrl(portfolioDetailsId , fileUrl, "data", type);
       this.fetchPortfolioData();
     }
   }

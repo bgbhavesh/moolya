@@ -9,14 +9,17 @@ import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolio
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails';
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 export default class MlPortfolioIdeatorStrategyPlansView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      portfolioIdeatorInfo: {}
+      portfolioIdeatorInfo: {},
+      loading:true
     }
     this.fetchPortfolioInfo.bind(this);
     //this.fetchAnnotations.bind(this);
@@ -126,30 +129,34 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
   async fetchPortfolioInfo(){
     const response = await findIdeatorStrategyPlansActionHandler(this.props.portfolioDetailsId);
     if(response){
-      this.setState({portfolioIdeatorInfo : response});
+      this.setState({portfolioIdeatorInfo : response,loading:false});
     }
   }
 
   render(){
 
-
+    let loading = this.state.loading ? this.state.loading : false;
     return (
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ? (
+              <div className="col-lg-12 col-sm-12">
+                <div className="row">
+                  <h2>Strategy and Planning</h2>
+                  <div id="strategyPlansContent" className="panel panel-default panel-form-view">
+                    <div className="panel-body">
+                      {this.state.portfolioIdeatorInfo.spDescription}
+                    </div>
+                  </div>
 
-      <div className="col-lg-12 col-sm-12">
-        <div className="row">
-          <h2>Strategy and Planning</h2>
-          <div id="strategyPlansContent" className="panel panel-default panel-form-view">
-
-            <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.spDescription}
-            </div>
+                </div>
+              </div>
+            ) : (<NoData tabName={this.props.tabName}/>)}
           </div>
-
-        </div>    </div>
-
+        )
+        }
+        </div>
     )
-
-
-
   }
 }

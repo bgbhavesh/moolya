@@ -7,7 +7,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 const KEY = 'clients'
 
 export default class MlInstitutionViewClients extends React.Component {
@@ -153,7 +153,7 @@ export default class MlInstitutionViewClients extends React.Component {
     return (
       <div id="annotatorContent">
         <h2>Clients</h2>
-        <div className="col-lg-12">
+        {clientsArray && clientsArray.length?<div className="col-lg-12">
           <div className="row">
             {clientsArray.map(function (details, idx) {
               return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
@@ -166,7 +166,7 @@ export default class MlInstitutionViewClients extends React.Component {
               </div>)
             })}
           </div>
-        </div>
+        </div>:(<NoData tabName={this.props.tabName}/>)}
       </div>
     )
   }

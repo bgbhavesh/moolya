@@ -1106,8 +1106,9 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .inputfile-upload + label figure{width:80px;height:80px;border-radius:50%;background-color:#273545;display:block;padding:0;margin:0 auto;text-align:center;color:#fff;font-size:40px;line-height:80px}
 .inputfile-upload:focus + label figure,.inputfile-upload.has-focus + label figure,.inputfile-upload + label:hover figure{background-color:#ef4647}
 .upload-file-wrap{float:left;border-right:2px solid #B9C5CC;background:#B9C5CC;margin-right:5px;min-width:125px;text-align:center}
-.upload-image{float:left;width:100px;border:1px dashed #c3c3c3;height:100px;border-radius:4px;margin:6px 5px 0 0}
-.upload-image img{width:100%}
+.upload-image{float:left;width:100px;border:1px dashed #c3c3c3;height:100px;border-radius:4px;margin:6px 5px 0 0;position: relative;}
+.upload-image .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer;z-index: 9;}
+.upload-image img{width:100%;height: 100%;}
 
 .see-more a{color:#fff;font-size:12px;cursor:pointer;text-decoration:none;background:#273545;padding:4px 6px;border-radius:4px;text-shadow:none;font-weight: normal;}
 .library-wrap .thumbnail{float:left;width:120px;height:120px;margin:4px 10px 4px 4px;position:relative;padding:0;}

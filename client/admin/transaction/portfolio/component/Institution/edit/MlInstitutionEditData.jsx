@@ -1,6 +1,6 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary,removePortfolioDataFile} from '../../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
@@ -106,7 +106,7 @@ export default class MlInstitutionEditData extends React.Component{
   async removeDataDocument(type,fileUrl){
     if(type && fileUrl){
       let portfolioDetailsId = this.props.portfolioDetailsId;
-      const resp =await removePortfolioDataFile(portfolioDetailsId , fileUrl, "data", type);
+      const resp =await removePortfolioFileUrl(portfolioDetailsId , fileUrl, "data", type);
       this.fetchInstitutionPortfolioData();
     }
   }

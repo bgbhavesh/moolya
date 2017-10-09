@@ -300,4 +300,27 @@ export async function removePortfolioDataFile(portfolioDetailsId, fileUrl,tabNam
   return id;
 }
 
+export async function removeIdetaorProblemAndSolutionPic(portfolioDetailsId, fileUrl,typeOfImage) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($portfolioDetailsId: String, $fileUrl:String, $typeOfImage:String){
+        removeIdetaorProblemAndSolutionPic(portfoliodetailsId:$portfolioDetailsId,fileUrl:$fileUrl,typeOfImage:$typeOfImage) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfolioDetailsId,
+      fileUrl,
+      typeOfImage
+    },
+    forceFetch: true
+  });
+  const id = result.data.removeIdetaorProblemAndSolutionPic;
+  return id;
+}
+
+
 

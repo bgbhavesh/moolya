@@ -578,6 +578,20 @@ MlResolver.MlMutationResolver['removePortfolioDataFile'] = (obj, args, context, 
           }
         }
         break;
+      default:
+            break;
+    }
+  }
+}
+
+MlResolver.MlMutationResolver['removeIdetaorProblemAndSolutionPic'] = (obj, args, context) => {
+  let response
+  if(args.portfoliodetailsId) {
+    let ideatorPortfolioData = MlIdeatorPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+    if (ideatorPortfolioData && ideatorPortfolioData.problemSolution) {
+      _.remove(ideatorPortfolioData.problemSolution[args.typeOfImage], {fileUrl: args.fileUrl})
+      response = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {problemSolution: ideatorPortfolioData.problemSolution}, {$set: true}, context)
+      return response
     }
   }
 }

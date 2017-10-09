@@ -6,7 +6,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary, removeIdetaorProblemAndSolutionPic} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
@@ -170,12 +170,21 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
+  async removeProblemAndSolutionPic(typeOfImage,fileUrl){
+      if(typeOfImage && fileUrl){
+        let portfolioDetailsId = this.props.portfolioDetailsId;
+        const resp = await removeIdetaorProblemAndSolutionPic(portfolioDetailsId , fileUrl,typeOfImage);
+        this.fetchOnlyImages();
+      }
+  }
 
   render(){
     const problemImageArray = this.state.data.problemImage && this.state.data.problemImage.length > 0 ? this.state.data.problemImage : [];
+    let that=this;
     const problemImages = problemImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
+          <FontAwesome className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"problemImage",m.fileUrl)}/>
           <img id="output" src={m.fileUrl}/>
         </div>
       )
@@ -185,6 +194,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     const solutionImages = solutionImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
+          <FontAwesome className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"solutionImage",m.fileUrl)}/>
           <img id="output" src={m.fileUrl}/>
         </div>
       )
@@ -197,9 +207,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-              <div className="row requested_input">
-                <div className="col-md-12"><h2>Problems and Solutions</h2></div>
-                <div className="col-lg-6">
+              <div className="requested_input">
+                <div className="col-md-12 nopadding"><h2>Problems and Solutions</h2></div>
+                <div className="col-lg-6 nopadding-left">
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Problems
@@ -229,7 +239,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6">
+                <div className="col-lg-6 nopadding-right">
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Solutions

@@ -1,19 +1,18 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
-import {graphql} from "react-apollo";
 import moment from "moment";
+import ScrollArea from "react-scrollbar";
+var FontAwesome = require('react-fontawesome');
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../../client/admin/utils/formElemUtil";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-export default class MlFunderInvestment extends React.Component {
+export default class MlFunderInvestment extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -27,7 +26,8 @@ export default class MlFunderInvestment extends React.Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.dateChange.bind(this)
     this.fetchPortfolioDetails.bind(this);
@@ -111,10 +111,10 @@ export default class MlFunderInvestment extends React.Component {
   }
 
   onSaveAction(e) {
-    var isDate = _.findIndex(this.state.funderInvestment, {dateOfInvestment:''})
-    var dateKey = _.compact(_.map(this.state.funderInvestment, 'dateOfInvestment'));
-    if ((isDate > 0) || (dateKey.length != this.state.funderInvestment.length))
-      toastr.error("Please select Date");
+    // var isDate = _.findIndex(this.state.funderInvestment, {dateOfInvestment:''})
+    // var dateKey = _.compact(_.map(this.state.funderInvestment, 'dateOfInvestment'));
+    // if ((isDate > 0) || (dateKey.length != this.state.funderInvestment.length))
+    //   toastr.error("Please select Date");
     this.setState({funderInvestmentList: this.state.funderInvestment, popoverOpen: false})
   }
 
@@ -131,8 +131,7 @@ export default class MlFunderInvestment extends React.Component {
     let details = this.state.data;
     details = _.omit(details, ["typeOfFundingId"]);
     details = _.extend(details, {["typeOfFundingId"]: selectedFunding});
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedFunding})
+    this.setState({data: details, "selectedVal": selectedFunding}, function () {
       this.sendDataToParent()
     })
   }
@@ -192,7 +191,13 @@ export default class MlFunderInvestment extends React.Component {
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderInvestment;
     let funderInvestment = _.cloneDeep(investment);
@@ -211,9 +216,8 @@ export default class MlFunderInvestment extends React.Component {
       arr.push(updateItem)
     })
     funderInvestment = arr;
-    // funderInvestment=_.omit(funderInvestment,["privateFields"]);
     this.setState({funderInvestment: funderInvestment})
-    this.props.getInvestmentsDetails(funderInvestment, this.state.privateKey);
+    this.props.getInvestmentsDetails(funderInvestment, this.state.privateKey, requiredFields);
   }
 
   render() {
@@ -289,29 +293,33 @@ export default class MlFunderInvestment extends React.Component {
                                           inputProps={{placeholder: "Enter Date of Investment",className: "float-label form-control",readOnly:true}} ref="dateOfInvestment"
                                           defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
                                           onChange={this.dateChange.bind(this)} closeOnSelect={true}
-                                          isValidDate={ valid }/>
+                                          isValidDate={ valid }  data-required={true}
+                                          data-errMsg="Date is required"/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfInvestmentPrivate"
                                              onClick={this.onLockChange.bind(this, "dateOfInvestment", "isDateOfInvestmentPrivate")}/>
                               </div>
-                              <div className="form-group mandatory  ">
-                                <input type="text" placeholder="Company Name" name="investmentcompanyName"
+                              <div className="form-group mandatory">
+                                <input type="text" placeholder="Company Name" name="investmentcompanyName" ref="investmentcompanyName"
                                        defaultValue={this.state.data.investmentcompanyName}
-                                       className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                                       className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                                       data-errMsg="Company Name is required"/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
                                              onClick={this.onLockChange.bind(this, "investmentcompanyName", "isCompanyNamePrivate")}/>
                               </div>
                               <div className="form-group mandatory">
-                                <input type="text" placeholder="Investment Amount" name="investmentAmount"
+                                <input type="text" placeholder="Investment Amount" name="investmentAmount" ref="investmentAmount"
                                        defaultValue={this.state.data.investmentAmount}
-                                       className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                                       className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                                       data-errMsg="Investment Amount is required"/>
                                 <FontAwesome name='unlock' className="input_icon un_lock" id="isInvestmentAmountPrivate"
                                              onClick={this.onLockChange.bind(this, "investmentAmount", "isInvestmentAmountPrivate")}/>
                               </div>
                               <div className="form-group">
-                                <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                                <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'} ref={'typeOfFundingId'}
                                               labelKey={'label'} queryType={"graphql"} query={query} mandatory={true}
                                               isDynamic={true} placeholder="Type of Funding"
-                                              onSelect={this.onOptionSelected.bind(this)}
+                                              onSelect={this.onOptionSelected.bind(this)} data-required={true}
+                                              data-errMsg="Type of Funding is required"
                                               selectedValue={this.state.selectedVal}/>
                               </div>
                               <div className="form-group">

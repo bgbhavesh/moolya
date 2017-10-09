@@ -1528,8 +1528,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                         }
                       ]
                     },
-                    // {longitude: {$lte: rightLng}},
-                    // {longitude: {$gte: leftLng}},
                     {latitude: {$lte: topLat}},
                     {latitude: {$gte: bottomLat}}
                   ]}, context).fetch();
@@ -1562,8 +1560,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                         }
                       ]
                     },
-                    // {longitude: {$lte: rightLng}},
-                    // {longitude: {$gte: leftLng}},
                     {latitude: {$lte: topLat}},
                     {latitude: {$gte: bottomLat}}
                   ]}, context).fetch();
@@ -1584,7 +1580,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           }
       }else{
           var relatedSubChapterIds = [];
-          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
           if(relatedSubChapters&&relatedSubChapters.length>0){
             _.each(relatedSubChapters, function(obj){
               let ids = _.map(obj.subChapters, "subChapterId");
@@ -1658,7 +1654,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       }else{
           clusterId = clusterId?clusterId:args.queryProperty.query
           var relatedSubChapterIds = [];
-          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
           if(relatedSubChapters&&relatedSubChapters.length>0) {
             _.each(relatedSubChapters, function (obj) {
               let ids = _.map(obj.subChapters, "subChapterId");
@@ -1750,10 +1746,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
-              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
-              // _.remove(relatedIds, {subChapterId: userSubChapterId})
-              // relatedIds = _.uniq(relatedIds);
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
 
               var relatedIds = [];
 
@@ -1785,10 +1778,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
-              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
-              // _.remove(relatedIds, {subChapterId: userSubChapterId})
-              // relatedIds = _.uniq(relatedIds);
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
 
               var relatedIds = [];
 
@@ -1816,10 +1806,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
-              // var relatedIds = _.map(relatedSubChapters.subChapters, "subChapterId");
-              // _.remove(relatedIds, {subChapterId: userSubChapterId})
-              // relatedIds = _.uniq(relatedIds);
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
 
               var relatedIds = [];
 
@@ -1850,7 +1837,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true}).fetch()
 
               var relatedIds = [];
 

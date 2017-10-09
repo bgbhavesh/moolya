@@ -23,7 +23,10 @@ export default class MlTabComponent extends React.Component {
           key= 'name';
         }
 
-        object[type]=this.state.tabs[0][key];
+        if(this.props.selectedTabKey)
+          object[type]=this.props.selectedTabKey;
+        else
+          object[type]=this.state.tabs[0][key];
         FlowRouter.setQueryParams(object);
       }
       this.context.breadCrum.updateBreadCrum();
@@ -37,6 +40,8 @@ export default class MlTabComponent extends React.Component {
       object[type]=index;
       object["appointment"] = null;
       object[" Team"] = null;
+      object["add"] = null;
+      object[" Products"] =null;
       FlowRouter.setQueryParams(object);
     }
     this.context.breadCrum.updateBreadCrum();

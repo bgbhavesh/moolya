@@ -326,7 +326,8 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
       }, context, info)
 
       addNoise = () => {
-        let x = Math.random() * 0.0007 + "";
+        let x = Math.random() * 0.0007 ;
+        x=Math.pow(-1,new Date().getMilliseconds()%2) * x + ""; // random +/-
         return parseFloat(x.substr(0,8));
       }
 

@@ -87,6 +87,7 @@ class MlEditBackendUser extends React.Component{
 
     genderSelect(e){
     this.setState({genderSelect: e.target.value})
+      this.getGender();
   }
 
   onBirthDateSelection(event) {
@@ -491,6 +492,13 @@ class MlEditBackendUser extends React.Component{
   data:fetchActiveSubChapters{label:subChapterName,value:_id}
 }
 `;
+    let loggedInUser = getAdminUserContext();
+    let dobDisabled = "";
+    let genderDisabled = "";
+    if(loggedInUser.hierarchyLevel < 4){
+      dobDisabled = "disabled"
+      genderDisabled = "disabled"
+    }
     const showLoader=this.state.loading;
     let that=this;
     let Dob=that.state.dateOfBirth
@@ -587,7 +595,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
 
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={Dob} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={Dob} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } disabled={dobDisabled} />
                       {/*<input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label " defaultValue={Dob} disabled="disabled" />*/}
                       <FontAwesome name="calendar" className="password_icon"/>
 
@@ -597,13 +605,13 @@ class MlEditBackendUser extends React.Component{
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="male" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateMale} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="male" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateMale} disabled={genderDisabled} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                          <input id="radio2" type="radio" name="radio" value="female" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateFemale} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
+                          <input id="radio2" type="radio" name="radio" value="female" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateFemale} disabled={genderDisabled} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="others" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateOthers} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="others" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateOthers} disabled={genderDisabled} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
                       </div>
                     </div>
                     <div className="clearfix"></div>

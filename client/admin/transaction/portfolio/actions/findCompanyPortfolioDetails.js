@@ -418,7 +418,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
 
 export async function fetchCompanyPortfolioData(portfoliodetailsId, connection) {
 
-  const result = await connection.query({
+  const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchCompanyPortfolioData(portfoliodetailsId: $portfoliodetailsId) {

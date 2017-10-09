@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
@@ -9,22 +7,30 @@ var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
-export default class MlStartupAboutUs extends React.Component{
+export default class MlStartupAboutUs extends Component{
   constructor(props){
     super(props)
     this.state = {aboutStartup:false,startupAboutUs:[], startupAboutUsList:[]}
     this.fetchPortfolioDetails.bind(this);
+    this.selectedTab=this.selectedTab.bind(this);
   }
-  selectedTab(field,e){
-    this.setState({aboutStartup : true})
+  selectedTab(activeTab){
+    this.setState({aboutStartup : true,activeTab:activeTab})
     this.props.backClickHandler(this.getStartUpState.bind(this))
   }
-  getPortfolioStartupAboutUsDetails(details,tabName, privateKey){
-    this.props.getAboutus(details,tabName,privateKey);
+
+  getPortfolioStartupAboutUsDetails(details, tabName, privateKey, requiredFields) {
+    this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
-  componentWillMount(){
-    this.fetchPortfolioDetails();
+
+  componentWillMount() {
+    if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
+      this.setState({aboutStartup: true});
+    }
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -32,7 +38,6 @@ export default class MlStartupAboutUs extends React.Component{
     if (response) {
       this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
     }
-
   }
 
   getStartUpState() {
@@ -71,7 +76,7 @@ export default class MlStartupAboutUs extends React.Component{
         >        <h2>Portfolio</h2>
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
               <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
             </div>
@@ -79,7 +84,7 @@ export default class MlStartupAboutUs extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Rating')}/></a></div>
             <div className="panel-body rating_small">
               <div className="star_ratings">
                 <Rating
@@ -95,20 +100,20 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="clearfix"></div>
           <div className="col-md-6 col-sm-6 nopadding-left">
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+              <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Client')}/></a></div>
               <div className="panel-body text-center panel-body-scroll">
                 {aboutUsImages}
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+              <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
               <div className="panel-body panel-body-scroll">
                 <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p>
               </div>
             </div></div>
           </div>
           <div className="col-md-6 col-sm-6 nopadding"><div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
             <div className="panel-body">
               <ul className="list-info">
                 <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li>
@@ -118,7 +123,7 @@ export default class MlStartupAboutUs extends React.Component{
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp} activeTab={this.state.activeTab}></MlStartupTab> }</div>)}
       </div>
 
     )

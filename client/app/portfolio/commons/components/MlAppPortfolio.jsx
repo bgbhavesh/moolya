@@ -33,6 +33,7 @@ class MlAppPortfolio extends Component{
       backHandlerMethod: "",
       portfolioDetails: {}
     }
+    this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -201,18 +202,31 @@ class MlAppPortfolio extends Component{
     this.setState({loading: false})
   }
 
-  getIdeatorIdeaDetails(details, privateKey){
+  getIdeatorIdeaDetails(details, privateKey, requiredFields){
     this.setState({idea:details});
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
+    if (requiredFields)
+      this.updateRequiredFields(requiredFields)
   }
 
-  getPortfolioDetails(details, privateKey){
+  updateRequiredFields(requiredFields) {
+    var ary = this.requiredFieldAry
+    _.remove(ary, {tabName: requiredFields.tabName, index: requiredFields.index})
+    if (requiredFields && requiredFields.errorMessage) {
+      ary.push(requiredFields)
+    }
+    this.requiredFieldAry = ary
+  }
+
+  getPortfolioDetails(details, privateKey, requiredFields){
     this.setState({portfolio:details});
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
+    if (requiredFields)
+      this.updateRequiredFields(requiredFields)
   }
 
   updatePrivateKeys(privateKey){
@@ -257,23 +271,33 @@ class MlAppPortfolio extends Component{
   }
 
   async updatePortfolioDetails() {
-    let jsonData={
-      portfolioId :this.props.config,
-      portfolio :this.state.portfolio,
-      privateKeys: this.state.privateKeys,
-      removeKeys: this.state.removePrivateKeys
-    }
-    console.log(jsonData)
-    const response = await updatePortfolioActionHandler(jsonData)
-    if(response){
-      if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
-        let idea = this.state.idea
-        if(idea){
-          const response1 = await updateIdeatorIdeaActionHandler(idea)
-          return response1;
-        }
+    const isRequired = this.isRequired()
+    if(!isRequired) {
+      let jsonData = {
+        portfolioId: this.props.config,
+        portfolio: this.state.portfolio,
+        privateKeys: this.state.privateKeys,
+        removeKeys: this.state.removePrivateKeys
       }
-      return response;
+      const response = await updatePortfolioActionHandler(jsonData)
+      if (response) {
+        if (this.props.communityType == "Ideators" || this.props.communityType == "ideator") {
+          let idea = this.state.idea
+          if (idea) {
+            const response1 = await updateIdeatorIdeaActionHandler(idea)
+            return response1;
+          }
+        }
+        return response;
+      }
+    }else
+      toastr.error(isRequired.errorMessage +' in '+ isRequired.tabName);
+  }
+
+  isRequired() {
+    const error = this.requiredFieldAry && this.requiredFieldAry.length ? this.requiredFieldAry[0] : null
+    if (error) {
+      return error
     }
   }
 

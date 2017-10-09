@@ -463,6 +463,7 @@ let registrationSchema = `
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
+         verifyLaterUserMobileNumber(mobileNumber:String):response
          forgotPassword(email:String):response
          resetPasswords(token:String, password:String):response
          createKYCDocument(registrationId:String,documentID:String,kycDocID:String,docTypeID:String):response
@@ -505,6 +506,7 @@ let supportedApi = [
     {api:'verifyUserMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyLaterUserMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},

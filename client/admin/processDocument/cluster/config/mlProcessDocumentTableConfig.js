@@ -66,6 +66,11 @@ function  communityFormatter(data) {
   }
 }
 
+function titleFormatter(data){
+  let formatterData=data&&data.length>0?data:null;
+  if(formatterData){return `${formatterData.join()}`;}else{return `All`;}
+}
+
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -108,12 +113,12 @@ const mlProcessTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processName", title: "Process",dataSort:true},
     {dataField: "industryNames", title:"Industry",dataSort:true},
-    {dataField: "professionNames", title:"Profession",dataSort:true,customComponent:professionFormatter},
-    {dataField: "clusterNames", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
-    {dataField: "stateNames", title: "State",dataSort:true,customComponent:stateFormatter},
-    {dataField:"chapterNames", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField:"subChapterNames", title:"Sub Chapter",dataSort:true,customComponent:subChapterFormatte},
-    {dataField: "communityNames", title: "Community",dataSort:true,customComponent:communityFormatter},
+    {dataField: "professionNames", title:"Profession",dataSort:true,customComponent:professionFormatter,customTitleFormatter:titleFormatter},
+    {dataField: "clusterNames", title: "Cluster",dataSort:true,customComponent:clusterFormatter,customTitleFormatter:titleFormatter},
+    {dataField: "stateNames", title: "State",dataSort:true,customComponent:stateFormatter,customTitleFormatter:titleFormatter},
+    {dataField:"chapterNames", title:"Chapter",dataSort:true,customComponent:chapterFormatter,customTitleFormatter:titleFormatter},
+    {dataField:"subChapterNames", title:"Sub Chapter",dataSort:true,customComponent:subChapterFormatte,customTitleFormatter:titleFormatter},
+    {dataField: "communityNames", title: "Community",dataSort:true,customComponent:communityFormatter,customTitleFormatter:titleFormatter},
     {dataField: "userTypeNames", title: "User Type",dataSort:true},
     {dataField: "identity", title: "Identity",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveProcessFormatter}

@@ -15,6 +15,7 @@ export default class MlCompanyViewAboutLanding extends Component {
     super(props)
     this.state = {aboutCompany: false, aboutUs: [], aboutUsList: []}
     this.fetchPortfolioDetails.bind(this);
+    this.selectedTab=this.selectedTab.bind(this);
   }
 
 
@@ -24,6 +25,9 @@ export default class MlCompanyViewAboutLanding extends Component {
   // }
 
   componentWillMount() {
+    if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
+      this.setState({aboutCompany: true});
+    }
     const resp = this.fetchPortfolioDetails();
     return resp
   }
@@ -37,8 +41,8 @@ export default class MlCompanyViewAboutLanding extends Component {
     }
   }
 
-  selectedTab(field, e) {
-    this.setState({aboutCompany: true})
+  selectedTab(activeTab) {
+    this.setState({aboutCompany: true,activeTab:activeTab})
     this.props.backClickHandler(this.getInstitutionState.bind(this))
   }
 
@@ -79,7 +83,7 @@ export default class MlCompanyViewAboutLanding extends Component {
             <div className="col-md-6 col-sm-6 nopadding">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
-                  name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                  name='ellipsis-h' onClick={(e)=>this.selectedTab('About Us')}/></a></div>
                 <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
                   <p>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?this.state.aboutUs.aboutUs.companyDescription:(<NoData tabName="aboutUs"/>)}</p>
                 </div>
@@ -88,7 +92,7 @@ export default class MlCompanyViewAboutLanding extends Component {
             <div className="col-md-6 col-sm-6 nopadding-right">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome
-                  name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                  name='ellipsis-h' onClick={(e)=>this.selectedTab('Rating')}/></a></div>
                 <div className="panel-body rating_small">
                   <div className="star_ratings">
                     <Rating
@@ -106,7 +110,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                 <div className="col-md-12 nopadding">
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome
-                      name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                      name='ellipsis-h' onClick={(e)=>this.selectedTab('Clients')}/></a></div>
                     <div className="panel-body text-center panel-body-scroll">
                       {aboutUsImages && aboutUsImages.length?<div>{aboutUsImages}</div>:(<NoData tabName="clients"/>)}
                     </div>
@@ -116,7 +120,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Service & Products <a href=""
                                                                          className="pull-right ellipsis-menu"><FontAwesome
-                      name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                      name='ellipsis-h' onClick={(e)=>this.selectedTab('Services And Products')}/></a></div>
                     <div className="panel-body panel-body-scroll">
                       <p>{this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?this.state.aboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
                     </div>
@@ -127,7 +131,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Information <a href=""
                                                                 className="pull-right ellipsis-menu"><FontAwesome
-                    name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                    name='ellipsis-h' onClick={(e)=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body panel-body-scroll">
                     <ul className="list-info">
                       <li>{this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?this.state.aboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
@@ -142,6 +146,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                                    institutionAboutUsDetails={this.state.aboutUs}
                                                    getSelectedAnnotations={this.props.getSelectedAnnotations}
+                                                   activeTab={this.state.activeTab || null}
                                                    isApp={this.props.isApp}></MlCompanyViewAboutusTabs> }</div>)}
       </div>
     )

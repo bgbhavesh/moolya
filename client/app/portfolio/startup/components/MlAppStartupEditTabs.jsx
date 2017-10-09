@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-// import { connect } from 'react-redux';
 import _ from 'lodash'
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupAboutUs from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
@@ -13,8 +12,9 @@ import MlStartupLookingFor from "../../../../admin/transaction/portfolio/compone
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
+// import { connect } from 'react-redux';
 
-class MlAppStartupEditTabs extends React.Component {
+class MlAppStartupEditTabs extends Component {
 
   constructor(props) {
     super(props)
@@ -75,7 +75,7 @@ class MlAppStartupEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Management",
         name: "Management",
-        component: <MlStartupManagement key="2" isAdmin={false} client={appClient}
+        component: <MlStartupManagement key="2" isAdmin={false} client={appClient} tabName={"management"}
                                         getManagementDetails={this.getManagementDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -145,23 +145,23 @@ class MlAppStartupEditTabs extends React.Component {
     return tabs;
   }
 
-  getAboutus(details, tabName, privatekey) {
+  getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey, requiredFields);
   }
 
-  getManagementDetails(details, privatekey) {
+  getManagementDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.management) {
       data['management'] = [];
     }
     data['management'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
   }
 
-  getInvestorDetails(details, privatekey) {
+  getInvestorDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data['investor'] = details;
     this.setState({startupPortfolio: data})
@@ -171,11 +171,10 @@ class MlAppStartupEditTabs extends React.Component {
       arr.push(updateItem)
     })
     data['investor'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey, requiredFields);
   }
 
-  getAwardsDetails(details, privatekey) {
-
+  getAwardsDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -188,18 +187,17 @@ class MlAppStartupEditTabs extends React.Component {
     })
     data['awardsRecognition'] = arr;
 
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
   }
 
-  getLookingForDetails(details, privatekey) {
-
+  getLookingForDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
   }
 
   getChartDetails(details, tabName) {
@@ -242,7 +240,7 @@ class MlAppStartupEditTabs extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
+    // console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp

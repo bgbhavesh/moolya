@@ -5,9 +5,10 @@ import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import moment from "moment";
 import {client} from '../../../core/apolloConnection';
 
-function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
-  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+function dateFormatter (cell,data){
+  let createdDateTime=data&&data.createdAt?data.createdAt:null;
+  let dateVal=createdDateTime?moment(createdDateTime).format(Meteor.settings.public.dateFormat):'';
+  return dateVal;
 }
 
 const mlApprovedPortfolioTableConfig=new MlViewer.View({
@@ -39,7 +40,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
     {dataField: "lastName", title: "Status",dataSort:true},
     {dataField: "lastName", title: "Assign",dataSort:true},*/
     {dataField: "portfolioId", title: "Portfolio Id",dataSort:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
+    {dataField: "createdAt", title: "Date & Time",dataSort:true,useCustomComponent:true,customComponent:dateFormatter},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},

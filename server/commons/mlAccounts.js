@@ -484,6 +484,42 @@ export default MlAccounts=class MlAccounts {
 
   }
 
+  static verifyLaterUserMobileNumber(numbr){
+
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":numbr});
+
+    if(!regDetails){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+
+    let to=(regDetails.registrationInfo||{}).contactNumber;
+    let countryCode=(regDetails.registrationInfo||{}).countryId;
+
+    if(!to){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+
+    //send SMS
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(user);
+    }else{
+      msg= "You have opted for 'Verify later'. You can verify your mobile number from 'My Profile'.";
+    }
+
+    //send SMS
+    if(to){
+      Meteor.setTimeout(function() {
+        // mlSms.send(countryCode,to,msg);
+        mlSmsController.sendSMS(msg, countryCode, to)
+      }, 1 * 1000);
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.success=true;
+    return resp;
+  }
+
   static verifyUserMobileNumberOtp(userId, otp){
 
     var user = mlDBController.findOne('users', {'_id': userId}, context) || {};

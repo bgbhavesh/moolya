@@ -43,8 +43,8 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   var moduleName=args.module;
   //to resolve the type in data _resolveType for Union
   context.module=args.module;
-  console.log("ContextResolverArgs-"+args.module);
-  console.log("ContextResolverModule-"+context.module);
+  //console.log("ContextResolverArgs-"+args.module);
+  //console.log("ContextResolverModule-"+context.module);
 
   //Authorization layer
   var transactionModules = ['registrationInfo', 'registrationApprovedInfo', 'registrationRejectedInfo', 'internalRequests', "share", "userTransaction", "ConversationsLog", "portfolioApproved", "portfolioRequests", "internalRejectedRequests", "internalApprovedRequests", "officeTransaction"]
@@ -226,8 +226,8 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
     if(resolveType){
       return resolveType;
     }else{
-      console.log("UnionResolverModule-"+module);
-      console.log("UnionResolverType-"+resolveType);
+     // console.log("UnionResolverModule-"+module);
+     // console.log("UnionResolverType-"+resolveType);
       return 'GenericType';
     }
   }

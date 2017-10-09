@@ -289,7 +289,7 @@ class MlAppSetCalendarVacation extends Component {
             <form>
               <div className="form-group">
                 <span className="placeHolder active">Choose break type</span>
-                <select id="breaktype" className="form-control" onChange={(event) => this.onChangeFieldValue(event)}>
+                <select id="breaktype" className="form-control" onChange={(event) => this.onChangeFieldValue(event)} value={that.state.vacationData.type}>
                   {this.breakTypes && this.loadBreakTypes()}
                 </select>
               </div>
@@ -359,7 +359,7 @@ class MlAppSetCalendarVacation extends Component {
               {this.state.vacations.map(function (vacation, index) {
                 return (
                   <li className={ that.state.selectedVacation == vacation.vacationId ? 'active' : '' } key={index} onClick={() => that.selectVacation(vacation)}>
-                    <FontAwesome name='plane'/><b>{vacation.note}</b>
+                    <span className={ vacation.type === "holiday" ?  'fa my-ml-holiday' : "fa my-ml-travel"}></span><b>{vacation.note}</b>
                   </li>
                 )
               })}

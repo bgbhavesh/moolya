@@ -1,18 +1,18 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar'
+import gql from 'graphql-tag';
+import _ from 'lodash';
 import {Button, Popover, PopoverTitle, PopoverContent} from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-import {graphql} from 'react-apollo';
-import _ from 'lodash';
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-const KEY = "lookingFor"
-export default class MlStartupLookingFor extends React.Component {
+const KEY = "lookingFor";
+
+export default class MlStartupLookingFor extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -26,7 +26,7 @@ export default class MlStartupLookingFor extends React.Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    // this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
     return this;
@@ -178,23 +178,19 @@ export default class MlStartupLookingFor extends React.Component {
       ["lookingForName"]: selObject.label,
       lookingDescription: selObject.about
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
       this.sendDataToParent()
     })
   }
 
-  // handleBlur(e) {
-  //   let details = this.state.data;
-  //   let name = e.target.name;
-  //   details = _.omit(details, [name]);
-  //   details = _.extend(details, {[name]: e.target.value});
-  //   this.setState({data: details}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
 
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
@@ -209,15 +205,12 @@ export default class MlStartupLookingFor extends React.Component {
       }
       var newItem = _.omit(item, "__typename")
       newItem = _.omit(newItem, ["privateFields"])
-      // if (item && item.logo) {
-      //   delete item.logo['__typename'];
-      // }
       arr.push(newItem)
     })
 
     startupLookingFor = arr;
     this.setState({startupLookingFor: startupLookingFor})
-    this.props.getLookingForDetails(startupLookingFor, this.state.privateKey);    //indexArray
+    this.props.getLookingForDetails(startupLookingFor, this.state.privateKey, requiredFields);    //indexArray
 
   }
 
@@ -289,7 +282,9 @@ export default class MlStartupLookingFor extends React.Component {
                                           isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
+                                          selectedValue={this.state.selectedVal} ref={"lookingForId"}
+                                          data-required={true}
+                                          data-errMsg="Looking For is required"/>
 
                             <div className="form-group">
                               <textarea type="text" name="lookingDescription" placeholder="About"

@@ -1,22 +1,21 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import gql from "graphql-tag";
+import _ from "lodash";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'investor'
 
-export default class MlStartupInvestor extends React.Component{
+export default class MlStartupInvestor extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -32,7 +31,8 @@ export default class MlStartupInvestor extends React.Component{
       showProfileModal: false,
       uploadingAvatar: false
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
@@ -160,8 +160,8 @@ export default class MlStartupInvestor extends React.Component{
     let details =this.state.data;
     details=_.omit(details,["fundingTypeId"]);
     details=_.extend(details,{["fundingTypeId"]:selectedId});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
+    this.setState({data:details, "selectedVal" : selectedId}, function () {
+      // this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
 
@@ -179,7 +179,13 @@ export default class MlStartupInvestor extends React.Component{
     this.setState({startupInvestorList:this.state.startupInvestor, popoverOpen : false})
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
@@ -198,9 +204,9 @@ export default class MlStartupInvestor extends React.Component{
     })
     startupInvestor = arr;
     this.setState({startupInvestor: startupInvestor})
-    this.props.getInvestorDetails(startupInvestor, this.state.privateKey);
-
+    this.props.getInvestorDetails(startupInvestor, this.state.privateKey, requiredFields);
   }
+
   onLogoFileUpload(image,fileInfo){
     // if(e.target.files[0].length ==  0)
     //   return;
@@ -356,22 +362,25 @@ export default class MlStartupInvestor extends React.Component{
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
                       <div className="form-group mandatory">
-                        <input type="text" name="investorName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.investorName}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="investorName" placeholder="Name" className="form-control float-label"
+                               defaultValue={this.state.data.investorName} onBlur={this.handleBlur}
+                               ref={"investorName"} data-required={true}
+                               data-errMsg="Investor Name is required"/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate}  onClick={this.onLockChange.bind(this, "investorName", "isNamePrivate")}/>
                       </div>
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    placeholder={'Select Funding..'}
+                                    isDynamic={true} mandatory={true} ref={"fundingTypeId"}
+                                    onSelect={this.onOptionSelected.bind(this)}
+                                    selectedValue={this.state.selectedVal} data-required={true}
+                                    data-errMsg="Funding is required"/>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                      labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Funding..'}
-                                      isDynamic={true} mandatory={true}
-                                      onSelect={this.onOptionSelected.bind(this)}
-                                      selectedValue={this.state.selectedVal}/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" name="investmentAmount" placeholder="Investment Amount" className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="investmentAmount" placeholder="Investment Amount" className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInvestmentAmountPrivate" defaultValue={this.state.data.isInvestmentAmountPrivate}  onClick={this.onLockChange.bind(this, "investmentAmount", "isInvestmentAmountPrivate")}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="investorDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.investorDescription}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="investorDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.investorDescription}  onBlur={this.handleBlur}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "investorDescription", "isDescriptionPrivate")}/>
                       </div>
                       {displayUploadButton?<div className="form-group">

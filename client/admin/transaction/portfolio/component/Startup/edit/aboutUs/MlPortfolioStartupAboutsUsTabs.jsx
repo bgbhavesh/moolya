@@ -198,8 +198,6 @@ export default class MlStartupTab extends React.Component {
   }
 
   getStartupTechnology(details, privateKey, requiredFields) {
-    // let data = this.state.portfolioStartupTechnologies;
-    // data = details;
     this.setState({portfolioStartupTechnologies: details})
     let ary = [];
     _.each(details, function (obj) {

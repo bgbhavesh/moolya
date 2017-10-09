@@ -36,6 +36,10 @@ export default class MlCommunityList extends Component {
       $('.community_icons a').removeClass('active_community');
       $('.'+communityCode).addClass('active_community');
     }
+    if(this.props.config.params.userType != "All"){
+      $('.community_icons a').removeClass('active_community');
+      $('.'+this.props.config.params.userType).addClass('active_community');
+    }
   }
   componentDidUpdate(){
     let loggedInUser = getAdminUserContext();
@@ -150,25 +154,25 @@ export default class MlCommunityList extends Component {
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
               <span className="ml ml-select-all br br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>
-            <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
+            <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE Ideators" data-filter="ideator">
               <span className="ml my-ml-Ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
             </a>
-            <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN" data-filter="funder">
+            <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN Investors" data-filter="funder">
               <span className="ml my-ml-Investors fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
             </a>
-            <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU" data-filter="startup">
+            <a data-toggle="tooltip" title="Startups" data-placement="bottom" className="STU Startups" data-filter="startup">
               <span className="ml my-ml-Startups st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
             </a>
-            <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="" data-filter="provider">
+            <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
               <span className="ml my-ml-Service-Providers pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
             </a>
             {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="" data-filter="browser">*/}
               {/*<span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
             {/*</a>*/}
-            <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="" data-filter="company">
+            <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
               <span className="ml my-ml-Company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
             </a>
-            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="" data-filter="institution">
+            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
               <span className="ml my-ml-Institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
             </a>
           </div>

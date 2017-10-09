@@ -61,7 +61,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
-        component: <MlInstitutionViewAbout client={client} isAdmin={true} key="1"
+        component: <MlInstitutionViewAbout client={client} isAdmin={true} key="1" tabName="aboutUs"
                                        portfolioDetailsId={this.props.portfolioDetailsId}
                                        getSelectedAnnotations={this.props.getSelectedAnnotations}
                                        aboutUsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.aboutUs}/>
@@ -78,7 +78,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlInstitutionViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          clientsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.clients}/>
       },
@@ -86,7 +86,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
-        component: <MlInstitutionViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId} tabName="serviceProducts"
                                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                      serviceProductsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.serviceProducts}/>
       },
@@ -94,7 +94,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
-        component: <MlInstitutionViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId} tabName="information"
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              informationDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.information}/>
       }

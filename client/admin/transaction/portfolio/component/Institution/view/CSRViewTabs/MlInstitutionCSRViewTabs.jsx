@@ -71,7 +71,7 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Evolution",
-        component: <MlInstitutionViewEvolution key="2" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewEvolution key="2" portfolioDetailsId={this.props.portfolioDetailsId} tabName="evolution"
                                                getSelectedAnnotations={this.props.getSelectedAnnotations}
         />
       },
@@ -92,7 +92,7 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Policy",
-        component: <MlInstitutionViewPolicy key="4" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewPolicy key="4" portfolioDetailsId={this.props.portfolioDetailsId} tabName="policy"
                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                  />
       }

@@ -7,7 +7,7 @@ import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlCompanyViewAbout extends React.Component {
   constructor(props) {
@@ -118,7 +118,7 @@ export default class MlCompanyViewAbout extends React.Component {
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription : ""}</p>
+              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription :(<NoData tabName={this.props.tabName}/>)}</p>
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlInstitutionViewAboutusTabs from './MlInstitutionViewAboutusTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../../portfolio/actions/findPortfolioInstitutionDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlInstitutionViewAboutLanding extends Component {
   constructor(props) {
@@ -81,7 +81,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
                   name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
                 <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription}</p>
+                  <p>{this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription?this.state.institutionAboutUs.aboutUs.institutionDescription:(<NoData tabName="aboutUs"/>)}</p>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                     <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
                     <div className="panel-body text-center panel-body-scroll">
-                      {aboutUsImages}
+                      {aboutUsImages&&aboutUsImages.length?<div>{aboutUsImages}</div>:(<NoData tabName="clients"/>)}
                     </div>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                                                                          className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
                     <div className="panel-body panel-body-scroll">
-                      <p>{this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription}</p>
+                      <p>{this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription?this.state.institutionAboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
                     </div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                     name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
                   <div className="panel-body">
                     <ul className="list-info">
-                      <li>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription}</li>
+                      <li>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?this.state.institutionAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
                     </ul>
                   </div>
                 </div>

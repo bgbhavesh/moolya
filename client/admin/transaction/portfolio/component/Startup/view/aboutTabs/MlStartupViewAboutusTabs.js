@@ -66,7 +66,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
-        component: <MlStartupViewAbout client={client} isAdmin={true} key="1"
+        component: <MlStartupViewAbout client={client} isAdmin={true} key="1" tabName="aboutUs"
                                        portfolioDetailsId={this.props.portfolioDetailsId}
                                        getSelectedAnnotations={this.props.getSelectedAnnotations}
                                        aboutUsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.aboutUs}/>
@@ -83,7 +83,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlStartupViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          clientsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.clients}/>
       },
@@ -91,7 +91,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
-        component: <MlStartupViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId} tabName="serviceProducts"
                                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                      serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
       },
@@ -99,7 +99,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
-        component: <MlStartupViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId} tabName="information"
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              informationDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.information}/>
       },

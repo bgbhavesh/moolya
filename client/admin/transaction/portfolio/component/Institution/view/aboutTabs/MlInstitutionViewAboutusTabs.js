@@ -61,7 +61,8 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
-        component: <MlInstitutionViewAbout client={client} isAdmin={true} key="1"
+        name: "About Us",
+        component: <MlInstitutionViewAbout client={client} isAdmin={true} key="1" tabName="aboutUs"
                                        portfolioDetailsId={this.props.portfolioDetailsId}
                                        getSelectedAnnotations={this.props.getSelectedAnnotations}
                                        aboutUsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.aboutUs}/>
@@ -70,6 +71,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Rating",
+        name: "Rating",
         component: <MlInstitutionViewRating key="2" portfolioDetailsId={this.props.portfolioDetailsId}
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}
                                         ratingDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.rating}/>
@@ -78,7 +80,8 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlInstitutionViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Clients",
+        component: <MlInstitutionViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          clientsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.clients}/>
       },
@@ -86,7 +89,8 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
-        component: <MlInstitutionViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Services And Products",
+        component: <MlInstitutionViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId} tabName="serviceProducts"
                                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                      serviceProductsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.serviceProducts}/>
       },
@@ -94,7 +98,8 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
-        component: <MlInstitutionViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Information",
+        component: <MlInstitutionViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId} tabName="information"
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              informationDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.information}/>
       }
@@ -116,7 +121,8 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key: tab.title,
+        key: tab.name,
+        name:tab.name,
         getContent: () => tab.component
       }));
     }
@@ -141,11 +147,16 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
   render() {
     let tabs = this.state.tabs;
     if(this.state.admin){
+      if(this.props.activeTab){
+        let index = tabs.findIndex(i => i.name === this.props.activeTab);
+        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getInstitutionState}/>
+      }else
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.getInstitutionState}/>
     }
     else{
+      let activeTab =  this.props.activeTab || this.state.activeTab;
       return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
+                             selectedTabKey={activeTab}
                              onChange={this.updateTab}
                              backClickHandler={this.props.getInstitutionState}
                              type="subtab" mkey="title"

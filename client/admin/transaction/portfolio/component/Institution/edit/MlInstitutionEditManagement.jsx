@@ -1,20 +1,21 @@
 import React, { Component, PropTypes }  from "react";
+import gql from 'graphql-tag'
+import moment from "moment";
+import _ from 'lodash';
+import Datetime from "react-datetime";
+var Select = require('react-select');
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import _ from 'lodash';
-import Datetime from "react-datetime";
-import moment from "moment";
 import MlLoader from '../../../../../../commons/components/loader/loader'
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'management';
-export default class MlInstitutionEditManagement extends React.Component{
+export default class MlInstitutionEditManagement extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -31,7 +32,8 @@ export default class MlInstitutionEditManagement extends React.Component{
       managementIndex:"",
       responseImage:"",
       gender:null,
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.addManagement.bind(this);
@@ -209,7 +211,13 @@ export default class MlInstitutionEditManagement extends React.Component{
     }
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionManagement1 = this.state.institutionManagement;
     let institutionManagement = _.cloneDeep(institutionManagement1);
@@ -235,7 +243,7 @@ export default class MlInstitutionEditManagement extends React.Component{
     // institutionManagement=_.extend(institutionManagement[this.state.arrIndex],data);
     this.setState({institutionManagement:institutionManagement})
     // let indexArray = this.state.indexArray;
-    this.props.getManagementDetails(institutionManagement, this.state.privateKey)
+    this.props.getManagementDetails(institutionManagement, this.state.privateKey, requiredFields)
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -364,7 +372,7 @@ export default class MlInstitutionEditManagement extends React.Component{
                   <div className="form_bg">
                     <form>
                       {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title} id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                      {/*<input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title}  onBlur={this.handleBlur.bind(this)}/>*/}
                       {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isTitlePrivate" onClick={this.onClick.bind(this, "isTitlePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isTitlePrivate}/>*/}
                       {/*</div>*/}
                       <div className="form-group">
@@ -374,42 +382,56 @@ export default class MlInstitutionEditManagement extends React.Component{
 
                       </div>
                       <div className="form-group mandatory">
-                        <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="First Name" name="firstName"
+                               defaultValue={this.state.data.firstName} className="form-control float-label"
+                               onBlur={this.handleBlur.bind(this)} ref={"firstName"} data-required={true} data-errMsg="First Name is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isFirstNamePrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Middle Name" name="middleName" defaultValue={this.state.data.middleName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Middle Name" name="middleName" defaultValue={this.state.data.middleName} className="form-control float-label"   onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isMiddleNamePrivate" onClick={this.onClick.bind(this, "middleName", "isMiddleNamePrivate")}/>
                       </div>
 
                       <div className="form-group mandatory">
-                        <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Last Name" name="lastName"
+                               defaultValue={this.state.data.lastName} className="form-control float-label"
+                               onBlur={this.handleBlur.bind(this)} ref={"lastName"} data-required={true}
+                               data-errMsg="Last Name is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")}/>
                       </div>
 
                       {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>*/}
                         {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>*/}
                       {/*</div>*/}
                       <div className="form-group mandatory">
-                        <Select name="form-field-name"  ref={"gender"} placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" data-required={true} data-errMsg="Gender is required"/>
+                        <Select name="form-field-name" ref={"gender"} placeholder="Select Gender"
+                                value={this.state.gender} options={genderValues}
+                                onChange={this.optionsBySelectGender.bind(this)} className="float-label"
+                                data-required={true} data-errMsg="Gender is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
 
                       </div>
 
                       <div className="form-group mandatory">
-                        <input type="text" placeholder="Designation" name="designation" defaultValue={this.state.data.designation} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Designation" name="designation"
+                               defaultValue={this.state.data.designation} className="form-control float-label"
+                               onBlur={this.handleBlur.bind(this)} ref={"designation"} data-required={true}
+                               data-errMsg="Designation is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate" onClick={this.onClick.bind(this, "designation", "isDesignationPrivate")}/>
                       </div>
 
                       <div className="form-group mandatory">
-                        <input type="text" placeholder="Year of Experience" name="yearsOfExperience" defaultValue={this.state.data.yearsOfExperience} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Year of Experience" name="yearsOfExperience"
+                               defaultValue={this.state.data.yearsOfExperience} className="form-control float-label"
+                               onBlur={this.handleBlur.bind(this)} ref={"yearsOfExperience"} data-required={true}
+                               data-errMsg="Year of Experience is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isYOFPrivate" onClick={this.onClick.bind(this, "yearsOfExperience", "isYOFPrivate")}/>
                       </div>
 
                       <div className="form-group date-pick-wrap">
-                        {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>*/}
                         <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                   inputProps={{placeholder: "Joining Date to this Company",readOnly:true}}
                                   closeOnSelect={true} value={this.state.data.joiningDate}
@@ -418,7 +440,7 @@ export default class MlInstitutionEditManagement extends React.Component{
                       </div>
 
                       <div className="form-group date-pick-wrap">
-                        {/*<input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>*/}
                         <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                   inputProps={{placeholder: "First Job Joining Date",readOnly:true}}
                                   closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
@@ -446,32 +468,32 @@ export default class MlInstitutionEditManagement extends React.Component{
                       </div>
                       <br className="brclear"/>
                       <div className="form-group">
-                        <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "qualification", "isQualificationPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Certification" name="certification" defaultValue={this.state.data.certification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Certification" name="certification" defaultValue={this.state.data.certification} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isCertificationPrivate" onClick={this.onClick.bind(this, "certification", "isCertificationPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Universities" name="universities" defaultValue={this.state.data.universities} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Universities" name="universities" defaultValue={this.state.data.universities} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isUniversitiesPrivate" onClick={this.onClick.bind(this, "universities", "isUniversitiesPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Awards" name="awards" defaultValue={this.state.data.awards} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Awards" name="awards" defaultValue={this.state.data.awards} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isAwardsPrivate" onClick={this.onClick.bind(this, "awards", "isAwardsPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Linkdin URL" name="linkedInUrl" defaultValue={this.state.data.linkedInUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Linkdin URL" name="linkedInUrl" defaultValue={this.state.data.linkedInUrl} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedInUrlPrivate" onClick={this.onClick.bind(this, "linkedInUrl", "isLinkedInUrlPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="About" name="managmentAbout" defaultValue={this.state.data.managmentAbout} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="About" name="managmentAbout" defaultValue={this.state.data.managmentAbout} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrivate" onClick={this.onClick.bind(this, "managmentAbout", "isAboutPrivate")}/>
                       </div>
 

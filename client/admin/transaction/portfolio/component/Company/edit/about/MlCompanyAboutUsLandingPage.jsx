@@ -1,31 +1,32 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 var Rating = require('react-rating');
 import MlPortfolioCompanyAboutsUsTabs from './MlPortfolioCompanyAboutsUsTabs'
 import {fetchDetailsCompanyActionHandler} from '../../../../actions/findCompanyPortfolioDetails'
-import underscore from "underscore";
 
-
-export default class MlCompanyAboutUsLandingPage extends React.Component{
+export default class MlCompanyAboutUsLandingPage extends Component{
   constructor(props){
     super(props)
     this.state = {aboutUsCompany:false,aboutUs:[], aboutUsList:[]}
     this.fetchPortfolioDetails.bind(this);
+    this.selectedTab=this.selectedTab.bind(this);
   }
-  selectedTab(field,e){
-    this.setState({aboutUsCompany: true})
+  selectedTab(activeTab){
+    this.setState({aboutUsCompany: true,activeTab:activeTab})
     this.props.backClickHandler(this.getState.bind(this))
   }
-  getPortfolioAboutUsDetails(details,tabName, privateKey){
-    this.props.getAboutus(details,tabName,privateKey);
+
+  getPortfolioAboutUsDetails(details, tabName, privateKey, requiredFields) {
+    this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+
   componentWillMount(){
+    if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
+      this.setState({aboutUsCompany: true});
+    }
     this.fetchPortfolioDetails();
   }
   async fetchPortfolioDetails() {
@@ -76,7 +77,7 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
         >        <h2>Portfolio</h2>
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
               <p>{this.state.aboutUs.aboutUs&&this.state.aboutUs.aboutUs.companyDescription}</p>
             </div>
@@ -84,7 +85,7 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Rating')}/></a></div>
             <div className="panel-body rating_small">
               <div className="star_ratings">
                 <Rating
@@ -100,20 +101,20 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
           <div className="clearfix"></div>
           <div className="col-md-6 col-sm-6 nopadding-left">
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+              <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Client')}/></a></div>
               <div className="panel-body text-center panel-body-scroll">
                 {aboutUsImages}
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+              <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
               <div className="panel-body panel-body-scroll">
                 <p>{this.state.aboutUs.serviceProducts&&this.state.aboutUs.serviceProducts.spDescription}</p>
               </div>
             </div></div>
           </div>
           <div className="col-md-6 col-sm-6 nopadding"><div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
             <div className="panel-body panel-body-scroll">
               <ul className="list-info">
                 <li>{this.state.aboutUs.information&&this.state.aboutUs.information.informationDescription}</li>
@@ -123,7 +124,7 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlPortfolioCompanyAboutsUsTabs getState={this.getState.bind(this)} getPortfolioAboutUsDetails={this.getPortfolioAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.state.aboutUs} isApp={this.props.isApp}></MlPortfolioCompanyAboutsUsTabs> }</div>)}
+      </div>):(<div>{<MlPortfolioCompanyAboutsUsTabs getState={this.getState.bind(this)} getPortfolioAboutUsDetails={this.getPortfolioAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.state.aboutUs} isApp={this.props.isApp} activeTab={this.state.activeTab || null}></MlPortfolioCompanyAboutsUsTabs> }</div>)}
       </div>
 
     )

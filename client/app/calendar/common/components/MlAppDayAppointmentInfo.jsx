@@ -125,7 +125,7 @@ export default class MlAppDayAppointmentInfo extends Component {
                             { appointments.length && canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>
-                        <ul className="list-group">
+                        <ul className="list-group" style={{height:'160', overflowY:'scroll'}}>
                           {
                             appointments.map(function (appointments, aptIndex) {
                               appointments = appointments ? appointments : {};

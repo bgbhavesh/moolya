@@ -51,11 +51,20 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlCompanyAboutUs client={client} isAdmin={true} key="1"  getAboutUs={this.getAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.aboutUs}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlCompanyClients client={client} isAdmin={true} key="3" getClients={this.getClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.clients}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlCompanySP key="4"  getServiceProducts={this.getServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.serviceProducts}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlCompanyInformation  key="5" getInfo={this.getInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.information} tabName="information"/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us",name:"About Us", component:<MlCompanyAboutUs client={client} isAdmin={true} key="1"  getAboutUs={this.getAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.aboutUs}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" ,name:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating}/>},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Client",
+        name: "Client",
+        component: <MlCompanyClients client={client} isAdmin={true} key="3" getClients={this.getClients.bind(this)}
+                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName={"clients"}
+                                     clientsDetails={this.props.aboutUsDetails && this.props.aboutUsDetails.clients}/>
+      },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" ,
+        name: "Services And Products", component:<MlCompanySP key="4"  getServiceProducts={this.getServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.serviceProducts}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Information",name:"Information", component:<MlCompanyInformation  key="5" getInfo={this.getInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.information} tabName="information"/>},
     ]
     return tabs;
   }
@@ -68,11 +77,11 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
     updateItem = _.omit(updateItem, 'privateFields');
     this.props.getPortfolioAboutUsDetails(updateItem,"aboutUs", privateKey);
   }
-  getClients(details, privateKey){
+  getClients(details, privateKey, requiredFields){
     let data = this.state.portfolioClients;
     data = details;
     this.setState({portfolioClients : data})
-    this.props.getPortfolioAboutUsDetails(data,"clients", privateKey);
+    this.props.getPortfolioAboutUsDetails(data,"clients", privateKey, requiredFields);
   }
   getServiceProducts(details, privateKey){
     let data = this.state.portfolioSP;
@@ -107,7 +116,8 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        key:tab.name,
+        name:tab.name,
         getContent: () => tab.component
       }));
     }
@@ -131,11 +141,16 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
   render(){
     let tabs = this.state.tabs;
     if(this.state.admin){
+      if(this.props.activeTab){
+        let index = tabs.findIndex(i => i.name === this.props.activeTab);
+        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getState}/>
+      }else
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
     }
     else{
+      let activeTab =  this.props.activeTab || this.state.activeTab;
       return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
+                             selectedTabKey={activeTab}
                              onChange={this.updateTab}
                              backClickHandler={this.props.getState}
                              type="subtab" mkey="title"

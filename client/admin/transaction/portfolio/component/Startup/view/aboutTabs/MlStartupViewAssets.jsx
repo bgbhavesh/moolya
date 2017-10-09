@@ -7,7 +7,7 @@ import {render} from 'react-dom';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlStartupViewAssets extends React.Component {
   constructor(props) {
@@ -118,20 +118,23 @@ export default class MlStartupViewAssets extends React.Component {
     return (
       <div id="annotatorContent">
         <h2>Assets</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {branchesArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo && details.logo.fileUrl} className="team_img"/>
-                  <h3>
-                    {details.assetTypeName && details.assetTypeName} <br />
-                  </h3>
-                </div>
-              </div>)
-            })}
-          </div>
+        <div>
+          {branchesArray && branchesArray.length?(<div className="col-lg-12">
+            <div className="row">
+              {branchesArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo && details.logo.fileUrl} className="team_img"/>
+                    <h3>
+                      {details.assetTypeName && details.assetTypeName} <br />
+                    </h3>
+                  </div>
+                </div>)
+              })}
+            </div>
+          </div>):(<NoData tabName={this.props.tabName}/>)}
         </div>
+
       </div>
     )
   }

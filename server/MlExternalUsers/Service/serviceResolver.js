@@ -188,8 +188,19 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
       } else {
         args.Services.status = "Rejected";
       }
+      args.Services.isCurrentVersion = false;
+      console.log(' args.Services', args.Services);
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
       if(result){
+        let serviceInfo = service;
+        serviceInfo.userId = service.userId;
+        serviceInfo.updatedAt = new Date();
+        serviceInfo.transactionId = service.transactionId;
+        serviceInfo.versions = args.Services.versions + 0.001;
+        serviceInfo.status = args.Services.status;
+        serviceInfo.isReview = false;
+        delete serviceInfo._id;
+        let newScVersion = mlDBController.insert('MlServiceCardDefinition', serviceInfo , context);
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response
@@ -273,6 +284,11 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
     });
   return totalAmountOfTasks;
 }
+
+/**
+ * @Note: this is portfolio thing need to move to portfolio Resolver
+ * @Duplicate of "findPortfolioDetails"
+ * */
 
 MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, info) => {
   let query = {

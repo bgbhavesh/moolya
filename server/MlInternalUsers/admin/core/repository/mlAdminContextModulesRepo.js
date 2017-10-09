@@ -728,7 +728,7 @@ let CoreModules = {
     }
     var serverQuery = {
       'isBeSpoke': false,
-      'isCurrentVersion': true,
+//      'isCurrentVersion': true,
       'isReview': true
     };
     let query = {};

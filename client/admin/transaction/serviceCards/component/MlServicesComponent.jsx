@@ -28,7 +28,7 @@ export default class MlServiceManageSchedule extends Component {
 
   constructor(props) {
     super(props);
-    let taskId = this.props.data && this.props.data.tasks && this.props.data.tasks[0].id ? this.props.data.tasks[0].id : '';
+    let taskId = this.props.data && this.props.data.tasks && this.props.data.tasks[0] && this.props.data.tasks[0].id ? this.props.data.tasks[0].id : '';
     this.state = {
       data: this.props.data || {},
       selectedTaskId: taskId

@@ -209,11 +209,11 @@ class MlAppCalendarPrimarySettings extends React.Component {
                 {/*<FontAwesome name="clock-o"/>*/}
                 <span className="ml my-ml-switch_profile-01 fa-2x" />
                 Overlapping in schedule</label>
-              <span className="state_label">No</span><label className="switch nocolor-switch">
+              <span className={!this.state.isOverlappingSchedule ? "state_label acLabel" : "state_label" }>No</span><label className="switch nocolor-switch">
                 <input type="checkbox" onClick={(evt) => this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
                 <div className="slider"></div>
               </label>
-              <span className="state_label acLabel">Yes</span>
+              <span className={this.state.isOverlappingSchedule ? "state_label acLabel" : "state_label" }>Yes</span>
             </div>
             <div className="clearfix"></div>
           </form>

@@ -27,9 +27,11 @@ export default class MlServiceManageSchedule extends Component {
    */
 
   constructor(props) {
-    super(props)
+    super(props);
+    let taskId = this.props.data && this.props.data.tasks && this.props.data.tasks[0].id ? this.props.data.tasks[0].id : '';
     this.state = {
-      data: this.props.data || {}
+      data: this.props.data || {},
+      selectedTaskId: taskId
     };
     this.errorMsg = '';
     this.optionsBySelectService = this.optionsBySelectService.bind(this);
@@ -37,6 +39,7 @@ export default class MlServiceManageSchedule extends Component {
     this.checkChargeStatus = this.checkChargeStatus.bind(this);
     this.calculateCharges = this.calculateCharges.bind(this);
     //this.getCreatedId.bind(this)
+    this.optionsBySelectService(taskId);
   }
 
   /**

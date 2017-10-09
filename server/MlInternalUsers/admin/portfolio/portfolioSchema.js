@@ -133,7 +133,7 @@ let portfolioSchema = `
           updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
           removeIdetaorProfilePic(portfoliodetailsId:String):response
           removePortfolioDataFile(portfoliodetailsId:String,fileUrl:String,tabName:String,typeOfData:String):response
-          
+          removeIdetaorProblemAndSolutionPic(portfoliodetailsId:String,fileUrl:String,typeOfImage:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

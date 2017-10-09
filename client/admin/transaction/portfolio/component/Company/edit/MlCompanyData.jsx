@@ -20,6 +20,24 @@ export default class MlCompanyData extends React.Component{
   }
 
   async componentWillMount() {
+    let portfolioId = FlowRouter.getRouteName();
+    let path = FlowRouter.current().path
+    if (path.indexOf("view") > 0) {
+      this.setState({explore: false})
+    }
+    if (portfolioId !== "portfolio" || path.indexOf("view") > 0) {
+      this.setState({explore: true})
+    }
+    if (portfolioId !== "portfolio" || path.indexOf("edit") > 0) {
+      this.setState({deleteOption: true, isEndUserEdit : true})
+    }
+    if (portfolioId === "library") {
+      this.setState({explore: false, isLibrary: true, hideLock: true, deleteOption: false})
+    }
+    if (portfolioId === "transaction_portfolio_EditRequests") {
+      this.setState({explore: false, isAdminEdit: true})
+      this.setState({hideLock: true})
+    }
     this.fetchPortfolioData()
   }
   async fetchPortfolioData(){
@@ -250,10 +268,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Balance Sheet
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'balanceSheet' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('balanceSheet')}
@@ -262,10 +280,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Quaterly Report
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'quaterlyReport' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('quaterlyReport')}
@@ -274,10 +292,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Yearly Report
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'yearlyReport' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('yearlyReport')}
@@ -286,10 +304,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Half Yearly Report
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'halfYearlyReport' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('halfYearlyReport')}
@@ -298,10 +316,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Annual Report
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'annualReport' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('annualReport')}
@@ -312,10 +330,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Profit and Loss
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'profitAndLoss' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" >
                   {this.loopingTheUploadedData('profitAndLoss')}
@@ -324,10 +342,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Cash Flow
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'cashFlow' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('cashFlow')}
@@ -336,10 +354,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Share Holdings
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'shareHoldings' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('shareHoldings')}
@@ -348,10 +366,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Capital Structure
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'capitalStructure' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('capitalStructure')}
@@ -360,10 +378,10 @@ export default class MlCompanyData extends React.Component{
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
                   Ratio
-                  <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'ratio' )} /></span></a>
-                  </div>
+                  </div>:""}
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('ratio')}

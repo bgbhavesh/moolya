@@ -132,7 +132,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                   <div className="panel-heading">Information <a href=""
                                                                 className="pull-right ellipsis-menu"><FontAwesome
                     name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
-                  <div className="panel-body">
+                  <div className="panel-body panel-body-scroll">
                     <ul className="list-info">
                       <li>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?this.state.institutionAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
                     </ul>

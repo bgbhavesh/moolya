@@ -2,20 +2,18 @@ import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
 import _ from "lodash";
 import Datetime from "react-datetime";
+var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "researchAndDevelopment"
 
-export default class MlCompanyRAndD extends React.Component{
+export default class MlCompanyRAndD extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -28,7 +26,8 @@ export default class MlCompanyRAndD extends React.Component{
       companyRDList:[],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -197,7 +196,13 @@ export default class MlCompanyRAndD extends React.Component{
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.companyRD;
     let companyRD = _.cloneDeep(awards);
@@ -211,13 +216,13 @@ export default class MlCompanyRAndD extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     companyRD = arr;
     this.setState({companyRD:companyRD})
-    this.props.getRDDetails(companyRD, this.state.privateKey);
+    this.props.getRDDetails(companyRD, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -363,7 +368,11 @@ export default class MlCompanyRAndD extends React.Component{
                       <div className="col-md-12">
                         <div className="form-group">
                           <div className="form-group mandatory">
-                            <input type="text" name="researchAndDevelopmentName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.researchAndDevelopmentName}  onBlur={this.handleBlur.bind(this)}/>
+                            <input type="text" name="researchAndDevelopmentName" placeholder="Name"
+                                   className="form-control float-label"
+                                   defaultValue={this.state.data.researchAndDevelopmentName} ref={"researchAndDevelopmentName"}
+                                   onBlur={this.handleBlur.bind(this)} data-required={true}
+                                   data-errMsg="Name is required"/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>
                         </div>

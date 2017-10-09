@@ -1,18 +1,19 @@
 import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
+import Datetime from "react-datetime";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
-import _ from "lodash";
-import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "achievements"
 
-export default class MlCompanyAchivements extends React.Component{
+export default class MlCompanyAchivements extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -25,7 +26,8 @@ export default class MlCompanyAchivements extends React.Component{
       institutionAchievementsList:[],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
@@ -167,7 +169,13 @@ export default class MlCompanyAchivements extends React.Component{
     })
   }*/
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
@@ -181,13 +189,13 @@ export default class MlCompanyAchivements extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     institutionAchievements = arr;
     this.setState({institutionAchievements:institutionAchievements})
-    this.props.getAchivements(institutionAchievements, this.state.privateKey);
+    this.props.getAchivements(institutionAchievements, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -332,7 +340,10 @@ export default class MlCompanyAchivements extends React.Component{
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
                         <div className="form-group mandatory">
-                          <input type="text" name="achievementName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.achievementName}  onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="achievementName" placeholder="Name"
+                                 className="form-control float-label" defaultValue={this.state.data.achievementName}
+                                 onBlur={this.handleBlur.bind(this)} ref={"achievementName"} data-required={true}
+                                 data-errMsg="Achievement Name is required"/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementNamePrivate" defaultValue={this.state.data.isAchievementNamePrivate}  onClick={this.onLockChange.bind(this, "achievementName", "isAchievementNamePrivate")}/>
                         </div>
                         <div className="form-group">

@@ -13,6 +13,7 @@ import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
 import {fetchUserDetailsHandler} from "../../../../app/commons/actions/fetchUserDetails";
 import {registerAsInfo} from '../../../transaction/requested/actions/registrationAs'
 import {pick} from 'lodash'
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 
 //todo:// this file is to be placed in the commons as it is been used by both admin and app
 export default class MlAnchorInfoView extends React.Component {
@@ -26,6 +27,7 @@ export default class MlAnchorInfoView extends React.Component {
       subChapterImageLink: "/images/startup_default.png",
       popoverOpen: false,
     };
+    this.loggedInUser = {}
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
@@ -85,8 +87,13 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   async fetchSubChapterDetails() {
+    if(this.props.isAdmin){
+      const loggedInUser = getAdminUserContext();
+      this.loggedInUser = loggedInUser
+    }
+    const {communityId} = this.loggedInUser
     const {clusterId, chapterId, subChapterId} = this.props;
-    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId, communityId);
     const objective = response && response.objective && response.objective.map((ob) => ({
         description: ob.description,
         status: ob.status,

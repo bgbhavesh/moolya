@@ -1,19 +1,18 @@
 import React, { Component, PropTypes } from "react";
-import { render } from "react-dom";
 import ScrollArea from "react-scrollbar";
 import Datetime from "react-datetime";
 import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
 import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
 import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
 import { fetchfunderPortfolioSuccess } from "../../../actions/findPortfolioFunderDetails";
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../commons/components/loader/loader'
-import NoData from '../../../../../../commons/components/noData/noData'
 import CropperModal from '../../../../../../commons/components/cropperModal';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-export default class MlFunderSuccessStories extends React.Component {
+export default class MlFunderSuccessStories extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -29,6 +28,7 @@ export default class MlFunderSuccessStories extends React.Component {
       showProfileModal: false,
     }
     this.curSelectLogo = {}
+    this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this);
     this.dateChange.bind(this)
@@ -180,16 +180,16 @@ export default class MlFunderSuccessStories extends React.Component {
 
   onSaveAction(e) {
     this.sendDataToParent();
-    var funderSuccessArray = this.state.funderSuccess || [];
-
-    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
-      funderSuccessArray = this.context.funderPortfolio.successStories;
-    }
-    var isDate = _.findIndex(funderSuccessArray, { date: '' })
-    var dateKey = _.compact(_.map(funderSuccessArray, 'date'));
-    if ((isDate > 0) || (dateKey.length !== (funderSuccessArray && funderSuccessArray.length))) {
-      toastr.error("Please select Date");
-    }
+    // var funderSuccessArray = this.state.funderSuccess || [];
+    //
+    // if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
+    //   funderSuccessArray = this.context.funderPortfolio.successStories;
+    // }
+    // var isDate = _.findIndex(funderSuccessArray, { date: '' })
+    // var dateKey = _.compact(_.map(funderSuccessArray, 'date'));
+    // if ((isDate > 0) || (dateKey.length !== (funderSuccessArray && funderSuccessArray.length))) {
+    //   toastr.error("Please select Date");
+    // }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
       this.setState({ funderSuccessList: this.context.funderPortfolio.successStories, popoverOpen: false });
     }
@@ -262,7 +262,13 @@ export default class MlFunderSuccessStories extends React.Component {
     }
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
@@ -278,13 +284,11 @@ export default class MlFunderSuccessStories extends React.Component {
       }
       let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, "privateFields");
-      // newItem = _.omit(newItem, 'logo');
       arr.push(newItem)
     })
     funderSuccess = arr;
-    // funderSuccess=_.omit(funderSuccess,["privateFields"]);
     this.setState({ funderSuccess: funderSuccess })
-    this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey);
+    this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey, requiredFields);
   }
 
   handleUploadAvatar(image, e) {
@@ -376,7 +380,8 @@ export default class MlFunderSuccessStories extends React.Component {
                               inputProps={{ placeholder: "Select Date", className: "float-label form-control",readOnly:true }} ref="date"
                               defaultValue={this.state.data.date ? this.state.data.date : ''}
                               onBlur={this.dateChange.bind(this)}
-                              isValidDate={valid} /> {/**/} {/*closeOnSelect={true}*/}
+                              isValidDate={valid} data-required={true}
+                                      data-errMsg="Date is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isDatePrivate"
                               onClick={this.onLockChange.bind(this, "date", "isDatePrivate")} />
                           </div>
@@ -403,17 +408,19 @@ export default class MlFunderSuccessStories extends React.Component {
                           <br />
                           <br className="brclear" />
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Enter title of Story" className="form-control float-label"
+                            <input type="text" placeholder="Enter title of Story" className="form-control float-label" ref={"storyTitle"}
                               name="storyTitle" defaultValue={this.state.data.storyTitle}
-                              onBlur={this.handleBlur} />
+                              onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Story title is required"/>
                             <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
                               onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")} />
 
                           </div>
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Description" className="form-control float-label"
+                            <input type="text" placeholder="Description" className="form-control float-label" ref={"description"}
                               name="description" defaultValue={this.state.data.description}
-                              onBlur={this.handleBlur} />
+                              onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Description is required"/>
                             <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
                               onClick={this.onLockChange.bind(this, "description", "isDescPrivate")} />
 

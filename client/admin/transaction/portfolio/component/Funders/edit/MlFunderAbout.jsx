@@ -238,7 +238,7 @@ export default class MlFunderAbout extends React.Component {
 
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret}
+    return {tabName: this.tabName, errorMessage: ret, index: 0}
   }
 
   onLogoFileUpload(image) {

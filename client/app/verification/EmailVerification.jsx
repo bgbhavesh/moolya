@@ -104,6 +104,22 @@ export default class EmailVerification extends React.Component{
         }
       }
   }
+  verifyLater(){
+    let mobileNumber=this.state.mobileNumber;
+    let data = {mobileNumber: mobileNumber};
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: Meteor.absoluteUrl('verifyLaterUserMobileNumber'),
+      data: JSON.stringify(data),
+      contentType: "application/json; charset=utf-8",
+      success: function (response) {
+        if (response.success) {
+          toastr.success("Please verify later you mobile number from 'My Profile'");
+        }
+      }.bind(this)
+    });
+  }
 
  /* async verifyEmail(token){
     const response=await verifyEmailHandler(token,appClient);
@@ -192,6 +208,8 @@ export default class EmailVerification extends React.Component{
               <div className="form-group sendotp">
                 <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
                 <a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
+
+                <a href="" className="resendotp" onClick={this.verifyLater.bind(this)}>Verify Later</a>
               </div><br />
                 <div className="terms">
                   <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a data-toggle="modal" data-target=".termsConditionsPop">Terms and Conditions</a> and <a data-toggle="modal" data-target=".privacyPop"> 'Privacy Policy'</a></label>

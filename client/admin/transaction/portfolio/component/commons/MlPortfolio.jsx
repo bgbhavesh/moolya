@@ -71,8 +71,6 @@ class MlPortfolio extends React.Component {
         this.fetchComments(selAnnotation.id);
       })
     }
-
-
   }
 
   commentClicked() {
@@ -214,8 +212,9 @@ class MlPortfolio extends React.Component {
   }
 
   updateRequiredFields(requiredFields) {
+    console.log("requiredFields", requiredFields)
     var ary = this.requiredFieldAry
-    _.remove(ary, {tabName: requiredFields.tabName})
+    _.remove(ary, {tabName: requiredFields.tabName, index: requiredFields.index})
     if (requiredFields && requiredFields.errorMessage) {
       ary.push(requiredFields)
     }
@@ -283,6 +282,7 @@ class MlPortfolio extends React.Component {
         privateKeys: this.state.privateKeys,
         removeKeys: this.state.removePrivateKeys
       }
+      // toastr.success("server hit")
       const response = await updatePortfolioActionHandler(jsonData)
       if (response) {
         if (this.props.communityType == "Ideators") {
@@ -299,6 +299,7 @@ class MlPortfolio extends React.Component {
   }
 
   isRequired() {
+    console.log("this.requiredFieldAry", this.requiredFieldAry)
     const error = this.requiredFieldAry && this.requiredFieldAry.length ? this.requiredFieldAry[0] : null
     if (error) {
       return error

@@ -184,7 +184,7 @@ export default class MlIdeatorDetails extends Component{
 
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret}
+    return {tabName: this.tabName, errorMessage: ret, index: 0}
   }
   onFileUpload(file){
     if(file){

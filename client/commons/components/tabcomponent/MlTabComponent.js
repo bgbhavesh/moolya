@@ -38,6 +38,7 @@ export default class MlTabComponent extends React.Component {
       object["appointment"] = null;
       object[" Team"] = null;
       object["add"] = null;
+      object[" Products"] =null;
       FlowRouter.setQueryParams(object);
     }
     this.context.breadCrum.updateBreadCrum();

@@ -145,10 +145,10 @@ class MlAppStartupEditTabs extends React.Component {
     return tabs;
   }
 
-  getAboutus(details, tabName, privatekey) {
+  getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey);
+    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey, requiredFields);
   }
 
   getManagementDetails(details, privatekey) {

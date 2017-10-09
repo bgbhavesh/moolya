@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
@@ -9,7 +7,7 @@ var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
-export default class MlStartupAboutUs extends React.Component{
+export default class MlStartupAboutUs extends Component{
   constructor(props){
     super(props)
     this.state = {aboutStartup:false,startupAboutUs:[], startupAboutUsList:[]}
@@ -19,12 +17,16 @@ export default class MlStartupAboutUs extends React.Component{
     this.setState({aboutStartup : true})
     this.props.backClickHandler(this.getStartUpState.bind(this))
   }
-  getPortfolioStartupAboutUsDetails(details,tabName, privateKey){
-    this.props.getAboutus(details,tabName,privateKey);
+
+  getPortfolioStartupAboutUsDetails(details, tabName, privateKey, requiredFields) {
+    this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
-  componentWillMount(){
-    this.fetchPortfolioDetails();
+
+  componentWillMount() {
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -32,7 +34,6 @@ export default class MlStartupAboutUs extends React.Component{
     if (response) {
       this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
     }
-
   }
 
   getStartUpState() {

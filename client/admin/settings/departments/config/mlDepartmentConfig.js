@@ -35,7 +35,7 @@ function departmentsFormatter (data){
 }
 
 function titleFormatter(data){
-  let departments=data&&data.length>0?data:[];
+  let departments=data&&data.length>0?data:null;
   if(departments){return `${departments.join()}`;}else{return `All`;}
 }
 

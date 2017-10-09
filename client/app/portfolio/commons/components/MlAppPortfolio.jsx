@@ -213,7 +213,7 @@ class MlAppPortfolio extends Component{
 
   updateRequiredFields(requiredFields) {
     var ary = this.requiredFieldAry
-    _.remove(ary, {tabName: requiredFields.tabName})
+    _.remove(ary, {tabName: requiredFields.tabName, index: requiredFields.index})
     if (requiredFields && requiredFields.errorMessage) {
       ary.push(requiredFields)
     }

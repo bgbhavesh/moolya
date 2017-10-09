@@ -2,16 +2,16 @@
  * Created by vishwadeep on 06/9/17.
  */
 import React, {Component, PropTypes}  from "react";
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 import {Popover, PopoverTitle, PopoverContent} from 'reactstrap';
+import gql from 'graphql-tag';
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {findFunderLookingForActionHandler} from '../../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 export default class MlFunderLookingFor extends Component {
   constructor(props, context) {
@@ -26,7 +26,8 @@ export default class MlFunderLookingFor extends Component {
       funderLookingForList: [],
       selectedVal: null,
       selectedObject: "default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
   }
 
@@ -165,16 +166,22 @@ export default class MlFunderLookingFor extends Component {
     details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label,
-      lookingDescription: selObject.about
+      ["lookingForName"]: selObject && selObject.label ? selObject.label : '',
+      lookingDescription: selObject && selObject.about ? selObject.about : ''
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
       this.sendDataToParent()
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let funderLookingFor1 = this.state.funderLookingFor;
     let funderLookingFor = _.cloneDeep(funderLookingFor1);
@@ -194,7 +201,7 @@ export default class MlFunderLookingFor extends Component {
 
     funderLookingFor = arr;
     this.setState({funderLookingFor: funderLookingFor})
-    this.props.getLookingFor(funderLookingFor, this.state.privateKey);
+    this.props.getLookingFor(funderLookingFor, this.state.privateKey, requiredFields);
 
   }
 
@@ -268,8 +275,9 @@ export default class MlFunderLookingFor extends Component {
                                           isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
-
+                                          selectedValue={this.state.selectedVal} ref={"lookingForId"}
+                                          data-required={true}
+                                          data-errMsg="Looking for is required"/>
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
                                      className="form-control float-label" disabled="disabled"

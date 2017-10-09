@@ -83,7 +83,7 @@ export default class MlFunderEditTemplate extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Areas Of Interest",
-        component: <MlFunderAreaOfInterest key="6" tabName="Areas Of Interest"
+        component: <MlFunderAreaOfInterest key="6" tabName="areaOfInterest"
                                            getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -127,14 +127,14 @@ export default class MlFunderEditTemplate extends React.Component {
     return tabs;
   }
 
-  getLookingFor(details, privateKey) {
+  getLookingFor(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['lookingFor'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
-  getSuccessStoriesDetails(details, privateKey) {
+  getSuccessStoriesDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio: data})
@@ -145,7 +145,7 @@ export default class MlFunderEditTemplate extends React.Component {
     // })
     // data['successStories'] = arr;
     var object = omitDeep(details, 'logo')
-    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
   getAboutus(details, privateKey, requiredFields) {
@@ -155,14 +155,14 @@ export default class MlFunderEditTemplate extends React.Component {
     this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
-  getInvestmentsDetails(details, privateKey) {
+  getInvestmentsDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
-  getPrincipalDetails(details, privateKey) {
+  getPrincipalDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.principal) {
       data['principal'] = [];
@@ -177,10 +177,10 @@ export default class MlFunderEditTemplate extends React.Component {
     // data['principal'] = arr;
     // this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
     var object = omitDeep(details, 'logo')
-    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
-  getTeamDetails(details, privateKey) {
+  getTeamDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.team) {
       data['team'] = [];
@@ -194,19 +194,22 @@ export default class MlFunderEditTemplate extends React.Component {
     // })
     // data['team'] = arr;
     var object = omitDeep(details, 'logo')
-    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
-  getAreaOfInterestDetails(details, privateKey) {
+  getAreaOfInterestDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.areaOfInterest) {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
+  /**
+   * check need and remove it
+   * */
   getFunderNewsDetails(details, privateKey) {
     let data = this.state.funderPortfolio;
     if (data && !data.lookingFor) {
@@ -217,6 +220,9 @@ export default class MlFunderEditTemplate extends React.Component {
     this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
   }
 
+  /**
+   * check need and remove it
+   * */
   getFunderLibrary(details) {
     let data = this.state.funderPortfolio;
     if (details.memberships) {

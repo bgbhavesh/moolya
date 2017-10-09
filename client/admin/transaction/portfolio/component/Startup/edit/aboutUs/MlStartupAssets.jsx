@@ -1,21 +1,21 @@
 import React, {Component, PropTypes} from "react";
 import { connect } from 'react-redux';
-import {render} from "react-dom";
+import gql from "graphql-tag";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'assets'
-class MlStartupAssets extends React.Component{
+
+class MlStartupAssets extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -29,6 +29,7 @@ class MlStartupAssets extends React.Component{
       selectedAssetType:null,
       selectedObject:"default"
     }
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this)
@@ -37,7 +38,6 @@ class MlStartupAssets extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
-
   }
 
   componentDidMount(){
@@ -124,18 +124,25 @@ class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
+
   assetTypeOptionSelected(selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["assetTypeId"]);
     details=_.omit(details,["assetTypeName"]);
     details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
+    this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label}, function () {
+      // this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
       this.sendDataToParent()
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let assets = this.state.startupAssets;
     let startupAssets = _.cloneDeep(assets);
@@ -155,7 +162,7 @@ class MlStartupAssets extends React.Component{
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    this.props.getStartupAssets(startupAssets, this.state.privateKey);
+    this.props.getStartupAssets(startupAssets, this.state.privateKey, requiredFields);
 
   }
 
@@ -295,18 +302,18 @@ class MlStartupAssets extends React.Component{
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={assetsQuery} mandatory={true}
-                                    isDynamic={true} placeholder={'Select  Asset..'}
-                                    onSelect={this.assetTypeOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedVal}/>
-                    </div>
-
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                  ref={"assetTypeId"}
+                                  labelKey={'label'} queryType={"graphql"} query={assetsQuery} mandatory={true}
+                                  isDynamic={true} placeholder={'Select  Asset..'}
+                                  onSelect={this.assetTypeOptionSelected.bind(this)}
+                                  selectedValue={this.state.selectedVal}
+                                  data-required={true} data-errMsg="Asset Type is required"/>
                     <div className="form-group mandatory">
-                      <input type="text" name="quantity" placeholder="Enter Number of Quantity"
+                      <input type="text" name="quantity" placeholder="Enter Number of Quantity" ref={"quantity"}
                              className="form-control float-label" defaultValue={this.state.data.quantity}
-                             onBlur={this.handleBlur.bind(this)}/>
+                             onBlur={this.handleBlur.bind(this)} data-required={true}
+                             data-errMsg="Number of Quantity is required"/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                    id="isQuantityTypePrivate" defaultValue={this.state.data.isQuantityTypePrivate}
                                    onClick={this.onLockChange.bind(this, "quantity", "isQuantityTypePrivate")}/>

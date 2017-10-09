@@ -20,6 +20,8 @@ export function mlFieldValidations(elements) {
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
        var value = selectObj.props['selectedValue']?selectObj.props['selectedValue']:selectObj.props['value'];
+      if (!value)
+        value = selectObj.props['defaultValue'] ? selectObj.props['defaultValue'] : null                                /**case for the date-time required field*/
       var  multi= selectObj.props['multiSelect']
 
         if (isRequired && multi&&value.length==0) {

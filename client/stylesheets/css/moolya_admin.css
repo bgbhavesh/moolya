@@ -502,7 +502,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 
 
 .chapter_map_hover{position: absolute;z-index: 999;right: -144px;top:0px;}
-.chapter_map_hover_content{border-radius: 0px 10px 10px 10px; background: #000 url("/images/map_details_bg.png") right bottom no-repeat; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 144px; padding-bottom: 3px;}
+.chapter_map_hover_content{border-radius: 0px 10px 10px 10px; background: #fff; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 144px; padding-bottom: 3px;}
 .chapter_map_hover_content h2{background: #ef4647; margin: 0px; border-radius: 10px 10px 0 0; padding: 2px 0px; color: #fff; text-shadow: none; text-align: center; font-size: 14px;}
 .chapter_map_hover_content ul{padding: 5px 0px 0px 10px}
 .chapter_map_hover_content ul li{width: 30px;margin-bottom: 8px; float: left; margin-right: 14px;height: 30px;position: relative;line-height: 34px;text-align: center;border-radius: 4px;margin-top: 6px;text-shadow: none;color: #FFF;}
@@ -682,10 +682,10 @@ button:focus{outline: 0;}
 .subscriptions_btn .present:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 
 .ml_btn{text-align: right; width: 100%; bottom: 0;font-weight: normal;}
-.ml_btn .save_btn{display: inline-block; background: #ef4647; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #fff;text-shadow: none;text-align: center;}
+.ml_btn .save_btn{display: inline-block; background: #ef4647; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #fff;text-shadow: none;text-align: center;cursor: pointer;}
 .ml_btn .save_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .ml_btn .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
-.ml_btn .cancel_btn{display: inline-block; background: #273545; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px; color: #fff; text-shadow: none; text-align: center;}
+.ml_btn .cancel_btn{display: inline-block; background: #273545; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px; color: #fff; text-shadow: none; text-align: center;cursor: pointer;}
 .ml_btn .cancel_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #273545;top: 0px;}
 .ml_btn .cancel_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 .ml_icon_btn{text-align: right; width: 100%; bottom: 0;font-weight: bold;margin-top: -10px;}

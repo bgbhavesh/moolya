@@ -115,6 +115,10 @@ export default class MlTable extends React.Component {
         // columnOptions['width']='10%';
        // }
       }
+
+      if(cl.customTitleFormatter){
+        columnOptions['columnTitle']=cl.customTitleFormatter;
+      }
       return <TableHeaderColumn {...columnOptions}>{cl.title}</TableHeaderColumn>;
     });
 

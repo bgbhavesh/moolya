@@ -58,7 +58,7 @@ export default class MlAppCompanyListView extends Component {
     const data=this.props.data||[];
     let loading=this.props.config&&this.props.config.loading;
     const list=  data.map((company, idx) =>
-      <div className="col-md-2 col-sm-4 col-lg-2" key={idx}>
+      <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, company.portfolioDetailsId)}>
           <div className="company_block">
             <div className="regular"><span>{company.accountType}</span></div>

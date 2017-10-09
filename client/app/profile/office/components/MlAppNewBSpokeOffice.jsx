@@ -16,7 +16,7 @@ import {findDefaultProfile} from '../../../commons/actions/fetchUserDetails'
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:"", user:{}};
+    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:"", user:{}, community: "OFB"};
     this.handleBlur.bind(this)
     this.setDefaultValues.bind(this)
     this.findUserDetails.bind(this)
@@ -132,8 +132,14 @@ export default class MlAppNewSpokePerson extends React.Component {
   communityType(e) {
     if (e.target.checked) {
       const communityList = this.fetchCommunities();
+      this.setState({
+        community: 'ALL'
+      });
     } else {
       const communityList = this.fetchCommunities({code: 'OFB'});
+      this.setState({
+        community: 'OFB'
+      });
     }
   }
 
@@ -275,11 +281,11 @@ export default class MlAppNewSpokePerson extends React.Component {
                                ref="teamUserCount" min="0"/>
                       </div>
                       <div className="form-group switch_wrap switch_names">
-                        <span className="state_label acLabel">Specific</span><label className="switch">
+                        <span className={that.state.community === "OFB" ? "state_label acLabel" : "state_label"}>Specific</span><label className="switch">
                         <input type="checkbox" onChange={this.communityType.bind(this)}/>
                         <div className="slider"></div>
                       </label>
-                        <span className="state_label">All Communities</span>
+                        <span className={that.state.community === "ALL" ? "state_label acLabel" : "state_label"}>All Communities</span>
                       </div>
 
                     </div>

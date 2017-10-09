@@ -141,11 +141,19 @@ class MlAppCalendarPrimarySettings extends React.Component {
 
   render() {
     const that = this;
+    console.log("props.primarySettings:",that.props.primarySettings);
     /**
      * Setting up action handler for activity different event
      */
-    let appActionConfig = [
-      {
+    let appActionConfig = [];
+    if( !that.props.hasAppointment ) {
+      appActionConfig.push({
+        showAction: true,
+        actionName: 'save',
+        handler: async (event) => that.props.handler(that.updateCalendarSetting.bind(this))
+      });
+    } else {
+      appActionConfig.push({
         showAction: true,
         actionName: 'save',
         hasPopOver: true,
@@ -155,8 +163,8 @@ class MlAppCalendarPrimarySettings extends React.Component {
         popOverComponent: <CalendarPopOver save={this.updateCalendarSetting.bind(this)} />,
         actionComponent: PopoverActionIcon,
         handler: this.portfolioShareHandler.bind(this),
-      }
-    ];
+      });
+    }
     export const genericPortfolioAccordionConfig = {
       id: 'portfolioAccordion',
       panelItems: [
@@ -201,11 +209,11 @@ class MlAppCalendarPrimarySettings extends React.Component {
                 {/*<FontAwesome name="clock-o"/>*/}
                 <span className="ml my-ml-switch_profile-01 fa-2x" />
                 Overlapping in schedule</label>
-              <span className="state_label">No</span><label className="switch nocolor-switch">
+              <span className={!this.state.isOverlappingSchedule ? "state_label acLabel" : "state_label" }>No</span><label className="switch nocolor-switch">
                 <input type="checkbox" onClick={(evt) => this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
                 <div className="slider"></div>
               </label>
-              <span className="state_label acLabel">Yes</span>
+              <span className={this.state.isOverlappingSchedule ? "state_label acLabel" : "state_label" }>Yes</span>
             </div>
             <div className="clearfix"></div>
           </form>

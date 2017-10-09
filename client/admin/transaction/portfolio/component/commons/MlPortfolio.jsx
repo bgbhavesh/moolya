@@ -30,6 +30,7 @@ class MlPortfolio extends React.Component {
         editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
       isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
     }
+    this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -39,7 +40,7 @@ class MlPortfolio extends React.Component {
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
-    this.updatePrivateKeys.bind(this);
+    // this.updatePrivateKeys.bind(this);
     return this;
   }
 
@@ -50,9 +51,9 @@ class MlPortfolio extends React.Component {
   }
 
 
-  componentDidMount() {
-    let portfolioId = this.props.config;
-  }
+  // componentDidMount() {
+  //   let portfolioId = this.props.config;
+  // }
 
   getContext() {
     return {
@@ -70,8 +71,6 @@ class MlPortfolio extends React.Component {
         this.fetchComments(selAnnotation.id);
       })
     }
-
-
   }
 
   commentClicked() {
@@ -113,7 +112,7 @@ class MlPortfolio extends React.Component {
     let portfolioId = this.props.config
     const response = await rejectPortfolio(portfolioId);
     if (response) {
-      this.props.getRegistrationKYCDetails();
+      // this.props.getRegistrationKYCDetails();
       toastr.success("Portfolio Rejected Successfully")
     }
   }
@@ -203,20 +202,34 @@ class MlPortfolio extends React.Component {
     }
   }
 
-  getIdeatorIdeaDetails(details, privateKey) {
+  getIdeatorIdeaDetails(details, privateKey, requiredFields) {
     this.setState({idea: details});
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
+    if (requiredFields)
+      this.updateRequiredFields(requiredFields)
   }
 
-  getPortfolioDetails(portfolioDetails, privateKey) {
+  updateRequiredFields(requiredFields) {
+    console.log("requiredFields", requiredFields)
+    var ary = this.requiredFieldAry
+    _.remove(ary, {tabName: requiredFields.tabName, index: requiredFields.index})
+    if (requiredFields && requiredFields.errorMessage) {
+      ary.push(requiredFields)
+    }
+    this.requiredFieldAry = ary
+  }
+
+  getPortfolioDetails(portfolioDetails, privateKey, requiredFields) {
     console.log("portfolioDetails", portfolioDetails)
     console.log("privateKey", privateKey)
     this.setState({portfolio: portfolioDetails});
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
+    if (requiredFields)
+      this.updateRequiredFields(requiredFields)
   }
 
   updatePrivateKeys(privateKey){
@@ -261,25 +274,37 @@ class MlPortfolio extends React.Component {
   }
 
   async updatePortfolioDetails() {
-    var jsonData = {
-      portfolioId: this.props.config,
-      portfolio: this.state.portfolio,
-      privateKeys: this.state.privateKeys,
-      removeKeys: this.state.removePrivateKeys
-    }
-    const response = await updatePortfolioActionHandler(jsonData)
-    if (response) {
-      if (this.props.communityType == "Ideators") {
-        let idea = this.state.idea
-        if (idea) {
-          const response1 = await updateIdeatorIdeaActionHandler(idea, this.loggedUserDetails)
-          return response1;
-        }
+    const isRequired = this.isRequired()
+    if(!isRequired){
+      var jsonData = {
+        portfolioId: this.props.config,
+        portfolio: this.state.portfolio,
+        privateKeys: this.state.privateKeys,
+        removeKeys: this.state.removePrivateKeys
       }
-      return response;
-    }
+      // toastr.success("server hit")
+      const response = await updatePortfolioActionHandler(jsonData)
+      if (response) {
+        if (this.props.communityType == "Ideators") {
+          let idea = this.state.idea
+          if (idea) {
+            const response1 = await updateIdeatorIdeaActionHandler(idea, this.loggedUserDetails)
+            return response1;
+          }
+        }
+        return response;
+      }
+    }else
+      toastr.error(isRequired.errorMessage +' in '+ isRequired.tabName);
   }
 
+  isRequired() {
+    console.log("this.requiredFieldAry", this.requiredFieldAry)
+    const error = this.requiredFieldAry && this.requiredFieldAry.length ? this.requiredFieldAry[0] : null
+    if (error) {
+      return error
+    }
+  }
   /**
    * success handle if no error in server
    * */
@@ -294,13 +319,13 @@ class MlPortfolio extends React.Component {
   render() {
     let that = this;
     let MlActionConfig = []
-    if(FlowRouter.getRouteName() === "portfolio_requested"){
-      MlActionConfig.push({
-        showAction: true,
-        actionName: 'edit',
-        handler: null
-      });
-    }
+    // if(FlowRouter.getRouteName() === "portfolio_requested"){
+    //   MlActionConfig.push({
+    //     showAction: true,
+    //     actionName: 'edit',
+    //     handler: null
+    //   });
+    // }
     MlActionConfig.push({
       actionName: 'save',
       showAction: true,

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
+import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlAppInternalPendingTask from './MlAppInternalPendingTask';
 import MlAppInternalCurrentTask from './MlAppInternalCurrentTask';
 import MlAppInternalCompleteTask from './MlAppInternalCompleteTask';
@@ -20,14 +21,24 @@ import {mlMyAppSelfInternalTaskConfig} from './../config/MlAppSelfTasksConfig';
 
 export default class MlAppInternalTask extends React.Component{
 
+  constructor(props){
+    super(props);
+    this.state={
+      activeTab:'My Tasks',
+    }
+    this.updateTab=this.updateTab.bind(this);
+  }
   componentDidMount() {
   }
-
-
-  removeTab(){
-    FlowRouter.setQueryParams({
-      add: null
-    });
+  componentWillMount(){
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
+  }
+  updateTab(index){
+    let tab =  this.state.tabs[index].name;
+    FlowRouter.setQueryParams({ tab: tab,add: null });
   }
 
   render(){
@@ -59,16 +70,16 @@ export default class MlAppInternalTask extends React.Component{
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
+        key:MlTab.name,
         getContent: () => MlTab.tabContent,
       }));
     }
 
-    const App = () => <Tabs items={getTabs()} onChange={() => this.removeTab()} />;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12">
-            <App/>
+            <MlTabComponent selectedTabKey={this.state.activeTab} tabs={getTabs()} onChange={this.updateTab} type="tab" mkey="name" />
           </div>
         </div>
       </div>

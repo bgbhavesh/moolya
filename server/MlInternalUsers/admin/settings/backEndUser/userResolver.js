@@ -753,7 +753,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
         let profile = _.find(userProfiles, {clusterId:clusterId});
         if(profile){
-          let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
+          // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
+          let roles = _.find(profile.userRoles, function (obj) {
+            if(obj.chapterId == (chapterId||"all") && obj.subChapterId == (subChapterId||"all") && obj.communityCode == (communityCode||"all")){
+              return obj
+            }
+          })
           if(roles){
             let resp = new MlAdminUserContext().getUserLatLng(user.profile);
             user.latitude = resp.lat;
@@ -772,7 +777,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         if(externalUsers && externalUsers.length>0) {
           _.each(externalUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
-            userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'chapterId': chapterId, 'subChapterId': subChapterId, 'communityDefCode': communityCode||"all"});
+            // userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'chapterId': chapterId, 'subChapterId': subChapterId, 'communityDefCode': communityCode||"all"});
+            userProfiles = _.filter(userProfiles, function (obj) {
+              if(obj.clusterId==clusterId && obj.chapterId==chapterId && obj.subChapterId==subChapterId &&obj.communityDefCode==(communityCode||"all")){
+                return obj
+              }
+            })
               if(userProfiles && userProfiles.length>0){
                 let locationName = "subChapterName";
                 var resp = new MlAdminUserContext().getAllExternalUser(userProfiles, user, locationName);
@@ -803,7 +813,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:cluster._id});
               if(profile){
-                let roles = _.filter(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
+                // let roles = _.filter(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
+                let roles = _.filter(profile.userRoles, function (obj) {
+                  if(obj.chapterId==(chapterId||"all") && obj.subChapterId==(subChapterId||"all")){
+                    return obj
+                  }
+                })
                 if(roles){
                   let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                   user.latitude = resp.lat;
@@ -839,7 +854,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
                   let profile = _.find(userProfiles, {clusterId:cluster._id});
                   if(profile){
-                    let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
+                    // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
+                    let roles = _.find(profile.userRoles, function (obj) {
+                      if(obj.chapterId==(chapterId||"all") && obj.subChapterId==(subChapterId||"all")){
+                        return obj
+                      }
+                    })
                     if(roles){
                       let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                       user.latitude = resp.lat;
@@ -886,7 +906,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
           let profile = _.find(userProfiles, {clusterId:cluster._id});
           if(profile){
-            let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+            // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+            let roles = _.find(profile.userRoles, function(obj){
+              if(obj.chapterId==(chapterId||"all")){
+                return obj
+              }
+            })
             if(roles){
               let resp = new MlAdminUserContext().getUserLatLng(user.profile);
               user.latitude = resp.lat;
@@ -923,7 +948,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:cluster._id});
               if(profile){
-                let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+                // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+                let roles = _.find(profile.userRoles, function(obj){
+                  if(obj.chapterId==(chapterId||"all")){
+                    return obj
+                  }
+                })
                 if(roles){
                   let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                   user.latitude = resp.lat;
@@ -964,7 +994,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
         let profile = _.find(userProfiles, {clusterId:clusterId});
         if(profile){
-          let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
+          // let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
+          let roles = _.find(profile.userRoles, function(obj){
+            if(obj.communityCode==(communityCode||"all")){
+              return obj
+            }
+          })
           if(roles){
             let resp = new MlAdminUserContext().getUserLatLng(user.profile);
             user.latitude = resp.lat;
@@ -984,7 +1019,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         if(externalUsers && externalUsers.length>0) {
           _.each(externalUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
-            userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'communityDefCode': communityCode||"all"});
+            // userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'communityDefCode': communityCode||"all"});
+            userProfiles = _.filter(userProfiles, function(obj){
+              if(obj.clusterId==clusterId && obj.communityDefCode == (communityCode||"all")){
+                return obj
+              }
+            })
             if (userProfiles && userProfiles.length>0) {
                 let locationName = "chapterName";
                 var resp = new MlAdminUserContext().getAllExternalUser(userProfiles, user, locationName);
@@ -1091,18 +1131,22 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         _.each(external, function (user){
           _.each(user.profile.externalUserProfiles, function(externalUserProfile){
             if(externalUserProfile.isActive && externalUserProfile.isApprove){
-              user.communityCode = externalUserProfile.communityDefCode;
-              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
-              user.clusterName = externalUserProfile.clusterName?externalUserProfile.clusterName:"";
-              if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0){
-                _.each(user.profile.externalUserAdditionalInfo, function(profile){
-                  if(externalUserProfile.profileId == profile.profileId){
-                    var resp = new MlAdminUserContext().getUserLatLng(profile);
-                    user.latitude = resp.lat;
-                    user.longitude = resp.lng;
-                    users.push(user);
-                  }
-                })
+              let portfolio = MlPortfolioDetails.findOne({profileId:externalUserProfile.profileId, status: 'PORT_LIVE_NOW'});
+              if(portfolio) {
+                user.communityCode = externalUserProfile.communityDefCode;
+                user.portfolioId = portfolio._id;
+                user.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
+                user.clusterName = externalUserProfile.clusterName ? externalUserProfile.clusterName : "";
+                if (user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length > 0) {
+                  _.each(user.profile.externalUserAdditionalInfo, function (profile) {
+                    if (externalUserProfile.profileId == profile.profileId) {
+                      var resp = new MlAdminUserContext().getUserLatLng(profile);
+                      user.latitude = resp.lat;
+                      user.longitude = resp.lng;
+                      users.push(user);
+                    }
+                  })
+                }
               }
             }
           })
@@ -1139,7 +1183,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  context.module = "Users";
+  context.userModule = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

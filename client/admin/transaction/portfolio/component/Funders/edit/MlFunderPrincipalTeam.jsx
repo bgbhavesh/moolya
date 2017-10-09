@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from "react";
-import { render } from "react-dom";
 import gql from 'graphql-tag'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import ScrollArea from "react-scrollbar";
 import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
 import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
@@ -14,8 +12,9 @@ import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibra
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper'
 import CropperModal from '../../../../../../commons/components/cropperModal';
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-export default class MlFunderPrincipalTeam extends React.Component {
+export default class MlFunderPrincipalTeam extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -313,8 +312,13 @@ export default class MlFunderPrincipalTeam extends React.Component {
     //   })
     // }, 10)
   }
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.state.selectedTab, errorMessage: ret, index: this.state.selectedIndex}
+  }
 
   sendDataToParent(isSaveClicked) {
+    const requiredFields = this.getFieldValidations();
     var data = this.state.data;
     var selectedTab = this.state.selectedTab;
     if (selectedTab == "principal") {
@@ -337,7 +341,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       })
       funderPrincipal = arr;
       this.setState({ funderPrincipal: funderPrincipal })
-      this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
+      this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey, requiredFields);
 
     } else if (selectedTab == "team") {
 
@@ -360,9 +364,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       })
       funderTeam = arr;
       this.setState({ funderTeam: funderTeam })
-      this.props.getTeamDetails(funderTeam, this.state.privateKey);
+      this.props.getTeamDetails(funderTeam, this.state.privateKey, requiredFields);
     }
-
   }
 
   onTabSelect(tab, e) {
@@ -447,7 +450,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   async fetchOnlyImages() {
-
     if (this.state.selectedTab == "principal") {
       const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
       if (response && !_.isEmpty(response)) {
@@ -479,7 +481,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
         }
       }
     }
-
   }
 
   toggleModal() {
@@ -670,24 +671,27 @@ export default class MlFunderPrincipalTeam extends React.Component {
 
                           </div>
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="First Name" name="firstName"
+                            <input type="text" placeholder="First Name" name="firstName" ref={"firstName"}
                                    defaultValue={this.state.data.firstName} className="form-control float-label"
-                                   id="cluster_name" onBlur={this.handleBlur} />
+                                   onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="First name is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
                                          onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "principal")} />
                           </div>
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Last Name" name="lastName"
+                            <input type="text" placeholder="Last Name" name="lastName" ref={"lastName"}
                                    defaultValue={this.state.data.lastName} className="form-control float-label"
-                                   id="cluster_name" onBlur={this.handleBlur} />
+                                   onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Last name is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
                                          onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "principal")} />
                           </div>
                           <div className="form-group mandatory">
                             <input type="text" placeholder="Designation" name="designation"
-                                   defaultValue={this.state.data.designation}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
+                                   defaultValue={this.state.data.designation} ref={"designation"}
+                                   className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Designation is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"
                                          onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate", "principal")} />
                           </div>
@@ -820,25 +824,28 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           {/*</div>*/}
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="First Name" name="firstName"
+                            <input type="text" placeholder="First Name" name="firstName" ref={"firstName"}
                                    defaultValue={this.state.data.firstName} className="form-control float-label"
-                                   id="cluster_name" onBlur={this.handleBlur} />
+                                   onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="First name is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
                                          onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "team")} />
                           </div>
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Last Name" name="lastName"
+                            <input type="text" placeholder="Last Name" name="lastName" ref={"lastName"}
                                    defaultValue={this.state.data.lastName} className="form-control float-label"
-                                   id="cluster_name" onBlur={this.handleBlur} />
+                                   onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Last name is required"/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
                                          onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "team")} />
                           </div>
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Designation" name="designation"
+                            <input type="text" placeholder="Designation" name="designation" ref={"designation"}
                                    defaultValue={this.state.data.designation}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
+                                   className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                                   data-errMsg="Designation is required"/>
                             <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
                                          onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate", "team")} />
                           </div>

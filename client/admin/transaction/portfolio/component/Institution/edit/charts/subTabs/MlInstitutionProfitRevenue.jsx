@@ -131,6 +131,7 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     this.refs["prlabout"+index].value = ""
     this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
+    this.setState({data : {}})
 
   }
 

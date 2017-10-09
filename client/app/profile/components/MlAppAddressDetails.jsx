@@ -443,6 +443,29 @@ export default class AppAddressDetails extends React.Component {
   }
 
 
+  onMakeDefaultChange(index){
+    let addressInfo = this.props&&this.props.addressInfoDetails?this.props.addressInfoDetails:[];
+    let presentObject = addressInfo&&addressInfo[index]?addressInfo[index]:{}
+    let presentObjIsDefault = presentObject&&presentObject.isDefaultAddress?presentObject.isDefaultAddress:null
+    if(!presentObjIsDefault){
+      let dbData = _underscore.pluck(addressInfo, 'isDefaultAddress') || [];
+      let defaultAdrsExist = null;
+      defaultAdrsExist = _underscore.contains(dbData,true );
+
+      if(defaultAdrsExist){
+        toastr.error("Default Address Already Exists!!!!!");
+        if(index<0){
+          this.refs["defaultAddress"].checked = false
+        }else{
+          this.refs["defaultAddress"+index].checked = false
+        }
+
+      }
+    }
+
+
+  }
+
 
 
   render(){
@@ -544,7 +567,7 @@ export default class AppAddressDetails extends React.Component {
               <div className="form-group switch_wrap inline_switch">
                 <label>Set as default</label>
                 <label className="switch">
-                  <input type="checkbox" ref={'defaultAddress'}/>
+                  <input type="checkbox" ref={'defaultAddress'}  onChange={this.onMakeDefaultChange.bind(this,-1)}/>
                   <div className="slider"></div>
                 </label>
               </div>
@@ -638,7 +661,7 @@ export default class AppAddressDetails extends React.Component {
                   <div className="form-group switch_wrap inline_switch">
                     <label>Set as default</label>
                     <label className="switch">
-                      <input type="checkbox" ref={'defaultAddress'+key} defaultChecked={options.isDefaultAddress}/>
+                      <input type="checkbox" ref={'defaultAddress'+key} defaultChecked={options.isDefaultAddress} onChange={that.onMakeDefaultChange.bind(that,key)}/>
                       <div className="slider"></div>
                     </label>
                   </div>

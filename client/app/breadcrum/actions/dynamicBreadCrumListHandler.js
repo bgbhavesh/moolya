@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { client } from '../../../admin/core/apolloConnection';
 import _ from 'lodash';
-export default function getBreadCrumListBasedOnhierarchy(params, callback) {
+export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,callback) {
   params = params || {};
   const requ = _.pick(params, ['clusterId', 'chapterId', 'subChapterId', 'communityId']);
   const breadCrumHierarchyPromise = client.query({
@@ -59,13 +59,30 @@ export default function getBreadCrumListBasedOnhierarchy(params, callback) {
     else if (name === 'INS') name = 'Institute';
     else if (name === 'SPS') name = 'Service Provider';
     else if (name === 'assignusers') name = 'Assign Users';
-    if (name !== 'chapters' && name !== 'subChapters' && name !== 'communities' && name!== 'true') {
+    if(FlowRouter.getParam('portfolioId') && FlowRouter.getParam('portfolioId')===name){
+      list.push({
+        linkUrl: path,
+        linkName: properName(portfolioName) ||'User',
+      });
+    }else if (name !== 'chapters' && name !== 'subChapters' && name !== 'communities' && name!== 'true') {
       list.push({
         linkUrl: path,
         linkName: properName(name),
       });
     }
 
+    if(FlowRouter.getQueryParam('tab')){
+      list.push({
+        linkUrl: path.split('?')[0] + '?tab='+FlowRouter.getQueryParam('tab'),
+        linkName: properName(FlowRouter.getQueryParam('tab')),
+      })
+    }
+    if(FlowRouter.getQueryParam('subtab')){
+      list.push({
+        linkUrl: '',
+        linkName: properName(FlowRouter.getQueryParam('subtab')),
+      })
+    }
 
     if (list && list.length && list[0].linkName === 'Dashboard') { list.splice(0, 1); }
     if (callback) {

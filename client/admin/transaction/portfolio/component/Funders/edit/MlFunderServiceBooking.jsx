@@ -264,14 +264,21 @@ export default class FunderAboutView extends React.Component{
                       {/*<td>: 200 INR</td>*/}
                     {/*</tr>*/}
                     <tr>
+                      <td>Facilitation charges</td>
+                      <td>{ that.props.serviceDetails.finalAmount && that.props.serviceDetails.payment ?
+                        parseFloat(that.props.serviceDetails.finalAmount - that.props.serviceDetails.payment.tasksDerived).toFixed(4)
+                        : 0 }</td>
+                    </tr>
+                    <tr>
                       <td>Total Amount</td>
-                      <td>{that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksDerived:0}</td>
+                      <td>{that.props.serviceDetails.finalAmount?that.props.serviceDetails.finalAmount:0}</td>
                     </tr>
                     <tr>
                       <td>&nbsp;</td>
                       <td>
                         <div className="ml_btn" style={{'textAlign': 'left'}}>
-                            <a href="" className="save_btn" onClick={that.bookUserServiceCard.bind(that)}>Book</a><a href="" className="cancel_btn">Cancel</a>
+                            <a href="" className="save_btn" onClick={that.bookUserServiceCard.bind(that)}>Book</a>
+                            <a href="" className="cancel_btn" onClick={ () => that.props.componentToView('landingPage') } >Cancel</a>
                         </div>
                       </td>
                     </tr>
@@ -298,7 +305,8 @@ export default class FunderAboutView extends React.Component{
                   </div>
                   <h1>
                     Payment Gateway Here
-                    <div className="ml_btn" style={{'textAlign':'center'}}><a href="" className="save_btn" onClick={this.payment.bind(this)}>Proceed</a> <a href="" className="cancel_btn">Cancel</a> </div>
+                    <div className="ml_btn" style={{'textAlign':'center'}}><a href="" className="save_btn" onClick={this.payment.bind(this)}>Proceed</a>
+                      <a href="" className="cancel_btn" onClick={ () => that.props.componentToView('landingPage') } >Cancel</a> </div>
                   </h1>
                 </form>
               </div>

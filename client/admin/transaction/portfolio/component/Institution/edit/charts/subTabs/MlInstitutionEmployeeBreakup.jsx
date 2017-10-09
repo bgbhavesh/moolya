@@ -151,7 +151,7 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
     this.refs["ebdNumberOfEmployment"+index].value = ""
     this.refs["ebdAbout"+index].value = ""
     this.setState({"selectedVal" : ""})
-
+    this.setState({data : {}})
     /* this.refs["prlFromYear"+index].val(" ")
      this.refs["prlFromMonth"+index].val(" ")
      this.refs["prlToYear"+index].val(" ")

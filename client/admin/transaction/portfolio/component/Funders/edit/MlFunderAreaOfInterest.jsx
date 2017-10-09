@@ -1,18 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import _ from "lodash";
 import gql from "graphql-tag";
-import {graphql} from "react-apollo";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../../commons/components/loader/loader'
-import NoData from '../../../../../../commons/components/noData/noData'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-export default class MlFunderAreaOfInterest extends React.Component {
+export default class MlFunderAreaOfInterest extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -24,7 +22,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
       funderAreaOfInterestList: [],
       selectedObject: "default",
       privateKey:{}
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.dateChange.bind(this)
@@ -41,24 +40,20 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.areaOfInterest)
-    if (empty) {
-      const response = await fetchfunderPortfolioAreaInterest(portfolioDetailsId);
-      if (response) {
-        this.setState({loading: false, funderAreaOfInterest: response, funderAreaOfInterestList: response});
-        // _.each(response.privateFields, function (pf) {
-        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        // })
+    const response = await fetchfunderPortfolioAreaInterest(portfolioDetailsId);
+      if (empty) {
+        if(response && response.length)
+          this.setState({loading: false, funderAreaOfInterest: response, funderAreaOfInterestList: response});
+        else
+          this.setState({loading: false})
+      } else {
+        this.setState({
+          loading: false,
+          funderAreaOfInterest: that.context.funderPortfolio.areaOfInterest,
+          funderAreaOfInterestList: that.context.funderPortfolio.areaOfInterest
+        });
       }
-
-    } else {
-      this.setState({
-        loading: false,
-        funderAreaOfInterest: that.context.funderPortfolio.areaOfInterest,
-        funderAreaOfInterestList: that.context.funderPortfolio.areaOfInterest
-      });
-    }
-
-    this.setState({loading:false})
+      this.funderAreaOfInterestServer = response
   }
 
   handleBlur(e) {
@@ -82,6 +77,19 @@ export default class MlFunderAreaOfInterest extends React.Component {
   }
 
   onTileClick(index, e) {
+    let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
+    let details = cloneArray[index]
+    details = _.omit(details, "__typename");
+    if (details && details.logo) {
+      delete details.logo['__typename'];
+    }
+    this.setState({
+      selectedIndex: index,
+      data: details,
+      selectedObject: index,
+      popoverOpen: !(this.state.popoverOpen)}, () => {
+      this.lockPrivateKeys(index)
+    });
     // let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
     // let details = cloneArray[index]
     // details = _.omit(details, "__typename");
@@ -142,12 +150,33 @@ export default class MlFunderAreaOfInterest extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data: details}, function () {
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
+
   }
+
+  /**
+   * UI creating lock function\
+   * @Note: For the first Time context data is not working
+   *        from the second time context when connection establish then its working
+   * */
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.funderAreaOfInterestServer && this.funderAreaOfInterestServer[selIndex]?this.funderAreaOfInterestServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   onSaveAction(e) {
     this.setState({funderAreaOfInterestList: this.state.funderAreaOfInterest, popoverOpen: false})
@@ -157,8 +186,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let details = this.state.data;
     details = _.omit(details, ["industryTypeId"]);
     details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
+    this.setState({data: details, "selectedVal": selectedFunding, "industryTypeName": selObject.label}, function () {
+      // this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
       this.sendDataToParent()
     })
   }
@@ -173,7 +202,31 @@ export default class MlFunderAreaOfInterest extends React.Component {
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  /**
+   * UI creating lock function\
+   * @Note: For the first Time context data is not working
+   *        from the second time context when connection establish then its working
+   * */
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.funderInvestmentServer && this.funderInvestmentServer[selIndex]?this.funderInvestmentServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderAreaOfInterest;
     let funderAreaOfInterest = _.cloneDeep(investment);
@@ -192,9 +245,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;
-    // funderAreaOfInterest=_.omit(funderAreaOfInterest,["privateFields"]);
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
-    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
+    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey, requiredFields);
   }
 
 
@@ -242,7 +294,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         return (
                           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                             <a href="" id={"create_client" + idx}>
-                              <div className="list_block list_block_intrests notrans">
+                              <div className="list_block list_block_intrests notrans">`
                                 <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
@@ -270,11 +322,12 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         <div className="row">
                           <div className="col-md-12">
                             <div className="form-group">
-                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'} ref={"industryTypeId"}
                                             labelKey={'label'} queryType={"graphql"} query={industriesquery} mandatory={true}
                                             isDynamic={true} placeholder="Select Industry.."
                                             onSelect={this.onOptionSelectedIndustry.bind(this)}
-                                            selectedValue={this.state.selectedVal}/>
+                                            selectedValue={this.state.selectedVal} data-required={true}
+                                            data-errMsg="Industry is required"/>
                             </div>
                             <div className="form-group">
                               <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
@@ -305,4 +358,5 @@ export default class MlFunderAreaOfInterest extends React.Component {
 
 MlFunderAreaOfInterest.contextTypes = {
   funderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

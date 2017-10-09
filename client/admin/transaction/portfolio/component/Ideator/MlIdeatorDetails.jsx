@@ -1,25 +1,24 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+var FontAwesome = require('react-fontawesome');
+var Select = require('react-select')
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
-/*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
-import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProficPic'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select')
 import CropperModal from '../../../../../commons/components/cropperModal';
+import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
+
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
   {value: 'others', label: 'Others'}
 ];
 
-export default class MlIdeatorDetails extends React.Component{
+export default class MlIdeatorDetails extends Component{
   constructor(props, context){
     super(props);
     this.state = {
@@ -32,6 +31,7 @@ export default class MlIdeatorDetails extends React.Component{
       showProfileModal: false,
       uploadingAvatar: false
     }
+    this.tabName = this.props.tabName || ''
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -76,7 +76,6 @@ export default class MlIdeatorDetails extends React.Component{
         details=_.extend(details,{[key]:false});
       }
     var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
     this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
@@ -172,6 +171,7 @@ export default class MlIdeatorDetails extends React.Component{
 
 
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
       for (var propName in data) {
         if (data[propName] === null || data[propName] === undefined) {
@@ -179,13 +179,14 @@ export default class MlIdeatorDetails extends React.Component{
         }
       }
       data=_.omit(data,["privateFields"]);
-      this.props.getIdeatorDetails(data, this.state.privateKey)
+      this.props.getIdeatorDetails(data, this.state.privateKey, requiredFields)
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: 0}
+  }
   onFileUpload(file){
-    // if(e.target.files[0].length ==  0)
-    //   return;
-    // let file = e.target.files[0];
     if(file){
       let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -225,7 +226,6 @@ export default class MlIdeatorDetails extends React.Component{
   }
 
   async deleteProfilePic() {
-
     const response = await removePortfolioProfilePic(this.props.portfolioDetailsId);
     if(response){
       this.fetchPortfolioDetails();
@@ -268,11 +268,18 @@ export default class MlIdeatorDetails extends React.Component{
                 <div className="form_bg">
                   <form id="ideatorDetails">
                     <div className="form-group mandatory">
-                      <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="First Name" name="firstName" ref="firstName"
+                             defaultValue={this.state.data.firstName} className="form-control float-label"
+                             onBlur={this.handleBlur.bind(this)} data-required={true}
+                             data-errMsg="First Name is required"/>
                       {/*<FontAwesome htmlFor="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>*/}
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName}
+                             ref="lastName"
+                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}
+                             data-required={true}
+                             data-errMsg="Last Name is required"/>
                       {/*<FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>*/}
                     </div>
 

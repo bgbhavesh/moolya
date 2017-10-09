@@ -1207,6 +1207,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'OFFICEPACKAGE':resolveType='OfficePackage';break;
     }
 
+    /**Its a quick fix until a generic solution is coded.
+     *  This is to resolve module Name from fetchUsersForDashboard QueryResolver of the userResolver.js file*/
+    if(context&&context.userModule==='Users'){
+      resolveType='BackendUsers';
+    }
+
     if(resolveType){
       return resolveType;
     }else{

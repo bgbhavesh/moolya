@@ -543,32 +543,37 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
   }
 }
 
-MlResolver.MlMutationResolver['removePortfolioDataFile'] = (obj, args, context, info) => {
+//todo: // need to merge all conditions of one community in one part only
+MlResolver.MlMutationResolver['removePortfolioFileUrl'] = (obj, args, context, info) => {
   let response
   let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
   if(args.portfoliodetailsId) {
     switch (portfolio.communityCode) {
       case "STU":
-          if (args.tabName==="data") {
-            let startupPortfolioData = MlStartupPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
-            if (startupPortfolioData && startupPortfolioData.data) {
-              _.remove(startupPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
-              response = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data:startupPortfolioData.data}, {$set: true}, context)
-              return response
-            }
-          }
-          break;
-      case "CMP":
-        if (args.tabName==="data") {
-          let companyPortfolioData = MlCompanyPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
-          if (companyPortfolioData && companyPortfolioData.data) {
-            _.remove(companyPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
-            response = mlDBController.update('MlCompanyPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data:companyPortfolioData.data}, {$set: true}, context)
+      {
+        if (args.tabName === "data") {
+          let startupPortfolioData = MlStartupPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (startupPortfolioData && startupPortfolioData.data) {
+            _.remove(startupPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data: startupPortfolioData.data}, {$set: true}, context)
             return response
           }
         }
+      }
+          break;
+      case "CMP":
+      {
+        if (args.tabName === "data") {
+          let companyPortfolioData = MlCompanyPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (companyPortfolioData && companyPortfolioData.data) {
+            _.remove(companyPortfolioData.data[args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlCompanyPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {data: companyPortfolioData.data}, {$set: true}, context)
+            return response
+          }
+        }
+      }
         break;
-      case "INS":
+      case "INS":{
         if (args.tabName==="data") {
           let institutionPortfolioData = MlInstitutionPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
           if (institutionPortfolioData && institutionPortfolioData.data) {
@@ -577,21 +582,21 @@ MlResolver.MlMutationResolver['removePortfolioDataFile'] = (obj, args, context, 
             return response
           }
         }
+      }
+        break;
+      case 'IDE': {
+        if (args.tabName==="problemsAndSolutions") {
+          let ideatorPortfolioData = MlIdeatorPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (ideatorPortfolioData && ideatorPortfolioData.problemSolution) {
+            _.remove(ideatorPortfolioData.problemSolution[args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {problemSolution:ideatorPortfolioData.problemSolution}, {$set: true}, context)
+            return response
+          }
+        }
+      }
         break;
       default:
             break;
-    }
-  }
-}
-
-MlResolver.MlMutationResolver['removeIdetaorProblemAndSolutionPic'] = (obj, args, context) => {
-  let response
-  if(args.portfoliodetailsId) {
-    let ideatorPortfolioData = MlIdeatorPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
-    if (ideatorPortfolioData && ideatorPortfolioData.problemSolution) {
-      _.remove(ideatorPortfolioData.problemSolution[args.typeOfImage], {fileUrl: args.fileUrl})
-      response = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {problemSolution: ideatorPortfolioData.problemSolution}, {$set: true}, context)
-      return response
     }
   }
 }

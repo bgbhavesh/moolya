@@ -6,7 +6,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {putDataIntoTheLibrary, removeIdetaorProblemAndSolutionPic} from '../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary, removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
@@ -173,7 +173,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   async removeProblemAndSolutionPic(typeOfImage,fileUrl){
       if(typeOfImage && fileUrl){
         let portfolioDetailsId = this.props.portfolioDetailsId;
-        const resp = await removeIdetaorProblemAndSolutionPic(portfolioDetailsId , fileUrl,typeOfImage);
+        const resp = await removePortfolioFileUrl(portfolioDetailsId , fileUrl,"problemsAndSolutions",typeOfImage);
         this.fetchOnlyImages();
       }
   }

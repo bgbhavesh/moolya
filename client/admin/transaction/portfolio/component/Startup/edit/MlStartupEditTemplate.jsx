@@ -65,7 +65,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
-        component: <MlStartupManagement client={client} isAdmin={true} key="2"
+        component: <MlStartupManagement client={client} isAdmin={true} key="2" tabName={"management"}
                                         getManagementDetails={this.getManagementDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
       },

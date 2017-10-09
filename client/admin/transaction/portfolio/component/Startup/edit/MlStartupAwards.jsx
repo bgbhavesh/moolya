@@ -1,23 +1,22 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import gql from "graphql-tag";
+import _ from "lodash";
+import Datetime from "react-datetime";
+var FontAwesome = require('react-fontawesome')
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
-import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../actions/findPortfolioStartupDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import CropperModal from '../../../../../../commons/components/cropperModal';
-var FontAwesome = require('react-fontawesome')
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "awardsRecognition"
 
-export default class MlStartupAwards extends React.Component{
+export default class MlStartupAwards extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -33,7 +32,8 @@ export default class MlStartupAwards extends React.Component{
       showProfileModal: false,
       uploadingAvatar: false
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
@@ -170,14 +170,14 @@ export default class MlStartupAwards extends React.Component{
     details = _.omit(details, ["awardName"]);
     if(selectedAward){
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
+      this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
+        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
         this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', awardName: ''})
+      this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
+        // this.setState({"selectedVal": '', awardName: ''})
         this.sendDataToParent()
       })
     }
@@ -204,7 +204,13 @@ export default class MlStartupAwards extends React.Component{
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.startupAwards;
     let startupAwards = _.cloneDeep(awards);
@@ -218,13 +224,13 @@ export default class MlStartupAwards extends React.Component{
             delete item[propName];
           }
         }
-        newItem = _.omit(item, "__typename");
+        let newItem = _.omit(item, "__typename");
         newItem = _.omit(newItem, ["privateFields"])
         arr.push(newItem)
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    this.props.getAwardsDetails(startupAwards, this.state.privateKey);
+    this.props.getAwardsDetails(startupAwards, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(fileInfo,image){
@@ -391,20 +397,19 @@ export default class MlStartupAwards extends React.Component{
                 <div  className="ml_create_client">
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
-                      <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                      labelKey={'label'} queryType={"graphql"} query={query}
-                                      isDynamic={true} placeholder="Select Award.."
-                                      onSelect={this.onOptionSelected.bind(this)} mandatory={true}
-                                      selectedValue={this.state.selectedVal}/>
-                      </div>
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    isDynamic={true} placeholder="Select Award.."
+                                    onSelect={this.onOptionSelected.bind(this)} mandatory={true}
+                                    selectedValue={this.state.selectedVal} ref={"awardId"} data-required={true}
+                                    data-errMsg="Award is required"/>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                   inputProps={{placeholder: "Select Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data&&this.state.data.year?this.state.data.year:0}
                                   closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={this.state.data&&this.state.data.year? valid :"" }/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "awardsDescription", "isDescriptionPrivate")}/>
                       </div>
                       {displayUploadButton?<div className="form-group">

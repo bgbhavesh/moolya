@@ -1,22 +1,21 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import gql from "graphql-tag";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import { connect } from 'react-redux';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "technologies"
 
-class MlStartupTechnology extends React.Component{
+class MlStartupTechnology extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -30,7 +29,9 @@ class MlStartupTechnology extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
+    this.onOptionSelected = this.onOptionSelected.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
@@ -120,8 +121,8 @@ class MlStartupTechnology extends React.Component{
       // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
       details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, technologyDescription: selObject.about});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
+      this.setState({data: details, "selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about}, function () {
+        // this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
         this.sendDataToParent()
       })
     } else {
@@ -130,8 +131,8 @@ class MlStartupTechnology extends React.Component{
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
       details = _.omit(details, ["technologyDescription"]);
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
+      this.setState({data: details, "selectedVal": '', "technologyName": '', technologyDescription:''}, function () {
+        // this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
         this.sendDataToParent()
       })
     }
@@ -146,7 +147,14 @@ class MlStartupTechnology extends React.Component{
       this.sendDataToParent()
     })
   }
+
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
@@ -166,7 +174,7 @@ class MlStartupTechnology extends React.Component{
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey);
+    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey, requiredFields);
 
   }
   onLogoFileUpload(e){
@@ -305,15 +313,17 @@ class MlStartupTechnology extends React.Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Technology'}
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} ref={"technologyId"}
+                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    placeholder={'Select Technology'}
                                     isDynamic={true} mandatory={true}
-                                    onSelect={this.onOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedVal}/>
+                                    onSelect={this.onOptionSelected}
+                                    selectedValue={this.state.selectedVal}
+                                    data-required={true} data-errMsg="Technology is required"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur}/>
                       <FontAwesome id="isDescriptionPrivate" name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "technologyDescription", "isDescriptionPrivate")}/>
                     </div>
 

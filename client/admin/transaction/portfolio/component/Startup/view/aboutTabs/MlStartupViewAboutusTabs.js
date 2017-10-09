@@ -113,7 +113,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         panelClassName: 'panel',
         title: "Assets",
         name: "Assets",
-        component: <MlStartupViewAssets key="2" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewAssets key="2" portfolioDetailsId={this.props.portfolioDetailsId} tabName="assets"
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}
                                         assetsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.assets}/>
       },
@@ -122,7 +122,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         panelClassName: 'panel',
         title: "Branches",
         name: "Branches",
-        component: <MlStartupViewBranches key="8" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewBranches key="8" portfolioDetailsId={this.props.portfolioDetailsId} tabName="branches"
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}
                                           branchesDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.branches}/>
       },
@@ -131,7 +131,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         panelClassName: 'panel',
         title: "Technologies",
         name: "Technologies",
-        component: <MlStartupViewTechnologies key="2" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewTechnologies key="2" portfolioDetailsId={this.props.portfolioDetailsId} tabName="technologies"
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}
                                               technologiesDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.technologies}/>
       },
@@ -140,7 +140,7 @@ export default class MlStartupViewAboutusTabs extends React.Component {
         panelClassName: 'panel',
         title: "Legal Issue",
         name: "Legal Issue",
-        component: <MlStartupViewLegalIssues key="9" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewLegalIssues key="9" portfolioDetailsId={this.props.portfolioDetailsId} tabName="legalIssue"
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              legalIssueDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.legalIssue}/>
       }

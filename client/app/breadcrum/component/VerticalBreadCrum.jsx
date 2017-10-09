@@ -179,7 +179,6 @@ export default class VerticalBreadCrum extends Component {
           // }else
           list.push({
             name: properName(subtab),
-            link: '',
           });
         }
       }
@@ -196,7 +195,6 @@ export default class VerticalBreadCrum extends Component {
           // }else
             list.push({
               name: properName(subtab),
-              link: '',
             });
         }
       }
@@ -269,7 +267,6 @@ export default class VerticalBreadCrum extends Component {
         if (subtab && tab !== 'about') {
           list.push({
             name: properName(subtab),
-            link: '',
           });
         }
 

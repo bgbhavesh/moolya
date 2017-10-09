@@ -357,10 +357,12 @@ let CoreModules = {
       object = doc.registrationInfo;
       object._id = doc._id;
       object.registrationStatus = doc.status;
-      if (doc.allocation) {
-        object.assignedUser = doc.allocation.assignee
+      if (doc.allocation && doc.allocation.assigneeId) {
+        // object.assignedUser = doc.allocation.assignee
+        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
+        object.assignedUser = user.profile.firstName+" "+user.profile.lastName
         object.assignedUserId = doc.allocation.assigneeId
-          object.allocationStatus = doc.allocation.allocationStatus
+        object.allocationStatus = doc.allocation.allocationStatus
       }
       /*else{
        object.assignedUser = "Un Assigned"
@@ -398,8 +400,10 @@ let CoreModules = {
     var data = MlPortfolioDetails.find(resultantQuery, fieldsProj).fetch() || [];
     var totalRecords = MlPortfolioDetails.find(resultantQuery, fieldsProj).count();
     data.map(function (doc, index) {
-      if (doc.allocation) {
-        doc.assignedUser = doc.allocation.assignee
+      if (doc.allocation && doc.allocation.assigneeId) {
+        // doc.assignedUser = doc.allocation.assignee
+        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
+        doc.assignedUser = user.profile.firstName+" "+user.profile.lastName
         doc.assignedUserId = doc.allocation.assigneeId
         doc.allocationStatus = doc.allocation.allocationStatus
       }

@@ -9,7 +9,6 @@ import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabCom
 import MlCompanyViewManagement from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewManagement';
 import MlCompanyViewAwards from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewAwards';
 import MlCompanyViewMCL from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewMCL';
-import MlCompanyViewData from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewData';
 import MlCompanyViewChart from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewChart';
 import MlCompanyViewLibrary from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewLibrary';
 import MlCompanyViewAboutLanding from '../../../../admin/transaction/portfolio/component/Company/view/about/MlCompanyViewAboutLanding';
@@ -20,6 +19,7 @@ import MlCompanyViewRAndD from '../../../../admin/transaction/portfolio/componen
 import MlCompanyViewLookingFor from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewLookingFor'
 import MlCompanyIncubatorsViewTabs from '../../../../admin/transaction/portfolio/component/Company/view/incubators/MlCompanyIncubatorsViewTabs'
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import MlCompanyData from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyData"
 
 //todo:import the View component of about screen//
 
@@ -62,7 +62,8 @@ export default class MlAppCompaniesViewTabs extends Component {
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About" , component:<MlCompanyViewAboutLanding key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , name:"Management" , component:<MlCompanyViewManagement key="2" isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" ,  name:"Data" , component:<MlCompanyViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" ,  name:"Data" , component:<MlCompanyViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},*/
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlCompanyData key="4"  isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Chart" , name:"Chart" , component:<MlCompanyViewChart key="5"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" ,  name:"Awards" , component:<MlCompanyViewAwards key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" ,name:"Library" ,  component:<PortfolioLibrary isAdmin={false} client={appClient}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

@@ -105,7 +105,7 @@ componentDidMount(){
     let MapFooterComponent=null;
     // Fix me
     var path = window.location.pathname;
-    if(this.props.isApp && path.indexOf("/communities") !== -1){
+    if(path.indexOf("/communities") !== -1){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
     }
 

@@ -1,14 +1,14 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
+import gql from 'graphql-tag';
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {findServiceProviderLookingForActionHandler} from '../../../actions/findPortfolioServiceProviderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 export default class MlServiceProviderLookingFor extends Component {
   constructor(props, context) {
@@ -24,8 +24,9 @@ export default class MlServiceProviderLookingFor extends Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    // this.handleBlur.bind(this)
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this)
   }
 
   componentWillMount() {
@@ -206,13 +207,19 @@ export default class MlServiceProviderLookingFor extends Component {
       ["lookingForName"]: selObject.label,
       lookingDescription: selObject.about
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
       this.sendDataToParent()
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let serviceProviderLookingFor1 = this.state.serviceProviderLookingFor;
     let serviceProviderLookingFor = _.cloneDeep(serviceProviderLookingFor1);
@@ -232,31 +239,9 @@ export default class MlServiceProviderLookingFor extends Component {
 
     serviceProviderLookingFor = arr;
     this.setState({serviceProviderLookingFor: serviceProviderLookingFor})
-    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey);
+    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey, requiredFields);
 
   }
-
-  // handleBlur(e){
-  //   let details =this.state.data;
-  //   let name  = e.target.name;
-  //   details=_.omit(details,[name]);
-  //   details=_.extend(details,{[name]:e.target.value});
-  //   this.setState({data:details}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
-  //
-  // sendDataToParent(){
-  //   let data = this.state.data;
-  //   for (var propName in data) {
-  //     if (data[propName] === null || data[propName] === undefined) {
-  //       delete data[propName];
-  //     }
-  //   }
-  //   data=_.omit(data,["privateFields"]);
-  //   this.props.getLookingFor(data, this.state.privateKey)
-  // }
-
 
   render() {
     let query = gql`query($communityCode:String){
@@ -327,7 +312,8 @@ export default class MlServiceProviderLookingFor extends Component {
                                           isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
+                                          selectedValue={this.state.selectedVal} ref={"lookingForId"} data-required={true}
+                                          data-errMsg="Looking For is required"/>
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
@@ -346,7 +332,7 @@ export default class MlServiceProviderLookingFor extends Component {
                                   htmlFor="checkbox1"><span></span>Make Private</label></div>
                               </div>
                               <div className="ml_btn" style={{'textAlign': 'center'}}>
-                                <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                                <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                               </div>
                             </div>
                           </div>

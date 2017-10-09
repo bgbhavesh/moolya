@@ -274,6 +274,11 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
   return totalAmountOfTasks;
 }
 
+/**
+ * @Note: this is portfolio thing need to move to portfolio Resolver
+ * @Duplicate of "findPortfolioDetails"
+ * */
+
 MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, info) => {
   let query = {
     _id: args.portfolioId

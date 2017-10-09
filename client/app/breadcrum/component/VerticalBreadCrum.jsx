@@ -174,12 +174,11 @@ export default class VerticalBreadCrum extends Component {
           link: path.split('&')[0],
         });
         if (subtab) {
-          if(tab === 'About'){
-            FlowRouter.setQueryParams({'subtab':null});
-          }else
+          // if(tab === 'About'){
+          //   FlowRouter.setQueryParams({'subtab':null});
+          // }else
           list.push({
             name: properName(subtab),
-            link: '',
           });
         }
       }
@@ -191,12 +190,11 @@ export default class VerticalBreadCrum extends Component {
           link: path.split('&')[0],
         });
         if (subtab) {
-          if(tab === 'About'){
-            FlowRouter.setQueryParams({'subtab':null});
-          }else
+          // if(tab === 'About'){
+          //   FlowRouter.setQueryParams({'subtab':null});
+          // }else
             list.push({
               name: properName(subtab),
-              link: '',
             });
         }
       }
@@ -269,7 +267,6 @@ export default class VerticalBreadCrum extends Component {
         if (subtab && tab !== 'about') {
           list.push({
             name: properName(subtab),
-            link: '',
           });
         }
 

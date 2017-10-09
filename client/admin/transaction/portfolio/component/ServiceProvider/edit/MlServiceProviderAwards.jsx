@@ -1,19 +1,18 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
-import {graphql} from "react-apollo";
 import _ from "lodash";
 import Datetime from "react-datetime";
+import ScrollArea from "react-scrollbar";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
+import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfolioServiceProviderDetails";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
 import CropperModal from '../../../../../../commons/components/cropperModal';
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 export default class MlServiceProviderAwards extends Component {
   constructor(props, context) {
@@ -31,7 +30,8 @@ export default class MlServiceProviderAwards extends Component {
       showProfileModal: false,
       uploadingAvatar: false
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
@@ -175,14 +175,14 @@ export default class MlServiceProviderAwards extends Component {
     details = _.omit(details, ["awardName"]);
     if (selectedAward) {
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
+      this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
+        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
         this.sendDataToParent()
       })
     } else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', awardName: ''})
+      this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
+        // this.setState({"selectedVal": '', awardName: ''})
         this.sendDataToParent()
       })
     }
@@ -209,7 +209,13 @@ export default class MlServiceProviderAwards extends Component {
     })
   }
 
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent() {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.serviceProviderAwards;
     let serviceProviderAwards = _.cloneDeep(awards);
@@ -228,7 +234,7 @@ export default class MlServiceProviderAwards extends Component {
     })
     serviceProviderAwards = arr;
     this.setState({serviceProviderAwards: serviceProviderAwards})
-    this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
+    this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(image,fileInfo) {
@@ -399,13 +405,12 @@ export default class MlServiceProviderAwards extends Component {
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                          labelKey={'label'} queryType={"graphql"} query={query}
-                                          isDynamic={true} placeholder="Select Award.."
-                                          onSelect={this.onOptionSelected.bind(this)} mandatory={true}
-                                          selectedValue={this.state.selectedVal}/>
-                          </div>
+                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                        labelKey={'label'} queryType={"graphql"} query={query}
+                                        isDynamic={true} placeholder="Select Award.."
+                                        onSelect={this.onOptionSelected.bind(this)} mandatory={true}
+                                        selectedValue={this.state.selectedVal} ref={"awardId"} data-required={true}
+                                        data-errMsg="Award is required"/>
                           <div className="form-group">
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
@@ -415,7 +420,7 @@ export default class MlServiceProviderAwards extends Component {
                           <div className="form-group">
                             <input type="text" name="awardsDescription" placeholder="About"
                                    className="form-control float-label" defaultValue={this.state.data.awardsDescription}
-                                   onBlur={this.handleBlur.bind(this)}/>
+                                   onBlur={this.handleBlur}/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                          id="isDescriptionPrivate"
                                          defaultValue={this.state.data.isDescriptionPrivate}

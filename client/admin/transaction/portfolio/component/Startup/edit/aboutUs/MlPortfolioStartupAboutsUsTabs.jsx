@@ -69,6 +69,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
+        name: "About Us",
         component: <MlStartupAboutUs client={client} isAdmin={true} key="1" tabName="aboutUs"
                                      getStartupAboutUs={this.getStartupAboutUs.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
@@ -78,6 +79,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Rating",
+        name: "Rating",
         component: <MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
                                     ratingDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.rating}/>
@@ -86,6 +88,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Client",
+        name: "Client",
         component: <MlStartupClients client={client} isAdmin={true} key="3" tabName={"clients"}
                                      getStartupClients={this.getStartupClients.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
@@ -95,6 +98,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
+        name: "Services And Products",
         component: <MlStartupSP key="4" getStartupSP={this.getStartupServiceProducts.bind(this)}
                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                 serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
@@ -103,6 +107,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
+        name: "Information",
         component: <MlStartupInformation key="5" getStartupInfo={this.getStartupInfo.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          informationDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.information}/>
@@ -111,6 +116,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Assets",
+        name: "Assets",
         component: <MlStartupAssets client={this.state.client} isAdmin={this.state.admin} key="6" tabName={"assets"}
                                     getStartupAssets={this.getStartupAssets.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
@@ -120,6 +126,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Branches",
+        name: "Branches",
         component: <MlStartupBranches client={this.state.client} isAdmin={this.state.admin} key="7" tabName={"branches"}
                                       getStartupBranches={this.getStartupBranches.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}
@@ -129,6 +136,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Technology",
+        name: "Technology",
         component: <MlStartupTechnology client={this.state.client} isAdmin={this.state.admin} key="8" tabName={"technologies"}
                                         getStartupTechnology={this.getStartupTechnology.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}
@@ -138,6 +146,7 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Legal Issue",
+        name: "Legal Issue",
         component: <MlStartupLegal key="9" getStartupLegalIssue={this.getStartupLegalIssue.bind(this)}
                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                    legalIssueDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.legalIssue}/>
@@ -235,7 +244,8 @@ export default class MlStartupTab extends React.Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key: tab.title,
+        key: tab.name,
+        name:tab.name,
         getContent: () => tab.component
       }));
     }
@@ -259,11 +269,16 @@ export default class MlStartupTab extends React.Component {
     let tabs = this.state.tabs;
 
     if(this.state.admin){
+      if(this.props.activeTab){
+        let index = tabs.findIndex(i => i.name === this.props.activeTab);
+        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getStartUpState}/>
+      }else
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
     }
     else{
+      let activeTab =  this.props.activeTab || this.state.activeTab;
       return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
+                             selectedTabKey={activeTab}
                              onChange={this.updateTab}
                              backClickHandler={this.props.getStartUpState}
                              type="subtab" mkey="title"

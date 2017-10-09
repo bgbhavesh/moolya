@@ -10,8 +10,6 @@ import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 
 // import custom method(s) and component(s)
-import {MoolyaToggleSwitch} from '../../../../../admin/utils/formElemUtil'
-
 export default class MlAppServicePayment extends React.Component{
   constructor(props){
     super(props);
@@ -25,10 +23,6 @@ export default class MlAppServicePayment extends React.Component{
     $('.step_form_wrap').height(WinHeight-(hight+$('.app_header').outerHeight(true)));
     this.props.getServiceDetails();
     this.props.getRedirectServiceList(true);
-  }
-
-  componentDidUpdate() {
-    MoolyaToggleSwitch(true, true);
   }
 
   bookService(){
@@ -71,7 +65,8 @@ export default class MlAppServicePayment extends React.Component{
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label htmlFor="discount">Is Eligible for discount</label>
-                <span className={servicePayment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="discount" className="switch nocolor-switch">
+                <span className={servicePayment && servicePayment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span>
+                <label htmlFor="discount" className="switch nocolor-switch">
                 <input type="checkbox" id="discount"
                        checked={!servicePayment.isDiscount}
                        value={servicePayment.isDiscount}

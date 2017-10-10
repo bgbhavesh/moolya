@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { multipartASyncFormHandler } from '../../MlMultipartFormAction'
-import { createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, fetchLibraryBasedOnPortfolioIdHandler, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler'
+import { createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails,fetchShareMembersInfo, fetchLibraryBasedOnPortfolioIdHandler, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer'
 import { Popover, PopoverTitle, PopoverContent } from "reactstrap";
 import formHandler from "../../../commons/containers/MlFormHandler";
@@ -71,6 +71,7 @@ class Library extends React.Component {
       showProfileModal1: false,
       showImageUploadCropper: false,
       uploadingImage2: false,
+      memberInfo: []
     };
     this.toggle = this.toggle.bind(this);
     this.refetchData.bind(this);
@@ -111,7 +112,7 @@ class Library extends React.Component {
    */
 
   componentWillMount() {
-    this.getCentralLibrary()
+    this.getCentralLibrary();
     let userId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : "";
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
@@ -143,6 +144,7 @@ class Library extends React.Component {
     if (portfolioId === "library") {
       this.getLibraryDetails(userId);
       this.getTotalSpaceLeft();
+      this.getShareMembersInfo();
       this.setState({ explore: false, isLibrary: true, hideLock: true, deleteOption: false })
     }
     if (portfolioId === "transaction_portfolio_EditRequests") {
@@ -154,6 +156,13 @@ class Library extends React.Component {
     // if(this.state.getLibraryInfo) {
     //   this.getLibraryDetails(userId);
     // }
+  }
+
+
+  async getShareMembersInfo() {
+    const response  = await fetchShareMembersInfo(this.props.client)
+    this.setState({memberInfo: response})
+    // console.log(response)
   }
 
   getTotalSpaceLeft(response) {
@@ -854,6 +863,7 @@ class Library extends React.Component {
 
   popImages() {
     let that = this;
+    const {memberInfo} = that.state;
     let popImageData = this.state.imageDetails || [];
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -865,15 +875,19 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /></div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+            {memberInfo.map(function(memberData){
+              if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "image") {
+                return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                  }
+              })
+            }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
@@ -945,6 +959,7 @@ class Library extends React.Component {
 
   popTemplates() {
     let that = this;
+    const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
     const popTemplates = popTemplateData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -956,15 +971,19 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /></div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "template"  ) {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
@@ -1027,6 +1046,7 @@ class Library extends React.Component {
 
   popVideos() {
     let that = this;
+    const { memberInfo } = that.state;
     let popVideoData = this.state.videoDetails || [];
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -1038,15 +1058,19 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "video") {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
@@ -1110,6 +1134,7 @@ class Library extends React.Component {
 
   popDocuments() {
     let that = this;
+    const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
     const popDocuments = popDocumentData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -1121,15 +1146,19 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "document") {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>

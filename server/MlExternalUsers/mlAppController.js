@@ -81,7 +81,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                ...defaultGraphQLOptions,
                ...customOptionsObject,
             };
-            var context = getContext({req});
+          context = getContext({req});
             if(!context||!context.userId){
               res.json({unAuthorized:true,message:"Invalid Token"})
               return;

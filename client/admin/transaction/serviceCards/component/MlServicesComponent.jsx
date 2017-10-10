@@ -223,6 +223,12 @@ export default class MlServiceManageSchedule extends Component {
       } else {
         service.isApproved = false;
       }
+
+      if( typeof type === 'undefined') {
+        delete service.isApproved;
+        type = 'save';
+      }
+
       service.payment = servicePayment;
       service.finalAmount = finalAmount || 0;
       service.facilitationCharge = facilitationCharge;

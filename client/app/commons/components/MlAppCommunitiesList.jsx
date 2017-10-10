@@ -196,7 +196,7 @@ export default class MlAppCommunitiesList extends Component {
         return(
             <div className="app_main_wrap">
                 <div className="app_padding_wrap">
-                    <h2>Select Community</h2>
+                    <h2>Select your Community to Register</h2>
                     {list}
                 </div>
                 <Popover placement="right" isOpen={this.state.popoverOpen} target={"selCommunity"+this.state.selectedCommunity} toggle={this.toggle.bind(this)}>

@@ -476,7 +476,7 @@ class MlAppInternalMyTaskItem extends React.Component{
                 </div>
               </div>
               <div className="panel-body">
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /></p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : PDF <br />Document Size : 10 MB <br /></p>
                 {this.attachedDocuments()}
               </div>
             </div>

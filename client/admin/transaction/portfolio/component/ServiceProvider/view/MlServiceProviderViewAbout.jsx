@@ -11,7 +11,8 @@ import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDet
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from '../../../../../../commons/components/loader/loader'
 export default class MlServiceProviderViewAbout extends React.Component {
 
   constructor(props) {
@@ -160,22 +161,28 @@ export default class MlServiceProviderViewAbout extends React.Component {
     //let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
     const showLoader = this.state.loading;
     return (
-      <div className="sp_about" id="annotatorContent">
+      <div>
+        {showLoader===true?(<MlLoader/>):(
+      <div>
+        {image||title||description? (<div className="sp_about" id="annotatorContent">
 
-        <div className="media">
-          <div className="media-left">
-            <a href="">
-              <img className="media-object" src={image}/>
-            </a>
+          <div className="media">
+            <div className="media-left">
+              <a href="">
+                <img className="media-object" src={image}/>
+              </a>
+            </div>
+            <div className="media-body">
+              <h4 className="media-heading">{title}</h4>
+              {/*<p>Founder,25yr.Experience</p>*/}
+            </div>
           </div>
-          <div className="media-body">
-            <h4 className="media-heading">{title}</h4>
-            {/*<p>Founder,25yr.Experience</p>*/}
-          </div>
-        </div>
-        <p>{description}</p>
+          <p>{description}</p>
 
+        </div>):(<NoData tabName={this.props.tabName}/>)}
       </div>
+        )}
+        </div>
     )
   }
 };

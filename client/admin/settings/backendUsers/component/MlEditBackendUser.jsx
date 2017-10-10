@@ -93,7 +93,7 @@ class MlEditBackendUser extends React.Component{
   onBirthDateSelection(event) {
     if (event._d) {
       let value = moment(event._d).format(Meteor.settings.public.dateFormat);
-      this.setState({loading: false, birthDate: value});
+      this.setState({loading: false, dateOfBirth: value});
     }
   }
 

@@ -889,6 +889,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "activity": "$$trans.activity",
                 "activityDocId": "$$trans.activityDocId",
                 "registrationId": "$$trans.registrationId",
+                "docId": "$$trans.docId"
               }
             }
           }
@@ -1017,6 +1018,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "fromProfileId": "$$trans.fromProfileId",
                 "fromUserName": "$$trans.fromUserName",
                 "fromUserType": "$$trans.fromUserType",
+                "docId": "$$trans.docId"
               }
             }
         }

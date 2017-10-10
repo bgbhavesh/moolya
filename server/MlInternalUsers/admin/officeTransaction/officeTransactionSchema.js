@@ -113,6 +113,8 @@ let officeTransaction = `
       firstName: String
       lastName: String
       updatedBy : String
+      activityDocId: String
+      docId: String
     }
 
     

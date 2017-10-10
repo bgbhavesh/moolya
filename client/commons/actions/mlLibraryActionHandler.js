@@ -300,5 +300,22 @@ export async function removePortfolioFileUrl(portfolioDetailsId, fileUrl,tabName
   return id;
 }
 
+export async function fetchShareMembersInfo(connection) {
+  const result = await connection.query({
+    query: gql`
+    query{
+  fetchShareMembersInfo{
+      userName
+      daysRemaining
+      fileUrl
+      fileType
+      profileImage
+  }
+}`, forceFetch:true
+  })
+  const id = result.data.fetchShareMembersInfo;
+  return id
+}
+
 
 

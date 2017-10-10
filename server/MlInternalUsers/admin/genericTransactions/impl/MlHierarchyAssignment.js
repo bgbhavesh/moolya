@@ -154,7 +154,7 @@ class MlHierarchyAssignment {
           }
 
           /*    Checking if transaction is already assigned or not     */
-          if(!trans.allocation){
+          if(!trans.allocation || !trans.allocation.assigneeId){
 
               /*      Checking whether user role is equal parent most role      */
               if(parentHierarchy.roleId == userRole.roleId){
@@ -169,7 +169,7 @@ class MlHierarchyAssignment {
                       return true;
               }
 
-          }else if(trans.allocation){
+          }else if(trans.allocation && trans.allocation.assigneeId){
 
               /*      Checking whether user role is equal parent most role      */
               if(parentHierarchy.roleId == userRole.roleId) {
@@ -283,7 +283,7 @@ class MlHierarchyAssignment {
 
   processAssignmentTransactions(transaction, userId) {
 
-    if (transaction.allocation) {
+    if (transaction.allocation && transaction.allocation.assigneeId) {
       transaction.canAssign = false;
       //check if it is already assigned to this user and above in hierarchy
       let allocation = transaction.allocation

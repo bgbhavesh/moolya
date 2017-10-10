@@ -800,6 +800,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: "$profile.displayName",
                   portfolioId : '$portfolio._id',
+                  profile:{
+                    profileImage:"$profile.profileImage",
+                    firstName:"$profile.firstName",
+                    lastName:"$profile.lastName"
+                  },
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   communityDefName: "$profile.externalUserProfiles.communityDefName",
                   chapterName: "$profile.externalUserProfiles.chapterName",
@@ -827,6 +832,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityDefName:1,
                   chapterName:1,
                   portfolioId : 1,
+                  profile:1,
                   isActive: 1,
                   accountType : 1,
                   address: {
@@ -850,6 +856,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   communityCode: 1,
                   communityDefName:1,
                   portfolioId : 1,
+                  profile:1,
                   chapterName:1,
                   isActive: 1,
                   latitude: "$address.latitude",
@@ -899,7 +906,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: "$profile.displayName",
                   profile:{
-                    profileImage:"$profile.profileImage"
+                    profileImage:"$profile.profileImage",
+                    firstName:"$profile.firstName",
+                    lastName:"$profile.lastName"
                   },
                   portfolioId : '$portfolio._id',
                   communityCode: "$profile.externalUserProfiles.communityDefCode",

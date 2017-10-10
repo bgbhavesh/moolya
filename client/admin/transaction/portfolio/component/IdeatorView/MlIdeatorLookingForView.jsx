@@ -117,8 +117,10 @@ export default class MlIdeatorLookingForView extends React.Component {
     const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({ideatorLookingFor: response,loading : false});
-    }
-    _.each(response.privateFields, function (pf) {
+    }else
+      this.setState({loading: false})
+    const privateFields = response && response.privateFields ? response.privateFields : []
+    _.each(privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }

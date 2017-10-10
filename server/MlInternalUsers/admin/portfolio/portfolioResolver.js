@@ -585,14 +585,12 @@ MlResolver.MlMutationResolver['removePortfolioFileUrl'] = (obj, args, context, i
       }
         break;
       case 'IDE': {
-        if (args.tabName==="problemsAndSolutions") {
-          let ideatorPortfolioData = MlIdeatorPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
-          if (ideatorPortfolioData && ideatorPortfolioData.problemSolution) {
-            _.remove(ideatorPortfolioData.problemSolution[args.typeOfData], {fileUrl: args.fileUrl})
-            response = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {problemSolution:ideatorPortfolioData.problemSolution}, {$set: true}, context)
+        let ideatorPortfolioData = MlIdeatorPortfolio.findOne({portfolioDetailsId: args.portfoliodetailsId}) || {};
+          if (ideatorPortfolioData && ideatorPortfolioData[args.tabName]) {
+            _.remove(ideatorPortfolioData[args.tabName][args.typeOfData], {fileUrl: args.fileUrl})
+            response = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId: args.portfoliodetailsId}, {[args.tabName]:ideatorPortfolioData[args.tabName]}, {$set: true}, context)
             return response
           }
-        }
       }
         break;
       default:

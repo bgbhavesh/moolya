@@ -10,13 +10,16 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      portfolioIdeatorInfo: {}
+      portfolioIdeatorInfo: {},
+      loading: true
     }
     this.fetchPortfolioInfo.bind(this);
     this.createAnnotations.bind(this);
@@ -134,32 +137,35 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
   async fetchPortfolioInfo(){
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(this.props.portfolioDetailsId);
     if(response){
-      this.setState({portfolioIdeatorInfo : response});
+      this.setState({portfolioIdeatorInfo : response, loading : false});
     }
-
   }
 
   render(){
-
-
+    let loading = this.state.loading ? this.state.loading : false;
     return (
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? (
+              <div className="col-lg-12 col-sm-12">
+                <div className="row">
+                  <h2>Intellectual Property And Trademark</h2>
+                  <div id="trademarkContent" className="panel panel-default panel-form-view">
 
-      <div className="col-lg-12 col-sm-12">
-        <div className="row">
-          <h2>Intellectual Property And Trademark</h2>
-          <div id="trademarkContent" className="panel panel-default panel-form-view">
+                    <div className="panel-body">
+                      {this.state.portfolioIdeatorInfo.IPdescription}
+                    </div>
+                  </div>
 
-            <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.IPdescription}
-            </div>
+                </div>
+              </div>
+            ) : (<NoData tabName={this.props.tabName}/>)
+            }
           </div>
-
+        )
+        }
         </div>
-      </div>
-
     )
-
-
-
   }
 }

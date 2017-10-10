@@ -3,20 +3,19 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 export default class MlStartupViewAbout extends React.Component {
   componentDidMount() {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : ""}</p>
+              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p>
             </div>
           </div>
         </div>

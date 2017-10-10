@@ -7,7 +7,7 @@ import { render } from 'react-dom';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlStartupViewBranches extends React.Component {
   constructor(props) {
@@ -109,7 +109,9 @@ export default class MlStartupViewBranches extends React.Component {
 
         <div id="annotatorContent">
           <h2>Branches</h2>
-          <div className="col-lg-12">
+          <div>
+            {branchesArray && branchesArray.length?(
+             <div className="col-lg-12">
             <div className="row">
               {branchesArray.map(function (details, idx) {
                 return(
@@ -136,7 +138,8 @@ export default class MlStartupViewBranches extends React.Component {
                 )
               })}
             </div>
-          </div>
+          </div>):(<NoData tabName={this.props.tabName}/>)}
+            </div>
         </div>
     )
   }

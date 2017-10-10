@@ -1,6 +1,4 @@
-
 import React from "react";
-import {render} from "react-dom";
 import MlInstitutionEvolution from "./MlInstitutionEvolution";
 import MlInstitutionPolicy from "./MlInstitutionPolicy";
 import MlInstitutionEditAchivements from "./MlInstitutionEditAchivements";
@@ -22,7 +20,6 @@ export default class MlInstitutionCSREditTabs extends React.Component{
       admin: true,
       activeTab:'Evolution',
     }
-    ;
   }
 
   /**
@@ -67,7 +64,14 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlInstitutionEvolution client={client} isAdmin={true} key="1"  getInstitutionEvolution={this.getInstitutionEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Achivements" , component:<MlInstitutionEditAchivements key="2" getInstitutionAchivements={this.getInstitutionAchivements.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Achivements",
+        component: <MlInstitutionEditAchivements key="2"
+                                                 getInstitutionAchivements={this.getInstitutionAchivements.bind(this)}
+                                                 portfolioDetailsId={this.props.portfolioDetailsId} tabName={"achievements"}/>
+      },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports" , component:<MlInstitutionCSRReports key="3"  getInstitutionReports={this.getInstitutionReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlInstitutionPolicy client={client} isAdmin={true} key="4" getInstitutionPolicy={this.getInstitutionPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
     ]
@@ -79,14 +83,15 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     data = details;
     this.setState({evolution : data})
     this.props.getCSRDetails(data,"evolution", privateKey);
-
   }
-  getInstitutionAchivements(details, privateKey){
+
+  getInstitutionAchivements(details, privateKey, requiredFields){
     let data = this.state.achivements;
     data=details;
     this.setState({achivements : data})
-    this.props.getCSRDetails(data,"achievements", privateKey);
+    this.props.getCSRDetails(data, "achievements", privateKey, requiredFields);
   }
+
   getInstitutionPolicy(details, privateKey){
     let data = this.state.listOfIncubators;
     data = details;

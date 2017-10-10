@@ -7,7 +7,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlInstitutionViewServicesAndProducts extends React.Component {
   constructor(props) {
@@ -118,7 +118,7 @@ export default class MlInstitutionViewServicesAndProducts extends React.Componen
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              <p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : ""}</p>
+              <p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (<NoData tabName={this.props.tabName}/>)}</p>
 
             </div>
           </div>

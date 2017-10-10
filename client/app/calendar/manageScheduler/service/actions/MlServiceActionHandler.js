@@ -86,6 +86,7 @@ export async function fetchServiceActionHandler (serviceId) {
         isApproved
         isLive
         isActive
+        isReview
         serviceExpiry
         duration{
          hours

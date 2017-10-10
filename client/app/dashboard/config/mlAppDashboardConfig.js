@@ -93,7 +93,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
                           text:communityCode
                           isActive:portfolioId
                           name:name
-                          status:profile{profileImage}
+                          status:profile{profileImage, firstName, lastName}
                       }
                    }                                                                                                     
                 }

@@ -229,7 +229,9 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
   }
 }
 
-
+/**
+ * @Note: Duplicate of "fetchUser"
+ * */
 MlResolver.MlQueryResolver['fetchMyProfile'] = (obj, args, context, info) => {
   let user = mlDBController.findOne('users', {_id: args.userId}, context)
   return user
@@ -1183,7 +1185,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  context.userModule = "Users";
+  context.module = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

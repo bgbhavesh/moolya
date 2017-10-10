@@ -1,9 +1,10 @@
 import gql from "graphql-tag";
 import {appClient} from "../../core/appConnection";
 
+/**
+ * @Note: This seems to have no use need to remove it
+ * */
 export async function addRegistrationContactDetails(contactDetails) {
-
-
   let contactInfo = {}
   contactInfo = contactDetails;
   let registrationObject = {

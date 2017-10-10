@@ -11,7 +11,9 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails';
+import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
@@ -22,7 +24,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
             solutionImage:[]
           },
           annotations:[],
-        content:{}
+        content:{},
+        loading:true
       }
 
       this.createAnnotations.bind(this);
@@ -138,60 +141,59 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
       response.problemImage ? response.problemImage : response.problemImage =[];
       response.solutionImage ? response.solutionImage : response.solutionImage =[];
-      this.setState({portfolioIdeatorInfo : response});
+      this.setState({portfolioIdeatorInfo : response,loading:false});
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
   }
 
   render(){
+    let loading = this.state.loading ? this.state.loading : false;
     return (
+       <div>
+         {loading === true ? ( <MlLoader/>) : (
+           <div>
+             <h2>Problems and Solutions </h2>
+             <div className="tab_wrap_scroll">
+               <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+                 <div className="panel panel-default">
+                   <div className="panel-heading"> Problems</div>
+                   <div className="panel-body">
+                     {this.state.portfolioIdeatorInfo.problemStatement||this.state.portfolioIdeatorInfo.problemImage.length?(
+                       <p>
+                         {this.state.portfolioIdeatorInfo.problemStatement}
+                         <br className="brclear"/>
+                         {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
+                           return <img className="upload-image img upload" src={imgLink.fileUrl} key={i}/>
+                         })}
+                       </p>
+                     ):(<NoData tabName={this.props.tabName}/>)}
 
-      <div>
-
-        <h2>Problems and Solutions </h2>
-
-        <div className="tab_wrap_scroll">
-
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
-              <div className="panel-heading"> Problems </div>
-              <div className="panel-body">
-                <p>
-
-                  {this.state.portfolioIdeatorInfo.problemStatement}
-                  <br className="brclear" />
-                  {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
-                    return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
-                  })}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
-              <div className="panel-heading"> Solutions </div>
-              <div className="panel-body">
-                <p>
-                  {this.state.portfolioIdeatorInfo.solutionStatement}
-                  <br className="brclear" />
-                  {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
-                    return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
-                  })}
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-
-
-        </div>
-          {/*<a href="" id="annotationss">one</a>*/}
-      </div>
+                   </div>
+                 </div>
+               </div>
+               <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+                 <div className="panel panel-default">
+                   <div className="panel-heading"> Solutions</div>
+                   <div className="panel-body">
+                     {this.state.portfolioIdeatorInfo.solutionStatement||this.state.portfolioIdeatorInfo.solutionImage.length?(
+                     <p>
+                       {this.state.portfolioIdeatorInfo.solutionStatement}
+                       <br className="brclear"/>
+                       {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
+                         return <img className="upload-image img upload" src={imgLink.fileUrl} key={i}/>
+                       })}
+                     </p>):(<NoData tabName={this.props.tabName}/>)}
+                   </div>
+                 </div>
+               </div>
 
 
-
+             </div>
+             {/*<a href="" id="annotationss">one</a>*/}
+           </div>)
+         }
+       </div>
     )
   }
 }

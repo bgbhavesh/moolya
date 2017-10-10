@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlCompanyViewAboutusTabs from './MlCompanyViewAboutusTabs'
 import {fetchDetailsCompanyActionHandler} from '../../../../../portfolio/actions/findCompanyPortfolioDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlCompanyViewAboutLanding extends Component {
   constructor(props) {
@@ -85,7 +85,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
                   name='ellipsis-h' onClick={(e)=>this.selectedTab('About Us')}/></a></div>
                 <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription}</p>
+                  <p>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?this.state.aboutUs.aboutUs.companyDescription:(<NoData tabName="aboutUs"/>)}</p>
                 </div>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                     <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={(e)=>this.selectedTab('Clients')}/></a></div>
                     <div className="panel-body text-center panel-body-scroll">
-                      {aboutUsImages}
+                      {aboutUsImages && aboutUsImages.length?<div>{aboutUsImages}</div>:(<NoData tabName="clients"/>)}
                     </div>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                                                                          className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={(e)=>this.selectedTab('Services And Products')}/></a></div>
                     <div className="panel-body panel-body-scroll">
-                      <p>{this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription}</p>
+                      <p>{this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?this.state.aboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
                     </div>
                   </div>
                 </div>
@@ -134,7 +134,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                     name='ellipsis-h' onClick={(e)=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body panel-body-scroll">
                     <ul className="list-info">
-                      <li>{this.state.aboutUs.information && this.state.aboutUs.information.informationDescription}</li>
+                      <li>{this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?this.state.aboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
                     </ul>
                   </div>
                 </div>

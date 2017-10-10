@@ -271,6 +271,10 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
                 subDomainName
                 isActive
                 index
+                logo{
+                    fileName
+                    fileUrl
+                }
                 privateFields{
                   keyName,
                   booleanKey

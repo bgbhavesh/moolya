@@ -306,7 +306,6 @@ export default class MlCompanyIntrapreneur extends React.Component{
     //     value:_id
     //   }
     // }`;
-    console.log('----data---', this.state.data);
     let that = this;
     const showLoader = that.state.loading;
     let institutionIntrapreneurList = that.state.institutionIntrapreneurList || [];

@@ -5,7 +5,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
-import { findSubChapterActionHandler } from '../../actions/findSubChapter';
+// import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 
 //todo:// replace set-time out for sending data to parent need to change

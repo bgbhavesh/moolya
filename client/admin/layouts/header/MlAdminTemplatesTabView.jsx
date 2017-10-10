@@ -27,6 +27,7 @@ export default class MlAdminTemplatesTabView extends Component {
     let params = FlowRouter.current().params;
     let queryParams = FlowRouter.current().queryParams;
     let menuConfig = this.props.tabOptions||[];
+    let pathName=FlowRouter.current().path||'';
     let menu, tabOptions;
 
     menu = find(path, menuConfig);
@@ -66,7 +67,8 @@ export default class MlAdminTemplatesTabView extends Component {
 
       tabOptions = tabMenu.map(function (option,index) {
         let activeClass="";
-        if(option.uniqueId===path){
+        //fix for issue :MOOLYA-804
+        if(pathName&&option.link&&option.link.indexOf(pathName) >= 0){
           activeClass = 'active_btn'
         }
 
@@ -92,7 +94,8 @@ export default class MlAdminTemplatesTabView extends Component {
     if(subProcessOPtion!=undefined){
       tabOptions = subProcessOPtion.map(function (option,index) {
         let activeClass="";
-        if(option.uniqueId===path){
+        //fix for issue :MOOLYA-804
+        if(pathName&&option.link&&option.link.indexOf(pathName) >= 0){
           activeClass = 'active_btn'
         }
 

@@ -4,7 +4,7 @@ import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioI
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 const KEY = "evolution"
 export default class MlInstitutionViewEvolution extends React.Component {
   constructor(props) {
@@ -132,7 +132,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              <p>{this.state.data && this.state.data.institutionEvolutionDescription ? this.state.data.institutionEvolutionDescription : ""}</p>
+              <p>{this.state.data && this.state.data.institutionEvolutionDescription ? this.state.data.institutionEvolutionDescription : (<NoData tabName={this.props.tabName}/>)}</p>
 
             </div>
           </div>

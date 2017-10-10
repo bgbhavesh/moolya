@@ -64,6 +64,8 @@ const mlMyTransactionTableConfig = new MlViewer.View({
                                 mobileNumber
                                 activity
                                 fromProfileId
+                                activityDocId
+                                docId
                             }
                           }
                         }

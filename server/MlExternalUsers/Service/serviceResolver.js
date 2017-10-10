@@ -174,6 +174,7 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
   if (!_.isEmpty(args.Services)) {
     var service = mlDBController.findOne('MlServiceCardDefinition', {_id: args.serviceId}, context);
     if (service) {
+      let isSave = typeof args.Services.isApproved === 'undefined';
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
       args.Services.transactionId = service.transactionId;
@@ -183,13 +184,30 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
           args.Services[key] = service[key];
         }
       }
-      if(args.Services.isApproved) {
-        args.Services.status = "Admin Approved";
-      } else {
-        args.Services.status = "Rejected";
+      if(!isSave) {
+        if(args.Services.isApproved) {
+          args.Services.status = "Admin Approved";
+        } else {
+          args.Services.status = "Rejected";
+        }
+        args.Services.isCurrentVersion = false;
       }
+
+      console.log(' args.Services', args.Services);
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
       if(result){
+        let serviceInfo = args.Services;
+        serviceInfo.userId = service.userId;
+        serviceInfo.updatedAt = new Date();
+        serviceInfo.transactionId = service.transactionId;
+        serviceInfo.versions = args.Services.versions + 0.001;
+        serviceInfo.status = args.Services.status;
+        serviceInfo.isReview = false;
+        serviceInfo.isCurrentVersion = true;
+        delete serviceInfo._id;
+        if( !isSave ) {
+          let newScVersion = mlDBController.insert('MlServiceCardDefinition', serviceInfo, context);
+        }
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response

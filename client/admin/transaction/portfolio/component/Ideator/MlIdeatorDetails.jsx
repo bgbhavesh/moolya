@@ -269,17 +269,13 @@ export default class MlIdeatorDetails extends Component{
                   <form id="ideatorDetails">
                     <div className="form-group mandatory">
                       <input type="text" placeholder="First Name" name="firstName" ref="firstName"
-                             defaultValue={this.state.data.firstName} className="form-control float-label"
-                             onBlur={this.handleBlur.bind(this)} data-required={true}
-                             data-errMsg="First Name is required"/>
+                             defaultValue={this.state.data.firstName} className="form-control float-label" disabled/>
                       {/*<FontAwesome htmlFor="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>*/}
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName}
                              ref="lastName"
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}
-                             data-required={true}
-                             data-errMsg="Last Name is required"/>
+                             className="form-control float-label" disabled/>
                       {/*<FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>*/}
                     </div>
 
@@ -350,12 +346,12 @@ export default class MlIdeatorDetails extends Component{
                     </div>
 
                     <div className="form-group mandatory">
-                      <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} disabled="true" className="form-control float-label"/>
                       <FontAwesome htmlFor="mobileNumber" name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this, "mobileNumber", "isMobileNumberPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isMobileNumberPrivate}/>
                     </div>
 
                     <div className="form-group mandatory">
-                      <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} disabled="true" className="form-control float-label"/>
                       <FontAwesome htmlFor="emailId" name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "emailId", "isEmailIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmailIdPrivate}/>
                     </div>
 

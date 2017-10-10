@@ -204,7 +204,7 @@ let CoreModules = {
       let lastName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName : "";
       data[index].userName = firstName && lastName ? firstName + " " + lastName : doc.userName
     })
-    const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
+    const totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
 
     return {totalRecords: totalRecords, data: data};
   },

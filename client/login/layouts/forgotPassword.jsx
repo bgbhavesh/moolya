@@ -43,6 +43,11 @@ MlForgotPasswordContent = React.createClass({
       window.open('https://www.moolya.global/register', '_system');
     }
   },
+  handleKeyPress(target) {
+    if (target.charCode == 13) {
+      this.submit()
+    }
+  },
   render() {
     return (
       <div id="forgotpassword_wrap">
@@ -51,7 +56,7 @@ MlForgotPasswordContent = React.createClass({
         </div>
         <div className="login_block">
           <div className="login_block login_block_in" id="login">
-            <form className="form-signin">
+            <form className="form-signin" onKeyPress={this.handleKeyPress}>
               <input type="text" className="form-control" style={{'visibility':'hidden'}}/>
               <input type="text" ref="email" className="form-control" placeholder="Email"/>
               <button className="ml_submit_btn" onClick={() => this.submit()} type="button">Submit</button><br className="brclear" />

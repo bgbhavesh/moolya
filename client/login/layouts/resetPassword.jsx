@@ -38,7 +38,11 @@ MlResetPasswordContent = React.createClass({
       toastr.error('Password not match');
     }
   },
-
+  handleKeyPress(target) {
+    if (target.charCode == 13) {
+      this.submit()
+    }
+  },
   render() {
     return (
       <div id="resetpassword_wrap">
@@ -47,7 +51,7 @@ MlResetPasswordContent = React.createClass({
         </div>
         <div className="login_block">
           <div className="login_block login_block_in" id="login">
-            <form className="form-signin">
+            <form className="form-signin" onKeyPress={this.handleKeyPress}>
               <input type="password" ref="password" className="form-control" placeholder="New Password"/>
               <input type="password" ref="conformPassword" className="form-control" placeholder="Confirm Password"/>
               <button className="ml_submit_btn" onClick={() => this.submit()} type="button">Submit</button><br className="brclear" />

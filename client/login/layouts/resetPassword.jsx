@@ -5,13 +5,19 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {resetPasswordActionHandler} from '../actions/resetPassword'
-
+import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 MlResetPasswordContent = React.createClass({
 
   async submit(){
     // let errMessages = {"userName": "A valid username is required"};
     let password = this.refs.password.value;
     let conformPassword = this.refs.conformPassword.value;
+
+    var validate = passwordSAS_validate(password);
+    if (!validate.isValid && typeof (validate) == 'object') {
+      toastr.error('Password '+ validate.errorMsg);
+      return;
+    }
 
     if(password == conformPassword){
       let token = FlowRouter.getParam('token');

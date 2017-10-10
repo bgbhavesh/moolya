@@ -173,7 +173,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   async removeProblemAndSolutionPic(typeOfImage,fileUrl){
       if(typeOfImage && fileUrl){
         let portfolioDetailsId = this.props.portfolioDetailsId;
-        const resp = await removePortfolioFileUrl(portfolioDetailsId , fileUrl,"problemsAndSolutions",typeOfImage);
+        const resp = await removePortfolioFileUrl(portfolioDetailsId , fileUrl,"problemSolution",typeOfImage);
         this.fetchOnlyImages();
       }
   }

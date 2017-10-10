@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
@@ -157,13 +157,21 @@ export default class MlIdeatorAudience extends React.Component{
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
-
+  async removeProblemAndSolutionPic(typeOfImage,fileUrl){
+    if(typeOfImage && fileUrl){
+      let portfolioDetailsId = this.props.portfolioDetailsId;
+      const resp = await removePortfolioFileUrl(portfolioDetailsId , fileUrl,"audience",typeOfImage);
+      this.fetchOnlyImages();
+    }
+  }
   render(){
     const showLoader = this.state.loading;
     const audienceImageArray = this.state.data.audienceImages && this.state.data.audienceImages.length > 0 ? this.state.data.audienceImages : [];
+    let that=this;
     const audienceImages = audienceImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
+          <FontAwesome className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"audienceImages",m.fileUrl)}/>
           <img id="output" src={m.fileUrl}/>
         </div>
       )

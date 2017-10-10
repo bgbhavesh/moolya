@@ -134,7 +134,7 @@ class MlAuthorization
             return false;
         }
 
-        var user = mlDBController.findOne('users', {_id: userId}, context)
+        var user = mlDBController.findOne('users', {_id: userId})
         if(user && user.profile && user.profile.isInternaluser == true)
         {
             let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);

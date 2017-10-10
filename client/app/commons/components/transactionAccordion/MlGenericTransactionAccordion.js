@@ -21,7 +21,10 @@ export default function MlGenericTransactionAccordion(props) {
     case 'appointment': {
       // return (<h1>appointment testing</h1>);
       return (
-        <MlAppointmentsDetailsComponent transactionType={data.activity} appointmentId={data._id} />
+        <MlAppointmentsDetailsComponent
+          transactionType={data.activity}
+          appointmentId={data._id}
+          docId={data.docId} />
       );
     }
     case 'office': {
@@ -46,7 +49,7 @@ export default function MlGenericTransactionAccordion(props) {
       break;
     }
     default:
-      return <MlEmptyView data={data}/>
+      return <MlEmptyView data={data} />
   }
 }
 
@@ -91,11 +94,11 @@ export class MlOffice extends Component {
 
 export class MlEmptyView extends Component {
   render() {
-    let {data} = this.props;
+    let { data } = this.props;
     data = data ? data : {};
     console.log(data);
     return (<div>
-      {data.transactionType} { data.status ?  '- '+ data.status :  '' }
+      {data.transactionType} {data.status ? '- ' + data.status : ''}
       {/*UI Not available*/}
     </div>)
   }

@@ -155,7 +155,7 @@ export default class MlAppFunderEditTabs extends Component {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio: data})
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
     // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
   }
@@ -187,7 +187,7 @@ export default class MlAppFunderEditTabs extends Component {
     //   arr.push(updateItem)
     // })
     // data['principal'] = arr;
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
 
@@ -204,7 +204,7 @@ export default class MlAppFunderEditTabs extends Component {
     //   arr.push(updateItem)
     // })
     // data['team'] = arr;
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
 

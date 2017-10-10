@@ -2,14 +2,13 @@ import React, { Component, PropTypes }  from "react";
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 var Rating = require('react-rating');
 import MlInstitutionTab from './MlPortfolioInstitutionAboutsUsTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../actions/findPortfolioInstitutionDetails'
 import underscore from "underscore";
 
 
-export default class MlInstitutionAboutUsLandingPage extends React.Component{
+export default class MlInstitutionAboutUsLandingPage extends Component{
   constructor(props){
     super(props)
     this.state = {aboutInstitution:false,institutionAboutUs:[], institutionAboutUsList:[]}
@@ -20,9 +19,11 @@ export default class MlInstitutionAboutUsLandingPage extends React.Component{
     this.setState({aboutInstitution : true,activeTab:activeTab})
     this.props.backClickHandler(this.getInstitutionState.bind(this))
   }
-  getPortfolioInstitutionAboutUsDetails(details,tabName, privateKey){
-    this.props.getAboutus(details,tabName,privateKey);
+
+  getPortfolioInstitutionAboutUsDetails(details, tabName, privateKey, requiredFields) {
+    this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+
   componentWillMount(){
     if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
       this.setState({aboutInstitution: true});

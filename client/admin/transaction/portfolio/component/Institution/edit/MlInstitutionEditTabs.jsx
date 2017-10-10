@@ -85,7 +85,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
-        component: <MlInstitutionEditManagement client={client} isAdmin={true} key="2"
+        component: <MlInstitutionEditManagement client={client} isAdmin={true} key="2" tabName={"management"}
                                                 getManagementDetails={this.getManagementDetails.bind(this)}
                                                 portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -182,20 +182,20 @@ export default class MlInstitutionEditTab extends Component {
     return tabs;
   }
 
-  getAboutus(details, tabName, privateKey) {
+  getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey);
+    this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey, requiredFields);
   }
 
-  getManagementDetails(details, privateKey) {
+  getManagementDetails(details, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.management) {
       data['management'] = [];
     }
     data['management'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
   }
 
   getInvestorDetails(details, privateKey) {
@@ -235,8 +235,7 @@ export default class MlInstitutionEditTab extends Component {
     this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
   }
 
-  getAwardsDetails(details, privateKey) {
-
+  getAwardsDetails(details, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -248,11 +247,10 @@ export default class MlInstitutionEditTab extends Component {
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
-
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
   }
 
-  getRDDetails(details, privateKey) {
+  getRDDetails(details, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.researchAndDevelopment) {
       data['researchAndDevelopment'] = [];
@@ -264,9 +262,7 @@ export default class MlInstitutionEditTab extends Component {
       arr.push(updateItem)
     })
     data['researchAndDevelopment'] = arr;
-
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
-
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
   }
 
   getIntrapreneurDetails(details, privateKey) {
@@ -286,14 +282,14 @@ export default class MlInstitutionEditTab extends Component {
     this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
   }
 
-  getLookingForDetails(details, privateKey) {
+  getLookingForDetails(details, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
   }
 
 
@@ -320,8 +316,7 @@ export default class MlInstitutionEditTab extends Component {
     this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
   }
 
-  getCSRDetails(details, tabName, privateKey) {
-
+  getCSRDetails(details, tabName, privateKey, requiredFields) {
     if (tabName == "reports") {
       let data = this.state.institutionPortfolio;
       data[tabName] = details;
@@ -329,10 +324,8 @@ export default class MlInstitutionEditTab extends Component {
     } else {
       let data = this.state.institutionPortfolio;
       data[tabName] = details;
-      this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey);
+      this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey, requiredFields);
     }
-
-
   }
 
   getIncubators(details, tabName, privateKey) {

@@ -3,6 +3,7 @@ import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHand
 import ScrollArea from 'react-scrollbar'
 import { findBackendUserActionHandler } from '../../settings/backendUsers/actions/findBackendUserAction';
 import { findUserRegistrationActionHandler } from '../../users/actions/findUsersHandlers';
+import { findStepTemplatesAssignmentActionHandler } from '../../templates/actions/findTemplatesAssignmentAction';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
@@ -17,10 +18,14 @@ export default class VerticalBreadCrum extends Component {
     this._isMounted = true;
     let porfolioId = FlowRouter.getParam('registrationId');
     let backendUserId= FlowRouter.getParam('backendUserId');
+    let processId =FlowRouter.getParam('id');
     if(porfolioId)
       this.getUserName(porfolioId,1);
     else if(backendUserId)
       this.getUserName(backendUserId,0);
+    else if(processId){
+      this.getProcessId(processId);
+    }
     else
       this.getHierarchyDetails();
   }
@@ -29,6 +34,17 @@ export default class VerticalBreadCrum extends Component {
     var WinHeight = $(window).height();
     $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));
   }
+
+  async getProcessId(id){
+    var response = await findStepTemplatesAssignmentActionHandler(id);
+    if (response && response.templateProcessName && response.templateSubProcessName) {
+      this.setState({process : response.templateProcessName + ' / '+response.templateSubProcessName},
+        ()=>{
+          this.getHierarchyDetails();
+        });
+    }else  this.getHierarchyDetails();
+  }
+
 
   async getUserName(porfolioId,isPortfolio){
     var response = null;
@@ -159,7 +175,7 @@ export default class VerticalBreadCrum extends Component {
           });
         }
         if(breadCrum.subModule !=='stepCode')
-          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig);
+          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig,this.state.process);
         else{
           let modulePath = path.split('settings')[0] + 'settings/templatesList';
           breadCrumObject[1].linkUrl = modulePath;
@@ -227,7 +243,7 @@ export default class VerticalBreadCrum extends Component {
   }
 }
 
-function StaticBreadCrumListHandler(list, breadCrum, menu) {
+function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
   let currentModule = {};
   const path = Object.assign(FlowRouter._current.path);
   const module = breadCrum.subModule || breadCrum.module;
@@ -251,6 +267,10 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
           list[1].linkUrl = object.link;
         }
       });
+    }
+
+    if (breadCrum.type === 'templates' && breadCrum.subModule && breadCrum.subModule==='Edit') {
+      list[list.length-1].linkName = process|| list[list.length-1].linkName;
     }
 
 

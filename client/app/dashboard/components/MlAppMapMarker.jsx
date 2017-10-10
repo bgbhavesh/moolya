@@ -34,9 +34,10 @@ export default class MlAppMapMarker extends Component {
     if(this.props.text == "INS"){
       status = "in"
     }
+    let name = this.props.status&&this.props.status.firstName?this.props.status.firstName:""+" "+this.props.status&&this.props.status.lastName?this.props.status.lastName:""
     return (
       <div>
-        <div className="map_profiles" onClick={this.markerClickActionHandler.bind(this, this.props)} id={this.props.markerId}>
+        <div data-toggle="tooltip" title={this.props.status.firstName+" "+this.props.status.lastName} className="map_profiles" onClick={this.markerClickActionHandler.bind(this, this.props)} id={this.props.markerId}>
           <span className={`ml ${status}`}></span>
           <img src={`${this.props.status&&this.props.status.profileImage?this.props.status.profileImage:"/images/def_profile.png"}`}/>
         </div>

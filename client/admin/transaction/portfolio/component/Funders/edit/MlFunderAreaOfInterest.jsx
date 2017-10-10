@@ -9,7 +9,9 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../../client/a
 import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
-
+import CropperModal from '../../../../../../commons/components/cropperModal';
+import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
+import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
 export default class MlFunderAreaOfInterest extends Component {
   constructor(props, context) {
     super(props);
@@ -21,12 +23,17 @@ export default class MlFunderAreaOfInterest extends Component {
       selectedIndex: -1,
       funderAreaOfInterestList: [],
       selectedObject: "default",
+      uploadingAvatar: false,
+      showProfileModal: false,
       privateKey:{}
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
-    this.dateChange.bind(this)
+    this.dateChange.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
@@ -87,7 +94,9 @@ export default class MlFunderAreaOfInterest extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpen: !(this.state.popoverOpen)}, () => {
+      popoverOpen: !(this.state.popoverOpen),
+      "selectedVal": details.industryTypeId,
+     "selectedValDomain": details.subDomainId},() => {
       this.lockPrivateKeys(index)
     });
     // let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
@@ -180,6 +189,7 @@ export default class MlFunderAreaOfInterest extends Component {
 
   onSaveAction(e) {
     this.setState({funderAreaOfInterestList: this.state.funderAreaOfInterest, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onOptionSelectedIndustry(selectedFunding, callback, selObject) {
@@ -201,7 +211,68 @@ export default class MlFunderAreaOfInterest extends Component {
       this.sendDataToParent()
     })
   }
+  onLogoFileUpload(fileInfo, image) {
 
+    let file = image;
+    let fileName = fileInfo.name;
+    let data = {
+      moduleName: "PORTFOLIO",
+      actionName: "UPLOAD",
+      portfolioDetailsId: this.props.portfolioDetailsId,
+      portfolio: { areaOfInterest: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] }
+    };
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+  }
+
+  onFileUploadCallBack(file, resp) {
+    if (resp) {
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
+      if (result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        }
+        this.setState({ loading: true })
+        this.fetchOnlyImages();
+      }
+      this.toggleModal();
+      this.setState({ uploadingAvatar: false })
+    }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
+    return resp;
+  }
+
+
+  async fetchOnlyImages() {
+    const response = await fetchfunderPortfolioAreaInterest(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState = this.state.selectedIndex;
+      let dataDetails = this.state.funderAreaOfInterest
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if (specificData) {
+        let curUpload = response[thisState]
+        specificData['logo'] = curUpload['logo']
+        this.setState({ loading: false, funderAreaOfInterest: cloneBackUp });
+      } else {
+        this.setState({ loading: false })
+      }
+    }
+  }
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
@@ -231,6 +302,7 @@ export default class MlFunderAreaOfInterest extends Component {
     let investment = this.state.funderAreaOfInterest;
     let funderAreaOfInterest = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     funderAreaOfInterest[this.state.selectedIndex] = data;
     let arr = [];
     _.each(funderAreaOfInterest, function (item) {
@@ -248,6 +320,20 @@ export default class MlFunderAreaOfInterest extends Component {
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
     this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey, requiredFields);
   }
+  handleUploadAvatar(image, e) {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    this.onLogoFileUpload(e, image);
+  }
+
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal,
+    });
+  }
+
 
 
   render() {
@@ -300,7 +386,7 @@ export default class MlFunderAreaOfInterest extends Component {
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                                 <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                                  <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} /></div>
                                 </div>
                                 <h3>{details.industryTypeName}</h3>
                               </div>
@@ -337,6 +423,21 @@ export default class MlFunderAreaOfInterest extends Component {
                                             onSelect={this.onOptionSelectedSubDomain.bind(this)}
                                             selectedValue={this.state.selectedValDomain}/>
                             </div>
+                            <CropperModal
+                              uploadingImage={this.state.uploadingAvatar}
+                              handleImageUpload={this.handleUploadAvatar}
+                              cropperStyle="circle"
+                              show={this.state.showProfileModal}
+                              toggleShow={this.toggleModal}
+                            />
+                            {this.state.selectedObject != "default" ?
+                              <div className="form-group" onClick={this.toggleModal}>
+                                <div className="fileUpload mlUpload_btn">
+                                  <span>Upload Pic</span>
+                                </div>
+                              </div> : <div></div>
+                            }
+                            <br className="brclear"/>
                             <div className="form-group">
                               <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                             </div>

@@ -80,6 +80,7 @@ let transactionsSchema = `
       chapterName               : String
       subChapterName            : String
       communityName             : String
+      docId                     : String
     }
     
     input userAgentInput{

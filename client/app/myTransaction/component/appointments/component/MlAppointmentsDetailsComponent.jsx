@@ -15,7 +15,7 @@ export default class MlAppointmentsDetailsComponent extends Component {
       )
     } else {
       return (
-        <MlAppServiceSessionAppointment orderId={appointmentId} />
+        <MlAppServiceSessionAppointment orderId={appointmentId} docId={this.props.docId} />
       );
     }
 

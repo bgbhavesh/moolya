@@ -1185,7 +1185,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  context.userModule = "Users";
+  context.module = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

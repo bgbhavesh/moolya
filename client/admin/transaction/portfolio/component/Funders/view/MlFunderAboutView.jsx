@@ -163,7 +163,7 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
                           <div className="clearfix"></div>
                           <div className="panel panel-default mart20">
-                            <div className="panel-heading"> Investment Budget Per Year:</div>
+                            <div className="panel-heading"> Investment Budget Per Year (in USD):</div>
 
                             <div className="panel-body">
                               <div className="form-group col-md-6 nomargin-bottom nopadding-left">
@@ -180,7 +180,7 @@ export default class MlFunderAboutView extends React.Component{
 
                           <div className="clearfix"></div>
                           <div className="panel panel-default">
-                            <div className="panel-heading"> Investment From:</div>
+                            <div className="panel-heading"> Source of Investment:</div>
 
                             <div className="panel-body">
                               <div className="input_types">

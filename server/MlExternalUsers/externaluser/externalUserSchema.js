@@ -30,6 +30,9 @@ let externalUser = `
       isExternaluser:Boolean,
       isActive:Boolean,
       profileImage:String,
+      firstName: String,
+      middleName: String,
+      lastName: String,
     }
 
     input profile{

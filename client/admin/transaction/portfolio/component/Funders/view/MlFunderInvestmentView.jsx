@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+var FontAwesome = require('react-fontawesome');
 import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
@@ -181,14 +182,21 @@ export default class MlFunderInvestmentView extends React.Component {
       return (
         <div key={value}>
           <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
-          <p>Date
+          <ul className="list_left">
+            <li>Date : {say.dateOfInvestment} <FontAwesome name='lock'/></li>
+            <li>Company - {say.investmentcompanyName}<FontAwesome name='lock'/></li>
+            <li>Amount - {say.investmentAmount}<FontAwesome name='lock'/></li>
+            <li>Funding Type - {say.typeOfFundingName}<FontAwesome name='lock'/></li>
+          </ul>
+          <br className="brclear" />
+          {/*<p>Date
             - {say.dateOfInvestment}<br/>
             Company - {say.investmentcompanyName}<br/>
 
             Amount - {say.investmentAmount}<br/>
             Funding Type
             - {say.typeOfFundingName}
-          </p>
+          </p>*/}
           <p>{say.aboutInvestment ? say.aboutInvestment : '--'}</p>
         </div>
       )

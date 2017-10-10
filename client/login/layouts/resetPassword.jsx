@@ -5,13 +5,19 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {resetPasswordActionHandler} from '../actions/resetPassword'
-
+import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 MlResetPasswordContent = React.createClass({
 
   async submit(){
     // let errMessages = {"userName": "A valid username is required"};
     let password = this.refs.password.value;
     let conformPassword = this.refs.conformPassword.value;
+
+    var validate = passwordSAS_validate(password);
+    if (!validate.isValid && typeof (validate) == 'object') {
+      toastr.error('Password '+ validate.errorMsg);
+      return;
+    }
 
     if(password == conformPassword){
       let token = FlowRouter.getParam('token');
@@ -38,7 +44,11 @@ MlResetPasswordContent = React.createClass({
       toastr.error('Password not match');
     }
   },
-
+  handleKeyPress(target) {
+    if (target.charCode == 13) {
+      this.submit()
+    }
+  },
   render() {
     return (
       <div id="resetpassword_wrap">
@@ -47,7 +57,7 @@ MlResetPasswordContent = React.createClass({
         </div>
         <div className="login_block">
           <div className="login_block login_block_in" id="login">
-            <form className="form-signin">
+            <form className="form-signin" onKeyPress={this.handleKeyPress}>
               <input type="password" ref="password" className="form-control" placeholder="New Password"/>
               <input type="password" ref="conformPassword" className="form-control" placeholder="Confirm Password"/>
               <button className="ml_submit_btn" onClick={() => this.submit()} type="button">Submit</button><br className="brclear" />

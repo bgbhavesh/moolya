@@ -565,7 +565,7 @@ export default class AppAddressDetails extends React.Component {
                        className="form-control float-label" data-required={true} data-errMsg="PinCode is required" />
               </div>
               <div className="form-group switch_wrap inline_switch">
-                <label>Set as default</label>
+                <label>Is Default Address</label>
                 <label className="switch">
                   <input type="checkbox" ref={'defaultAddress'}  onChange={this.onMakeDefaultChange.bind(this,-1)}/>
                   <div className="slider"></div>
@@ -659,7 +659,7 @@ export default class AppAddressDetails extends React.Component {
                            data-required={true} data-errMsg="PinCode is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
-                    <label>Set as default</label>
+                    <label>Is Default Address</label>
                     <label className="switch">
                       <input type="checkbox" ref={'defaultAddress'+key} defaultChecked={options.isDefaultAddress} onChange={that.onMakeDefaultChange.bind(that,key)}/>
                       <div className="slider"></div>

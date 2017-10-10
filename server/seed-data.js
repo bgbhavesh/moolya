@@ -441,6 +441,8 @@ var systemAdminProfile = {
     isExternaluser : false,
     email: 'systemadmin@moolya.global',
     isActive:true,
+    firstName:'System',
+    lastName:'Admin',
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],

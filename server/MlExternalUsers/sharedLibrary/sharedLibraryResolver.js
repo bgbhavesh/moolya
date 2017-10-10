@@ -221,7 +221,6 @@ MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) =>
       if(expiryDate < 0 || expiryDate === 0) {
          info.isExpired = true;
        let updatedValue =  mlDBController.update('MlSharedLibrary',{'_id':info._id}, info , {$set:1}, context);
-       console.log(updatedValue)
       }
       let status = ((!info.isExpired) || new Date(info.sharedStartDate) === new Date())
     let yetToBeShared = new Date(info.sharedStartDate) > new Date()
@@ -230,5 +229,28 @@ MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) =>
       }
   })
   return libraryData;
+}
+
+MlResolver.MlQueryResolver['fetchShareMembersInfo'] = (obj, args, context, info) => {
+  let userId = context.userId ;
+  let data = mlDBController.find('MlSharedLibrary',{ 'owner.userId':userId }, context).fetch();
+  let responseData = []
+  data.map((info)=> {
+    let expiryDate = Math.floor((Date.UTC(info.sharedEndDate.getFullYear(), info.sharedEndDate.getMonth(), info.sharedEndDate.getDate()) - Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) ) /(1000 * 60 * 60 * 24));
+    let otherUserId = info.user.userId;
+    let userInfo = mlDBController.findOne('users',{ '_id':otherUserId}, context);
+    let userName = userInfo.profile.firstName;
+    let userObject = {
+      userName: userName,
+      profileImage: userInfo.profile.profileImage,
+      daysRemaining: expiryDate,
+      fileUrl: info.file.url,
+      fileType: info.file.fileType
+    }
+    responseData.push(userObject)
+
+  })
+
+    return responseData;
 }
 

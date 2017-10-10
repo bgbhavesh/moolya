@@ -100,6 +100,14 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
       lastName = (user.profile || {}).lastName || '';
     }
   }
+  // /**
+  //  * @Note: merging the condition for the "internal/external" user's
+  //   * for opening this condition take care of the systemAdmin with ETL in all instance
+  //  * */
+  // if (user && user.profile) {
+  //     firstName = (user.profile || {}).firstName || '';
+  //     lastName = (user.profile || {}).lastName || '';
+  // }
 
   let createdBy = firstName + ' ' + lastName
   args.registration.createdBy = createdBy ? createdBy : user.username;

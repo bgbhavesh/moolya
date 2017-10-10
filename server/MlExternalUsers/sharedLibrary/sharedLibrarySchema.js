@@ -18,6 +18,14 @@ let sharedLibrarySchema = `
       libraryDocumentId: String
     }
     
+    type MemberInfo {
+      userName:  String
+      daysRemaining: Int
+      fileUrl: String
+      fileType: String
+      profileImage: String
+    }
+    
      type AdminShareList {
       _id : String
       createdAt : Date
@@ -108,6 +116,7 @@ let sharedLibrarySchema = `
       fetchSharedLibraryDetails(sharedId:String):SharedOutputAdmin
       getMySharedConnections: [sharedConnections]
       fetchSharedLibrary(userId: String): [SharedOutput]
+      fetchShareMembersInfo: [MemberInfo]
  }
  
  type Mutation{
@@ -120,6 +129,8 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema
 let supportedApi = [
   {api:'fetchSharedLibraryDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'fetchShareMembersInfo', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+
   {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 ];

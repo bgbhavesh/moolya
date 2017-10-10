@@ -91,8 +91,10 @@ class MlGenericTransactions{
           /*
            Checking if roleId of highest role has hierarchy
            */
-          var isDefaultSubChapter = mlDBController.findOne('MlSubChapters',{_id:subChapterId}).isDefaultSubChapter;
-
+          var isDefaultSubChapter = true
+          if(defaultRole && defaultRole.subChapterId != 'all'){
+            isDefaultSubChapter = mlDBController.findOne('MlSubChapters',{_id:defaultRole.subChapterId}).isDefaultSubChapter;
+          }
           hierarchyAssignment = mlDBController.find('MlHierarchyAssignments',{
             "$and":[
               {'clusterId':{"$in":[clusterId, "All"]}},

@@ -250,7 +250,6 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.data && result.data.data.lookingFor;
-  // let data = _.omit(id, '__typename')
   return id
 }
 

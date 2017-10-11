@@ -405,6 +405,7 @@ class MlAppServiceManageSchedule extends Component {
           cluster: service.cluster,
           isBeSpoke: service.isBeSpoke,
           isApproved: service.isApproved,
+          isReview: service.isReview,
           isLive: service.isLive,
           city: service.city,
           state: service.state,
@@ -1109,7 +1110,7 @@ class MlAppServiceManageSchedule extends Component {
         handler: async (event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: _this.serviceId && this.state.service && this.state.service.isActive && ( this.state.service.status !== "Gone Live" ) ? true : false,
+        showAction: _this.serviceId && this.state.service && this.state.service.isActive && ["Send For Review", "Gone Live", "Admin Approved"].indexOf(this.state.service.status) == -1 ? true : false,
         actionName: 'send for review',
         handler: async (event) => _this.props.handler(_this.sendReviewService.bind(this))
       },

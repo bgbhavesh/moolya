@@ -12,7 +12,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       chapterId=regDetails.chapterId;
       registrationType=regDetails.registrationType;
     }else{
-      let regRecord = mlDBController.findOne('MlRegistration', {_id: regId}, context)||{};
+      let regRecord = mlDBController.findOne('MlRegistration', {_id: regId}, {})||{};
       registrationType=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.registrationType:null;
       subChapterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.subChapterId:null;
       clusterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.clusterId:null;
@@ -25,7 +25,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
 
     //check community access is active at platform
-    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, context);
+    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, {});
       if(!platformCommunity){
         let code = 401;
         response = new MlRespPayload().errorPayload("Community is not active", code);
@@ -34,7 +34,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
 
     //check community access is active at cluster
     if(isActiveCommunity&&clusterId){
-      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, context);
+      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, {});
       if(!clusterCommunity){
         let code = 401;
         response = new MlRespPayload().errorPayload("Community not available for cluster", code);
@@ -43,7 +43,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
     //check community access is active at chapter
     if(isActiveCommunity&&chapterId){
-      var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{chapterId: chapterId, communityDefCode:registrationType, "isActive":true}]}, context);
+      var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{chapterId: chapterId, communityDefCode:registrationType, "isActive":true}]}, {});
       if(!communityDetails){
         let code = 401;
         response = new MlRespPayload().errorPayload("Community not available for chapter", code);
@@ -53,7 +53,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
 
     //check community access is active at subChapter
     if(isActiveCommunity&&chapterId&&subChapterId){
-      var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, context);
+      var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, {});
       if(!communityDetails){
         let code = 401;
         response = new MlRespPayload().errorPayload("Community not available for subchapter", code);
@@ -85,7 +85,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       chapterId=regDetails.chapterId;
       registrationType=regDetails.registrationType;
     }else{
-         let regRecord = mlDBController.findOne('MlRegistration', {_id: regId}, context)||{};
+         let regRecord = mlDBController.findOne('MlRegistration', {_id: regId}, {})||{};
          registrationType=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.registrationType:null;
          subChapterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.subChapterId:null;
          clusterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.clusterId:null;
@@ -97,18 +97,18 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
 
     //check community access is active at platform
-    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, context);
+    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, {});
     if(!platformCommunity)isActiveCommunity=false;
 
     //check community access is active at cluster
     if(isActiveCommunity&&clusterId){
-      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, context);
+      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, {});
       if(!clusterCommunity)isActiveCommunity=false;
     }
 
     //check community access is active at subChapter
     if(isActiveCommunity&&chapterId&&subChapterId){
-    var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, context);
+    var communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, {});
     if(!communityDetails)isActiveCommunity=false;
     }
 
@@ -157,7 +157,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
   }
   static  validateBackEndUserExist(registration) {
 
-    var userExist = mlDBController.findOne('users', {"profile.email":registration.email}, context) || {};
+    var userExist = mlDBController.findOne('users', {"profile.email":registration.email}, {}) || {};
     if(userExist._id){
       let code = 409;
       let message ="Backend user registred with the same email"
@@ -175,23 +175,23 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       clusterId=regDetails.clusterId;
       registrationType=regDetails.registrationType;
       countryId=regDetails.countryId;
-      let clusterObject = mlDBController.findOne('MlClusters', {"countryId":countryId,isActive:true}, context);
+      let clusterObject = mlDBController.findOne('MlClusters', {"countryId":countryId,isActive:true}, {});
       countryClusterId = clusterObject&&clusterObject._id?clusterObject._id:""
     }
 
     //check community access is active at platform
-    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, context);
+    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, {});
     if(!platformCommunity)isActiveCommunity=false;
 
     //check community access is active at cluster
     if(isActiveCommunity&&clusterId){
-      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, context);
+      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, {});
       if(!clusterCommunity)isActiveCommunity=false;
     }
 
     //check comunity access is active at country
     if(isActiveCommunity&&countryClusterId){
-      var countryCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":countryClusterId, "communityDefCode":registrationType,isActive:true}, context);
+      var countryCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":countryClusterId, "communityDefCode":registrationType,isActive:true}, {});
       if(!countryCommunity)isActiveCommunity=false;
     }
 

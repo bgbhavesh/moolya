@@ -14,7 +14,7 @@ class MlTransactionsListRepo{
     let transasctions = [];
 
     //find user default profile and all its associated roles
-    let user = mlDBController.findOne('users', {_id: userId}, context)
+    let user = mlDBController.findOne('users', {_id: userId})
     let userprofile = user.profile.InternalUprofile.moolyaProfile.userProfiles
     let defaultProfile = _.filter(userprofile, function (user) {
       return user.isDefault == true;
@@ -33,7 +33,7 @@ class MlTransactionsListRepo{
       roleHierarchy = mlDBController.find('MlHierarchyAssignments', {
         parentDepartment: role.departmentId,
         parentSubDepartment: role.subDepartmentId
-      }, context, {teamStructureAssignment: {$elemMatch: {roleId: role.roleId}}}).fetch()
+      }, {}, {teamStructureAssignment: {$elemMatch: {roleId: role.roleId}}}).fetch()
       if (roleHierarchy) {
         for (let i = 0; i < roleHierarchy.length; i++) {
           hierarchyInfo.push(roleHierarchy[i])

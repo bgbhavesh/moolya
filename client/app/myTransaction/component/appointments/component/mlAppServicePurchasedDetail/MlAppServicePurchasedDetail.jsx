@@ -6,6 +6,9 @@ import React from 'react';
 import AppointmentSes from './appointmentSession';
 import { fetchAppAppointmentByTransactionId } from "../../action/fetchAppointment";
 import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCardsDetailsComponent';
+import AppointmentModal from './../AppointmentModal';
+import { cancelUserServiceCardOrder } from './../../action/cancelUserServiceCardOrder';
+import { signOffUserServiceCardOrder } from './../../action/signOffUserServiceCardOrder';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -32,12 +35,29 @@ export default class MlAppServicePurchasedDetail extends React.Component {
     this.fetchAppServiceAppointmentByTransactionId();
   }
 
+  async signOffOrder() {
+    let response = await signOffUserServiceCardOrder(this.state.data.orderId);
+    if (response && response.success) {
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
+  async cancelOrder() {
+    let response = await cancelUserServiceCardOrder(this.state.data.orderId);
+    if (response && response.success) {
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
   async fetchAppServiceAppointmentByTransactionId() {
     let orderId = this.state.orderId;
     const that = this;
     if (orderId) {
       let response = await fetchAppAppointmentByTransactionId(orderId);
-      console.log(response);
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
@@ -79,7 +99,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
             <a href={`#${data.orderId}6a`} data-toggle="tab">Payment Details</a>
           </li>
           {/*<li>*/}
-            {/*<a href={`#${data.orderId}7a`} data-toggle="tab">Device Details</a>*/}
+          {/*<a href={`#${data.orderId}7a`} data-toggle="tab">Device Details</a>*/}
           {/*</li>*/}
         </ul>
 
@@ -117,7 +137,20 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
-                <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>
+                <a className="fileUpload mlUpload_btn" onClick={() => { this.setState({ showCancelModal: true }) }}>Cancel</a>
+                <AppointmentModal
+                  message="Are you sure to cancel the order?"
+                  onOkClick={() => { this.cancelOrder(); this.setState({ showCancelModal: false }) }}
+                  onCancelClick={() => { this.setState({ showCancelModal: false }) }}
+                  showModal={this.state.showCancelModal}
+                />
+                <a className="fileUpload mlUpload_btn" onClick={() => { this.setState({ showSignOffModal: true }) }}>Sign Off</a>
+                <AppointmentModal
+                  message="Are you sure to signoff the order?"
+                  onOkClick={() => { this.signOffOrder(); this.setState({ showSignOffModal: false }) }}
+                  onCancelClick={() => { this.setState({ showSignOffModal: false }) }}
+                  showModal={this.state.showSignOffModal}
+                />
               </div>
 
             </div>

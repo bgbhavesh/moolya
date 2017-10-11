@@ -115,7 +115,6 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
-                <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>
               </div>
 
             </div>

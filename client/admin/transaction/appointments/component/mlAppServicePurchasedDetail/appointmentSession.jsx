@@ -151,9 +151,10 @@ export default class Appointments extends React.Component {
   }
 
   expandComponent(row) {
-    return (
-      <InnerTable data={row.expand} />
-    );
+    // return (
+    //   // <InnerTable data={row.expand} />
+    //   ""
+    // );
   }
   render() {
     const options = {
@@ -170,17 +171,17 @@ export default class Appointments extends React.Component {
 
           <BootstrapTable data={this.state.sessions}
             options={options}
-            expandableRow={this.isExpandableRow}
+            expandableRow={false}
             expandComponent={this.expandComponent}
             selectRow={selectRow}
           >
             <TableHeaderColumn dataField="id" isKey={true} dataSort={true} width='62px' dataAlign='center'>S.No</TableHeaderColumn>
             <TableHeaderColumn dataField="info">Session</TableHeaderColumn>
             <TableHeaderColumn dataField="dateTime">Time</TableHeaderColumn>
-            <TableHeaderColumn dataField="userId" dataFormat={Info}>Info</TableHeaderColumn>
+            {/* <TableHeaderColumn dataField="userId" dataFormat={Info}>Info</TableHeaderColumn> */}
             <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             <TableHeaderColumn dataField="tarId">Date</TableHeaderColumn>
-            <TableHeaderColumn dataField="cluster" dataFormat={ScheduledBtn}>Scheduled</TableHeaderColumn>
+            {/* <TableHeaderColumn dataField="cluster" dataFormat={ScheduledBtn}>Scheduled</TableHeaderColumn> */}
           </BootstrapTable>
 
         </ScrollArea>

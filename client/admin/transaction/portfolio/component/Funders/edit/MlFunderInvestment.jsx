@@ -95,7 +95,7 @@ export default class MlFunderInvestment extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: e.target.value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -106,16 +106,21 @@ export default class MlFunderInvestment extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
+    this.sendDataToParent(true)
+    var setObject = this.state.funderInvestment
+    if(this.context && this.context.funderPortfolio && this.context.funderPortfolio.investments ){
+      setObject = this.context.funderPortfolio.investments
+    }
     // var isDate = _.findIndex(this.state.funderInvestment, {dateOfInvestment:''})
     // var dateKey = _.compact(_.map(this.state.funderInvestment, 'dateOfInvestment'));
     // if ((isDate > 0) || (dateKey.length != this.state.funderInvestment.length))
     //   toastr.error("Please select Date");
-    this.setState({funderInvestmentList: this.state.funderInvestment, popoverOpen: false})
+    this.setState({funderInvestmentList: setObject, popoverOpen: false})
   }
 
   addInvestment() {
@@ -132,7 +137,7 @@ export default class MlFunderInvestment extends Component {
     details = _.omit(details, ["typeOfFundingId"]);
     details = _.extend(details, {["typeOfFundingId"]: selectedFunding});
     this.setState({data: details, "selectedVal": selectedFunding}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -146,7 +151,7 @@ export default class MlFunderInvestment extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -196,7 +201,7 @@ export default class MlFunderInvestment extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderInvestment;

@@ -152,7 +152,7 @@ export default class MlStartupInvestor extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -162,7 +162,7 @@ export default class MlStartupInvestor extends Component{
     details=_.extend(details,{["fundingTypeId"]:selectedId});
     this.setState({data:details, "selectedVal" : selectedId}, function () {
       // this.setState({"selectedVal" : selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
 
   }
@@ -172,11 +172,16 @@ export default class MlStartupInvestor extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onSaveAction(e){
-    this.setState({startupInvestorList:this.state.startupInvestor, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupInvestor
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.investor ){
+      setObject = this.context.startupPortfolio.investor
+    }
+    this.setState({startupInvestorList:setObject, popoverOpen : false})
   }
 
   getFieldValidations() {
@@ -184,13 +189,15 @@ export default class MlStartupInvestor extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
     data.index = this.state.selectedIndex;
-    startupInvestor[this.state.selectedIndex] = data;    //startupInvestor[this.state.index] = data;
+    if(isSaveClicked){
+      startupInvestor[this.state.selectedIndex] = data;    //startupInvestor[this.state.index] = data;
+    }
     let arr = [];
     _.each(startupInvestor, function (item) {
       for (var propName in item) {

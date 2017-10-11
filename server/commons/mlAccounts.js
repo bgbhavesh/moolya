@@ -307,7 +307,7 @@ export default MlAccounts=class MlAccounts {
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
 
-    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
+    Meteor.users.update({_id: userId},{$set:{"otps": otps}});
 
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(user,otpNum);
@@ -405,7 +405,7 @@ export default MlAccounts=class MlAccounts {
   }
   static resendUserVerificationSmsOtp(userId,customEmailComponent){
 
-    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var user = mlDBController.findOne('users', {'_id': userId}) || {};
     var mobileNumber = null;
     var externalProfile = {}
     if(user && user.profile){
@@ -458,7 +458,7 @@ export default MlAccounts=class MlAccounts {
     }else{
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
-    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
+    Meteor.users.update({_id:userId},{$set:{"otps": otps}});
     //send SMS
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(user,otpNum);
@@ -522,7 +522,7 @@ export default MlAccounts=class MlAccounts {
 
   static verifyUserMobileNumberOtp(userId, otp){
 
-    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var user = mlDBController.findOne('users', {'_id': userId}) || {};
     var mobileNumber = null;
     if(user && user.profile){
 
@@ -668,7 +668,7 @@ export default MlAccounts=class MlAccounts {
     }
     context.userId = user._id;
     context.browser = 'Forgot Password';
-    context.url="https://mymoolya.com";
+    context.url=Meteor.absoluteUrl('')||"moolya";
     let token = Random.secret();
     let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
    /* let regObj = {
@@ -701,7 +701,7 @@ export default MlAccounts=class MlAccounts {
     }
     context.userId = user._id;
     context.browser = 'Reset Password API';
-    context.url="https://mymoolya.com";
+    context.url=Meteor.absoluteUrl('')||"moolya";
     let salted = passwordUtil.hashPassword(password);
     let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
     if(res){

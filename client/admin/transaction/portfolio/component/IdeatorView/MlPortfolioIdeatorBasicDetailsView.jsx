@@ -78,7 +78,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
         {showLoader === true ? ( <MlLoader />) : (
             <div>
               <h2>Ideator</h2>
-        <div className="main_wrap_scroll">
+        <div className="main_wrap_scroll hide_unlock">
               <div className="col-md-6 nopadding-left">
 
                     <div className="form_bg">
@@ -147,7 +147,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <input type="text" placeholder="Profession" ref="profession" defaultValue={this.state.data.profession} className="form-control float-label" disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isprofessionPrivate"/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate"/>
                         </div>
 
 

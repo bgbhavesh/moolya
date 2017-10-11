@@ -265,6 +265,7 @@ MlResolver.MlMutationResolver['updateServiceGoLive'] = (obj, args, context, info
   }
   let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
   if(result){
+    mlDBController.update('MlServiceCardDefinition', {transactionId: service.transactionId, versions: parseInt(service.versions)}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -307,8 +308,7 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['getServiceBasedOnServiceId'] = (obj, args, context, info) => {
   let query = {
-    _id: args.serviceId,
-    isCurrentVersion: true
+    _id: args.serviceId
   };
   let result = mlDBController.findOne('MlServiceCardDefinition', query , context);
   return result;

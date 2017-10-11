@@ -47,22 +47,6 @@ export default class MlComapanyLookingFor extends Component {
   }
 
   async fetchPortfolioDetails() {
-    // const response = await findCompanyLookingForActionHandler(this.props.portfolioDetailsId);
-    // let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.lookingFor)
-    // if(empty && response){
-    //    this.setState({loading: false, data: response});
-    //   _.each(response.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }else{
-    //   this.setState({
-    //     loading: false,
-    //     data: this.context.companyPortfolio.lookingFor,
-    //     privateValues: response.privateFields
-    //   }, () => {
-    //     this.lockPrivateKeys()
-    //   });
-    // }
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.lookingFor)
@@ -87,17 +71,6 @@ export default class MlComapanyLookingFor extends Component {
     }
     this.CompanyLookingForServer = response&&response.lookingFor?response.lookingFor:[]
   }
-
-  // lockPrivateKeys() {
-  //   var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
-  //   var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
-  //   var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
-  //   var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
-  //   console.log('keysssssssssssssssss', keys)
-  //   _.each(keys, function (pf) {
-  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-  //   })
-  // }
 
   addLookingFor() {
     this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
@@ -141,56 +114,24 @@ export default class MlComapanyLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({companyLookingForList: this.state.companyLookingFor, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.companyLookingFor
+    if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.lookingFor)
+      setObject = this.context.companyPortfolio.lookingFor
+    this.setState({companyLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
-    // var privateKey = {
-    //   keyName: fieldName,
-    //   booleanKey: field,
-    //   isPrivate: isPrivate,
-    //   index: this.state.selectedIndex,
-    //   tabName: this.props.tabName
-    // }
-    // this.setState({data: details, privateKey: privateKey}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
-
-  // onClick(fieldName, field,e){
-  //   let details = this.state.data||{};
-  //   let key = e.target.id;
-  //   var isPrivate = false
-  //   details=_.omit(details,[key]);
-  //   let className = e.target.className;
-  //   if(className.indexOf("fa-lock") != -1){
-  //     details=_.extend(details,{[key]:true});
-  //     isPrivate = true
-  //   }else{
-  //     details=_.extend(details,{[key]:false});
-  //   }
-  //   var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
-  //   // this.setState({privateKey:privateKey})
-  //   this.setState({data:details, privateKey:privateKey}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
 
   onStatusChangeNotify(e) {
     let updatedData = this.state.data || {};
@@ -202,7 +143,7 @@ export default class MlComapanyLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -217,8 +158,7 @@ export default class MlComapanyLookingFor extends Component {
       lookingDescription: selObject.about
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
-      // this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -227,13 +167,14 @@ export default class MlComapanyLookingFor extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let companyLookingFor1 = this.state.companyLookingFor;
     let companyLookingFor = _.cloneDeep(companyLookingFor1);
     data.index = this.state.selectedIndex;
-    companyLookingFor[this.state.selectedIndex] = data;
+    if (isSaveClicked)
+      companyLookingFor[this.state.selectedIndex] = data;
     let arr = [];
     _.each(companyLookingFor, function (item) {
       for (var propName in item) {

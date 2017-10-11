@@ -345,12 +345,20 @@ export default class MlAppRegCompany extends React.Component {
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
     }
     `;
-    let citiesquery = gql`query($searchQuery:String){
-      data:searchCities(searchQuery:$searchQuery){label:name,value:_id}
+    let citiesquery = gql`query($searchQuery:String,$countryId: String){
+      data:fetchHeadQuarterOfRegisteredCommunity(searchQuery:$searchQuery,countryId:$countryId){label:name,value:_id}
     }
     `;
+
+    let branchesQuery = gql`query($searchQuery:String,$countryId: [String]){
+      data:fetchBrachesOfRegisteredCommunity(searchQuery:$searchQuery,countryId:$countryId){label:name,value:_id}
+    }
+    `;
+
+    let countryOption = {options: { variables: {countryId:this.state&&this.state.selectedHeadquarter?this.state.selectedHeadquarter:""}}};
+    let branchesOption = {options: { variables: {countryId:this.state&&this.state.selectedBranches?this.state.selectedBranches:null}}};
     let userTypeOption = {options: {variables: {communityCode: this.props.registrationInfo.registrationType}}};
-    let countryOption = {options: {variables: {countryId: this.props.clusterId}}};
+    //let countryOption = {options: {variables: {countryId: this.props.clusterId}}};
     let that = this;
     const showLoader = this.state.loading;
     return (
@@ -400,7 +408,7 @@ export default class MlAppRegCompany extends React.Component {
                                 onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
-                    <div className="form-group">
+                 {/*   <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Headquarter Location"
                                     className="form-control float-label" valueKey={'value'} labelKey={'label'}
                                     selectedValue={this.state.selectedHeadquarter} queryType={"graphql"}
@@ -413,6 +421,20 @@ export default class MlAppRegCompany extends React.Component {
                                     selectedValue={this.state.selectedBranches} queryType={"graphql"}
                                     query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)}
                                     isDynamic={true}/>
+                    </div>*/}
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Headquarter Location"
+                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                    selectedValue={this.state.selectedHeadquarter} queryType={"graphql"}
+                                    query={citiesquery} queryOptions={countryOption}
+                                    onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
+                    </div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={true} placeholder="Branch Location"
+                                    className="form-control float-label" valueKey={'value'}
+                                    labelKey={'label'}  selectedValue={this.state.selectedBranches}
+                                    queryType={"graphql"}  query={branchesQuery} queryOptions={branchesOption}
+                                    onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="isoAccrediationNumber"

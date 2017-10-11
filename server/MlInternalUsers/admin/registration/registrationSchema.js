@@ -299,7 +299,7 @@ let registrationSchema = `
           companyEmail: String,
           foundationDate:  String,
           headQuarterLocation: String,
-          branchLocations: String,  
+          branchLocations: [String],  
           companytyp: String,
           entityType:  String,
           businessType: String,
@@ -337,8 +337,7 @@ let registrationSchema = `
           staffCount:String,
           chairman: String,
           dean:  String,
-          headQuarterLocation: String,
-          branchLocations: String,  
+            
           
           identityType : String,
           userType : String,
@@ -379,7 +378,7 @@ let registrationSchema = `
           companyEmail: String,
           foundationDate:  String,
           headQuarterLocation: String,
-          branchLocations: String
+          branchLocations: [String]
           companytyp: String,
           entityType:  String,
           businessType: String,
@@ -416,8 +415,7 @@ let registrationSchema = `
           staffCount:String,
           chairman: String,
           dean:  String,
-          headQuarterLocation: String,
-          branchLocations: String,  
+      
           identityType : String,
           userType : String,
           title :  String,

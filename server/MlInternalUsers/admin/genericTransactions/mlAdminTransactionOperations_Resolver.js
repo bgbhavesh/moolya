@@ -11,16 +11,16 @@ MlResolver.MlMutationResolver['updateGenericTransaction'] = (obj, args, context,
   if(instance) {
     switch (operation) {
       case 'assignTransaction':
-        return instance.assignTransaction(transactionType,transactionId,args.params.assignmentParams);
+        return instance.assignTransaction(transactionType,transactionId,args.params.assignmentParams,context);
         break;
       case 'unAssignTransaction':
-        return instance.unAssignTransaction(transactionType,transactionId);
+        return instance.unAssignTransaction(transactionType,transactionId,context);
         break;
       case 'selfAssignTransaction':
-        return instance.selfAssignTransaction(transactionType,transactionId, context.userId);
+        return instance.selfAssignTransaction(transactionType,transactionId, context.userId,context);
         break;
       case 'updateTransactionStatus':
-        return instance.updateTransactionStatus(transactionType,transactionId,args.parmas.status);
+        return instance.updateTransactionStatus(transactionType,transactionId,args.parmas.status,context);
         break;
       case 'workflowTransaction':
         return instance.workflowTransaction();

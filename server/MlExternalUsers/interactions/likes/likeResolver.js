@@ -40,7 +40,7 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
 
           if(resp){
             let fromUserType = 'user';
-            mlInteractionService.createTransactionRequest(toUser._id,'like', args.resourceId, resp, fromuser._id, fromUserType );
+            mlInteractionService.createTransactionRequest(toUser._id,'like', args.resourceId, resp, fromuser._id, fromUserType , context);
             //todo: create a repo for like
             //transaction Log
           }

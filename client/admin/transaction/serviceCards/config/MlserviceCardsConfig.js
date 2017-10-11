@@ -19,7 +19,7 @@ import {client} from '../../../core/apolloConnection';
 
 function createdateFormatter (data){
   console.log(data)
-  let createdAt=data&&data.data&&data.data.createdAt;
+  let createdAt=data&&data.data&&data.data.updatedAt;
   if(createdAt){
     return <div>{moment(createdAt).format('DD-MM-YYYY HH:mm:ss')}</div>;
   }
@@ -50,7 +50,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="serviceCards" moduleName="serviceCards" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},
+    {dataField: "updatedAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},
     {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "profileId", title: "Profile Id",dataSort:true,selectRow:true},
     {dataField: "service", title: "Transaction Type",dataSort:true,selectRow:true},

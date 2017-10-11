@@ -282,7 +282,7 @@ class MlAppServiceBasicInfo extends Component {
                     Service expires &nbsp;
                     <input type="number"
                            className="form-control inline_input" onChange={(event)=>setServiceExpiry(event)}
-                           disabled={(this.state.currentFrequency !== 'Onetime')}  value={data.serviceExpiry}  />
+                           disabled={(this.state.currentFrequency !== 'Onetime' || this.props.viewMode )}  value={data.serviceExpiry}  />
                     days from the date of purchase
                   </label>
                 </div>

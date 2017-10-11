@@ -91,7 +91,7 @@ class MlAppIdeatorAddIdea extends React.Component{
             toastr.success(response.result);
           }
           this.setState({loading:false})
-          toastr.success("Idea created successfully")
+          // toastr.success("Idea created successfully")
           FlowRouter.go("/app/portfolio");
           // return response;
         }

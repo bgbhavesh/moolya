@@ -95,7 +95,12 @@ export default class MlCompanyClients extends Component{
     })
   }
   onSaveAction(e){
-    this.setState({companyClientsList:this.state.companyClients,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.companyClients
+    if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.clients ){
+      setObject = this.context.companyPortfolio.clients
+    }
+    this.setState({companyClientsList:setObject,popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -109,7 +114,7 @@ export default class MlCompanyClients extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -119,7 +124,7 @@ export default class MlCompanyClients extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 

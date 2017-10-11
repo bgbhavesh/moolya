@@ -347,7 +347,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
 
     // create a ledger balance entry
     officeSC = mlDBController.findOne('MlOfficeSC', {officeId:args.id, isActive:true})
-    mlOfficeValidationRepo.createOfficeLedgerEntry(officeSC._id)
+    mlOfficeValidationRepo.createOfficeLedgerEntry(officeSC._id,context)
 
   }catch (e){
     let code = 400;

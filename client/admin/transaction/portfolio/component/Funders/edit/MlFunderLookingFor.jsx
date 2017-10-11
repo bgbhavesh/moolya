@@ -118,21 +118,26 @@ export default class MlFunderLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({funderLookingForList: this.state.funderLookingFor, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.funderLookingFor
+    if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.lookingFor)
+      setObject = this.context.funderPortfolio.lookingFor
+    this.setState({funderLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
+    // let details = this.state.data || {};
+    // let key = e.target.id;
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
     var privateKey = {
       keyName: fieldName,
       booleanKey: field,
@@ -140,8 +145,8 @@ export default class MlFunderLookingFor extends Component {
       index: this.state.selectedIndex,
       tabName: this.props.tabName
     }
-    this.setState({data: details, privateKey: privateKey}, function () {
-      this.sendDataToParent()
+    this.setState({privateKey: privateKey}, function () {
+      // this.sendDataToParent()
     })
   }
 
@@ -155,7 +160,7 @@ export default class MlFunderLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -171,7 +176,7 @@ export default class MlFunderLookingFor extends Component {
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -180,13 +185,14 @@ export default class MlFunderLookingFor extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let funderLookingFor1 = this.state.funderLookingFor;
     let funderLookingFor = _.cloneDeep(funderLookingFor1);
     data.index = this.state.selectedIndex;
-    funderLookingFor[this.state.selectedIndex] = data;
+    if (isSaveClicked)
+      funderLookingFor[this.state.selectedIndex] = data;
     let arr = [];
     _.each(funderLookingFor, function (item) {
       for (var propName in item) {

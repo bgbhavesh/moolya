@@ -31,7 +31,7 @@ class MlHierarchyAssignment {
           parentSubDepartment: subDepartmentId,
           clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
           isDefaultSubChapter:isDefaultSubChapter,
-        }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+        }, {}, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
       }else{
         var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
           parentDepartment: departmentId,
@@ -39,7 +39,7 @@ class MlHierarchyAssignment {
           clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
           subChapterId: roleDetails.isSystemDefined ? "all" : subChapterId,
           isDefaultSubChapter:isDefaultSubChapter,
-        }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+        }, {}, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
       }
     }else{
       var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
@@ -47,7 +47,7 @@ class MlHierarchyAssignment {
         parentSubDepartment: subDepartmentId,
         clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
         isDefaultSubChapter:isDefaultSubChapter,
-      }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+      }, {}, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
     }
 
     return hierarchy;
@@ -110,7 +110,7 @@ class MlHierarchyAssignment {
 
     var trans = {};
     if(!_.isObject(transactionId))
-        trans = mlDBController.findOne(collection, {"transactionId": transactionId}, context);
+        trans = mlDBController.findOne(collection, {"transactionId": transactionId}, {});
     else
       trans = transactionId
 
@@ -154,7 +154,7 @@ class MlHierarchyAssignment {
           }
 
           /*    Checking if transaction is already assigned or not     */
-          if(!trans.allocation){
+          if(!trans.allocation || !trans.allocation.assigneeId){
 
               /*      Checking whether user role is equal parent most role      */
               if(parentHierarchy.roleId == userRole.roleId){
@@ -169,7 +169,7 @@ class MlHierarchyAssignment {
                       return true;
               }
 
-          }else if(trans.allocation){
+          }else if(trans.allocation && trans.allocation.assigneeId){
 
               /*      Checking whether user role is equal parent most role      */
               if(parentHierarchy.roleId == userRole.roleId) {
@@ -222,7 +222,7 @@ class MlHierarchyAssignment {
 
   getUserRoles(userId) {
     let role = null
-    let user = mlDBController.findOne('users', {_id: userId}, context)
+    let user = mlDBController.findOne('users', {_id: userId}, {})
     let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
     userProfiles.map(function (doc, index) {
@@ -283,7 +283,7 @@ class MlHierarchyAssignment {
 
   processAssignmentTransactions(transaction, userId) {
 
-    if (transaction.allocation) {
+    if (transaction.allocation && transaction.allocation.assigneeId) {
       transaction.canAssign = false;
       //check if it is already assigned to this user and above in hierarchy
       let allocation = transaction.allocation
@@ -444,7 +444,7 @@ class MlHierarchyAssignment {
 
   checkisFinalApprover(userId){
     let finalApprover = false
-    let user = mlDBController.findOne('users', {_id: userId}, context)
+    let user = mlDBController.findOne('users', {_id: userId}, {})
     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
     userProfiles.map(function (doc, index) {
       if (doc.isDefault) {
@@ -470,7 +470,7 @@ class MlHierarchyAssignment {
               clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
               isDefaultSubChapter: isDefaultSubChapter,
               "finalApproval.role":role.roleId
-            }, context)
+            }, {})
           }else{
             var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
               parentDepartment: role.departmentId,
@@ -479,7 +479,7 @@ class MlHierarchyAssignment {
               subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
               isDefaultSubChapter: isDefaultSubChapter,
               "finalApproval.role":role.roleId
-            }, context)
+            }, {})
           }
 
           if(hierarchy&&hierarchy._id){

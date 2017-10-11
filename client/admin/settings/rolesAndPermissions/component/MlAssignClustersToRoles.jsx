@@ -5,6 +5,8 @@ import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import Select from 'react-select';
+import _ from 'lodash';
+
 export default class MlAssignClustersToRoles extends React.Component {
   constructor(props){
       super(props);
@@ -74,44 +76,93 @@ export default class MlAssignClustersToRoles extends React.Component {
   optionsBySelectCluster(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['cluster']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd) {
+      this.setState({assignRoleToClusters: availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['cluster']=""
+      toastr.error("Role already exists")
+    }
   }
 
   optionsBySelectChapter(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['chapter']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd) {
+      this.setState({assignRoleToClusters: availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['chapter']=""
+      toastr.error("Role already exists")
+    }
   }
 
   optionsBySelectSubChapter(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['subChapter']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd) {
+      this.setState({assignRoleToClusters: availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['subChapter']=""
+      toastr.error("Role already exists")
+    }
   }
 
   optionsBySelectCommunity(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['community']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd) {
+      this.setState({assignRoleToClusters: availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['community']=""
+      toastr.error("Role already exists")
+    }
   }
 
   optionsBySelectDepartment(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['department']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd) {
+      this.setState({assignRoleToClusters: availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['department']=""
+      toastr.error("Role already exists")
+    }
   }
 
   optionsBySelectSubDepartment(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     availabilityDetails[index]['subDepartment']=selectedIndex
-    this.setState({assignRoleToClusters:availabilityDetails})
-    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    let canAdd = this.checkAvailabilityOfRole(availabilityDetails[index])
+    if(canAdd){
+      this.setState({assignRoleToClusters:availabilityDetails})
+      this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+    }else{
+      availabilityDetails[index]['subDepartment']=""
+      toastr.error("Role already exists")
+    }
   }
+
+  checkAvailabilityOfRole(role){
+    role = _.omit(role, "isActive");
+    let roleObj = _.filter(this.state.assignRoleToClusters, role);
+    if(roleObj&&roleObj.length>1){
+      return false
+    }else{
+      return true
+    }
+
+  }
+
+
   addDepartmentComponent(event) {
 
     var mySwiper = new Swiper('.blocks_in_form', {

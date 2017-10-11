@@ -144,7 +144,7 @@ export default class MlFunderEditTemplate extends React.Component {
     //   arr.push(updateItem)
     // })
     // data['successStories'] = arr;
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -176,7 +176,7 @@ export default class MlFunderEditTemplate extends React.Component {
     // })
     // data['principal'] = arr;
     // this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -193,7 +193,7 @@ export default class MlFunderEditTemplate extends React.Component {
     //   arr.push(updateItem)
     // })
     // data['team'] = arr;
-    var object = omitDeep(details, 'logo')
+    var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 

@@ -96,7 +96,12 @@ class MlStartupClients extends Component{
     })
   }
   onSaveAction(e){
-    this.setState({startupClientsList:this.state.startupClients,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject = this.state.startupClients
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.clients ){
+      setObject = this.context.startupPortfolio.clients
+    }
+    this.setState({startupClientsList:setObject,popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -110,7 +115,7 @@ class MlStartupClients extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -120,7 +125,7 @@ class MlStartupClients extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -129,13 +134,15 @@ class MlStartupClients extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    startupClients[this.state.selectedIndex] = data;
+    if(isSaveClicked) {
+      startupClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupClients, function (item)
     {

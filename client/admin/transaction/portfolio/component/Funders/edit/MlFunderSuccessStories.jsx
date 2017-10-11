@@ -155,17 +155,18 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   onLockChange(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = field;
+    // let details = this.state.data || {};
+    // let key = field;
     var isPrivate = false;
-    details = _.omit(details, [key]);
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, { [key]: true });
+      // details = _.extend(details, { [key]: true });
       isPrivate = true;
-    } else {
-      details = _.extend(details, { [key]: false });
     }
+    // else {
+    //   details = _.extend(details, { [key]: false });
+    // }
     /* var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:"successStories"}
      this.setState({privateKey:privateKey})
      this.setState({data: details}, function () {
@@ -173,13 +174,13 @@ export default class MlFunderSuccessStories extends Component {
      })*/
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName }
     // this.setState({privateKey:privateKey})
-    this.setState({ data: details, privateKey: privateKey }, function () {
+    this.setState({privateKey: privateKey }, function () {
       // this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.sendDataToParent();
+    this.sendDataToParent(true);
     // var funderSuccessArray = this.state.funderSuccess || [];
     //
     // if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
@@ -267,14 +268,15 @@ export default class MlFunderSuccessStories extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    funderSuccess[this.state.selectedIndex] = data;
+    if(isSaveClicked)
+      funderSuccess[this.state.selectedIndex] = data;
     let arr = [];
     _.each(funderSuccess, function (item) {
       for (var propName in item) {

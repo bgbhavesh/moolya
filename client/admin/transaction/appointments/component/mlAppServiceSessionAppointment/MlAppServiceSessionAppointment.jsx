@@ -144,7 +144,6 @@ export default class MlAppServiceSessionAppointment extends Component {
                   </div>
                 </div>
                 <div className="final_btns">
-                  <a href="#" className="fileUpload mlUpload_btn final_cancel">Cancel</a> <a href="#" className="fileUpload mlUpload_btn final_sign">Sign Off</a>
                 </div>
               </div>
 

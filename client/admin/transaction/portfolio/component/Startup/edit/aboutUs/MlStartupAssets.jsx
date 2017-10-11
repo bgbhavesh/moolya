@@ -52,7 +52,12 @@ class MlStartupAssets extends Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupAssetsList:this.state.startupAssets,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupAssets
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.assets ){
+      setObject = this.context.startupPortfolio.assets
+    }
+    this.setState({startupAssetsList:setObject,popoverOpen : false})
   }
 
   addAsset(){
@@ -111,7 +116,7 @@ class MlStartupAssets extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -121,7 +126,7 @@ class MlStartupAssets extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -132,7 +137,7 @@ class MlStartupAssets extends Component{
     details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
     this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label}, function () {
       // this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -141,13 +146,15 @@ class MlStartupAssets extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let assets = this.state.startupAssets;
     let startupAssets = _.cloneDeep(assets);
     data.index = this.state.selectedIndex;
-    startupAssets[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupAssets[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupAssets, function (item)
     {

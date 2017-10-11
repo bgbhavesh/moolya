@@ -16,7 +16,7 @@ class MlInvestmentsStageRepoService{
     var investmentDetails =mlDBController.findOne('MlStage',
          {userId:contextUserId,"resourceType" : "portfolio",
            "resourceId" :portfolioId,"resourceStage" : "onboard",
-           "onBoardStatus":"accept"}, context)||{};
+           "onBoardStatus":"accept"}, {})||{};
 
     if(investmentDetails&&investmentDetails.onBoardStatus==="accept"){ canView=true;};
     return canView;

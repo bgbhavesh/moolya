@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AppointmentModal from './AppointmentModal';
+import AppointmentModal from './../AppointmentModal';
 
 export default class SessionTable extends Component {
   constructor(props) {

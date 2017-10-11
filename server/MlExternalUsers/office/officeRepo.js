@@ -20,7 +20,7 @@ class MlOfficeRepo{
 
       switch (userAction){
         case 'CREATEOFFICE':{
-          return this.validateOfficeDetails(payload, context)
+          return this.validateOfficeDetails(payload)
         }
         case 'ADDMEMBER':{
           return this.officeMemeberValidations(userId, defaultProfile, payload);
@@ -86,7 +86,7 @@ class MlOfficeRepo{
       if(!officeId)
         throw new Error('Office Not Found');
 
-      var ret = reconcileSCLedgerBalance(officeId)
+      var ret = reconcileSCLedgerBalance(officeId,context)
       if(!ret)
         throw new Error('Failed in updating the office');
 
@@ -148,7 +148,7 @@ class MlOfficeRepo{
     }
 
     // Ledger Entry will be created
-    createOfficeLedgerEntry(scId){
+    createOfficeLedgerEntry(scId,context){
         let officeLedger = {};
         officeSC = mlDBController.findOne('MlOfficeSC', {_id:scId})
         if(!officeSC)
@@ -168,7 +168,7 @@ class MlOfficeRepo{
     }
 
     //This Method Reconcile ServiceCard and Update Office Service Card and Ledger Balance
-    reconcileSCLedgerBalance(officeId){
+    reconcileSCLedgerBalance(officeId,context){
         if(!officeId)
             return
 

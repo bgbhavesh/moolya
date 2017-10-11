@@ -160,7 +160,11 @@ export default class MlServiceProviderClients extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderClientsList: this.state.serviceProviderClients, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.serviceProviderClients
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.clients)
+      setObject = this.context.serviceProviderPortfolio.clients
+    this.setState({serviceProviderClientsList: setObject, popoverOpen: false})
   }
 
   onStatusChangeNotify(e) {
@@ -173,7 +177,7 @@ export default class MlServiceProviderClients extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -183,7 +187,7 @@ export default class MlServiceProviderClients extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: e.target.value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -192,13 +196,15 @@ export default class MlServiceProviderClients extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.serviceProviderClients;
     let serviceProviderClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    serviceProviderClients[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      serviceProviderClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderClients, function (item) {
       for (var propName in item) {

@@ -207,7 +207,9 @@ export default class MlFunderInvestment extends Component {
     let investment = this.state.funderInvestment;
     let funderInvestment = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
-    funderInvestment[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      funderInvestment[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(funderInvestment, function (item) {
       for (var propName in item) {

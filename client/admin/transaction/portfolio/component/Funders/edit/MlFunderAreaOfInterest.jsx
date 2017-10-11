@@ -308,7 +308,9 @@ export default class MlFunderAreaOfInterest extends Component {
     let funderAreaOfInterest = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    funderAreaOfInterest[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      funderAreaOfInterest[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(funderAreaOfInterest, function (item) {
       for (var propName in item) {

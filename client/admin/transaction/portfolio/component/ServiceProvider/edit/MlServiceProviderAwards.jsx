@@ -93,7 +93,12 @@ export default class MlServiceProviderAwards extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderAwardsList: this.state.serviceProviderAwards, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.serviceProviderAwards
+    if(this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.awardsRecognition ){
+      setObject = this.context.serviceProviderPortfolio.awardsRecognition
+    }
+    this.setState({serviceProviderAwardsList: setObject, popoverOpen: false})
   }
 
   onTileClick(index, e) {
@@ -165,7 +170,7 @@ export default class MlServiceProviderAwards extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -183,7 +188,7 @@ export default class MlServiceProviderAwards extends Component {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
         // this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
 
@@ -195,7 +200,7 @@ export default class MlServiceProviderAwards extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: e.target.value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -205,7 +210,7 @@ export default class MlServiceProviderAwards extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: this.refs.year.state.inputValue});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -214,13 +219,15 @@ export default class MlServiceProviderAwards extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.serviceProviderAwards;
     let serviceProviderAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    serviceProviderAwards[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      serviceProviderAwards[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderAwards, function (item) {
       for (var propName in item) {

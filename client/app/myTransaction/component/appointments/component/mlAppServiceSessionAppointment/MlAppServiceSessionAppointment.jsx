@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { fetchAppAppointmentByTransactionId } from '../../action/fetchAppointment';
 import MlAppSelectedTaskMyAppointment from '../../../../../calendar/myAppointments/components/mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
-import AppointmentSes from './../mlAppServicePurchasedDetail/appointmentSession';
 import { getSessionDayAvailable } from './../../action/getSessionDayAvailable';
 import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
@@ -9,7 +8,7 @@ import moment from "moment";
 import { rescheduleUserServiceCardAppointment } from '../../action/rescheduleSessionAppointment';
 import SessionTable from './SessionTable';
 import { cancelUserServiceCardAppointment } from '../../action/cancelSessionAppointment';
-import AppointmentModal from './AppointmentModal';
+import AppointmentModal from './../AppointmentModal';
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {

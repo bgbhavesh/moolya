@@ -7,92 +7,9 @@ import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
 import moment from "moment";
 import { rescheduleUserServiceCardAppointment } from '../../action/rescheduleSessionAppointment';
-import Modal from 'reactstrap/lib/Modal';
-import ModalBody from 'reactstrap/lib/ModalBody';
-import ModalFooter from 'reactstrap/lib/ModalFooter';
-import Button from 'reactstrap/lib/Button';
-
-
-class SessionTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-      selectedSlot: {}
-    }
-  }
-
-  showAlert(slot) {
-    this.setState({
-      showModal: true,
-      selectedSlot: slot
-    })
-    // const shouldAllow = confirm(`Do you want to book a slot at ${slot.slotTime}`);
-    // if (shouldAllow) {
-    //   this.props.updateSession(slot);
-    // }
-  }
-
-  render() {
-    let slots = [];
-    let slotIndex = -1;
-    this.props.availableSlots.forEach((slot, index) => {
-      if (index % 4 === 0) {
-        slotIndex++;
-        if (!slots[slotIndex])
-          slots[slotIndex] = [];
-      }
-      slots[slotIndex].push(slot);
-    });
-    const currentDateString = new Date().toLocaleDateString();
-    return (
-      <div>
-        <Modal isOpen={this.state.showModal} onHide={this.onClose}>
-          <ModalBody>
-            <div>Are you sure to reschedule the session?</div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={() => { this.props.updateSession(this.state.selectedSlot); this.setState({ showModal: false, selectedSlot: {} }); }}>Ok</Button>{' '}
-            <Button color="secondary" onClick={() => this.setState({ showModal: false, selectedSlot: {} })}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-        <div>
-          {
-            !this.props.showLoading &&
-            <div>
-              <table className="table table-bordered">
-                <tbody>
-                  {
-                    slots.map((list, index) => {
-                      return (
-                        <tr key={index}>
-                          {
-                            list.map((slot, i) => {
-                              return (
-                                <td key={i} onClick={() => { this.showAlert(slot) }}>
-                                  {currentDateString} <br />
-                                  {slot.slotTime}
-                                </td>
-                              );
-                            })
-                          }
-                        </tr>
-                      );
-                    })
-                  }
-                </tbody>
-              </table>
-
-            </div>
-          }
-          {
-            this.props.showLoading && <span> Loading...</span>
-          }
-        </div>
-      </div>
-    )
-  }
-}
+import SessionTable from './SessionTable';
+import { cancelUserServiceCardAppointment } from '../../action/cancelSessionAppointment';
+import AppointmentModal from './AppointmentModal';
 
 export default class MlAppServiceSessionAppointment extends Component {
   constructor(props) {
@@ -115,6 +32,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     this.fetchServiceSessionAppointments = this.fetchServiceSessionAppointments.bind(this);
     this.changeDate = this.changeDate.bind(this);
     this.updateSession = this.updateSession.bind(this);
+    this.cancelSession = this.cancelSession.bind(this);
   }
 
   componentWillReceiveProps({ orderId, docId }) {
@@ -145,6 +63,15 @@ export default class MlAppServiceSessionAppointment extends Component {
       this.setState({
         showSession: false
       })
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
+  async cancelSession() {
+    let response = await cancelUserServiceCardAppointment(this.state.docId);
+    if (response && response.success) {
+      toastr.success(response.result);
     } else {
       toastr.error(response.result);
     }
@@ -298,10 +225,15 @@ export default class MlAppServiceSessionAppointment extends Component {
                       </div>
                     </div>
                     <div className="final_btns">
-                      <a href="#" className="fileUpload mlUpload_btn final_cancel">Cancel</a>
+                      <a onClick={() => { this.setState({ showModal: true }) }} className="fileUpload mlUpload_btn final_cancel">Cancel</a>
                       <a onClick={() => { this.setState({ showSession: true }) }} className="fileUpload mlUpload_btn final_sign">Modify</a>
                     </div>
                   </div>
+                  <AppointmentModal
+                    message="Are you sure you want to cancel the session?"
+                    onOkClick={() => { this.cancelSession(); this.setState({ showModal: false }) }}
+                    onCancelClick={() => { this.setState({ showModal: false }) }}
+                    showModal={this.state.showModal} />
 
                 </div>
               </div>
@@ -397,8 +329,7 @@ export default class MlAppServiceSessionAppointment extends Component {
               />
               <FontAwesome name="calendar" className="password_icon" />
             </div>
-            <a href
-              onClick={() => { this.setState({ showSession: false }) }}
+            <a onClick={() => { this.setState({ showSession: false }) }}
               className="fileUpload mlUpload_btn cancel_send">
               Cancel</a>
             <SessionTable

@@ -93,7 +93,7 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
       if(resp===1){
         let fromUserType = 'user';
         let connectionData = mlDBController.findOne('MlConnections', {connectionCode:connectionCode,"users.userId":fromuser._id,isBlocked:false,isDenied:false,isAccepted:true}, context);
-        mlInteractionService.createTransactionRequest(toUser._id,'favorite', args.resourceId, connectionData._id, fromuser._id, fromUserType );
+        mlInteractionService.createTransactionRequest(toUser._id,'favorite', args.resourceId, connectionData._id, fromuser._id, fromUserType , context);
         return new MlRespPayload().successPayload(resp,200);
       };
 

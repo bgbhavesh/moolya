@@ -42,6 +42,17 @@ export default class MlServiceManageSchedule extends Component {
     this.optionsBySelectService(taskId);
   }
 
+  componentWillReceiveProps(nextProps) {
+    let taskId = nextProps.data && nextProps.data.tasks && nextProps.data.tasks[0] && nextProps.data.tasks[0].id ? nextProps.data.tasks[0].id : '';
+    this.state = {
+      data: nextProps.data || {},
+      selectedTaskId: taskId
+    };
+    this.optionsBySelectService(taskId);
+    console.log('nextProps',nextProps);
+  }
+
+
   /**
    * ComponentDidMount
    * Desc :: Configures the switch
@@ -200,6 +211,9 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Save the service
    */
   async saveServicePaymentDetails(type) {
+    if(this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ){
+      return false;
+    }
     if (!this.errorMsg) {
       this.errorMsg = '';
       let {data} = this.state;
@@ -280,6 +294,7 @@ export default class MlServiceManageSchedule extends Component {
         icon: <span className="ml ml-payments"></span>},
       {name: 'Payment',
         component: <MlServiceCardStep4 data={this.state.data}
+                                       isView={this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ? true : false }
                                        checkChargeStatus={this.checkChargeStatus}
                                        calculateCharges={this.calculateCharges}
                                        saveServicePaymentDetails={this.saveServicePaymentDetails} />,

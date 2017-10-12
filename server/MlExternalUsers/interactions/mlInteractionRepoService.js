@@ -13,7 +13,7 @@ class MlInteractionService{
   }
 
   getUserDetails(userId){
-    var user =mlDBController.findOne('users',{_id:userId}, context)||{};
+    var user =mlDBController.findOne('users',{_id:userId}, {})||{};
     return user;
   }
 

@@ -79,7 +79,12 @@ export default class MlCompanyRAndD extends Component{
   }
 
   onSaveAction(e){
-    this.setState({companyRDList:this.state.companyRD, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.companyRD
+    if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.researchAndDevelopment ){
+      setObject = this.context.companyPortfolio.researchAndDevelopment
+    }
+    this.setState({companyRDList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -152,7 +157,7 @@ export default class MlCompanyRAndD extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -182,7 +187,7 @@ export default class MlCompanyRAndD extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -192,7 +197,7 @@ export default class MlCompanyRAndD extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -201,13 +206,15 @@ export default class MlCompanyRAndD extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.companyRD;
     let companyRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    companyRD[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      companyRD[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(companyRD, function (item)
     {

@@ -167,7 +167,7 @@ class MlAppProfileHeader extends Component {
                 <a href={ !this.state.isCalendar ? "" : "/app/calendar"} className={!this.state.isCalendar ?"disable": activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
-                <a href="/app/task" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>
+                <a href="/app/task?tab=My Tasks" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
                 <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>

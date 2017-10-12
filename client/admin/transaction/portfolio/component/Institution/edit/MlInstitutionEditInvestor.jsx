@@ -116,42 +116,28 @@ export default class MlInstitutionEditInvestor extends React.Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-   /* var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })*/
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
   onStatusChangeNotify(e)
   {
-    var isPrivate = false;
     let updatedData = this.state.data||{};
     let key = e.target.id;
     updatedData=_.omit(updatedData,[key]);
     if (e.currentTarget.checked) {
       updatedData=_.extend(updatedData,{[key]:true});
-      isPrivate = true
     } else {
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -159,9 +145,8 @@ export default class MlInstitutionEditInvestor extends React.Component{
     let details =this.state.data;
     details=_.omit(details,["fundingTypeId"]);
     details=_.extend(details,{["fundingTypeId"]:selectedId});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
-      this.sendDataToParent()
+    this.setState({data:details, "selectedVal" : selectedId}, function () {
+      // this.sendDataToParent()
     })
 
   }
@@ -171,19 +156,26 @@ export default class MlInstitutionEditInvestor extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onSaveAction(e){
-    this.setState({institutionInvestorList:this.state.institutionInvestor, popoverOpen : false})
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionInvestor;
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.investor) {
+      setObject = this.context.institutionPortfolio.investor
+    }
+    this.setState({institutionInvestorList: setObject, popoverOpen: false})
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     let data = this.state.data;
     let institutionInvestor1 = this.state.institutionInvestor;
     let institutionInvestor = _.cloneDeep(institutionInvestor1);
     data.index = this.state.selectedIndex;
-    institutionInvestor[this.state.selectedIndex] = data;    //institutionInvestor[this.state.index] = data;
+    if(isSaveClicked){
+      institutionInvestor[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionInvestor, function (item) {
       for (var propName in item) {
@@ -198,8 +190,8 @@ export default class MlInstitutionEditInvestor extends React.Component{
     institutionInvestor = arr;
     this.setState({institutionInvestor: institutionInvestor})
     this.props.getInvestorDetails(institutionInvestor, this.state.privateKey);
-
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;

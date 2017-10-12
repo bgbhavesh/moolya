@@ -148,19 +148,20 @@ export default class MlFunderAreaOfInterest extends Component {
   }
 
   onLockChange(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = field;
+    // let details = this.state.data || {};
+    // let key = field;
     var isPrivate = false;
-    details = _.omit(details, [key]);
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true;
-    } else {
-      details = _.extend(details, {[key]: false});
     }
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
     // this.setState({privateKey:privateKey})
     this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()

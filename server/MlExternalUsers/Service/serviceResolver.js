@@ -137,6 +137,11 @@ MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, i
 MlResolver.MlMutationResolver['checkServiceSubChapterAccessControl'] = (obj, args, context, info) => {
   let serviceId = args.serviceId;
   let serviceDetails =mlDBController.findOne('MlServiceCardDefinition', serviceId , context);
+  if(serviceDetails.userId == context.userId){
+    let code = 400;
+    response = new MlRespPayload().errorPayload('You can not book your own service', code);
+    return response;
+  }
   let subChapterId = serviceDetails && serviceDetails.subChapterId ? serviceDetails.subChapterId : '';
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
   let response;
@@ -265,6 +270,7 @@ MlResolver.MlMutationResolver['updateServiceGoLive'] = (obj, args, context, info
   }
   let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
   if(result){
+    mlDBController.update('MlServiceCardDefinition', {transactionId: service.transactionId, versions: parseInt(service.versions)}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -307,8 +313,7 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['getServiceBasedOnServiceId'] = (obj, args, context, info) => {
   let query = {
-    _id: args.serviceId,
-    isCurrentVersion: true
+    _id: args.serviceId
   };
   let result = mlDBController.findOne('MlServiceCardDefinition', query , context);
   return result;

@@ -24,16 +24,15 @@ export default class MlInstitutionEditManagement extends Component{
       privateKey:{},
       institutionManagement:[],
       institutionManagementList:[],
-      // indexArray:[],
       selectedIndex:-1,
       title:'',
       clusterId:'',
-      // arrIndex:"",
       managementIndex:"",
       responseImage:"",
       gender:null,
     };
     this.tabName = this.props.tabName || ""
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.addManagement.bind(this);
@@ -106,7 +105,7 @@ export default class MlInstitutionEditManagement extends Component{
     let data = _.cloneDeep(this.state.data);
     data.title=val;
     this.setState({data:data}, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
   async fetchClusterId() {
@@ -115,24 +114,21 @@ export default class MlInstitutionEditManagement extends Component{
       this.setState({loading: false, clusterId: response.clusterId});
     }
   }
-  onClick(fieldName, field, e){
+
+  onClick(fieldName, field, e) {
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    var privateKey = {
+      keyName: fieldName,
+      booleanKey: field,
+      isPrivate: isPrivate,
+      index: this.state.selectedIndex,
+      tabName: KEY
+    }
+    this.setState({privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -171,14 +167,14 @@ export default class MlInstitutionEditManagement extends Component{
         details = _.omit(details, [name]);
         details = _.extend(details, {[name]: e.target.value});
         this.setState({data: details}, function () {
-          this.sendDataToParent()
+          // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, {[name]: e.target.value});
       this.setState({data: details}, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
@@ -206,9 +202,20 @@ export default class MlInstitutionEditManagement extends Component{
       details=_.omit(details,[name]);
       details=_.extend(details,{[name]:value});
       this.setState({data:details}, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
+  }
+
+  onSaveAction() {
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionManagementList
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.management) {
+      setObject = this.context.institutionPortfolio.management
+    }
+    this.setState({institutionManagementList: setObject}, () => {
+      $('#management-form').slideUp();
+    })
   }
 
   getFieldValidations() {
@@ -216,16 +223,17 @@ export default class MlInstitutionEditManagement extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionManagement1 = this.state.institutionManagement;
     let institutionManagement = _.cloneDeep(institutionManagement1);
     data.index = this.state.selectedIndex;
-    institutionManagement[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionManagement[this.state.selectedIndex] = data;
+    }
     let managementArr = [];
     _.each(institutionManagement, function (item) {
-
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
           delete item[propName];
@@ -234,17 +242,15 @@ export default class MlInstitutionEditManagement extends Component{
       item = _.omit(item, "__typename");
       let newItem = _.omit(item, 'privateFields');
       if(item && item.logo){
-        // delete item.logo['__typename'];
         newItem = _.omit(item, 'logo')
       }
       managementArr.push(newItem)
     })
     institutionManagement = managementArr;
-    // institutionManagement=_.extend(institutionManagement[this.state.arrIndex],data);
     this.setState({institutionManagement:institutionManagement})
-    // let indexArray = this.state.indexArray;
     this.props.getManagementDetails(institutionManagement, this.state.privateKey, requiredFields)
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -367,14 +373,9 @@ export default class MlInstitutionEditManagement extends Component{
               </div>
 
               <div id="management-form" className=" management-form-wrap" style={{'display':'none'}}>
-
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
-                      {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title}  onBlur={this.handleBlur.bind(this)}/>*/}
-                      {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isTitlePrivate" onClick={this.onClick.bind(this, "isTitlePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isTitlePrivate}/>*/}
-                      {/*</div>*/}
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}
                                       selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption}
@@ -400,11 +401,6 @@ export default class MlInstitutionEditManagement extends Component{
                                data-errMsg="Last Name is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")}/>
                       </div>
-
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>*/}
-                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>*/}
-                      {/*</div>*/}
                       <div className="form-group mandatory">
                         <Select name="form-field-name" ref={"gender"} placeholder="Select Gender"
                                 value={this.state.gender} options={genderValues}
@@ -449,12 +445,8 @@ export default class MlInstitutionEditManagement extends Component{
                       </div>
                     </form>
                   </div>
-
-
                 </div>
                 <div className="col-md-6 nopadding-right">
-
-
                   <div className="form_bg">
                     <form>
                       <div className="form-group">
@@ -496,13 +488,13 @@ export default class MlInstitutionEditManagement extends Component{
                         <input type="text" placeholder="About" name="managmentAbout" defaultValue={this.state.data.managmentAbout} className="form-control float-label"  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrivate" onClick={this.onClick.bind(this, "managmentAbout", "isAboutPrivate")}/>
                       </div>
-
-
                     </form>
                   </div>
-
                 </div>
                 <br className="brclear"/>
+                <div className="ml_btn text-center" style={{'textAlign':'center'}}>
+                  <a className="save_btn" onClick={this.onSaveAction}>Save</a>
+                </div>
               </div>
             </div>
           </div>)}

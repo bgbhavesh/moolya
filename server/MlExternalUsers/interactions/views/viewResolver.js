@@ -29,7 +29,7 @@ MlResolver.MlMutationResolver['createView'] = (obj, args, context, info) =>{
           if(resp){
             //transaction Log
             let fromUserType = 'user';
-            mlInteractionService.createTransactionRequest(toUser._id,'view', args.resourceId, resp, fromuser._id, fromUserType );
+            mlInteractionService.createTransactionRequest(toUser._id,'view', args.resourceId, resp, fromuser._id, fromUserType , context);
             MlEmailNotification.reviewRecieved(fromuser,toUser)
           }
 

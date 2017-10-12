@@ -22,6 +22,13 @@ export default class MlStartupAboutUs extends Component{
   getPortfolioStartupAboutUsDetails(details, tabName, privateKey, requiredFields) {
     this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+  componentDidMount()
+  {
+    var className = this.props.isAdmin ? "admin_header" : "app_header";
+    var WinHeight = $(window).height();
+    $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
+    $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+535));
+  }
 
   componentWillMount() {
     if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
@@ -77,8 +84,17 @@ export default class MlStartupAboutUs extends Component{
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
-            <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
-              <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
+            <div className="panel-body">
+              <div className="md_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="md_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
+                </ScrollArea>
+            </div>
             </div>
           </div>
         </div>
@@ -101,23 +117,50 @@ export default class MlStartupAboutUs extends Component{
           <div className="col-md-6 col-sm-6 nopadding-left">
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
               <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Client')}/></a></div>
-              <div className="panel-body text-center panel-body-scroll">
-                {aboutUsImages}
+              <div className="panel-body">
+                <div className="sm_scroll">
+                  <ScrollArea
+                    speed={0.8}
+                    className="sm_scroll"
+                    smoothScrolling={true}
+                    default={true}
+                  >
+                    {aboutUsImages}
+                  </ScrollArea>
+                </div>
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
               <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
-              <div className="panel-body panel-body-scroll">
+              <div className="panel-body">
+                <div className="sm_scroll">
+                  <ScrollArea
+                    speed={0.8}
+                    className="sm_scroll"
+                    smoothScrolling={true}
+                    default={true}
+                  >
                 <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p>
+                  </ScrollArea>
+                </div>
               </div>
             </div></div>
           </div>
           <div className="col-md-6 col-sm-6 nopadding"><div className="panel panel-default panel-form-view">
             <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
             <div className="panel-body">
+              <div className="sm_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="sm_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
               <ul className="list-info">
                 <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li>
               </ul>
+                </ScrollArea>
+              </div>
             </div>
           </div></div>
 

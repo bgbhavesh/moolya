@@ -76,26 +76,23 @@ export default class MlInstitutionClients extends Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   onSaveAction(e){
-    this.setState({institutionClientsList:this.state.institutionClients,popoverOpen : false})
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionClients;
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.clients) {
+      setObject = this.context.institutionPortfolio.clients
+    }
+    this.setState({institutionClientsList: setObject, popoverOpen: false})
   }
 
   onStatusChangeNotify(e)
@@ -109,7 +106,7 @@ export default class MlInstitutionClients extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -119,7 +116,7 @@ export default class MlInstitutionClients extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -128,13 +125,15 @@ export default class MlInstitutionClients extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.institutionClients;
     let institutionClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    institutionClients[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionClients, function (item)
     {

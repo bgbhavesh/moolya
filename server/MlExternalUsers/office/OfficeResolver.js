@@ -130,7 +130,22 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
     officeId:args.officeId,
     isPrincipal: args.isPrincipal
   };
-  let response = mlDBController.find('MlOfficeMembers', query).fetch();
+  console.log(query);
+  let pipeline = [
+    { $match: query },
+    { $lookup:
+      {
+        from: "users",
+        localField: "emailId",
+        foreignField: "username",
+        as: "user"
+      }
+    },
+    { $unwind:{ path: "$user", preserveNullAndEmptyArrays: true } },
+    {  $addFields : { profileImage: '$user.profile.profileImage' } }
+  ];
+  let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
+  //let response = mlDBController.find('MlOfficeMembers', query).fetch();
   return response;
 }
 

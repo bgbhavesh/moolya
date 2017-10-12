@@ -156,7 +156,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                           <div className="hex_outer">
                             {
                               data.profileImage
-                                ? <img scr={data.profileImage} />
+                                ? <img src={data.profileImage} />
                                 : <span className="ml my-ml-Investors"></span>
                             }
                           </div>

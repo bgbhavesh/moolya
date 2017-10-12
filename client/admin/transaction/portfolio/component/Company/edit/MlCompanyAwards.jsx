@@ -87,7 +87,12 @@ export default class MlCompanyAwards extends Component{
   }
 
   onSaveAction(e){
-    this.setState({awardsList:this.state.awards, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.awards
+    if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.awardsRecognition ){
+      setObject = this.context.companyPortfolio.awardsRecognition
+    }
+    this.setState({awardsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -159,7 +164,7 @@ export default class MlCompanyAwards extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -171,13 +176,13 @@ export default class MlCompanyAwards extends Component{
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
       this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
         // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
         // this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
 
@@ -189,7 +194,7 @@ export default class MlCompanyAwards extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -199,7 +204,7 @@ export default class MlCompanyAwards extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -208,13 +213,15 @@ export default class MlCompanyAwards extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.awards;
     awards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    awards[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      awards[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(awards, function (item)
     {

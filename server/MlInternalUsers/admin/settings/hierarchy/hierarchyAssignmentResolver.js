@@ -146,11 +146,22 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
       let code = 200;
       response = new MlRespPayload().successPayload('Updated Successfully', code);
       return response
-    } else {
+
+    } else if(!_.isEqual(hierarchy.finalApproval, hierarchyAssignment.finalApproval)){
+
+        hierarchyAssignment.finalApproval = hierarchy.finalApproval
+        mlDBController.update('MlHierarchyAssignments', id, hierarchyAssignment, {$set: true}, context)
+        let code = 200;
+        response = new MlRespPayload().successPayload('Updated Successfully', code);
+        return response
+
+    }else {
+
       let code = 200;
       response = new MlRespPayload().successPayload('No changes found to update', code);
       return response
     }
+
   } else {
     /**update of an hirarchy*/
     let hierarchyRoles = hierarchy.teamStructureAssignment;

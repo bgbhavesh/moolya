@@ -39,7 +39,7 @@ export default class MlAppTaskSession extends Component {
       let userSession = _.range(response ? response.noOfSession : 0);
       console.log(userSession);
       let sessionData = [];
-      _.each(userSession, function (item, value) {
+      _.each(response.session, function (item, value) {
         sessionData.push({
           duration: { hours: 0, minutes: 0 },
           activities: [],
@@ -262,12 +262,12 @@ export default class MlAppTaskSession extends Component {
                             return (
                               <div className="card_block swiper-slide" key={idx}>
                                 <div className="">
-                                    <h3>Name of the Task</h3>
+                                    <h3>{activity.displayName}</h3>
                                     <div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>
                                     <div className="clearfix"></div>
                                     <div className="list_icon mart0">
-                                      <span className="price">Rs. 18,500</span>
-                                      <span className="price pull-right">4 Sessions</span>
+                                      <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                                      <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                                       <div className="clearfix"></div>
                                       <i className="c_image ml my-ml-Ideator"></i>
                                       <div className="clearfix"></div>
@@ -281,7 +281,7 @@ export default class MlAppTaskSession extends Component {
                                       </div></span>
                                       <button className="btn btn-danger pull-right">{activity.mode}</button>
                                     </div>
-                                    <div className="block_footer"><span> {activity.displayName} </span></div>
+                                    <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
                                 </div>
                               </div>
                             )

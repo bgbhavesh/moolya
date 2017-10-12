@@ -728,7 +728,7 @@ let CoreModules = {
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     if (!fieldsProj.sort) {
-      fieldsProj.sort = {'createdDate': -1}
+      fieldsProj.sort = {'updatedAt': -1}
     }
     var serverQuery = {
       'isBeSpoke': false,

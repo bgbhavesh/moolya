@@ -119,21 +119,26 @@ export default class MlStartupLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({startupLookingForList: this.state.startupLookingFor, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.startupLookingFor
+    if (this.context && this.context.startupPortfolio && this.context.startupPortfolio.lookingFor)
+      setObject = this.context.startupPortfolio.lookingFor
+    this.setState({startupLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
+    // let details = this.state.data || {};
+    // let key = e.target.id;
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
     //
     // var privateKey = {
     //   keyName: fieldName,
@@ -149,7 +154,7 @@ export default class MlStartupLookingFor extends Component {
       booleanKey:field, isPrivate:isPrivate,
       index:this.state.selectedIndex,
       tabName: this.props.tabName}
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -164,7 +169,7 @@ export default class MlStartupLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -180,7 +185,7 @@ export default class MlStartupLookingFor extends Component {
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -189,13 +194,14 @@ export default class MlStartupLookingFor extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
     data.index = this.state.selectedIndex;
-    startupLookingFor[this.state.selectedIndex] = data;
+    if (isSaveClicked)
+      startupLookingFor[this.state.selectedIndex] = data;
     let arr = [];
     _.each(startupLookingFor, function (item) {
       for (var propName in item) {
@@ -211,7 +217,6 @@ export default class MlStartupLookingFor extends Component {
     startupLookingFor = arr;
     this.setState({startupLookingFor: startupLookingFor})
     this.props.getLookingForDetails(startupLookingFor, this.state.privateKey, requiredFields);    //indexArray
-
   }
 
 

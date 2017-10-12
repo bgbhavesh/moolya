@@ -347,7 +347,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
 
     // create a ledger balance entry
     officeSC = mlDBController.findOne('MlOfficeSC', {officeId:args.id, isActive:true})
-    mlOfficeValidationRepo.createOfficeLedgerEntry(officeSC._id)
+    mlOfficeValidationRepo.createOfficeLedgerEntry(officeSC._id,context)
 
   }catch (e){
     let code = 400;
@@ -395,13 +395,13 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info) => {
     if(!args.myOfficeId){
         let code = 400;
-        let response = new MlRespPayload().successPayload("Invalid Office", code);
+        let response = new MlRespPayload().errorPayload("Invalid Office", code);
         return response;
     }
     var ret = mlOfficeValidationRepo.validateOfficeExpiryDate(args.myOfficeId);
     if(!ret.success){
         let code = 400;
-        let response = new MlRespPayload().successPayload(ret.msg, code);
+        let response = new MlRespPayload().errorPayload(ret.msg, code);
         return response;
     }
 
@@ -414,7 +414,13 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
+    let isMobileNumberExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.contactNumber': args.officeMember.mobileNumber ,status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
+    if(isMobileNumberExist) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Mobile number is already registered", code);
+      return response;
+    }
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId ,status: {'$nin': ['REG_ADM_REJ','REG_USER_REJ']}});
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
     if (isUserExist || isUserRegExist) {
       let pipeline = [

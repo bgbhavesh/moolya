@@ -119,8 +119,7 @@ export default class MlAppAddOfficeMember extends React.Component{
       });
       this.getMembers();
     } else {
-      toastr.error(response.result)
-      this.setState({popoverOpen:false})
+      toastr.error(response.result);
     }
   }
 

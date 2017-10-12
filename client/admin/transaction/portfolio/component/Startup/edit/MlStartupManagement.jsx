@@ -32,17 +32,16 @@ export default class MlStartupManagement extends Component{
       privateKey:{}
 ,      startupManagement:[],
       startupManagementList:[],
-      // indexArray:[],
       selectedIndex:-1,
       title:'',
       clusterId:'',
-      // arrIndex:"",
       managementIndex:"",
       responseImage:"",
       showProfileModal: false,
       uploadingAvatar: false,
     }
     this.tabName = this.props.tabName || ""
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.onClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.addManagement.bind(this);
@@ -64,25 +63,25 @@ export default class MlStartupManagement extends Component{
       $('#management-form').slideDown();
     });
     this.imagesDisplay()
-
   }
-  componentDidUpdate()
-  {
+
+  componentDidUpdate(){
     initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
-
-    var className = this.props.isAdmin?"admin_header":"app_header"
+    var className = this.props.isAdmin ? "admin_header" : "app_header";
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
-  componentWillMount(){
+
+  componentWillMount() {
     this.fetchPortfolioDetails();
-    this.fetchClusterId();
+    this.fetchClusterIdByPortfolio();
   }
+
   addManagement(){
     this.setState({loading:true})
     if(this.state.startupManagement){
@@ -118,42 +117,33 @@ export default class MlStartupManagement extends Component{
     let data = _.cloneDeep(this.state.data);
     data.title=val;
     this.setState({data:data}, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
   optionsBySelectGender(val) {
     var dataDetails = this.state.data
     dataDetails['gender'] = val.value
     this.setState({data: dataDetails}, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
 
 
-  async fetchClusterId() {
+  async fetchClusterIdByPortfolio() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({loading: false, clusterId: response.clusterId});
     }
   }
+
   onClick(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -192,14 +182,14 @@ export default class MlStartupManagement extends Component{
         details = _.omit(details, [name]);
         details = _.extend(details, {[name]: e.target.value});
         this.setState({data: details}, function () {
-          this.sendDataToParent()
+          // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, {[name]: e.target.value});
       this.setState({data: details}, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
@@ -220,6 +210,7 @@ export default class MlStartupManagement extends Component{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
     }
   }
+
   onDateChange(name, event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
@@ -227,9 +218,20 @@ export default class MlStartupManagement extends Component{
       details=_.omit(details,[name]);
       details=_.extend(details,{[name]:value});
       this.setState({data:details}, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
+  }
+
+  onSaveAction() {
+    this.sendDataToParent(true);
+    var setObject = this.state.startupManagementList
+    if (this.context && this.context.startupPortfolio && this.context.startupPortfolio.management) {
+      setObject = this.context.startupPortfolio.management
+    }
+    this.setState({startupManagementList: setObject}, () => {
+      $('#management-form').slideUp();
+    })
   }
 
   getFieldValidations() {
@@ -237,13 +239,15 @@ export default class MlStartupManagement extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupManagement1 = this.state.startupManagement;
     let startupManagement = _.cloneDeep(startupManagement1);
     data.index = this.state.selectedIndex;
-    startupManagement[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupManagement[this.state.selectedIndex] = data;
+    }
     let managementArr = [];
     _.each(startupManagement, function (item) {
       for (var propName in item) {
@@ -254,23 +258,15 @@ export default class MlStartupManagement extends Component{
       let newItem = _.omit(item, "__typename")
       newItem = _.omit(newItem, "privateFields")
       if(newItem && newItem.logo){
-        // delete item.logo['__typename'];
         newItem = _.omit(newItem, 'logo')
       }
       managementArr.push(newItem)
     })
     startupManagement = managementArr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupManagement:startupManagement})
-    // let indexArray = this.state.indexArray;
     this.props.getManagementDetails(startupManagement, this.state.privateKey, requiredFields)
   }
   onLogoFileUpload(image,fileInfo){
-    // if(e.target.files[0].length ==  0)
-    //   return;
-    // let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let file=image;
     let name = 'logo';
     let fileName = fileInfo.name;
@@ -506,8 +502,6 @@ export default class MlStartupManagement extends Component{
 
                 </div>
                 <div className="col-md-6 nopadding-right">
-
-
                   <div className="form_bg">
                     <form>
                       <div className="form-group">
@@ -563,6 +557,9 @@ export default class MlStartupManagement extends Component{
                   toggleShow={this.toggleModal}
                 />
                 <br className="brclear"/>
+                <div className="ml_btn text-center" style={{'textAlign':'center'}}>
+                  <a className="save_btn" onClick={this.onSaveAction}>Save</a>
+                </div>
               </div>
             </div>
           </div>)}

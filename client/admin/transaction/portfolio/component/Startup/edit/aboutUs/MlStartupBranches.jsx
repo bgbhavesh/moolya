@@ -56,7 +56,12 @@ class MlStartupBranches extends Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupBranchesList:this.state.startupBranches,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupBranches
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.branches ){
+      setObject = this.context.startupPortfolio.branches
+    }
+    this.setState({startupBranchesList:setObject,popoverOpen : false})
   }
   addBranch(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -83,23 +88,22 @@ class MlStartupBranches extends Component{
   }
 
   onLockChange(fieldName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    // var isPrivate = false
+    // let details = this.state.data||{};
+    // let key = e.target.id;
+    // details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+      // details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
 
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
 
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -114,7 +118,7 @@ class MlStartupBranches extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelected(selectedBranch){
@@ -123,7 +127,7 @@ class MlStartupBranches extends Component{
     details=_.extend(details,{["addressTypeId"]: selectedBranch});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedBranch})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedCountry(val){
@@ -132,7 +136,7 @@ class MlStartupBranches extends Component{
     details=_.extend(details,{["countryId"]:val});
     this.setState({data: details, "countryId": val}, function () {
       // this.setState({"countryId":val})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedStates(value, callback, label){
@@ -142,7 +146,7 @@ class MlStartupBranches extends Component{
     details=_.extend(details,{["stateId"]: value, ["branchState"]:label.label});
     this.setState({data: details, "stateId": value}, function () {
       // this.setState({"stateId" : value})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedCities(val, callback, label){
@@ -152,7 +156,7 @@ class MlStartupBranches extends Component{
     details=_.extend(details,{["cityId"]: val, ["branchCity"]:label.label});
     this.setState({data: details, "cityId": val}, function () {
       // this.setState({"cityId" : val})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   handleBlur(e){
@@ -161,7 +165,7 @@ class MlStartupBranches extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -170,13 +174,15 @@ class MlStartupBranches extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let branches = this.state.startupBranches;
     let startupBranches = _.cloneDeep(branches);
     data.index = this.state.selectedIndex;
-    startupBranches[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupBranches[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupBranches, function (item)
     {

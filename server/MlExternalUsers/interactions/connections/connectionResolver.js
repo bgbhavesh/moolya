@@ -127,7 +127,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
       //create the transaction record and log
       if(resp){
         let fromUserType = 'user';
-        mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId, resp, fromuser._id, fromUserType );
+        mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId, resp, fromuser._id, fromUserType , context);
           if(toUser._id&&fromuser._id){
             MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
             MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
@@ -152,7 +152,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
       let fromUserType = 'user';
       let connectionRec=mlDBController.findOne('MlConnections',{connectionCode:connectionCode},context)||{};
       //mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',connectionRec._id);
-      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId,connectionRec._id, fromuser._id, fromUserType );
+      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId,connectionRec._id, fromuser._id, fromUserType , context);
       return new MlRespPayload().successPayload(resp,200)
     };
 

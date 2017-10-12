@@ -10,7 +10,7 @@ MlResolver.MlQueryResolver['fetchConversationAuthToken'] = (obj, args, context, 
     if(!user){
       return new MlRespPayload().errorPayload("Invalid User", 400);
     }
-    var result = mlConversationsRepo.login(user.username)
+    var result = mlConversationsRepo.login(context)
     return result;
 }
 /**this resolver have no use need to remove it*/

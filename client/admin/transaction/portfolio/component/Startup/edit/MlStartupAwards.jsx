@@ -88,7 +88,12 @@ export default class MlStartupAwards extends Component{
   }
 
   onSaveAction(e){
-    this.setState({startupAwardsList:this.state.startupAwards, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupAwards
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.awardsRecognition ){
+      setObject = this.context.startupPortfolio.awardsRecognition
+    }
+    this.setState({startupAwardsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -160,7 +165,7 @@ export default class MlStartupAwards extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -178,7 +183,7 @@ export default class MlStartupAwards extends Component{
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
         // this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
 
@@ -190,7 +195,7 @@ export default class MlStartupAwards extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -200,7 +205,7 @@ export default class MlStartupAwards extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -209,13 +214,15 @@ export default class MlStartupAwards extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.startupAwards;
     let startupAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    startupAwards[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupAwards[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupAwards, function (item)
     {

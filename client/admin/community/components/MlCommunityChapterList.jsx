@@ -21,7 +21,7 @@ export default class MlCommunityChapterList extends Component {
         status = "assign";
         // icon = "assign";
       }
-        let image=prop.chapterImage&&prop.chapterImage.trim()!==""?<img src={`${prop.chapterImage}`}/>:<span className="ml ml-chapter"></span>;
+        let image=prop.chapterImage&&prop.chapterImage.trim()!==""?<img src={`${prop.chapterImage}`}/>:<span className="ml my-ml-chapter"></span>;
         return (
           <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
             <div className="list_block">

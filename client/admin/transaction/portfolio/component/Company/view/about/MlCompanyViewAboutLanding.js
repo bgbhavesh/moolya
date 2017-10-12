@@ -85,7 +85,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
                   name='ellipsis-h' onClick={(e)=>this.selectedTab('About Us')}/></a></div>
                 <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?this.state.aboutUs.aboutUs.companyDescription:(<NoData tabName="aboutUs"/>)}</p>
+                  {this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?<p>{this.state.aboutUs.aboutUs.companyDescription}</p>:(<NoData tabName="aboutUs"/>)}
                 </div>
               </div>
             </div>
@@ -122,7 +122,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                                                                          className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={(e)=>this.selectedTab('Services And Products')}/></a></div>
                     <div className="panel-body panel-body-scroll">
-                      <p>{this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?this.state.aboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
+                      {this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?<p>{this.state.aboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
                     </div>
                   </div>
                 </div>
@@ -133,9 +133,11 @@ export default class MlCompanyViewAboutLanding extends Component {
                                                                 className="pull-right ellipsis-menu"><FontAwesome
                     name='ellipsis-h' onClick={(e)=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body panel-body-scroll">
-                    <ul className="list-info">
-                      <li>{this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?this.state.aboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
-                    </ul>
+                    {this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?
+                        (<ul className="list-info">
+                          <li>{this.state.aboutUs.information.informationDescription}</li>
+                          </ul>):
+                        (<NoData tabName="information"/>)}
                   </div>
                 </div>
               </div>

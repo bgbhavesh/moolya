@@ -86,7 +86,7 @@ export default class MlStartupViewAboutLanding extends Component {
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
                   name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
                 <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?this.state.startupAboutUs.aboutUs.startupDescription: (<NoData tabName="aboutUs"/>)}</p>
+                  {this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?<p>{this.state.startupAboutUs.aboutUs.startupDescription}</p>: (<NoData tabName="aboutUs"/>)}
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@ export default class MlStartupViewAboutLanding extends Component {
                                                                          className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
                     <div className="panel-body panel-body-scroll">
-                      <p>{this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?this.state.startupAboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
+                      {this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?<p>this.state.startupAboutUs.serviceProducts.spDescription</p>:(<NoData tabName="serviceProducts"/>)}
                     </div>
                   </div>
                 </div>
@@ -134,9 +134,11 @@ export default class MlStartupViewAboutLanding extends Component {
                                                                 className="pull-right ellipsis-menu"><FontAwesome
                     name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body">
-                    <ul className="list-info">
-                      <li>{this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?this.state.startupAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
-                    </ul>
+                    {this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?
+                        (<ul className="list-info">
+                          <li>{ this.state.startupAboutUs.information.informationDescription}</li>
+                        </ul>)
+                        :(<NoData tabName="information"/>)}
                   </div>
                 </div>
               </div>

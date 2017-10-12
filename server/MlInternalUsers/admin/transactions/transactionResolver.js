@@ -351,37 +351,106 @@ MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['validateAssignmentsDataContext'] = (obj, args, context, info) => {
   let data = args.data
   let userId = args.userId
-  let matchNotFound = false
+  // let matchNotFound = false
+  // if(data && userId){
+  //   let adminContext = new MlAdminContextQueryConstructor(userId).contextQuery()
+  //   let context = _lodash.concat(adminContext.clusterId, adminContext.chapterId,adminContext.subChapterId,adminContext.communityId)
+  //   if(adminContext.clusterId && !adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
+  //     data.map(function (trans) {
+  //       if(!_.contains(context,trans.clusterId)){
+  //         matchNotFound = true
+  //       }
+  //     })
+  //   }else if(adminContext.clusterId && adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
+  //     data.map(function (trans) {
+  //       if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId)){
+  //         matchNotFound = true
+  //       }
+  //     })
+  //   }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && !adminContext.communityId){
+  //     data.map(function (trans) {
+  //       if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId)){
+  //         matchNotFound = true
+  //       }
+  //     })
+  //   }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && adminContext.communityId){
+  //     data.map(function (trans) {
+  //       if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId) || !_.contains(context,trans.communityId)){
+  //         matchNotFound = true
+  //       }
+  //     })
+  //   }
+
+  // if(matchNotFound === true){
+  //   let code = 200;
+  //   let result = {status : ''}
+  //   let response = new MlRespPayload().successPayload(result, code);
+  //   return response
+  // }else{
+  //   let code = 400;
+  //   let result = {status:''}
+  //   let response = new MlRespPayload().errorPayload(result, code);
+  //   return response
+  // }
+
+  var matchFound = false
   if(data && userId){
-    let adminContext = new MlAdminContextQueryConstructor(userId).contextQuery()
-    let context = _lodash.concat(adminContext.clusterId, adminContext.chapterId,adminContext.subChapterId,adminContext.communityId)
-    if(adminContext.clusterId && !adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
-      data.map(function (trans) {
-        if(!_.contains(context,trans.clusterId)){
-          matchNotFound = true
+    var userRoles=[];
+    var user = mlDBController.findOne('users', {_id:userId})
+    var userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+    _.each(userProfiles, function (profile) {
+      // Picking Highest Active Role from each User Profile
+      var roles = _lodash.filter(profile.userRoles, {isActive:true})
+      var highestRole = _lodash.maxBy(roles, 'hierarchyLevel')
+      userRoles.push(highestRole);
+    })
+
+    for(let i=0;i<data.length;i++){
+      try{
+        if(data[i].clusterId && !data[i].chapterId && !data[i].subChapterId && !data[i].communityId){
+          var role = _lodash.find(userRoles, function (obj) {
+            if((obj.clusterId == data[i].clusterId || obj.clusterId == "all")){
+              return obj
+            }
+          })
+          if(role){
+            matchFound = true
+          }
+        }else if(data[i].clusterId && data[i].chapterId && !data[i].subChapterId && !data[i].communityId){
+          var role = _lodash.find(userRoles, function (obj) {
+            if((obj.clusterId == data[i].clusterId || obj.clusterId == "all") && (obj.chapterId == data[i].chapterId || obj.chapterId == "all")){
+              return obj
+            }
+          })
+          if(role){
+            matchFound = true
+          }
+        }else if(userRoles[i].clusterId && userRoles[i].chapterId && userRoles[i].subChapterId && !userRoles[i].communityId){
+          var role = _lodash.find(userRoles, function (obj) {
+            if((obj.clusterId == data[i].clusterId || obj.clusterId == "all") && (obj.chapterId == data[i].chapterId || obj.chapterId == "all") && (obj.subChapterId == data[i].subChapterId || obj.subChapterId == "all")){
+              return obj
+            }
+          })
+          if(role){
+            matchFound = true
+          }
+        }else if(data[i].clusterId && data[i].chapterId && data[i].subChapterId && data[i].communityId){
+          var role = _lodash.find(userRoles, function (obj) {
+            if((obj.clusterId == data[i].clusterId || obj.clusterId == "all") && (obj.chapterId == data[i].chapterId || obj.chapterId == "all") && (obj.subChapterId == data[i].subChapterId || obj.subChapterId == "all") && (obj.communityCode == data[i].communityCode || obj.communityCode == "all")){
+              return obj
+            }
+          })
+          if(role){
+            matchFound = true
+          }
         }
-      })
-    }else if(adminContext.clusterId && adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
-      data.map(function (trans) {
-        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId)){
-          matchNotFound = true
-        }
-      })
-    }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && !adminContext.communityId){
-      data.map(function (trans) {
-        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId)){
-          matchNotFound = true
-        }
-      })
-    }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && adminContext.communityId){
-      data.map(function (trans) {
-        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId) || !_.contains(context,trans.communityId)){
-          matchNotFound = true
-        }
-      })
+      }catch(e){
+        console.log('error: '+e)
+        return new MlRespPayload().errorPayload({status:e}, 400);
+      }
     }
 
-    if(matchNotFound === true){
+    if(matchFound === true){
       let code = 200;
       let result = {status : ''}
       let response = new MlRespPayload().successPayload(result, code);
@@ -392,7 +461,6 @@ MlResolver.MlQueryResolver['validateAssignmentsDataContext'] = (obj, args, conte
       let response = new MlRespPayload().errorPayload(result, code);
       return response
     }
-    console.log(adminContext)
   }
 
 }

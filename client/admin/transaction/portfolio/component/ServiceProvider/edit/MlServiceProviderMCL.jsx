@@ -225,7 +225,7 @@ export default class MlStartupMCL extends React.Component {
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Membership</div>
                       <div className="panel-body ">
-                        <div className="form-group nomargin-bottom">
+                        <div className="form-group nomargin-bottom panel_input">
                           <textarea placeholder="Describe..." name="membershipDescription" className="form-control" id="cl_about"
                                     defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
@@ -241,7 +241,7 @@ export default class MlStartupMCL extends React.Component {
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Compliances</div>
                       <div className="panel-body ">
-                        <div className="form-group nomargin-bottom">
+                        <div className="form-group nomargin-bottom panel_input">
                           <textarea placeholder="Describe..." name="compliancesDescription" className="form-control" id="cl_about"
                                     defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.compliancesDescription ? this.state.data.compliances.compliancesDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
@@ -255,7 +255,7 @@ export default class MlStartupMCL extends React.Component {
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Licenses</div>
                       <div className="panel-body ">
-                        <div className="form-group nomargin-bottom">
+                        <div className="form-group nomargin-bottom panel_input">
                           <textarea placeholder="Describe..." name="licensesDescription" className="form-control" id="cl_about"
                                     defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licensesDescription ? this.state.data.licenses.licensesDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "licenses")}></textarea>

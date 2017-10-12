@@ -99,7 +99,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                       smoothScrolling={true}
                       default={true}
                     >
-                  <p>{this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription?this.state.institutionAboutUs.aboutUs.institutionDescription:(<NoData tabName="aboutUs"/>)}</p>
+                      {this.state.institutionAboutUs.aboutUs && this.state.institutionAboutUs.aboutUs.institutionDescription?<p>{this.state.institutionAboutUs.aboutUs.institutionDescription}</p>:(<NoData tabName="aboutUs"/>)}
                     </ScrollArea>
                   </div>
                   </div>
@@ -154,7 +154,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
                           smoothScrolling={true}
                           default={true}
                         >
-                      <p>{this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription?this.state.institutionAboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
+                          {this.state.institutionAboutUs.serviceProducts && this.state.institutionAboutUs.serviceProducts.spDescription?<p>{this.state.institutionAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
                         </ScrollArea>
                       </div>
                     </div>
@@ -174,9 +174,12 @@ export default class MlInstitutionViewAboutLanding extends Component {
                         smoothScrolling={true}
                         default={true}
                       >
-                    <ul className="list-info">
-                      <li>{this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?this.state.institutionAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
-                    </ul>
+                        {this.state.institutionAboutUs.information && this.state.institutionAboutUs.information.informationDescription?
+                          (<ul className="list-info">
+                            <li>{this.state.institutionAboutUs.information.informationDescription}</li>
+                          </ul>)
+                          :
+                          (<NoData tabName="information"/>)}
                       </ScrollArea>
                     </div>
                   </div>

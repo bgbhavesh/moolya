@@ -101,7 +101,7 @@ export default class MlStartupViewAboutLanding extends Component {
                       smoothScrolling={true}
                       default={true}
                     >
-                  <p>{this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?this.state.startupAboutUs.aboutUs.startupDescription: (<NoData tabName="aboutUs"/>)}</p>
+                      {this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?<p>{this.state.startupAboutUs.aboutUs.startupDescription}</p>: (<NoData tabName="aboutUs"/>)}
                     </ScrollArea>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default class MlStartupViewAboutLanding extends Component {
                             smoothScrolling={true}
                             default={true}
                           >
-                      <p>{this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?this.state.startupAboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
+                            {this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?<p>{this.state.startupAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
                           </ScrollArea>
                         </div>
                       </div>
@@ -176,9 +176,11 @@ export default class MlStartupViewAboutLanding extends Component {
                         smoothScrolling={true}
                         default={true}
                       >
-                    <ul className="list-info">
-                      <li>{this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?this.state.startupAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
-                    </ul>
+                        {this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?
+                          <ul className="list-info">
+                            <li>{this.state.startupAboutUs.information.informationDescription}</li>
+                          </ul>
+                          :(<NoData tabName="information"/>)}
                       </ScrollArea>
                     </div>
                   </div>

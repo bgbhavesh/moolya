@@ -189,10 +189,8 @@ export default class SharePopOver extends React.Component {
     let data = that.state.teamData || [];
     let datas = data.map(function(value, index) {
       return (
-        <ul className="img_upload ul-hide" key={index}>
-          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
-        </ul>
-          )
+          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+      )
     })
     return datas;
   }
@@ -267,9 +265,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       if(value.name.match(search)) {
         return (
-          <ul className="img_upload ul-hide" key={index}>
-            <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
-          </ul>
+            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
         )
       }
       })
@@ -294,8 +290,10 @@ render(){
           <div className="form-group">
             <input type="text" placeholder="Search here" className="form-control float-label" id="" onChange={this.searchFunctionality.bind(this)}></input>
           </div>
+          <ul className="img_upload ul-hide">
           {this.state.searchActivated?this.searchedMembers():this.teamMembersData()}
-          <div className="clearfix" />
+          </ul>
+          <br className="brclear" />
           <div className="col-md-6 nopadding-left">
             <div className="form-group" id="start-time">
               <Datetime dateFormat={"DD-MM-YYYY"}
@@ -328,11 +326,12 @@ render(){
                            />
             </div>
           </div>
-
+          <br className="brclear" />
           <div className="form-group">
             <div className="input_types"><input id="checkbox1" type="checkbox" name="isDownloadable"  onChange={this.isDownloadable.bind(this)} value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label></div>
           </div>
-          <br className="brclear" />
+
+          <br className="brclear" /><br /><br /><br />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Share</a>
             <a href="" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>

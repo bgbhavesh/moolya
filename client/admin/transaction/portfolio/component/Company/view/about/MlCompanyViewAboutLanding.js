@@ -99,7 +99,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                       smoothScrolling={true}
                       default={true}
                     >
-                  <p>{this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?this.state.aboutUs.aboutUs.companyDescription:(<NoData tabName="aboutUs"/>)}</p>
+                  {this.state.aboutUs.aboutUs && this.state.aboutUs.aboutUs.companyDescription?<p>{this.state.aboutUs.aboutUs.companyDescription}</p>:(<NoData tabName="aboutUs"/>)}
                     </ScrollArea>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default class MlCompanyViewAboutLanding extends Component {
                           smoothScrolling={true}
                           default={true}
                         >
-                      <p>{this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?this.state.aboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
+                          {this.state.aboutUs.serviceProducts && this.state.aboutUs.serviceProducts.spDescription?<p>{this.state.aboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
                         </ScrollArea>
                       </div>
                     </div>
@@ -174,8 +174,13 @@ export default class MlCompanyViewAboutLanding extends Component {
                         smoothScrolling={true}
                         default={true}
                       >
+                        {this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?
+                          (<ul className="list-info">
+                            <li>{this.state.aboutUs.information.informationDescription}</li>
+                          </ul>)
+                          :(<NoData tabName="information"/>)}
                     <ul className="list-info">
-                      <li>{this.state.aboutUs.information && this.state.aboutUs.information.informationDescription?this.state.aboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
+                      <li></li>
                     </ul>
                       </ScrollArea>
                     </div>

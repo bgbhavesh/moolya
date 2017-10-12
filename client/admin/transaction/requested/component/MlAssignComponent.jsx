@@ -89,7 +89,7 @@ export default class MlAssignComponent extends React.Component {
     })
     let userId = user
     const response = await validateAssignmentsDataContext(selectedData,userId);
-    if(response && response.success){
+    if(response && !response.success){
       toastr.error("Selected transactions not availble in user context");
       this.props.closePopOver(false)
       //FlowRouter.reload();

@@ -127,7 +127,7 @@ export default class MlIdeatorLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    this.sendDataToParent(true);
     var setObject = this.state.ideatorLookingFor
     if (this.context && this.context.ideatorPortfolio && this.context.ideatorPortfolio.lookingFor)
       setObject = this.context.ideatorPortfolio.lookingFor

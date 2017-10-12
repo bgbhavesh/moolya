@@ -136,19 +136,24 @@ export default class MlInstitutionEditPartners extends React.Component {
         details = _.omit(details, [name]);
         details = _.extend(details, {[name]: e.target.value});
         this.setState({data: details}, function () {
-          this.sendDataToParent()
+          // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, {[name]: e.target.value});
       this.setState({data: details}, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
   onSavePartnerAction(e) {
-    this.setState({partnersList: this.state.partners, popoverOpenP: false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.partners
+    if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.partners ){
+      setObject = this.context.institutionPortfolio.partners
+    }
+    this.setState({partnersList:setObject, popoverOpenP: false})
   }
 
   addPartner() {
@@ -164,7 +169,7 @@ export default class MlInstitutionEditPartners extends React.Component {
     let data = _.cloneDeep(this.state.data);
     data.title=val;
     this.setState({data:data}, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
 
@@ -178,7 +183,7 @@ export default class MlInstitutionEditPartners extends React.Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -224,14 +229,16 @@ export default class MlInstitutionEditPartners extends React.Component {
     })
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     let data = this.state.data;
     selectedTab = this.state.selectedTab;
 
     let fun = this.state.partners;
     let partners = _.cloneDeep(fun);
     data.index = this.state.selectedIndex;
-    partners[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      partners[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(partners, function (item) {
       for (var propName in item) {

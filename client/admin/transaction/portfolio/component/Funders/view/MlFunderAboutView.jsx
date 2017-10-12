@@ -85,7 +85,7 @@ export default class MlFunderAboutView extends React.Component{
         {showLoader === true ? (<MlLoader/>) : (
           <div>
             <h2>About Us</h2>
-            <div className="main_wrap_scroll">
+            <div className="main_wrap_scroll hide_unlock">
                 <div className="col-md-6 nopadding-left">
                       <div className="form_bg">
                         <form>

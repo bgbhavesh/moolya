@@ -234,12 +234,12 @@ export default class MlCompanyIntrapreneur extends React.Component{
   async fetchOnlyImages(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.intrapreneurRecognition) {
-      let dataDetails =this.state.institutionIntrapreneur
+      let dataDetails =this.state.institutionIntrapreneur;
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response.intrapreneurRecognition[this.state.selectedIndex]
-        specificData['logo']= curUpload['logo']
+        specificData['logo']= curUpload['logo'];
         this.setState({loading: false, institutionIntrapreneur:cloneBackUp });
 
       }else {

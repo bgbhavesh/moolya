@@ -244,7 +244,7 @@ export default class MlCreateRegistration extends React.Component{
 
 
     let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
+      data:fetchCommunityDefinitionForRegistration{label:name,value:code}
     }
     `;
 

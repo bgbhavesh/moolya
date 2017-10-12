@@ -18,6 +18,7 @@ let CommunityDefinition = `
     }
     type Query{
       fetchCommunityDefinition:[CommunityDefinition]
+      fetchCommunityDefinitionForRegistration:[CommunityDefinition]
        fetchCommunityDefinitionForSelect:[CommunityDefinition]
        fetchCommunityDefinitionAPI:[CommunityDefinition]
          fetchCommunityDefinitionForProcessMapping:[CommunityDefinition]
@@ -27,6 +28,7 @@ let CommunityDefinition = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CommunityDefinition]);
 let supportedApi = [
     {api:'fetchCommunityDefinition', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunityDefinitionForRegistration', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunityDefinitionForSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunityDefinitionAPI', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
   {api:'fetchCommunityDefinitionForProcessMapping', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},

@@ -659,7 +659,7 @@ class MlEditBackendUser extends React.Component{
                               <input type="text" ref="Department" defaultValue={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="subDepartment" defaultValue={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="subDepartment" defaultValue={(userRoles.communityCode=='all')?userRoles.communityCode:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
                               <input type="text" ref="role" defaultValue={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>

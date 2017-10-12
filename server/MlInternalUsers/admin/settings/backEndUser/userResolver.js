@@ -219,7 +219,7 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
           const chapterData = mlDBController.findOne('MlChapters', {_id: Rdoc.chapterId}, context) || [];
           Rdoc.chapterName = chapterData.chapterName;
         }
-        if (Rdoc.communityId != 'all') {
+        if (Rdoc.communityCode != 'all') {
           const communityData = mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityCode}, context) || [];
           Rdoc.communityName = communityData.name;
         }

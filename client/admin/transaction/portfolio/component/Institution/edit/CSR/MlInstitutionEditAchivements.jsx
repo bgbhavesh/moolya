@@ -76,7 +76,12 @@ export default class MlInstitutionEditAchivements extends Component{
   }
 
   onSaveAction(e){
-    this.setState({institutionAchievementsList:this.state.institutionAchievements, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject = this.state.institutionAchievements
+    if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.achievements ){
+      setObject = this.context.institutionPortfolio.achievements
+    }
+    this.setState({institutionAchievementsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -124,7 +129,7 @@ export default class MlInstitutionEditAchivements extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -154,7 +159,7 @@ export default class MlInstitutionEditAchivements extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 /*
@@ -173,13 +178,15 @@ export default class MlInstitutionEditAchivements extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
     data.index = this.state.selectedIndex;
-    institutionAchievements[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionAchievements[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionAchievements, function (item)
     {

@@ -1025,7 +1025,7 @@ p{margin-top:10px;}
 .invitation .input_types {margin-right:2px;}
 .popover-lg{
   width: 500px;
-  height: 320px;
+  height: 480px;
   overflow-y: auto;
   .reply-list{
     padding:0px;
@@ -2370,3 +2370,9 @@ li.sameWorkTime:after {
 .top-content.ideators_list .ideators_list_block p.small, .top-content2.ideators_list .ideators_list_block p.small{font-size:11px;}
 .top-content.ideators_list .ideators_list_block img, .top-content2.ideators_list .ideators_list_block img{margin-top:25px;}
 .top-content.ideators_list .ideators_list_block .fa, .top-content2.ideators_list .ideators_list_block .fa{font-size:15px; margin:5px;color:#fff;}
+
+.hide_unlock{
+.fa-unlock{
+  display: none !important;
+}
+}

@@ -627,7 +627,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
     response.push({
       key: '321',
       count: args&&args.moduleName=="subChapter"?0:chapterCount,
-      icon: "ml ml-chapter"
+      icon: "ml my-ml-chapter"
     })
   }
 

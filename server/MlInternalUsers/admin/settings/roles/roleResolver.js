@@ -32,7 +32,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   }
 
   // if(MlClusters.find({roleName:role.roleName}).count() > 0){
-  if (mlDBController.find('MlClusters', {roleName: role.roleName}, context).count() > 0) {
+  if (mlDBController.find('MlRoles', {roleName: role.roleName}, context).count() > 0) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exist", code);
     return response;

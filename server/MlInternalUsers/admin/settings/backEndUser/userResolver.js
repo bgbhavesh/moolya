@@ -219,7 +219,7 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
           const chapterData = mlDBController.findOne('MlChapters', {_id: Rdoc.chapterId}, context) || [];
           Rdoc.chapterName = chapterData.chapterName;
         }
-        if (Rdoc.communityId != 'all') {
+        if (Rdoc.communityCode != 'all') {
           const communityData = mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityCode}, context) || [];
           Rdoc.communityName = communityData.name;
         }
@@ -737,6 +737,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         }
       }
   }
+  if(loggedInUser.roleName == "communityadmin"){
+    if(loggedInUser.defaultCommunities[0].communityCode != "all"){
+      communityCode = loggedInUser.defaultCommunities[0].communityCode;
+    }
+  }
+
   var users = [];
 
   if(clusterId != "" && chapterId != "" && subChapterId != "" && communityCode != ""){
@@ -757,7 +763,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         if(profile){
           // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
           let roles = _.find(profile.userRoles, function (obj) {
-            if(obj.chapterId == (chapterId||"all") && obj.subChapterId == (subChapterId||"all") && obj.communityCode == (communityCode||"all")){
+            if((obj.chapterId == chapterId || obj.chapterId == "all") && (obj.subChapterId == subChapterId || obj.subChapterId == "all") && (obj.communityCode == communityCode || obj.communityCode == "all")){
               return obj
             }
           })
@@ -781,7 +787,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             let userProfiles = user.profile.externalUserProfiles;
             // userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'chapterId': chapterId, 'subChapterId': subChapterId, 'communityDefCode': communityCode||"all"});
             userProfiles = _.filter(userProfiles, function (obj) {
-              if(obj.clusterId==clusterId && obj.chapterId==chapterId && obj.subChapterId==subChapterId &&obj.communityDefCode==(communityCode||"all")){
+              if(obj.clusterId==clusterId && obj.chapterId==chapterId && obj.subChapterId==subChapterId && obj.communityDefCode==communityCode){
                 return obj
               }
             })
@@ -817,7 +823,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(profile){
                 // let roles = _.filter(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
                 let roles = _.filter(profile.userRoles, function (obj) {
-                  if(obj.chapterId==(chapterId||"all") && obj.subChapterId==(subChapterId||"all")){
+                  if((obj.chapterId==chapterId || obj.chapterId=="all") && (obj.subChapterId==subChapterId || obj.subChapterId=="all")){
                     return obj
                   }
                 })
@@ -858,7 +864,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   if(profile){
                     // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
                     let roles = _.find(profile.userRoles, function (obj) {
-                      if(obj.chapterId==(chapterId||"all") && obj.subChapterId==(subChapterId||"all")){
+                      if((obj.chapterId==chapterId || obj.chapterId=="all") && (obj.subChapterId==subChapterId || obj.subChapterId=="all")){
                         return obj
                       }
                     })
@@ -910,7 +916,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           if(profile){
             // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
             let roles = _.find(profile.userRoles, function(obj){
-              if(obj.chapterId==(chapterId||"all")){
+              if((obj.chapterId==chapterId || obj.chapterId=="all")){
                 return obj
               }
             })
@@ -952,7 +958,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(profile){
                 // let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
                 let roles = _.find(profile.userRoles, function(obj){
-                  if(obj.chapterId==(chapterId||"all")){
+                  if((obj.chapterId==chapterId || obj.chapterId=="all")){
                     return obj
                   }
                 })
@@ -998,7 +1004,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         if(profile){
           // let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
           let roles = _.find(profile.userRoles, function(obj){
-            if(obj.communityCode==(communityCode||"all")){
+            if((obj.communityCode==communityCode || obj.communityCode=="all")){
               return obj
             }
           })
@@ -1023,7 +1029,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             let userProfiles = user.profile.externalUserProfiles;
             // userProfiles = _.filter(userProfiles,  {'clusterId': clusterId, 'communityDefCode': communityCode||"all"});
             userProfiles = _.filter(userProfiles, function(obj){
-              if(obj.clusterId==clusterId && obj.communityDefCode == (communityCode||"all")){
+              if(obj.clusterId==clusterId && (obj.communityDefCode == communityCode || obj.communityDefCode == "all")){
                 return obj
               }
             })
@@ -1185,8 +1191,8 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  // context.module = "Users";
-  context.userModule = "Users";
+   context.module = "Users";
+  //context.userModule = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

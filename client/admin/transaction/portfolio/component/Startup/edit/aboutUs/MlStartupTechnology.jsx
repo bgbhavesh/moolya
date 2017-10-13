@@ -53,7 +53,12 @@ class MlStartupTechnology extends Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupTechnologiesList:this.state.startupTechnologies,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupTechnologies
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.technologies ){
+      setObject = this.context.startupPortfolio.technologies
+    }
+    this.setState({startupTechnologiesList:setObject,popoverOpen : false})
   }
   addTechnology(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -81,21 +86,20 @@ class MlStartupTechnology extends Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = field;
-    details=_.omit(details,[key]);
+    // let details = this.state.data||{};
+    // let key = field;
+    // details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+      // details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
 
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -111,7 +115,7 @@ class MlStartupTechnology extends Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -123,7 +127,7 @@ class MlStartupTechnology extends Component{
       details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, technologyDescription: selObject.about});
       this.setState({data: details, "selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about}, function () {
         // this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     } else {
       let details = this.state.data;
@@ -133,7 +137,7 @@ class MlStartupTechnology extends Component{
       details = _.omit(details, ["technologyDescription"]);
       this.setState({data: details, "selectedVal": '', "technologyName": '', technologyDescription:''}, function () {
         // this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
@@ -144,7 +148,7 @@ class MlStartupTechnology extends Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -153,13 +157,15 @@ class MlStartupTechnology extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
     data.index = this.state.selectedIndex;
-    startupTechnologies[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupTechnologies[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupTechnologies, function (item)
     {

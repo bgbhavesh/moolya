@@ -79,8 +79,13 @@ export default class MlCompanyIntrapreneur extends React.Component{
     }
   }
 
-  onSaveAction(e){
-    this.setState({institutionIntrapreneurList:this.state.institutionIntrapreneur, popoverOpen : false})
+  onSaveAction(e) {
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionIntrapreneurList;
+    if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.intrapreneurRecognition) {
+      setObject = this.context.companyPortfolio.intrapreneurRecognition;
+    }
+    this.setState({institutionIntrapreneurList: setObject, popoverOpen: false})
   }
 
   onTileClick(index, e){
@@ -116,27 +121,15 @@ export default class MlCompanyIntrapreneur extends React.Component{
   }
 
   onLockChange(fiedName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
-    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data:details}, function () {
-    //   this.sendDataToParent()
-    // })
   }
 
   onStatusChangeNotify(e)
@@ -150,29 +143,9 @@ export default class MlCompanyIntrapreneur extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
-
-  // onOptionSelected(selectedAward, callback, selObject) {
-  //   let details = this.state.data;
-  //   details = _.omit(details, ["awardId"]);
-  //   details = _.omit(details, ["awardName"]);
-  //   if(selectedAward){
-  //     details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-  //     this.setState({data: details}, function () {
-  //       this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-  //       this.sendDataToParent()
-  //     })
-  //   }else {
-  //     details = _.extend(details, {["awardId"]: '', "awardName": ''});
-  //     this.setState({data: details}, function () {
-  //       this.setState({"selectedVal": '', awardName: ''})
-  //       this.sendDataToParent()
-  //     })
-  //   }
-  //
-  // }
 
   handleBlur(e){
     let details =this.state.data;
@@ -180,7 +153,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -190,16 +163,18 @@ export default class MlCompanyIntrapreneur extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let intrapreneur = this.state.institutionIntrapreneur;
     let institutionIntrapreneur = _.cloneDeep(intrapreneur);
     data.index = this.state.selectedIndex;
-    institutionIntrapreneur[this.state.selectedIndex] = data;
+    if (isSaveClicked) {
+      institutionIntrapreneur[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionIntrapreneur, function (item)
     {
@@ -208,7 +183,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      var newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
@@ -259,12 +234,12 @@ export default class MlCompanyIntrapreneur extends React.Component{
   async fetchOnlyImages(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.intrapreneurRecognition) {
-      let dataDetails =this.state.institutionIntrapreneur
+      let dataDetails =this.state.institutionIntrapreneur;
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response.intrapreneurRecognition[this.state.selectedIndex]
-        specificData['logo']= curUpload['logo']
+        specificData['logo']= curUpload['logo'];
         this.setState({loading: false, institutionIntrapreneur:cloneBackUp });
 
       }else {
@@ -362,13 +337,6 @@ export default class MlCompanyIntrapreneur extends React.Component{
                           <input type="text" name="intrapreneurName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.intrapreneurName}  onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntrapreneurNamePrivate" defaultValue={this.state.data.isIntrapreneurNamePrivate}  onClick={this.onLockChange.bind(this, "intrapreneurName", "isIntrapreneurNamePrivate")}/>
                         </div>
-                        {/*<div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                        labelKey={'label'} queryType={"graphql"} query={query}
-                                        isDynamic={true} placeholder="Select Award.."
-                                        onSelect={this.onOptionSelected.bind(this)}
-                                        selectedValue={this.state.selectedVal}/>
-                        </div>*/}
                         <div className="form-group">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}

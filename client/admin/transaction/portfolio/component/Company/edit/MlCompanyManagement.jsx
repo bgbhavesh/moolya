@@ -43,6 +43,7 @@ export default class MlCompanyManagement extends Component {
       showProfileModal: false
     }
     this.tabName = this.props.tabName || ""
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.onClick.bind(this);
     this.addManagement.bind(this);
@@ -78,8 +79,9 @@ export default class MlCompanyManagement extends Component {
   }
   componentWillMount() {
     this.fetchPortfolioDetails();
-    this.fetchClusterId();
+    this.fetchClusterIdByPortfolio();
   }
+
   addManagement() {
     this.setState({ loading: true })
     if (this.state.management) {
@@ -92,9 +94,8 @@ export default class MlCompanyManagement extends Component {
         $('#management-form').slideDown();
       })
     })
-    // this.setState({data:{}})
-    // $('#management-form').slideDown();
   }
+
   onSelectUser(index, e) {
     this.setState({ loading: true })
     let managmentDetails = this.state.management[index]
@@ -110,50 +111,44 @@ export default class MlCompanyManagement extends Component {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
+
   optionsBySelectTitle(val) {
     let data = _.cloneDeep(this.state.data);
     data.title = val;
     this.setState({ data: data }, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
   optionsBySelectGender(val) {
     var dataDetails = this.state.data
     dataDetails['gender'] = val.value
     this.setState({ data: dataDetails }, function () {
-      this.sendDataToParent();
+      // this.sendDataToParent();
     })
   }
 
-  async fetchClusterId() {
+  async fetchClusterIdByPortfolio() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({ loading: false, clusterId: response.clusterId });
     }
   }
+
   onClick(fieldName, field, e) {
     var isPrivate = false
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, { [key]: true });
       isPrivate = true;
-    } else {
-      details = _.extend(details, { [key]: false });
     }
-
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: KEY }
-    this.setState({ privateKey: privateKey })
-
-    this.setState({ data: details }, function () {
+    var privateKey = {
+      keyName: fieldName,
+      booleanKey: field,
+      isPrivate: isPrivate,
+      index: this.state.selectedIndex,
+      tabName: KEY
+    }
+    this.setState({privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -193,14 +188,14 @@ export default class MlCompanyManagement extends Component {
         details = _.omit(details, [name]);
         details = _.extend(details, { [name]: e.target.value });
         this.setState({ data: details }, function () {
-          this.sendDataToParent()
+          // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: e.target.value });
       this.setState({ data: details }, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
   }
@@ -227,9 +222,20 @@ export default class MlCompanyManagement extends Component {
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: value });
       this.setState({ data: details }, function () {
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
+  }
+
+  onSaveAction() {
+    this.sendDataToParent(true);
+    var setObject = this.state.managementList
+    if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.management) {
+      setObject = this.context.companyPortfolio.management
+    }
+    this.setState({managementList: setObject}, () => {
+      $('#management-form').slideUp();
+    })
   }
 
   getFieldValidations() {
@@ -237,13 +243,15 @@ export default class MlCompanyManagement extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let management1 = this.state.management;
     let management = _.cloneDeep(management1);
     data.index = this.state.selectedIndex;
-    management[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      management[this.state.selectedIndex] = data;
+    }
     let managementArr = [];
     _.each(management, function (item) {
       for (var propName in item) {
@@ -259,10 +267,10 @@ export default class MlCompanyManagement extends Component {
       managementArr.push(newItem)
     })
     management = managementArr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({ management: management })
     this.props.getManagementDetails(management, this.state.privateKey, requiredFields)
   }
+
   onLogoFileUpload(fileInfo, image) {
     let file = image;
     let name = "logo";
@@ -289,7 +297,7 @@ export default class MlCompanyManagement extends Component {
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: { fileName: file.fileName, fileUrl: temp } });
       that.setState({ data: details, responseImage: temp }, function () {
-        that.sendDataToParent()
+        // that.sendDataToParent()
       })
       // if(result.success){
       //   that.setState({loading:true})
@@ -392,7 +400,6 @@ export default class MlCompanyManagement extends Component {
               </div>
 
               <div id="management-form" className=" management-form-wrap" style={{ 'display': 'none' }}>
-
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
@@ -474,11 +481,8 @@ export default class MlCompanyManagement extends Component {
                       </div>
                     </form>
                   </div>
-
-
                 </div>
                 <div className="col-md-6 nopadding-right">
-
                   <CropperModal
                     uploadingImage={this.state.uploadingAvatar}
                     handleImageUpload={this.handleUploadAvatar}
@@ -532,6 +536,9 @@ export default class MlCompanyManagement extends Component {
 
                 </div>
                 <br className="brclear" />
+                <div className="ml_btn text-center" style={{'textAlign':'center'}}>
+                  <a className="save_btn" onClick={this.onSaveAction}>Save</a>
+                </div>
               </div>
             </div>
           </div>)}

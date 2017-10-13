@@ -142,24 +142,29 @@ export default class MlServiceProviderLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderLookingForList: this.state.serviceProviderLookingFor, popoverOpen: false})
+    this.sendDataToParent(true);
+    var setObject = this.state.serviceProviderLookingFor
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.lookingFor)
+      setObject = this.context.serviceProviderPortfolio.lookingFor
+    this.setState({serviceProviderLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
+    // let details = this.state.data || {};
+    // let key = e.target.id;
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -193,7 +198,7 @@ export default class MlServiceProviderLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -209,7 +214,7 @@ export default class MlServiceProviderLookingFor extends Component {
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -218,13 +223,15 @@ export default class MlServiceProviderLookingFor extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let serviceProviderLookingFor1 = this.state.serviceProviderLookingFor;
     let serviceProviderLookingFor = _.cloneDeep(serviceProviderLookingFor1);
     data.index = this.state.selectedIndex;
-    serviceProviderLookingFor[this.state.selectedIndex] = data;
+    if (isSaveClicked) {
+      serviceProviderLookingFor[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderLookingFor, function (item) {
       for (var propName in item) {
@@ -281,11 +288,10 @@ export default class MlServiceProviderLookingFor extends Component {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                         <a id={"create_client" + idx}>
                           <div className="list_block">
-                            <div className="cluster_status">
                               <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
                               <input type="checkbox" className="lock_input" id="makePrivate"
                                      checked={details.makePrivate}/>
-                            </div>
+
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
                               <span className="ml my-ml-browser_3"/>
                             </div>

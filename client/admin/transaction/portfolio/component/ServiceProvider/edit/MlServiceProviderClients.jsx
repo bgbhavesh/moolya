@@ -136,17 +136,18 @@ export default class MlServiceProviderClients extends Component {
 
 
   onLockChange(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
+    // let details = this.state.data || {};
+    // let key = e.target.id;
     var isPrivate = false;
-    details = _.omit(details, [key]);
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
     // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
     // this.setState({privateKey:privateKey})
     // this.setState({data: details}, function () {
@@ -154,13 +155,17 @@ export default class MlServiceProviderClients extends Component {
     // })
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderClientsList: this.state.serviceProviderClients, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.serviceProviderClients
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.clients)
+      setObject = this.context.serviceProviderPortfolio.clients
+    this.setState({serviceProviderClientsList: setObject, popoverOpen: false})
   }
 
   onStatusChangeNotify(e) {
@@ -173,7 +178,7 @@ export default class MlServiceProviderClients extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -183,7 +188,7 @@ export default class MlServiceProviderClients extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: e.target.value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -192,13 +197,15 @@ export default class MlServiceProviderClients extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.serviceProviderClients;
     let serviceProviderClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    serviceProviderClients[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      serviceProviderClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderClients, function (item) {
       for (var propName in item) {
@@ -368,7 +375,7 @@ export default class MlServiceProviderClients extends Component {
                           <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
-                            <img src={details.logo && details.logo.fileUrl}/></div>
+                            <img src={details.logo && details.logo.fileUrl?details.logo.fileUrl: "/images/def_profile.png"}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                           <h3>{details.companyName ? details.companyName : ""} </h3>
                         </div>

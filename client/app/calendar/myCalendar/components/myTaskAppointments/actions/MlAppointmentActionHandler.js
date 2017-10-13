@@ -50,6 +50,11 @@ export async function fetchTaskActionHandler(taskId) {
                   name
                   displayName
                   deliverable
+                  isExternal
+                  isInternal
+                  payment{
+                    derivedAmount
+                  }
                   duration {
                     hours
                     minutes

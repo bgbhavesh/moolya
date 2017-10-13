@@ -1510,7 +1510,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         isListView = query.isListView;
       }
 
-      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView){
+      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
           if(isListView && query.bounds){
             var bounds = query.bounds;
             var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
@@ -1589,8 +1589,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           }
       }else{
           var relatedSubChapterIds = [];
-          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
-          if(relatedSubChapters&&relatedSubChapters.length>0){
+          pipeLine = [
+            {$match:{isActive:true}},
+            {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+            {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+          ]
+        var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine);
+        // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+        if(relatedSubChapters&&relatedSubChapters.length>0){
             _.each(relatedSubChapters, function(obj){
               let ids = _.map(obj.subChapters, "subChapterId");
               relatedSubChapterIds = _.concat(relatedSubChapterIds, ids)
@@ -1639,7 +1645,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       }
 
 
-      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView){
+      if(isDefaultSubChapter || userSubChapter.moolyaSubChapterAccess.externalUser.canView || userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
           // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
           if(isListView && bounds && query.viewMode){
             var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
@@ -1663,7 +1669,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       }else{
           clusterId = clusterId?clusterId:args.queryProperty.query
           var relatedSubChapterIds = [];
-          var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+          pipeLine = [
+            {$match:{isActive:true}},
+            {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+            {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+          ]
+          // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+          var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine)
           if(relatedSubChapters&&relatedSubChapters.length>0) {
             _.each(relatedSubChapters, function (obj) {
               let ids = _.map(obj.subChapters, "subChapterId");
@@ -1728,7 +1740,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             var rightLng = bounds.se && bounds.se.lng ? bounds.se.lng : null;
             pipeLine = [
                 {$match:{chapterId:chapterId, isActive:true}},
-                {$match:{$or:[{isDefaultSubChapter:true}, {isDefaultSubChapter:false, "moolyaSubChapterAccess.externalUser.canView":true}]}},
+                {$match:{$or:[{isDefaultSubChapter:true}, {$and:[{isDefaultSubChapter:false}, {$or:[{"moolyaSubChapterAccess.externalUser.canView":true},{"moolyaSubChapterAccess.externalUser.canSearch":true}]}]}]}},
                 {$match:{$and:[{longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}}
             ]
             subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
@@ -1736,13 +1748,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             chapterId = chapterId?chapterId:args.queryProperty.query;
             pipeLine = [
                 {$match:{chapterId:chapterId, isActive:true}},
-                {$match:{$or:[{isDefaultSubChapter:true}, {isDefaultSubChapter:false, "moolyaSubChapterAccess.externalUser.canView":true}]}}
+                {$match:{$or:[{isDefaultSubChapter:true}, {$and:[{isDefaultSubChapter:false}, {$or:[{"moolyaSubChapterAccess.externalUser.canView":true},{"moolyaSubChapterAccess.externalUser.canSearch":true}]}]}]}},
             ]
             subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
         }
     }else{
         chapterId = chapterId?chapterId:args.queryProperty.query;
-        if(userSubChapter.moolyaSubChapterAccess.externalUser.canView){
+        if(userSubChapter.moolyaSubChapterAccess.externalUser.canView && userSubChapter.moolyaSubChapterAccess.externalUser.canSearch){
             // If listView is 'true' and viewMode is also 'true', that means you have switched from map view to list view
             if(isListView && bounds && query.viewMode){
               var topLat = bounds.nw && bounds.nw.lat ? bounds.nw.lat : null;
@@ -1755,7 +1767,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+              pipeLine = [
+                {$match:{isActive:true}},
+                {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+                {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+              ]
+              var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine)
+              // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+
               if(relatedSubChapters&&relatedSubChapters.length>0) {
                 var relatedIds = [];
 
@@ -1789,7 +1808,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+              pipeLine = [
+                {$match:{isActive:true}},
+                {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+                {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+              ]
+              var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine)
+              // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+
               if(relatedSubChapters&&relatedSubChapters.length>0) {
                 var relatedIds = [];
 
@@ -1821,7 +1847,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+              pipeLine = [
+                {$match:{isActive:true}},
+                {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+                {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+              ]
+              var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine)
+              // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+
               if(relatedSubChapters&&relatedSubChapters.length>0) {
                 var relatedIds = [];
 
@@ -1854,7 +1887,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               ]
               subChapters = mlDBController.aggregate('MlSubChapters',pipeLine);
 
-              var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+              pipeLine = [
+                {$match:{isActive:true}},
+                {$match:{'subChapters':{$elemMatch:{subChapterId:userSubChapterId}}}},
+                {$match:{$or:[{'externalUser.canView':true}, {'externalUser.canSearch':true}]}}
+              ]
+              var relatedSubChapters = mlDBController.aggregate('MlRelatedSubChapters', pipeLine)
+              // var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}, 'externalUser.canView':true, isActive:true}).fetch()
+
               if(relatedSubChapters&&relatedSubChapters.length>0) {
                 var relatedIds = [];
 

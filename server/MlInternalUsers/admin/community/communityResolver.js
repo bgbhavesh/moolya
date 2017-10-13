@@ -55,7 +55,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     response.push({
       key: '321',
       count: chapterCount,
-      icon: "ml ml-chapter"
+      icon: "ml my-ml-chapter"
     })
   }
 

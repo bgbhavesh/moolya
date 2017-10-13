@@ -25,6 +25,14 @@ export default class MlStartupViewAboutLanding extends Component {
     // this.props.getAboutus(details, tabName, privateKey);
   // }
 
+  componentDidMount()
+  {
+    var className = this.props.isAdmin ? "admin_header" : "app_header";
+    var WinHeight = $(window).height();
+    $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
+    $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+535));
+  }
+
   componentWillMount() {
     if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
       this.setState({aboutStartup: true});
@@ -85,8 +93,17 @@ export default class MlStartupViewAboutLanding extends Component {
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
                   name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
-                <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?this.state.startupAboutUs.aboutUs.startupDescription: (<NoData tabName="aboutUs"/>)}</p>
+                <div className="panel-body">
+                  <div className="md_scroll">
+                    <ScrollArea
+                      speed={0.8}
+                      className="md_scroll"
+                      smoothScrolling={true}
+                      default={true}
+                    >
+                      {this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?<p>{this.state.startupAboutUs.aboutUs.startupDescription}</p>: (<NoData tabName="aboutUs"/>)}
+                    </ScrollArea>
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,8 +129,17 @@ export default class MlStartupViewAboutLanding extends Component {
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={e=>this.selectedTab('Clients')}/></a></div>
-                    <div className="panel-body text-center panel-body-scroll">
+                    <div className="panel-body text-center">
+                      <div className="sm_scroll">
+                        <ScrollArea
+                          speed={0.8}
+                          className="sm_scroll"
+                          smoothScrolling={true}
+                          default={true}
+                        >
                       {aboutUsImages && aboutUsImages.length?<div>{aboutUsImages}</div>:(<NoData tabName="Clients"/>)}
+                        </ScrollArea>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -122,9 +148,18 @@ export default class MlStartupViewAboutLanding extends Component {
                     <div className="panel-heading">Service & Products <a href=""
                                                                          className="pull-right ellipsis-menu"><FontAwesome
                       name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
-                    <div className="panel-body panel-body-scroll">
-                      <p>{this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?this.state.startupAboutUs.serviceProducts.spDescription:(<NoData tabName="serviceProducts"/>)}</p>
-                    </div>
+                    <div className="panel-body">
+                        <div className="sm_scroll">
+                          <ScrollArea
+                            speed={0.8}
+                            className="sm_scroll"
+                            smoothScrolling={true}
+                            default={true}
+                          >
+                            {this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?<p>{this.state.startupAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
+                          </ScrollArea>
+                        </div>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -134,9 +169,20 @@ export default class MlStartupViewAboutLanding extends Component {
                                                                 className="pull-right ellipsis-menu"><FontAwesome
                     name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body">
-                    <ul className="list-info">
-                      <li>{this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?this.state.startupAboutUs.information.informationDescription:(<NoData tabName="information"/>)}</li>
-                    </ul>
+                    <div className="sm_scroll">
+                      <ScrollArea
+                        speed={0.8}
+                        className="sm_scroll"
+                        smoothScrolling={true}
+                        default={true}
+                      >
+                        {this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?
+                          <ul className="list-info">
+                            <li>{this.state.startupAboutUs.information.informationDescription}</li>
+                          </ul>
+                          :(<NoData tabName="information"/>)}
+                      </ScrollArea>
+                    </div>
                   </div>
                 </div>
               </div>

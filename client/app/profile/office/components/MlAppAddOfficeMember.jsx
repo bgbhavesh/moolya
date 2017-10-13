@@ -127,7 +127,7 @@ export default class MlAppAddOfficeMember extends React.Component{
     const that = this;
     const props = this.props;
     const canView = props.role == 'Principal' || props.role == 'AdminUser' ? true : false;
-    console.log('this.props:',props);
+    console.log('this.props:',props, that.state.members);
     return (
       <div>
         <div className="main_wrap_scroll">
@@ -153,7 +153,13 @@ export default class MlAppAddOfficeMember extends React.Component{
                       <a href={ canView ? '/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id : ''} >
                         <div className="list_block notrans">
                           <div className="cluster_status active_cl"></div>
-                          <div className="hex_outer"><span className="ml my-ml-Investors"></span></div>
+                          <div className="hex_outer">
+                            {
+                              data.profileImage
+                                ? <img src={data.profileImage} />
+                                : <span className="ml my-ml-Investors"></span>
+                            }
+                          </div>
                           <h3>{data.name}</h3>
                         </div>
                       </a>

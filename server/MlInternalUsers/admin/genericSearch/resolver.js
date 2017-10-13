@@ -820,12 +820,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if (args.module == "officeTransaction") {
 
     let pipeline = [
-      { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
+      // { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
+      { "$match" : { officeId: args.customParams.docId} },
       { "$group": {
         _id : null,
         officeId: {$first: "$officeId"},
         officeTrans: { $push: "$$ROOT" }
-      }
+        }
       },
       {'$lookup':{from:'mlTransactionsLog',localField:'officeId',foreignField:'docId', as:'transactionLog'}},
       {"$unwind": "$transactionLog"},

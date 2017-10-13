@@ -94,7 +94,7 @@ export default class MlAppMyOffice extends Component {
       else if (data[0].office.isActivated) {
         FlowRouter.go('/app/editOffice/' + officeId);
       } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
-        toastr.success('Office amount Paid wait for admin approval');
+        toastr.error('Office amount Paid wait for admin approval');
       } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
         FlowRouter.go('/app/payOfficeSubscription/' + officeId)
       } else

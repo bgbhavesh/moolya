@@ -375,7 +375,7 @@ export default class MlServiceProviderClients extends Component {
                           <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
-                            <img src={details.logo && details.logo.fileUrl}/></div>
+                            <img src={details.logo && details.logo.fileUrl?details.logo.fileUrl: "/images/def_profile.png"}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                           <h3>{details.companyName ? details.companyName : ""} </h3>
                         </div>

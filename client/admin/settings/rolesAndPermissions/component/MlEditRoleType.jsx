@@ -39,8 +39,6 @@
     OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   async addEventHandler() {
     const resp = await this.createBackendUser();
@@ -214,13 +212,6 @@
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Roles & Permissions</h2>
-              <div className="main_wrap_scroll">
-                <ScrollArea
-                  speed={0.8}
-                  className="main_wrap_scroll"
-                  smoothScrolling={true}
-                  default={true}
-                >
               <div className="col-md-6 nopadding-left">
                 <div className="left_wrap">
                   <ScrollArea
@@ -314,8 +305,6 @@
                     </ScrollArea>
                   </div>
                 </div>
-              </div>
-                </ScrollArea>
               </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 

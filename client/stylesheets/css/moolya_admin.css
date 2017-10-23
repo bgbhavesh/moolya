@@ -138,6 +138,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .list_block.provider_block h3{border-radius: 0px 0px 4px 4px;padding: 5px 0px;line-height: 20px;font-size: 14px;padding: 4px 0px 6px 0px;}
 
 .admin_main_wrap .left_user_blocks .list_block.provider_block{height: 192px;}
+.provider_block .list-moolya-icon .ml{position: absolute; color: #EF4647; font-size: 20px; top: -9px; z-index: 9999; right: -5px; line-height: normal; text-shadow: none; /* right: 0; */ left: auto;}
 .admin_main_wrap .left_user_blocks .list_block{margin-bottom: 3px;}
 .admin_main_wrap .left_user_blocks .provider_mask{top: 2px;}
 .left_wrap{overflow-x: hidden;overflow-y: auto;}

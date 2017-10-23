@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import backendUserRoute from "../actions/routesBackendUserLIst";
 let FontAwesome = require('react-fontawesome');
+import ScrollArea from 'react-scrollbar'
 
 export default class MlBackendUserListView extends Component {
 
@@ -53,7 +54,15 @@ export default class MlBackendUserListView extends Component {
 
     return (<div className="row">
       <h2>BackendUsers</h2>
+      <div className="list_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="list_scroll"
+          smoothScrolling={true}
+        >
       {list}
+        </ScrollArea>
+      </div>
       </div>);
   }
 }

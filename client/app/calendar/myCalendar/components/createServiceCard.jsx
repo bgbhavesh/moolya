@@ -237,34 +237,34 @@ class MlAppServiceManageSchedule extends Component {
     }
   }
 
-  // async bookActionHandler(){
-  //   switch(this.state.currentComponent) {
-  //     case 'BasicInfo':
-  //       let firstStep = this.state.details;
-  //       if (firstStep && this.state.serviceId) {
-  //         this.bookServiceCard();
-  //       } else {
-  //         toastr.error('Please select a service seeker');
-  //       }
-  //       break;
-  //     case 'SessionDetails':
-  //       if (this.state.selectedSessionId) {
-  //         this.bookServiceCard();
-  //       } else {
-  //         toastr.error('Please select a session');
-  //       }
-  //       break;
-  //     case 'termAndCondition':
-  //       if (this.state.selectedSessionId) {
-  //         this.bookServiceCard();
-  //       } else {
-  //         toastr.error('Please select a session');
-  //       }
-  //       break;
-  //     default:
-  //     // do nothing
-  //   }
-  // }
+  async bookActionHandler(){
+    switch(this.state.currentComponent) {
+      case 'BasicInfo':
+        let firstStep = this.state.details;
+        if (firstStep && this.state.serviceId) {
+          this.bookServiceCard();
+        } else {
+          toastr.error('Please select a service seeker');
+        }
+        break;
+      case 'SessionDetails':
+        if (this.state.selectedSessionId) {
+          this.bookServiceCard();
+        } else {
+          toastr.error('Please select a session');
+        }
+        break;
+      case 'termAndCondition':
+        if (this.state.selectedSessionId) {
+          this.bookServiceCard();
+        } else {
+          toastr.error('Please select a session');
+        }
+        break;
+      default:
+      // do nothing
+    }
+  }
 
  async  saveActionHandler() {
     switch(this.state.currentComponent) {
@@ -278,8 +278,8 @@ class MlAppServiceManageSchedule extends Component {
         break;
       case 'SessionDetails':
         if (this.state.selectedSessionId) {
-          this.bookServiceCard();
-          // toastr.success('Data saved')
+          // this.bookServiceCard();
+          toastr.success('Data saved')
         } else {
           toastr.error('Please select a session');
         }
@@ -370,11 +370,11 @@ class MlAppServiceManageSchedule extends Component {
 
     let _this = this;
     let appActionConfig = [
-      // {
-      //   showAction: true,
-      //   actionName: 'book',
-      //   handler: async(event) => _this.bookActionHandler.bind(this)
-      // },
+      {
+        showAction: this.state.selectedSessionId?true:false,
+        actionName: 'book',
+        handler: async(event) => _this.props.handler(_this.bookActionHandler.bind(this))
+      },
       {
         showAction: true,
         actionName: 'save',
@@ -412,7 +412,8 @@ class MlAppServiceManageSchedule extends Component {
                   <div>
                   <StepZilla steps={this.setServiceSteps()}
                              stepsNavigation={true}
-                             prevBtnOnLastStep={true}/>
+                             prevBtnOnLastStep={true}
+                             showNavigation={false}/>
                     <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
                   </div>
 

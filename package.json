@@ -109,6 +109,7 @@
     "lodash": "4.17.4",
     "malihu-custom-scrollbar-plugin": "3.1.5",
     "meteor-node-stubs": "^0.2.5",
+    "minio": "^3.2.1",
     "mocha": "3.4.2",
     "moment": "^2.18.1",
     "omit-deep-lodash": "1.0.0",

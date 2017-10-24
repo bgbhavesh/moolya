@@ -7,7 +7,8 @@
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"
-    }
+    },
+    "countriesFlagBaseUrl":"https://minio.raksan.in/moolya-images/flags/"
   },
   "private": {
       "subChapterName":"Moolya",

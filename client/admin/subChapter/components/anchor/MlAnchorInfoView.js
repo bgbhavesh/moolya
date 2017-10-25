@@ -209,7 +209,19 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   render() {
-
+    let firstNameActive='',lastNameActive = '',contactNumberActive='',emailActive=''
+    if(this.state.firstName){
+      firstNameActive = 'active'
+    }
+    if(this.state.lastName){
+      lastNameActive = 'active'
+    }
+    if(this.state.contactNumber){
+      contactNumberActive ='active'
+    }
+    if(this.state.email){
+      emailActive ='active'
+    }
     let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterQuery = gql`query($id:String){data:fetchChapters(id:$id) {
         value:_id
@@ -347,11 +359,11 @@ export default class MlAnchorInfoView extends React.Component {
             <div className="panel-heading">
                 <div className="ml_btn" style={{'textAlign':'center'}}>
                   {/*<a href="" className="cancel_btn">Contact Admin</a>*/}
-                  <a href="" onClick={this.changePath} className="cancel_btn">Enter into subchapter</a>
+                  <a href="" onClick={this.changePath} className="cancel_btn">Enter Sub-Chapter</a>
 
                   {!this.props.isAdmin ?
                     <span id="default_target" className="cancel_btn" onClick={this.registerAsClick}>Get
-                  invited</span> : <div></div>}
+                  Invite</span> : <div></div>}
                 </div>
             </div>
           </div>
@@ -379,10 +391,12 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
             <div className="col-md-6 nopadding-left">
               <div className="form-group ">
+                <span className={`placeHolder ${firstNameActive}`}>First Name</span>
                 <input type="text" ref="firstName" value={this.state.firstName} placeholder="First Name"
                        className="form-control float-label" disabled="true"/>
               </div>
               <div className="form-group ">
+                <span className={`placeHolder ${lastNameActive}`}>Last Name</span>
                 <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number"
                        className="form-control float-label" id="" disabled="true"/>
               </div>
@@ -395,10 +409,12 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="form-group ">
+                <span className={`placeHolder ${contactNumberActive}`}>Contact Number</span>
                 <input type="text" ref="lastName" value={this.state.contactNumber} placeholder="Last Name"
                        className="form-control float-label" disabled="true"/>
               </div>
               <div className="form-group ">
+                <span className={`placeHolder ${emailActive}`}>Email Id</span>
                 <input type="text" ref="email" value={this.state.email} placeholder="Email Id"
                        className="form-control float-label" disabled="true"/>
               </div>

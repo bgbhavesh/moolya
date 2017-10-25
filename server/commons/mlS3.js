@@ -87,7 +87,9 @@ module.exports = class s3Client{
               callback(err, response);
             }
             else{
-              let url = minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + s3Bucket+"/"+bucketFolder+uniqueId+"-"+fileNameValue;
+              let url = `${bucketFolder}${uniqueId}-${fileNameValue}`;
+
+              // let url = minioClient.protocol + '//' + minioClient.host + ':' + minioClient.port + '/' + s3Bucket+"/"+bucketFolder+uniqueId+"-"+fileNameValue;
               callback(err,url);
             }
           });

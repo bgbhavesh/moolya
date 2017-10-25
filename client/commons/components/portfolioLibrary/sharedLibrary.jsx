@@ -29,6 +29,9 @@ export default class  SharedLibrary extends React.Component {
     this.state = {
       modal: false,
       previewImage: "",
+      previewDocument:"",
+      previewTemplate:"",
+      previewVideo:"",
       templateDetails: [],
       documentDetails: [],
       imageDetails: [],
@@ -47,7 +50,7 @@ export default class  SharedLibrary extends React.Component {
    */
 
   componentWillMount() {
-    let data = this.props.data;
+    let data = this.props.data || [];
     let that = this;
     let Image = [];
     let Video = [];
@@ -116,28 +119,28 @@ export default class  SharedLibrary extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoDetails|| [];
     let videoPreviewUrl;
-    videoPreviewUrl = data[index].file.url;
+    videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
     this.setState({previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl});
   }
 
   random(link, index) {
     let data = this.state.imageDetails || [];
     let imagePreviewUrl;
-    imagePreviewUrl = data[index].file.url;
+    imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
     this.setState({previewImage: imagePreviewUrl});
   }
 
   randomDocument(link, index) {
     let data = this.state.documentDetails|| [];
     let documentPreviewUrl;
-    documentPreviewUrl = data[index].file.url;
+    documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
     this.setState({previewDocument: documentPreviewUrl});
   }
 
   randomTemplate(link, index) {
     let data = this.state.templateDetails|| [];
     let templatePreviewUrl;
-    templatePreviewUrl = data[index].file.url;
+    templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
     this.setState({previewTemplate: templatePreviewUrl});
   }
 
@@ -157,8 +160,8 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
             <a href="" data-toggle="modal" data-target=".imagespop"
-                                                 onClick={that.random.bind(that, show.file.url, id)}>
-              <img src={show.file.url} /></a>
+                                                 onClick={that.random.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
+              <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} /></a>
           <div id="images" className="title">{show.file.fileName}</div>
 
         </div>
@@ -182,8 +185,8 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".templatespop"
-             onClick={that.randomTemplate.bind(that, show.file.url, id)}>
-            <img src={show.file.url} /></a>
+             onClick={that.randomTemplate.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
+            <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} /></a>
           <div id="templates" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -207,9 +210,9 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".videospop"
-             onClick={that.randomVideo.bind(that, show.file.url, id)}>
+             onClick={that.randomVideo.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
             <video width="120" height="100" controls>
-              <source src={show.file.url} type="video/mp4"></source>
+              <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} type="video/mp4"></source>
             </video>
           </a>
           <div className="title">{show.file.fileName}</div>
@@ -234,7 +237,7 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentspop"
-             onClick={that.randomDocument.bind(that, show.file.url, id)}>
+             onClick={that.randomDocument.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
             <img src="/images/doc.png"/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>

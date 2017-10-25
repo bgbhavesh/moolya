@@ -32,7 +32,7 @@ export default class MlAppChapterList extends Component {
   );
     return (
       <div className="col-md-12">
-        <h2> Chapter </h2>
+        <h2> Chapters </h2>
         {list}
         </div>);
   }

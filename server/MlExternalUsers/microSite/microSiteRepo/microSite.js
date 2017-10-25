@@ -3,6 +3,7 @@
  */
 import _ from 'lodash'
 import MlUserContext from '../../mlUserContext';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
   try {  //Default Values
     const existsSeoName = MlSitemap.findOne({seoUrl: originalUrl});
@@ -26,7 +27,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
       lookingForDescription: '',
       privateFields: {},
       currentUrl: fullUrl,
-      twitterHandle: '@kanwar00733',
+      twitterHandle: '@moolyaglobal',
       branches: []
     }
 
@@ -34,7 +35,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     let displayName = userObject.profile.displayName;
     portFolio.displayName = displayName;
     if (userObject.profile)
-      portFolio.profilePic = userObject.profile.profileImage ? userObject.profile.profileImage : '';
+      portFolio.profilePic = userObject.profile.profileImage ? generateAbsolutePath(userObject.profile.profileImage) : '';
 
     let defaultProfile = new MlUserContext().userProfileDetails(userID)
     let profileId = defaultProfile.profileId;
@@ -267,7 +268,7 @@ function getManagementInfo(portFolio, managementInfo) {
   if (managementInstitution) {
     managementInstitution.forEach(function (management) {
       managementPortFolio.push({
-        logo: management.logo ? management.logo.fileUrl : '',
+        logo: management.logo ? generateAbsolutePath(management.logo.fileUrl) : '',
         firstName: management.firstName,
         lastName: management.lastName,
         designation: management.designation
@@ -325,7 +326,7 @@ async function getBranches(portFolio, resultPortFolioBranches) {
 
       outputBranches.push({
         name:branch.name,
-        branches_logo: branch.logo ? branch.logo.fileUrl : '',
+        branches_logo: branch.logo ? generateAbsolutePath(branch.logo.fileUrl) : '',
         addr1: branch.address1 ? branch.address1 : '',
         addr2: branch.address2 ? branch.address2 : '',
         area: branch.area ? branch.area : 'branch.area',

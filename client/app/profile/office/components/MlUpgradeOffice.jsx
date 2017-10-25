@@ -71,31 +71,31 @@ export default class MlUpgradeOffice extends React.Component{
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
                   <div className="list_block notrans funding_list">
-                    <div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span></div>
+                    <div><p className="fund">10 Members</p><span>Principal(s): 2</span><span>Team Size: 2</span><span>(Limited Communities)</span></div>
                     <h3>Basic Office</h3>
                   </div>
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
                   <div className="list_block notrans funding_list">
-                    <div><p className="fund">15 Members</p><span>Principal: 2</span><span>Team: 13</span><span>(All Community)</span></div>
+                    <div><p className="fund">15 Members</p><span>Principal(s): 2</span><span>Team Size: 13</span><span>(All Communities)</span></div>
                     <h3>Advance Office</h3>
                   </div>
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
                   <div className="list_block notrans funding_list">
-                    <div><p className="fund">20 Members</p><span>Principal: 5</span><span>Team: 15</span><span>(All Community)</span></div>
+                    <div><p className="fund">20 Members</p><span>Principal(s): 5</span><span>Team Size: 15</span><span>(All Communities)</span></div>
                     <h3>Pro Office</h3>
                   </div>
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
                   <div className="list_block notrans funding_list">
-                    <div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span></div>
+                    <div><p className="fund">10 Members</p><span>Principal(s): 2</span><span>Team Size: 2</span><span>(Limited Communities)</span></div>
                     <h3>Basic Office</h3>
                   </div>
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
                   <div className="list_block notrans funding_list">
-                    <div><p className="fund">15 Members</p><span>Principal: 2</span><span>Team: 13</span><span>(All Community)</span></div>
+                    <div><p className="fund">15 Members</p><span>Principal(s): 2</span><span>Team Size: 13</span><span>(All Communities)</span></div>
                     <h3>Advance Office</h3>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default class MlUpgradeOffice extends React.Component{
                             <div className="team-block marb0">
                               <span className="ml ml-moolya-symbol"></span>
                               <h3>
-                                Office Barer
+                                Office Bearer
                               </h3>
                             </div>
                           </div>

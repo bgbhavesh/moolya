@@ -101,8 +101,8 @@ export default class MlStartupManagement extends Component{
     this.setState({loading:true})
     let managmentDetails = this.state.startupManagement[index]
     managmentDetails = _.omit(managmentDetails, "__typename");
-    this.setState({selectedIndex:index});
-    this.setState({data:managmentDetails}, function () {
+    // this.setState({selectedIndex:index});
+    this.setState({selectedIndex:index, data:managmentDetails}, function () {
       this.setState({loading:false}, function () {
         $('#management-form').slideDown();
       })

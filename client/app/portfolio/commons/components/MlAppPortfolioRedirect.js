@@ -94,7 +94,7 @@ export default class MlAppPortfolioRedirect extends React.Component {
                           <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
                           <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
                           <hr />
-                          <div className="col-md-6"><b>CommunityType&nbsp; : &nbsp;</b> {pf.communityType}</div>
+                          <div className="col-md-6"><b>Community Type&nbsp; : &nbsp;</b> {pf.communityType}</div>
                           <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
                         </div>
                       </div>

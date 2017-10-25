@@ -26,13 +26,6 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     this.fetchPortfolioDetails.bind(this);
   }
 
-  componentDidMount()
-  {
-    // OnLockSwitch();
-    // dataVisibilityHandler();
-
-  }
-
   componentDidUpdate()
   {
     initalizeFloatLabel();
@@ -48,14 +41,12 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
-
   }
 
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
     return resp
   }
-
 
   async fetchPortfolioDetails() {
     let that = this;

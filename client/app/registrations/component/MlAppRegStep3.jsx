@@ -60,7 +60,7 @@ export default class MlAppRegStep3 extends React.Component {
      * Check whether registration contains address array
      */
     if(addressDetails&&addressDetails.length<1){
-      toastr.error("Default Address is manditory")
+      toastr.error("Default Address is mandatory")
     }else if(addressDetails&&addressDetails.length>0){
       /**
        * If registration contains address array
@@ -75,7 +75,7 @@ export default class MlAppRegStep3 extends React.Component {
          * If default address not found throw an error
          */
 
-        toastr.error("Default Address is manditory")
+        toastr.error("Default Address is mandatory")
 
       }else if(found){
         /**

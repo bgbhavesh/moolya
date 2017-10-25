@@ -110,9 +110,9 @@ export default class MlAppMyOffice extends Component {
         <div className="swiper-slide office_accounts my-office-main" key={id}
              onClick={that.selectOffice.bind(that, office.officeId)}>
           <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
-          <h2>OfficeName: {office.officeName}</h2>
-          <h2>Total: {office.totalusercount}</h2>
-          <h3>Principal:{office.principalcount}&nbsp;&nbsp;Team:{office.teamMembercount}</h3>
+          <h2>Office Name: {office.officeName}</h2>
+          <h2>Total Member(s): {office.totalusercount}</h2>
+          <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
         </div>
       )
     });
@@ -149,7 +149,7 @@ export default class MlAppMyOffice extends Component {
                             Office</a>
                         </div>:<div></div>}
                         <div className="col-md-4 nopadding">
-                          <a href="" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                          <a href="" className="fileUpload mlUpload_btn disabled">Enter Office</a>
                         </div>
                         <div className="col-md-4 nopadding">
                           <a href="" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>

@@ -317,6 +317,10 @@ export default class MlFunderAbout extends React.Component {
   }
 
   render() {
+    let genderActive =''
+    if(this.state.data.gender){
+      genderActive='active'
+    }
     const showLoader = this.state.loading;
     let genderImage = this.state.data && this.state.data.gender === 'female' ? "/images/female.jpg" : this.state.defaultProfilePic;
     let investmentFrom = this.state.data && this.state.data.investmentFrom ? this.state.data.investmentFrom : "";
@@ -368,6 +372,7 @@ export default class MlFunderAbout extends React.Component {
                       {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender","isGenderPrivate")}/>*/}
                       {/*</div>*/}
                       <div className="form-group">
+                        <span className={`placeHolder ${genderActive}`}>Gender</span>
                         <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender} options={genderValues} onChange={this.optionsBySelectGender} className="float-label" />
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")} />
                       </div>

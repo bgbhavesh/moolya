@@ -25,6 +25,7 @@ import SharePopOver from './sharePopOver'
 import MlConnectionHeader from './connectionHeader'
 import SharedLibrary from './sharedLibrary';
 import CropperModal from '../cropperModal';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 
 
@@ -42,6 +43,7 @@ class Library extends React.Component {
       uploadedImage: "",
       previewImage: "",
       previewVideo: "",
+      previewDocument:"",
       responseDataFromDB: "",
       imageDetails: "",
       uploadedVideo: "",
@@ -715,14 +717,14 @@ class Library extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoSpecifications || [];
     let videoPreviewUrl;
-    videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    videoPreviewUrl = generateAbsolutePath(data[index].fileUrl);
     this.setState({ previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl });
   }
 
   random(link, index) {
     let data = this.state.imageSpecifications || [];
     let imagePreviewUrl;
-    imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    imagePreviewUrl = generateAbsolutePath(data[index].fileUrl);
     console.log('imagePreviewUrl', imagePreviewUrl)
     this.setState({ previewImage: imagePreviewUrl });
   }
@@ -730,14 +732,14 @@ class Library extends React.Component {
   randomDocument(link, index) {
     let data = this.state.documentSpecifications || [];
     let documentPreviewUrl;
-    documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    documentPreviewUrl = generateAbsolutePath(data[index].fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
   }
 
   randomTemplate(link, index) {
     let data = this.state.templateSpecifications || [];
-    let templatePreviewUrl;
-    templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    let templatePreviewUrl ;
+    templatePreviewUrl = generateAbsolutePath(data[index].fileUrl);
     this.setState({ previewTemplate: templatePreviewUrl });
   }
 
@@ -834,8 +836,7 @@ class Library extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          {
-            !that.state.explore && !that.state.hideLock ?
+          {!that.state.explore && !that.state.hideLock ?
               <FontAwesome onClick={() => that.toggleImageLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
               :
               ""
@@ -847,7 +848,7 @@ class Library extends React.Component {
             <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
           }
           <a href="" data-toggle="modal" data-target=".imagepop"
-            onClick={that.random.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
+            onClick={that.random.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
           <div id="images" className="title">{show.fileName}</div>
 
         </div>
@@ -892,9 +893,9 @@ class Library extends React.Component {
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
+                src={generateAbsolutePath(show.fileUrl)} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
+                src={generateAbsolutePath(show.fileUrl)} /></a>}
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )
@@ -909,7 +910,7 @@ class Library extends React.Component {
     const popImages = popImageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} style={{ 'width': '200px', 'height': '150px' }} />
+          <img src={generateAbsolutePath(show.file.url)} style={{ 'width': '200px', 'height': '150px' }} />
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -944,8 +945,8 @@ class Library extends React.Component {
           }
 
           <a href="" data-toggle="modal" data-target=".templatepop"
-            onClick={that.randomTemplate.bind(that, id)}>
-            <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
+            onClick={that.randomTemplate.bind(that,show.fileUrl, id)}>
+            <img src={generateAbsolutePath(show.fileUrl)} /></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -989,9 +990,9 @@ class Library extends React.Component {
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
+                src={generateAbsolutePath(show.fileUrl)} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
+                src={generateAbsolutePath(show.fileUrl)} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1030,7 +1031,7 @@ class Library extends React.Component {
 
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
-              <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
+              <source src={generateAbsolutePath(show.fileUrl)} type="video/mp4"></source>
             </video>
           </a>
           <div className="title">{show.fileName}</div>
@@ -1077,11 +1078,11 @@ class Library extends React.Component {
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <video width="120" height="100" controls>
-                <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
+                <source src={generateAbsolutePath(show.fileUrl)} type="video/mp4"></source>
               </video>
             </a> : <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
                 <video width="120" height="100" controls>
-                  <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
+                  <source src={generateAbsolutePath(show.fileUrl)} type="video/mp4"></source>
                 </video>
               </a>}
             <div id="templates" className="title">{show.fileName}</div>
@@ -1120,7 +1121,7 @@ class Library extends React.Component {
 
 
           <a href="" data-toggle="modal" data-target=".documentpop"
-            onClick={that.randomDocument.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src="/images/doc.png" /></a>
+            onClick={that.randomDocument.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src="/images/doc.png" /></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -1166,7 +1167,7 @@ class Library extends React.Component {
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <img src="/images/doc.png" /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
+                src={generateAbsolutePath(show.fileUrl)} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1190,7 +1191,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.imageDetails || [];
         let imagePreviewUrl;
-        imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+        imagePreviewUrl = generateAbsolutePath(data[index].fileUrl);
         this.setState({ previewImage: imagePreviewUrl });
       } else {
         let data = this.state.imageSpecifications || [];
@@ -1201,7 +1202,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.videoDetails || [];
         let videoPreviewUrl;
-        videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+        videoPreviewUrl = generateAbsolutePath(data[index].fileUrl);
         this.setState({ previewVideo: videoPreviewUrl });
       } else {
         let data = this.state.videoSpecifications || [];
@@ -1212,7 +1213,8 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.templateDetails || [];
         let templatePreviewUrl;
-        templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+        templatePreviewUrl = generateAbsolutePath(data[index].fileUrl);
+        console.log('templatePreviewUrl', templatePreviewUrl)
         this.setState({ previewTemplate: templatePreviewUrl });
       } else {
         let data = this.state.templateSpecifications || [];
@@ -1223,7 +1225,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.documentDetails || [];
         let documentPreviewUrl;
-        documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+        documentPreviewUrl = generateAbsolutePath(data[index].fileUrl);
         this.setState({ previewDocument: documentPreviewUrl });
       } else {
         let data = this.state.documentSpecifications || [];
@@ -1645,7 +1647,7 @@ class Library extends React.Component {
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-                {this.state.isLibrary ? this.popImages() : this.images()}
+                {this.state.isLibrary ? this.popImages() : this.images() }
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
             </div>

@@ -26,7 +26,7 @@ export default class MlAppClusterList extends Component {
 
     return (
       <div className="col-md-12">
-        <h2> Cluster </h2>
+        <h2> Clusters </h2>
       {list}
       </div>);
 

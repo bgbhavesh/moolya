@@ -93,7 +93,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Intellectual Property And Trademark",
+        title: "Intellectual Property And Trademarks",
         component: <MlIdeatorIntellectualPlanningAndTrademark key="7" tabName="intellectualPlanning"
                                                               getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}
                                                               portfolioDetailsId={this.props.portfolioDetailsId}/>

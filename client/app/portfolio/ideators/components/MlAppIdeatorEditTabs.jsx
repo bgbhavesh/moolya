@@ -97,7 +97,7 @@ export default class MlAppIdeatorEditTabs extends React.Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Intellectual Property And Trademark",
+        title: "Intellectual Property And Trademarks",
         component: <MlIdeatorIntellectualPlanningAndTrademark key="6" portfolioDetailsId={this.props.portfolioDetailsId}
                                                               tabName="intellectualPlanning"
                                                               getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>

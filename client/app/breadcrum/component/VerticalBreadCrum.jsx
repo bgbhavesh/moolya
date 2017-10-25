@@ -290,7 +290,9 @@ export default class VerticalBreadCrum extends Component {
     let currentClassName = '';
     const mlist = list.map((obj, index) => {
       if (index + 1 === list.length) currentClassName = 'current';
-      return (<li key={index} className={currentClassName} onClick={ this.onLinkClicked.bind(this)}><a href={obj.link} >{obj.name}</a></li>);
+      var link = obj.link;
+      if(index === list.length-1) link ='';
+      return (<li key={index} className={currentClassName} onClick={ this.onLinkClicked.bind(this)}><a href={link} >{obj.name}</a></li>);
     });
 
     if (list.length > 0) { mlist.push(<li key={'last'} className='timelineLast'></li>); }

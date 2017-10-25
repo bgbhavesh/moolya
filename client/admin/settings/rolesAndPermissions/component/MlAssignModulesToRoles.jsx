@@ -332,22 +332,22 @@ export default class MlAssignModulesToRoles extends React.Component {
                   </div>
                   <div className="col-md-12 ">
                     <div className="form-group">
-                    <div className="input_types"><input id="chapter_admin_check1" type="checkbox" name="CREATE"
+                    <div className="input_types"><input id={`chapter_admin_create${id}`} type="checkbox" name="CREATE"
                                                         checked={statusCreate}
                                                         onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                      htmlFor="chapter_admin_check1"><span></span>Create</label></div>
-                    <div className="input_types"><input id="chapter_admin_check2" type="checkbox" name="READ"
+                      htmlFor={`chapter_admin_create${id}`}><span></span>Create</label></div>
+                    <div className="input_types"><input id={`chapter_admin_read${id}`} type="checkbox" name="READ"
                                                         checked={statusRead}
                                                         onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                      htmlFor="chapter_admin_check2"><span></span>Read</label></div>
-                    <div className="input_types"><input id="chapter_admin_check3" type="checkbox" name="UPDATE"
+                      htmlFor={`chapter_admin_read${id}`}><span></span>Read</label></div>
+                    <div className="input_types"><input id={`chapter_admin_update${id}`} type="checkbox" name="UPDATE"
                                                         checked={statusUpdate}
                                                         onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                      htmlFor="chapter_admin_check3"><span></span>Update</label></div>
-                    <div className="input_types"><input id="chapter_admin_check4" type="checkbox" name="DELETE"
+                      htmlFor={`chapter_admin_update${id}`}><span></span>Update</label></div>
+                    <div className="input_types"><input id={`chapter_admin_delete${id}`} type="checkbox" name="DELETE"
                                                         checked={statusDelete}
                                                         onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                      htmlFor="chapter_admin_check4"><span></span>Delete</label></div>
+                      htmlFor={`chapter_admin_delete${id}`}><span></span>Delete</label></div>
                   </div>
                   </div>
 

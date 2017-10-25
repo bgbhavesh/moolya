@@ -137,6 +137,11 @@ MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, i
 MlResolver.MlMutationResolver['checkServiceSubChapterAccessControl'] = (obj, args, context, info) => {
   let serviceId = args.serviceId;
   let serviceDetails =mlDBController.findOne('MlServiceCardDefinition', serviceId , context);
+  if(serviceDetails.userId == context.userId){
+    let code = 400;
+    response = new MlRespPayload().errorPayload('You can not book your own service', code);
+    return response;
+  }
   let subChapterId = serviceDetails && serviceDetails.subChapterId ? serviceDetails.subChapterId : '';
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
   let response;

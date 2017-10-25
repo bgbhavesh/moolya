@@ -81,7 +81,12 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   onSaveAction(e){
-    this.setState({institutionAwardsList:this.state.institutionAwards, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.institutionAwards
+    if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.awardsRecognition ){
+      setObject = this.context.institutionPortfolio.awardsRecognition
+    }
+    this.setState({institutionAwardsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -150,7 +155,7 @@ export default class MlInstitutionEditAwards extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -162,13 +167,13 @@ export default class MlInstitutionEditAwards extends React.Component{
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
       this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
         // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
         // this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
+        // this.sendDataToParent()
       })
     }
 
@@ -180,7 +185,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -190,7 +195,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -199,13 +204,15 @@ export default class MlInstitutionEditAwards extends React.Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
+  sendDataToParent(isSaveClicked){
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionAwards;
     let institutionAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    institutionAwards[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionAwards[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionAwards, function (item)
     {

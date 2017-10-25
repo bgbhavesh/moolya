@@ -727,7 +727,7 @@ export default class step1 extends React.Component{
                     </div>
                     <div className="form-group">
                       {/*<span className={`placeHolder ${institutionAssociationActive}`}>Do you want to associate to any of the Sub Chapter</span>*/}
-                      <span className='placeHolder active'>Do You Want To Associate To Any Of The Sub Chapter</span>
+                      <span className='placeHolder active'>Do You Want To Associate With Any Of The Sub Chapters</span>
                       {that.state.isEcoSystem?<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="No" options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>:<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="Yes"  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>}
                     </div>
                     <div className="form-group">

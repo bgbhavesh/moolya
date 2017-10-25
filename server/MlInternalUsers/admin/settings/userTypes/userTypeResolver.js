@@ -65,12 +65,12 @@ if(args.userType.communityCode) {
   args.userType.createdBy = createdBy;
   args.userType.createdDate = new Date();
   // let result= MlUserTypes.insert({...args.userType})
-  let result = mlDBController.insert('MlUserTypes', args.userType, context)
+  var result = mlDBController.insert('MlUserTypes', args.userType, context)
   if (result) {
     let code = 200;
-    let result = {userTypeId: result}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+    //let result = {userTypeId: result}
+    return new MlRespPayload().successPayload({userTypeId: result}, code);
+    //return response
   }
 }else{
   let response = new MlRespPayload().errorPayload("Community Needed");

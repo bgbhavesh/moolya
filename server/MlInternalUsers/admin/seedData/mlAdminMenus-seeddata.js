@@ -6,7 +6,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-dashboard",
           "link": "/admin/dashboard/clusters",
-          "name": "Dashboard",
+          "name": "Ecosystem",
           "uniqueId": "dashboard",
           "isLink": true,
           "isMenu": true,

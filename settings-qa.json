@@ -7,6 +7,14 @@
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"
+    },
+    "countriesFlagBaseUrl":"https://s3.raksan.in/moolya-images/flags/",
+    "minio":{
+      "minioConfig":{
+        "bucketName":"moolya-users",
+        "endPoint":"s3.raksan.in",
+        "port":443
+      }
     }
   },
   "private": {
@@ -19,19 +27,16 @@
     "smsConfig":{
       "isWhiteListEnabled":true
     },
-    "aws":{
-      "s3Config":{
-        "accessKeyId":"AKIAIOLVK4M2SMABND3Q",
-        "secretAccessKey":"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",
-        "region":"ap-south-1",
-        "maxAsyncS3":20,
-        "s3RetryCount":3,
-        "s3RetryDelay":1000,
-        "multipartUploadThreshold": 20971520,
-        "multipartUploadSize": 15728640,
-        "urlExpirationTime":4000,
+    "minio":{
+      "minioConfig":{
+        "accessKeyId":"rakSan$3buckEtaccEss",
+        "secretAccessKey":"Raksan$36u(ket#s#cret",
+        "region":"us-east-1",
         "bucketName":"moolya-users",
-        "adminBucketKey":"moolya-admin-users"
+        "regDoc":"registrationDocuments",
+        "endPoint":"s3.raksan.in",
+        "port":443,
+        "secure":true
       }
     },
     "graphql_proxy_url":"http://localhost:8090/graphql",
@@ -41,6 +46,7 @@
     "bugReportEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
+    "isProdENV":false,
     "conversationsBaseURL":"https://qarkc.moolya.global"
   }
 }

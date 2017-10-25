@@ -71,20 +71,12 @@ export default class MlFunderInvestment extends Component {
   }
 
   onLockChange(fieldName, field, e) {
-    // let details = this.state.data || {};
-    // let key = e.target.id;
     var isPrivate = false;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
       isPrivate = true
     }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -111,21 +103,8 @@ export default class MlFunderInvestment extends Component {
     })
   }
 
-  onSaveAction(e) {
-    this.sendDataToParent(true)
-    var setObject = this.state.funderInvestment
-    if(this.context && this.context.funderPortfolio && this.context.funderPortfolio.investments ){
-      setObject = this.context.funderPortfolio.investments
-    }
-    // var isDate = _.findIndex(this.state.funderInvestment, {dateOfInvestment:''})
-    // var dateKey = _.compact(_.map(this.state.funderInvestment, 'dateOfInvestment'));
-    // if ((isDate > 0) || (dateKey.length != this.state.funderInvestment.length))
-    //   toastr.error("Please select Date");
-    this.setState({funderInvestmentList: setObject, popoverOpen: false})
-  }
-
   addInvestment() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: ''})
     if (this.state.funderInvestment) {
       this.setState({selectedIndex: this.state.funderInvestment.length})
     } else {
@@ -197,18 +176,32 @@ export default class MlFunderInvestment extends Component {
     })
   }
 
+  onSaveAction(e) {
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
+    var setObject = this.state.funderInvestment
+    if(this.context && this.context.funderPortfolio && this.context.funderPortfolio.investments ){
+      setObject = this.context.funderPortfolio.investments
+    }
+    this.setState({funderInvestmentList: setObject, popoverOpen: false})
+  }
+
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderInvestment;
     let funderInvestment = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
-    if(isSaveClicked){
+    if (isSaveClicked) {
       funderInvestment[this.state.selectedIndex] = data;
     }
     let arr = [];
@@ -225,7 +218,7 @@ export default class MlFunderInvestment extends Component {
     })
     funderInvestment = arr;
     this.setState({funderInvestment: funderInvestment})
-    this.props.getInvestmentsDetails(funderInvestment, this.state.privateKey, requiredFields);
+    this.props.getInvestmentsDetails(funderInvestment, this.state.privateKey);
   }
 
   render() {
@@ -271,10 +264,9 @@ export default class MlFunderInvestment extends Component {
                               <a href="" id={"create_client" + idx}>
                                 <div className="list_block notrans funding_list">
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <div className="cluster_status inactive_cl">
-                                    <FontAwesome name='lock' id="makePrivate" defaultValue={details.makePrivate}/>
-                                    <input type="checkbox" className="lock_input" id="makePrivate"
-                                           checked={details.makePrivate}/></div>
+                                  <FontAwesome name='lock' id="makePrivate" defaultValue={details.makePrivate}/>
+                                  <input type="checkbox" className="lock_input" id="makePrivate"
+                                         checked={details.makePrivate}/>
                                   <div onClick={that.onTileClick.bind(that, idx)}>
                                     <p>{details.investmentcompanyName}</p>
                                     <p className="fund">{details.investmentAmount}</p>
@@ -315,7 +307,7 @@ export default class MlFunderInvestment extends Component {
                                              onClick={this.onLockChange.bind(this, "investmentcompanyName", "isCompanyNamePrivate")}/>
                               </div>
                               <div className="form-group mandatory">
-                                <input type="text" placeholder="Investment Amount" name="investmentAmount" ref="investmentAmount"
+                                <input type="number" placeholder="Investment Amount" name="investmentAmount" ref="investmentAmount" min={0}
                                        defaultValue={this.state.data.investmentAmount}
                                        className="form-control float-label" onBlur={this.handleBlur} data-required={true}
                                        data-errMsg="Investment Amount is required"/>

@@ -23,7 +23,7 @@ class MenuRepo{
                 "link": "/app/myOffice",
                 "isLink": true,
                 "isMenu": true,
-                "name": "My Office",
+                "name": "Digital Office",
                 "uniqueId": "myOffice",
                 "hideSubMenu": true,
                 "subMenu": [{

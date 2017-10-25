@@ -67,6 +67,10 @@
        duration : Duration
        activities: [TaskActivity]
    }
+   
+   type Payment {
+      derivedAmount:Float
+   }
  
    type TaskActivity {
      _id: String
@@ -75,6 +79,9 @@
      displayName: String
      duration : Duration
      deliverable: [String]
+     isInternal: Boolean
+     isExternal : Boolean
+     payment: Payment
    }
    type Activity {
      name: String

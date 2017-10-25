@@ -62,6 +62,7 @@ export async function findRegistrationActionHandler(registrationId) {
           companyEmail
           foundationDate
           headQuarterLocation
+          branchLocations
           companytyp
           entityType
           businessType

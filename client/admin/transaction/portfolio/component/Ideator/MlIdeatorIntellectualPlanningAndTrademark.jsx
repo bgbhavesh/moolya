@@ -109,7 +109,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
     const showLoader = this.state.loading;
     return (
       <div>
-        <h2>Intellectual Property And Trademark</h2>
+        <h2>Intellectual Property And Trademarks</h2>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll">
             <ScrollArea

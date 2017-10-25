@@ -29,7 +29,7 @@ export default class MlAppSubChapterList extends Component {
 
     return (
       <div className="col-md-12">
-        <h2> Sub Chapter </h2>
+        <h2> Sub-Chapters </h2>
         {list}
       </div>
     );

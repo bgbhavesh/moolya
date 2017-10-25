@@ -1,5 +1,4 @@
 import React from 'react';
-import {render} from 'react-dom';
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'

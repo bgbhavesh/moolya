@@ -66,31 +66,32 @@ export default class MlAppTaskMyAppointmentSession extends Component {
             <div className="panel-body">
               <div className="swiper-container manage_tasks">
                 <div className="swiper-wrapper">
-                  {data.activities && data.activities.map((activity, index) => {
+                  {data.activities && data.activities.map((activity, idx) => {
                     return (
-                    <div className="card_block swiper-slide" key={index}>
-                      <div className="">
-                        <h3>{' '}</h3>
-                        <div className="clearfix"></div>
-                        <div className="list_icon mart0">
+                      <div className="card_block swiper-slide" key={idx}>
+                        <div className="">
+                          <h3>{activity.displayName}</h3>
+                          {/*<div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>*/}
                           <div className="clearfix"></div>
-                          <i className="c_image ml my-ml-Ideator"></i>
-                          <div className="clearfix"></div>
-                          <span className="price"><div className="form-group">
-                      <label>
-                      <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true"
-                            className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
-                    <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                          className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span> Mins
-                    </label>
-                    </div></span>
-                          <button className="btn btn-danger pull-right">{activity.mode}</button>
-                        </div>
-                        <div className="block_footer">
-                          <span> {activity.displayName} </span>
+                          <div className="list_icon mart0">
+                            <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                            <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
+                            <div className="clearfix"></div>
+                            <i className="c_image ml my-ml-Ideator"></i>
+                            <div className="clearfix"></div>
+                            <span className="price"><div className="form-group">
+                                        <label>
+                                          <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
+                                      <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                            className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
+                                          Mins
+                                        </label>
+                                      </div></span>
+                            <button className="btn btn-danger pull-right">{activity.mode}</button>
+                          </div>
+                          <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
                         </div>
                       </div>
-                    </div>
                     )
                   })}
                 </div>

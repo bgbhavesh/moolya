@@ -277,17 +277,28 @@ class MlAppServiceSelectTask extends Component{
                   <div className="swiper-wrapper">
                     { data.activities && data.activities.map((activity, index) => {
                       return (
-                        <div className="swiper-slide funding_list list_block notrans" key={index}>
-                          <p className="online">{activity.mode}</p>
-                          <span>Duration:</span><br />
-                          <div className="form-group">
-                            <label><input type="text" className="form-control inline_input"
-                                          value={activity.duration.hours || 0} disabled /> Hours
-                              <input type="text" className="form-control inline_input"
-                                     value={activity.duration.minutes || 0} disabled /> Mins
-                            </label>
+                        <div className="card_block swiper-slide" key={index}>
+                          <div className="">
+                            <h3>{activity.displayName}</h3>
+                            <div className="clearfix"></div>
+                            <div className="list_icon mart0">
+                              <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                              <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
+                              <div className="clearfix"></div>
+                              <i className="c_image ml my-ml-Ideator"></i>
+                              <div className="clearfix"></div>
+                              <span className="price"><div className="form-group">
+                                        <label>
+                                          <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
+                                      <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                            className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
+                                          Mins
+                                        </label>
+                                      </div></span>
+                              <button className="btn btn-danger pull-right">{activity.mode}</button>
+                            </div>
+                            <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
                           </div>
-                          <h3>{activity.displayName}</h3>
                         </div>
                       )
                     })}

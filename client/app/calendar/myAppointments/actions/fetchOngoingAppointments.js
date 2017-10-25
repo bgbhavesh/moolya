@@ -177,6 +177,11 @@ export async function findTaskActionHandler(taskId) {
                   mode
                   name
                   displayName
+                  isInternal
+                  isExternal
+                  payment{
+                    derivedAmount
+                  }
                   duration {
                     hours
                     minutes

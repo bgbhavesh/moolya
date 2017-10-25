@@ -382,6 +382,11 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               mode
               name
               displayName
+              isInternal
+              isExternal
+              payment{
+                derivedAmount
+              }
               duration {
                 hours
                 minutes

@@ -130,6 +130,9 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
     const response = await findIdeatorStrategyPlansActionHandler(this.props.portfolioDetailsId);
     if(response){
       this.setState({portfolioIdeatorInfo : response,loading:false});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }
   }
 
@@ -139,15 +142,21 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-          <div>
+          <div className="requested_input">
             {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ? (
               <div className="col-lg-12 col-sm-12">
                 <div className="row">
                   <h2>Strategy and Planning</h2>
-                  <div id="strategyPlansContent" className="panel panel-default panel-form-view">
+                  <div id="strategyPlansContent" className="panel-form-view hide_unlock">
+                    <div className="panel panel-default">
+                      <div className="panel-heading">
+                        Strategy and Planning
+                        <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" />
+                      </div>
                     <div className="panel-body">
                       {this.state.portfolioIdeatorInfo.spDescription}
                     </div>
+                      </div>
                   </div>
 
                 </div>

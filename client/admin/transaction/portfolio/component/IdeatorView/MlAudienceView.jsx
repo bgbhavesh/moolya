@@ -171,6 +171,9 @@ export default class MlIdeatorAudience extends React.Component{
       const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
       if (response) {
         this.setState({loading: false, data: response});
+          _.each(response.privateFields, function (pf) {
+              $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+          })
       }
     }else{
       this.fetchOnlyImages();
@@ -190,9 +193,9 @@ export default class MlIdeatorAudience extends React.Component{
   async fetchOnlyImages(){
     const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      let dataDetails =this.state.data
-      dataDetails['audienceImages'] = response.audienceImages
-      this.setState({loading: false, data: dataDetails});
+        let dataDetails =this.state.data
+        dataDetails['audienceImages'] = response.audienceImages
+        this.setState({loading: false, data: dataDetails});
     }
   }
 
@@ -220,16 +223,23 @@ export default class MlIdeatorAudience extends React.Component{
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-          <div>
+          <div className="requested_input">
             {description?(
-              <div>
-                <h2>Audience</h2>
-                <div id="psContent" className="panel panel-default panel-form-view">
-                  <div className="panel-body">
-                    {description }
-                  </div>
-                </div>
-
+                <div className="col-lg-12 col-sm-12">
+                    <div className="row">
+                        <h2>Audience</h2>
+                        <div id="psContent" className="panel-form-view hide_unlock">
+                            <div className="panel panel-default">
+                                <div className="panel-heading">
+                                    Audience
+                                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" />
+                                </div>
+                                <div className="panel-body">
+                                    {description }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 {/*{showLoader === true ? ( <MlLoader/>) : (*/}
                 {/*<div className="requested_input">*/}

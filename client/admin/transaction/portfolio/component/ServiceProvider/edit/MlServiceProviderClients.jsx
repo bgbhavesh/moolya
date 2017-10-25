@@ -21,7 +21,6 @@ export default class MlServiceProviderClients extends Component {
       popoverOpen: false,
       selectedIndex: -1,
       serviceProviderClientsList:[],
-      // selectedVal: null,
       selectedObject: "default",
       privateKey:{},
       showProfileModal: false,
@@ -29,7 +28,7 @@ export default class MlServiceProviderClients extends Component {
     }
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
-    this.onSaveAction.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
@@ -52,14 +51,6 @@ export default class MlServiceProviderClients extends Component {
   }
 
   componentWillMount() {
-    // let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
-    // if (!empty) {
-    //   this.setState({
-    //     loading: false,
-    //     serviceProviderClients: this.context.startupPortfolio.clients,
-    //     serviceProviderClientsList: this.context.startupPortfolio.clients
-    //   });
-    // }
     const resp = this.fetchPortfolioDetails();
     return resp;
   }
@@ -109,7 +100,6 @@ export default class MlServiceProviderClients extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      // "selectedVal": details.companyId,
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
@@ -136,32 +126,25 @@ export default class MlServiceProviderClients extends Component {
 
 
   onLockChange(fieldName, field, e) {
-    // let details = this.state.data || {};
-    // let key = e.target.id;
     var isPrivate = false;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
       isPrivate = true
     }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
-    // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data: details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.serviceProviderClients
     if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.clients)
       setObject = this.context.serviceProviderPortfolio.clients
@@ -224,12 +207,6 @@ export default class MlServiceProviderClients extends Component {
   }
 
   onLogoFileUpload(fileInfo,image) {
-    /*if (e.target.files[0].length == 0)
-      return;*/
-    //let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
-
     let file = image;
     let fileName = fileInfo.name;
     if(file){
@@ -426,7 +403,7 @@ export default class MlServiceProviderClients extends Component {
                             htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                         </div>
                       </div>
                     </div>

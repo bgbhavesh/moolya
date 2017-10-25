@@ -7,6 +7,14 @@
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"
+    },
+    "countriesFlagBaseUrl":"http://10.0.2.16:9090/moolya-images/flags/",
+    "minio":{
+      "minioConfig":{
+        "bucketName":"moolya-users",
+        "endPoint":"10.0.2.16",
+        "port":9090
+      }
     }
   },
   "private": {
@@ -19,19 +27,16 @@
      "smsConfig":{
        "isWhiteListEnabled":true
       },
-      "aws":{
-        "s3Config":{
-          "accessKeyId":"AKIAIOLVK4M2SMABND3Q",
-          "secretAccessKey":"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",
-          "region":"ap-south-1",
-          "maxAsyncS3":20,
-          "s3RetryCount":3,
-          "s3RetryDelay":1000,
-          "multipartUploadThreshold": 20971520,
-          "multipartUploadSize": 15728640,
-          "urlExpirationTime":4000,
+      "minio":{
+        "minioConfig":{
+          "accessKeyId":"RakSan987",
+          "secretAccessKey":"RakSan987",
+          "region":"us-east-1",
           "bucketName":"moolya-users",
-          "adminBucketKey":"moolya-admin-users"
+          "regDoc":"registrationDocuments",
+          "endPoint":"10.0.2.16",
+          "port":9090,
+          "secure":false
         }
       },
      "googleApiKey": "AIzaSyCLv57ZFY12OgknxxkDB12w8aH214rkEEc",
@@ -40,6 +45,7 @@
     "bugReportEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
+    "isProdENV":false,
     "conversationsBaseURL":"https://qarkc.moolya.global"
 
   }

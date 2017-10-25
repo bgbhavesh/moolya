@@ -121,7 +121,7 @@ export default class MlCalendarHeader extends Component {
             <ul className="sub_list">
               <li className={ type == "activity" ? "active_user" : ""}>
                 <a onClick={()=>that.changeType("activity")} href="">
-                  <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
+                  <span className="icon_bg"><span className="icon_lg ml my-ml-activity"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Activity</span>
                   </div>
@@ -129,7 +129,7 @@ export default class MlCalendarHeader extends Component {
               </li>
               <li className={ type == "task" ? "active_user" : ""}>
                 <a onClick={()=>that.changeType("task")} href="">
-                  <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
+                  <span className="icon_bg"><span className="icon_lg ml my-ml-task"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Task Master</span>
                   </div>
@@ -137,7 +137,7 @@ export default class MlCalendarHeader extends Component {
               </li>
               <li className={ type == "service" ? "active_user" : ""}>
                 <a onClick={()=>that.changeType("service")} href="">
-                  <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
+                  <span className="icon_bg"><span className="icon_lg ml my-ml-service"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Services</span>
                   </div>
@@ -176,7 +176,7 @@ export default class MlCalendarHeader extends Component {
                   <ul className="sub_list">
                     <li className={ type == "activity" ? "active_user" : ""}>
                       <a onClick={()=>that.changeType("activity")} href="">
-                        <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
+                        <span className="icon_bg"><span className="icon_lg ml my-ml-activity"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Activity</span>
                         </div>
@@ -184,7 +184,7 @@ export default class MlCalendarHeader extends Component {
                     </li>
                     <li className={ type == "task" ? "active_user" : ""}>
                       <a onClick={()=>that.changeType("task")} href="">
-                        <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
+                        <span className="icon_bg"><span className="icon_lg ml my-ml-task"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Task Master</span>
                         </div>
@@ -192,7 +192,7 @@ export default class MlCalendarHeader extends Component {
                     </li>
                     <li className={ type == "service" ? "active_user" : ""}>
                       <a onClick={()=>that.changeType("service")} href="">
-                        <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
+                        <span className="icon_bg"><span className="icon_lg ml my-ml-service"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Services</span>
                         </div>

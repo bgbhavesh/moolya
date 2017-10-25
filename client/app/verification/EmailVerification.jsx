@@ -72,6 +72,14 @@ export default class EmailVerification extends React.Component{
         }.bind(this)
       });
     }
+    // For timer countdown
+    var timeleft = 30;
+    var downloadTimer = setInterval(function(){
+      timeleft--;
+      document.getElementById("countdowntimer").textContent = timeleft;
+      if(timeleft <= 0)
+        clearInterval(downloadTimer);
+    },1000);
   }
 
   async verifyMobileNumber(){
@@ -136,6 +144,14 @@ export default class EmailVerification extends React.Component{
    setTimeout(function(){
      this.setState({canResend:true})
    }.bind(this),30000)
+
+   var timeleft = 30;
+   var downloadTimer = setInterval(function(){
+     timeleft--;
+     document.getElementById("countdowntimer").textContent = timeleft;
+     if(timeleft <= 0)
+       clearInterval(downloadTimer);
+   },1000);
  }
 
   // async verifyMobileNumber(){
@@ -207,14 +223,16 @@ export default class EmailVerification extends React.Component{
               </div>
               <div className="form-group sendotp">
                 <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
-                <a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a>
-
-                <a href="" className="resendotp" onClick={this.verifyLater.bind(this)}>Verify Later</a>
+                {this.state.canResend?<span><a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a></span>:<p className="resendotp"> 00 : <span id="countdowntimer">30</span> </p>}
+                {/*<a href="" className="resendotp" onClick={this.verifyLater.bind(this)}>Verify Later</a>*/}
               </div><br />
                 <div className="terms">
                   <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a data-toggle="modal" data-target=".termsConditionsPop">Terms and Conditions</a> and <a data-toggle="modal" data-target=".privacyPop"> 'Privacy Policy'</a></label>
                 </div>
-              <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
+                <div className="ml_btn" style={{'textAlign':'center'}}>
+                <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
+                <a href="" className="cancel_btn" onClick={this.verifyLater.bind(this)}>Verify Later</a>
+                </div>
               </div>
             }
             {!emailVerificationSuccess&&<div>

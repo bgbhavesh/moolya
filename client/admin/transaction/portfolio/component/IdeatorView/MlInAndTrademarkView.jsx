@@ -138,6 +138,9 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(this.props.portfolioDetailsId);
     if(response){
       this.setState({portfolioIdeatorInfo : response, loading : false});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }
   }
 
@@ -146,17 +149,18 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     return (
       <div>
         {loading === true ? ( <MlLoader/>) : (
-          <div>
+          <div className="requested_input">
             {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? (
               <div className="col-lg-12 col-sm-12">
                 <div className="row">
-                  <h2>Intellectual Property And Trademarks</h2>
-                  <div id="trademarkContent" className="panel panel-default panel-form-view">
+                  <h2>Intellectual Property And Trademark</h2>
+                  <div id="trademarkContent" className="panel-form-view hide_unlock">
+                    <div className="panel panel-default">
+                      <div className="panel-heading">
+                        Audience
+                        <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
+                      </div>
 
-                    <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.IPdescription}
-                    </div>
-                  </div>
 
                 </div>
               </div>

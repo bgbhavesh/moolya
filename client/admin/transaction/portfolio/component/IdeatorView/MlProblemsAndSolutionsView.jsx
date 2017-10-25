@@ -152,12 +152,15 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     return (
        <div>
          {loading === true ? ( <MlLoader/>) : (
-           <div>
+           <div className="requested_input">
              <h2>Problems and Solutions </h2>
-             <div className="tab_wrap_scroll">
+             <div className="tab_wrap_scroll hide_unlock">
                <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
                  <div className="panel panel-default">
-                   <div className="panel-heading"> Problems</div>
+                   <div className="panel-heading">
+                       Problems
+                       <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isProblemPrivate"/>
+                   </div>
                    <div className="panel-body">
                      {this.state.portfolioIdeatorInfo.problemStatement||this.state.portfolioIdeatorInfo.problemImage.length?(
                        <p>
@@ -174,7 +177,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                </div>
                <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
                  <div className="panel panel-default">
-                   <div className="panel-heading"> Solutions</div>
+                   <div className="panel-heading">
+                       Solutions
+                       <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isSolutionPrivate"/>
+                   </div>
                    <div className="panel-body">
                      {this.state.portfolioIdeatorInfo.solutionStatement||this.state.portfolioIdeatorInfo.solutionImage.length?(
                      <p>

@@ -18,6 +18,7 @@ import CropperModal from '../../../commons/components/cropperModal';
 import {appClient} from '../../core/appConnection';
 import {smsUserOtpHandler, verifyUserMobileNumberHandler, resendUserSmsOtpHandler} from '../../../commons/verificationActionHandler';
 import _ from "lodash";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -393,7 +394,7 @@ class MlAppMyProfile extends Component {
       }]
   };
     let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
-    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:generateAbsolutePath(this.state.profileImage);
 
     let isMobileVerified = false;
     if(this.state.userDetails&&this.state.userDetails.mobileNumbers){

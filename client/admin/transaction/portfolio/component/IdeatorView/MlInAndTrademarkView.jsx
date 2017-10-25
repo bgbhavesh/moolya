@@ -160,7 +160,11 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
                         Audience
                         <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
                       </div>
-
+                    <div className="panel-body">
+                      {this.state.portfolioIdeatorInfo.IPdescription}
+                    </div>
+                      </div>
+                  </div>
 
                 </div>
               </div>

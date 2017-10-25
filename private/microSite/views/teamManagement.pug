@@ -1,9 +1,12 @@
-if(!privateFields.management)
-  if(management && management.length >0)
+//
+   Created by kanwarjeet on 10/24/17.
+
+if(!privateFields.team)
+  if(teamManagement && teamManagement.length >0)
     .ms_swiper
       .swiper-container
         .swiper-wrapper
-          each slide , i in management
+          each slide , i in teamManagement
             .swiper-slide
               img(src=slide.logo)
               .profile_info
@@ -25,5 +28,4 @@ else
   h2 Private Content
 
 // Swiper Ends
-
 

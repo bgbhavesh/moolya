@@ -1,9 +1,12 @@
-if(!privateFields.management)
-  if(management && management.length >0)
+//
+   Created by kanwarjeet on 10/24/17.
+
+if(!privateFields.successStories)
+  if(successStories && successStories.length >0)
     .ms_swiper
       .swiper-container
         .swiper-wrapper
-          each slide , i in management
+          each slide , i in successStories
             .swiper-slide
               img(src=slide.logo)
               .profile_info
@@ -26,4 +29,22 @@ else
 
 // Swiper Ends
 
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+script(type='text/javascript', src='/js/swiper.min.js')
+script.
+  var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    slidesPerView: 4,
+    paginationClickable: true,
+    spaceBetween: 10,
+    keyboardControl: true,
+    nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+    //loop: true
+  });
+  $('.expand_info').click(function () {
+    $(this).parent().find('.profile_info').toggleClass('open');
+    $(this).toggleClass('collapse');
+  });
+script(src="/js/swiper.min.js")
 

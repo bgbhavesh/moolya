@@ -61,36 +61,14 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     let query = {
       'portfolioDetailsId': resultParentPortFolio._id
     }
-    let dynamicLinksClasses = getDynamicLinksClasses()
-    let defaultListMenu = getDefaultMenu(dynamicLinksClasses);
+    let dynamicLinksClasses = getDynamicLinksClasses();
     let dynamicListMenu = {
-      'IDE': [
-        {name: 'About', className: dynamicLinksClasses.About},
-        {name: 'Awards', className: dynamicLinksClasses.Awards},
-        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-        {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
-        {name: 'Keywords', className: dynamicLinksClasses.Keywords}
-      ],
-      'STU': defaultListMenu,
-      'FUN': [
-        {name: 'About', className: dynamicLinksClasses.About},
-        {name: 'Management', className: dynamicLinksClasses.Management},
-        {name: 'Branches', className: dynamicLinksClasses.Branches},
-        {name: 'Awards', className: dynamicLinksClasses.Awards},
-        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-        {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
-        {name: 'Keywords', className: dynamicLinksClasses.Keywords}
-      ],
-
-      'SPS': [
-        {name: 'About', className: dynamicLinksClasses.About},
-        {name: 'Management', className: dynamicLinksClasses.Management},
-        {name: 'Branches', className: dynamicLinksClasses.Branches},
-        {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-        {name: 'Social Links', className: dynamicLinksClasses.Social_Links}
-      ],
-      'CMP': defaultListMenu,
-      'INS': defaultListMenu
+      'IDE': getIDEMenu(dynamicLinksClasses),
+      'STU': getSTUMenu(dynamicLinksClasses),
+      'FUN': getFUNMenu(dynamicLinksClasses),
+      'SPS': getSPSMenu(dynamicLinksClasses),
+      'CMP': getCMPMenu(dynamicLinksClasses),
+      'INS': getINSMenu(dynamicLinksClasses)
     }
     let communityCode = ''
     if (resultParentPortFolio) {
@@ -184,7 +162,8 @@ async function FUN(portFolio, query) {
     portFolio.communityTypes =resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories)
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
-    getManagementInfo(portFolio, resultFunderPortfolio);
+    getTeamInfo(portFolio,resultFunderPortfolio)
+    getSuccessStoriesInfo(portFolio,resultFunderPortfolio);
     getLookingForDescription(portFolio, resultFunderPortfolio);
     appendKeywords(portFolio);
   }
@@ -279,6 +258,54 @@ function getManagementInfo(portFolio, managementInfo) {
   return portFolio;
 }
 
+
+function getTeamInfo(portFolio, resultFunderPortfolio) {
+  let teamPortFolio = []
+  let principals = resultFunderPortfolio.principal;
+  let teams = resultFunderPortfolio.team;
+
+  if (principals) {
+    principals.forEach(function (principal) {
+      teamPortFolio.push({
+        logo: '',//principal.logo ? principal.logo.fileUrl : '',
+        firstName: principal.firstName,
+        lastName: principal.lastName,
+        designation: principal.designation
+      })
+    })
+
+  }
+  if (teams) {
+    teams.forEach(function (team) {
+      teamPortFolio.push({
+        logo: '', //team.logo ? team.logo.fileUrl : '',
+        firstName: team.firstName,
+        lastName: team.lastName,
+        designation: team.designation
+      })
+    })
+
+  }
+  portFolio.teamManagement = teamPortFolio;
+}
+
+function getSuccessStoriesInfo(portFolio, resultPortfolio) {
+  let successStoriesFolio = []
+  let successStories = resultPortfolio.successStories;
+  if (successStories) {
+    successStories.forEach(function (successStory) {
+      successStoriesFolio.push({
+        logo: '',//principal.logo ? principal.logo.fileUrl : '',
+        firstName: successStory.firstName,
+        lastName: successStory.lastName,
+        designation: successStory.designation
+      })
+    })
+
+  }
+  portFolio.successStories = successStoriesFolio;
+}
+
 function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
   communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
@@ -299,20 +326,74 @@ async function getPortFolio(collectionName, query) {
   return result
 }
 
-function getDefaultMenu(dynamicLinksClasses) {
-  let defaultListView =
-    [
-      {name: 'About', className: dynamicLinksClasses.About},
-      {name: 'Management', className: dynamicLinksClasses.Management},
-      {name: 'Branches', className: dynamicLinksClasses.Branches},
-      {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
-      {name: 'Social Links', className: dynamicLinksClasses.Social_Links},
-      {name: 'Keywords', className: dynamicLinksClasses.Keywords}
-    ];
-  return defaultListView
+
+function getSTUMenu(dynamicLinksClasses) {
+  return   [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Management', className: dynamicLinksClasses.Management},
+    {name: 'Technology', className: dynamicLinksClasses.Branches},
+    {name: 'Services and Products', className: dynamicLinksClasses.Looking_For},
+    {name: 'Awards', className: dynamicLinksClasses.Social_Links},
+    {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ];
+}
+
+function getCMPMenu(dynamicLinksClasses) {
+  return   [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Management', className: dynamicLinksClasses.Management},
+    {name: 'Awards', className: dynamicLinksClasses.Awards},
+    {name: 'Incubator Sectors', className: dynamicLinksClasses.Incubator_Sectors},
+    {name: 'CSR', className: dynamicLinksClasses.CSR},
+    {name: 'R&D', className: dynamicLinksClasses.RandD},
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ];
+}
+
+function getINSMenu(dynamicLinksClasses) {
+  return   [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Management', className: dynamicLinksClasses.Management},
+    {name: 'Awards', className: dynamicLinksClasses.Awards},
+    {name: 'Incubator Sectors', className: dynamicLinksClasses.Incubator_Sectors},
+    {name: 'Intrapreneur', className: dynamicLinksClasses.Intrapreneur},
+    {name: 'R&D', className: dynamicLinksClasses.RandD},
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ];
 }
 
 
+function getSPSMenu(dynamicLinksClasses) {
+  return   [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Awards and Rewards', className: dynamicLinksClasses.AwardsandRewards},
+    {name: 'Clients', className: dynamicLinksClasses.Clients},
+    {name: 'Services', className: dynamicLinksClasses.Services},
+     {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ];
+}
+function getFUNMenu(dynamicLinksClasses) {
+  return  [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Team', className: dynamicLinksClasses.Team},
+    {name: 'Success Stories', className: dynamicLinksClasses.Success_Stories},
+    {name: 'Focus Areas', className: dynamicLinksClasses.Focus_Areas},
+    {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ]
+}
+
+
+function getIDEMenu(dynamicLinksClasses) {
+  return [
+    {name: 'About', className: dynamicLinksClasses.About},
+    {name: 'Problems and Solutions', className: dynamicLinksClasses.Problems_and_Solutions},
+    {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
+    {name: 'IP and TM', className: dynamicLinksClasses.IPandTM},
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+  ]
+}
 async function getBranches(portFolio, resultPortFolioBranches) {
   let branches = resultPortFolioBranches.branches;
   let outputBranches = [];
@@ -346,7 +427,21 @@ function getDynamicLinksClasses() {
     'Social_Links': 'pageSocialLinks',
     'Keywords': 'pageKeywords',
     'Branches': 'pageBranches',
-    'Management': 'pageManagement'
+    'Management': 'pageManagement',
+    'Problems_and_Solutions':'pageProblemsandSolutions',
+    'IPandTM':'pageIPandTM',
+    'Focus_Areas':'pageFocusAreas',
+    'Success_Stories':'pageSuccessStories',
+    'Team':'pageTeam',
+    'Services':'pageServices',
+    'Clients':'pageClients',
+    'AwardsandRewards':'pageAwardsandRewards',
+    'Incubator_Sectors':'pageIncubatorSectors',
+    'Intrapreneur':'pageIntrapreneur',
+    'RandD':'pageRandD',
+    'CSR':'pageCSR'
+
+
 
   }
 

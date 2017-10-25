@@ -118,6 +118,10 @@ html(prefix='og: http://ogp.me/ns#')
           .pages
             .pageManagement
               include management
+            .pageTeam
+              include teamManagement
+            .pageSuccessStories
+              include success_stories
             .pageAwards
               if(!privateFields.awardsDescription)
                 p

@@ -79,7 +79,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
       let options = response.map(function (user) {
         return {
           value:user.userId,
-          label:user.name
+          label:user.name + (user.officeName ? (" - " + user.officeName ) : '' )
         }
       });
       this.setState({
@@ -209,7 +209,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
               });
               return (
                 <li key={index}>
-                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name}</span>
+                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name} { user.officeName ? (" - " + user.officeName ) : '' }</span>
                 </li>
               )
             })}

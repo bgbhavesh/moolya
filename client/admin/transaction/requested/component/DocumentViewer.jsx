@@ -14,7 +14,6 @@ export default class DocumentViewer extends React.Component{
       displayModal:false,
       previewImage:"",
       modal: false,
-      removeModal:true
     }
     return this;
   }
@@ -76,7 +75,6 @@ export default class DocumentViewer extends React.Component{
     }
   }
   OnFileRemove(docTypeId,documentId,fileId){
-    this.setState({removeModal:false})
     this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
 
@@ -84,11 +82,9 @@ export default class DocumentViewer extends React.Component{
     let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
     let imagePreviewUrl;
     imagePreviewUrl = data[index].fileUrl;
+
     this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
-    let removeModal=this.state.removeModal
-    if(!removeModal){
-      this.setState({removeModal:true,modal: true})
-    }
+
 
   }
 
@@ -114,17 +110,14 @@ export default class DocumentViewer extends React.Component{
     return (
 
       <div className="col-lg-4">
-        {this.state.removeModal?(
-          <Modal isOpen={this.state.modal} toggle={this.closeModal.bind(this, 'modal')}>
-            {/* <ModalHeader toggle={this.closeModal.bind(this, 'modal')}>
+        <Modal isOpen={this.state.modal} toggle={this.closeModal.bind(this, 'modal')}>
+         {/* <ModalHeader toggle={this.closeModal.bind(this, 'modal')}>
 
-             </ModalHeader>*/}
-            <ModalBody>
-              <div className="img_scroll"><img src={this.state.previewImage}/></div>
-            </ModalBody>
-          </Modal>
-        ):""}
-
+          </ModalHeader>*/}
+          <ModalBody>
+            <div className="img_scroll"><img src={this.state.previewImage}/></div>
+          </ModalBody>
+        </Modal>
         <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
              <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}<text style={{'color':'red'}}>{mandatory}</text></label></div>
@@ -143,10 +136,9 @@ export default class DocumentViewer extends React.Component{
            <ul className="swiper-wrapper">
            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
              {docFiles.map((file,fIndex)=>{
-                     return (<li key={file.fileId} className="doc_card" data-toggle="modal"  data-placement="bottom" title={file.fileName}
-                                 onClick={this.showModal.bind(this,fIndex)}>
+                     return (<li key={file.fileId} className="doc_card" data-toggle="modal"  data-placement="bottom" title={file.fileName}>
                                 <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.docTypeId,doc.documentId,file.fileId)}></span>
-                                <img id={file.fileId} src={file.fileUrl} />
+                                <img id={file.fileId} src={file.fileUrl}  onClick={this.showModal.bind(this,fIndex)} />
                             </li>);
              })}
 

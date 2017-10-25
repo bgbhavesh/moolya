@@ -6,21 +6,19 @@
  * Import of all the usable components
  * */
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import _ from "lodash";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlFunderAbout from "../../../../admin/transaction/portfolio/component/Funder/MlFunderAbout";
 import MlServiceProviderAbout from '../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAbout'
 import MlServiceProviderAwards from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAwards";
 import MlServiceProviderMCL from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
-// import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
-import MlServiceProviderViewServices from "../../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewServices";
 import MlServiceProviderClients from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
 import MlServiceProviderLookingFor from "../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderLookingFor";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
 import {appClient} from '../../../core/appConnection'
 import {getProfileBasedOnPortfolio} from '../../../calendar/manageScheduler/service/actions/MlServiceActionHandler'
+// import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
+import MlServiceProviderViewServices from "../../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewServices";
 
 export default class MlAppServiceProviderEditTabs extends Component {
   constructor(props) {
@@ -126,10 +124,9 @@ export default class MlAppServiceProviderEditTabs extends Component {
   getServiceDetails(details, privatekey) {
     if (details.services) {
       let portfolioId = details.portfolioId;
-      console.log()
       this.saveDataToServices(portfolioId)
     }
-    console.log(details)
+    // console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio: data})
@@ -142,14 +139,14 @@ export default class MlAppServiceProviderEditTabs extends Component {
     return resp
   }
 
-  getLookingForDetails(details, privatekey) {
+  getLookingForDetails(details, privatekey, requiredFields) {
     let data = this.state.serviceProviderPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privatekey);
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privatekey, requiredFields);
   }
   /**
    * getting all values from the child components and passing all to Main component through props
@@ -161,7 +158,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-  getAwardsDetails(details) {
+  getAwardsDetails(details, privateKey, requiredFields) {
     let data = this.state.serviceProviderPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -173,7 +170,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio});
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
   }
 
   getServiceProviderMCL(details, privateKey) {
@@ -191,29 +188,32 @@ export default class MlAppServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-  getServiceProviderServices(details, privateKey) {
-    let data = this.state.serviceProviderPortfolio;
-    data['services']=details;
-    this.setState({serviceProviderPortfolio : data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio:this.state.serviceProviderPortfolio}, privateKey);
-  }
+  // getServiceProviderServices(details, privateKey) {
+  //   let data = this.state.serviceProviderPortfolio;
+  //   data['services']=details;
+  //   this.setState({serviceProviderPortfolio : data})
+  //   this.props.getPortfolioDetails({serviceProviderPortfolio:this.state.serviceProviderPortfolio}, privateKey);
+  // }
 
+  /**
+   * Note: it has no use need to remove it
+   * */
   getFunderLibrary(details) {
-    let data = this.state.serviceProviderPortfolio;
-    if (details.memberships) {
-      data['memberships'] = details.memberships;
-    }
-    if (details.compliances) {
-      data['compliances'] = details.compliances;
-    }
-    if (details.licenses) {
-      data['licenses'] = details.licenses;
-    }
-    this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
+    // let data = this.state.serviceProviderPortfolio;
+    // if (details.memberships) {
+    //   data['memberships'] = details.memberships;
+    // }
+    // if (details.compliances) {
+    //   data['compliances'] = details.compliances;
+    // }
+    // if (details.licenses) {
+    //   data['licenses'] = details.licenses;
+    // }
+    // this.setState({serviceProviderPortfolio: data})
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
   }
 
-  getServiceProviderClients(details, privateKey) {
+  getServiceProviderClients(details, privateKey, requiredFields,) {
     let data = this.state.serviceProviderPortfolio;
     if (data && !data.clients) {
       data['clients'] = [];
@@ -227,7 +227,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
     })
     data['clients'] = arr;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
   }
 
 

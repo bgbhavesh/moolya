@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { multipartASyncFormHandler } from '../../MlMultipartFormAction'
-import { createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, fetchLibraryBasedOnPortfolioIdHandler, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler'
+import { createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails,fetchShareMembersInfo, fetchLibraryBasedOnPortfolioIdHandler, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer'
 import { Popover, PopoverTitle, PopoverContent } from "reactstrap";
 import formHandler from "../../../commons/containers/MlFormHandler";
@@ -71,6 +71,7 @@ class Library extends React.Component {
       showProfileModal1: false,
       showImageUploadCropper: false,
       uploadingImage2: false,
+      memberInfo: []
     };
     this.toggle = this.toggle.bind(this);
     this.refetchData.bind(this);
@@ -111,7 +112,7 @@ class Library extends React.Component {
    */
 
   componentWillMount() {
-    this.getCentralLibrary()
+    this.getCentralLibrary();
     let userId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : "";
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
@@ -143,6 +144,7 @@ class Library extends React.Component {
     if (portfolioId === "library") {
       this.getLibraryDetails(userId);
       this.getTotalSpaceLeft();
+      this.getShareMembersInfo();
       this.setState({ explore: false, isLibrary: true, hideLock: true, deleteOption: false })
     }
     if (portfolioId === "transaction_portfolio_EditRequests") {
@@ -154,6 +156,13 @@ class Library extends React.Component {
     // if(this.state.getLibraryInfo) {
     //   this.getLibraryDetails(userId);
     // }
+  }
+
+
+  async getShareMembersInfo() {
+    const response  = await fetchShareMembersInfo(this.props.client)
+    this.setState({memberInfo: response})
+    // console.log(response)
   }
 
   getTotalSpaceLeft(response) {
@@ -706,28 +715,29 @@ class Library extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoSpecifications || [];
     let videoPreviewUrl;
-    videoPreviewUrl = data[index].fileUrl;
+    videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl });
   }
 
   random(link, index) {
     let data = this.state.imageSpecifications || [];
     let imagePreviewUrl;
-    imagePreviewUrl = data[index].fileUrl;
+    imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    console.log('imagePreviewUrl', imagePreviewUrl)
     this.setState({ previewImage: imagePreviewUrl });
   }
 
   randomDocument(link, index) {
     let data = this.state.documentSpecifications || [];
     let documentPreviewUrl;
-    documentPreviewUrl = data[index].fileUrl;
+    documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewDocument: documentPreviewUrl });
   }
 
   randomTemplate(link, index) {
     let data = this.state.templateSpecifications || [];
     let templatePreviewUrl;
-    templatePreviewUrl = data[index].fileUrl;
+    templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewTemplate: templatePreviewUrl });
   }
 
@@ -837,7 +847,7 @@ class Library extends React.Component {
             <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
           }
           <a href="" data-toggle="modal" data-target=".imagepop"
-            onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
+            onClick={that.random.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
           <div id="images" className="title">{show.fileName}</div>
 
         </div>
@@ -854,6 +864,7 @@ class Library extends React.Component {
 
   popImages() {
     let that = this;
+    const {memberInfo} = that.state;
     let popImageData = this.state.imageDetails || [];
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -865,21 +876,25 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /></div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+            {memberInfo.map(function(memberData){
+              if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "image") {
+                return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                  }
+              })
+            }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a> :
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )
@@ -894,7 +909,7 @@ class Library extends React.Component {
     const popImages = popImageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          <img src={show.file.url} style={{ 'width': '200px', 'height': '150px' }} />
+          <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} style={{ 'width': '200px', 'height': '150px' }} />
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -929,7 +944,8 @@ class Library extends React.Component {
           }
 
           <a href="" data-toggle="modal" data-target=".templatepop"
-            onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
+            onClick={that.randomTemplate.bind(that, id)}>
+            <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -945,6 +961,7 @@ class Library extends React.Component {
 
   popTemplates() {
     let that = this;
+    const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
     const popTemplates = popTemplateData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -956,21 +973,25 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /></div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "template"  ) {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a> :
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1009,7 +1030,7 @@ class Library extends React.Component {
 
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
-              <source src={show.fileUrl} type="video/mp4"></source>
+              <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
             </video>
           </a>
           <div className="title">{show.fileName}</div>
@@ -1027,6 +1048,7 @@ class Library extends React.Component {
 
   popVideos() {
     let that = this;
+    const { memberInfo } = that.state;
     let popVideoData = this.state.videoDetails || [];
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -1038,24 +1060,28 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "video") {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <video width="120" height="100" controls>
-                <source src={show.fileUrl} type="video/mp4"></source>
+                <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
               </video>
             </a> : <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
                 <video width="120" height="100" controls>
-                  <source src={show.fileUrl} type="video/mp4"></source>
+                  <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
                 </video>
               </a>}
             <div id="templates" className="title">{show.fileName}</div>
@@ -1094,7 +1120,7 @@ class Library extends React.Component {
 
 
           <a href="" data-toggle="modal" data-target=".documentpop"
-            onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>
+            onClick={that.randomDocument.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src="/images/doc.png" /></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -1110,6 +1136,7 @@ class Library extends React.Component {
 
   popDocuments() {
     let that = this;
+    const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
     const popDocuments = popDocumentData.map(function (show, id) {
       if (show.inCentralLibrary) {
@@ -1121,21 +1148,25 @@ class Library extends React.Component {
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
               <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
-            {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
+            <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
-            <div className="show_details" style={{ 'display': 'none' }}>
-              <ul className="list-group">
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-                <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
-              </ul>
+            <div className="show_details" style={{'display': 'none'}}>
+              {memberInfo.map(function(memberData){
+                if(memberData && memberData.fileUrl === show.fileUrl && memberData.fileType === "document") {
+                  return (
+                    <ul className="list-group">
+                      <li className="list-group-item"><span className="task_with"><img src={memberData && memberData.profileImage ? memberData.profileImage :"/images/def_profile.png"}/></span><b>
+                        {memberData.userName} </b><span className="task_status act_task">{memberData.daysRemaining} days</span></li>
+                    </ul>)
+                }
+              })
+              }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <img src="/images/doc.png" /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1159,7 +1190,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.imageDetails || [];
         let imagePreviewUrl;
-        imagePreviewUrl = data[index].fileUrl;
+        imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewImage: imagePreviewUrl });
       } else {
         let data = this.state.imageSpecifications || [];
@@ -1170,7 +1201,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.videoDetails || [];
         let videoPreviewUrl;
-        videoPreviewUrl = data[index].fileUrl;
+        videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewVideo: videoPreviewUrl });
       } else {
         let data = this.state.videoSpecifications || [];
@@ -1181,7 +1212,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.templateDetails || [];
         let templatePreviewUrl;
-        templatePreviewUrl = data[index].fileUrl;
+        templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewTemplate: templatePreviewUrl });
       } else {
         let data = this.state.templateSpecifications || [];
@@ -1192,7 +1223,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.documentDetails || [];
         let documentPreviewUrl;
-        documentPreviewUrl = data[index].fileUrl;
+        documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewDocument: documentPreviewUrl });
       } else {
         let data = this.state.documentSpecifications || [];
@@ -1222,6 +1253,8 @@ class Library extends React.Component {
 
   async updateLibraryPortfolioLibrary(id, data) {
     const resp = await updateLibrary(id, data, this.props.client)
+    this.refetchData();
+    this.getCentralLibrary();
     // if(!resp.success){
     //   toastr.error("Image already Exists in library")
     // }

@@ -39,7 +39,7 @@ export default class MlAppTaskSession extends Component {
       let userSession = _.range(response ? response.noOfSession : 0);
       console.log(userSession);
       let sessionData = [];
-      _.each(userSession, function (item, value) {
+      _.each(response.session, function (item, value) {
         sessionData.push({
           duration: { hours: 0, minutes: 0 },
           activities: [],
@@ -104,7 +104,10 @@ export default class MlAppTaskSession extends Component {
 
   handelBlur(id, e) {
     let name = e.target.name;
-    var value = e.target.value
+    let value = Number.parseInt(e.target.value);
+
+    if(name === 'minutes'&& value>59) return;
+
     let data = this.state.sessionData
     let cloneBackUp = _.cloneDeep(data);
     let specificData = cloneBackUp[id]
@@ -159,7 +162,6 @@ export default class MlAppTaskSession extends Component {
   addActivity(activity, index) {
     let sessionData = this.state.sessionData;
     // sessionData[index].activities = (new Array(sessionData[index].activities))[0];
-    console.log(sessionData);
     const that = this;
     sessionData[index].activities.push(activity.value);
     sessionData[index].isOffline = this.isOfflineSession(sessionData[index].activities);
@@ -223,9 +225,9 @@ export default class MlAppTaskSession extends Component {
                     <div className="col-md-3 nopadding">Session {id + 1} {session.isOffline ? '(Offline)' : ''}</div>
                     <div className="col-md-3 nopadding">
                       <div style={{ 'marginTop': '-4px' }}>
-                        <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Hours
+                        <label>Duration: &nbsp; <input type="Number" pattern="[0-9]" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration ? session.duration.hours : 0} onChange={that.handelBlur.bind(that, id)} min={0} /> Hours
                         <input
-                            type="Number" className="form-control inline_input" key={session.duration ? 'snotLoadedYetMin' : 'sloadedMin'} name="minutes" value={session.duration ? session.duration.minutes : 0} onChange={that.handelBlur.bind(that, id)} min="0" /> Mins </label>
+                            type="Number" pattern="[0-9]" className="form-control inline_input" key={session.duration ? 'snotLoadedYetMin' : 'sloadedMin'} name="minutes" value={session.duration ? session.duration.minutes : 0} onChange={that.handelBlur.bind(that, id)} min={0}  max={59} /> Mins </label>
                       </div>
                     </div>
                     <div className="col-md-3">
@@ -260,12 +262,12 @@ export default class MlAppTaskSession extends Component {
                             return (
                               <div className="card_block swiper-slide" key={idx}>
                                 <div className="">
-                                    <h3>Name of the Task</h3>
+                                    <h3>{activity.displayName}</h3>
                                     <div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>
                                     <div className="clearfix"></div>
                                     <div className="list_icon mart0">
-                                      <span className="price">Rs. 18,500</span>
-                                      <span className="price pull-right">4 Sessions</span>
+                                      <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                                      <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                                       <div className="clearfix"></div>
                                       <i className="c_image ml my-ml-Ideator"></i>
                                       <div className="clearfix"></div>
@@ -279,7 +281,7 @@ export default class MlAppTaskSession extends Component {
                                       </div></span>
                                       <button className="btn btn-danger pull-right">{activity.mode}</button>
                                     </div>
-                                    <div className="block_footer"><span> {activity.displayName} </span></div>
+                                    <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
                                 </div>
                               </div>
                             )

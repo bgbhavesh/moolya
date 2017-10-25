@@ -1,14 +1,14 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
+import gql from 'graphql-tag';
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {findServiceProviderLookingForActionHandler} from '../../../actions/findPortfolioServiceProviderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 export default class MlServiceProviderLookingFor extends Component {
   constructor(props, context) {
@@ -24,8 +24,9 @@ export default class MlServiceProviderLookingFor extends Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    // this.handleBlur.bind(this)
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this)
   }
 
   componentWillMount() {
@@ -141,24 +142,29 @@ export default class MlServiceProviderLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderLookingForList: this.state.serviceProviderLookingFor, popoverOpen: false})
+    this.sendDataToParent(true);
+    var setObject = this.state.serviceProviderLookingFor
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.lookingFor)
+      setObject = this.context.serviceProviderPortfolio.lookingFor
+    this.setState({serviceProviderLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
+    // let details = this.state.data || {};
+    // let key = e.target.id;
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -192,7 +198,7 @@ export default class MlServiceProviderLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -206,18 +212,26 @@ export default class MlServiceProviderLookingFor extends Component {
       ["lookingForName"]: selObject.label,
       lookingDescription: selObject.about
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent() {
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked) {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let serviceProviderLookingFor1 = this.state.serviceProviderLookingFor;
     let serviceProviderLookingFor = _.cloneDeep(serviceProviderLookingFor1);
     data.index = this.state.selectedIndex;
-    serviceProviderLookingFor[this.state.selectedIndex] = data;
+    if (isSaveClicked) {
+      serviceProviderLookingFor[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderLookingFor, function (item) {
       for (var propName in item) {
@@ -232,31 +246,9 @@ export default class MlServiceProviderLookingFor extends Component {
 
     serviceProviderLookingFor = arr;
     this.setState({serviceProviderLookingFor: serviceProviderLookingFor})
-    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey);
+    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey, requiredFields);
 
   }
-
-  // handleBlur(e){
-  //   let details =this.state.data;
-  //   let name  = e.target.name;
-  //   details=_.omit(details,[name]);
-  //   details=_.extend(details,{[name]:e.target.value});
-  //   this.setState({data:details}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
-  //
-  // sendDataToParent(){
-  //   let data = this.state.data;
-  //   for (var propName in data) {
-  //     if (data[propName] === null || data[propName] === undefined) {
-  //       delete data[propName];
-  //     }
-  //   }
-  //   data=_.omit(data,["privateFields"]);
-  //   this.props.getLookingFor(data, this.state.privateKey)
-  // }
-
 
   render() {
     let query = gql`query($communityCode:String){
@@ -296,11 +288,10 @@ export default class MlServiceProviderLookingFor extends Component {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                         <a id={"create_client" + idx}>
                           <div className="list_block">
-                            <div className="cluster_status">
                               <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
                               <input type="checkbox" className="lock_input" id="makePrivate"
                                      checked={details.makePrivate}/>
-                            </div>
+
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
                               <span className="ml my-ml-browser_3"/>
                             </div>
@@ -324,10 +315,11 @@ export default class MlServiceProviderLookingFor extends Component {
                             <Moolyaselect multiSelect={false} placeholder="Select Looking For"
                                           className="form-control float-label" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={query}
-                                          isDynamic={true}
+                                          isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
                                           onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
+                                          selectedValue={this.state.selectedVal} ref={"lookingForId"} data-required={true}
+                                          data-errMsg="Looking For is required"/>
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
@@ -346,7 +338,7 @@ export default class MlServiceProviderLookingFor extends Component {
                                   htmlFor="checkbox1"><span></span>Make Private</label></div>
                               </div>
                               <div className="ml_btn" style={{'textAlign': 'center'}}>
-                                <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                                <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                               </div>
                             </div>
                           </div>

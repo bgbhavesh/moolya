@@ -101,6 +101,19 @@ MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) =
   }
 };
 
+MlResolver.MlQueryResolver['fetchCitiesPerStates'] = (obj, args, context, info) => {
+  if(args.stateIds){
+    let resp;
+    if(args.stateIds[0] && args.stateIds.indexOf('all') >= 0 ) {
+      resp = mlDBController.find('MlCities', {"isActive":true}, context).fetch()
+    } else {
+      // let resp = MlCities.find({"stateId":args.stateId,"isActive":true}).fetch()
+      resp = mlDBController.find('MlCities', {"stateId": { "$in": args.stateIds },"isActive":true}, context).fetch()
+    }
+    return resp;
+  }
+};
+
 MlResolver.MlQueryResolver['fetchCitiesPerCountry'] = (obj, args, context, info) => {
 
   if(args.countryId){
@@ -170,3 +183,52 @@ MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'] = (obj, args, context, in
     // return resp;
   }
 };
+
+
+MlResolver.MlQueryResolver['fetchBrachesOfRegisteredCommunity'] = (obj, args, context, info) => {
+  let result=[];
+
+  let cityIds = args&&args.countryId?args.countryId:[]
+  if(args.searchQuery&&args.searchQuery.trim()!=="" || (args.countryId && args.countryId.length) ){
+
+    let query ={
+      "$or":[
+        {
+          name:{$regex:'.*'+args.searchQuery+'.*',$options:"i"}
+        },
+        {
+          _id :  {"$in":cityIds }
+        }
+      ]
+    };
+    //query={name:{$regex:'.*'+args.searchQuery+'.*',$options:"i"},_id : args.countryId};
+
+    result = mlDBController.find('MlCities',query, context,{limit:100}).fetch()||[];
+
+  }
+  return result;
+}
+
+MlResolver.MlQueryResolver['fetchHeadQuarterOfRegisteredCommunity'] = (obj, args, context, info) => {
+  let result=[];
+
+  let cityId = args&&args.countryId?args.countryId:""
+  if(args.searchQuery&&args.searchQuery.trim()!=="" || args.countryId ){
+
+    let query ={
+      "$or":[
+        {
+          name:{$regex:'.*'+args.searchQuery+'.*',$options:"i"}
+        },
+        {
+          _id : cityId
+        }
+      ]
+    };
+    //query={name:{$regex:'.*'+args.searchQuery+'.*',$options:"i"},_id : args.countryId};
+
+    result = mlDBController.find('MlCities',query, context,{limit:100}).fetch()||[];
+
+  }
+  return result;
+}

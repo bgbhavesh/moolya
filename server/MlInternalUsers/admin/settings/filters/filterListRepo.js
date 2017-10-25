@@ -17,7 +17,7 @@ export default class MlFilterListRepo{
 
     //let userProfile = new MlAdminUserContext().userProfileDetails(this.userId);
     let userProfile=new MlAdminUserContext().userProfileDetails(this.userId)||{};
-    let user = Meteor.users.findOne({_id:context.userId});
+    let user = Meteor.users.findOne({_id:this.userId});
     let roleIds=[];
     let hirarichyLevel=[]
     let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];

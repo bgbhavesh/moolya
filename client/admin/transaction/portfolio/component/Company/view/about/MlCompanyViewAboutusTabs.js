@@ -61,7 +61,8 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About Us",
-        component: <MlCompanyViewAbout client={client} isAdmin={true} key="1"
+        name: "About Us",
+        component: <MlCompanyViewAbout client={client} isAdmin={true} key="1" tabName="aboutUs"
                                        portfolioDetailsId={this.props.portfolioDetailsId}
                                        getSelectedAnnotations={this.props.getSelectedAnnotations}
                                        aboutUsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.aboutUs}/>
@@ -70,6 +71,7 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Rating",
+        name: "Rating",
         component: <MlCompanyViewRating key="2" portfolioDetailsId={this.props.portfolioDetailsId}
                                         getSelectedAnnotations={this.props.getSelectedAnnotations}
                                         ratingDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.rating}/>
@@ -78,7 +80,8 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlCompanyViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Clients",
+        component: <MlCompanyViewClients key="3" portfolioDetailsId={this.props.portfolioDetailsId} tabName="clients"
                                          getSelectedAnnotations={this.props.getSelectedAnnotations}
                                          clientsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.clients}/>
       },
@@ -86,7 +89,8 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services & Products",
-        component: <MlCompanyViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Services And Products",
+        component: <MlCompanyViewServicesAndProducts key="4" portfolioDetailsId={this.props.portfolioDetailsId} tabName="serviceProducts"
                                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                      serviceProductsDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.serviceProducts}/>
       },
@@ -94,7 +98,8 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Information",
-        component: <MlCompanyViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId}
+        name: "Information",
+        component: <MlCompanyViewInformation key="5" portfolioDetailsId={this.props.portfolioDetailsId} tabName="information"
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
                                              informationDetails={this.props.institutionAboutUsDetails && this.props.institutionAboutUsDetails.information}/>
       }
@@ -103,6 +108,11 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
   }
 
   componentWillMount() {
+    let admin=true;
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      admin = false;
+    }
     let tabs = this.getTabComponents();
 
     function getTabs() {
@@ -110,16 +120,21 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        key:tab.name,
+        name:tab.name,
         getContent: () => tab.component
       }));
     }
 
+    let AllTabs =getTabs() ||[];
+    if(admin){
+      AllTabs.forEach(function(v){ delete v.key });
+    }
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
-      this.setState({activeTab});
-    }
-    this.setState({tabs: getTabs() || []});
+      this.setState({activeTab,admin,tabs:AllTabs});
+    }else
+    this.setState({tabs:AllTabs,admin});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
   updateTab(index){
@@ -128,7 +143,21 @@ export default class MlCompanyViewAboutusTabs extends React.Component {
   }
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} selectedTabKey={this.state.activeTab}  onChange={this.updateTab}
-    type="subtab" mkey="title"/>
+    if(this.state.admin){
+      if(this.props.activeTab){
+        let index = tabs.findIndex(i => i.name === this.props.activeTab);
+        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getStartUpState}/>
+      }else
+      return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState} />
+    }
+    else{
+      let activeTab =  this.props.activeTab || this.state.activeTab;
+      return <MlTabComponent tabs={tabs}
+                             selectedTabKey={activeTab}
+                             onChange={this.updateTab}
+                             backClickHandler={this.props.getStartUpState}
+                             type="subtab" mkey="title"
+      />
+    }
   }
 }

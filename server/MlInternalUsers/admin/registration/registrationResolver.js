@@ -83,7 +83,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 
   // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   args.registration.registrationDate = date
-  let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
+  // let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails = [{address: args.registration.email, verified: false}];
   var user = mlDBController.findOne('users', {_id: context.userId}) || {}
@@ -100,6 +100,14 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
       lastName = (user.profile || {}).lastName || '';
     }
   }
+  // /**
+  //  * @Note: merging the condition for the "internal/external" user's
+  //   * for opening this condition take care of the systemAdmin with ETL in all instance
+  //  * */
+  // if (user && user.profile) {
+  //     firstName = (user.profile || {}).firstName || '';
+  //     lastName = (user.profile || {}).lastName || '';
+  // }
 
   let createdBy = firstName + ' ' + lastName
   args.registration.createdBy = createdBy ? createdBy : user.username;
@@ -108,7 +116,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     status: "REG_EMAIL_P",
     emails: emails,
     transactionId: args.registration.registrationId,
-    transactionCreatedDate: transactionCreatedDate
+    transactionCreatedDate: new Date()
   }, context)
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');
@@ -263,7 +271,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};
   if (registrationExist || userExist._id) {
     let code = 400;
-    let result = {message: "Registration Exist"}
+    let result = {message: "Registration Exist with same  email Id/mobile number"}
     var isActiveOFB = MlRegistrationPreCondition.checkActiveOfficeBearer(args)
     if (isActiveOFB)
       result = {message: "Sorry, your request will require Office admin attention. Please contact Office Admin"}
@@ -331,7 +339,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
          MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: regRec._id}, context, info);
          // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
         let code = 200;
-        let result = {message: "Registration Successful", registrationId: args.registration.registrationId}
+        let result = {message: "you have successfully registered with moolya. please check your email for verification link", registrationId: args.registration.registrationId}
         let succResp = new MlRespPayload().successPayload(result, code);
         return succResp;
       }else{
@@ -1594,6 +1602,10 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
       return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
     }
   }
+}
+MlResolver.MlMutationResolver['verifyLaterUserMobileNumber'] = (obj, args, context, info) => {
+  // TODO : Authorization
+    return MlAccounts.verifyLaterUserMobileNumber(args.mobileNumber);
 }
 
 

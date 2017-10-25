@@ -1,17 +1,15 @@
 import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
 import _ from "lodash";
 import Datetime from "react-datetime";
+var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInstitutionDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "researchAndDevelopment"
 
@@ -28,7 +26,8 @@ export default class MlInstitutionEditRD extends React.Component{
       institutionRDList:[],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -70,6 +69,7 @@ export default class MlInstitutionEditRD extends React.Component{
     }
     this.institutionRAndDServer = response && response.researchAndDevelopment?response.researchAndDevelopment:[]
   }
+
   addRD(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.institutionRD){
@@ -80,7 +80,12 @@ export default class MlInstitutionEditRD extends React.Component{
   }
 
   onSaveAction(e){
-    this.setState({institutionRDList:this.state.institutionRD, popoverOpen : false})
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionRD;
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.researchAndDevelopment) {
+      setObject = this.context.institutionPortfolio.researchAndDevelopment
+    }
+    this.setState({institutionRDList: setObject, popoverOpen: false})
   }
 
   onTileClick(index, e){
@@ -95,12 +100,8 @@ export default class MlInstitutionEditRD extends React.Component{
                     popoverOpen : !(this.state.popoverOpen)},()=>{
                     this.lockPrivateKeys(index)
                  });
-   /* setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)*/
   }
+
 //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.institutionRAndDServer && this.institutionRAndDServer[selIndex] ? this.institutionRAndDServer[selIndex].privateFields : []
@@ -120,25 +121,12 @@ export default class MlInstitutionEditRD extends React.Component{
   }
   onLockChange(fiedName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-   /* var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })*/
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -154,29 +142,9 @@ export default class MlInstitutionEditRD extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
-
-/*  onOptionSelected(selectedAward, callback, selObject) {
-    let details = this.state.data;
-    details = _.omit(details, ["awardId"]);
-    details = _.omit(details, ["awardName"]);
-    if(selectedAward){
-      details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-        this.sendDataToParent()
-      })
-    }else {
-      details = _.extend(details, {["awardId"]: '', "awardName": ''});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
-      })
-    }
-
-  }*/
 
   handleBlur(e){
     let details =this.state.data;
@@ -184,7 +152,7 @@ export default class MlInstitutionEditRD extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -194,16 +162,24 @@ export default class MlInstitutionEditRD extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionRD;
     let institutionRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    institutionRD[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionRD[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionRD, function (item)
     {
@@ -212,13 +188,13 @@ export default class MlInstitutionEditRD extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     institutionRD = arr;
     this.setState({institutionRD:institutionRD})
-    this.props.getRDDetails(institutionRD, this.state.privateKey);
+    this.props.getRDDetails(institutionRD, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -363,8 +339,12 @@ export default class MlInstitutionEditRD extends React.Component{
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <div className="form-group">
-                            <input type="text" name="researchAndDevelopmentName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.researchAndDevelopmentName}  onBlur={this.handleBlur.bind(this)}/>
+                          <div className="form-group mandatory">
+                            <input type="text" name="researchAndDevelopmentName" placeholder="Name"
+                                   className="form-control float-label" ref={"researchAndDevelopmentName"}
+                                   defaultValue={this.state.data.researchAndDevelopmentName}
+                                   onBlur={this.handleBlur.bind(this)} data-required={true}
+                                   data-errMsg="Name is required"/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>
                         </div>

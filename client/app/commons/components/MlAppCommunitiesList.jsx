@@ -196,7 +196,7 @@ export default class MlAppCommunitiesList extends Component {
         return(
             <div className="app_main_wrap">
                 <div className="app_padding_wrap">
-                    <h2>Select Community</h2>
+                    <h2>Select your Community to Register</h2>
                     {list}
                 </div>
                 <Popover placement="right" isOpen={this.state.popoverOpen} target={"selCommunity"+this.state.selectedCommunity} toggle={this.toggle.bind(this)}>
@@ -239,7 +239,7 @@ export default class MlAppCommunitiesList extends Component {
                         <a data-toggle="tooltip" title="Save" data-placement="top"  className="hex_btn hex_btn_in" onClick={this.registerAs.bind(this)}>
                           <span className="ml ml-save"></span>
                         </a>
-                        <a data-toggle="tooltip" title="Cancel" data-placement="top" href=""  className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)} >
+                        <a data-toggle="tooltip" title="Cancel" data-placement="top"  className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)} >
                           <span className="ml ml-delete"></span>
                         </a>
                       </div>

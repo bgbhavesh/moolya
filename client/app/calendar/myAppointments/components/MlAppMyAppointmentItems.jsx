@@ -133,13 +133,15 @@ export default class MlAppMyAppointmentItems extends Component{
             {appointments.map(function (appointment, index) {
               let startDate, currenDate, days, startMsg, hours, minutes;
               if (appointment.startDate) {
-                startDate = new Moment(appointment.startDate);
-                currenDate = new Moment();
+                startDate = new Moment(appointment.startDate,"YYYY-MM-DD HH:mm:ss");
+                currenDate = new Moment(new Date(),"YYYY-MM-DD HH:mm:ss");
                 days = startDate.diff(currenDate, 'days');
-                hours = startDate.diff(currenDate, 'hours');
-                minutes = startDate.diff(currenDate, 'minutes');
+                hours = startDate.diff(currenDate, 'hours')%24;
+                minutes = startDate.diff(currenDate, 'minutes')%60;
                 if (days > 1) {
                   startMsg = `Starts in ${days} Days`;
+                }else if(days<0){
+                  startMsg = ``;
                 } else if (hours >= 0 && minutes >= 0) {
                   startMsg = `Starts in ${hours > 0 ? `${hours} Hrs :` : ''}  ${minutes} Mins`;
                 }

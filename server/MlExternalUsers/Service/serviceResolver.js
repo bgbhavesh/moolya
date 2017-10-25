@@ -137,6 +137,11 @@ MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, i
 MlResolver.MlMutationResolver['checkServiceSubChapterAccessControl'] = (obj, args, context, info) => {
   let serviceId = args.serviceId;
   let serviceDetails =mlDBController.findOne('MlServiceCardDefinition', serviceId , context);
+  if(serviceDetails.userId == context.userId){
+    let code = 400;
+    response = new MlRespPayload().errorPayload('You can not book your own service', code);
+    return response;
+  }
   let subChapterId = serviceDetails && serviceDetails.subChapterId ? serviceDetails.subChapterId : '';
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
   let response;
@@ -174,6 +179,7 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
   if (!_.isEmpty(args.Services)) {
     var service = mlDBController.findOne('MlServiceCardDefinition', {_id: args.serviceId}, context);
     if (service) {
+      let isSave = typeof args.Services.isApproved === 'undefined';
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
       args.Services.transactionId = service.transactionId;
@@ -183,13 +189,30 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
           args.Services[key] = service[key];
         }
       }
-      if(args.Services.isApproved) {
-        args.Services.status = "Admin Approved";
-      } else {
-        args.Services.status = "Rejected";
+      if(!isSave) {
+        if(args.Services.isApproved) {
+          args.Services.status = "Admin Approved";
+        } else {
+          args.Services.status = "Rejected";
+        }
+        args.Services.isCurrentVersion = false;
       }
+
+      console.log(' args.Services', args.Services);
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
       if(result){
+        let serviceInfo = args.Services;
+        serviceInfo.userId = service.userId;
+        serviceInfo.updatedAt = new Date();
+        serviceInfo.transactionId = service.transactionId;
+        serviceInfo.versions = args.Services.versions + 0.001;
+        serviceInfo.status = args.Services.status;
+        serviceInfo.isReview = false;
+        serviceInfo.isCurrentVersion = true;
+        delete serviceInfo._id;
+        if( !isSave ) {
+          let newScVersion = mlDBController.insert('MlServiceCardDefinition', serviceInfo, context);
+        }
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response
@@ -247,6 +270,7 @@ MlResolver.MlMutationResolver['updateServiceGoLive'] = (obj, args, context, info
   }
   let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
   if(result){
+    mlDBController.update('MlServiceCardDefinition', {transactionId: service.transactionId, versions: parseInt(service.versions)}, {isLive: true, status: "Gone Live" }, {$set: 1}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -274,6 +298,11 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
   return totalAmountOfTasks;
 }
 
+/**
+ * @Note: this is portfolio thing need to move to portfolio Resolver
+ * @Duplicate of "findPortfolioDetails"
+ * */
+
 MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, info) => {
   let query = {
     _id: args.portfolioId
@@ -284,8 +313,7 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['getServiceBasedOnServiceId'] = (obj, args, context, info) => {
   let query = {
-    _id: args.serviceId,
-    isCurrentVersion: true
+    _id: args.serviceId
   };
   let result = mlDBController.findOne('MlServiceCardDefinition', query , context);
   return result;

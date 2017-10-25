@@ -1,4 +1,5 @@
 import React, { Component, PropTypes }  from "react";
+import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -6,7 +7,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 
-export default class MlStartupInformation extends React.Component{
+class MlStartupInformation extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -118,3 +119,12 @@ export default class MlStartupInformation extends React.Component{
 MlStartupInformation.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupInformation);
+export default MlStartupInformation;

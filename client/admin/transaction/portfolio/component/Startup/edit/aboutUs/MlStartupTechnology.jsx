@@ -1,21 +1,21 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import gql from "graphql-tag";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
+import { connect } from 'react-redux';
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "technologies"
 
-export default class MlStartupTechnology extends React.Component{
+class MlStartupTechnology extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -29,7 +29,9 @@ export default class MlStartupTechnology extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
+    this.onOptionSelected = this.onOptionSelected.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
@@ -51,7 +53,12 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupTechnologiesList:this.state.startupTechnologies,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupTechnologies
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.technologies ){
+      setObject = this.context.startupPortfolio.technologies
+    }
+    this.setState({startupTechnologiesList:setObject,popoverOpen : false})
   }
   addTechnology(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -79,21 +86,20 @@ export default class MlStartupTechnology extends React.Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = field;
-    details=_.omit(details,[key]);
+    // let details = this.state.data||{};
+    // let key = field;
+    // details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+      // details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
 
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -109,7 +115,7 @@ export default class MlStartupTechnology extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -119,9 +125,9 @@ export default class MlStartupTechnology extends React.Component{
       // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
       details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, technologyDescription: selObject.about});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
-        this.sendDataToParent()
+      this.setState({data: details, "selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about}, function () {
+        // this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
+        // this.sendDataToParent()
       })
     } else {
       let details = this.state.data;
@@ -129,9 +135,9 @@ export default class MlStartupTechnology extends React.Component{
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
       details = _.omit(details, ["technologyDescription"]);
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
-        this.sendDataToParent()
+      this.setState({data: details, "selectedVal": '', "technologyName": '', technologyDescription:''}, function () {
+        // this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
+        // this.sendDataToParent()
       })
     }
   }
@@ -142,15 +148,24 @@ export default class MlStartupTechnology extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
-  sendDataToParent(){
+
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
     data.index = this.state.selectedIndex;
-    startupTechnologies[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupTechnologies[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupTechnologies, function (item)
     {
@@ -165,7 +180,7 @@ export default class MlStartupTechnology extends React.Component{
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey);
+    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey, requiredFields);
 
   }
   onLogoFileUpload(e){
@@ -304,15 +319,17 @@ export default class MlStartupTechnology extends React.Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Technology'}
-                                    isDynamic={true}
-                                    onSelect={this.onOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedVal}/>
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} ref={"technologyId"}
+                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    placeholder={'Select Technology'}
+                                    isDynamic={true} mandatory={true}
+                                    onSelect={this.onOptionSelected}
+                                    selectedValue={this.state.selectedVal}
+                                    data-required={true} data-errMsg="Technology is required"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur}/>
                       <FontAwesome id="isDescriptionPrivate" name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "technologyDescription", "isDescriptionPrivate")}/>
                     </div>
 
@@ -343,3 +360,12 @@ export default class MlStartupTechnology extends React.Component{
 MlStartupTechnology.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupTechnology);
+export default MlStartupTechnology;

@@ -277,3 +277,45 @@ export async function fetchSharedLibraryHandler(userId) {
 }
 
 
+export async function removePortfolioFileUrl(portfolioDetailsId, fileUrl,tabName,typeOfData) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($portfolioDetailsId: String, $fileUrl:String, $tabName:String, $typeOfData:String){
+        removePortfolioFileUrl(portfoliodetailsId:$portfolioDetailsId,fileUrl:$fileUrl,tabName:$tabName,typeOfData:$typeOfData) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfolioDetailsId,
+      fileUrl,
+      tabName,
+      typeOfData
+    },
+    forceFetch: true
+  });
+  const id = result.data.removePortfolioFileUrl;
+  return id;
+}
+
+export async function fetchShareMembersInfo(connection) {
+  const result = await connection.query({
+    query: gql`
+    query{
+  fetchShareMembersInfo{
+      userName
+      daysRemaining
+      fileUrl
+      fileType
+      profileImage
+  }
+}`, forceFetch:true
+  })
+  const id = result.data.fetchShareMembersInfo;
+  return id
+}
+
+
+

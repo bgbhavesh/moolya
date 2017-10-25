@@ -116,6 +116,7 @@ let myOfficeSchema = `
        userId: String
        profileId: String
        profileImage: String
+       officeName: String
     }
     
     type OfficeUserTypes{

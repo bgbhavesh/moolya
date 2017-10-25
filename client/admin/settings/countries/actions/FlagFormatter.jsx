@@ -7,7 +7,7 @@ class FlagFormatter extends React.Component {
 
   render() {
     return (
-     <img src={this.props.data.url}/>
+     <img src={Meteor.settings.public.countriesFlagBaseUrl+this.props.data.url}/>
       );
   }
 };

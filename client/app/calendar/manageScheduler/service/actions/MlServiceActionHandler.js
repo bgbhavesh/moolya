@@ -86,6 +86,7 @@ export async function fetchServiceActionHandler (serviceId) {
         isApproved
         isLive
         isActive
+        isReview
         serviceExpiry
         duration{
          hours
@@ -381,6 +382,11 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               mode
               name
               displayName
+              isInternal
+              isExternal
+              payment{
+                derivedAmount
+              }
               duration {
                 hours
                 minutes

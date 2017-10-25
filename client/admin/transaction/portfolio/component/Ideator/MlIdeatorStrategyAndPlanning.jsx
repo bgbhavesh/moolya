@@ -129,7 +129,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                 <div className="col-lg-12">
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
-                      Startergy and Planning
+                      Strategy and Planning
                       <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "spDescription", "isStrategyPlansPrivate")}/>
                     </div>
                     <div className="panel-body">

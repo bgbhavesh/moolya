@@ -1,21 +1,19 @@
 import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import Datetime from "react-datetime";
+import _ from "lodash";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "achievements"
 
-export default class MlInstitutionEditAchivements extends React.Component{
+export default class MlInstitutionEditAchivements extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -28,7 +26,8 @@ export default class MlInstitutionEditAchivements extends React.Component{
       institutionAchievementsList:[],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
@@ -77,7 +76,12 @@ export default class MlInstitutionEditAchivements extends React.Component{
   }
 
   onSaveAction(e){
-    this.setState({institutionAchievementsList:this.state.institutionAchievements, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject = this.state.institutionAchievements
+    if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.achievements ){
+      setObject = this.context.institutionPortfolio.achievements
+    }
+    this.setState({institutionAchievementsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -115,8 +119,7 @@ export default class MlInstitutionEditAchivements extends React.Component{
     })
   }
 
-  onStatusChangeNotify(e)
-  {
+  onStatusChangeNotify(e){
     let updatedData = this.state.data||{};
     let key = e.target.id;
     updatedData=_.omit(updatedData,[key]);
@@ -126,7 +129,7 @@ export default class MlInstitutionEditAchivements extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -156,7 +159,7 @@ export default class MlInstitutionEditAchivements extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 /*
@@ -170,12 +173,20 @@ export default class MlInstitutionEditAchivements extends React.Component{
     })
   }*/
 
-  sendDataToParent(){
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
     data.index = this.state.selectedIndex;
-    institutionAchievements[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionAchievements[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionAchievements, function (item)
     {
@@ -184,13 +195,13 @@ export default class MlInstitutionEditAchivements extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     institutionAchievements = arr;
     this.setState({institutionAchievements:institutionAchievements})
-    this.props.getInstitutionAchivements(institutionAchievements, this.state.privateKey);
+    this.props.getInstitutionAchivements(institutionAchievements, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -334,8 +345,11 @@ export default class MlInstitutionEditAchivements extends React.Component{
                   <div  className="ml_create_client">
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
-                        <div className="form-group">
-                          <input type="text" name="achievementName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.achievementName}  onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group mandatory">
+                          <input type="text" name="achievementName" placeholder="Name" ref={"achievementName"}
+                                 className="form-control float-label" defaultValue={this.state.data.achievementName}
+                                 onBlur={this.handleBlur.bind(this)} data-required={true}
+                                 data-errMsg="Achievement Name is required"/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementNamePrivate" defaultValue={this.state.data.isAchievementNamePrivate}  onClick={this.onLockChange.bind(this, "achievementName", "isAchievementNamePrivate")}/>
                         </div>
                         <div className="form-group">

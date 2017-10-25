@@ -38,6 +38,7 @@
     "fromEmailAddr":"noreply@moolya.in",
     "bugReportEmailAddr":"noreply@moolya.in",
     "isEmailDomainCheckEnabled":true,
+    "isProdENV":true,
     "isAuditEnabled":true
   }
 }

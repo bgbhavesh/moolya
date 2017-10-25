@@ -176,7 +176,7 @@ class MlAppServiceManageSchedule extends Component {
           options={this.options}
           checkBoxHandler={this.checkBoxHandler}
           validTill={this.validTill}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved || this.state.serviceBasicInfo.isReview ))}
           canStatusChange={ canStatusChange }
           setSessionFrequency={this.setSessionFrequency}
           onChangeFormField={this.onChangeFormField}
@@ -193,7 +193,7 @@ class MlAppServiceManageSchedule extends Component {
           getRedirectServiceList={this.getRedirectServiceList}
           deleteSelectedTask={this.deleteSelectedTask}
           getServiceDetails={this.getServiceDetails}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved || this.state.serviceBasicInfo.isReview ))}
           saveService={this.saveService}
           selectedTaskId={serviceTask.selectedTaskId}
           optionsBySelectService={this.optionsBySelectService}
@@ -205,7 +205,7 @@ class MlAppServiceManageSchedule extends Component {
         name: 'Terms & Conditions',
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
           attachments={attachments}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved ))}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isApproved || this.state.serviceBasicInfo.isReview ))}
           activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           onChangeCheckBox={this.onChangeCheckBox}
@@ -219,7 +219,7 @@ class MlAppServiceManageSchedule extends Component {
           taxStatus={taxStatus}
           finalAmount={finalAmount}
           prevFinalAmount={prevFinalAmount}
-          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && this.state.serviceBasicInfo.isLive)}
+          viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isReview ))}
           activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
           getServiceDetails={this.getServiceDetails}
@@ -405,6 +405,7 @@ class MlAppServiceManageSchedule extends Component {
           cluster: service.cluster,
           isBeSpoke: service.isBeSpoke,
           isApproved: service.isApproved,
+          isReview: service.isReview,
           isLive: service.isLive,
           city: service.city,
           state: service.state,
@@ -1066,6 +1067,7 @@ class MlAppServiceManageSchedule extends Component {
   async setGoLiveService() {
     const resp = await updateGoLiveServiceActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Your service is now live');
+    FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/serviceList');
   }
 
   /**
@@ -1075,6 +1077,7 @@ class MlAppServiceManageSchedule extends Component {
   async sendReviewService() {
     const resp = await updateReviewServiceActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Sent for review successfully');
+    FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/serviceList');
   }
 
   /**
@@ -1107,7 +1110,7 @@ class MlAppServiceManageSchedule extends Component {
         handler: async (event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: _this.serviceId && this.state.service && this.state.service.isActive && this.state.service.status !== "Gone Live" ? true : false,
+        showAction: _this.serviceId && this.state.service && this.state.service.isActive && ["Send For Review", "Gone Live", "Admin Approved"].indexOf(this.state.service.status) == -1 ? true : false,
         actionName: 'send for review',
         handler: async (event) => _this.props.handler(_this.sendReviewService.bind(this))
       },

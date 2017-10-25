@@ -166,7 +166,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {"$lookup":{from:'mlStates',localField:'countryCode',foreignField:'countryCode',as:'states'}},
       {"$unwind":'$states'},
       {"$project":{ _id:"$states._id",
-        "countryName":"$country","name":"$states.name","countryId":"$_id","countryCode":1,"isActive":"$states.isActive" }},
+        "countryName":"$country","name":"$states.name","displayName":"$states.displayName","countryId":"$_id","countryCode":1,"isActive":"$states.isActive" }},
     ];
     if(query && Object.keys(query).length){
       pipeline.push({"$match":query});
@@ -182,7 +182,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       { '$unwind': '$data' }
     )
     pipeline.push({
-      "$project":{ count:1,_id:"$data._id", "countryName":"$data.countryName","name":"$data.name","countryId":"$data.countryId","countryCode":"$data.countryCode","isActive":"$data.isActive" }
+      "$project":{ count:1,_id:"$data._id", "countryName":"$data.countryName","name":"$data.name","displayName":"$data.displayName","countryId":"$data.countryId","countryCode":"$data.countryCode","isActive":"$data.isActive" }
     });
     if(findOptions.sort){
       pipeline.push({"$sort": findOptions.sort});
@@ -820,12 +820,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if (args.module == "officeTransaction") {
 
     let pipeline = [
-      { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
+      // { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
+      { "$match" : { officeId: args.customParams.docId} },
       { "$group": {
         _id : null,
         officeId: {$first: "$officeId"},
         officeTrans: { $push: "$$ROOT" }
-      }
+        }
       },
       {'$lookup':{from:'mlTransactionsLog',localField:'officeId',foreignField:'docId', as:'transactionLog'}},
       {"$unwind": "$transactionLog"},
@@ -889,6 +890,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "activity": "$$trans.activity",
                 "activityDocId": "$$trans.activityDocId",
                 "registrationId": "$$trans.registrationId",
+                "docId": "$$trans.docId"
               }
             }
           }
@@ -1017,6 +1019,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
                 "fromProfileId": "$$trans.fromProfileId",
                 "fromUserName": "$$trans.fromUserName",
                 "fromUserType": "$$trans.fromUserType",
+                "docId": "$$trans.docId"
               }
             }
         }
@@ -1205,6 +1208,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'userTransaction':resolveType='myTransaction';break
       case 'NotificationTemplate':resolveType='NotificationTemplate';break
       case 'OFFICEPACKAGE':resolveType='OfficePackage';break;
+    }
+
+    /**Its a quick fix until a generic solution is coded.
+     *  This is to resolve module Name from fetchUsersForDashboard QueryResolver of the userResolver.js file*/
+    if(context&&context.userModule==='Users'){
+      resolveType='BackendUsers';
     }
 
     if(resolveType){

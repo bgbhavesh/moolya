@@ -9,7 +9,7 @@ if(Meteor.isServer){
       {
         "image" : "ml my-ml-dashboard",
         "link" : "/admin/dashboard/chapters",
-        "name" : "Dashboard",
+        "name" : "Ecosystem",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
@@ -405,7 +405,7 @@ if(Meteor.isServer){
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
                     "subMenusId":"transaction_Registration",
-                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                    "subMenuMappingId":"transaction_registration_requested"
                   }
                 ]
               },
@@ -417,7 +417,31 @@ if(Meteor.isServer){
                 "isMenu" : true,
                 "image" : "",
                 "subMenusId":"transaction_Registration",
-                "subMenuMappingId":"transaction_registration_approved"
+                "subMenuMappingId":"transaction_registration_approved",
+                "subMenu": [
+                  {
+                    "link": "/admin/transactions/registrationApprovedList",
+                    "name": "Request List",
+                    "uniqueId": "transaction_registration_approved_list",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": "",
+                    "subMenusId": "transaction_Registration",
+                    "subMenuMappingId": "transaction_registration_approved_list"
+                  },
+                  {
+                    "link": "/admin/transactions/registrationRequested/edit",
+                    "name": "Backend Users",
+                    "uniqueId": "transaction_registration_approved_edit",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": "",
+                    "dynamicLink": true,
+                    "dynamicLinkHandler": "",
+                    "subMenusId": "transaction_Registration",
+                    "subMenuMappingId": "transaction_registration_approved"
+                  }
+                ]
               },
 
               {

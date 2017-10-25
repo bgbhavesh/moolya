@@ -11,7 +11,7 @@ if(Meteor.isServer){
                 "link": "/app/dashboard",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Dashboard",
+                "name" : "Ecosystem",
                 "uniqueId" : "dashboard"
             },
             {

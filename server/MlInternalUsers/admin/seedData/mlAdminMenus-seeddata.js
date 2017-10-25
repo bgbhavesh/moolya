@@ -6,7 +6,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-dashboard",
           "link": "/admin/dashboard/clusters",
-          "name": "Dashboard",
+          "name": "Ecosystem",
           "uniqueId": "dashboard",
           "isLink": true,
           "isMenu": true,
@@ -398,6 +398,19 @@ if (Meteor.isServer) {
               ]
               //   }
               // ]
+            },
+            {
+              "link" : "/admin/chapters/subChapters",
+              "name": "Sub Chapters",
+              "uniqueId": "chapter_subChapters",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "dynamicLink": true,
+              "hideSubMenu": true,
+              "dynamicLinkHandler": "",
+              "subMenusId": "chapter",
+              "subMenuMappingId":"chapter_subChapters"
             }
           ]
         },

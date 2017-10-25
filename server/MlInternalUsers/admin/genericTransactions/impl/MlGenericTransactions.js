@@ -10,7 +10,7 @@ import _underscore from "underscore";
 class MlGenericTransactions{
 
 
-  assignTransaction(transactionType,transactionId,params) {
+  assignTransaction(transactionType,transactionId,params,context) {
     let resp =MlResolver.MlMutationResolver['assignTransaction'] ("", {'params':params,'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId}, context, "")
     if(resp.success){
       return resp;
@@ -23,7 +23,7 @@ class MlGenericTransactions{
     }
   }
 
-  unAssignTransaction(transactionType,transactionId){
+  unAssignTransaction(transactionType,transactionId,context){
     let resp =MlResolver.MlMutationResolver['unAssignTransaction']  ("", {'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId}, context, "")
     if(resp.success){
       return resp;
@@ -36,7 +36,7 @@ class MlGenericTransactions{
     }
   }
 
-  selfAssignTransaction(transactionType,transactionId, userId){
+  selfAssignTransaction(transactionType,transactionId, userId,context){
       /*
         1) Allow users to self assign only if their role is in hierarchy
         2) If not, throw error.
@@ -91,8 +91,10 @@ class MlGenericTransactions{
           /*
            Checking if roleId of highest role has hierarchy
            */
-          var isDefaultSubChapter = mlDBController.findOne('MlSubChapters',{_id:subChapterId}).isDefaultSubChapter;
-
+          var isDefaultSubChapter = true
+          if(defaultRole && defaultRole.subChapterId != 'all'){
+            isDefaultSubChapter = mlDBController.findOne('MlSubChapters',{_id:defaultRole.subChapterId}).isDefaultSubChapter;
+          }
           hierarchyAssignment = mlDBController.find('MlHierarchyAssignments',{
             "$and":[
               {'clusterId':{"$in":[clusterId, "All"]}},
@@ -126,7 +128,7 @@ class MlGenericTransactions{
       }
   }
 
-  updateTransactionStatus(transactionType,transactionId,status){
+  updateTransactionStatus(transactionType,transactionId,status,context){
     let resp = MlResolver.MlMutationResolver['updateTransactionStatus'] ("",{'collection':this.collectionConfig().get(transactionType),'transactionId':transactionId,'status':status},context, "");
     if(!resp.success){
       return resp;

@@ -27,9 +27,11 @@ export default class MlServiceManageSchedule extends Component {
    */
 
   constructor(props) {
-    super(props)
+    super(props);
+    let taskId = this.props.data && this.props.data.tasks && this.props.data.tasks[0] && this.props.data.tasks[0].id ? this.props.data.tasks[0].id : '';
     this.state = {
-      data: this.props.data || {}
+      data: this.props.data || {},
+      selectedTaskId: taskId
     };
     this.errorMsg = '';
     this.optionsBySelectService = this.optionsBySelectService.bind(this);
@@ -37,7 +39,19 @@ export default class MlServiceManageSchedule extends Component {
     this.checkChargeStatus = this.checkChargeStatus.bind(this);
     this.calculateCharges = this.calculateCharges.bind(this);
     //this.getCreatedId.bind(this)
+    this.optionsBySelectService(taskId);
   }
+
+  componentWillReceiveProps(nextProps) {
+    let taskId = nextProps.data && nextProps.data.tasks && nextProps.data.tasks[0] && nextProps.data.tasks[0].id ? nextProps.data.tasks[0].id : '';
+    this.state = {
+      data: nextProps.data || {},
+      selectedTaskId: taskId
+    };
+    this.optionsBySelectService(taskId);
+    console.log('nextProps',nextProps);
+  }
+
 
   /**
    * ComponentDidMount
@@ -197,6 +211,9 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Save the service
    */
   async saveServicePaymentDetails(type) {
+    if(this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ){
+      return false;
+    }
     if (!this.errorMsg) {
       this.errorMsg = '';
       let {data} = this.state;
@@ -220,6 +237,12 @@ export default class MlServiceManageSchedule extends Component {
       } else {
         service.isApproved = false;
       }
+
+      if( typeof type === 'undefined') {
+        delete service.isApproved;
+        type = 'save';
+      }
+
       service.payment = servicePayment;
       service.finalAmount = finalAmount || 0;
       service.facilitationCharge = facilitationCharge;
@@ -271,6 +294,7 @@ export default class MlServiceManageSchedule extends Component {
         icon: <span className="ml ml-payments"></span>},
       {name: 'Payment',
         component: <MlServiceCardStep4 data={this.state.data}
+                                       isView={this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ? true : false }
                                        checkChargeStatus={this.checkChargeStatus}
                                        calculateCharges={this.calculateCharges}
                                        saveServicePaymentDetails={this.saveServicePaymentDetails} />,

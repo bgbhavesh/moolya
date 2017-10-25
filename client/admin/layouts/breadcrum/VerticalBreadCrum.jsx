@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import getBreadCrumListBasedOnhierarchy from './actions/dynamicBreadCrumListHandler';
 import ScrollArea from 'react-scrollbar'
-import { fetchPortfolioImageHandler } from '../../../app/portfolio/ideators/actions/ideatorActionHandler';
+import { findBackendUserActionHandler } from '../../settings/backendUsers/actions/findBackendUserAction';
+import { findUserRegistrationActionHandler } from '../../users/actions/findUsersHandlers';
+import { findStepTemplatesAssignmentActionHandler } from '../../templates/actions/findTemplatesAssignmentAction';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
@@ -14,25 +16,59 @@ export default class VerticalBreadCrum extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    let porfolioId = FlowRouter.getParam('portfolioId');
+    let porfolioId = FlowRouter.getParam('registrationId');
+    let backendUserId= FlowRouter.getParam('backendUserId');
+    let processId =FlowRouter.getParam('id');
     if(porfolioId)
-      this.getUserName(porfolioId);
+      this.getUserName(porfolioId,1);
+    else if(backendUserId)
+      this.getUserName(backendUserId,0);
+    else if(processId){
+      this.getProcessId(processId);
+    }
     else
       this.getHierarchyDetails();
   }
+
   componentDidUpdate() {
     var WinHeight = $(window).height();
     $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));
   }
 
-  async getUserName(porfolioId){
-    var response = await fetchPortfolioImageHandler(porfolioId);
-    if (response) {
-      this.setState({user:response.portfolioUserName},
+  async getProcessId(id){
+    var response = await findStepTemplatesAssignmentActionHandler(id);
+    if (response && response.templateProcessName && response.templateSubProcessName) {
+      this.setState({process : response.templateProcessName + ' / '+response.templateSubProcessName},
         ()=>{
-        this.getHierarchyDetails();
+          this.getHierarchyDetails();
         });
     }else  this.getHierarchyDetails();
+  }
+
+
+  async getUserName(porfolioId,isPortfolio){
+    var response = null;
+    if(isPortfolio) {
+      response = await findUserRegistrationActionHandler(porfolioId);
+      if (response && response.registrationInfo) {
+        this.setState({user:response.registrationInfo.firstName || 'User',cluster:response.registrationInfo.clusterName || 'Cluster'},
+          ()=>{
+            this.getHierarchyDetails();
+          });
+      }else  this.getHierarchyDetails();
+    }
+    else{
+      response = await findBackendUserActionHandler(porfolioId);
+      if (response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
+        && response.profile.InternalUprofile.moolyaProfile.firstName) {
+        this.setState({user:response.profile.InternalUprofile.moolyaProfile.firstName || 'Backend User'},
+          ()=>{
+            this.getHierarchyDetails();
+          });
+      }else  this.getHierarchyDetails();
+    }
+
+
   }
 
   componentWillUnmount() {
@@ -67,14 +103,13 @@ export default class VerticalBreadCrum extends Component {
 
         if(breadCrum.type === 'documents' && breadCrum.document){
           let breadCrumObject=[];
-          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
-            breadCrumObject.push({
-              linkName: properName((FlowRouter._current.oldRoute.path.split('documents/')[1]).split('List')[0]), linkId: breadCrum.type,linkUrl :FlowRouter._current.oldRoute.path
-            });
-          }
+          breadCrumObject.push({
+            linkName: 'Cluster',
+            linkUrl :path.split('/documents')[0]+'/documents/clusterList',
+          });
 
           breadCrumObject.push({
-            linkName: properName(FlowRouter.getParam('docid')), linkId: 'module'
+            linkName: properName(FlowRouter.getParam('docid')), linkUrl: ''
           });
 
           this.setBreadCrumHierarchyCallback(
@@ -107,7 +142,7 @@ export default class VerticalBreadCrum extends Component {
 
         if(breadCrum.type === 'users' && breadCrum.module ==='clusters' && breadCrum.subModule){
           breadCrumObject = [
-            { linkName: properName(breadCrum.module),  linkUrl:path.split('users')[0]+'users/clusters'},
+            { linkName: properName(this.state.cluster)||'Cluster',  linkUrl:path.split('users')[0]+'users/clusters'},
             { linkName: properName(this.state.user || 'User'),  linkUrl:path.split(breadCrum.subModule)[0]+'aboutuser'},
             { linkName: properName(fixName(breadCrum.subModule)),  linkUrl:path},
           ];
@@ -140,7 +175,7 @@ export default class VerticalBreadCrum extends Component {
           });
         }
         if(breadCrum.subModule !=='stepCode')
-          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig);
+          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig,this.state.process);
         else{
           let modulePath = path.split('settings')[0] + 'settings/templatesList';
           breadCrumObject[1].linkUrl = modulePath;
@@ -185,34 +220,30 @@ export default class VerticalBreadCrum extends Component {
       ++counter;
       let lastLinkClass = '';
       const linkUrl = prop.linkUrl;
+      let name = prop.linkName;
+      if(name === 'Backend User Details'){
+        name = this.state.user||'Backend User Details';
+      }
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
-      return (<li key={id} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
+      return (<li key={id} className={lastLinkClass}><a href={linkUrl}>{name}</a></li>);
     });
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 
     return (
 
       <div className="vTimeline">
-        <div className="main_wrap_scroll">
-        <ScrollArea
-          speed={0.8}
-          className="main_wrap_scroll"
-          smoothScrolling={true}
-        >
         <ul>
           {list}
         </ul>
-        </ScrollArea>
-        </div>
       </div>
 
     );
   }
 }
 
-function StaticBreadCrumListHandler(list, breadCrum, menu) {
+function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
   let currentModule = {};
   const path = Object.assign(FlowRouter._current.path);
   const module = breadCrum.subModule || breadCrum.module;
@@ -236,6 +267,10 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
           list[1].linkUrl = object.link;
         }
       });
+    }
+
+    if (breadCrum.type === 'templates' && breadCrum.subModule && breadCrum.subModule==='Edit') {
+      list[list.length-1].linkName = process|| list[list.length-1].linkName;
     }
 
 

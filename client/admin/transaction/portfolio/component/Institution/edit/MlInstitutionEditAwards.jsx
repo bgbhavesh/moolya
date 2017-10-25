@@ -1,17 +1,17 @@
 import React, {Component, PropTypes} from "react";
 import ScrollArea from "react-scrollbar";
+import gql from "graphql-tag";
+import _ from "lodash";
+import Datetime from "react-datetime";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
-import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInstitutionDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "awardsRecognition"
 
@@ -28,7 +28,8 @@ export default class MlInstitutionEditAwards extends React.Component{
       institutionAwardsList:[],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -80,7 +81,12 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   onSaveAction(e){
-    this.setState({institutionAwardsList:this.state.institutionAwards, popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.institutionAwards
+    if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.awardsRecognition ){
+      setObject = this.context.institutionPortfolio.awardsRecognition
+    }
+    this.setState({institutionAwardsList:setObject, popoverOpen : false})
   }
 
   onTileClick(index, e){
@@ -149,7 +155,7 @@ export default class MlInstitutionEditAwards extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -159,15 +165,15 @@ export default class MlInstitutionEditAwards extends React.Component{
     details = _.omit(details, ["awardName"]);
     if(selectedAward){
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-        this.sendDataToParent()
+      this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
+        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
+        // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
-      this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', awardName: ''})
-        this.sendDataToParent()
+      this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
+        // this.setState({"selectedVal": '', awardName: ''})
+        // this.sendDataToParent()
       })
     }
 
@@ -179,7 +185,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -189,16 +195,24 @@ export default class MlInstitutionEditAwards extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:this.refs.year.state.inputValue});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionAwards;
     let institutionAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    institutionAwards[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionAwards[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionAwards, function (item)
     {
@@ -207,13 +221,13 @@ export default class MlInstitutionEditAwards extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+     let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     institutionAwards = arr;
     this.setState({institutionAwards:institutionAwards})
-    this.props.getAwardsDetails(institutionAwards, this.state.privateKey);
+    this.props.getAwardsDetails(institutionAwards, this.state.privateKey, requiredFields);
   }
 
   onLogoFileUpload(e){
@@ -357,13 +371,12 @@ export default class MlInstitutionEditAwards extends React.Component{
                   <div  className="ml_create_client">
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
-                        <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                        labelKey={'label'} queryType={"graphql"} query={query}
-                                        isDynamic={true} placeholder="Select Award.."
-                                        onSelect={this.onOptionSelected.bind(this)}
-                                        selectedValue={this.state.selectedVal}/>
-                        </div>
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                      labelKey={'label'} queryType={"graphql"} query={query}
+                                      isDynamic={true} placeholder="Select Award.." ref={"awardId"}
+                                      onSelect={this.onOptionSelected.bind(this)} mandatory={true}
+                                      selectedValue={this.state.selectedVal} data-required={true}
+                                      data-errMsg="Award is required"/>
                         <div className="form-group">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}

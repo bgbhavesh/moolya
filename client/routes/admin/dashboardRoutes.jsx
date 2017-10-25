@@ -24,6 +24,7 @@ import MlAdminHeader from "../../admin/layouts/header/MlAdminHeader";
 import {getAdminUserContext} from "../../commons/getAdminUserContext";
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlAnchorInfoView from '../../admin/subChapter/components/anchor/MlAnchorInfoView'
+import MlPortfolio from '../../admin/transaction/portfolio/component/commons/MlPortfolio'
 
 adminSection.route('/dashboard', {
   triggersEnter: [function (context, redirect) {
@@ -62,6 +63,16 @@ adminSection.route('/dashboard/communities', {
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'community'}} />,
       adminContent: <MlViews showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
                              listConfig={mlCommunityDashboardListConfig}/>
+    })
+  }
+});
+
+adminSection.route('/dashboard/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });
@@ -127,6 +138,16 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
   }
 });
 
+adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
+
 adminSection.route('/dashboard/:clusterId/communities', {
   name: 'dashboard_communities',
   action(params, queryParams){
@@ -140,6 +161,15 @@ adminSection.route('/dashboard/:clusterId/communities', {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
       adminContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
                              listConfig={mlCommunityDashboardListConfig} params={params}/>
+    })
+  }
+});
+adminSection.route('/dashboard/:clusterId/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
     })
   }
 });
@@ -161,27 +191,37 @@ adminSection.route('/dashboard/:clusterId/:chapterId/communities', {
   }
 });
 
+adminSection.route('/dashboard/:clusterId/:chapterId/:communityType/portfolio/:portfolioId', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>
+    })
+  }
+});
+
 adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/:clusterId/:chapterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/:clusterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });
 adminSection.route('/dashboard/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+    mount(AdminLayout,{headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,adminContent:< MlEditBackendUser config={params.backendUserId}/>})
   }
 });

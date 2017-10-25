@@ -9,13 +9,14 @@ var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlStartupViewAboutusTabs from './MlStartupViewAboutusTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../../portfolio/actions/findPortfolioStartupDetails'
-
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlStartupViewAboutLanding extends Component {
   constructor(props) {
     super(props)
     this.state = {aboutStartup: false, startupAboutUs: [], startupAboutUsList: []}
     this.fetchPortfolioDetails.bind(this);
+    this.selectedTab=this.selectedTab.bind(this);
   }
 
 
@@ -24,9 +25,20 @@ export default class MlStartupViewAboutLanding extends Component {
     // this.props.getAboutus(details, tabName, privateKey);
   // }
 
+  componentDidMount()
+  {
+    var className = this.props.isAdmin ? "admin_header" : "app_header";
+    var WinHeight = $(window).height();
+    $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
+    $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+535));
+  }
+
   componentWillMount() {
+    if(FlowRouter.getQueryParam('subtab') && FlowRouter.getQueryParam('tab')==='About'){
+      this.setState({aboutStartup: true});
+    }
     const resp = this.fetchPortfolioDetails();
-    return resp
+    return resp;
   }
 
   async fetchPortfolioDetails() {
@@ -38,8 +50,8 @@ export default class MlStartupViewAboutLanding extends Component {
     }
   }
 
-  selectedTab(field, e) {
-    this.setState({aboutStartup: true})
+  selectedTab(activeTab) {
+    this.setState({aboutStartup: true,activeTab:activeTab})
     this.props.backClickHandler(this.getStartUpState.bind(this))
   }
 
@@ -80,16 +92,25 @@ export default class MlStartupViewAboutLanding extends Component {
             <div className="col-md-6 col-sm-6 nopadding">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
-                  name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-                <div className="panel-body panel-body-scroll" style={{'height': '384px'}}>
-                  <p>{this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription}</p>
+                  name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
+                <div className="panel-body">
+                  <div className="md_scroll">
+                    <ScrollArea
+                      speed={0.8}
+                      className="md_scroll"
+                      smoothScrolling={true}
+                      default={true}
+                    >
+                      {this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription?<p>{this.state.startupAboutUs.aboutUs.startupDescription}</p>: (<NoData tabName="aboutUs"/>)}
+                    </ScrollArea>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="col-md-6 col-sm-6 nopadding-right">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome
-                  name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                  name='ellipsis-h' onClick={e=>this.selectedTab('Rating')}/></a></div>
                 <div className="panel-body rating_small">
                   <div className="star_ratings">
                     <Rating
@@ -107,9 +128,18 @@ export default class MlStartupViewAboutLanding extends Component {
                 <div className="col-md-12 nopadding">
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome
-                      name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-                    <div className="panel-body text-center panel-body-scroll">
-                      {aboutUsImages}
+                      name='ellipsis-h' onClick={e=>this.selectedTab('Clients')}/></a></div>
+                    <div className="panel-body text-center">
+                      <div className="sm_scroll">
+                        <ScrollArea
+                          speed={0.8}
+                          className="sm_scroll"
+                          smoothScrolling={true}
+                          default={true}
+                        >
+                      {aboutUsImages && aboutUsImages.length?<div>{aboutUsImages}</div>:(<NoData tabName="Clients"/>)}
+                        </ScrollArea>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -117,10 +147,19 @@ export default class MlStartupViewAboutLanding extends Component {
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Service & Products <a href=""
                                                                          className="pull-right ellipsis-menu"><FontAwesome
-                      name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-                    <div className="panel-body panel-body-scroll">
-                      <p>{this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription}</p>
-                    </div>
+                      name='ellipsis-h' onClick={e=>this.selectedTab('Services And Products')}/></a></div>
+                    <div className="panel-body">
+                        <div className="sm_scroll">
+                          <ScrollArea
+                            speed={0.8}
+                            className="sm_scroll"
+                            smoothScrolling={true}
+                            default={true}
+                          >
+                            {this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription?<p>{this.state.startupAboutUs.serviceProducts.spDescription}</p>:(<NoData tabName="serviceProducts"/>)}
+                          </ScrollArea>
+                        </div>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -128,11 +167,22 @@ export default class MlStartupViewAboutLanding extends Component {
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Information <a href=""
                                                                 className="pull-right ellipsis-menu"><FontAwesome
-                    name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+                    name='ellipsis-h' onClick={e=>this.selectedTab('Information')}/></a></div>
                   <div className="panel-body">
-                    <ul className="list-info">
-                      <li>{this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription}</li>
-                    </ul>
+                    <div className="sm_scroll">
+                      <ScrollArea
+                        speed={0.8}
+                        className="sm_scroll"
+                        smoothScrolling={true}
+                        default={true}
+                      >
+                        {this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription?
+                          <ul className="list-info">
+                            <li>{this.state.startupAboutUs.information.informationDescription}</li>
+                          </ul>
+                          :(<NoData tabName="information"/>)}
+                      </ScrollArea>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -143,7 +193,8 @@ export default class MlStartupViewAboutLanding extends Component {
                                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                                    startupAboutUsDetails={this.state.startupAboutUs}
                                                    getSelectedAnnotations={this.props.getSelectedAnnotations}
-                                                   isApp={this.props.isApp}></MlStartupViewAboutusTabs> }</div>)}
+                                                   isApp={this.props.isApp}
+                                                    activeTab={this.state.activeTab}></MlStartupViewAboutusTabs> }</div>)}
       </div>
     )
   }

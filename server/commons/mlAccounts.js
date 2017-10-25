@@ -116,7 +116,7 @@ export default MlAccounts=class MlAccounts {
 
   static verifyEmail(token) {
        //var user = Meteor.users.findOne({'services.email.verificationTokens.token': token});
-    var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token},{});
+    var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},{});/*Status check to handle the verification for rejected registraiton: MOOLYA-3421*/
       if (!user)  return {email:null, error: true,reason:"Verify email link expired", code:403};//throw new Error(403, "Verify email link expired");
 
       var tokenRecord = _.find(user.services.email.verificationTokens, function (t) {
@@ -307,7 +307,7 @@ export default MlAccounts=class MlAccounts {
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
 
-    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
+    Meteor.users.update({_id: userId},{$set:{"otps": otps}});
 
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(user,otpNum);
@@ -338,7 +338,7 @@ export default MlAccounts=class MlAccounts {
 
   static resendVerificationSmsOtp(numbr,customEmailComponent){
 
-    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":numbr});
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":numbr,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}});
 
     if(!regDetails){
       throw new Error(403, "Mobile Number entered is not registered");
@@ -378,7 +378,7 @@ export default MlAccounts=class MlAccounts {
     }else{
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
-    MlRegistration.update({"registrationInfo.contactNumber":numbr},{$set:{"otps":otps}});
+    MlRegistration.update({"registrationInfo.contactNumber":numbr,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},{$set:{"otps":otps}});
     //send SMS
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
@@ -405,7 +405,7 @@ export default MlAccounts=class MlAccounts {
   }
   static resendUserVerificationSmsOtp(userId,customEmailComponent){
 
-    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var user = mlDBController.findOne('users', {'_id': userId}) || {};
     var mobileNumber = null;
     var externalProfile = {}
     if(user && user.profile){
@@ -458,7 +458,7 @@ export default MlAccounts=class MlAccounts {
     }else{
       otps.push({num:otpNum, time: new Date(), verified: false,mobileNumber:mobileNumber,countryId:countryCode});
     }
-    Meteor.users.update({_id: context.userId},{$set:{"otps": otps}});
+    Meteor.users.update({_id:userId},{$set:{"otps": otps}});
     //send SMS
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(user,otpNum);
@@ -484,9 +484,45 @@ export default MlAccounts=class MlAccounts {
 
   }
 
+  static verifyLaterUserMobileNumber(numbr){
+
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":numbr,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}});
+
+    if(!regDetails){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+
+    let to=(regDetails.registrationInfo||{}).contactNumber;
+    let countryCode=(regDetails.registrationInfo||{}).countryId;
+
+    if(!to){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+
+    //send SMS
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(user);
+    }else{
+      msg= "You have opted for 'Verify later'. You can verify your mobile number from 'My Profile'.";
+    }
+
+    //send SMS
+    if(to){
+      Meteor.setTimeout(function() {
+        // mlSms.send(countryCode,to,msg);
+        mlSmsController.sendSMS(msg, countryCode, to)
+      }, 1 * 1000);
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.success=true;
+    return resp;
+  }
+
   static verifyUserMobileNumberOtp(userId, otp){
 
-    var user = mlDBController.findOne('users', {'_id': userId}, context) || {};
+    var user = mlDBController.findOne('users', {'_id': userId}) || {};
     var mobileNumber = null;
     if(user && user.profile){
 
@@ -568,8 +604,8 @@ export default MlAccounts=class MlAccounts {
   }
 
   static verifyMobileNumberOtp(mobileNumber, otp){
-
-    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":mobileNumber});
+    /** added a check to verify the mobile Number if registration is not rejected.*/
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":mobileNumber,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}});
 
     if(!regDetails){
       //throw new Error(403, "Mobile Number entered is not registered");
@@ -632,7 +668,7 @@ export default MlAccounts=class MlAccounts {
     }
     context.userId = user._id;
     context.browser = 'Forgot Password';
-    context.url="https://mymoolya.com";
+    context.url=Meteor.absoluteUrl('')||"moolya";
     let token = Random.secret();
     let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
    /* let regObj = {
@@ -665,7 +701,7 @@ export default MlAccounts=class MlAccounts {
     }
     context.userId = user._id;
     context.browser = 'Reset Password API';
-    context.url="https://mymoolya.com";
+    context.url=Meteor.absoluteUrl('')||"moolya";
     let salted = passwordUtil.hashPassword(password);
     let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
     if(res){

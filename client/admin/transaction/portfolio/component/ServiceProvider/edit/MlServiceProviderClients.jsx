@@ -1,16 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import {graphql} from "react-apollo";
 import _ from "lodash";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
+var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
 import CropperModal from '../../../../../../commons/components/cropperModal';
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+
 export default class MlServiceProviderClients extends Component {
   constructor(props, context) {
     super(props);
@@ -21,13 +21,14 @@ export default class MlServiceProviderClients extends Component {
       popoverOpen: false,
       selectedIndex: -1,
       serviceProviderClientsList:[],
-      selectedVal: null,
+      // selectedVal: null,
       selectedObject: "default",
       privateKey:{},
       showProfileModal: false,
       uploadingAvatar: false
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -108,7 +109,7 @@ export default class MlServiceProviderClients extends Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      "selectedVal": details.companyId,
+      // "selectedVal": details.companyId,
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
@@ -135,17 +136,18 @@ export default class MlServiceProviderClients extends Component {
 
 
   onLockChange(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
+    // let details = this.state.data || {};
+    // let key = e.target.id;
     var isPrivate = false;
-    details = _.omit(details, [key]);
+    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
+      // details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
+    // else {
+    //   details = _.extend(details, {[key]: false});
+    // }
     // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
     // this.setState({privateKey:privateKey})
     // this.setState({data: details}, function () {
@@ -153,13 +155,17 @@ export default class MlServiceProviderClients extends Component {
     // })
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.setState({serviceProviderClientsList: this.state.serviceProviderClients, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.serviceProviderClients
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.clients)
+      setObject = this.context.serviceProviderPortfolio.clients
+    this.setState({serviceProviderClientsList: setObject, popoverOpen: false})
   }
 
   onStatusChangeNotify(e) {
@@ -172,7 +178,7 @@ export default class MlServiceProviderClients extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -182,16 +188,24 @@ export default class MlServiceProviderClients extends Component {
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: e.target.value});
     this.setState({data: details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent() {
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked) {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.serviceProviderClients;
     let serviceProviderClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    serviceProviderClients[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      serviceProviderClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(serviceProviderClients, function (item) {
       for (var propName in item) {
@@ -200,13 +214,12 @@ export default class MlServiceProviderClients extends Component {
         }
       }
       let newItem = _.omit(item, "__typename");
-      // let updateItem = _.omit(newItem, 'logo');
       let updateItem =_.omit(newItem,"privateFields");
       arr.push(updateItem)
     })
     serviceProviderClients = arr;
     this.setState({serviceProviderClients: serviceProviderClients})
-    this.props.getServiceProviderClients(serviceProviderClients, this.state.privateKey);
+    this.props.getServiceProviderClients(serviceProviderClients, this.state.privateKey, requiredFields);
 
   }
 
@@ -216,7 +229,7 @@ export default class MlServiceProviderClients extends Component {
     //let file = e.target.files[0];
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
-   
+
     let file = image;
     let fileName = fileInfo.name;
     if(file){
@@ -282,6 +295,10 @@ export default class MlServiceProviderClients extends Component {
     }
   }
 
+  /**
+   * @Note: check its usage and need to remove it
+   * @function: imagesDisplay()
+   */
   async imagesDisplay() {
     const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
@@ -358,7 +375,7 @@ export default class MlServiceProviderClients extends Component {
                           <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
-                            <img src={details.logo && details.logo.fileUrl}/></div>
+                            <img src={details.logo && details.logo.fileUrl?details.logo.fileUrl: "/images/def_profile.png"}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                           <h3>{details.companyName ? details.companyName : ""} </h3>
                         </div>
@@ -376,17 +393,18 @@ export default class MlServiceProviderClients extends Component {
                   <div className="medium-popover">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="form-group">
-                          <input type="text" name="companyName" placeholder="Company Name"
+                        <div className="form-group mandatory">
+                          <input type="text" name="companyName" placeholder="Company Name" ref={"companyName"}
                                  className="form-control float-label" defaultValue={this.state.data.companyName}
-                                 onBlur={this.handleBlur.bind(this)}/>
+                                 onBlur={this.handleBlur} data-required={true}
+                                 data-errMsg="Company Name is required"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
                                        defaultValue={this.state.data.isCompanyNamePrivate}
                                        onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                         </div>
                         <div className="form-group">
                           <input type="text" name="clientDescription" placeholder="About" className="form-control float-label"
-                                 id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
+                                 id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isClientDescriptionPrivate"
                                        defaultValue={this.state.data.isClientDescriptionPrivate}
                                        onClick={this.onLockChange.bind(this,"clientDescription", "isClientDescriptionPrivate")}/>
@@ -408,7 +426,7 @@ export default class MlServiceProviderClients extends Component {
                             htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div>

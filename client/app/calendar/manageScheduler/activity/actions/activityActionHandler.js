@@ -217,6 +217,12 @@ export async function fetchActivitiesForTaskActionHandler(taskId){
         imageLink
         mode
         _id
+        isExternal
+        isInternal
+        isServiceCardEligible
+        payment{
+          derivedAmount
+        }
         duration {
           hours
           minutes

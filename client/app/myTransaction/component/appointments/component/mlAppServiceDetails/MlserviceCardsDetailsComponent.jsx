@@ -77,7 +77,6 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(`Received updated props again ${nextProps.data.profileId}`);
     this.setState({
       profileId: nextProps.profileId,
       serviceId: nextProps._id

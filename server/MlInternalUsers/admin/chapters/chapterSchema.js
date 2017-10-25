@@ -212,7 +212,7 @@ let chapterSchema = `
         fetchChapter(clusterId:String, chapterId: String): Chapter
         fetchChapters(id:String):[Chapter]
         fetchChaptersWithoutAll(id:String):[Chapter]
-        fetchSubChapter(clusterId: String, chapterId: String, subChapterId: String):SubChapter
+        fetchSubChapter(clusterId: String, chapterId: String, subChapterId: String, communityId: String):SubChapter
         fetchSubChapters(clusterId: String, chapterId: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]

@@ -13,6 +13,7 @@ import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
 import {fetchUserDetailsHandler} from "../../../../app/commons/actions/fetchUserDetails";
 import {registerAsInfo} from '../../../transaction/requested/actions/registrationAs'
 import {pick} from 'lodash'
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 
 //todo:// this file is to be placed in the commons as it is been used by both admin and app
 export default class MlAnchorInfoView extends React.Component {
@@ -26,6 +27,7 @@ export default class MlAnchorInfoView extends React.Component {
       subChapterImageLink: "/images/startup_default.png",
       popoverOpen: false,
     };
+    this.loggedInUser = {}
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.clearSelection = this.clearSelection.bind(this);
@@ -85,8 +87,13 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   async fetchSubChapterDetails() {
+    if(this.props.isAdmin){
+      const loggedInUser = getAdminUserContext();
+      this.loggedInUser = loggedInUser
+    }
+    const {communityId} = this.loggedInUser
     const {clusterId, chapterId, subChapterId} = this.props;
-    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId, communityId);
     const objective = response && response.objective && response.objective.map((ob) => ({
         description: ob.description,
         status: ob.status,
@@ -176,7 +183,7 @@ export default class MlAnchorInfoView extends React.Component {
           </span>
           <br />
           <div className="tooltiprefer">
-            <span><small>{value.communityType}</small> <b>{value.count}</b></span>
+            <span title={value.communityType}><small>{value.communityType}</small> <b>{value.count}</b></span>
           </div>
         </a>
       </li>)
@@ -202,7 +209,19 @@ export default class MlAnchorInfoView extends React.Component {
   }
 
   render() {
-
+    let firstNameActive='',lastNameActive = '',contactNumberActive='',emailActive=''
+    if(this.state.firstName){
+      firstNameActive = 'active'
+    }
+    if(this.state.lastName){
+      lastNameActive = 'active'
+    }
+    if(this.state.contactNumber){
+      contactNumberActive ='active'
+    }
+    if(this.state.email){
+      emailActive ='active'
+    }
     let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterQuery = gql`query($id:String){data:fetchChapters(id:$id) {
         value:_id
@@ -255,21 +274,21 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
-            <div className="left_wrap left_user_blocks">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-              >
-                {!this.state.selectedUser.profile &&
-                <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick}/>}
-                {this.state.selectedUser.profile &&
-                <div>
-                  <h3 style={{'display': 'inline-block'}} onClick={this.clearSelection} alt="Go Back" title="Go Back">
-                    <span className="fa fa-angle-left"/> &nbsp;{this.state.selectedUser.profile.firstName}
-                  </h3>
+              {!this.state.selectedUser.profile &&
+              <div className="panel panel-default">
+              <div className="panel-heading">title</div>
+              <div className="panel-body nopadding anchor_tabs">
+              <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick}/>
+              </div></div>
+              }
+              {this.state.selectedUser.profile &&
+              <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <span style={{'display': 'inline-block'}}  onClick={this.clearSelection} alt="Go Back" title="Go Back"><span className="fa fa-angle-left"/> &nbsp;{this.state.selectedUser.profile.firstName}</span>
+                  </div>
+                  <div className="panel-body anchor_tabs">
 
                   <p>
-                    <br />
                     <b>First Name : </b>{this.state.selectedUser.profile.firstName} <br />
                     <b>Last Name : </b>{this.state.selectedUser.profile.lastName} <br />
                     <b>Email : </b>{this.state.selectedUser.profile.email} <br />
@@ -278,82 +297,80 @@ export default class MlAnchorInfoView extends React.Component {
                     {this.renderSocialLinks(this.state.selectedUser.profile)}
                     {console.log(this.state.selectedUser)}
                   </p>
-
+                  </div>
                 </div>
                 }
-              </ScrollArea>
-            </div>
           </div>
           <div className="col-lx-4 col-sm-4 col-md-4">
             <div className="row">
               {/*<h3>Users List</h3>*/}
-              <div className="left_wrap left_user_blocks">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                >
-                  <h3>Objectives :</h3>
-                  <ul className="list-info">
-                    {
-                      !this.state.objective.length && <p> No objectives added</p>
-                    }
-                    {
-                      this.state.objective.length !== 0 && this.state.objective.map((ob, index) => {
-                        const {status, description} = ob;
-                        if (status) {
-                          return <li key={`${description}index`}>{description}</li>;
-                        }
-                        return <span key={index}></span>
-                      })
-                    }
-                  </ul>
-                </ScrollArea>
-              </div>
+                <div className="panel panel-default">
+                  <div className="panel-heading">Objectives</div>
+                  <div className="panel-body anchor_tabs">
+                    <ul className="list-info">
+                      {
+                        !this.state.objective.length && <p> No objectives added</p>
+                      }
+                      {
+                        this.state.objective.length !== 0 && this.state.objective.map((ob, index) => {
+                          const {status, description} = ob;
+                          if (status) {
+                            return <li key={`${description}index`}>{description}</li>;
+                          }
+                          return <span key={index}></span>
+                        })
+                      }
+                    </ul>
+                  </div>
+                </div>
+
             </div>
           </div>
 
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-right">
-            <div className="left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-              >
-                <h3>Contact Us:</h3>
+            <div className="panel panel-default">
+              <div className="panel-heading">Contact Us</div>
+              <div className="panel-body anchor_tabs">
                 {
                   !this.state.contactDetails.length && <p>No contact details added</p>
                 }
                 <ul className={'list-info'}>
-                {
-                  this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
-                    const {emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber} = cd;
-                    return (
-                      <li key={index}>
-                        {buildingNumber}, {street}, {area}, {landmark}, {town}, {stateId}, {countryId}-{pincode}`
-                        <br />
-                        Tel: {contactNumber}
-                        <br />
-                        Email: {emailId}
-                      </li>);
-                  })
-                }
+                  {
+                    this.state.contactDetails.length !== 0 && this.state.contactDetails.map((cd, index) => {
+                      const {emailId, buildingNumber, street, town, area, landmark, countryId, stateId, pincode, contactNumber} = cd;
+                      return (
+                        <li key={index}>
+                          {buildingNumber}, {street}, {area}, {landmark}, {town}, {stateId}, {countryId}-{pincode}`
+                          <br />
+                          Tel: {contactNumber}
+                          <br />
+                          Email: {emailId}
+                        </li>);
+                    })
+                  }
                 </ul>
-              </ScrollArea>
+              </div>
+            </div>
+
+
+          </div>
+          <div className="col-md-12 nopadding">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+                <div className="ml_btn" style={{'textAlign':'center'}}>
+                  {/*<a href="" className="cancel_btn">Contact Admin</a>*/}
+                  <a href="" onClick={this.changePath} className="cancel_btn">Enter Sub-Chapter</a>
+
+                  {!this.props.isAdmin ?
+                    <span id="default_target" className="cancel_btn" onClick={this.registerAsClick}>Get
+                  Invite</span> : <div></div>}
+                </div>
             </div>
           </div>
-          <div className="col-md-12 text-center">
-            <div className="col-md-4">
-              {/*<a href="#" className="fileUpload mlUpload_btn">Contact Admin</a>*/}
-            </div>
-            <div className="col-md-4">
-              <a onClick={this.changePath} href="" className="fileUpload mlUpload_btn">Enter into
-                subchapter</a>
-            </div>
-            <div className="col-md-4 text-center">
-              {!this.props.isAdmin ?
-                <span id="default_target" className="fileUpload mlUpload_btn" onClick={this.registerAsClick}>Get
-                  invited</span> : <div></div>}
-            </div>
           </div>
+
+
+
         </div>
 
         <Popover placement="top" isOpen={this.state.popoverOpen} target="default_target" toggle={this.toggle}>
@@ -374,10 +391,12 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
             <div className="col-md-6 nopadding-left">
               <div className="form-group ">
+                <span className={`placeHolder ${firstNameActive}`}>First Name</span>
                 <input type="text" ref="firstName" value={this.state.firstName} placeholder="First Name"
                        className="form-control float-label" disabled="true"/>
               </div>
               <div className="form-group ">
+                <span className={`placeHolder ${lastNameActive}`}>Last Name</span>
                 <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number"
                        className="form-control float-label" id="" disabled="true"/>
               </div>
@@ -390,10 +409,12 @@ export default class MlAnchorInfoView extends React.Component {
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="form-group ">
+                <span className={`placeHolder ${contactNumberActive}`}>Contact Number</span>
                 <input type="text" ref="lastName" value={this.state.contactNumber} placeholder="Last Name"
                        className="form-control float-label" disabled="true"/>
               </div>
               <div className="form-group ">
+                <span className={`placeHolder ${emailActive}`}>Email Id</span>
                 <input type="text" ref="email" value={this.state.email} placeholder="Email Id"
                        className="form-control float-label" disabled="true"/>
               </div>

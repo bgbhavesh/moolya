@@ -12,7 +12,6 @@ export default class MlStartupCompanyReview extends React.Component{
     this.state={
       data:{},
       startupCompanyReview: [],
-      selectedIndex:0,
       selectedVal:null,
       selectedObject:"default",
       reviewList :  []
@@ -103,28 +102,19 @@ export default class MlStartupCompanyReview extends React.Component{
     data["rofYear"] =  this.refs["rofYear"+index].state.inputValue ;
     data["rofValue"] =  this.refs["rofValue"+index].value;
     data["rofAbout"] = this.refs["rofAbout"+index].value;
+    data["index"] =  this.state.startupCompanyReview&&this.state.startupCompanyReview.length?this.state.startupCompanyReview.length:0
     let clients = this.state.startupCompanyReview;
     clients[index] = data
     this.setState({startupCompanyReview:clients})
     this.props.getStartupCompanyReview(clients);
     this.setState({reviewList:this.state.startupCompanyReview})
-    if(this.state.startupCompanyReview){
-      this.setState({selectedIndex:this.state.startupCompanyReview.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
     this.refs["rofYear"+index].state.inputValue = ""
     this.refs["rofValue"+index].value = ""
     this.refs["rofAbout"+index].value = ""
+    this.setState({data : {}})
 
   }
-  onUpdateAction(){
-    if(this.state.startupCompanyReview){
-      this.setState({selectedIndex:this.state.startupCompanyReview.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
-  }
+
 
   /*onRemoveAction(index,e){
    let updatedData = this.state.startupCompanyReview || [];

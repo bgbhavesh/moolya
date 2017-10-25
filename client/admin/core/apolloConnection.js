@@ -58,9 +58,9 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
           clonedResponse.json().then(data => {
             const { errors = [] } = data;
             if(data && data.unAuthorized){
-                toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
-                window.history.back()
-                // FlowRouter.go('/unauthorize')
+                // toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
+                // window.history.back()
+                FlowRouter.go('/unauthorize')
             }
             else if(data && data.invalidToken){
               FlowRouter.go('/login')

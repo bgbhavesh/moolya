@@ -31,7 +31,7 @@ import {appClient} from '../../../app/core/appConnection';
 /**
  * fetching office user types for office module
  * */
-export async function fetchAllCommunitiesHandler() {
+export async function fetchOfficeUserTypes() {
   const result = await appClient.query({
     query: gql`
            query {

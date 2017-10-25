@@ -582,6 +582,7 @@ let startupPortfolioSchema = `
       ebdToMonth: String
       ebdToYear: String
       ebdDepartment: String
+      ebdDepartmentName:String
       ebdNumberOfEmployment: Int
       ebdAbout: String
       index : Int

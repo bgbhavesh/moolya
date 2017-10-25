@@ -1,22 +1,18 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
-var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
 import _ from 'lodash';
+var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchInstitutionDetailsHandler} from '../../../../actions/findPortfolioInstitutionDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'clients'
 
-export default class MlInstitutionClients extends React.Component{
+export default class MlInstitutionClients extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -29,7 +25,8 @@ export default class MlInstitutionClients extends React.Component{
       institutionClientsList:this.props.employmentDetails || [],
       selectedVal:null,
       selectedObject:"default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
@@ -79,26 +76,23 @@ export default class MlInstitutionClients extends React.Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   onSaveAction(e){
-    this.setState({institutionClientsList:this.state.institutionClients,popoverOpen : false})
+    this.sendDataToParent(true);
+    var setObject = this.state.institutionClients;
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.clients) {
+      setObject = this.context.institutionPortfolio.clients
+    }
+    this.setState({institutionClientsList: setObject, popoverOpen: false})
   }
 
   onStatusChangeNotify(e)
@@ -112,7 +106,7 @@ export default class MlInstitutionClients extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -122,16 +116,24 @@ export default class MlInstitutionClients extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.institutionClients;
     let institutionClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    institutionClients[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      institutionClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(institutionClients, function (item)
     {
@@ -147,7 +149,7 @@ export default class MlInstitutionClients extends React.Component{
     })
     institutionClients = arr;
     this.setState({institutionClients:institutionClients})
-    this.props.getInstitutionClients(institutionClients, this.state.privateKey);
+    this.props.getInstitutionClients(institutionClients, this.state.privateKey, requiredFields);
 
   }
 
@@ -281,8 +283,11 @@ export default class MlInstitutionClients extends React.Component{
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
-                    <div className="form-group">
-                      <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" defaultValue={this.state.data.companyName} onBlur={this.handleBlur.bind(this)}/>
+                    <div className="form-group mandatory">
+                      <input type="text" name="companyName" placeholder="Company Name"
+                             className="form-control float-label" defaultValue={this.state.data.companyName}
+                             onBlur={this.handleBlur.bind(this)} ref={"companyName"} data-required={true}
+                             data-errMsg="Company Name is required"/>
                       <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                     </div>
                     <div className="form-group">

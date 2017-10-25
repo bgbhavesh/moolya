@@ -8,7 +8,7 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import NoData from '../../../../../../../commons/components/noData/noData';
-import MlGenericAchievementsView from '../../../Company/view/MlGenericAchievementsView';
+import MlGenericAchievementsView from '../../../commons/MlGenericAchievementsView';
 
 const KEY = 'achievements'
 

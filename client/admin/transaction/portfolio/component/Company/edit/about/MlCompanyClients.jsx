@@ -1,22 +1,18 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
-var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
 import _ from 'lodash';
+var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchCompanyDetailsHandler} from '../../../../actions/findCompanyPortfolioDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'clients'
 
-export default class MlCompanyClients extends React.Component{
+export default class MlCompanyClients extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -30,7 +26,8 @@ export default class MlCompanyClients extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
-    this.handleBlur.bind(this);
+    this.tabName = this.props.tabName || ""
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
@@ -98,7 +95,12 @@ export default class MlCompanyClients extends React.Component{
     })
   }
   onSaveAction(e){
-    this.setState({companyClientsList:this.state.companyClients,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.companyClients
+    if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.clients ){
+      setObject = this.context.companyPortfolio.clients
+    }
+    this.setState({companyClientsList:setObject,popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -112,7 +114,7 @@ export default class MlCompanyClients extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -122,11 +124,18 @@ export default class MlCompanyClients extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
+
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
   sendDataToParent(){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.companyClients;
     let companyClients = _.cloneDeep(clients);
@@ -147,7 +156,7 @@ export default class MlCompanyClients extends React.Component{
     })
     companyClients = arr;
     this.setState({companyClients:companyClients})
-    this.props.getClients(companyClients, this.state.privateKey);
+    this.props.getClients(companyClients, this.state.privateKey, requiredFields);
 
   }
 
@@ -281,12 +290,15 @@ export default class MlCompanyClients extends React.Component{
                 <div className="ml_create_client">
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
-                      <div className="form-group">
-                        <input type="text" name="clientName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.clientName} onBlur={this.handleBlur.bind(this)}/>
+                      <div className="form-group mandatory">
+                        <input type="text" name="clientName" placeholder="Name" className="form-control float-label"
+                               ref={"clientName"}
+                               defaultValue={this.state.data.clientName} onBlur={this.handleBlur} data-required={true}
+                               data-errMsg="Client Name is required"/>
                         <FontAwesome name='unlock' className="input_icon" id="isClientNamePrivate"  defaultValue={this.state.data.isClientNamePrivate}  onClick={this.onLockChange.bind(this, "clientName", "isClientNamePrivate")}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur}/>
                         <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "clientDescription", "isDescriptionPrivate")}/>
                       </div>
                       {displayUploadButton?<div className="form-group">

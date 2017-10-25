@@ -73,15 +73,25 @@ export default class MlAssignDocument extends React.Component {
 
   optionsBySelectDocument(index, selectedIndex){
     let assignDocuments=this.state.assignDocuments
-    assignDocuments[index]['type']=selectedIndex
-    this.setState({assignDocuments:assignDocuments})
-    this.props.getAssignedDocuments(this.state.assignDocuments)
+    var assignedData = _.findWhere(assignDocuments, {"type": selectedIndex,"category":assignDocuments[index].category});
+    if (assignedData && assignedData != undefined) {
+      toastr.error("Document Combination Exists");
+    }else{
+      assignDocuments[index]['type']=selectedIndex
+      this.setState({assignDocuments:assignDocuments})
+      this.props.getAssignedDocuments(this.state.assignDocuments)
+    }
   }
   optionsBySelectKyc(index, selectedIndex){
     let assignDocuments=this.state.assignDocuments
-    assignDocuments[index]['category']=selectedIndex
-    this.setState({assignDocuments:assignDocuments})
-    this.props.getAssignedDocuments(this.state.assignDocuments)
+    var assignedData = _.findWhere(assignDocuments, {"type": assignDocuments[index].type,"category":selectedIndex});
+    if (assignedData && assignedData != undefined) {
+      toastr.error("Document Combination Exists");
+    }else {
+      assignDocuments[index]['category'] = selectedIndex
+      this.setState({assignDocuments: assignDocuments})
+      this.props.getAssignedDocuments(this.state.assignDocuments)
+    }
   }
   onStatusChange(index,event){
     let assignDocumentsDetails=this.state.assignDocuments

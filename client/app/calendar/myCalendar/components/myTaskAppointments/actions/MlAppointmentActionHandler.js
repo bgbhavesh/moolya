@@ -9,6 +9,7 @@ export async function fetchAllTaskActionHandler(profileId) {
       fetchTasks(profileId: $profileId) {
         taskId: _id
         displayName
+        isActive
       }
     }
     `,
@@ -49,6 +50,11 @@ export async function fetchTaskActionHandler(taskId) {
                   name
                   displayName
                   deliverable
+                  isExternal
+                  isInternal
+                  payment{
+                    derivedAmount
+                  }
                   duration {
                     hours
                     minutes

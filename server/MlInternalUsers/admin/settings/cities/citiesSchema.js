@@ -36,9 +36,12 @@ let citiesSchema = `
         fetchCity(cityId: String): Cities
         fetchCities:[Cities]
         fetchCitiesPerState(stateId: String):[Cities]
+        fetchCitiesPerStates(stateIds: [String]):[Cities]
         fetchCitiesPerCountry(countryId: String):[Cities]
         searchCities(searchQuery:String,displayAllOption:Boolean):[Cities]
         fetchCitiesPerCountryAPI(countryId: String,cityName:String,limit:Int):citiesSearchResult
+        fetchBrachesOfRegisteredCommunity(searchQuery:String,displayAllOption:Boolean,countryId: [String]):[Cities]
+        fetchHeadQuarterOfRegisteredCommunity(searchQuery:String,displayAllOption:Boolean,countryId: String):[Cities]
         
     }
     
@@ -52,9 +55,12 @@ let supportedApi = [
   {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
   {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+  {api:'fetchCitiesPerStates', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}
+  {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"},
+  {api:'fetchBrachesOfRegisteredCommunity', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+  {api:'fetchHeadQuarterOfRegisteredCommunity', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

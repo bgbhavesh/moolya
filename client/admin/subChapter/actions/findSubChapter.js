@@ -2,14 +2,18 @@ import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 import {omit, each, map} from 'lodash'
 
-export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapterId) {
+/**
+ * @Note: "communityId" added for the communityAdmin auth errors
+ * */
+
+export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapterId, communityId) {
   let clusterId = ClusterId
   let chapterId = ChapterId
   let did = subChapterId
   const result = await client.query({
     query: gql`
-    query  ($clusterId: String, $chapterId: String, $subChapterId: String){
-        fetchSubChapter(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
+    query  ($clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
+        fetchSubChapter(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId: $communityId){
           id:_id
           clusterName
           chapterName
@@ -79,7 +83,8 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
     variables: {
       clusterId: clusterId,
       chapterId: chapterId,
-      subChapterId: did
+      subChapterId: did,
+      communityId
     },
     forceFetch: true
   })

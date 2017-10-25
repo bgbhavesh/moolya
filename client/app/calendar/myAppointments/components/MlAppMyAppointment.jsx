@@ -23,7 +23,7 @@ import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlApp
 import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppSelectedSelfTaskMyAppointment';
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 
-console.log("mlAppPendingAppointmentConfig", mlAppPendingAppointmentConfig);
+// console.log("mlAppPendingAppointmentConfig", mlAppPendingAppointmentConfig);
 
 export default class MlAppMyAppointment extends React.Component {
 

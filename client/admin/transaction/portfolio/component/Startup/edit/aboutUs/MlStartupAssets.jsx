@@ -1,20 +1,21 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
+import { connect } from 'react-redux';
+import gql from "graphql-tag";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-import {graphql} from "react-apollo";
-import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = 'assets'
-export default class MlStartupAssets extends React.Component{
+
+class MlStartupAssets extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -28,6 +29,7 @@ export default class MlStartupAssets extends React.Component{
       selectedAssetType:null,
       selectedObject:"default"
     }
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this)
@@ -36,7 +38,6 @@ export default class MlStartupAssets extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
-
   }
 
   componentDidMount(){
@@ -51,7 +52,12 @@ export default class MlStartupAssets extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupAssetsList:this.state.startupAssets,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupAssets
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.assets ){
+      setObject = this.context.startupPortfolio.assets
+    }
+    this.setState({startupAssetsList:setObject,popoverOpen : false})
   }
 
   addAsset(){
@@ -110,7 +116,7 @@ export default class MlStartupAssets extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -120,26 +126,35 @@ export default class MlStartupAssets extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
+
   assetTypeOptionSelected(selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["assetTypeId"]);
     details=_.omit(details,["assetTypeName"]);
     details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
-      this.sendDataToParent()
+    this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label}, function () {
+      // this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let assets = this.state.startupAssets;
     let startupAssets = _.cloneDeep(assets);
     data.index = this.state.selectedIndex;
-    startupAssets[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupAssets[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupAssets, function (item)
     {
@@ -154,7 +169,7 @@ export default class MlStartupAssets extends React.Component{
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    this.props.getStartupAssets(startupAssets, this.state.privateKey);
+    this.props.getStartupAssets(startupAssets, this.state.privateKey, requiredFields);
 
   }
 
@@ -294,18 +309,18 @@ export default class MlStartupAssets extends React.Component{
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={assetsQuery}
-                                    isDynamic={true} placeholder={'Select  Asset..'}
-                                    onSelect={this.assetTypeOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedVal}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" name="quantity" placeholder="Enter Number of Quantity"
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                  ref={"assetTypeId"}
+                                  labelKey={'label'} queryType={"graphql"} query={assetsQuery} mandatory={true}
+                                  isDynamic={true} placeholder={'Select  Asset..'}
+                                  onSelect={this.assetTypeOptionSelected.bind(this)}
+                                  selectedValue={this.state.selectedVal}
+                                  data-required={true} data-errMsg="Asset Type is required"/>
+                    <div className="form-group mandatory">
+                      <input type="text" name="quantity" placeholder="Enter Number of Quantity" ref={"quantity"}
                              className="form-control float-label" defaultValue={this.state.data.quantity}
-                             onBlur={this.handleBlur.bind(this)}/>
+                             onBlur={this.handleBlur.bind(this)} data-required={true}
+                             data-errMsg="Number of Quantity is required"/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                    id="isQuantityTypePrivate" defaultValue={this.state.data.isQuantityTypePrivate}
                                    onClick={this.onLockChange.bind(this, "quantity", "isQuantityTypePrivate")}/>
@@ -341,3 +356,12 @@ export default class MlStartupAssets extends React.Component{
 MlStartupAssets.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+
+// export default connect(mapStateToProps)(MlStartupAssets);
+export default MlStartupAssets;

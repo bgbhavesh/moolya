@@ -1,5 +1,4 @@
 import React from 'react';
-import {render} from 'react-dom';
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
@@ -7,13 +6,15 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../commons/components/loader/loader";
 
 export default class MlIdeatorLookingForView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ideatorLookingFor: [],
-      isUserValidForAnnotation: false
+      isUserValidForAnnotation: false,
+      loading : true
     }
     this.fetchPortfolioInfo.bind(this);
     // this.fetchAnnotations.bind(this);
@@ -114,9 +115,11 @@ export default class MlIdeatorLookingForView extends React.Component {
   async fetchPortfolioInfo() {
     const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      this.setState({ideatorLookingFor: response});
-    }
-    _.each(response.privateFields, function (pf) {
+      this.setState({ideatorLookingFor: response,loading : false});
+    }else
+      this.setState({loading: false})
+    const privateFields = response && response.privateFields ? response.privateFields : []
+    _.each(privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
@@ -141,7 +144,7 @@ export default class MlIdeatorLookingForView extends React.Component {
                     return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                       <div className="team-block">
                         <span className="ml my-ml-browser_3"/>
-                        <h3>
+                        <h3 title={details.lookingForName}>
                           {details.lookingForName && details.lookingForName}
                         </h3>
                       </div>

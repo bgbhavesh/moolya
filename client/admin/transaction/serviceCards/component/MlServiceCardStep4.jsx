@@ -22,6 +22,7 @@ export default class MlServiceCardStep4 extends React.Component{
 
   constructor(props){
     super(props);
+    console.log('props',props);
   }
 
   /**
@@ -57,6 +58,8 @@ export default class MlServiceCardStep4 extends React.Component{
       taxStatus,
       finalAmount } = this.props.data;
     const {checkChargeStatus, calculateCharges, saveServicePaymentDetails} = this.props;
+    let isView = this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.props.data.service.status) >= 0 ? true : false ;
+    console.log('isView:',isView, this.props.data.service.status, this.props.data);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -181,9 +184,9 @@ export default class MlServiceCardStep4 extends React.Component{
             </form>
           </div>
           <div className="ml_btn" style={{'textAlign':'center'}}>
-            <div className="save_btn" onClick={() => saveServicePaymentDetails('saved')}>Save</div>
-            <div className="save_btn" onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
-            <div className="cancel_btn" onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
+            <div className={ this.props.isView ? "save_btn disabled" : "save_btn" } onClick={() => saveServicePaymentDetails()} >Save</div>
+            <div className={ this.props.isView ? "save_btn disabled" : "save_btn" } onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
+            <div className={ this.props.isView ? "cancel_btn disabled" : "cancel_btn" } onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
           </div>
         </ScrollArea>
       </div>

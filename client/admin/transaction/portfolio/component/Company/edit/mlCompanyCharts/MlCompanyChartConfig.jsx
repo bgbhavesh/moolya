@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
@@ -131,3 +131,8 @@ export default class MlCompanyChartConfig extends React.Component{
   }
 
 }
+
+
+MlCompanyChartConfig.contextTypes = {
+  companyPortfolio: PropTypes.object,
+};

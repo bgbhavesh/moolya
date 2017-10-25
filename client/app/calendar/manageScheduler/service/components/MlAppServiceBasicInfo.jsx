@@ -106,6 +106,7 @@ class MlAppServiceBasicInfo extends Component {
       setSessionFrequency,
       clusterData } = this.props;
 
+    console.log(this.props);
     // fetch states graphql query
     let statesQuery = gql`query ($countryId: String) {
       data: fetchStatesPerCountryWithAll(countryId: $countryId) {
@@ -114,12 +115,20 @@ class MlAppServiceBasicInfo extends Component {
       }
     }`;
 
+    let citiesQuery = gql`query($stateIds:[String]){data:fetchCitiesPerStates(stateIds:$stateIds) {
+     value:_id
+     label:name
+     }
+   }`;
+
     // fetch cities graphql query
-    let citiesQuery = gql`query($id:String){data:fetchChapters(id:$id) {
-      value:_id
-      label:chapterName
-      }  
-    }`;
+   // let citiesQuery = gql`query($countryId:String){data:fetchCitiesPerCountry(countryId:$countryId) {
+   //   value:_id
+   //   label:name
+   //   }
+   // }`;
+
+
 
     // fetch communities graphql query
     let fetchcommunities = gql` query{
@@ -127,8 +136,12 @@ class MlAppServiceBasicInfo extends Component {
     }
     `;
 
+    console.log('clusterData.state',clusterData.state);
+    let states = clusterData.state ? clusterData.state : [];
+    console.log(states);
     let statesOption={options: { variables: {countryId: clusterCode}}};
-    let citiesOption={options: { variables: {id: clusters}}};
+    let citiesOption={options: { variables: {stateIds: states}}};
+    //let citiesOption={options: { variables: {countryId: clusterCode}}};
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true}>
@@ -269,7 +282,7 @@ class MlAppServiceBasicInfo extends Component {
                     Service expires &nbsp;
                     <input type="number"
                            className="form-control inline_input" onChange={(event)=>setServiceExpiry(event)}
-                           disabled={(this.state.currentFrequency !== 'Onetime')}  value={data.serviceExpiry}  />
+                           disabled={(this.state.currentFrequency !== 'Onetime' || this.props.viewMode )}  value={data.serviceExpiry}  />
                     days from the date of purchase
                   </label>
                 </div>

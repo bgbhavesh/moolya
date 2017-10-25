@@ -31,6 +31,7 @@ let FunderPortfolioSchema = `
         industryTypeId:String,
         industryTypeName :String
         domainType:String,
+        logo:imagesTypeSchema,
         makePrivate:Boolean,
         isActive:Boolean
         subDomainId : String

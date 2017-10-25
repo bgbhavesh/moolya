@@ -1,23 +1,23 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from "react-dom";
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
+import omitDeep from 'omit-deep-lodash';
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import {getProfileBasedOnPortfolio} from '../../../calendar/manageScheduler/service/actions/MlServiceActionHandler'
-import MlFunderAbout from '../../../../admin/transaction/portfolio/component/Funder/MlFunderAbout'
-import MlFunderAreaOfInterest from '../../../../admin/transaction/portfolio/component/Funder/MlFunderAreaOfInterest'
-import MlFunderEngagementMethod from '../../../../admin/transaction/portfolio/component/Funder/MlFunderEngagementMethod'
-import MlFunderInvestment from '../../../../admin/transaction/portfolio/component/Funder/MlFunderInvestment'
+import MlFunderAbout from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderAbout'
+import MlFunderAreaOfInterest from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderAreaOfInterest'
+import MlFunderEngagementMethod from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderEngagementMethod'
+import MlFunderInvestment from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderInvestment'
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary';
-import MlFunderNews from '../../../../admin/transaction/portfolio/component/Funder/MlFunderNews'
-import MlFunderPrincipalTeam from '../../../../admin/transaction/portfolio/component/Funder/MlFunderPrincipalTeam'
-import MlFunderSuccessStories from '../../../../admin/transaction/portfolio/component/Funder/MlFunderSuccessStories'
-import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
-import MlFunderLookingFor from '../../../../admin/transaction/portfolio/component/Funder/MlFunderLookingFor'
-import FunderCreateServicesView from '../../../../admin/transaction/portfolio/component/Funder/beSpokeHandler'
-import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funder/MlFunderServicesList'
+import MlFunderNews from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderNews'
+import MlFunderPrincipalTeam from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderPrincipalTeam'
+import MlFunderSuccessStories from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderSuccessStories'
+import MlFunderServices from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServices'
+import MlFunderLookingFor from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderLookingFor'
+import FunderCreateServicesView from '../../../../admin/transaction/portfolio/component/Funders/edit/beSpokeHandler'
+import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServicesList'
 import {appClient} from '../../../core/appConnection'
 
-export default class MlAppFunderEditTabs extends React.Component {
+export default class MlAppFunderEditTabs extends Component {
   constructor(props) {
     super(props)
     this.state = {tabs: [], aboutUs: {}, funderPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}, activeTab:'About'};
@@ -144,74 +144,78 @@ export default class MlAppFunderEditTabs extends React.Component {
     return tabs;
   }
 
-  getLookingFor(details, privateKey) {
+  getLookingFor(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['lookingFor'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
   }
 
-  getSuccessStoriesDetails(details, privatekey) {
+  getSuccessStoriesDetails(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
   }
 
-  getAboutus(details, privatekey) {
+  getAboutus(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['funderAbout'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
   }
 
-  getInvestmentsDetails(details, privatekey) {
+  getInvestmentsDetails(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
   }
 
-  getPrincipalDetails(details, privatekey) {
+  getPrincipalDetails(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.principal) {
       data['principal'] = [];
     }
     data['principal'] = details;
     this.setState({funderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['principal'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio: data}, privatekey);
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['principal'] = arr;
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
 
-  getTeamDetails(details, privatekey) {
+  getTeamDetails(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.team) {
       data['team'] = [];
     }
     data['team'] = details;
     this.setState({funderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['team'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio: data}, privatekey);
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['team'] = arr;
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
 
-  getAreaOfInterestDetails(details, privatekey) {
+  getAreaOfInterestDetails(details, privatekey, requiredFields) {
     let data = this.state.funderPortfolio;
     if (data && !data.areaOfInterest) {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
   }
 
   getServiceDetails(details, privatekey) {
@@ -233,6 +237,9 @@ export default class MlAppFunderEditTabs extends React.Component {
     return resp
   }
 
+  /**
+   * check need and remove it
+   * */
   getFunderNewsDetails(details, privatekey) {
     let data = this.state.funderPortfolio;
     if (data && !data.lookingFor) {
@@ -243,6 +250,9 @@ export default class MlAppFunderEditTabs extends React.Component {
     this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
   }
 
+  /**
+   * check need and remove it
+   * */
   getFunderLibrary(details) {
     let data = this.state.funderPortfolio;
     if (details.memberships) {

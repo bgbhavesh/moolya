@@ -19,7 +19,8 @@ export default class MlAppSubChapterList extends Component {
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
           <a href={dashboardRoutes.subChapterAnchorRoute(prop.clusterId,prop.chapterId,prop._id, v)}>
-            <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div>
+            <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={prop.subChapterImageLink}/> : <span
+              className="ml ml-moolya-symbol"></span>}</div>
           </a>
           <h3>{prop.subChapterDisplayName} </h3>
         </div>
@@ -28,7 +29,7 @@ export default class MlAppSubChapterList extends Component {
 
     return (
       <div className="col-md-12">
-        <h2> Sub Chapter </h2>
+        <h2> Sub-Chapters </h2>
         {list}
       </div>
     );

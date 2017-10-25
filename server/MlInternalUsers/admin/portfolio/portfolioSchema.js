@@ -132,7 +132,8 @@ let portfolioSchema = `
           requestForGoLive(portfoliodetailsId:String):response
           updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
           removeIdetaorProfilePic(portfoliodetailsId:String):response
-          
+          removePortfolioFileUrl(portfoliodetailsId:String,fileUrl:String,tabName:String,typeOfData:String):response
+
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
@@ -148,7 +149,8 @@ let supportedApi = [
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api: 'findPortfolioDetails', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},   //temp making white list
-  {api: 'fetchPortfolioImage', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true}
+  {api: 'fetchPortfolioImage', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},
+  {api:'removePortfolioFileUrl',actionName:'UPDATE',moduleName:"PORTFOLIO", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

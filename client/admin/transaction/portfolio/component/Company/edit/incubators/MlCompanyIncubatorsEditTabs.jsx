@@ -18,6 +18,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
       sectorsAndServices:{},
       listOfIncubators:{},
       admin: true,
+      activeTab:"Startup Incubators",
     }
     ;
   }
@@ -34,7 +35,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
-        $('.first-item').addClass('menunone');
+        $('.initialized').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
         $('.RRT__panel').addClass('nomargintop');
@@ -91,24 +92,52 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
 
   componentWillMount()
   {
+    let admin=true;
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      admin = false;
+    }
     let tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.title,
         getContent: () => tab.component
       }));
     }
-    this.setState({tabs:getTabs() ||[]});
+    let AllTabs =getTabs() ||[];
+    if(admin){
+      AllTabs.forEach(function(v){ delete v.key });
+    }
+    let activeTab = FlowRouter.getQueryParam('subtab');
+    if(activeTab){
+      this.setState({tabs:AllTabs,activeTab,admin:admin});
+    }else
+    this.setState({tabs:AllTabs,admin:admin});
     /**UI changes for back button*/
     this.setBackTab()
   }
 
-
+  updateTab(index){
+    let subtab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ subtab });
+  }
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    if(this.state.admin){
+      return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}
+      />
+    }
+    else{
+      return <MlTabComponent tabs={tabs}
+                             selectedTabKey={this.state.activeTab}
+                             onChange={this.updateTab}
+                             backClickHandler={this.props.backClickHandler}
+                             type="subtab" mkey="title"
+      />
+    }
   }
 }
 

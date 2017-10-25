@@ -1,22 +1,21 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import { connect } from 'react-redux';
 import ScrollArea from 'react-scrollbar'
+import gql from 'graphql-tag';
+import _ from 'lodash';
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import MlLoader from '../../../../../../../commons/components/loader/loader'
+import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 
 const KEY = "branches"
 
-export default class MlStartupBranches extends React.Component{
+class MlStartupBranches extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -34,6 +33,7 @@ export default class MlStartupBranches extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
@@ -56,7 +56,12 @@ export default class MlStartupBranches extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupBranchesList:this.state.startupBranches,popoverOpen : false})
+    this.sendDataToParent(true)
+    var setObject =  this.state.startupBranches
+    if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.branches ){
+      setObject = this.context.startupPortfolio.branches
+    }
+    this.setState({startupBranchesList:setObject,popoverOpen : false})
   }
   addBranch(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -83,23 +88,22 @@ export default class MlStartupBranches extends React.Component{
   }
 
   onLockChange(fieldName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    // var isPrivate = false
+    // let details = this.state.data||{};
+    // let key = e.target.id;
+    // details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+      // details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
+    // else{
+    //   details=_.extend(details,{[key]:false});
+    // }
 
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
 
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -114,7 +118,7 @@ export default class MlStartupBranches extends React.Component{
       updatedData=_.extend(updatedData,{[key]:false});
     }
     this.setState({data:updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelected(selectedBranch){
@@ -123,16 +127,16 @@ export default class MlStartupBranches extends React.Component{
     details=_.extend(details,{["addressTypeId"]: selectedBranch});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedBranch})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedCountry(val){
     let details =this.state.data;
     details=_.omit(details,["countryId"]);
     details=_.extend(details,{["countryId"]:val});
-    this.setState({data:details}, function () {
-      this.setState({"countryId":val})
-      this.sendDataToParent()
+    this.setState({data: details, "countryId": val}, function () {
+      // this.setState({"countryId":val})
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedStates(value, callback, label){
@@ -140,9 +144,9 @@ export default class MlStartupBranches extends React.Component{
     details=_.omit(details,["stateId"]);
     details=_.omit(details,["branchState"]);
     details=_.extend(details,{["stateId"]: value, ["branchState"]:label.label});
-    this.setState({data:details}, function () {
-      this.setState({"stateId" : value})
-      this.sendDataToParent()
+    this.setState({data: details, "stateId": value}, function () {
+      // this.setState({"stateId" : value})
+      // this.sendDataToParent()
     })
   }
   onOptionSelectedCities(val, callback, label){
@@ -150,9 +154,9 @@ export default class MlStartupBranches extends React.Component{
     details=_.omit(details,["cityId"]);
     details=_.omit(details,["branchCity"]);
     details=_.extend(details,{["cityId"]: val, ["branchCity"]:label.label});
-    this.setState({data:details}, function () {
-      this.setState({"cityId" : val})
-      this.sendDataToParent()
+    this.setState({data: details, "cityId": val}, function () {
+      // this.setState({"cityId" : val})
+      // this.sendDataToParent()
     })
   }
   handleBlur(e){
@@ -161,15 +165,24 @@ export default class MlStartupBranches extends React.Component{
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
-  sendDataToParent(){
+
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked){
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let branches = this.state.startupBranches;
     let startupBranches = _.cloneDeep(branches);
     data.index = this.state.selectedIndex;
-    startupBranches[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      startupBranches[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(startupBranches, function (item)
     {
@@ -184,7 +197,7 @@ export default class MlStartupBranches extends React.Component{
     })
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
-    this.props.getStartupBranches(startupBranches, this.state.privateKey);
+    this.props.getStartupBranches(startupBranches, this.state.privateKey, requiredFields);
 
   }
   onLogoFileUpload(e){
@@ -360,53 +373,64 @@ export default class MlStartupBranches extends React.Component{
                                         onSelect={this.onOptionSelected.bind(this)}
                                         selectedValue={this.state.selectedVal}/>
                         </div>
-                        <div className="form-group">
-                          <input type="text" name="branchName" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.branchName}  onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group mandatory">
+                          <input type="text" name="branchName" placeholder="Name" className="form-control float-label" ref={"branchName"}
+                                 defaultValue={this.state.data.branchName} onBlur={this.handleBlur.bind(this)}
+                                 data-required={true} data-errMsg="Branch Name is required"/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "branchName", "isNamePrivate")}/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" name="branchPhoneNumber" placeholder="Phone Number" className="form-control float-label" id="" defaultValue={this.state.data.branchPhoneNumber} onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="branchPhoneNumber" placeholder="Phone Number" className="form-control float-label" defaultValue={this.state.data.branchPhoneNumber} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isPhoneNumberPrivate" defaultValue={this.state.data.isPhoneNumberPrivate} onClick={this.onLockChange.bind(this, "branchPhoneNumber", "isPhoneNumberPrivate")}/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" name="branchAddress1" placeholder="Flat/House/Floor/Building" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress1} onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group mandatory">
+                          <input type="text" name="branchAddress1" placeholder="Flat/House/Floor/Building"
+                                 className="form-control float-label" ref={"branchAddress1"}
+                                 defaultValue={this.state.data.branchAddress1} onBlur={this.handleBlur.bind(this)}
+                                  />
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressOnePrivate" defaultValue={this.state.data.isAddressOnePrivate} onClick={this.onLockChange.bind(this, "branchAddress1", "isAddressOnePrivate")}/>
                         </div>
 
 
-                        <div className="form-group">
-                          <input type="text" name="branchAddress2" placeholder="Colony/Street/Locality" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group mandatory">
+                          <input type="text" name="branchAddress2" placeholder="Colony/Street/Locality"
+                                 className="form-control float-label"
+                                 defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}
+                                 ref={"branchAddress2"} data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressTwoPrivate" defaultValue={this.state.data.isAddressTwoPrivate} onClick={this.onLockChange.bind(this, "branchAddress2", "isAddressTwoPrivate")}/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" name="branchLandmark" placeholder="Landmark" className="form-control float-label" id=""  defaultValue={this.state.data.branchLandmark} onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="branchLandmark" placeholder="Landmark" className="form-control float-label"  defaultValue={this.state.data.branchLandmark} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLandmarkPrivate" defaultValue={this.state.data.isLandmarkPrivate} onClick={this.onLockChange.bind(this, "branchLandmark", "isLandmarkPrivate")}/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" name="branchArea" placeholder="Area" className="form-control float-label" id="" defaultValue={this.state.data.branchArea} onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="branchArea" placeholder="Area" className="form-control float-label" defaultValue={this.state.data.branchArea} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAreaPrivate" defaultValue={this.state.data.isAreaPrivate} onClick={this.onLockChange.bind(this, "branchArea", "isAreaPrivate")}/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} ref="country"  className="form-control float-label"
                                         valueKey={'value'} labelKey={'label'} placeholder="Your Country"
-                                        selectedValue={this.state.countryId} queryType={"graphql"} query={countryQuery}
-                                        isDynamic={true}  onSelect={this.onOptionSelectedCountry.bind(this)}/>
+                                        selectedValue={this.state.countryId} queryType={"graphql"} query={countryQuery} mandatory={true}
+                                        isDynamic={true}  onSelect={this.onOptionSelectedCountry.bind(this)}
+                                        data-required={true} data-errMsg="Country is required"/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} ref="state" className="form-control float-label"
                                         valueKey={'value'} labelKey={'label'} placeholder="State" queryOptions={statesOption}
-                                        selectedValue={this.state.stateId} queryType={"graphql"} query={statesQuery}
-                                        isDynamic={true}  onSelect={this.onOptionSelectedStates.bind(this)}/>
+                                        selectedValue={this.state.stateId} queryType={"graphql"} query={statesQuery} mandatory={true}
+                                        isDynamic={true}  onSelect={this.onOptionSelectedStates.bind(this)}
+                                        data-required={true} data-errMsg="State is required"/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} ref="town" className="form-control float-label"
                                         valueKey={'value'} labelKey={'label'} placeholder="Town/City" queryOptions={citiesOption}
-                                        selectedValue={this.state.cityId} queryType={"graphql"} query={citiesQuery}
-                                        isDynamic={true}  onSelect={this.onOptionSelectedCities.bind(this)}/>
+                                        selectedValue={this.state.cityId} queryType={"graphql"} query={citiesQuery} mandatory={true}
+                                        isDynamic={true}  onSelect={this.onOptionSelectedCities.bind(this)}
+                                        data-required={true} data-errMsg="Town is required"/>
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -436,3 +460,12 @@ export default class MlStartupBranches extends React.Component{
 MlStartupBranches.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     keys: state.mlStartupEditTemplateReducer.privateKeys
+//   };
+// }
+//
+// export default connect(mapStateToProps)(MlStartupBranches);
+export default MlStartupBranches;

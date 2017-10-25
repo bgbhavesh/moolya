@@ -1,15 +1,17 @@
 import React, {Component, PropTypes}  from "react";
 import ScrollArea from 'react-scrollbar'
 import {Button, Popover, PopoverTitle, PopoverContent} from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
-var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
 import _ from 'lodash';
+var FontAwesome = require('react-fontawesome');
+import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
-import MlLoader from '../../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 
-const KEY = "lookingFor"
+const KEY = "lookingFor";
+
 export default class MlInstitutionEditLookingFor extends Component {
   constructor(props, context) {
     super(props);
@@ -23,7 +25,8 @@ export default class MlInstitutionEditLookingFor extends Component {
       institutionLookingForList: [],
       selectedVal: null,
       selectedObject: "default"
-    }
+    };
+    this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
     return this;
@@ -98,7 +101,11 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({institutionLookingForList: this.state.institutionLookingFor, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.institutionLookingFor
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.lookingFor)
+      setObject = this.context.institutionPortfolio.lookingFor
+    this.setState({institutionLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
@@ -121,7 +128,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       tabName: KEY
     }
     this.setState({data: details, privateKey: privateKey}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -135,7 +142,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -149,17 +156,24 @@ export default class MlInstitutionEditLookingFor extends Component {
       ["lookingForName"]: selObject.label,
       lookingDescription: selObject.about
     });
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+    this.setState({data: details, "selectedVal": selectedId}, function () {
+      // this.setState({"selectedVal": selectedId})
+      // this.sendDataToParent()
     })
   }
 
-  sendDataToParent() {
+  getFieldValidations() {
+    const ret = mlFieldValidations(this.refs);
+    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+  }
+
+  sendDataToParent(isSaveClicked) {
+    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionLookingFor1 = this.state.institutionLookingFor;
     let institutionLookingFor = _.cloneDeep(institutionLookingFor1);
     data.index = this.state.selectedIndex;
+    if(isSaveClicked)
     institutionLookingFor[this.state.selectedIndex] = data;
     let arr = [];
     _.each(institutionLookingFor, function (item) {
@@ -175,7 +189,7 @@ export default class MlInstitutionEditLookingFor extends Component {
 
     institutionLookingFor = arr;
     this.setState({institutionLookingFor: institutionLookingFor})
-    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey);
+    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey, requiredFields);
 
   }
 
@@ -245,10 +259,11 @@ export default class MlInstitutionEditLookingFor extends Component {
                             <Moolyaselect multiSelect={false} placeholder="Select Looking For"
                                           className="form-control float-label" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={query}
-                                          isDynamic={true}
+                                          isDynamic={true} mandatory={true}
                                           queryOptions={lookingOption}
-                                          onSelect={this.onOptionSelected.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
+                                          onSelect={this.onOptionSelected.bind(this)} ref={"lookingForId"}
+                                          selectedValue={this.state.selectedVal} data-required={true}
+                                          data-errMsg="Looking For is required"/>
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"

@@ -74,7 +74,7 @@ export default class MlAdminMapMarker extends Component {
              onClick={this.markerClickActionHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">
             <span>
-              {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
+              {this.props.showImage && this.props.showImage===true?<img src={Meteor.settings.public.countriesFlagBaseUrl+this.props.text}/>:<b>{this.props.text}</b>}</span>
             <div className="indec"></div>
           </div>
           {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
@@ -86,7 +86,7 @@ export default class MlAdminMapMarker extends Component {
              onClick={this.markerClickActionHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">
           <span>
-           {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
+           {this.props.showImage && this.props.showImage===true?<img src={Meteor.settings.public.countriesFlagBaseUrl+this.props.text}/>:<b>{this.props.text}</b>}</span>
             <div className="indec"></div>
           </div>
           {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}

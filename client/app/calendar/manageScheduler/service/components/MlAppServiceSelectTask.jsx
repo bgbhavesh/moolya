@@ -131,24 +131,29 @@ class MlAppServiceSelectTask extends Component{
                 <div className="swiper-wrapper">
                   { data.activities && data.activities.map((activity, index) => {
                     return (
-                    <div className="col-lg-2 col-md-4 col-sm-4">
-                      <div className="card_block"><h3>Name of the Task</h3>
-                        <div className="active"></div>
-                        <div className="clearfix"></div>
-                        <div className="list_icon mart0">
-                          <span className="price">Rs. 18,500</span>
-                          <span className="price pull-right">4 Sessions</span>
+                      <div className="card_block swiper-slide" key={index}>
+                        <div className="">
+                          <h3>{activity.displayName}</h3>
                           <div className="clearfix"></div>
-                          <i className="c_image ml my-ml-Ideator"></i>
-                          <div className="clearfix"></div>
-                          <span className="price"> <div className="form-group">
-                          <label><span>{activity.duration.hours || 0} Hours</span>
-                                 <span> {activity.duration.minutes || 0} Mins </span>
-                          </label>
-                        </div></span>
-                          <button className="btn btn-danger pull-right">{activity.mode}</button>
-                        </div><div className="block_footer"><span>{activity.displayName}</span></div></div>
-                    </div>
+                          <div className="list_icon mart0">
+                            <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                            <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
+                            <div className="clearfix"></div>
+                            <i className="c_image ml my-ml-Ideator"></i>
+                            <div className="clearfix"></div>
+                            <span className="price"><div className="form-group">
+                                        <label>
+                                          <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
+                                      <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                            className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
+                                          Mins
+                                        </label>
+                                      </div></span>
+                            <button className="btn btn-danger pull-right">{activity.mode}</button>
+                          </div>
+                          <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
+                        </div>
+                      </div>
 
                     )
                   })}

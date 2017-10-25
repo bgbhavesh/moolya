@@ -37,7 +37,6 @@ export default class MlAppServicePurchasedDetail extends React.Component {
     const that = this;
     if (orderId) {
       let response = await fetchAdminServiceAppointment(orderId);
-      console.log(response);
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
@@ -56,7 +55,6 @@ export default class MlAppServicePurchasedDetail extends React.Component {
 
     const { data } = this.state;
 
-    // console.log("This Props", this.props);
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
@@ -117,7 +115,6 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
-                <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>
               </div>
 
             </div>

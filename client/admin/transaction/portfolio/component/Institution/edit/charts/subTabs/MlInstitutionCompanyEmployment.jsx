@@ -11,7 +11,6 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
     this.state={
       data:{},
       startupCompanyEmployment:[],
-      selectedIndex:0,
       selectedVal:null,
       selectedObject:"default",
       //employmentList : this.props.employmentDetails || []
@@ -134,39 +133,22 @@ export default class MlInstitutionCompanyEmployment extends React.Component{
     data["eofToMonth"] =  this.refs["eofToMonth"+index].state.inputValue;
     data["eofNumberOfEmployment"] =  this.refs["eofNumberOfEmployment"+index].value
     data["eofAbout"] =  this.refs["eofAbout"+index].value
+    data["index"] =  this.state.startupCompanyEmployment&&this.state.startupCompanyEmployment.length?this.state.startupCompanyEmployment.length:0
     let clients = this.state.startupCompanyEmployment;
     clients[index] = data
     this.setState({startupCompanyEmployment:clients})
     this.props.getStartupCompanyEmployment(clients);
     this.setState({employmentList:this.state.startupCompanyEmployment})
-    if(this.state.startupCompanyEmployment){
-      this.setState({selectedIndex:this.state.startupCompanyEmployment.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
     this.refs["eofFromYear"+index].state.inputValue = ""
     this.refs["eofFromMonth"+index].state.inputValue = ""
     this.refs["eofToYear"+index].state.inputValue = ""
     this.refs["eofToMonth"+index].state.inputValue = ""
     this.refs["eofNumberOfEmployment"+index].value = ""
     this.refs["eofAbout"+index].value = ""
+    this.setState({data : {}})
 
   }
-  onUpdateAction(){
-    if(this.state.startupCompanyEmployment){
-      this.setState({selectedIndex:this.state.startupCompanyEmployment.length})
-    }else{
-      this.setState({selectedIndex:0})
-    }
-  }
 
-  /*onRemoveAction(index,e){
-   let updatedData = this.state.startupCompanyEmployment || [];
-   updatedData.splice(updatedData.indexOf(index), 1);
-   this.setState({employmentList: updatedData}, function () {
-   this.sendDataToParent()
-   });
-   }*/
 
   render(){
     let that = this;

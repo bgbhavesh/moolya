@@ -256,17 +256,21 @@ class MlAppActivity extends Component {
     }
     if (id) {
       const res = await updateActivityActionHandler(id, activityDetails);
-      if (res) {
+      if (res.success) {
         toastr.success("Updated Successfully");
         this.setState({saved:true});
+        this.getActivityDetails();
+      } else {
+        toastr.error(res.result);
       }
-      this.getActivityDetails();
     } else {
       const res = await createActivityActionHandler(activityDetails);
-      if (res) {
+      if (res.success) {
         toastr.success("Created Successfully");
         this.setState({saved:true});
         FlowRouter.setQueryParams({ id: res.result });
+      } else {
+        toastr.error(res.result);
       }
     }
   }

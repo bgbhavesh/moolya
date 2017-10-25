@@ -4,7 +4,7 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlGenericPartnersView from './MlGenericIntrapreneurView';
+import MlGenericPartnersView from '../../commons/MlGenericIntrapreneurView';
 
 const KEY = 'intrapreneurRecognition'
 

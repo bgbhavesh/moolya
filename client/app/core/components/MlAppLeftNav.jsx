@@ -30,7 +30,7 @@ export default class MlAppLeftNav extends Component {
         });
 
         if(WinWidth > 768){
-            $(".app_menu, .vTimeline").mCustomScrollbar({theme:"minimal-dark"});
+            $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
         }
         let routeName = FlowRouter.getRouteName();
         $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );

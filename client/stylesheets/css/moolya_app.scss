@@ -37,11 +37,11 @@ $menuTrans:all 0.5s linear;
 .marb0{margin-bottom: 0;}
 .moolya_app{transition:$menuTrans;left:0px;position:relative;}
 .moolya_app.slid{position: relative;left: 300px;}
-.app_header{background:#000; height:64px; padding:0px 5px; line-height: 42px; text-align: center; border-top:3px solid $mlRed;
+.app_header{background:#000; height:70px; padding:0px 5px; line-height: 42px; text-align: center; border-top:3px solid $mlRed;
     a{color: $mlRed; font-size: 32px; margin-left: 8px; line-height: 56px;
       &:hover{color: $mlYellow;text-shadow:none;}
     }
-    img.moolya_app_logo{width: 130px; margin-top: 6px; position: absolute; left: calc(50% - 65px); }
+    img.moolya_app_logo{width: 130px; margin-top: 9px; position: absolute; left: calc(50% - 65px); }
     .mobile_menu_trigger{ position: relative;z-index:1;display:none;}
 }
 /*.moolya_app .app_menu{width: 94px;min-height: 400px;padding: 0px;float:left;background: #fff;}*/
@@ -829,7 +829,7 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50p
     }
   ul{margin: 0px; padding:3px;
     li{display: inline-block; text-align: center;margin-right:5px;background:#dc3b3c;
-      .notext{    width: 90%; color: #fff; line-height: 40px; font-size: 18px; margin: 0 auto;}
+      &.notext{background: none;text-shadow: none;line-height: 43px;width: 95%;}
       a{display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
 
         .team-block{margin-bottom:0px;background:$mlGray;
@@ -897,7 +897,7 @@ h3{font-size:40px; text-shadow:none;font-weight: bold;}
   .form-control.sendotp{width: 65%; font-size: 22px;  margin: 0 auto; text-align: center; border-bottom: none; background: $mlRed; color: #fff; border-radius: 5px; }
   .form-group.sendotp{
     width:80%;margin:0 auto;
-    .resendotp{float:right;text-decoration:underline;color:#ef4647;font-size:12px;}
+    .resendotp{float:right;color:#000;font-size:12px;}
   }
 .save_btn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 0px 0px 0px;color: $mlWhite;text-shadow: none;text-align: center;}
 .save_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlRed;top: 0px;}
@@ -1025,7 +1025,7 @@ p{margin-top:10px;}
 .invitation .input_types {margin-right:2px;}
 .popover-lg{
   width: 500px;
-  height: 320px;
+  height: 480px;
   overflow-y: auto;
   .reply-list{
     padding:0px;
@@ -2027,7 +2027,7 @@ p{margin-top:10px;}
   line-height: 18px;
   border-radius: 2px;
   font-size: 12px;
-  margin-top: -13px;
+  margin-top: -9px;
   text-shadow: none;}
 
 .act-btn{
@@ -2362,4 +2362,17 @@ li.sameWorkTime:after {
     height: 245px;
   }
 }
-.clear_all{position: absolute;right:8px;top:8px;padding:0px 5px;background: $mlGray; color:$mlBlue;border-radius: 5px;font-size: 12px;cursor: pointer}
+.clear_all{position: absolute;right:8px;top:8px;padding:0px 5px;background: $mlBlue; color:$mlWhite;border-radius: 3px;font-size: 12px;cursor: pointer}
+.anchor_tabs{height: 270px;overflow: auto;}
+
+.top-content.ideators_list .ideators_list_block, .top-content2.ideators_list .ideators_list_block{height:160px; color:#fff;}
+.top-content.ideators_list .ideators_list_block p, .top-content2.ideators_list .ideators_list_block p{font-size:14px;}
+.top-content.ideators_list .ideators_list_block p.small, .top-content2.ideators_list .ideators_list_block p.small{font-size:11px;}
+.top-content.ideators_list .ideators_list_block img, .top-content2.ideators_list .ideators_list_block img{margin-top:25px;}
+.top-content.ideators_list .ideators_list_block .fa, .top-content2.ideators_list .ideators_list_block .fa{font-size:15px; margin:5px;color:#fff;}
+
+.hide_unlock{
+.fa-unlock{
+  display: none !important;
+}
+}

@@ -2,16 +2,16 @@ import React, {Component, PropTypes} from "react";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
 import MlInstitutionAboutUs from "../../../../admin/transaction/portfolio/component/Institution/edit/aboutUs/MlInstitutionAboutUsLandingPage"
-import MlInstitutionManagement from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditManagement"
+import MlInstitutionEditManagement from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditManagement"
 import MlInstitutionInvestor from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditInvestor";
 import MlInstitutionData from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditData";
 import MlInstitutionCharts from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditChart";
-import MlInstitutionAwards from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditAwards";
+import MlInstitutionEditAwards from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditAwards";
 import MlInstitutionMCL from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditMCL";
 import MlInstitutionLookingFor from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditLookingFor";
 import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditIntrapreneur";
 import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditR&D";
-import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/edit/CSR/MlInstitutionCSREditTabs";
+import MlInstitutionCSREditTabs from "../../../../admin/transaction/portfolio/component/Institution/edit/CSR/MlInstitutionCSREditTabs";
 import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditPartners";
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/edit/incubators/MlInstitutionIncubatorsEditTabs";
 
@@ -85,7 +85,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Management",
         name: "Management",
-        component: <MlInstitutionManagement key="2" isAdmin={false} client={appClient}
+        component: <MlInstitutionEditManagement key="2" isAdmin={false} client={appClient} tabName={"management"}
                                             getManagementDetails={this.getManagementDetails.bind(this)}
                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -121,7 +121,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Awards",
         name: "Awards",
-        component: <MlInstitutionAwards client={appClient} isAdmin={false} key="6"
+        component: <MlInstitutionEditAwards client={appClient} isAdmin={false} key="6"
                                         getAwardsDetails={this.getAwardsDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
@@ -162,7 +162,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "CSR",
         name: "CSR",
-        component: <MlInstitutionCSR client={appClient} isAdmin={false} key="11"
+        component: <MlInstitutionCSREditTabs client={appClient} isAdmin={false} key="11"
                                      getCSRDetails={this.getCSRDetails.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
@@ -198,14 +198,13 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     return tabs;
   }
 
-  getAboutus(details, tabName, privatekey) {
+  getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
+    this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey, requiredFields);
   }
 
-  getCSRDetails(details, tabName, privatekey) {
-
+  getCSRDetails(details, tabName, privatekey, requiredFields) {
     if (tabName == "reports") {
       let data = this.state.institutionPortfolio;
       data[tabName] = details;
@@ -213,7 +212,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     } else {
       let data = this.state.institutionPortfolio;
       data[tabName] = details;
-      this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey);
+      this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey, requiredFields);
     }
   }
 
@@ -223,14 +222,14 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
   }
 
-  getManagementDetails(details, privatekey) {
+  getManagementDetails(details, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.management) {
       data['management'] = [];
     }
     data['management'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
   }
 
   getInvestorDetails(details, privatekey) {
@@ -259,8 +258,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
   }
 
-  getAwardsDetails(details, privatekey) {
-
+  getAwardsDetails(details, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
@@ -272,8 +270,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
-
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
   }
 
   getIntrapreneurDetails(details, privatekey) {
@@ -293,8 +290,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
   }
 
-  getRDDetails(details, privatekey) {
-
+  getRDDetails(details, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.awardsRecognition) {
       data['researchAndDevelopment'] = [];
@@ -306,19 +302,17 @@ export default class MlAppInstitutionEditTabs extends React.Component {
       arr.push(updateItem)
     })
     data['researchAndDevelopment'] = arr;
-
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
   }
 
-  getLookingForDetails(details, privatekey) {
-
+  getLookingForDetails(details, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
   }
 
   getChartDetails(details, tabName) {

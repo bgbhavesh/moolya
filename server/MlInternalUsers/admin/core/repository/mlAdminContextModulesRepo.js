@@ -204,7 +204,7 @@ let CoreModules = {
       let lastName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName : "";
       data[index].userName = firstName && lastName ? firstName + " " + lastName : doc.userName
     })
-    const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
+    const totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
 
     return {totalRecords: totalRecords, data: data};
   },
@@ -357,10 +357,12 @@ let CoreModules = {
       object = doc.registrationInfo;
       object._id = doc._id;
       object.registrationStatus = doc.status;
-      if (doc.allocation) {
-        object.assignedUser = doc.allocation.assignee
+      if (doc.allocation && doc.allocation.assigneeId) {
+        // object.assignedUser = doc.allocation.assignee
+        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
+        object.assignedUser = user.profile.firstName+" "+user.profile.lastName
         object.assignedUserId = doc.allocation.assigneeId
-          object.allocationStatus = doc.allocation.allocationStatus
+        object.allocationStatus = doc.allocation.allocationStatus
       }
       /*else{
        object.assignedUser = "Un Assigned"
@@ -398,8 +400,10 @@ let CoreModules = {
     var data = MlPortfolioDetails.find(resultantQuery, fieldsProj).fetch() || [];
     var totalRecords = MlPortfolioDetails.find(resultantQuery, fieldsProj).count();
     data.map(function (doc, index) {
-      if (doc.allocation) {
-        doc.assignedUser = doc.allocation.assignee
+      if (doc.allocation && doc.allocation.assigneeId) {
+        // doc.assignedUser = doc.allocation.assignee
+        let user = mlDBController.findOne('users', {_id:doc.allocation.assigneeId});
+        doc.assignedUser = user.profile.firstName+" "+user.profile.lastName
         doc.assignedUserId = doc.allocation.assigneeId
         doc.allocationStatus = doc.allocation.allocationStatus
       }
@@ -565,6 +569,8 @@ let CoreModules = {
     }
     pipleline.push({'$lookup': {from: 'users', localField: 'userId', 'foreignField': '_id', as: 'user'}},
       {'$unwind': '$user'},
+      {'$lookup':{ from: 'mlOffice', localField: 'officeId', foreignField: '_id', as: 'office'}},
+      {'$unwind':'$office'},
       {
         '$project': {
           'userName': '$user.profile.displayName',
@@ -577,7 +583,7 @@ let CoreModules = {
           'subChapterName': 1,
           'communityName': 1,
           'status': 1,
-          'profileId': '$user.profile.externalUserProfiles.profileId'
+          'profileId': '$office.profileId'
         }
       })
 
@@ -722,11 +728,11 @@ let CoreModules = {
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     if (!fieldsProj.sort) {
-      fieldsProj.sort = {'createdDate': -1}
+      fieldsProj.sort = {'updatedAt': -1}
     }
     var serverQuery = {
       'isBeSpoke': false,
-      'isCurrentVersion': true,
+//      'isCurrentVersion': true,
       'isReview': true
     };
     let query = {};
@@ -739,7 +745,8 @@ let CoreModules = {
       userData.map(function (list) {
         data[index].email = list.username;
         list.profile.externalUserProfiles.map(function (user) {
-          data[index].userDetails = user;
+          if(details.profileId ===  user.profileId)
+            data[index].userDetails = user;
         });
       });
     });

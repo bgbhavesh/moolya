@@ -101,7 +101,11 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.setState({institutionLookingForList: this.state.institutionLookingFor, popoverOpen: false})
+    this.sendDataToParent(true)
+    var setObject = this.state.institutionLookingFor
+    if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.lookingFor)
+      setObject = this.context.institutionPortfolio.lookingFor
+    this.setState({institutionLookingForList: setObject, popoverOpen: false})
   }
 
   onLockChange(fieldName, field, e) {
@@ -124,7 +128,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       tabName: KEY
     }
     this.setState({data: details, privateKey: privateKey}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -138,7 +142,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       updatedData = _.extend(updatedData, {[key]: false});
     }
     this.setState({data: updatedData}, function () {
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -154,7 +158,7 @@ export default class MlInstitutionEditLookingFor extends Component {
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
+      // this.sendDataToParent()
     })
   }
 
@@ -163,12 +167,13 @@ export default class MlInstitutionEditLookingFor extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent() {
+  sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionLookingFor1 = this.state.institutionLookingFor;
     let institutionLookingFor = _.cloneDeep(institutionLookingFor1);
     data.index = this.state.selectedIndex;
+    if(isSaveClicked)
     institutionLookingFor[this.state.selectedIndex] = data;
     let arr = [];
     _.each(institutionLookingFor, function (item) {

@@ -5,12 +5,12 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import MlLoader from '../../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../../commons/utils/formElemUtil'
+import MlLoader from '../../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericIntrapreneurView extends React.Component {
+export default class MlGenericAchievementsView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +72,7 @@ export default class MlGenericIntrapreneurView extends React.Component {
 
 
   viewDetails(id, e) {
-    let data = this.props.intrapreneurList;
+    let data = this.props.achievementsList;
     var getData = data[id]
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
@@ -91,7 +91,7 @@ export default class MlGenericIntrapreneurView extends React.Component {
     var _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.intrapreneurList ? _this.props.intrapreneurList : []
+    var arrayList = _this.props.achievementsList ? _this.props.achievementsList : []
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -112,7 +112,7 @@ export default class MlGenericIntrapreneurView extends React.Component {
                           <div className="list_block notrans funding_list">
                             <div>
                               <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
-                              <h3>{details.intrapreneurName?details.intrapreneurName:""}</h3>
+                              <h3>{details.achievementName?details.achievementName:""}</h3>
                             </div>
                           </div>
                         </div>
@@ -133,7 +133,7 @@ export default class MlGenericIntrapreneurView extends React.Component {
                         <div className="team-block" name="funding_01">
                           <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                           <h3>
-                            {details.intrapreneurName?details.intrapreneurName:""} <br />
+                            {details.achievementName?details.achievementName:""} <br />
                           </h3>
                         </div>
                       </li>
@@ -152,16 +152,8 @@ export default class MlGenericIntrapreneurView extends React.Component {
                             <div className="form_bg">
                               <form>
                                 <div className="form-group">
-                                  <input type="text" placeholder="Intrapreneur Name"
-                                         value={this.state.viewCurDetail.intrapreneurName ? this.state.viewCurDetail.intrapreneurName : ""}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
-                                  <FontAwesome name='unlock' className="password_icon"/>
-                                </div>
-
-                                <div className="form-group">
-                                  <input type="text" placeholder="Year"
-                                         value={this.state.viewCurDetail.year ? this.state.viewCurDetail.year : ""}
+                                  <input type="text" placeholder="Achievement Name"
+                                         value={this.state.viewCurDetail.achievementName ? this.state.viewCurDetail.achievementName : ""}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -173,8 +165,8 @@ export default class MlGenericIntrapreneurView extends React.Component {
                             <div className="form_bg">
                               <form>
                                 <div className="form-group">
-                                  <input type="text" placeholder="Intrapreneur Description"
-                                         value={this.state.viewCurDetail.intrapreneurDescription ? this.state.viewCurDetail.intrapreneurDescription : ''}
+                                  <input type="text" placeholder="Achievement Description"
+                                         value={this.state.viewCurDetail.achievementDescription ? this.state.viewCurDetail.achievementDescription : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>

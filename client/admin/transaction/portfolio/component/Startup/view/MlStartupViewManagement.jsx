@@ -1,12 +1,11 @@
 import React from 'react';
-import { render } from 'react-dom';
 // import ScrollArea from 'react-scrollbar';
 // var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
 // import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 // import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 // import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import MlGenericManagementView from './MlGenericManagementView'
+import MlGenericManagementView from '../../commons/MlGenericManagementView'
 import NoData from '../../../../../../commons/components/noData/noData'
 
 const KEY = 'management'

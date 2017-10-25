@@ -5,12 +5,12 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import MlLoader from '../../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../../commons/utils/formElemUtil'
+import MlLoader from '../../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericRAndDView extends React.Component {
+export default class MlGenericPartnersView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +72,7 @@ export default class MlGenericRAndDView extends React.Component {
 
 
   viewDetails(id, e) {
-    let data = this.props.RAndDList;
+    let data = this.props.partnersList;
     var getData = data[id]
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
@@ -91,7 +91,7 @@ export default class MlGenericRAndDView extends React.Component {
     var _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.RAndDList ? _this.props.RAndDList : []
+    var arrayList = _this.props.partnersList ? _this.props.partnersList : []
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -112,7 +112,7 @@ export default class MlGenericRAndDView extends React.Component {
                           <div className="list_block notrans funding_list">
                             <div>
                               <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
-                              <h3>{details.researchAndDevelopmentName?details.researchAndDevelopmentName:""}</h3>
+                              <h3>{details.firstName?details.firstName:""}</h3>
                             </div>
                           </div>
                         </div>
@@ -133,7 +133,7 @@ export default class MlGenericRAndDView extends React.Component {
                         <div className="team-block" name="funding_01">
                           <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                           <h3>
-                            {details.researchAndDevelopmentName?details.researchAndDevelopmentName:""} <br />
+                            {details.firstName?details.firstName:""} <br />
                           </h3>
                         </div>
                       </li>
@@ -151,9 +151,42 @@ export default class MlGenericRAndDView extends React.Component {
                           <div className="col-md-6 nopadding-left">
                             <div className="form_bg">
                               <form>
+                                {/*<div className="form-group">*/}
+                                  {/*<Moolyaselect multiSelect={false} placeholder="Title"*/}
+                                                {/*className="form-control float-label" valueKey={'value'}*/}
+                                                {/*labelKey={'label'}*/}
+                                                {/*selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}*/}
+                                                {/*query={titleQuery} queryOptions={titleOption}*/}
+                                                {/*onSelect={function () {}} isDynamic={true} isDisabled={true}/>*/}
+                                  {/*<FontAwesome name='unlock' className="password_icon"/>*/}
+                                {/*</div>*/}
+
                                 <div className="form-group">
-                                  <input type="text" placeholder="Research And Development Name"
-                                         value={this.state.viewCurDetail.researchAndDevelopmentName ? this.state.viewCurDetail.researchAndDevelopmentName : ""}
+                                  <input type="text" placeholder="First name"
+                                         value={this.state.viewCurDetail.firstName ? this.state.viewCurDetail.firstName : ''}
+                                         className="form-control float-label" onChange={_this.handleChange}/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+
+                                <div className="form-group">
+                                  <input type="text" placeholder="Last Name"
+                                         value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
+                                         onChange={_this.handleChange}
+                                         className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+
+                                <div className="form-group">
+                                  <input type="text" placeholder="Designation"
+                                         value={this.state.viewCurDetail.designation ? this.state.viewCurDetail.designation : ""}
+                                         onChange={_this.handleChange}
+                                         className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+
+                                <div className="form-group">
+                                  <input type="text" placeholder="Company Name"
+                                         value={this.state.viewCurDetail.partnerCompanyName ?this.state.viewCurDetail.partnerCompanyName : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
@@ -164,11 +197,27 @@ export default class MlGenericRAndDView extends React.Component {
                           <div className="col-md-6 nopadding-right">
                             <div className="form_bg">
                               <form>
+
                                 <div className="form-group">
-                                  <input type="text" placeholder="Research And Development Description"
-                                         value={this.state.viewCurDetail.researchAndDevelopmentDescription ? this.state.viewCurDetail.researchAndDevelopmentDescription : ''}
+                                  <input type="text" placeholder="Years of Experience"
+                                         value={this.state.viewCurDetail.yearsOfExperience ? this.state.viewCurDetail.yearsOfExperience : ''}
                                          onChange={_this.handleChange}
                                          className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+
+                                <div className="form-group">
+                                  <input type="text" placeholder="Qualification"
+                                         value={this.state.viewCurDetail.qualification ? this.state.viewCurDetail.qualification : ''}
+                                         onChange={_this.handleChange}
+                                         className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+
+                                <div className="form-group">
+                                  <input type="text" placeholder="About" className="form-control float-label"
+                                         value={this.state.viewCurDetail.aboutPartner ? this.state.viewCurDetail.aboutPartner : ''}
+                                         onChange={_this.handleChange}/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
                               </form>
@@ -188,7 +237,6 @@ export default class MlGenericRAndDView extends React.Component {
     )
   }
 }
-
 /*
 This generic file is being used by company and institutions
  */

@@ -5,12 +5,12 @@
 import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import MlLoader from '../../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../../commons/utils/formElemUtil'
+import MlLoader from '../../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 
 var FontAwesome = require('react-fontawesome');
 
-export default class MlGenericAwardsView extends React.Component {
+export default class MlGenericRAndDView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +72,7 @@ export default class MlGenericAwardsView extends React.Component {
 
 
   viewDetails(id, e) {
-    let data = this.props.awardsList;
+    let data = this.props.RAndDList;
     var getData = data[id]
     this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
@@ -91,7 +91,7 @@ export default class MlGenericAwardsView extends React.Component {
     var _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.awardsList ? _this.props.awardsList : []
+    var arrayList = _this.props.RAndDList ? _this.props.RAndDList : []
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -112,7 +112,7 @@ export default class MlGenericAwardsView extends React.Component {
                           <div className="list_block notrans funding_list">
                             <div>
                               <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
-                              <h3>{details.awardName?details.awardName:""}</h3>
+                              <h3>{details.researchAndDevelopmentName?details.researchAndDevelopmentName:""}</h3>
                             </div>
                           </div>
                         </div>
@@ -133,7 +133,7 @@ export default class MlGenericAwardsView extends React.Component {
                         <div className="team-block" name="funding_01">
                           <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                           <h3>
-                            {details.awardName?details.awardName:""} <br />
+                            {details.researchAndDevelopmentName?details.researchAndDevelopmentName:""} <br />
                           </h3>
                         </div>
                       </li>
@@ -144,15 +144,38 @@ export default class MlGenericAwardsView extends React.Component {
 
               <div className="main_wrap_scroll">
                 <ScrollArea speed={0.8} className="main_wrap_scroll"smoothScrolling={true} default={true} >
-                  <div className="col-lg-12">
+                  <div className="col-lg-12" id="psContent">
                     <div className="row">
                       <div className="investement-view-content">
-                        <div className="panel panel-default panel-form-view">
-                          <div className="panel-body">
-                            <textarea name="awardsDescription" placeholder="About" className="form-control float-label" value={this.state.viewCurDetail.awardsDescription?this.state.viewCurDetail.awardsDescription: ''} />
-                            <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.viewCurDetail.isDescriptionPrivate}/>
+                        <div className="funding-investers" id="funding_show">
+                          <div className="col-md-6 nopadding-left">
+                            <div className="form_bg">
+                              <form>
+                                <div className="form-group">
+                                  <input type="text" placeholder="Research And Development Name"
+                                         value={this.state.viewCurDetail.researchAndDevelopmentName ? this.state.viewCurDetail.researchAndDevelopmentName : ""}
+                                         onChange={_this.handleChange}
+                                         className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div className="col-md-6 nopadding-right">
+                            <div className="form_bg">
+                              <form>
+                                <div className="form-group">
+                                  <input type="text" placeholder="Research And Development Description"
+                                         value={this.state.viewCurDetail.researchAndDevelopmentDescription ? this.state.viewCurDetail.researchAndDevelopmentDescription : ''}
+                                         onChange={_this.handleChange}
+                                         className="form-control float-label"/>
+                                  <FontAwesome name='unlock' className="password_icon"/>
+                                </div>
+                              </form>
+                            </div>
                           </div>
                         </div>
+                        <div className="clearfix"></div>
                       </div>
                     </div>
                   </div>
@@ -165,3 +188,7 @@ export default class MlGenericAwardsView extends React.Component {
     )
   }
 }
+
+/*
+This generic file is being used by company and institutions
+ */

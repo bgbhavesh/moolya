@@ -27,7 +27,6 @@ export default class MlFunderPrincipalTeam extends Component {
       selectedIndex: -1,
       funderPrincipalList: [],
       funderTeamList: [],
-      selectedVal: null,
       selectedObject: "default",
       title: '',
       selectedTab: 'principal',
@@ -117,24 +116,12 @@ export default class MlFunderPrincipalTeam extends Component {
   }
 
   onLockChange(fieldName, field, tabName, e) {
-    // let details = this.state.data || {};
-    // let key = e.target.id;
     var isPrivate = false;
-    // details = _.omit(details, [key]);
     const className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, { [key]: true });
       isPrivate = true;
     }
-      // else {
-    //   details = _.extend(details, { [key]: false });
-    // }
-
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: tabName }
-    // this.setState({privateKey:privateKey})
-    // this.setState({ data: details, privateKey: privateKey }, function () {
-      // this.sendDataToParent()
-    // })
     this.setState({privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
@@ -186,7 +173,13 @@ export default class MlFunderPrincipalTeam extends Component {
     }
   }
   onSavePrincipalAction(e) {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.principal) {
       this.setState({funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false, selectLogo: {}});
     }
@@ -194,8 +187,15 @@ export default class MlFunderPrincipalTeam extends Component {
       this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false, selectLogo: {}});
     }
   }
+
   onSaveTeamAction(e) {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.team) {
       this.setState({funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false, selectLogoTeam: {}});
     }
@@ -259,7 +259,6 @@ export default class MlFunderPrincipalTeam extends Component {
       popoverOpenP: !(this.state.popoverOpenP)
     }, () => {
       this.lockPrivateKeys(index, true, "principal")
-      // "selectedVal": details.typeOfFundingId
     });
 
     /* setTimeout(function () {
@@ -301,9 +300,7 @@ export default class MlFunderPrincipalTeam extends Component {
       popoverOpenT: !(this.state.popoverOpenT)
     }, () => {
       this.lockPrivateKeys(index, false, "team")
-      // "selectedVal": details.typeOfFundingId
     });
-    // "selectedVal": details.typeOfFundingId
 
 
     // setTimeout(function () {
@@ -318,7 +315,6 @@ export default class MlFunderPrincipalTeam extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     var data = this.state.data;
     var selectedTab = this.state.selectedTab;
     if (selectedTab == "principal") {
@@ -341,10 +337,8 @@ export default class MlFunderPrincipalTeam extends Component {
       })
       funderPrincipal = arr;
       this.setState({ funderPrincipal: funderPrincipal })
-      this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey, requiredFields);
-
+      this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
     } else if (selectedTab == "team") {
-
       let fun = this.state.funderTeam;
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
@@ -364,7 +358,7 @@ export default class MlFunderPrincipalTeam extends Component {
       })
       funderTeam = arr;
       this.setState({ funderTeam: funderTeam })
-      this.props.getTeamDetails(funderTeam, this.state.privateKey, requiredFields);
+      this.props.getTeamDetails(funderTeam, this.state.privateKey);
     }
   }
 

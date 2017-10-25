@@ -111,7 +111,6 @@ export default class MlFunderAreaOfInterest extends Component {
     //   selectedObject: index,
     //   popoverOpen: !(this.state.popoverOpen)
     // });
-    console.log('tile clicked' + index)
   }
 
   componentDidUpdate() {
@@ -125,7 +124,13 @@ export default class MlFunderAreaOfInterest extends Component {
   }
 
   addAreaOfInterest() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({
+      selectedObject: "default",
+      popoverOpen: !(this.state.popoverOpen),
+      data: {},
+      industryTypeId: null,
+      industryTypeName: null
+    })
     if (this.state.funderAreaOfInterest) {
       this.setState({selectedIndex: this.state.funderAreaOfInterest.length})
     } else {
@@ -147,27 +152,17 @@ export default class MlFunderAreaOfInterest extends Component {
     })
   }
 
-  onLockChange(fieldName, field, e) {
-    // let details = this.state.data || {};
-    // let key = field;
-    var isPrivate = false;
-    // details = _.omit(details, [key]);
-    let className = e.target.className;
-    if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
-      isPrivate = true;
-    }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
-      this.sendDataToParent()
-    })
-
-  }
+  // onLockChange(fieldName, field, e) {
+  //   var isPrivate = false;
+  //   let className = e.target.className;
+  //   if (className.indexOf("fa-lock") != -1) {
+  //     isPrivate = true;
+  //   }
+  //   var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
+  //   this.setState({data: details, privateKey:privateKey}, function () {
+  //     this.sendDataToParent()
+  //   })
+  // }
 
   /**
    * UI creating lock function\
@@ -189,7 +184,13 @@ export default class MlFunderAreaOfInterest extends Component {
 
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.funderAreaOfInterest
     if(this.context && this.context.funderPortfolio && this.context.funderPortfolio.areaOfInterest ){
       setObject = this.context.funderPortfolio.areaOfInterest
@@ -203,7 +204,6 @@ export default class MlFunderAreaOfInterest extends Component {
     details = _.omit(details, ["industryTypeId"]);
     details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
     this.setState({data: details, "selectedVal": selectedFunding, "industryTypeName": selObject.label}, function () {
-      // this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
       // this.sendDataToParent()
     })
   }
@@ -212,13 +212,11 @@ export default class MlFunderAreaOfInterest extends Component {
     let details = this.state.data;
     details = _.omit(details, ["subDomainId"]);
     details = _.extend(details, {["subDomainId"]: selectedSubDomain});
-    this.setState({data: details}, function () {
-      this.setState({"selectedValDomain": selectedSubDomain})
+    this.setState({data: details, "selectedValDomain": selectedSubDomain}, function () {
       // this.sendDataToParent()
     })
   }
   onLogoFileUpload(fileInfo, image) {
-
     let file = image;
     let fileName = fileInfo.name;
     let data = {
@@ -303,7 +301,6 @@ export default class MlFunderAreaOfInterest extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let investment = this.state.funderAreaOfInterest;
     let funderAreaOfInterest = _.cloneDeep(investment);
@@ -326,8 +323,9 @@ export default class MlFunderAreaOfInterest extends Component {
     })
     funderAreaOfInterest = arr;
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
-    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey, requiredFields);
+    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
   }
+
   handleUploadAvatar(image, e) {
     this.setState({
       uploadingAvatar: true,

@@ -75,7 +75,7 @@ export default class MlFunderLookingFor extends Component {
   }
 
   addLookingFor() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if (this.state.funderLookingFor) {
       this.setState({selectedIndex: this.state.funderLookingFor.length})
     } else {
@@ -118,7 +118,13 @@ export default class MlFunderLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.funderLookingFor
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.lookingFor)
       setObject = this.context.funderPortfolio.lookingFor
@@ -127,17 +133,10 @@ export default class MlFunderLookingFor extends Component {
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    // let details = this.state.data || {};
-    // let key = e.target.id;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
       isPrivate = true
     }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
     var privateKey = {
       keyName: fieldName,
       booleanKey: field,
@@ -175,7 +174,6 @@ export default class MlFunderLookingFor extends Component {
       lookingDescription: selObject && selObject.about ? selObject.about : ''
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
-      // this.setState({"selectedVal": selectedId})
       // this.sendDataToParent()
     })
   }
@@ -186,7 +184,6 @@ export default class MlFunderLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let funderLookingFor1 = this.state.funderLookingFor;
     let funderLookingFor = _.cloneDeep(funderLookingFor1);
@@ -207,7 +204,7 @@ export default class MlFunderLookingFor extends Component {
 
     funderLookingFor = arr;
     this.setState({funderLookingFor: funderLookingFor})
-    this.props.getLookingFor(funderLookingFor, this.state.privateKey, requiredFields);
+    this.props.getLookingFor(funderLookingFor, this.state.privateKey);
 
   }
 

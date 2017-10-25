@@ -4,7 +4,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
-import MlGenericAchievementsView from '../MlGenericAchievementsView';
+import MlGenericAchievementsView from '../../../commons/MlGenericAchievementsView';
 const KEY = 'achievements'
 
 export default class MlCompanyViewAchievements extends React.Component {

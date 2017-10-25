@@ -3,14 +3,12 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
-import {find} from "lodash"
-import MlLoader from '../../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../../commons/utils/formElemUtil'
-import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
-import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio';
 import gql from 'graphql-tag'
+import MlLoader from '../../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
+import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio';
 
 var FontAwesome = require('react-fontawesome');
 
@@ -85,13 +83,16 @@ export default class MlGenericManagementView extends React.Component {
   viewDetails(id, e) {
     let data = this.props.data;
     var getData = data[id]
-    this.setState({viewCurDetail: getData});
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
+    this.setState({viewCurDetail: getData})
 
-    _.each(getData.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    })
+    setTimeout(function () {
+      $(".input_icon").removeClass('un_lock fa-lock').addClass('fa-unlock')
+      _.each(getData.privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
   handleChange() {
@@ -100,11 +101,10 @@ export default class MlGenericManagementView extends React.Component {
 
   render() {
     var _this = this
-    console.log('selected : ', _this.state.viewCurDetail);
     let titleQuery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-     label
-     value
+      label
+      value
      }
      }
      `;
@@ -117,10 +117,10 @@ export default class MlGenericManagementView extends React.Component {
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
           <div>
-            {_.isEmpty(arrayList) ? (
-              <div className="portfolio-main-wrap">
-                <NoData tabName={this.props.tabName}/>
-              </div>) : (
+            {/*{_.isEmpty(arrayList) ? (*/}
+              {/*<div className="portfolio-main-wrap">*/}
+                {/*<NoData tabName={this.props.tabName}/>*/}
+              {/*</div>) : (*/}
               <div className="col-md-12">
                 <div className="requested_input" id="show">
                   <ScrollArea
@@ -149,7 +149,7 @@ export default class MlGenericManagementView extends React.Component {
                   </ScrollArea>
                 </div>
 
-                <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
+                <div className="sub_wrap_scroll hide_unlock" id="details-div" style={{'display': 'none'}}>
 
                   <div className="top_block_scroller" id="forcecentered">
                     <ul>
@@ -157,7 +157,7 @@ export default class MlGenericManagementView extends React.Component {
                         return (
                           <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                             <div className="team-block" name="funding_01">
-                              <img src="/images/p_20.jpg" className="team_img"/>
+                              <img src={genderImage} className="team_img"/>
                               <h3>
                                 {details.firstName} <br /><b>{details.designation}</b>
                               </h3>
@@ -183,27 +183,18 @@ export default class MlGenericManagementView extends React.Component {
                               <div className="col-md-6 nopadding-left">
                                 <div className="form_bg">
                                   <form>
-                                    {/*<div className="form-group">*/}
-                                    {/*<input type="text" placeholder="Title"*/}
-                                    {/*className="form-control float-label"*/}
-                                    {/*value={this.state.viewCurDetail.title ? this.state.viewCurDetail.title : ''}*/}
-                                    {/*onChange={_this.handleChange}/>*/}
-                                    {/*<FontAwesome name='unlock' className="password_icon"/>*/}
-                                    {/*</div>*/}
-                                      <Moolyaselect multiSelect={false} placeholder="Title"
-                                                    className="float-label" valueKey={'value'}
-                                                    labelKey={'label'}
-                                                    selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}
-                                                    query={titleQuery} queryOptions={titleOption}
-                                                    onSelect={function () {}} isDynamic={true} isDisabled={true}/>
-                                      <FontAwesome name='unlock' className="password_icon mselect_icon"/>
-
-
+                                    <Moolyaselect multiSelect={false} placeholder="Title"
+                                                  className="float-label" valueKey={'value'}
+                                                  labelKey={'label'}
+                                                  selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}
+                                                  query={titleQuery} queryOptions={titleOption}
+                                                  isDynamic={true} isDisabled={true}/>
+                                    <FontAwesome name='unlock' className="input_icon mselect_icon"/>
                                     <div className="form-group">
                                       <input type="text" placeholder="First name"
                                              value={this.state.viewCurDetail.firstName ? this.state.viewCurDetail.firstName : ''}
                                              className="form-control float-label" onChange={_this.handleChange}/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id="isFirstNamePrivate"/>
                                     </div>
 
                                     <div className="form-group">
@@ -211,7 +202,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.middleName ? this.state.viewCurDetail.middleName : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id="isMiddleNamePrivate"/>
                                     </div>
 
                                     <div className="form-group">
@@ -219,7 +210,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id="isLastNamePrivate"/>
                                     </div>
 
                                     <div className="form-group">
@@ -227,7 +218,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.gender ? this.state.viewCurDetail.gender : ""}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isGenderPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -235,7 +226,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.designation ? this.state.viewCurDetail.designation : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isDesignationPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -243,7 +234,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.yearsOfExperience ? this.state.viewCurDetail.yearsOfExperience : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isYOFPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -251,7 +242,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.joiningDate ? this.state.viewCurDetail.joiningDate : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isJoiningDatePrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -259,7 +250,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.firstJobJoiningDate ? this.state.viewCurDetail.firstJobJoiningDate : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='unlock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isFJJDPrivate"}/>
                                     </div>
                                   </form>
                                 </div>
@@ -279,7 +270,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.qualification ? this.state.viewCurDetail.qualification : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isQualificationPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -287,7 +278,7 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.certification ? this.state.viewCurDetail.certification : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isCertificationPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -295,14 +286,14 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.universities ? this.state.viewCurDetail.universities : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isUniversitiesPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
                                       <input type="text" placeholder="Awards" className="form-control float-label"
                                              value={this.state.viewCurDetail.awards ? this.state.viewCurDetail.awards : ''}
                                              onChange={_this.handleChange}/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isAwardsPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
@@ -310,14 +301,14 @@ export default class MlGenericManagementView extends React.Component {
                                              value={this.state.viewCurDetail.linkedInUrl ? this.state.viewCurDetail.linkedInUrl : ''}
                                              onChange={_this.handleChange}
                                              className="form-control float-label"/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isLinkedInUrlPrivate"}/>
                                     </div>
 
                                     <div className="form-group">
                                       <input type="text" placeholder="About" className="form-control float-label"
                                              value={this.state.viewCurDetail.managmentAbout ? this.state.viewCurDetail.managmentAbout : ''}
                                              onChange={_this.handleChange}/>
-                                      <FontAwesome name='lock' className="password_icon"/>
+                                      <FontAwesome name='unlock' className="input_icon" id={"isAboutPrivate"}/>
                                     </div>
                                   </form>
                                 </div>
@@ -331,7 +322,7 @@ export default class MlGenericManagementView extends React.Component {
                   </div>
                 </div>
               </div>
-            )}
+            {/*)}*/}
           </div>
         )
         }

@@ -9,7 +9,13 @@
       "message" : "New User Created"
     },
     "countriesFlagBaseUrl":"http://10.0.2.16:9090/moolya-images/flags/",
-    "minioBaseUrl":"http://10.0.2.16:9090/moolya-users/registrationDocuments/"
+    "minio":{
+      "minioConfig":{
+        "bucketName":"moolya-users",
+        "endPoint":"10.0.2.16",
+        "port":9090
+      }
+    }
   },
   "private": {
       "subChapterName":"Moolya",

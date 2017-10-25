@@ -245,7 +245,7 @@ export default class Individual extends React.Component{
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
     }
     else{
-      toastr.error("age limit exceeded")
+      toastr.error("Minimum Age for Registration is 18 years")
     }
   }
   onemploymentDateSelection(event) {
@@ -264,6 +264,10 @@ export default class Individual extends React.Component{
   }
 
   render(){
+    let genderActive=''
+    if(this.state.gender){
+      genderActive ='active'
+    }
     var yesterday = Datetime.moment().subtract(0,'day');
     var valid = function( current ){
       return current.isBefore( yesterday );
@@ -421,10 +425,11 @@ export default class Individual extends React.Component{
                     {/*<Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>*/}
                   {/*</div>*/}
                   <div className="form-group mandatory">
+                    <span className={`placeHolder ${genderActive}`}>Gender</span>
                     <Select name="form-field-name"  ref={"gender"} placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" data-required={true} data-errMsg="Gender is required"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
+                    <Moolyaselect multiSelect={true} placeholder="Select Citizenship Caategory" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
                     <br className="clearfix"/>                      <br className="clearfix"/>
 
                   </div>

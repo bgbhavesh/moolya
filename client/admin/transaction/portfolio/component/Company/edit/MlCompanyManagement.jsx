@@ -352,6 +352,10 @@ export default class MlCompanyManagement extends Component {
   }
 
   render() {
+    let genderActive=''
+    if(this.state.gender){
+      genderActive='active'
+    }
     let titlequery = gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
      label
@@ -439,6 +443,7 @@ export default class MlCompanyManagement extends Component {
                       {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>*/}
                       {/*</div>*/}
                       <div className="form-group mandatory">
+                        <span className={`placeHolder ${genderActive}`}>Gender</span>
                         <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender}
                                 options={genderValues} onChange={this.optionsBySelectGender.bind(this)}
                                 className="float-label" ref={"gender"} data-required={true}

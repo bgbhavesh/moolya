@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 
 export default class MlAppDocumentViewer extends Component {
@@ -118,7 +119,7 @@ export default class MlAppDocumentViewer extends Component {
                             title={file.fileName}>
                   <span className="ml ml-minus"
                         onClick={this.OnFileRemove.bind(this, doc.docTypeId, doc.documentId, file.fileId)}></span>
-                  <img id={file.fileId} src={file.fileUrl}/>
+                  <img id={file.fileId} src={generateAbsolutePath(file.fileUrl)}/>
                 </li>);
               })}
 

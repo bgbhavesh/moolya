@@ -185,7 +185,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
     if ((Math.abs(ageDate.getUTCFullYear() - 1970) >= 18)) {
     }
     else {
-      toastr.error("age limit exceeded")
+      toastr.error("Minimum Age for Registration is 18 years")
     }
   }
 

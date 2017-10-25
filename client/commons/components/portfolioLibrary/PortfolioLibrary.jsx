@@ -715,28 +715,29 @@ class Library extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoSpecifications || [];
     let videoPreviewUrl;
-    videoPreviewUrl = data[index].fileUrl;
+    videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl });
   }
 
   random(link, index) {
     let data = this.state.imageSpecifications || [];
     let imagePreviewUrl;
-    imagePreviewUrl = data[index].fileUrl;
+    imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
+    console.log('imagePreviewUrl', imagePreviewUrl)
     this.setState({ previewImage: imagePreviewUrl });
   }
 
   randomDocument(link, index) {
     let data = this.state.documentSpecifications || [];
     let documentPreviewUrl;
-    documentPreviewUrl = data[index].fileUrl;
+    documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewDocument: documentPreviewUrl });
   }
 
   randomTemplate(link, index) {
     let data = this.state.templateSpecifications || [];
     let templatePreviewUrl;
-    templatePreviewUrl = data[index].fileUrl;
+    templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
     this.setState({ previewTemplate: templatePreviewUrl });
   }
 
@@ -846,7 +847,7 @@ class Library extends React.Component {
             <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
           }
           <a href="" data-toggle="modal" data-target=".imagepop"
-            onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
+            onClick={that.random.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
           <div id="images" className="title">{show.fileName}</div>
 
         </div>
@@ -891,9 +892,9 @@ class Library extends React.Component {
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a> :
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )
@@ -908,7 +909,7 @@ class Library extends React.Component {
     const popImages = popImageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          <img src={show.file.url} style={{ 'width': '200px', 'height': '150px' }} />
+          <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} style={{ 'width': '200px', 'height': '150px' }} />
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -943,7 +944,8 @@ class Library extends React.Component {
           }
 
           <a href="" data-toggle="modal" data-target=".templatepop"
-            onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl} /></a>
+            onClick={that.randomTemplate.bind(that, id)}>
+            <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -987,9 +989,9 @@ class Library extends React.Component {
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a> :
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1028,7 +1030,7 @@ class Library extends React.Component {
 
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
             <video onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
-              <source src={show.fileUrl} type="video/mp4"></source>
+              <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
             </video>
           </a>
           <div className="title">{show.fileName}</div>
@@ -1075,11 +1077,11 @@ class Library extends React.Component {
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <video width="120" height="100" controls>
-                <source src={show.fileUrl} type="video/mp4"></source>
+                <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
               </video>
             </a> : <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
                 <video width="120" height="100" controls>
-                  <source src={show.fileUrl} type="video/mp4"></source>
+                  <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} type="video/mp4"></source>
                 </video>
               </a>}
             <div id="templates" className="title">{show.fileName}</div>
@@ -1118,7 +1120,7 @@ class Library extends React.Component {
 
 
           <a href="" data-toggle="modal" data-target=".documentpop"
-            onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png" /></a>
+            onClick={that.randomDocument.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`, id)}><img src="/images/doc.png" /></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -1164,7 +1166,7 @@ class Library extends React.Component {
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
               <img src="/images/doc.png" /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl} /></a>}
+                src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.fileUrl}`} /></a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1188,7 +1190,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.imageDetails || [];
         let imagePreviewUrl;
-        imagePreviewUrl = data[index].fileUrl;
+        imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewImage: imagePreviewUrl });
       } else {
         let data = this.state.imageSpecifications || [];
@@ -1199,7 +1201,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.videoDetails || [];
         let videoPreviewUrl;
-        videoPreviewUrl = data[index].fileUrl;
+        videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewVideo: videoPreviewUrl });
       } else {
         let data = this.state.videoSpecifications || [];
@@ -1210,7 +1212,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.templateDetails || [];
         let templatePreviewUrl;
-        templatePreviewUrl = data[index].fileUrl;
+        templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewTemplate: templatePreviewUrl });
       } else {
         let data = this.state.templateSpecifications || [];
@@ -1221,7 +1223,7 @@ class Library extends React.Component {
       if (portfolioId === "library") {
         let data = this.state.documentDetails || [];
         let documentPreviewUrl;
-        documentPreviewUrl = data[index].fileUrl;
+        documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].fileUrl}`;
         this.setState({ previewDocument: documentPreviewUrl });
       } else {
         let data = this.state.documentSpecifications || [];

@@ -223,7 +223,7 @@ MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) =>
        let updatedValue =  mlDBController.update('MlSharedLibrary',{'_id':info._id}, info , {$set:1}, context);
       }
       let status = ((!info.isExpired) || new Date(info.sharedStartDate) === new Date())
-    let yetToBeShared = new Date(info.sharedStartDate) > new Date()
+    let yetToBeShared = new Date(info.sharedStartDate).setHours(0,0,0,0) > new Date()
     if(!info.isExpired && status && (!yetToBeShared)) {//&& (info && info.sharedStartDate ? new Date(info.sharedStartDate) === new Date() : true )) { // && (info && info.sharedStartDate ? info.sharedStartDate === new Date() : true )
         libraryData.push(info)
       }

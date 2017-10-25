@@ -10,7 +10,7 @@ let removeStartingSlash = (path)=>{
 
 let generateAbsolutePath = (relativePath,folderName)=>{
   if(!relativePath) return;
-  let baseUrl = Meteor.settings.public.minio.minioConfig.endPoint + ':'
+  let baseUrl = 'http://' + Meteor.settings.public.minio.minioConfig.endPoint + ':'
                     + Meteor.settings.public.minio.minioConfig.port + '/'
                     + Meteor.settings.public.minio.minioConfig.bucketName + '/';
 

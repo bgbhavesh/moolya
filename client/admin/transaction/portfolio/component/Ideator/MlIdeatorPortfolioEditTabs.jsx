@@ -1,5 +1,4 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from "react-dom";
 import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
 import MlIdeatorProblemsAndSolutions from "../Ideator/MlIdeatorProblemsAndSolutions";

@@ -3,6 +3,7 @@ import PortfolioLibrary from './PortfolioLibrary';
 import SharedLibrary from  './sharedLibrary';
 import { fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler';
 import MlConnectionHeader from './connectionHeader'
+import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer'
 // import ShowMore from './seeMore'
 
 
@@ -122,6 +123,37 @@ export default class LibraryParentContainer extends Component {
       //   break;
 
 
+      case "preview":
+        return (
+          <div className={`modal fade bs-example-modal-sm library-popup ${this.props.fileType}pop`}
+               onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+               aria-labelledby="mySmallModalLabel">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+                </div>
+                <div className="modal-body">
+
+                  {(this.props.fileType === 'image' || this.props.fileType === 'template')?<div className="img_scroll"><img src={this.props.filePath} /></div>:<div></div>}
+
+                  {this.props.fileType === 'video' ? <MlVideoPlayer videoAttributes={
+                    [{
+                      autoplay: true,
+                      controls: true,
+                      sources: [{ src: this.props.filePath, type: 'video/mp4' }]
+                    }]
+                  } /> : <div></div>}
+
+                  {this.props.fileType === 'document'? <iframe src={`https://docs.google.com/gview?url=${this.props.filePath}&embedded=true`} />:<div></div>}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+        break;
     }
   }
 }

@@ -20,6 +20,7 @@ import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {findBackendUserActionHandler} from '../../transaction/internalRequests/actions/findUserAction'
 import CropperModal from '../../../commons/components/cropperModal';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlMyProfile extends React.Component {
 
@@ -513,7 +514,7 @@ export default class MlMyProfile extends React.Component {
 
                       </span>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
+                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?generateAbsolutePath(this.state.uploadedProfilePic:profilePic):''}/>
                       </div>
                     </div>
                   </form>

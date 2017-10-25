@@ -9,6 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
 import _ from 'lodash';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
@@ -57,7 +58,7 @@ class MlAppProfileHeader extends Component {
     let gImg = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.profile && user.profile.profileImage) {
       this.setState({
-        profilePic:user.profile.profileImage == " "?gImg:user.profile.profileImage
+        profilePic:user.profile.profileImage == " "?gImg:generateAbsolutePath(user.profile.profileImage)
       });
     }
     else {

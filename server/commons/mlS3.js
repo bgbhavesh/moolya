@@ -11,7 +11,7 @@ let Minio = require('minio')
 Meteor.startup(function () {
 
 })
-const isProd = Meteor.settings.private.isProdENV;
+const isProd = Meteor.settings.private && Meteor.settings.private.isProdENV ? Meteor.settings.private.isProdENV : false
 const accessKeyId = Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.accessKeyId?Meteor.settings.private.aws.s3Config.accessKeyId:'AKIAIOLVK4M2SMABND3Q';
 const secretAccessKey = Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.secretAccessKey?Meteor.settings.private.aws.s3Config.secretAccessKey:'tX/MmyWGfVjEX37FCQlE+MLWBcwdY59FX23fXSmj';
 const region = Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.region?Meteor.settings.private.aws.s3Config.region:"ap-south-1";

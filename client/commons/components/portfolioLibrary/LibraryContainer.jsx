@@ -3,7 +3,7 @@ import PortfolioLibrary from './PortfolioLibrary';
 import SharedLibrary from  './sharedLibrary';
 import { fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler';
 import MlConnectionHeader from './connectionHeader'
-import ShowMore from './seeMore'
+// import ShowMore from './seeMore'
 
 
 export default class LibraryParentContainer extends Component {
@@ -44,7 +44,6 @@ export default class LibraryParentContainer extends Component {
   }
 
   seeMoreData(toView, data, current, type) {
-    console.log('data' , data)
     this.setState({ componentToLoad: toView, data: data, currentState: current, type: type})
   }
 
@@ -105,22 +104,22 @@ export default class LibraryParentContainer extends Component {
         break;
 
 
-      case "SeeMore":
-        return (
-          <div className="app_main_wrap">
-            <div className="app_padding_wrap">
-              <h2>Library</h2>
-              <ShowMore
-                data={this.state.data}
-                type={this.state.type}
-                currentState={this.state.currentState}
-                viewComponent={this.viewComponent.bind(this)}
-                seeMoreData={this.seeMoreData.bind(this)}
-              />
-            </div>
-          </div>
-        )
-        break;
+      // case "SeeMore":
+      //   return (
+      //     <div className="app_main_wrap">
+      //       <div className="app_padding_wrap">
+      //         <h2>Library</h2>
+      //         <ShowMore
+      //           data={this.state.data}
+      //           type={this.state.type}
+      //           currentState={this.state.currentState}
+      //           viewComponent={this.viewComponent.bind(this)}
+      //           seeMoreData={this.seeMoreData.bind(this)}
+      //         />
+      //       </div>
+      //     </div>
+      //   )
+      //   break;
 
 
     }

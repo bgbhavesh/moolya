@@ -10,7 +10,7 @@ if(Meteor.isServer){
               "link": "/app/myProfile",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "My Profile",
+              "name" : "Profile",
               "uniqueId" : "myProfile"
           },
           {
@@ -26,7 +26,7 @@ if(Meteor.isServer){
               "link": "/app/portfolio",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "My Portfolio",
+              "name" : "Portfolios",
               "uniqueId" : "portfolio"
           },
           // {
@@ -51,7 +51,7 @@ if(Meteor.isServer){
               "link": "/app/myConnections",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "My List",
+              "name" : "Lists",
               "uniqueId" : "myConnections"
           },
           // {
@@ -75,7 +75,7 @@ if(Meteor.isServer){
             "link": "/app/myAppointment",
             "isLink" : true,
             "isMenu" : true,
-            "name" : "My Appointments",
+            "name" : "Appointments",
             "uniqueId" : "myAppointment"
           },
           {
@@ -99,7 +99,7 @@ if(Meteor.isServer){
           "link": "/app/previewProfile",
           "isLink" : true,
           "isMenu" : true,
-          "name" : "My Public Profile",
+          "name" : "Public Profile",
           "uniqueId" : "myPublicProfile"
         },
         {
@@ -116,7 +116,7 @@ if(Meteor.isServer){
           "link": "",
           "isLink" : true,
           "isMenu" : true,
-          "name" : "My Subscriptions",
+          "name" : "Subscriptions",
           "uniqueId" : "mySubscriptions",
           isDisabled:true
         },

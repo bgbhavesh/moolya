@@ -30,20 +30,27 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // let communityData=MlCommunityDefinition.find({isActive:true}).fetch();
   let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
   let response=[];
+
+  if(query){
+    response.push({
+      key: '3212',
+      count: mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: query}}]}).count(),
+      icon: "ml ml-moolya-symbol"
+    })
+  }
+
   _.each(communityData,function (item,value) {
-    // query.communityDefId=item._id;
     query.communityDefName = item.name;
     query.isApprove=true;
-    if(item.communityImageLink!="ml my-ml-browser_5"){
+    if(item.communityImageLink!="ml my-ml-browser_5" && item.communityImageLink!="ml ml-moolya-symbol"){
       response.push({
         key: item._id,
-        // count: mlDBController.find('MlCommunity', query, context).count(),
         count: mlDBController.find('users', {'profile.externalUserProfiles':{$elemMatch: query}}, context).count(),
         icon: item.communityImageLink
       })
     }
   });
-  // count: MlCommunity.find(query).count(),
+
     let TU = _.map(response, 'count');
     let totalUsers = _.sum(TU);
     response.push({

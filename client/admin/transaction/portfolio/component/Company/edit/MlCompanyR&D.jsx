@@ -24,7 +24,6 @@ export default class MlCompanyRAndD extends Component{
       popoverOpen:false,
       selectedIndex:-1,
       companyRDList:[],
-      selectedVal:null,
       selectedObject:"default"
     };
     this.tabName = this.props.tabName || ""
@@ -49,10 +48,12 @@ export default class MlCompanyRAndD extends Component{
     this.imagesDisplay()
     //initalizeFloatLabel();
   }
+
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
     return resp;
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
@@ -79,7 +80,13 @@ export default class MlCompanyRAndD extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.companyRD
     if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.researchAndDevelopment ){
       setObject = this.context.companyPortfolio.researchAndDevelopment
@@ -123,25 +130,12 @@ export default class MlCompanyRAndD extends Component{
 
   onLockChange(fiedName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    //
-    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data:details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -207,7 +201,6 @@ export default class MlCompanyRAndD extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.companyRD;
     let companyRD = _.cloneDeep(awards);
@@ -229,7 +222,7 @@ export default class MlCompanyRAndD extends Component{
     })
     companyRD = arr;
     this.setState({companyRD:companyRD})
-    this.props.getRDDetails(companyRD, this.state.privateKey, requiredFields);
+    this.props.getRDDetails(companyRD, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -268,8 +261,6 @@ export default class MlCompanyRAndD extends Component{
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
-
-
 
   async fetchOnlyImages(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);

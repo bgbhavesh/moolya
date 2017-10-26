@@ -438,14 +438,14 @@ if (Meteor.isServer) {
             {
               "link": "/admin/community/history",
               "name": "History",
-              "uniqueId": "community_Histroy_Details",
+              "uniqueId": "community_History_Details",
               "isLink": true,
               "isMenu": true,
               "image": "",
               "dynamicLink": true,
               "dynamicLinkHandler": "",
               "subMenusId": "community",
-              "subMenuMappingId": "community_Histroy_Details"
+              "subMenuMappingId": "community_History_Details"
             },
             // {
             //   "link" : "/admin/community/assignusers",

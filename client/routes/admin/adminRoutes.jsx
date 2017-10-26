@@ -168,7 +168,7 @@ adminSection.route('/community/:communityId/communityDetails', {
   }
 });
 adminSection.route('/community/:communityId/history', {
-  name: 'community_Histroy_Details',
+  name: 'community_History_Details',
   action(params){
     mount(AdminLayout,{adminContent:< MlCommunityTabHistoryList params={params.communityId}/>})
   }

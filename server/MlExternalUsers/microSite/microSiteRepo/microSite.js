@@ -131,7 +131,12 @@ async function IDE(portFolio, query) {
       portFolio.lookingForDescription = resultIDEPortfolio.lookingFor[0].lookingDescription ? resultIDEPortfolio.lookingFor[0].lookingDescription : resultIDEPortfolio.lookingFor[0].lookingForName;
 
     }
+    if( resultIDEPortfolio.problemSolution){
+      portFolio.problemStatement =resultIDEPortfolio.problemSolution.problemStatement ?resultIDEPortfolio.problemSolution.problemStatement :''
+      portFolio.solutionStatement =resultIDEPortfolio.problemSolution.solutionStatement ?resultIDEPortfolio.problemSolution.solutionStatement :''
 
+    }
+     portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning ?resultIDEPortfolio.intellectualPlanning.IPdescription :''
     appendKeywords(portFolio);
     return portFolio
   }
@@ -165,6 +170,7 @@ async function FUN(portFolio, query) {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
     getTeamInfo(portFolio,resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio,resultFunderPortfolio);
+    getAreasOfInterest(portFolio,resultFunderPortfolio);
     getLookingForDescription(portFolio, resultFunderPortfolio);
     appendKeywords(portFolio);
   }
@@ -268,10 +274,11 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
   if (principals) {
     principals.forEach(function (principal) {
       teamPortFolio.push({
-        logo: '',//principal.logo ? principal.logo.fileUrl : '',
+        logo: principal.logo ? generateAbsolutePath(principal.logo.fileUrl ): '',
         firstName: principal.firstName,
         lastName: principal.lastName,
-        designation: principal.designation
+        designation: principal.designation,
+        description: principal.aboutPrincipal ?principal.aboutPrincipal:''
       })
     })
 
@@ -279,10 +286,12 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
   if (teams) {
     teams.forEach(function (team) {
       teamPortFolio.push({
-        logo: '', //team.logo ? team.logo.fileUrl : '',
+        logo: team.logo ? generateAbsolutePath(team.logo.fileUrl ): '',
         firstName: team.firstName,
         lastName: team.lastName,
-        designation: team.designation
+        designation: team.designation,
+        description: team.aboutTeam ?team.aboutTeam:''
+
       })
     })
 
@@ -296,15 +305,29 @@ function getSuccessStoriesInfo(portFolio, resultPortfolio) {
   if (successStories) {
     successStories.forEach(function (successStory) {
       successStoriesFolio.push({
-        logo: '',//principal.logo ? principal.logo.fileUrl : '',
-        firstName: successStory.firstName,
-        lastName: successStory.lastName,
-        designation: successStory.designation
+        logo: successStory.logo ? generateAbsolutePath(successStory.logo.fileUrl ): '',
+        storyTitle: successStory.storyTitle ?successStory.storyTitle:'',
+        description: successStory.description ?successStory.description:''
       })
     })
 
   }
   portFolio.successStories = successStoriesFolio;
+}
+
+function getAreasOfInterest(portFolio, resultPortfolio) {
+  let areasInterestsFolio = []
+  let areasInterests = resultPortfolio.areaOfInterest;
+  if (areasInterests) {
+    areasInterests.forEach(function (interest) {
+      areasInterestsFolio.push({
+        logo: interest.logo ? generateAbsolutePath(interest.logo.fileUrl ): '',
+        industryTypeName: interest.industryTypeName ?interest.industryTypeName:''
+      })
+    })
+
+  }
+  portFolio.areaOfInterest = areasInterestsFolio;
 }
 
 function getCommunityType(resultPortfolio) {

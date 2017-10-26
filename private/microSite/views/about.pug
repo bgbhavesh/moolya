@@ -122,6 +122,29 @@ html(prefix='og: http://ogp.me/ns#')
               include teamManagement
             .pageSuccessStories
               include success_stories
+            .pageFocusAreas
+              include areasOfInterest
+            .pageIPandTM
+              if(!privateFields.IPandTM)
+                if(IPandTM && IPandTM.length > 0 )
+                  p
+                    | !{IPandTM}
+
+                else
+                  .ms_noBranches
+                  img(src='/images/branches_banner.png')
+            .pageProblemsandSolutions
+              if(!privateFields.problemStatement)
+                if(problemStatement && problemStatement.length > 0 )
+                  p
+                    | Problem: !{problemStatement}
+                  p
+                    | Solution : !{solutionStatement}
+
+                else
+                  .ms_noBranches
+                  img(src='/images/branches_banner.png')
+
             .pageAwards
               if(!privateFields.awardsDescription)
                 p

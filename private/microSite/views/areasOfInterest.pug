@@ -1,22 +1,16 @@
 //
-   Created by kanwarjeet on 10/24/17.
+   Created by kanwarjeet on 10/26/17.
 
-if(!privateFields.successStories)
-  if(successStories && successStories.length >0)
+if(!privateFields.areaOfInterest)
+  if(areaOfInterest && areaOfInterest.length >0)
     .ms_swiper
       .swiper-container
         .swiper-wrapper
-          each slide , i in successStories
+          each slide , i in areaOfInterest
             .swiper-slide
               img(src=slide.logo)
               .profile_info
-                h5 #{slide.storyTitle}
-                p
-                  | #{slide.description}
-              span.expand_info
-        // Add Pagination
-        // <div class="swiper-pagination"></div>
-        // Add Arrows
+                h5 #{slide.industryTypeName}
       .swiper-button-next
       .swiper-button-prev
   else

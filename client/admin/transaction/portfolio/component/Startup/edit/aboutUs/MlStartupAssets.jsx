@@ -52,7 +52,13 @@ class MlStartupAssets extends Component{
     }
   }
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.startupAssets
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.assets ){
       setObject = this.context.startupPortfolio.assets
@@ -61,7 +67,7 @@ class MlStartupAssets extends Component{
   }
 
   addAsset(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupAssets){
       this.setState({selectedIndex:this.state.startupAssets.length})
     }else{
@@ -86,23 +92,14 @@ class MlStartupAssets extends Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, ()=>{
       this.sendDataToParent()
-    })
+    });
   }
 
   onStatusChangeNotify(e)
@@ -136,7 +133,6 @@ class MlStartupAssets extends Component{
     details=_.omit(details,["assetTypeName"]);
     details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
     this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label}, function () {
-      // this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
       // this.sendDataToParent()
     })
   }
@@ -147,7 +143,6 @@ class MlStartupAssets extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let assets = this.state.startupAssets;
     let startupAssets = _.cloneDeep(assets);
@@ -169,7 +164,7 @@ class MlStartupAssets extends Component{
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    this.props.getStartupAssets(startupAssets, this.state.privateKey, requiredFields);
+    this.props.getStartupAssets(startupAssets, this.state.privateKey);
 
   }
 

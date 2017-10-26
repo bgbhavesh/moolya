@@ -78,7 +78,7 @@ export default class MlCompanyAwards extends Component{
     this.CompanyAwardServer = response&&response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.awards){
       this.setState({selectedIndex:this.state.awards.length})
     }else{
@@ -87,7 +87,13 @@ export default class MlCompanyAwards extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.awards
     if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.awardsRecognition ){
       setObject = this.context.companyPortfolio.awardsRecognition
@@ -108,11 +114,6 @@ export default class MlCompanyAwards extends Component{
       popoverOpen : !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
   }
 
   //todo:// context data connection first time is not coming have to fix
@@ -131,24 +132,12 @@ export default class MlCompanyAwards extends Component{
 
   onLockChange(fiedName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data:details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -175,13 +164,11 @@ export default class MlCompanyAwards extends Component{
     if(selectedAward){
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
       this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
-        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
         // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
-        // this.setState({"selectedVal": '', awardName: ''})
         // this.sendDataToParent()
       })
     }
@@ -214,7 +201,6 @@ export default class MlCompanyAwards extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.awards;
     awards = _.cloneDeep(awards);
@@ -236,15 +222,10 @@ export default class MlCompanyAwards extends Component{
     })
     awards = arr;
     this.setState({awards:awards})
-    this.props.getAwardsDetails(awards, this.state.privateKey, requiredFields);
+    this.props.getAwardsDetails(awards, this.state.privateKey);
   }
 
   onLogoFileUpload(image,fileInfo){
-    // if(e.target.files[0].length ==  0)
-    //   return;
-    // let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let file=image;
     let fileName=fileInfo.name;
     if(file){

@@ -74,7 +74,7 @@ export default class MlStartupLookingFor extends Component {
   }
 
   addLookingFor() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if (this.state.startupLookingFor) {
       this.setState({selectedIndex: this.state.startupLookingFor.length})
     } else {
@@ -86,9 +86,6 @@ export default class MlStartupLookingFor extends Component {
     let cloneArray = _.cloneDeep(this.state.startupLookingFor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    // if (details && details.logo) {
-    //   delete details.logo['__typename'];
-    // }
     this.setState({
       selectedIndex: index,
       data: details,
@@ -97,12 +94,6 @@ export default class MlStartupLookingFor extends Component {
       popoverOpen: !(this.state.popoverOpen)},() =>{
       this.lockPrivateKeys(index)
     });
-
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
   }
 
   //todo:// context data connection first time is not coming have to fix
@@ -119,7 +110,13 @@ export default class MlStartupLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.startupLookingFor
     if (this.context && this.context.startupPortfolio && this.context.startupPortfolio.lookingFor)
       setObject = this.context.startupPortfolio.lookingFor
@@ -128,33 +125,17 @@ export default class MlStartupLookingFor extends Component {
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    // let details = this.state.data || {};
-    // let key = e.target.id;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
       isPrivate = true
     }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
-    //
-    // var privateKey = {
-    //   keyName: fieldName,
-    //   booleanKey: field,
-    //   isPrivate: isPrivate,
-    //   index: this.state.selectedIndex,
-    //   tabName: KEY
-    // }
-    // this.setState({data: details, privateKey: privateKey}, function () {
-    //   this.sendDataToParent()
-    // })
-    var privateKey = {keyName:fieldName,
-      booleanKey:field, isPrivate:isPrivate,
-      index:this.state.selectedIndex,
-      tabName: this.props.tabName}
-    this.setState({privateKey:privateKey}, function () {
+    var privateKey = {
+      keyName: fieldName,
+      booleanKey: field, isPrivate: isPrivate,
+      index: this.state.selectedIndex,
+      tabName: this.props.tabName
+    };
+    this.setState({privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -184,7 +165,6 @@ export default class MlStartupLookingFor extends Component {
       lookingDescription: selObject.about
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
-      // this.setState({"selectedVal": selectedId})
       // this.sendDataToParent()
     })
   }
@@ -195,7 +175,6 @@ export default class MlStartupLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
@@ -216,7 +195,7 @@ export default class MlStartupLookingFor extends Component {
 
     startupLookingFor = arr;
     this.setState({startupLookingFor: startupLookingFor})
-    this.props.getLookingForDetails(startupLookingFor, this.state.privateKey, requiredFields);    //indexArray
+    this.props.getLookingForDetails(startupLookingFor, this.state.privateKey);
   }
 
 

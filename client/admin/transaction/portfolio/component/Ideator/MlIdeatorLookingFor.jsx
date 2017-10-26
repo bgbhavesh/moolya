@@ -44,22 +44,6 @@ export default class MlIdeatorLookingFor extends Component {
   }
 
   async fetchPortfolioDetails() {
-    // const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
-    // let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.lookingFor)
-    // if(empty && response){
-    //    this.setState({loading: false, data: response});
-    //   _.each(response.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }else{
-    //   this.setState({
-    //     loading: false,
-    //     data: this.context.ideatorPortfolio.lookingFor,
-    //     privateValues: response.privateFields
-    //   }, () => {
-    //     this.lockPrivateKeys()
-    //   });
-    // }
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.lookingFor)
@@ -106,13 +90,8 @@ export default class MlIdeatorLookingFor extends Component {
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
-
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
   }
+
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.IdeatorLookingForServer && this.IdeatorLookingForServer[selIndex]?this.IdeatorLookingForServer[selIndex].privateFields : []

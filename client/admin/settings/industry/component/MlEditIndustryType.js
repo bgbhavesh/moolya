@@ -94,7 +94,7 @@ class MlEditIndustryType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/documentProcess/industryList")
+            FlowRouter.go("/admin/settings/documentProcess/industryList")
         }
       }
     ];

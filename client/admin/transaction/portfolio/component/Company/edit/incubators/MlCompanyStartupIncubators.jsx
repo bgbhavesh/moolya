@@ -39,7 +39,8 @@ export default class MlCompanyStartupIncubators extends React.Component{
   //   }
   // }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
   async fetchPortfolioDetails() {
     let that = this;

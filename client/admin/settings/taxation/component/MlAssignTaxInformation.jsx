@@ -4,6 +4,7 @@ import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {findClusterBasedStatesDeatilsActionHandler} from '../actions/findClusterBasedStatesAction'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 export default class MlAssignTaxInformation extends Component {
   constructor(props){
     super(props);
@@ -13,6 +14,7 @@ export default class MlAssignTaxInformation extends Component {
     return this;
   }
   componentDidMount() {
+    initalizeFloatLabel();
     this.props.onGetTaxDetails(this.state.states)
   }
   componentWillMount(){
@@ -102,13 +104,14 @@ export default class MlAssignTaxInformation extends Component {
                 <div className="col-md-3">
                   <div className="form-group">
                     {/*<Select name="form-field-name"value="select"options={options} className="float-label"/>*/}
-                    <Moolyaselect multiSelect={false} className="float-label" valueKey={'value'} labelKey={'label'} placeholder="Tax Name" selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
-                  </div>
+                    {/*<Moolyaselect multiSelect={false} className="float-label" valueKey={'value'} labelKey={'label'} placeholder="Tax Name" selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>*/}
+                  <input type="text" placeholder="Tax Name" className="form-control float-label" value={that.props.taxName} readOnly/>
+                    </div>
                 </div>
                 <div className="col-md-9">
                   <div className="form-group">
 
-                    <textarea placeholder="About" className="form-control float-label" id="cl_about" value={that.props.about}>
+                    <textarea placeholder="About" className="form-control float-label" id="cl_about" value={that.props.about} readOnly>
 
                         </textarea>
 

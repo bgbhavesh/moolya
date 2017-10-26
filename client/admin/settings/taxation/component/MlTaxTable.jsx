@@ -93,7 +93,7 @@ export default class MlTaxTable extends Component {
 
   expandComponent(row) {
     return (
-     <MlAssignTaxInformation id={ row.taxId }  onGetTaxDetails={this.onGetTaxDetails} statesInfo={row.statesInfo} about={row.aboutTax}/>
+     <MlAssignTaxInformation id={ row.taxId }  onGetTaxDetails={this.onGetTaxDetails} statesInfo={row.statesInfo} about={row.aboutTax} taxName={row.taxName}/>
     );
   }
   render() {

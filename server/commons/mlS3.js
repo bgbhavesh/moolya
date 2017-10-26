@@ -96,13 +96,15 @@ module.exports = class s3Client{
         }
     }
 
-    //getS3SignedUrl(fileKey, s3Bucket){
-    //    let params = {Key:fileKey, Bucket:s3Bucket, Expires:Meteor.settings.private.aws.urlExpirationTime}
-    //    return this.client.getSignedUrl('getObject', params);
-    //}
-    //
-    //getS3PublicUrl(fileKey, s3Bucket){
-    //    return this.client.getPublicUrlHttp(s3Bucket, fileKey);
-    //}
-
+    getS3SignedUrl(fileName, s3Bucket, fromDate, toDate){
+      var expiryDuration = (toDate-fromDate)/1000;
+      minioClient.presignedGetObject(s3Bucket, fileName, expiryDuration, function(err, presignedUrl) {
+        if (err) {
+          callback(err);
+        }
+        else{
+          callback(presignedUrl);
+        }
+      });
+    }
 }

@@ -570,7 +570,7 @@ if(Meteor.isServer){
             "link": "/admin/templates/templateList",
             "name": "Template List",
             "uniqueId": "templates_List",
-            "subMenuMappingId":"",
+            "subMenuMappingId":"templates_List",
             "subMenusId":"templates",
             "isLink": true,
             "isMenu": false,
@@ -580,7 +580,7 @@ if(Meteor.isServer){
                 "link": "/templates/assignTemplate/:id",
                 "name": "Edit Template",
                 "uniqueId": "templates_assignment_edit",
-                "subMenuMappingId":"",
+                "subMenuMappingId":"templates_List",
                 "subMenusId":"templates",
                 "isLink": true,
                 "isMenu": false,
@@ -590,7 +590,7 @@ if(Meteor.isServer){
                     "link": "/templates/assignTemplate/",
                     "name": " Assign Template",
                     "uniqueId": "templates_assignment",
-                    "subMenuMappingId":"",
+                    "subMenuMappingId":"templates_List",
                     "subMenusId":"templates",
                     "isLink": true,
                     "isMenu": false,
@@ -607,18 +607,10 @@ if(Meteor.isServer){
             "isLink": true,
             "isMenu": true,
             "image": "",
-            "subMenu": [
-              {
-                "link": "/admin/templates/history",
-                "name": "Templates History",
-                "uniqueId": "templates_HistoryList",
-                "subMenuMappingId": "templates_History",
-                "subMenusId": "templates",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              }
-            ]
+            "dynamicLink" : false,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"templates",
+            "subMenuMappingId": "templates_History"
           },
         ]
       },

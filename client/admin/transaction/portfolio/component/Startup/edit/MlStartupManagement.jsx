@@ -224,7 +224,13 @@ export default class MlStartupManagement extends Component{
   }
 
   onSaveAction() {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.startupManagementList
     if (this.context && this.context.startupPortfolio && this.context.startupPortfolio.management) {
       setObject = this.context.startupPortfolio.management
@@ -240,7 +246,6 @@ export default class MlStartupManagement extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupManagement1 = this.state.startupManagement;
     let startupManagement = _.cloneDeep(startupManagement1);
@@ -264,8 +269,9 @@ export default class MlStartupManagement extends Component{
     })
     startupManagement = managementArr;
     this.setState({startupManagement:startupManagement})
-    this.props.getManagementDetails(startupManagement, this.state.privateKey, requiredFields)
+    this.props.getManagementDetails(startupManagement, this.state.privateKey)
   }
+
   onLogoFileUpload(image,fileInfo){
     let file=image;
     let name = 'logo';

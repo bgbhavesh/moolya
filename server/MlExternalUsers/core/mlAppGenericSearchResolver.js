@@ -719,35 +719,19 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module === "externalUsers"){
-    // var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
 
     var query = JSON.parse(args.queryProperty.query);
 
     var clusterId = query.clusterId?query.clusterId:"";
     var chapterId = query.chapterId?query.chapterId:"";
     var subChapterId = query.subChapterId?query.subChapterId:"";
-
     var userType = query.userType;
-
-    // let loggedInUser = mlDBController.findOne('users', {'_id':context.userId}, context);
-    // var externalProfile = _.find(loggedInUser.profile.externalUserProfiles, {'isDefault':true});
-    // if(!externalProfile){
-    //   externalProfile = loggedInUser.profile.externalUserProfiles[0];
-    // }
-
-    //   // TODO: Add Browser condition
-    //
-    // var clusterId = externalProfile.clusterId;
-    // var chapterId = externalProfile.chapterId;
-    // var subChapterId = externalProfile.subChapterId;
-    // var communityCode = externalProfile.communityDefName;
 
     // Generic search query object for EXTERNAL Users
     var queryObj = {isActive: true};
 
     var users = [];
 
-    // if(clusterId != "" && chapterId != "" && subChapterId != "" && communityCode != ""){
     if(clusterId != "" && chapterId != "" && subChapterId != ""){
       let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
       let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context)
@@ -769,21 +753,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
-              // { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
-              // { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              // {
-              //   $unwind :"$profile.externalUserProfiles"
-              // },
-              // {
-              //   "$group": {
-              //     _id: "$_id",
-              //     data: {"$first": "$$ROOT"}
-              //   }
-              // },
-              // { "$replaceRoot": { "newRoot" : "$data" }  },
-              // {
-              //   $unwind :"$profile.externalUserProfiles"
-              // },
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -824,6 +793,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 "preserveNullAndEmptyArrays": true
               }
               },
+              {
+                "$group": {
+                  _id: "$externalUserAdditionalInfo.profileId",
+                  data: {"$first": "$$ROOT"}
+                }
+              },
+              { "$replaceRoot": { "newRoot" : "$data" }  },
               {
                 $project:{
                   _id : 1,
@@ -874,21 +850,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
-              // { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
-              // { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
-              // {
-              //   $unwind :"$profile.externalUserProfiles"
-              // },
-              // {
-              //   "$group": {
-              //     _id: "$_id",
-              //     data: {"$first": "$$ROOT"}
-              //   }
-              // },
-              // { "$replaceRoot": { "newRoot" : "$data" }  },
-              // {
-              //   $unwind :"$profile.externalUserProfiles"
-              // },
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -930,6 +891,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 "preserveNullAndEmptyArrays": true
               }
               },
+              {
+                "$group": {
+                  _id: "$externalUserAdditionalInfo.profileId",
+                  data: {"$first": "$$ROOT"}
+                }
+              },
+              { "$replaceRoot": { "newRoot" : "$data" }  },
               {
                 $project:{
                   _id : 1,

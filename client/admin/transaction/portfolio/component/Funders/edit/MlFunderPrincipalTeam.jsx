@@ -13,6 +13,8 @@ import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper'
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlFunderPrincipalTeam extends Component {
   constructor(props, context) {
@@ -20,6 +22,7 @@ export default class MlFunderPrincipalTeam extends Component {
     this.state = {
       loading: false,
       data: {},
+      fileName:"",
       funderPrincipal: [],
       funderTeam: [],
       popoverOpenP: false,
@@ -369,7 +372,7 @@ export default class MlFunderPrincipalTeam extends Component {
       popoverOpenT: false,
     });
   }
-  onPrincipalLogoFileUpload(fileInfo, image) {
+  onPrincipalLogoFileUpload(image,fileInfo) {
     if (fileInfo.length == 0)
       return;
     let file = image;
@@ -382,7 +385,7 @@ export default class MlFunderPrincipalTeam extends Component {
     };
     let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file, 'principal'));
   }
-  onTeamLogoFileUpload(fileInfo, image) {
+  onTeamLogoFileUpload(image, fileInfo) {
     let file = image;
     let fileName = fileInfo.name;
     let data = {
@@ -400,7 +403,7 @@ export default class MlFunderPrincipalTeam extends Component {
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file && file.name ? file.name : "",
+          fileName: this.state.fileName,
           fileType: file && file.type ? file.type : "",
           fileUrl: result.result,
           libraryType: "image"
@@ -440,7 +443,12 @@ export default class MlFunderPrincipalTeam extends Component {
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages() {
@@ -491,19 +499,20 @@ export default class MlFunderPrincipalTeam extends Component {
     });
   }
 
-  handleTeamAvatar(image, e) {
+  handleTeamAvatar(image, file) {
     this.setState({
       uploadingAvatar1: true,
     });
-    this.onTeamLogoFileUpload(e, image);
+    this.setState({ fileName: file.name })
+    this.onTeamLogoFileUpload(image, file);
   }
 
-  handleUploadAvatar(image, e) {
-    console.log('here');
+  handleUploadAvatar(image, file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onPrincipalLogoFileUpload(e, image);
+    this.setState({ fileName: file.name })
+    this.onPrincipalLogoFileUpload(image, file);
   }
 
   render() {
@@ -557,7 +566,7 @@ export default class MlFunderPrincipalTeam extends Component {
                                        onClick={that.onPrincipalTileClick.bind(that, idx, principal)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={principal.logo && principal.logo.fileUrl ? principal.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={principal.logo && principal.logo.fileUrl ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} />
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                     </div>
@@ -597,7 +606,7 @@ export default class MlFunderPrincipalTeam extends Component {
                                        onClick={that.onTeamTileClick.bind(that, idx, team)}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={team.logo && team.logo.fileUrl ? team.logo.fileUrl : "/images/def_profile.png"} />
+                                    <img src={team.logo && team.logo.fileUrl ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"} />
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>
                                     {/*<div className="ml_icon_btn">*/}

@@ -2376,3 +2376,7 @@ li.sameWorkTime:after {
   display: none !important;
 }
 }
+.stop_slide{
+  transition-duration: 0ms !important;
+  transform: inherit !important;
+}

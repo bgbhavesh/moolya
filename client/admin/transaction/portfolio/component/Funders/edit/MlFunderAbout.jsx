@@ -10,6 +10,8 @@ import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibra
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import MlLoader from '../../../../../../commons/components/loader/loader';
 import CropperModal from '../../../../../../commons/components/cropperModal';
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 const genderValues = [
   { value: 'male', label: 'Male' },
@@ -24,6 +26,7 @@ export default class MlFunderAbout extends React.Component {
       profilePic: " ",
       defaultProfilePic: "/images/def_profile.png",
       data: {},
+      fileName:"",
       uploadingAvatar: false,
       privateKey: {},
       showProfileModal: false
@@ -252,7 +255,7 @@ export default class MlFunderAbout extends React.Component {
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -272,7 +275,12 @@ export default class MlFunderAbout extends React.Component {
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages() {
@@ -302,10 +310,11 @@ export default class MlFunderAbout extends React.Component {
     })
   }
 
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image, file) {
     this.setState({
       uploadingAvatar: true,
     });
+    this.setState({ fileName: file.name })
     this.onLogoFileUpload(image);
   }
 
@@ -427,7 +436,7 @@ export default class MlFunderAbout extends React.Component {
                   <div className="form_bg">
                     <form>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profilePic ? this.state.profilePic : genderImage} />
+                        <img src={this.state.profilePic ? generateAbsolutePath(this.state.profilePic) : genderImage} />
                         {this.state.profilePic ? <span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)} /></span> : " "}
                       </div>
                       <div className="form-group" onClick={this.toggleModal.bind(this)}>

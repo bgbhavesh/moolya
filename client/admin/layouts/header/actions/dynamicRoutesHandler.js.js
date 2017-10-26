@@ -201,6 +201,12 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/community/${dynamicParams.communityId}/history`;
       }
     },
+    "community_Community_Details":function (params,queryParams) {  //fix for Issue: MOOLYA-3389
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"communityId")){
+        return `/admin/community/${dynamicParams.communityId}/communityDetails`;
+      }
+    },
 
     /**
      * users dynamic routes handler

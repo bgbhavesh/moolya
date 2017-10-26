@@ -46,22 +46,6 @@ export default class MlServiceProviderLookingFor extends Component {
   }
 
   async fetchPortfolioDetails() {
-    // const response = await findServiceProviderLookingForActionHandler(this.props.portfolioDetailsId);
-    // let empty = _.isEmpty(this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.lookingFor)
-    // if(empty && response){
-    //    this.setState({loading: false, data: response});
-    //   _.each(response.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }else{
-    //   this.setState({
-    //     loading: false,
-    //     data: this.context.serviceProviderPortfolio.lookingFor,
-    //     privateValues: response.privateFields
-    //   }, () => {
-    //     this.lockPrivateKeys()
-    //   });
-    // }
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.lookingFor)
@@ -87,19 +71,8 @@ export default class MlServiceProviderLookingFor extends Component {
     this.serviceProviderLookingForServer = response?response:[]
   }
 
-  // lockPrivateKeys() {
-  //   var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
-  //   var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
-  //   var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
-  //   var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
-  //   console.log('keysssssssssssssssss', keys)
-  //   _.each(keys, function (pf) {
-  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-  //   })
-  // }
-
   addLookingFor() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if (this.state.serviceProviderLookingFor) {
       this.setState({selectedIndex: this.state.serviceProviderLookingFor.length})
     } else {
@@ -119,12 +92,6 @@ export default class MlServiceProviderLookingFor extends Component {
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
-
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
   }
 
 
@@ -142,7 +109,13 @@ export default class MlServiceProviderLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.serviceProviderLookingFor
     if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.lookingFor)
       setObject = this.context.serviceProviderPortfolio.lookingFor
@@ -151,19 +124,11 @@ export default class MlServiceProviderLookingFor extends Component {
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    // let details = this.state.data || {};
-    // let key = e.target.id;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, {[key]: true});
       isPrivate = true
     }
-    // else {
-    //   details = _.extend(details, {[key]: false});
-    // }
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
-    // this.setState({privateKey:privateKey})
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -213,7 +178,6 @@ export default class MlServiceProviderLookingFor extends Component {
       lookingDescription: selObject.about
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
-      // this.setState({"selectedVal": selectedId})
       // this.sendDataToParent()
     })
   }
@@ -224,7 +188,6 @@ export default class MlServiceProviderLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let serviceProviderLookingFor1 = this.state.serviceProviderLookingFor;
     let serviceProviderLookingFor = _.cloneDeep(serviceProviderLookingFor1);
@@ -246,7 +209,7 @@ export default class MlServiceProviderLookingFor extends Component {
 
     serviceProviderLookingFor = arr;
     this.setState({serviceProviderLookingFor: serviceProviderLookingFor})
-    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey, requiredFields);
+    this.props.getLookingForDetails(serviceProviderLookingFor, this.state.privateKey);
 
   }
 

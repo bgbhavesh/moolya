@@ -52,7 +52,7 @@ class MlStartupClients extends Component{
   }
 
   addClient(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupClients){
       this.setState({selectedIndex:this.state.startupClients.length})
     }else{
@@ -96,7 +96,13 @@ class MlStartupClients extends Component{
     })
   }
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.startupClients
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.clients ){
       setObject = this.context.startupPortfolio.clients
@@ -135,7 +141,6 @@ class MlStartupClients extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
@@ -158,7 +163,7 @@ class MlStartupClients extends Component{
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
-    this.props.getStartupClients(startupClients, this.state.privateKey, requiredFields);
+    this.props.getStartupClients(startupClients, this.state.privateKey);
   }
 
   onLogoFileUpload(e){

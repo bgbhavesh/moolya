@@ -155,42 +155,25 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   onLockChange(fieldName, field, e) {
-    // let details = this.state.data || {};
-    // let key = field;
     var isPrivate = false;
-    // details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      // details = _.extend(details, { [key]: true });
       isPrivate = true;
     }
-    // else {
-    //   details = _.extend(details, { [key]: false });
-    // }
-    /* var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:"successStories"}
-     this.setState({privateKey:privateKey})
-     this.setState({data: details}, function () {
-     this.sendDataToParent()
-     })*/
     var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName }
-    // this.setState({privateKey:privateKey})
     this.setState({privateKey: privateKey }, function () {
       // this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true);
-    // var funderSuccessArray = this.state.funderSuccess || [];
-    //
-    // if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
-    //   funderSuccessArray = this.context.funderPortfolio.successStories;
-    // }
-    // var isDate = _.findIndex(funderSuccessArray, { date: '' })
-    // var dateKey = _.compact(_.map(funderSuccessArray, 'date'));
-    // if ((isDate > 0) || (dateKey.length !== (funderSuccessArray && funderSuccessArray.length))) {
-    //   toastr.error("Please select Date");
-    // }
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
       this.setState({ funderSuccessList: this.context.funderPortfolio.successStories, popoverOpen: false });
     }
@@ -201,7 +184,6 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   onLogoFileUpload(fileInfo, image) {
-
     let file = image;
     let fileName = fileInfo.name;
     let data = {
@@ -269,7 +251,6 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
@@ -290,7 +271,7 @@ export default class MlFunderSuccessStories extends Component {
     })
     funderSuccess = arr;
     this.setState({ funderSuccess: funderSuccess })
-    this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey, requiredFields);
+    this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey);
   }
 
   handleUploadAvatar(image, e) {

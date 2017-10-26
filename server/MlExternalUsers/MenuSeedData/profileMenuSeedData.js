@@ -14,7 +14,7 @@ if(Meteor.isServer){
               "uniqueId" : "myProfile"
           },
           {
-              "image":"ml flaticon-ml-agenda",
+              "image":"ml my-ml-contact_details",
               "link": "/app/addressBook",
               "isLink" : true,
               "isMenu" : true,

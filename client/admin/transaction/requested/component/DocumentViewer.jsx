@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
 import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 
 export default class DocumentViewer extends React.Component{
@@ -138,7 +138,7 @@ export default class DocumentViewer extends React.Component{
              {docFiles.map((file,fIndex)=>{
                      return (<li key={file.fileId} className="doc_card" data-toggle="modal"  data-placement="bottom" title={file.fileName}>
                                 <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.docTypeId,doc.documentId,file.fileId)}></span>
-                                <img id={file.fileId} src={file.fileUrl}  onClick={this.showModal.bind(this,fIndex)} />
+                                <img id={file.fileId} src={generateAbsolutePath(file.fileUrl)}  onClick={this.showModal.bind(this,fIndex)} />
                             </li>);
              })}
 

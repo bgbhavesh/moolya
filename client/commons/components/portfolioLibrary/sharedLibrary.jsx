@@ -14,7 +14,8 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import _ from 'lodash'
-import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
+import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class  SharedLibrary extends React.Component {
@@ -119,28 +120,28 @@ export default class  SharedLibrary extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoDetails|| [];
     let videoPreviewUrl;
-    videoPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
+    videoPreviewUrl = data[index].file.url;
     this.setState({previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl});
   }
 
   random(link, index) {
     let data = this.state.imageDetails || [];
     let imagePreviewUrl;
-    imagePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
+    imagePreviewUrl = data[index].file.url;
     this.setState({previewImage: imagePreviewUrl});
   }
 
   randomDocument(link, index) {
     let data = this.state.documentDetails|| [];
     let documentPreviewUrl;
-    documentPreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
+    documentPreviewUrl = data[index].file.url;
     this.setState({previewDocument: documentPreviewUrl});
   }
 
   randomTemplate(link, index) {
     let data = this.state.templateDetails|| [];
     let templatePreviewUrl;
-    templatePreviewUrl = `http://10.0.2.16:9090/moolya-users/registrationDocuments/${data[index].file.url}`;
+    templatePreviewUrl = data[index].file.url;
     this.setState({previewTemplate: templatePreviewUrl});
   }
 
@@ -160,8 +161,8 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
             <a href="" data-toggle="modal" data-target=".imagespop"
-                                                 onClick={that.random.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
-              <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} /></a>
+                                                 onClick={that.random.bind(that, generateAbsolutePath(show.file.url), id)}>
+              <img src={generateAbsolutePath(show.file.url)} /></a>
           <div id="images" className="title">{show.file.fileName}</div>
 
         </div>
@@ -185,8 +186,8 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".templatespop"
-             onClick={that.randomTemplate.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
-            <img src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} /></a>
+             onClick={that.randomTemplate.bind(that, generateAbsolutePath(show.file.url), id)}>
+            <img src={generateAbsolutePath(show.file.url)} /></a>
           <div id="templates" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -210,9 +211,9 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".videospop"
-             onClick={that.randomVideo.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
+             onClick={that.randomVideo.bind(that, generateAbsolutePath(show.file.url), id)}>
             <video width="120" height="100" controls>
-              <source src={`http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`} type="video/mp4"></source>
+              <source src={generateAbsolutePath(show.file.url)} type="video/mp4"></source>
             </video>
           </a>
           <div className="title">{show.file.fileName}</div>
@@ -237,7 +238,7 @@ export default class  SharedLibrary extends React.Component {
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentspop"
-             onClick={that.randomDocument.bind(that, `http://10.0.2.16:9090/moolya-users/registrationDocuments/${show.file.url}`, id)}>
+             onClick={that.randomDocument.bind(that, generateAbsolutePath(show.file.url), id)}>
             <img src="/images/doc.png"/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
@@ -315,7 +316,7 @@ export default class  SharedLibrary extends React.Component {
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
-                <div className="img_scroll"><img src={this.state.previewImage}/></div>
+                <div className="img_scroll"><img src={generateAbsolutePath(this.state.previewImage)}/></div>
               </div>
             </div>
           </div>
@@ -330,7 +331,7 @@ export default class  SharedLibrary extends React.Component {
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
-                <div className="img_scroll"><img src={this.state.previewTemplate}/></div>
+                <div className="img_scroll"><img src={generateAbsolutePath(this.state.previewTemplate)}/></div>
               </div>
             </div>
           </div>

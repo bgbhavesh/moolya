@@ -8,7 +8,8 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
-import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+import generateAbsolutePath  from '../../../../../../lib/mlGenerateAbsolutePath';
+
 
 
 var FontAwesome = require('react-fontawesome');

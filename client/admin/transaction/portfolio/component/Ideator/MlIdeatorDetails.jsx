@@ -11,6 +11,8 @@ import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProf
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 import CropperModal from '../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+
 
 const genderValues = [
   {value: 'male', label: 'Male'},
@@ -324,7 +326,7 @@ export default class MlIdeatorDetails extends Component{
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
                         <span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>
-                        <img src={this.state.profilePic?this.state.profilePic:genderImage}/>
+                        <img src={this.state.profilePic?generateAbsolutePath(this.state.profilePic):genderImage}/>
 
                       </div>
                       <div className="fileUpload mlUpload_btn">

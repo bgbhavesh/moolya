@@ -12,7 +12,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = 'investor'
 
 export default class MlStartupInvestor extends Component{
@@ -73,14 +73,16 @@ export default class MlStartupInvestor extends Component{
     }
     this.startupInvestorServer = response && response.investor?response.investor:[]
   }
+
   addInvestor(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupInvestor){
       this.setState({selectedIndex:this.state.startupInvestor.length})
     }else{
       this.setState({selectedIndex:0})
     }
   }
+
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupInvestor);
     let details = cloneArray[index]
@@ -161,7 +163,6 @@ export default class MlStartupInvestor extends Component{
     details=_.omit(details,["fundingTypeId"]);
     details=_.extend(details,{["fundingTypeId"]:selectedId});
     this.setState({data:details, "selectedVal" : selectedId}, function () {
-      // this.setState({"selectedVal" : selectedId})
       // this.sendDataToParent()
     })
 
@@ -176,7 +177,13 @@ export default class MlStartupInvestor extends Component{
     })
   }
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.startupInvestor
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.investor ){
       setObject = this.context.startupPortfolio.investor
@@ -190,7 +197,6 @@ export default class MlStartupInvestor extends Component{
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
@@ -211,15 +217,10 @@ export default class MlStartupInvestor extends Component{
     })
     startupInvestor = arr;
     this.setState({startupInvestor: startupInvestor})
-    this.props.getInvestorDetails(startupInvestor, this.state.privateKey, requiredFields);
+    this.props.getInvestorDetails(startupInvestor, this.state.privateKey);
   }
 
   onLogoFileUpload(image,fileInfo){
-    // if(e.target.files[0].length ==  0)
-    //   return;
-    // let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let file=image;
     let name = 'logo';
     let fileName = fileInfo.name;
@@ -351,7 +352,7 @@ export default class MlStartupInvestor extends Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
                           <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that, idx)}><img
-                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                            src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                           <h3>{details.investorName ? details.investorName : ''}</h3>
                         </div>
                       </a>

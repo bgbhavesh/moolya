@@ -706,9 +706,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, args, context, info) => {
   // TODO : Authorization
+
   if (args.docUrl && args.documentId && args.docTypeId) {
     var id = args.registrationId;
     var randomId = Math.floor(Math.random() * 90000) + 10000;
+
+    let documentDetails = MlDocumentMapping.findOne(args.documentId)
     // let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId,'docTypeId':args.docTypeId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     let updatedResponse = mlDBController.update('MlRegistration', {
       _id: args.registrationId,

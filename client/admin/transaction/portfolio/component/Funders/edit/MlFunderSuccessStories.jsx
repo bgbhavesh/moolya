@@ -11,6 +11,8 @@ import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibra
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlFunderSuccessStories extends Component {
   constructor(props, context) {
@@ -18,6 +20,7 @@ export default class MlFunderSuccessStories extends Component {
     this.state = {
       loading: false,
       data: {},
+      fileName:"",
       funderSuccess: [],
       popoverOpen: false,
       selectedIndex: -1,
@@ -186,6 +189,7 @@ export default class MlFunderSuccessStories extends Component {
   onLogoFileUpload(fileInfo, image) {
     let file = image;
     let fileName = fileInfo.name;
+    this.setState({ fileName: fileInfo.name})
     let data = {
       moduleName: "PORTFOLIO",
       actionName: "UPLOAD",
@@ -201,7 +205,7 @@ export default class MlFunderSuccessStories extends Component {
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -224,7 +228,12 @@ export default class MlFunderSuccessStories extends Component {
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -327,7 +336,7 @@ export default class MlFunderSuccessStories extends Component {
                               </div>
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                               <div className="" onClick={that.onTileClick.bind(that, idx)}>
-                                <img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} />
+                                <img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} />
                               </div>
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>

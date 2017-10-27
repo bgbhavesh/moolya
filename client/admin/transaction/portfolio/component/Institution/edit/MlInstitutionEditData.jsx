@@ -4,6 +4,7 @@ import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../../co
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlInstitutionEditData extends React.Component{
   constructor(props){
@@ -120,7 +121,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"balanceSheet",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -134,7 +135,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"profitAndLoss",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -148,7 +149,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"quaterlyReport",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -162,7 +163,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"yearlyReport",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -176,7 +177,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"halfYearlyReport",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -190,7 +191,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"annualReport",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -204,7 +205,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"cashFlow",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -218,7 +219,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"shareHoldings",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -232,7 +233,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"capitalStructure",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -246,7 +247,7 @@ export default class MlInstitutionEditData extends React.Component{
             return(
               <div className="thumbnail" key={id}>
                 <FontAwesome className="fa fa-trash-o" onClick={that.removeDataDocument.bind(that,"ratio",docs.fileUrl)}/>
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )

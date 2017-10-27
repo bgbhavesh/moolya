@@ -6,7 +6,8 @@ var FontAwesome = require('react-fontawesome');
 import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
-import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
+import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlCreateDiscussInternalTask extends React.Component {
 
@@ -209,7 +210,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
               });
               return (
                 <li key={index}>
-                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name} { user.officeName ? (" - " + user.officeName ) : '' }</span>
+                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"}/><span>{user.name} { user.officeName ? (" - " + user.officeName ) : '' }</span>
                 </li>
               )
             })}

@@ -9,6 +9,7 @@ import {fetchInstitutionDetailsHandler} from '../../../../actions/findPortfolioI
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = 'clients'
 
@@ -87,7 +88,13 @@ export default class MlInstitutionClients extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionClients;
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.clients) {
       setObject = this.context.institutionPortfolio.clients
@@ -126,7 +133,6 @@ export default class MlInstitutionClients extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.institutionClients;
     let institutionClients = _.cloneDeep(clients);
@@ -149,7 +155,7 @@ export default class MlInstitutionClients extends Component{
     })
     institutionClients = arr;
     this.setState({institutionClients:institutionClients})
-    this.props.getInstitutionClients(institutionClients, this.state.privateKey, requiredFields);
+    this.props.getInstitutionClients(institutionClients, this.state.privateKey);
 
   }
 
@@ -268,7 +274,7 @@ export default class MlInstitutionClients extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl):""}/></div>
                         <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>

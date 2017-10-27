@@ -24,7 +24,6 @@ export default class MlAppMyCalendarDayComponent extends Component {
       calendarInfo.map(function(info){
         let date = new Date(info.date);
         if( date.getDate() == dayDate.getDate() && date.getMonth() == dayDate.getMonth() ){
-          console.log(date);
           that.setState({status: info.status});
         }
         // if(info.date === this.props.calendar.value){

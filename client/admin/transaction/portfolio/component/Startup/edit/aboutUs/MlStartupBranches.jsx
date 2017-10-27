@@ -12,7 +12,7 @@ import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipar
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "branches"
 
 class MlStartupBranches extends Component{
@@ -29,7 +29,6 @@ class MlStartupBranches extends Component{
       stateId: null,
       cityId:null,
       startupBranchesList:this.props.branchDetails || [],
-     /* indexArray:[],*/
       selectedVal:null,
       selectedObject:"default"
     }
@@ -56,7 +55,13 @@ class MlStartupBranches extends Component{
     }
   }
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.startupBranches
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.branches ){
       setObject = this.context.startupPortfolio.branches
@@ -64,7 +69,7 @@ class MlStartupBranches extends Component{
     this.setState({startupBranchesList:setObject,popoverOpen : false})
   }
   addBranch(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupBranches){
       this.setState({selectedIndex:this.state.startupBranches.length})
     }else{
@@ -88,25 +93,17 @@ class MlStartupBranches extends Component{
   }
 
   onLockChange(fieldName, field, e){
-    // var isPrivate = false
-    // let details = this.state.data||{};
-    // let key = e.target.id;
-    // details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      // details=_.extend(details,{[key]:true});
       isPrivate = true
     }
-    // else{
-    //   details=_.extend(details,{[key]:false});
-    // }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   onStatusChangeNotify(e)
   {
     let updatedData = this.state.data||{};
@@ -175,7 +172,6 @@ class MlStartupBranches extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let branches = this.state.startupBranches;
     let startupBranches = _.cloneDeep(branches);
@@ -197,9 +193,9 @@ class MlStartupBranches extends Component{
     })
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
-    this.props.getStartupBranches(startupBranches, this.state.privateKey, requiredFields);
-
+    this.props.getStartupBranches(startupBranches, this.state.privateKey);
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -344,7 +340,7 @@ class MlStartupBranches extends Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.branchName?details.branchName:""}</h3>
                       </div>
                     </a>
@@ -381,7 +377,7 @@ class MlStartupBranches extends Component{
                         </div>
 
                         <div className="form-group">
-                          <input type="text" name="branchPhoneNumber" placeholder="Phone Number" className="form-control float-label" defaultValue={this.state.data.branchPhoneNumber} onBlur={this.handleBlur.bind(this)}/>
+                          <input type="number" name="branchPhoneNumber" placeholder="Phone Number" className="form-control float-label" defaultValue={this.state.data.branchPhoneNumber} onBlur={this.handleBlur.bind(this)} min={0}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isPhoneNumberPrivate" defaultValue={this.state.data.isPhoneNumberPrivate} onClick={this.onLockChange.bind(this, "branchPhoneNumber", "isPhoneNumberPrivate")}/>
                         </div>
 

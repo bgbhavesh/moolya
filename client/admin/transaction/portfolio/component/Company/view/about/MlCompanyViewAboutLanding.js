@@ -10,6 +10,8 @@ import MlCompanyViewAboutusTabs from './MlCompanyViewAboutusTabs'
 import {fetchDetailsCompanyActionHandler} from '../../../../../portfolio/actions/findCompanyPortfolioDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlCompanyViewAboutLanding extends Component {
   constructor(props) {
     super(props)
@@ -72,7 +74,7 @@ export default class MlCompanyViewAboutLanding extends Component {
         })
         if (logos.length > 0) {
           aboutUsImages = logos.map(function (items, id) {
-            return ( <img src={items.fileUrl} key={id}/>)
+            return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
           })
         }

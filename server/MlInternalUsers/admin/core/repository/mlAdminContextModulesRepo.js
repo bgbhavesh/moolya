@@ -795,38 +795,100 @@ let CoreModules = {
     else if (!subChapter.isDefaultSubChapter)
       depQuery = {$and: [{"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}, {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', requestParams.subChapterId]}}}}]}
     depQuery = mergeQueries(depQuery, userFilterQuery);
-    let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
 
-    resp.map(function (department) {
-      let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
-      subDepartments.map(function (subDepartment) {
-        let defaultSubChapter = JSON.parse(requestParams.defaultSubChapter);
-        let deptAndSubDepartment = {
-          departmentId: department._id,
-          departmentName: department.departmentName,
-          subDepartmentId: subDepartment._id,
-          subDepartmentName: subDepartment.subDepartmentName,
-          isMoolya: department.isMoolya,
-          isActive: department.isActive,
-          clusterId: requestParams.clusterId,
-          subChapterId:requestParams.subChapterId,
-          isDefaultSubChapter:defaultSubChapter
+    var piplelineQuery = []
+    piplelineQuery.push({$match: depQuery},
+      {
+        $lookup: {
+          from: "mlSubDepartments", localField: "_id",
+          foreignField: "departmentId",
+          as: "subDepartmentDetails"
         }
-        list.push(deptAndSubDepartment)
+      },
+      {$unwind: {path: "$subDepartmentDetails", preserveNullAndEmptyArrays: true}},
+      {
+        $project:
+          {
+            _id: 0,
+            departmentId: "$_id",
+            departmentName: 1,
+            subDepartmentId: "$subDepartmentDetails._id",
+            subDepartmentName: "$subDepartmentDetails.subDepartmentName",
+            isMoolya: "$isMoolya",
+            isActive: "$isActive",
+            clusterId: requestParams.clusterId,
+            subChapterId: requestParams.subChapterId,
+          }
+      },
+      {
+        $lookup:
+          {
+            from: "mlSubChapters",
+            "localField": "subChapterId",
+            "foreignField": "_id",
+            "as": "subChapterDetails"
+          }
+      },
+      {
+        "$unwind": {
+          "path": "$subChapterDetails",
+          "preserveNullAndEmptyArrays": true
+        }
+      },
+      {
+        $project: {
+          "departmentName": 1,
+          "subDepartmentId": 1,
+          "subDepartmentName": 1,
+          "isMoolya": 1,
+          "isActive": 1,
+          "clusterId": 1,
+          "subChapterId": 1,
+          isDefaultSubChapter: "$subChapterDetails.isDefaultSubChapter"
+        }
       })
-    })
 
-    data = list
-    //todo: pagination need to be taken.
-    return {totalRecords: data.length, data: data};
+    var counterQuery = _.clone(piplelineQuery)
+    counterQuery.push({$count: "totalRecords"})
+    var totalRecordsCount = mlDBController.aggregate('MlDepartments', counterQuery);
+
+    if (fieldsProj.sort) {
+      piplelineQuery.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      piplelineQuery.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      piplelineQuery.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    var data = mlDBController.aggregate('MlDepartments', piplelineQuery);
+    // let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
+    //
+    // resp.map(function (department) {
+    //   let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
+    //   subDepartments.map(function (subDepartment) {
+    //     let defaultSubChapter = JSON.parse(requestParams.defaultSubChapter);
+    //     let deptAndSubDepartment = {
+    //       departmentId: department._id,
+    //       departmentName: department.departmentName,
+    //       subDepartmentId: subDepartment._id,
+    //       subDepartmentName: subDepartment.subDepartmentName,
+    //       isMoolya: department.isMoolya,
+    //       isActive: department.isActive,
+    //       clusterId: requestParams.clusterId,
+    //       subChapterId:requestParams.subChapterId,
+    //       isDefaultSubChapter:defaultSubChapter
+    //     }
+    //     list.push(deptAndSubDepartment)
+    //   })
+    // })
+    //
+    // data = list
+    return {
+      totalRecords: totalRecordsCount && totalRecordsCount.length ? totalRecordsCount[0].totalRecords : 0,
+      data: data
+    };
   },
-  // let resp = mlDBController.find('MlDepartments', {
-  //   $and: [
-  //     {isMoolya:true},
-  //     {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
-  //   ]
-  // }, context).fetch()
-
   /**
    * user module repo handler
    * */

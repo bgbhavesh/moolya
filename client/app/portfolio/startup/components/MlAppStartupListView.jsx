@@ -7,6 +7,7 @@ import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionH
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlAppStartupListView extends Component {
   componentDidUpdate(){
@@ -64,7 +65,7 @@ export default class MlAppStartupListView extends Component {
             <div className="regular"><span>{startup.accountType}</span></div>
            <div className="company_header">
              {startup.aboutUs && startup.aboutUs.logo && startup.aboutUs.logo.length ?
-               <CDNImage src={startup.aboutUs.logo[0].fileUrl} className="c_image"/> :
+               <CDNImage src={generateAbsolutePath(startup.aboutUs.logo[0].fileUrl)} className="c_image"/> :
                <CDNImage src="/images/no_image.png" />}
             </div>
             <h3><span>{startup.firstName}</span><br/>

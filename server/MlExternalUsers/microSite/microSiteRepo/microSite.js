@@ -110,8 +110,8 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
       default:
         return portFolio
     }
-  }catch (e){
-    console.log('Error MicroSite',e);
+  } catch (e) {
+    console.log('Error MicroSite', e);
   }
 }
 
@@ -120,23 +120,23 @@ async function IDE(portFolio, query) {
   let resultIDEPortfolio = await getPortFolio('MlIdeatorPortfolio', query);
   if (resultIDEPortfolio) {
     portFolio.communityType = getCommunityType(resultIDEPortfolio) // Replacing trailing 's'
-    portFolio.communityTypes =resultIDEPortfolio.communityType;
-    let resultIdea = await mlDBController.findOne('MlIdeas', {userId:resultIDEPortfolio.userId});
-    if(resultIdea){
+    portFolio.communityTypes = resultIDEPortfolio.communityType;
+    let resultIdea = await mlDBController.findOne('MlIdeas', {userId: resultIDEPortfolio.userId});
+    if (resultIdea) {
       portFolio.aboutDiscription = resultIdea.ideaDescription ? resultIdea.ideaDescription : '';
     }
 
     //Get LookingFor Description
-    if(resultIDEPortfolio.lookingFor){
+    if (resultIDEPortfolio.lookingFor) {
       portFolio.lookingForDescription = resultIDEPortfolio.lookingFor[0].lookingDescription ? resultIDEPortfolio.lookingFor[0].lookingDescription : resultIDEPortfolio.lookingFor[0].lookingForName;
 
     }
-    if( resultIDEPortfolio.problemSolution){
-      portFolio.problemStatement =resultIDEPortfolio.problemSolution.problemStatement ?resultIDEPortfolio.problemSolution.problemStatement :''
-      portFolio.solutionStatement =resultIDEPortfolio.problemSolution.solutionStatement ?resultIDEPortfolio.problemSolution.solutionStatement :''
+    if (resultIDEPortfolio.problemSolution) {
+      portFolio.problemStatement = resultIDEPortfolio.problemSolution.problemStatement ? resultIDEPortfolio.problemSolution.problemStatement : ''
+      portFolio.solutionStatement = resultIDEPortfolio.problemSolution.solutionStatement ? resultIDEPortfolio.problemSolution.solutionStatement : ''
 
     }
-     portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning ?resultIDEPortfolio.intellectualPlanning.IPdescription :''
+    portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
     appendKeywords(portFolio);
     return portFolio
   }
@@ -146,10 +146,10 @@ async function STU(portFolio, query) {
   let resultStartUpPortFolio = await getPortFolio('MlStartupPortfolio', query);
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
-    portFolio.communityTypes =resultStartUpPortFolio.communityType;
+    portFolio.communityTypes = resultStartUpPortFolio.communityType;
     if (resultStartUpPortFolio.aboutUs) {
       let aboutUs = resultStartUpPortFolio.aboutUs;
-      portFolio.aboutDiscription = aboutUs.startupDescription?aboutUs.startupDescription:''
+      portFolio.aboutDiscription = aboutUs.startupDescription ? aboutUs.startupDescription : ''
     }
     getManagementInfo(portFolio, resultStartUpPortFolio);
     getLookingForDescription(portFolio, resultStartUpPortFolio);
@@ -165,12 +165,12 @@ async function FUN(portFolio, query) {
   let resultFunderPortfolio = await getPortFolio('MlFunderPortfolio', query);
   if (resultFunderPortfolio) {
     portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
-    portFolio.communityTypes =resultFunderPortfolio.communityType;
+    portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories)
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
-    getTeamInfo(portFolio,resultFunderPortfolio)
-    getSuccessStoriesInfo(portFolio,resultFunderPortfolio);
-    getAreasOfInterest(portFolio,resultFunderPortfolio);
+    getTeamInfo(portFolio, resultFunderPortfolio)
+    getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
+    getAreasOfInterest(portFolio, resultFunderPortfolio);
     getLookingForDescription(portFolio, resultFunderPortfolio);
     appendKeywords(portFolio);
   }
@@ -182,14 +182,20 @@ async function ServiceProviderPortFolio(portFolio, query) {
   let resultServicePortFolio = await getPortFolio('MlServiceProviderPortfolio', query);
   if (resultServicePortFolio) {
     portFolio.communityType = getCommunityType(resultServicePortFolio)// Replacing trailing 's'
-    portFolio.communityTypes =resultServicePortFolio.communityType;
+    portFolio.communityTypes = resultServicePortFolio.communityType;
 
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about
       portFolio.aboutDiscription = aboutUs.aboutDescription;
 
     }
-    getManagementInfo(portFolio, resultServicePortFolio);
+
+    if (resultServicePortFolio.services) {
+
+      portFolio.servicesDescription = resultServicePortFolio.services.servicesDescription ? resultServicePortFolio.services.servicesDescription : ''
+    }
+    getAwardsRewards(portFolio, resultServicePortFolio);
+    getClients(portFolio, resultServicePortFolio);
     getLookingForDescription(portFolio, resultServicePortFolio);
     appendKeywords(portFolio);
   }
@@ -201,12 +207,24 @@ async function CMP(portFolio, query) {
   let resultCompanyPortFolio = await getPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
     portFolio.communityType = 'a Company';
-    portFolio.communityTypes ='Company';
+    portFolio.communityTypes = 'Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
+
+    if (resultCompanyPortFolio.sectorsAndServices) {
+      portFolio.sectorsAndServices = resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
+
+
+    }
+    if (resultCompanyPortFolio.policy) {
+      portFolio.policy = resultCompanyPortFolio.policy.policyDescription ? resultCompanyPortFolio.policy.policyDescription : '';
+
+    }
     getManagementInfo(portFolio, resultCompanyPortFolio);
+    getAwardsRewards(portFolio, resultCompanyPortFolio);
+    getResearchDev(portFolio, resultCompanyPortFolio);
     getLookingForDescription(portFolio, resultCompanyPortFolio);
     appendKeywords(portFolio);
   }
@@ -219,7 +237,7 @@ async function INS(portFolio, query) {
   let resultINSPortFolio = await getPortFolio('MlInstitutionPortfolio', query);
   if (resultINSPortFolio) {
     portFolio.communityType = getCommunityType(resultINSPortFolio)
-    portFolio.communityTypes =resultINSPortFolio.communityType;
+    portFolio.communityTypes = resultINSPortFolio.communityType;
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
@@ -254,9 +272,9 @@ function getManagementInfo(portFolio, managementInfo) {
     managementInstitution.forEach(function (management) {
       managementPortFolio.push({
         logo: management.logo ? generateAbsolutePath(management.logo.fileUrl) : '',
-        firstName: management.firstName,
-        lastName: management.lastName,
-        designation: management.designation
+        name: management.firstName + ' ' + management.lastName,
+        designation: management.designation,
+        description: management.about ? management.about : ''
       })
     })
 
@@ -274,11 +292,10 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
   if (principals) {
     principals.forEach(function (principal) {
       teamPortFolio.push({
-        logo: principal.logo ? generateAbsolutePath(principal.logo.fileUrl ): '',
-        firstName: principal.firstName,
-        lastName: principal.lastName,
+        logo: principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : '',
+        name: principal.firstName + ' ' + principal.lastName,
         designation: principal.designation,
-        description: principal.aboutPrincipal ?principal.aboutPrincipal:''
+        description: principal.aboutPrincipal ? principal.aboutPrincipal : ''
       })
     })
 
@@ -286,11 +303,10 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
   if (teams) {
     teams.forEach(function (team) {
       teamPortFolio.push({
-        logo: team.logo ? generateAbsolutePath(team.logo.fileUrl ): '',
-        firstName: team.firstName,
-        lastName: team.lastName,
+        logo: team.logo ? generateAbsolutePath(team.logo.fileUrl) : '',
+        name: team.firstName + ' ' + team.lastName,
         designation: team.designation,
-        description: team.aboutTeam ?team.aboutTeam:''
+        description: team.aboutTeam ? team.aboutTeam : ''
 
       })
     })
@@ -305,9 +321,9 @@ function getSuccessStoriesInfo(portFolio, resultPortfolio) {
   if (successStories) {
     successStories.forEach(function (successStory) {
       successStoriesFolio.push({
-        logo: successStory.logo ? generateAbsolutePath(successStory.logo.fileUrl ): '',
-        storyTitle: successStory.storyTitle ?successStory.storyTitle:'',
-        description: successStory.description ?successStory.description:''
+        logo: successStory.logo ? generateAbsolutePath(successStory.logo.fileUrl) : '',
+        name: successStory.storyTitle ? successStory.storyTitle : '',
+        description: successStory.description ? successStory.description : ''
       })
     })
 
@@ -321,8 +337,8 @@ function getAreasOfInterest(portFolio, resultPortfolio) {
   if (areasInterests) {
     areasInterests.forEach(function (interest) {
       areasInterestsFolio.push({
-        logo: interest.logo ? generateAbsolutePath(interest.logo.fileUrl ): '',
-        industryTypeName: interest.industryTypeName ?interest.industryTypeName:''
+        logo: interest.logo ? generateAbsolutePath(interest.logo.fileUrl) : '',
+        name: interest.industryTypeName ? interest.industryTypeName : ''
       })
     })
 
@@ -330,6 +346,53 @@ function getAreasOfInterest(portFolio, resultPortfolio) {
   portFolio.areaOfInterest = areasInterestsFolio;
 }
 
+function getAwardsRewards(portFolio, resultPortfolio) {
+  let awardsRewards = []
+  let awardsRecognitions = resultPortfolio.awardsRecognition;
+  if (awardsRecognitions) {
+    awardsRecognitions.forEach(function (awards) {
+      awardsRewards.push({
+        logo: awards.logo ? generateAbsolutePath(awards.logo.fileUrl) : '',
+        name: awards.awardName ? awards.awardName : '',
+        description: awards.awardsDescription ? awards.awardsDescription : '',
+      })
+    })
+
+  }
+  portFolio.awardsRecognition = awardsRewards;
+}
+
+function getResearchDev(portFolio, resultPortfolio) {
+  let researchAndDevelopmentPortFolio = []
+  let researchAndDevelopments = resultPortfolio.researchAndDevelopment;
+  if (researchAndDevelopments) {
+    researchAndDevelopments.forEach(function (research) {
+      researchAndDevelopmentPortFolio.push({
+        logo: research.logo ? generateAbsolutePath(research.logo.fileUrl) : '',
+        name: research.researchAndDevelopmentName ? research.researchAndDevelopmentName : '',
+        description: research.researchAndDevelopmentDescription ? research.researchAndDevelopmentDescription : '',
+      })
+    })
+
+  }
+  portFolio.researchAndDevelopment = researchAndDevelopmentPortFolio;
+}
+
+function getClients(portFolio, resultPortfolio) {
+  let clientsFolio = []
+  let clients = resultPortfolio.clients;
+  if (clients) {
+    clients.forEach(function (client) {
+      clientsFolio.push({
+        logo: client.logo ? generateAbsolutePath(client.logo.fileUrl) : '',
+        name: client.companyName ? client.companyName : '',
+        description: client.clientDescription ? client.clientDescription : '',
+      })
+    })
+
+  }
+  portFolio.clients = clientsFolio;
+}
 function getCommunityType(resultPortfolio) {
   let communityType = resultPortfolio.communityType;
   communityType = communityType.replace(/s$/, ''); // Replacing trailing 's'
@@ -352,7 +415,7 @@ async function getPortFolio(collectionName, query) {
 
 
 function getSTUMenu(dynamicLinksClasses) {
-  return   [
+  return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Management', className: dynamicLinksClasses.Management},
     {name: 'Technology', className: dynamicLinksClasses.Branches},
@@ -364,10 +427,10 @@ function getSTUMenu(dynamicLinksClasses) {
 }
 
 function getCMPMenu(dynamicLinksClasses) {
-  return   [
+  return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Management', className: dynamicLinksClasses.Management},
-    {name: 'Awards', className: dynamicLinksClasses.Awards},
+    {name: 'Awards', className: 'pageAwardsandRewards'}, //Special Case where awards are treated as slides
     {name: 'Incubator Sectors', className: dynamicLinksClasses.Incubator_Sectors},
     {name: 'CSR', className: dynamicLinksClasses.CSR},
     {name: 'R&D', className: dynamicLinksClasses.RandD},
@@ -376,7 +439,7 @@ function getCMPMenu(dynamicLinksClasses) {
 }
 
 function getINSMenu(dynamicLinksClasses) {
-  return   [
+  return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Management', className: dynamicLinksClasses.Management},
     {name: 'Awards', className: dynamicLinksClasses.Awards},
@@ -389,16 +452,16 @@ function getINSMenu(dynamicLinksClasses) {
 
 
 function getSPSMenu(dynamicLinksClasses) {
-  return   [
+  return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Awards and Rewards', className: dynamicLinksClasses.AwardsandRewards},
     {name: 'Clients', className: dynamicLinksClasses.Clients},
     {name: 'Services', className: dynamicLinksClasses.Services},
-     {name: 'Keywords', className: dynamicLinksClasses.Keywords}
+    {name: 'Keywords', className: dynamicLinksClasses.Keywords}
   ];
 }
 function getFUNMenu(dynamicLinksClasses) {
-  return  [
+  return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Team', className: dynamicLinksClasses.Team},
     {name: 'Success Stories', className: dynamicLinksClasses.Success_Stories},
@@ -421,22 +484,21 @@ function getIDEMenu(dynamicLinksClasses) {
 async function getBranches(portFolio, resultPortFolioBranches) {
   let branches = resultPortFolioBranches.branches;
   let outputBranches = [];
-  if(branches)
-  {
+  if (branches) {
     await Promise.all(branches.map(async (branch) => {
-      let city = branch.cityId?await getCity(branch.cityId):'';
-      let state =branch.stateId? await getState(branch.stateId):'';
-      let country= branch.countryId?await getCountry(branch.countryId):'';
+      let city = branch.cityId ? await getCity(branch.cityId) : '';
+      let state = branch.stateId ? await getState(branch.stateId) : '';
+      let country = branch.countryId ? await getCountry(branch.countryId) : '';
 
       outputBranches.push({
-        name:branch.name,
+        name: branch.name,
         branches_logo: branch.logo ? generateAbsolutePath(branch.logo.fileUrl) : '',
         addr1: branch.address1 ? branch.address1 : '',
         addr2: branch.address2 ? branch.address2 : '',
         area: branch.area ? branch.area : 'branch.area',
-        state:state,
+        state: state,
         country: country,
-        city:city
+        city: city
       })
     }));
   }
@@ -452,19 +514,18 @@ function getDynamicLinksClasses() {
     'Keywords': 'pageKeywords',
     'Branches': 'pageBranches',
     'Management': 'pageManagement',
-    'Problems_and_Solutions':'pageProblemsandSolutions',
-    'IPandTM':'pageIPandTM',
-    'Focus_Areas':'pageFocusAreas',
-    'Success_Stories':'pageSuccessStories',
-    'Team':'pageTeam',
-    'Services':'pageServices',
-    'Clients':'pageClients',
-    'AwardsandRewards':'pageAwardsandRewards',
-    'Incubator_Sectors':'pageIncubatorSectors',
-    'Intrapreneur':'pageIntrapreneur',
-    'RandD':'pageRandD',
-    'CSR':'pageCSR'
-
+    'Problems_and_Solutions': 'pageProblemsandSolutions',
+    'IPandTM': 'pageIPandTM',
+    'Focus_Areas': 'pageFocusAreas',
+    'Success_Stories': 'pageSuccessStories',
+    'Team': 'pageTeam',
+    'Services': 'pageServices',
+    'Clients': 'pageClients',
+    'AwardsandRewards': 'pageAwardsandRewards',
+    'Incubator_Sectors': 'pageIncubatorSectors',
+    'Intrapreneur': 'pageIntrapreneur',
+    'RandD': 'pageRandD',
+    'CSR': 'pageCSR'
 
 
   }
@@ -475,7 +536,7 @@ function getDynamicLinksClasses() {
 async function getCity(cityId) {
   let result = await
     mlDBController.findOne('MlCities', {_id: cityId});
-  if(result)
+  if (result)
     return result.name
   else
     return ''
@@ -484,7 +545,7 @@ async function getCity(cityId) {
 async function getState(stateId) {
   let result = await
     mlDBController.findOne('MlStates', {_id: stateId});
-  if(result)
+  if (result)
     return result.name;
   else
     return '';
@@ -494,7 +555,7 @@ async function getState(stateId) {
 async function getCountry(countryId) {
   let result = await
     mlDBController.findOne('MlCountries', {_id: countryId});
-  if(result)
+  if (result)
     return result.displayName
   else
     return '';
@@ -511,13 +572,13 @@ function getPrivateFields(privateFieldsObjects) {
 
 function appendKeywords(portFolio) {
 
-  let keywords = portFolio.displayName + ', '+portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes;
-  if (portFolio.chapterName && portFolio.chapterName.trim().length >  0 )
+  let keywords = portFolio.displayName + ', ' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes;
+  if (portFolio.chapterName && portFolio.chapterName.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.chapterName;
-  if (portFolio.clusterName && portFolio.clusterName.trim().length >  0 )
-    keywords = keywords + ', ' +portFolio.displayName  + " " + portFolio.clusterName;
-  if (portFolio.communityType && portFolio.communityType.trim().length >  0 )
-    keywords = keywords + ', ' + portFolio.displayName  + " " + portFolio.communityTypes;
+  if (portFolio.clusterName && portFolio.clusterName.trim().length > 0)
+    keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.clusterName;
+  if (portFolio.communityType && portFolio.communityType.trim().length > 0)
+    keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
   portFolio.keywords = keywords;
   return portFolio
 }

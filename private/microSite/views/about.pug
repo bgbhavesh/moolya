@@ -117,13 +117,107 @@ html(prefix='og: http://ogp.me/ns#')
         .ms_content.mCustomScrollbar(data-mcs-theme='minimal-dark')
           .pages
             .pageManagement
-              include management
+              if(!privateFields.management)
+                if(management && management.length > 0)
+                  include management
+                  +portFolioSlides(management)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
             .pageTeam
-              include teamManagement
+              if(!privateFields.teamManagement)
+                if(teamManagement && teamManagement.length > 0)
+                  include management
+                  +portFolioSlides(teamManagement)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
             .pageSuccessStories
-              include success_stories
+              if(!privateFields.successStories)
+                if(successStories && successStories.length > 0)
+                  include management
+                  +portFolioSlides(successStories)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
+            .pageClients
+              if(!privateFields.clients)
+                if(clients && clients.length > 0)
+                  include management
+                  +portFolioSlides(clients)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
             .pageFocusAreas
-              include areasOfInterest
+              if(!privateFields.areaOfInterest)
+                if(areaOfInterest && areaOfInterest.length > 0)
+                  include management
+                  +portFolioSlides(areaOfInterest)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
+            .pageAwardsandRewards
+              if(!privateFields.awardsRecognition)
+                if(awardsRecognition && awardsRecognition.length > 0)
+                   include management
+                   +portFolioSlides(awardsRecognition)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+            .pageRandD
+              if(!privateFields.researchAndDevelopment)
+                if(researchAndDevelopment && researchAndDevelopment.length > 0)
+                  include management
+                  +portFolioSlides(researchAndDevelopment)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+            .pageIncubatorSectors
+              if(!privateFields.sectorsAndServices)
+                if(sectorsAndServices && sectorsAndServices.length > 0 )
+                  p
+                    | !{sectorsAndServices}
+
+                else
+                  .ms_noBranches
+                   img(src='/images/branches_banner.png')
+
+            .pageCSR
+              if(!privateFields.policy)
+                if(policy && policy.CSR > 0 )
+                  p
+                    | !{policy}
+
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+
+            .pageServices
+              if(!privateFields.servicesDescription)
+                if(servicesDescription && servicesDescription.length > 0 )
+                  p
+                    | !{servicesDescription}
+
+                else
+                  .ms_noBranches
+                     img(src='/images/branches_banner.png')
             .pageIPandTM
               if(!privateFields.IPandTM)
                 if(IPandTM && IPandTM.length > 0 )
@@ -132,7 +226,7 @@ html(prefix='og: http://ogp.me/ns#')
 
                 else
                   .ms_noBranches
-                  img(src='/images/branches_banner.png')
+                    img(src='/images/branches_banner.png')
             .pageProblemsandSolutions
               if(!privateFields.problemStatement)
                 if(problemStatement && problemStatement.length > 0 )
@@ -143,7 +237,7 @@ html(prefix='og: http://ogp.me/ns#')
 
                 else
                   .ms_noBranches
-                  img(src='/images/branches_banner.png')
+                   img(src='/images/branches_banner.png')
 
             .pageAwards
               if(!privateFields.awardsDescription)

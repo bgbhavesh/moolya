@@ -12,7 +12,7 @@ import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipar
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "branches"
 
 class MlStartupBranches extends Component{
@@ -340,7 +340,7 @@ class MlStartupBranches extends Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.branchName?details.branchName:""}</h3>
                       </div>
                     </a>

@@ -10,7 +10,7 @@ import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStart
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = 'clients'
 
 class MlStartupClients extends Component{
@@ -52,7 +52,7 @@ class MlStartupClients extends Component{
   }
 
   addClient(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupClients){
       this.setState({selectedIndex:this.state.startupClients.length})
     }else{
@@ -96,7 +96,13 @@ class MlStartupClients extends Component{
     })
   }
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.startupClients
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.clients ){
       setObject = this.context.startupPortfolio.clients
@@ -135,7 +141,6 @@ class MlStartupClients extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
@@ -158,7 +163,7 @@ class MlStartupClients extends Component{
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
-    this.props.getStartupClients(startupClients, this.state.privateKey, requiredFields);
+    this.props.getStartupClients(startupClients, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -276,7 +281,7 @@ class MlStartupClients extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>

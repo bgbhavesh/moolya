@@ -6,7 +6,7 @@ import Datetime from "react-datetime";
 import {getMoolyaAdminsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
 import moment from "moment";
 import {storeSharedDetailsHandler, fetchConnections} from '../../actions/mlLibraryActionHandler'
-
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class SharePopOver extends React.Component {
 
@@ -177,7 +177,8 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="doc_upload" key={index}>
-        <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/><img src={value.fileUrl}/></li>
+          <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
+            <img src={generateAbsolutePath(value.fileUrl)}/><div className="title">{value.fileName}</div></li>
         </ul>
       )
     })
@@ -189,7 +190,7 @@ export default class SharePopOver extends React.Component {
     let data = that.state.teamData || [];
     let datas = data.map(function(value, index) {
       return (
-          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
       )
     })
     return datas;
@@ -265,7 +266,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       if(value.name.match(search)) {
         return (
-            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
         )
       }
       })

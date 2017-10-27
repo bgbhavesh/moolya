@@ -52,16 +52,24 @@ class MlStartupTechnology extends Component{
       this.setState({loading: false, startupTechnologies: this.context.startupPortfolio.technologies, startupTechnologiesList:this.context.startupPortfolio.technologies});
     }
   }
+
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.startupTechnologies
     if(this.context && this.context.startupPortfolio && this.context.startupPortfolio.technologies ){
       setObject = this.context.startupPortfolio.technologies
     }
     this.setState({startupTechnologiesList:setObject,popoverOpen : false})
   }
+
   addTechnology(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.startupTechnologies){
       this.setState({selectedIndex:this.state.startupTechnologies.length})
     }else{
@@ -122,21 +130,17 @@ class MlStartupTechnology extends Component{
   onOptionSelected(selectedId, callback, selObject) {
     if (selectedId) {
       let details = this.state.data;
-      // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
       details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, technologyDescription: selObject.about});
       this.setState({data: details, "selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about}, function () {
-        // this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
         // this.sendDataToParent()
       })
     } else {
       let details = this.state.data;
-      // this.setState({aboutShow:''})
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
       details = _.omit(details, ["technologyDescription"]);
       this.setState({data: details, "selectedVal": '', "technologyName": '', technologyDescription:''}, function () {
-        // this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
         // this.sendDataToParent()
       })
     }
@@ -158,7 +162,6 @@ class MlStartupTechnology extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
@@ -180,9 +183,9 @@ class MlStartupTechnology extends Component{
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey, requiredFields);
-
+    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey);
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;

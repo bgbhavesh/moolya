@@ -12,7 +12,9 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
+import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
+
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "partners"
 
@@ -26,7 +28,6 @@ export default class MlCompanyPartners extends React.Component {
       partnersList: [],
       popoverOpenP: false,
       selectedIndex: -1,
-      selectedVal: null,
       selectedObject: "default",
       title:'',
       clusterId:'',
@@ -34,7 +35,7 @@ export default class MlCompanyPartners extends React.Component {
       privateKey:{},
     }
     this.handleBlur.bind(this);
-    this.onSavePrincipalAction.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -79,26 +80,13 @@ export default class MlCompanyPartners extends React.Component {
   }
 
   onLockChange(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
     var isPrivate = false;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
       isPrivate = true;
-    } else {
-      details = _.extend(details, {[key]: false});
     }
-
-    // var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:this.state.selectedTab}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data: details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -149,7 +137,7 @@ export default class MlCompanyPartners extends React.Component {
       })
     }
   }
-  onSavePrincipalAction(e) {
+  onSaveAction(e) {
     this.sendDataToParent(true)
     var setObject =  this.state.partners
     if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.partners ){
@@ -202,7 +190,6 @@ export default class MlCompanyPartners extends React.Component {
       selectedObject: index,
       popoverOpenP: !(this.state.popoverOpenP)},()=>{
       this.lockPrivateKeys(index)
-      // "selectedVal": details.typeOfFundingId
     });
 
     // setTimeout(function () {
@@ -230,8 +217,6 @@ export default class MlCompanyPartners extends React.Component {
 
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
-    selectedTab = this.state.selectedTab;
-
       let fun = this.state.partners;
       let partners = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
@@ -251,12 +236,8 @@ export default class MlCompanyPartners extends React.Component {
         arr.push(newItem)
       })
     partners = arr;
-      // funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
-    console.log('partners', partners)
       this.setState({partners: partners})
       this.props.getPartnersDetails(partners, this.state.privateKey);
-
-
   }
 
   onPrincipalLogoFileUpload(e) {
@@ -354,7 +335,7 @@ export default class MlCompanyPartners extends React.Component {
                                        onClick={that.onPrincipalTileClick.bind(that, idx)}>
                                     <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                    <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
+                                    <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                                     <div className="ml_icon_btn">
@@ -387,7 +368,7 @@ export default class MlCompanyPartners extends React.Component {
                                 <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
                               </div>
                               <div className="previewImg ProfileImg">
-                                <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
+                                <img src={this.state.data.logo ? generateAbsolutePath(this.state.data.logo.fileUrl) : "/images/def_profile.png"}/>
                               </div>
                             </div>:<div></div>
                           }
@@ -483,7 +464,7 @@ export default class MlCompanyPartners extends React.Component {
                           {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
                           {/*</div>*/}
                           <div className="ml_btn" style={{'textAlign': 'center'}}>
-                            <a className="save_btn" onClick={this.onSavePrincipalAction.bind(this)}>Save</a>
+                            <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                           </div>
                         </div>
                       </div>

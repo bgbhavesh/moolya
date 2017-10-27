@@ -8,6 +8,8 @@ var Select = require('react-select');
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {createOfficeMembers} from '../actions/addOfficeMembers';
 import {fetchOfficeMembers} from '../actions/findOfficeMembers';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 
 function logChange(val) {
   console.log("Selected: " + val);
@@ -156,7 +158,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                           <div className="hex_outer">
                             {
                               data.profileImage
-                                ? <img src={data.profileImage} />
+                                ? <img src={generateAbsolutePath(data.profileImage)} />
                                 : <span className="ml my-ml-Investors"></span>
                             }
                           </div>

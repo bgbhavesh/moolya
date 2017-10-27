@@ -53,3 +53,4 @@ App.setPreference('Orientation', 'all', 'ios'); //for ios
 App.accessRule('*');
 App.setPreference('loadUrlTimeoutValue', 100000);
 //App.setPreference('SplashShowOnlyFirstTime', 'false');
+

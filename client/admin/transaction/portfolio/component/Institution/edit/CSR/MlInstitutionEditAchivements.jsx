@@ -10,6 +10,7 @@ import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioI
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "achievements"
 
@@ -76,7 +77,13 @@ export default class MlInstitutionEditAchivements extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionAchievements
     if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.achievements ){
       setObject = this.context.institutionPortfolio.achievements
@@ -100,21 +107,13 @@ export default class MlInstitutionEditAchivements extends Component{
   }
 
   onLockChange(fiedName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -179,7 +178,6 @@ export default class MlInstitutionEditAchivements extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
@@ -201,7 +199,7 @@ export default class MlInstitutionEditAchivements extends Component{
     })
     institutionAchievements = arr;
     this.setState({institutionAchievements:institutionAchievements})
-    this.props.getInstitutionAchivements(institutionAchievements, this.state.privateKey, requiredFields);
+    this.props.getInstitutionAchivements(institutionAchievements, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -330,7 +328,7 @@ export default class MlInstitutionEditAchivements extends Component{
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.achievementName?details.achievementName:""}</h3>
                           </div>
                         </a>

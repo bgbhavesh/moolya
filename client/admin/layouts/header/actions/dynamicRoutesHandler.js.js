@@ -195,10 +195,22 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/history`;
       }
     },
-    "community_Histroy_Details":function (params,queryParams) {
+    "community_History_Details":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"communityId")){
         return `/admin/community/${dynamicParams.communityId}/history`;
+      }
+    },
+    community_subChapter_History_Details: function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "communityId")) {
+        return `/admin/communities/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters/${dynamicParams.subChapterId}/${dynamicParams.communityId}/history`;
+      }
+    },
+    "community_Community_Details":function (params,queryParams) {  //fix for Issue: MOOLYA-3389
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"communityId")){
+        return `/admin/community/${dynamicParams.communityId}/communityDetails`;
       }
     },
 

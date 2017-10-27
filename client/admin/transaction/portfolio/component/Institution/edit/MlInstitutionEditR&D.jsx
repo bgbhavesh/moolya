@@ -10,6 +10,7 @@ import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInst
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "researchAndDevelopment"
 
@@ -24,7 +25,6 @@ export default class MlInstitutionEditRD extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       institutionRDList:[],
-      selectedVal:null,
       selectedObject:"default"
     };
     this.tabName = this.props.tabName || ""
@@ -80,7 +80,13 @@ export default class MlInstitutionEditRD extends React.Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionRD;
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.researchAndDevelopment) {
       setObject = this.context.institutionPortfolio.researchAndDevelopment
@@ -172,7 +178,6 @@ export default class MlInstitutionEditRD extends React.Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionRD;
     let institutionRD = _.cloneDeep(awards);
@@ -194,7 +199,7 @@ export default class MlInstitutionEditRD extends React.Component{
     })
     institutionRD = arr;
     this.setState({institutionRD:institutionRD})
-    this.props.getRDDetails(institutionRD, this.state.privateKey, requiredFields);
+    this.props.getRDDetails(institutionRD, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -323,7 +328,7 @@ export default class MlInstitutionEditRD extends React.Component{
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.researchAndDevelopmentName?details.researchAndDevelopmentName:""}</h3>
                           </div>
                         </a>

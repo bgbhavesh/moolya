@@ -6,6 +6,7 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlGenericPartnersView from '../../commons/MlGenericIntrapreneurView';
 
+
 const KEY = 'intrapreneurRecognition'
 
 export default class MlCompanyViewIntrapreneur extends React.Component {

@@ -6,6 +6,8 @@ import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../..
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
@@ -172,7 +174,7 @@ export default class MlIdeatorAudience extends React.Component{
       return (
         <div className="upload-image" key={id}>
           <FontAwesome className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"audienceImages",m.fileUrl)}/>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });

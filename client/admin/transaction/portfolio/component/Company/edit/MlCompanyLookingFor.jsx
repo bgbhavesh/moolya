@@ -73,7 +73,7 @@ export default class MlComapanyLookingFor extends Component {
   }
 
   addLookingFor() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if (this.state.companyLookingFor) {
       this.setState({selectedIndex: this.state.companyLookingFor.length})
     } else {
@@ -93,13 +93,8 @@ export default class MlComapanyLookingFor extends Component {
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
-
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
   }
+
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.CompanyLookingForServer && this.CompanyLookingForServer[selIndex]?this.CompanyLookingForServer[selIndex].privateFields : []
@@ -114,7 +109,13 @@ export default class MlComapanyLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.companyLookingFor
     if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.lookingFor)
       setObject = this.context.companyPortfolio.lookingFor
@@ -168,7 +169,6 @@ export default class MlComapanyLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let companyLookingFor1 = this.state.companyLookingFor;
     let companyLookingFor = _.cloneDeep(companyLookingFor1);
@@ -189,7 +189,7 @@ export default class MlComapanyLookingFor extends Component {
 
     companyLookingFor = arr;
     this.setState({companyLookingFor: companyLookingFor})
-    this.props.getLookingForDetails(companyLookingFor, this.state.privateKey, requiredFields);
+    this.props.getLookingForDetails(companyLookingFor, this.state.privateKey);
 
   }
 

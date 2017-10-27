@@ -106,7 +106,7 @@ class MlEditProfessionType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/documentProcess/professionList")
+           FlowRouter.go("/admin/settings/documentProcess/professionList")
         }
       }
     ];

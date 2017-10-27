@@ -12,7 +12,9 @@ import {findAnnotations} from "../../../../../../commons/annotator/findAnnotatio
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlLoader from '../../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlServiceProviderViewAbout extends React.Component {
 
   constructor(props) {
@@ -163,23 +165,35 @@ export default class MlServiceProviderViewAbout extends React.Component {
     return (
       <div>
         {showLoader===true?(<MlLoader/>):(
-      <div>
-        {image||title||description? (<div className="sp_about" id="annotatorContent">
+      <div className="requested_input">
+        {image||title||description? (
+            <div className="col-lg-12">
+              <div className="row">
+                <div className="sp_about hide_unlock" id="annotatorContent">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            {title} <FontAwesome name='unlock' className="input_icon req_input_icon un_lock" id="isAboutTitlePrivate"/>
+                        </div>
+                        <div className="panel-body">
+                            <FontAwesome name='unlock' className="input_icon view_req_textarea_icon un_lock"
+                                                                 id="isDescriptionPrivate"/>{description}
+                            <div className="media">
+                                <div className="media-left">
+                                    <a href="">
+                                        <img className="media-object" src={generateAbsolutePath(image)}/>
+                                    </a>
+                                </div>
 
-          <div className="media">
-            <div className="media-left">
-              <a href="">
-                <img className="media-object" src={image}/>
-              </a>
-            </div>
-            <div className="media-body">
-              <h4 className="media-heading">{title}</h4>
-              {/*<p>Founder,25yr.Experience</p>*/}
-            </div>
-          </div>
-          <p>{description}</p>
+                            </div>
+                        </div>
+                    </div>
 
-        </div>):(<NoData tabName={this.props.tabName}/>)}
+
+
+                </div>
+              </div>
+            </div>
+        ):(<NoData tabName={this.props.tabName}/>)}
       </div>
         )}
         </div>

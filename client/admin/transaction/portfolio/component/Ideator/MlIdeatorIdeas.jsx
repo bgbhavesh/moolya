@@ -8,6 +8,8 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
 import CropperModal from '../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlIdeatorIdeas extends Component{
   constructor(props, context){
@@ -199,7 +201,7 @@ export default class MlIdeatorIdeas extends Component{
           {/*<a href="" >*/}
             <div className="upload_hex">
               {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
-              <img src={image} id="blah" width="105" height="auto"/>
+              <img src={generateAbsolutePath(image)} id="blah" width="105" height="auto"/>
               {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
             </div>
           {/*</a>*/}

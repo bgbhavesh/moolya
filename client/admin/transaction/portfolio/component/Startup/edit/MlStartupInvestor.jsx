@@ -12,7 +12,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = 'investor'
 
 export default class MlStartupInvestor extends Component{
@@ -352,7 +352,7 @@ export default class MlStartupInvestor extends Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
                           <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that, idx)}><img
-                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                            src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                           <h3>{details.investorName ? details.investorName : ''}</h3>
                         </div>
                       </a>

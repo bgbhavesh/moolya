@@ -91,6 +91,7 @@ class Library extends React.Component {
     this.uploadTemplate = this.uploadTemplate.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.toggleShowImageUploadCropper = this.toggleShowImageUploadCropper.bind(this);
+    // this.previewClicked = this.previewClicked.bind(this);
   }
 
   toggleShowImageUploadCropper(evt) {
@@ -159,6 +160,10 @@ class Library extends React.Component {
     //   this.getLibraryDetails(userId);
     // }
   }
+
+  // previewClicked(type, path){
+  //   this.props.previewClicked(type, path);
+  // }
 
 
   async getShareMembersInfo() {
@@ -1313,30 +1318,39 @@ class Library extends React.Component {
     });
 
     var mySwiper = new Swiper('.manage_tasks', {
-      speed: 400,
-      spaceBetween:20,
-      slidesPerView:'4',
-      pagination: '.swiper-pagination',
-      paginationClickable: true
     });
+
+    //$(".library-wrap .see-less").click(function(){
+      //$(this).parents('.library-wrap').addClass("wrap_open")
+      // $(this).parents('.library-wrap').addClass("col-lg-6 col-md-6 col-sm-12").removeClass("col-md-12");
+      //$(this).parents('.library-wrap').find(".see-less").hide();
+      //$(this).parents('.library-wrap').find(".see-more").show();
+      //$(this).parents('.library-wrap').find(".manage_tasks").addClass("swiper-container");
+      //$(this).parents('.library-wrap').find(".stop_slide").addClass("swiper-wrapper").removeClass("stop_slide");
+      //(".hide_panel").show();
+      //$(this).parents('.library-wrap').addClass("hide_panel");
+    //});
+
     $(".see-more").click(function(){
-      $(this).parents('.library-wrap').removeClass("col-lg-6 col-md-6 col-sm-12").addClass("col-md-12");
-      $(this).parents('.library-wrap').find(".see-more").hide();
-      $(this).parents('.library-wrap').find(".see-less").show();
-      $(this).parents('.library-wrap').find(".swiper-container").removeClass("swiper-container");
-      $(this).parents('.library-wrap').find(".swiper-wrapper").removeClass("swiper-wrapper").addClass("stop_slide");
+      $(this).parents('.library-wrap').siblings().toggleClass("wrap-show");
+
+      $(this).parents('.library-wrap').toggleClass("col-lg-6 col-md-6 col-sm-12").toggleClass("col-md-12");
+      //$(this).parents('.library-wrap').find(".see-more").hide();
+      $(this).toggleClass("see-less");
+      $(this).text("show more");
+      $(".see-less").text("show less");
+
+      //$(this).parents('.library-wrap').find(".see-less").show();
+      $(this).parents('.library-wrap').find(".manage_tasks").toggleClass("swiper-container");
+      $(this).parents('.library-wrap').find(".manage_swiper").toggleClass("swiper-wrapper").toggleClass("stop_slide");
       //$(this).parents('.library-wrap').find(".swiper-wrapper2").removeClass("swiper-");
-      $(this).parents('.library-wrap').removeClass("hide_panel");
-      $(".hide_panel").hide();
+      //$(this).parents('.library-wrap').removeClass("hide_panel");
+      //$(".hide_panel").hide();
     });
-    $(".see-less").click(function(){
-      $(this).parents('.library-wrap').addClass("col-lg-6 col-md-6 col-sm-12").removeClass("col-md-12");
-      $(this).parents('.library-wrap').find(".see-less").hide();
-      $(this).parents('.library-wrap').find(".see-more").show();
-      $("div.toggle1, div.toggle3, div.toggle4, div.toggle5").show();
-      $(".hide_panel").show();
-      $(this).parents('.library-wrap').addClass("hide_panel");
-    });
+
+
+
+
 
   }
 
@@ -1657,8 +1671,8 @@ class Library extends React.Component {
                   show={this.state.showProfileModal}
                   toggleShow={this.toggleModal}
                 />
-                <span className="see-more pull-right"><a href="">See More</a></span>
-                <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
+                <span className="see-more pull-right">See More</span>
+                {/*<span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>*/}
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_client">
                     <a href="javascript:void(0);">
@@ -1678,7 +1692,7 @@ class Library extends React.Component {
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 <div className="swiper-container manage_tasks">
-                  <div className="swiper-wrapper">
+                  <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
@@ -1690,7 +1704,7 @@ class Library extends React.Component {
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Videos
-                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-more pull-right">See More</span>
                 <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask" id="create_video">
@@ -1705,7 +1719,7 @@ class Library extends React.Component {
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 <div className="swiper-container manage_tasks">
-                  <div className="swiper-wrapper">
+                  <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : mp4 <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>
@@ -1725,7 +1739,7 @@ class Library extends React.Component {
                   show={this.state.showProfileModal1}
                   toggleShow={this.toggleModal1}
                 />
-                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-more pull-right">See More</span>
                 <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_template">
@@ -1745,7 +1759,7 @@ class Library extends React.Component {
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 <div className="swiper-container manage_tasks">
-                  <div className="swiper-wrapper">
+                  <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>
@@ -1757,7 +1771,7 @@ class Library extends React.Component {
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Documents
-                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-more pull-right">See More</span>
                 <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
@@ -1776,7 +1790,7 @@ class Library extends React.Component {
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 <div className="swiper-container manage_tasks">
-                  <div className="swiper-wrapper">
+                  <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>

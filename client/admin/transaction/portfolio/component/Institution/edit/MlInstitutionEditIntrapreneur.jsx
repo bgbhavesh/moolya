@@ -12,6 +12,7 @@ import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInst
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "intrapreneurRecognition"
 
@@ -318,7 +319,7 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.intrapreneurName?details.intrapreneurName:""}</h3>
                           </div>
                         </a>

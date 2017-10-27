@@ -7,6 +7,8 @@ import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../..
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {putDataIntoTheLibrary, removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
@@ -185,7 +187,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       return (
         <div className="upload-image" key={id}>
           <FontAwesome name='unlock' className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"problemImage",m.fileUrl)}/>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });
@@ -195,7 +197,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       return (
         <div className="upload-image" key={id}>
           <FontAwesome name='unlock' className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"solutionImage",m.fileUrl)}/>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });

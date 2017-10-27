@@ -90,7 +90,7 @@ class MlAppProfileHeader extends Component {
     let gImg = user && user.user && user.user.profile && user.user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
       this.setState({
-        profilePic:user.user.profile.profileImage == " "?gImg:user.user.profile.profileImage
+        profilePic:user.user.profile.profileImage == " "?gImg:generateAbsolutePath(user.user.profile.profileImage)
       });
     }
     else {

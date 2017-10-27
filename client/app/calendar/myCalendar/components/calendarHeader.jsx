@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import { getUserProfileActionHandler, getUserActiveProfileDetails } from "../../manageScheduler/activity/actions/activityActionHandler";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 
 export default class MlCalendarHead extends Component {
   constructor(props) {
@@ -89,7 +91,7 @@ export default class MlCalendarHead extends Component {
         <ul className="users_list well well-sm">
           <li className={that.state.isAll || profiles.length === 0 ? 'active_user' : ''}>
             <a href="" onClick={() => that.resetWithAll()}>
-              <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"} /><br />
+              <img src={that.state.profilePic ? generateAbsolutePath(that.state.profilePic) : "/images/def_profile.png"} /><br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}
                 <span ref={(node) => {

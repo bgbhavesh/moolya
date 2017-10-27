@@ -19,6 +19,8 @@ let Select = require('react-select');
 import _ from 'lodash';
 
 import CropperModal from '../../../../../commons/components/cropperModal';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath'
+
 
 /**
  * Initialize conversation types
@@ -457,7 +459,7 @@ export default class MlAppBasicInfo extends React.Component {
                   </div>
                   <br className="brclear"/>*/}
                   <div className="upload_hex">
-                    <img src={that.state.basicData.imageLink ? that.state.basicData.imageLink : '/images/images.png'} id="blah" onClick={this.toggleModal.bind(this)} width="105" height="auto" />
+                    <img src={that.state.basicData.imageLink ? generateAbsolutePath(that.state.basicData.imageLink) : '/images/images.png'} id="blah" onClick={this.toggleModal.bind(this)} width="105" height="auto" />
                     {/*<input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>*/}
                   </div>
                 </div>

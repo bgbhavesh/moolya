@@ -10,6 +10,8 @@ import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInst
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 const KEY = 'investor'
 
@@ -304,7 +306,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                           <div className="list_block">
                             <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
                             <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.investorName ? details.investorName : ''}</h3>
                           </div>
                         </a>

@@ -10,6 +10,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlServiceProviderClients extends Component {
   constructor(props, context) {
@@ -352,7 +353,7 @@ export default class MlServiceProviderClients extends Component {
                           <FontAwesome name='unlock' id={"makePrivate" + idx}
                                        defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
-                            <img src={details.logo && details.logo.fileUrl?details.logo.fileUrl: "/images/def_profile.png"}/></div>
+                            <img src={details.logo && details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl): "/images/def_profile.png"}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                           <h3>{details.companyName ? details.companyName : ""} </h3>
                         </div>

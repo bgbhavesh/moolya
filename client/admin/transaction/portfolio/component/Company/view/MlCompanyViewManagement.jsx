@@ -7,6 +7,8 @@ import {findAnnotations} from '../../../../../../commons/annotator/findAnnotatio
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlGenericManagementView from "../../commons/MlGenericManagementView";
 
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 const KEY = 'management'
 export default class MlCompanyViewManagement extends React.Component {
   constructor(props) {

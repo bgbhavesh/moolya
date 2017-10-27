@@ -15,6 +15,7 @@ import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper
 import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPortfolio';
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = 'management'
 
@@ -397,7 +398,7 @@ export default class MlCompanyManagement extends Component {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : genderImage} /></div>
+                          <div className="hex_outer"><img src={user.logo ? generateAbsolutePath(user.logo.fileUrl) : genderImage} /></div>
                           <h3>{user.firstName ? user.firstName : ""}</h3>
                         </div>
                       </div>
@@ -497,7 +498,7 @@ export default class MlCompanyManagement extends Component {
                           {/* <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  /> */}
                         </div>
                         <div className="previewImg ProfileImg">
-                          <img src={this.state.data && this.state.data.logo ? this.state.data.logo.fileUrl : this.state.responseImage ? this.state.responseImage : " "} />
+                          <img src={this.state.data && this.state.data.logo ? generateAbsolutePath(this.state.data.logo.fileUrl) : this.state.responseImage ? generateAbsolutePath(this.state.responseImage) : " "} />
                         </div>
                       </div>
                       <br className="brclear" />

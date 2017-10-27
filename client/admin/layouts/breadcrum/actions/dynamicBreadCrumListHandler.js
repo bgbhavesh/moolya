@@ -142,10 +142,10 @@ function generateLink(path, RefID, moduleType,name) {
 
 function generateLinkForDashboardUrl(path, RefID, moduleType, index) {
   let postfix = '/';
-
   let viewMode = FlowRouter.getQueryParam('viewMode') || 'true';
   if (moduleType === 'clusterId') postfix += 'chapters?viewMode='+viewMode;
   else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode='+viewMode;
+  else if (moduleType === 'subChapterId') postfix += 'anchorInfoView?viewMode='+viewMode;
   else if (moduleType === 'communityId') postfix += 'communities?viewMode='+viewMode;
 
   if (path.includes(RefID)) {

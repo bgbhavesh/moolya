@@ -8,7 +8,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlStartupViewBranches extends React.Component {
   constructor(props) {
     super(props);
@@ -117,7 +117,7 @@ export default class MlStartupViewBranches extends React.Component {
                 return(
                   <div className="col-lg-4 col-md-6 col-sm-6" key={idx}>
                     <div className="branch_block shadow_block">
-                      <img src={details.logo&&details.logo.fileUrl?details.logo.fileUrl:"/images/headquarters_img.png"}/>
+                      <img src={details.logo&&details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl):"/images/headquarters_img.png"}/>
                       <h3>
                         {details.branchName} <br />
                       </h3>

@@ -6,7 +6,7 @@ import Datetime from "react-datetime";
 import {getMoolyaAdminsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
 import moment from "moment";
 import {storeSharedDetailsHandler, fetchConnections} from '../../actions/mlLibraryActionHandler'
-
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class SharePopOver extends React.Component {
 
@@ -176,9 +176,12 @@ export default class SharePopOver extends React.Component {
     let data = that.state.selectedDatasToShare || [];
     let datas = data.map(function(value, index) {
       return (
-        <ul className="doc_upload" key={index}>
-        <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/><img src={value.fileUrl}/></li>
-        </ul>
+
+        <div className="thumbnail">
+          <FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
+       <img src={generateAbsolutePath(value.fileUrl)}style={{'width':'100px'}} />
+          <div id="images" className="title">{value.fileName}</div>
+        </div>
       )
     })
     return datas;

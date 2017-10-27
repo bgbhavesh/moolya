@@ -6,7 +6,6 @@ import React from 'react';
 import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
-import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 

@@ -50,26 +50,59 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
   var collection = args.collection
   var params = args.params;
   var hierarchyDesicion = false
+  var canUpdateAllTransactions = true
+  var hierarchy = null
   var successCount = 0
+  var user = mlDBController.findOne('users', {_id: params.user}, context)
   var transactions = args.transactionId
+
   transactions.map(function (transaction) {
+  if(canUpdateAllTransactions){
     let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
-    if(trans && trans.allocation && trans.allocation.assigneeId){
-       hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(transaction,collection,context.userId,trans.allocation.assigneeId)
-    }else{
-       hierarchyDesicion = mlHierarchyAssignment.assignTransaction(transaction,collection,context.userId,params.user)
+
+    if(user && params.cluster == null && params.department == null && params.role ==null){
+      var defaultRole = {};
+      var userProfile = _.find(user.profile.InternalUprofile.moolyaProfile.userProfiles, {clusterId:trans.registrationInfo.clusterId});
+      if(userProfile){
+        let userRolesData = userProfile&&userProfile.userRoles?userProfile.userRoles:[];
+        hirarichyLevel = _.pluck(userRolesData, 'hierarchyLevel') || [];
+        hirarichyLevel.sort(function (a, b) {
+          return b - a
+        });
+        for (let i = 0; i < userRolesData.length; i++) {
+          if ((userRolesData[i].hierarchyLevel == hirarichyLevel[0]) && userRolesData[i].isActive) {
+            defaultRole = userRolesData[i]
+            break
+          }
+        }
+        if(defaultRole){
+          try{
+            hierarchy = mlHierarchyAssignment.findHierarchy(defaultRole.clusterId, defaultRole.departmentId, defaultRole.subDepartmentId ,defaultRole.roleId, defaultRole.subChapterId)
+          } catch (e){
+            canUpdateAllTransactions = false;
+            console.log('Not available in hierarchy')
+          }
+        }
+      }else{
+        canUpdateAllTransactions = false;
+      }
     }
-    if(hierarchyDesicion===true){
-      successCount++
-      MlEmailNotification.onAdminAssigned(collection,transaction);
-      MlSMSNotification.AdminAssignedToUser(collection,transaction);
-      MlNotificationController.onUserAssigned(collection,transaction);
+
+    if(canUpdateAllTransactions){
+      if(trans && trans.allocation && trans.allocation.assigneeId){
+        hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(transaction,collection,context.userId,trans.allocation.assigneeId)
+      }else{
+        hierarchyDesicion = mlHierarchyAssignment.assignTransaction(transaction,collection,context.userId,params.user)
+      }
+      if(hierarchyDesicion===true){
+        successCount++
+      }
     }
+  }
   })
   //get user details iterate through profiles match with role and get department and update allocation details.
 
-  if(hierarchyDesicion === true && successCount == transactions.length) {
-    let user = mlDBController.findOne('users', {_id: params.user}, context)
+  if(hierarchyDesicion === true && successCount == transactions.length && canUpdateAllTransactions) {
 
     let date=new Date();
     let allocationObj = MlStatusRepo.getStatusDefinition("ADM_ASSIGN_COMP", "allocation");
@@ -83,28 +116,49 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
       subDepartmentId     : params.subDepartment,
       allocationStatus    : allocationObj&&allocationObj.code?allocationObj.code:"",
     }
+
     //find hierarchy
-    let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role, params.subChapter)
-    let updateCount = 0
-    transactions.map(function (trans) {
-      if(hierarchy){
-        let id =mlDBController.update(collection, {transactionId:trans},
-          {allocation:allocation,
-            // status:"WIP",
-            //userId:params.user,
-            hierarchy:hierarchy._id,
-            transactionUpdatedDate:date}
-          , {$set: true},context)
-        if (id) {
-          updateCount++
-        }
-      }else{
+    if(!hierarchy){
+      try{
+        hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role, params.subChapter)
+      }catch (e){
         let code = 400;
         let result = {message:"Not available in hierarchy"}
         let response = new MlRespPayload().errorPayload(result, code);
         return response
       }
-    })
+    }
+    let updateCount = 0
+    if(canUpdateAllTransactions){
+      transactions.map(function (trans) {
+        if(hierarchy){
+          let id =mlDBController.update(collection, {transactionId:trans},
+            {allocation:allocation,
+              // status:"WIP",
+              //userId:params.user,
+              hierarchy:hierarchy._id,
+              transactionUpdatedDate:date}
+            , {$set: true},context)
+          if (id) {
+            updateCount++
+            MlEmailNotification.onAdminAssigned(collection,trans);
+            MlSMSNotification.AdminAssignedToUser(collection,trans);
+            MlNotificationController.onUserAssigned(collection,trans);
+          }
+        }else{
+          let code = 400;
+          let result = {message:"Not available in hierarchy"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          return response
+        }
+      })
+    }else{
+      let code = 400;
+      let result = {message:"Not available in hierarchy"}
+      let response = new MlRespPayload().errorPayload(result, code);
+      return response
+    }
+
     if(updateCount>0){
       let code = 200;
       let result = {transactionId: ''}

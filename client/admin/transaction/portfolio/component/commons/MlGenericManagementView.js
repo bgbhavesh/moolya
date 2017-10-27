@@ -9,6 +9,7 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
 import Moolyaselect from '../../../../commons/components/MlAdminSelectWrapper'
 import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 var FontAwesome = require('react-fontawesome');
 
@@ -157,7 +158,7 @@ export default class MlGenericManagementView extends React.Component {
                         return (
                           <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                             <div className="team-block" name="funding_01">
-                              <img src={genderImage} className="team_img"/>
+                              <img src={generateAbsolutePath(genderImage)} className="team_img"/>
                               <h3>
                                 {details.firstName} <br /><b>{details.designation}</b>
                               </h3>
@@ -260,7 +261,7 @@ export default class MlGenericManagementView extends React.Component {
                                   <form>
                                     <div className="form-group">
                                       <div className="previewImg ProfileImg">
-                                        <img src={genderImage}/>
+                                        <img src={generateAbsolutePath(genderImage)}/>
                                       </div>
                                     </div>
                                     <br className="brclear"/>

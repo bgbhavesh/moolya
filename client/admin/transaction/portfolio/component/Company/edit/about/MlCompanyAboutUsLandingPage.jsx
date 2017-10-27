@@ -6,6 +6,7 @@ var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlPortfolioCompanyAboutsUsTabs from './MlPortfolioCompanyAboutsUsTabs'
 import {fetchDetailsCompanyActionHandler} from '../../../../actions/findCompanyPortfolioDetails'
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlCompanyAboutUsLandingPage extends Component{
   constructor(props){
@@ -67,7 +68,7 @@ export default class MlCompanyAboutUsLandingPage extends Component{
         })
         if(logos.length>0){
              aboutUsImages=logos.map(function (items,id) {
-               return ( <img src={items.fileUrl} key={id}/>)
+               return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
               })
         }

@@ -5,6 +5,7 @@ import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfol
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -157,7 +158,7 @@ export default class MlCompanyAboutUs extends React.Component{
     const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     }));

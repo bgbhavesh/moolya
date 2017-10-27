@@ -4,6 +4,8 @@ import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionH
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage'
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 export default class MlAppServiceProviderListView extends Component {
 
   async viewDetails(portfolioId, e) {
@@ -28,7 +30,7 @@ export default class MlAppServiceProviderListView extends Component {
               <span>{provider.accountType}</span>
             </div>
             <h3>{provider.about&&provider.about.aboutTitle?provider.about.aboutTitle:""}</h3>
-            {provider.profileImage ? <CDNImage src={provider.profileImage} className="c_image"/> :
+            {provider.profileImage ? <CDNImage src={generateAbsolutePath(provider.profileImage)} className="c_image"/> :
               <div className="list_icon">
                 <span className="ml my-ml-Service-Providers"></span>
               </div>}

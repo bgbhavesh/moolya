@@ -12,7 +12,9 @@ import {findAnnotations} from "../../../../../../commons/annotator/findAnnotatio
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlLoader from '../../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlServiceProviderViewAbout extends React.Component {
 
   constructor(props) {
@@ -178,7 +180,7 @@ export default class MlServiceProviderViewAbout extends React.Component {
                             <div className="media">
                                 <div className="media-left">
                                     <a href="">
-                                        <img className="media-object" src={image}/>
+                                        <img className="media-object" src={generateAbsolutePath(image)}/>
                                     </a>
                                 </div>
 

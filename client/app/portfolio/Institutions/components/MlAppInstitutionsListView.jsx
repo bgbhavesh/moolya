@@ -6,6 +6,8 @@ import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionH
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 export default class MlAppInstitutionListView extends Component {
   /**
    * @props isExplore
@@ -62,7 +64,7 @@ export default class MlAppInstitutionListView extends Component {
             <div className="regular"><span>{intitution.accountType}</span></div>
             <div className="company_header">
               {intitution.profileImage && intitution.profileImage ?
-                <CDNImage src={intitution.profileImage} className="c_image"/> :
+                <CDNImage src={generateAbsolutePath(intitution.profileImage)} className="c_image"/> :
                 <CDNImage src="/images/no_image.png" />}
             </div>
             <h3>{intitution.firstName}<br/>

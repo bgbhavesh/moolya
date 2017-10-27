@@ -8,6 +8,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 /**
  * export of the default component
@@ -56,7 +57,7 @@ export default class MlAppIdeatorListView extends Component {
                             <span>{ideator.accountType}</span>
                           </div>
                           <h3>{ideator.name}</h3>
-                          {ideator.profileImage ? <CDNImage src={ideator.profileImage} className="c_image"/> :
+                          {ideator.profileImage ? <CDNImage src={generateAbsolutePath(ideator.profileImage)} className="c_image"/> :
                             <div className="list_icon">
                               <span className="ml my-ml-Ideator"></span>
                             </div>}

@@ -252,7 +252,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
     if (portfolioDetails) {
       let tempObject = {
         portfolioId: portfolioDetails._id,
-        isPrivate: false
+        isPrivate: true
       }
       let tempArray = []
       tempArray.push(tempObject)
@@ -263,20 +263,34 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
       return libraryDataAdmin;
     }
   } else {
-    let currentProfile = context.url.split("/")
-    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile[6]}, context)
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
     if (portfolioDetails) {
       let tempObject = {
         portfolioId: portfolioDetails._id,
-        isPrivate: false
+        isPrivate: true
       }
+      var fileExistCheck = mlDBController.find('MlLibrary', {'portfolioReference.portfolioId': args.portfoliodetailsId}, context).fetch();
+      let check =fileExistCheck.map(function(fileName) {
+        if(fileName.fileName === args.files.fileName){
+          return 0;
+        } else {
+          return 1;
+        }
+      })
       let tempArray = []
-      tempArray.push(tempObject)
-      args.files.inCentralLibrary = true
-      args.files.portfolioReference = tempArray;
-      args.files.userId = context.userId;
-      if (args.portfoliodetailsId) {
-        response = mlDBController.insert('MlLibrary', args.files, context)
+      if(!check.includes(0)){
+        tempArray.push(tempObject)
+        args.files.inCentralLibrary = true
+        args.files.portfolioReference = tempArray;
+        args.files.userId = context.userId;
+        if (args.portfoliodetailsId) {
+          response = mlDBController.insert('MlLibrary', args.files, context)
+          let code = 200;
+          response = new MlRespPayload().successPayload('File moved to library', code);
+        }
+      } else {
+        let code = 404;
+        response = new MlRespPayload().errorPayload('File name already Exist', code);
       }
       return response;
     }

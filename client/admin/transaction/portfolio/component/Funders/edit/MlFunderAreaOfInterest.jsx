@@ -12,12 +12,16 @@ import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldV
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
 import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
+
 export default class MlFunderAreaOfInterest extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
       loading: true,
       data: {},
+      fileName:"",
       funderAreaOfInterest: [],
       popoverOpen: false,
       selectedIndex: -1,
@@ -216,8 +220,9 @@ export default class MlFunderAreaOfInterest extends Component {
       // this.sendDataToParent()
     })
   }
-  onLogoFileUpload(fileInfo, image) {
+  onLogoFileUpload(image, fileInfo) {
     let file = image;
+    this.setState({ fileName: fileInfo.name});
     let fileName = fileInfo.name;
     let data = {
       moduleName: "PORTFOLIO",
@@ -234,7 +239,7 @@ export default class MlFunderAreaOfInterest extends Component {
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -257,7 +262,12 @@ export default class MlFunderAreaOfInterest extends Component {
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -326,11 +336,11 @@ export default class MlFunderAreaOfInterest extends Component {
     this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
   }
 
-  handleUploadAvatar(image, e) {
+  handleUploadAvatar(image, file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(e, image);
+    this.onLogoFileUpload(image, file);
   }
 
   toggleModal() {
@@ -392,7 +402,7 @@ export default class MlFunderAreaOfInterest extends Component {
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                                 <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                  <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} /></div>
+                                  <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} /></div>
                                 </div>
                                 <h3>{details.industryTypeName}</h3>
                               </div>

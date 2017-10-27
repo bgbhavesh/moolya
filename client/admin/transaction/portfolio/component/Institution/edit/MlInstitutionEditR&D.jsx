@@ -25,7 +25,6 @@ export default class MlInstitutionEditRD extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       institutionRDList:[],
-      selectedVal:null,
       selectedObject:"default"
     };
     this.tabName = this.props.tabName || ""
@@ -81,7 +80,13 @@ export default class MlInstitutionEditRD extends React.Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionRD;
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.researchAndDevelopment) {
       setObject = this.context.institutionPortfolio.researchAndDevelopment
@@ -173,7 +178,6 @@ export default class MlInstitutionEditRD extends React.Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionRD;
     let institutionRD = _.cloneDeep(awards);
@@ -195,7 +199,7 @@ export default class MlInstitutionEditRD extends React.Component{
     })
     institutionRD = arr;
     this.setState({institutionRD:institutionRD})
-    this.props.getRDDetails(institutionRD, this.state.privateKey, requiredFields);
+    this.props.getRDDetails(institutionRD, this.state.privateKey);
   }
 
   onLogoFileUpload(e){

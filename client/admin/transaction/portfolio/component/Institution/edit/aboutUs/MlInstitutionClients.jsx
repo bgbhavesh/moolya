@@ -88,7 +88,13 @@ export default class MlInstitutionClients extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionClients;
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.clients) {
       setObject = this.context.institutionPortfolio.clients
@@ -127,7 +133,6 @@ export default class MlInstitutionClients extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let clients = this.state.institutionClients;
     let institutionClients = _.cloneDeep(clients);
@@ -150,7 +155,7 @@ export default class MlInstitutionClients extends Component{
     })
     institutionClients = arr;
     this.setState({institutionClients:institutionClients})
-    this.props.getInstitutionClients(institutionClients, this.state.privateKey, requiredFields);
+    this.props.getInstitutionClients(institutionClients, this.state.privateKey);
 
   }
 

@@ -179,6 +179,18 @@ html(prefix='og: http://ogp.me/ns#')
                     img(src='/images/branches_banner.png')
               else
                 h2 Private Content
+
+            .pageIntrapreneur
+              if(!privateFields.intrapreneurRecognition)
+                if(intrapreneurRecognition && intrapreneurRecognition.length > 0)
+                  include management
+                  +portFolioSlides(intrapreneurRecognition)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
             .pageRandD
               if(!privateFields.researchAndDevelopment)
                 if(researchAndDevelopment && researchAndDevelopment.length > 0)
@@ -189,6 +201,7 @@ html(prefix='og: http://ogp.me/ns#')
                     img(src='/images/branches_banner.png')
               else
                 h2 Private Content
+
             .pageIncubatorSectors
               if(!privateFields.sectorsAndServices)
                 if(sectorsAndServices && sectorsAndServices.length > 0 )
@@ -201,7 +214,7 @@ html(prefix='og: http://ogp.me/ns#')
 
             .pageCSR
               if(!privateFields.policy)
-                if(policy && policy.CSR > 0 )
+                if(policy && policy.length > 0 )
                   p
                     | !{policy}
 

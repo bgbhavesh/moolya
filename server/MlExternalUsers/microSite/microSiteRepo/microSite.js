@@ -242,8 +242,16 @@ async function INS(portFolio, query) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
+    if (resultINSPortFolio.sectorsAndServices) {
+      portFolio.sectorsAndServices = resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
 
+
+    }
+
+    getIntrapreneurInfo(portFolio, resultINSPortFolio);
     getManagementInfo(portFolio, resultINSPortFolio);
+    getAwardsRewards(portFolio, resultINSPortFolio);
+    getResearchDev(portFolio, resultINSPortFolio);
     getLookingForDescription(portFolio, resultINSPortFolio);
     appendKeywords(portFolio);
   }
@@ -377,7 +385,21 @@ function getResearchDev(portFolio, resultPortfolio) {
   }
   portFolio.researchAndDevelopment = researchAndDevelopmentPortFolio;
 }
+function getIntrapreneurInfo(portFolio, resultPortfolio) {
+  let intrapreneurFolio = []
+  let intrapreneurs = resultPortfolio.intrapreneurRecognition;
+  if (intrapreneurs) {
+    intrapreneurs.forEach(function (intrapreneur) {
+      intrapreneurFolio.push({
+        logo: intrapreneur.logo ? generateAbsolutePath(intrapreneur.logo.fileUrl) : '',
+        name: intrapreneur.intrapreneurName ? intrapreneur.intrapreneurName : '',
+        description: intrapreneur.intrapreneurDescription ? intrapreneur.intrapreneurDescription : '',
+      })
+    })
 
+  }
+  portFolio.intrapreneurRecognition = intrapreneurFolio;
+}
 function getClients(portFolio, resultPortfolio) {
   let clientsFolio = []
   let clients = resultPortfolio.clients;
@@ -430,7 +452,7 @@ function getCMPMenu(dynamicLinksClasses) {
   return [
     {name: 'About', className: dynamicLinksClasses.About},
     {name: 'Management', className: dynamicLinksClasses.Management},
-    {name: 'Awards', className: 'pageAwardsandRewards'}, //Special Case where awards are treated as slides
+    {name: 'Awards', className: dynamicLinksClasses.Awards}, //Special Case where awards are treated as slides
     {name: 'Incubator Sectors', className: dynamicLinksClasses.Incubator_Sectors},
     {name: 'CSR', className: dynamicLinksClasses.CSR},
     {name: 'R&D', className: dynamicLinksClasses.RandD},
@@ -508,7 +530,7 @@ async function getBranches(portFolio, resultPortFolioBranches) {
 function getDynamicLinksClasses() {
   let dynamicLinksClasses = {
     'About': 'pageAboutDiscription',
-    'Awards': 'pageAwards',
+    'Awards': 'pageAwardsandRewards',
     'Looking_For': 'pageLookingFor',
     'Social_Links': 'pageSocialLinks',
     'Keywords': 'pageKeywords',

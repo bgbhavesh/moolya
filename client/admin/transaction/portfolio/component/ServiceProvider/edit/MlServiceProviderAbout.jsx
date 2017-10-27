@@ -7,6 +7,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import _ from "lodash";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlServiceProviderAbout extends Component {
   constructor(props, context) {
@@ -158,7 +159,7 @@ export default class MlServiceProviderAbout extends Component {
     const aboutImages = aboutImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });

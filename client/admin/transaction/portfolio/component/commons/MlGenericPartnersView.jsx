@@ -7,6 +7,7 @@ import {render} from 'react-dom';
 import ScrollArea from "react-scrollbar";
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 var FontAwesome = require('react-fontawesome');
 
@@ -111,7 +112,7 @@ export default class MlGenericPartnersView extends React.Component {
                              key={idx}>
                           <div className="list_block notrans funding_list">
                             <div>
-                              <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
+                              <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
                               <h3>{details.firstName?details.firstName:""}</h3>
                             </div>
                           </div>
@@ -131,7 +132,7 @@ export default class MlGenericPartnersView extends React.Component {
                     return (
                       <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                         <div className="team-block" name="funding_01">
-                          <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                          <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} className="team_img"/>
                           <h3>
                             {details.firstName?details.firstName:""} <br />
                           </h3>

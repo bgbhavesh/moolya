@@ -13,6 +13,8 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlServiceProviderAwards extends Component {
   constructor(props, context) {
@@ -381,7 +383,7 @@ export default class MlServiceProviderAwards extends Component {
                             checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.awardName ? details.awardName : ""}</h3>
                           </div>
                         </a>

@@ -4,7 +4,9 @@ import ScrollArea from "react-scrollbar";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
-import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
+import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler';
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -143,7 +145,7 @@ export default class MlInstitutionAboutUs extends React.Component{
     const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     }));

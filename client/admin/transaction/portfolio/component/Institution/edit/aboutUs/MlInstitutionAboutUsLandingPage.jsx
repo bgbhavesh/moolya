@@ -5,6 +5,8 @@ var FontAwesome = require('react-fontawesome');
 var Rating = require('react-rating');
 import MlInstitutionTab from './MlPortfolioInstitutionAboutsUsTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../actions/findPortfolioInstitutionDetails'
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+
 import underscore from "underscore";
 
 
@@ -67,7 +69,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
         })
         if(logos.length>0){
              aboutUsImages=logos.map(function (items,id) {
-               return ( <img src={items.fileUrl} key={id}/>)
+               return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
               })
         }

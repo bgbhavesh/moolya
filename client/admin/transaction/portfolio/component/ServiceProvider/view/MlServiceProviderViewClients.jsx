@@ -9,6 +9,7 @@ import NoData from '../../../../../../commons/components/noData/noData';
 import ScrollArea from 'react-scrollbar';
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlServiceProviderViewClients extends React.Component {
@@ -206,7 +207,7 @@ export default class MlServiceProviderViewClients extends React.Component {
                           return (
                             <div className="col-lg-2 col-md-4 col-sm-4" key={idx} onClick={that.onChangeIndex.bind(that)}>
                               <div className="list_block">
-                                <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
+                                <div className="hex_outer"><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                                 <h3>{details.companyName && details.companyName}</h3>
                               </div>
                             </div>)

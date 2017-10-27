@@ -372,7 +372,7 @@ export default class MlCustomFilterComponent extends Component {
                   <input id="check2" type="checkbox" name="" value=""/><label htmlFor="check2"><span><span></span></span>option2</label>
                   </div>
                 </div>*/}
-
+              <br className="brclear" />
               <div className="ml_icon_btn">
                 <a href=""  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span
                   className="ml ml-save"></span></a>

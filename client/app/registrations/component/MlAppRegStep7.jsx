@@ -10,8 +10,7 @@ export default class MlAppRegStep7 extends React.Component {
   render() {
     return (
       <div className="step_form_wrap step5">
-
-
+        <h3>Coming Soon....</h3>
       </div>
     )
   }

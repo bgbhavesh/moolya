@@ -1,5 +1,4 @@
 import React, {Component, PropTypes}  from "react";
-import {render} from "react-dom";
 import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
 import MlIdeatorProblemsAndSolutions from "../Ideator/MlIdeatorProblemsAndSolutions";
@@ -93,7 +92,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Intellectual Property And Trademark",
+        title: "Intellectual Property And Trademarks",
         component: <MlIdeatorIntellectualPlanningAndTrademark key="7" tabName="intellectualPlanning"
                                                               getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}
                                                               portfolioDetailsId={this.props.portfolioDetailsId}/>

@@ -18,6 +18,7 @@ import CropperModal from '../../../commons/components/cropperModal';
 import {appClient} from '../../core/appConnection';
 import {smsUserOtpHandler, verifyUserMobileNumberHandler, resendUserSmsOtpHandler} from '../../../commons/verificationActionHandler';
 import _ from "lodash";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 class MlAppMyProfile extends Component {
   constructor(props) {
@@ -393,7 +394,7 @@ class MlAppMyProfile extends Component {
       }]
   };
     let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
-    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:generateAbsolutePath(this.state.profileImage);
 
     let isMobileVerified = false;
     if(this.state.userDetails&&this.state.userDetails.mobileNumbers){
@@ -524,16 +525,15 @@ class MlAppMyProfile extends Component {
                       <FontAwesome name="calendar" placeholder="Date of Birth" className="password_icon" readOnly="true" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
-
-                    {this.state.showPasswordFields ?
-                      <div className="form-group mandatory">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                        <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
-
-                      </div> : <div></div>}
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
                     {this.state.PasswordReset?(
                       <div>
+                        {this.state.showPasswordFields ?
+                          <div className="form-group mandatory">
+                            <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
+                            <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
+
+                          </div> : <div></div>}
                       <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                         <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>

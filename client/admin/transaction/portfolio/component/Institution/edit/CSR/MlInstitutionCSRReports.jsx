@@ -1,7 +1,7 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchInstitutionPortfolioReports} from '../../../../actions/findPortfolioInstitutionDetails'
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlInstitutionCSRReports extends React.Component{
   constructor(props){
@@ -103,7 +103,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -116,7 +116,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -129,7 +129,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -142,7 +142,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -155,7 +155,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -168,7 +168,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -181,7 +181,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -194,7 +194,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -207,7 +207,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )
@@ -220,7 +220,7 @@ export default class MlInstitutionCSRReports extends React.Component{
           const display = data.map(function(docs){
             return(
               <div className="thumbnail">
-                <img src={docs.fileUrl} style={{'width':'100px'}} />
+                <img src={generateAbsolutePath(docs.fileUrl)} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
             )

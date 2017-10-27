@@ -4,6 +4,7 @@ import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionH
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlLoader from "../../../../commons/components/loader/loader";
 import NoDataList from '../../../../commons/components/noData/noDataList';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 /**
  * import of libs and routes
  * */
@@ -34,7 +35,7 @@ export default class MlAppFunderListView extends Component {
           <div className="ideators_list_block">
             {/* <div className="premium"><span>{funder.accountType}</span></div>*/}
             <h3>{funder.funderAbout ? funder.funderAbout.firstName : ''}</h3>
-            {funder.profileImage ? <CDNImage src={funder.profileImage} className="c_image"/> :
+            {funder.profileImage ? <CDNImage src={generateAbsolutePath(funder.profileImage)} className="c_image"/> :
               <div className="list_icon">
                 <span className="ml my-ml-Investors"></span>
               </div>}

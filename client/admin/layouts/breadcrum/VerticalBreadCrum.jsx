@@ -263,7 +263,7 @@ function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
     });
     if (breadCrum.subModule) {
       currentModule.subMenu.map((object) => {
-        if ((object.uniqueId).includes(breadCrum.module)) {
+        if ((object.uniqueId).includes(breadCrum.module)&&object.uniqueId !== 'templates_History') {
           list[1].linkUrl = object.link;
         }
       });

@@ -8,6 +8,7 @@ import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDe
 import NoData from '../../../../../../commons/components/noData/noData'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlServiceProviderViewAwards extends React.Component {
@@ -151,7 +152,7 @@ export default class MlServiceProviderViewAwards extends React.Component {
                       {awardsArray && awardsArray.map(function (details, idx) {
                         return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                           <div className="team-block">
-                            <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}
+                            <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}
                                  className="team_img"/>
                             <h3>
                               {details.awardName && details.awardName}

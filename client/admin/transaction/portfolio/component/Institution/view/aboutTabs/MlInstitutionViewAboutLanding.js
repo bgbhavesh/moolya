@@ -9,6 +9,7 @@ var Rating = require('react-rating');
 import MlInstitutionViewAboutusTabs from './MlInstitutionViewAboutusTabs'
 import {fetchDetailsInstitutionActionHandler} from '../../../../../portfolio/actions/findPortfolioInstitutionDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlInstitutionViewAboutLanding extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ export default class MlInstitutionViewAboutLanding extends Component {
         })
         if (logos.length > 0) {
           aboutUsImages = logos.map(function (items, id) {
-            return ( <img src={items.fileUrl} key={id}/>)
+            return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
           })
         }

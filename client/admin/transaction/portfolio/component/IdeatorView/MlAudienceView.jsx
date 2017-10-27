@@ -12,6 +12,8 @@ import _ from 'lodash'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlIdeatorAudience extends React.Component{
   constructor(props, context){
@@ -214,7 +216,7 @@ export default class MlIdeatorAudience extends React.Component{
     const audienceImages = audienceImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <img id="output" src={m.fileUrl}/>
+          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });

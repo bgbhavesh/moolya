@@ -10,6 +10,7 @@ import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfol
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "achievements"
 
@@ -328,7 +329,7 @@ export default class MlCompanyAchivements extends Component{
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.achievementName?details.achievementName:""}</h3>
                           </div>
                         </a>

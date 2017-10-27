@@ -192,7 +192,7 @@ export default class SharePopOver extends React.Component {
     let data = that.state.teamData || [];
     let datas = data.map(function(value, index) {
       return (
-          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
       )
     })
     return datas;
@@ -268,7 +268,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       if(value.name.match(search)) {
         return (
-            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
         )
       }
       })

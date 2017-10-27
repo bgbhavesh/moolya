@@ -835,12 +835,14 @@ class Library extends React.Component {
    * @returns Images - type:: Object
    */
 
+
   images() {
     let that = this;
     let imageData =  this.state.imageSpecifications || [];
     const Images = imageData.map(function (show, id) {
       return (
-        <div className="thumbnail" key={id}>
+
+        <div className="thumbnail swiper-slide" key={id}>
           {!that.state.explore && !that.state.hideLock ?
               <FontAwesome onClick={() => that.toggleImageLock(show, id)}  name={ show.isPrivate ?'lock':'unlock' } />
               :
@@ -875,7 +877,7 @@ class Library extends React.Component {
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
-          <div className="thumbnail" key={id}>
+          <div className="thumbnail swiper-slide"  key={id}>
             <div className="input_types">
               <input id={"checkboxImg" + id} type="checkbox" name={"checkboxImg" + id} value="1" onChange={that.onFileSelect.bind(that, id, 'image')} />
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
@@ -914,7 +916,7 @@ class Library extends React.Component {
     let popImageData = that.state.sharedFiles || [];
     const popImages = popImageData.map(function (show, id) {
       return (
-        <div className="thumbnail" key={id}>
+        <div className="thumbnail swiper-slide" key={id}>
           <img src={generateAbsolutePath(show.file.url)} style={{ 'width': '200px', 'height': '150px' }} />
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
@@ -934,7 +936,7 @@ class Library extends React.Component {
     let templateData = this.state.isLibrary ? this.state.templateDetails || [] : this.state.templateSpecifications || [];
     const Templates = templateData.map(function (show, id) {
       return (
-        <div className="thumbnail" key={id}>
+        <div className="thumbnail swiper-slide" key={id}>
 
           {
             !that.state.explore && !that.state.hideLock ?
@@ -972,7 +974,7 @@ class Library extends React.Component {
     const popTemplates = popTemplateData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
-          <div className="thumbnail" key={id}>
+          <div className="thumbnail swiper-slide" key={id}>
             <div className="input_types">
               <input id={"checkboxTemp" + id} type="checkbox" name={"checkboxTemp" + id} value="1" onChange={that.onFileSelect.bind(that, id, 'template')} />
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
@@ -1017,7 +1019,7 @@ class Library extends React.Component {
     let videodata = this.state.isLibrary ? this.state.videoDetails || [] : this.state.videoSpecifications || [];
     const videos = videodata.map(function (show, id) {
       return (
-        <div className="thumbnail" key={id}>
+        <div className="thumbnail swiper-slide" key={id}>
 
           {
             !that.state.explore && !that.state.hideLock ?
@@ -1059,7 +1061,7 @@ class Library extends React.Component {
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
-          <div className="thumbnail" key={id}>
+          <div className="thumbnail swiper-slide" key={id}>
             <div className="input_types">
               <input id={"checkboxTemp" + id} type="checkbox" name={"checkboxTemp" + id} value="1" onChange={that.onFileSelect.bind(that, id, 'video')} />
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
@@ -1109,7 +1111,7 @@ class Library extends React.Component {
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
     const Documents = documentData.map(function (show, id) {
       return (
-        <div className="thumbnail" key={id}>
+        <div className="thumbnail swiper-slide" key={id}>
 
           {
             !that.state.explore && !that.state.hideLock ?
@@ -1147,7 +1149,7 @@ class Library extends React.Component {
     const popDocuments = popDocumentData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
-          <div className="thumbnail" key={id}>
+          <div className="thumbnail swiper-slide" key={id}>
             <div className="input_types">
               <input id={"checkboxTemp" + id} type="checkbox" name={"checkboxTemp" + id} value="1" onChange={that.onFileSelect.bind(that, id, 'document')} />
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
@@ -1313,6 +1315,32 @@ class Library extends React.Component {
         $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'auto' });
       }
       $(this).parents('.panel').find(".show-information").toggle(200);
+    });
+
+    var mySwiper = new Swiper('.manage_tasks', {
+      speed: 400,
+      spaceBetween:20,
+      slidesPerView:'4',
+      pagination: '.swiper-pagination',
+      paginationClickable: true
+    });
+    $(".see-more").click(function(){
+      $(this).parents('.library-wrap').removeClass("col-lg-6 col-md-6 col-sm-12").addClass("col-md-12");
+      $(this).parents('.library-wrap').find(".see-more").hide();
+      $(this).parents('.library-wrap').find(".see-less").show();
+      $(this).parents('.library-wrap').find(".swiper-container").removeClass("swiper-container");
+      $(this).parents('.library-wrap').find(".swiper-wrapper").removeClass("swiper-wrapper").addClass("stop_slide");
+      //$(this).parents('.library-wrap').find(".swiper-wrapper2").removeClass("swiper-");
+      $(this).parents('.library-wrap').removeClass("hide_panel");
+      $(".hide_panel").hide();
+    });
+    $(".see-less").click(function(){
+      $(this).parents('.library-wrap').addClass("col-lg-6 col-md-6 col-sm-12").removeClass("col-md-12");
+      $(this).parents('.library-wrap').find(".see-less").hide();
+      $(this).parents('.library-wrap').find(".see-more").show();
+      $("div.toggle1, div.toggle3, div.toggle4, div.toggle5").show();
+      $(".hide_panel").show();
+      $(this).parents('.library-wrap').addClass("hide_panel");
     });
 
   }
@@ -1623,7 +1651,7 @@ class Library extends React.Component {
           </div>
         </div>
         {!that.state.showSharedFiles ? <div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left hide_panel">
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Images
@@ -1634,6 +1662,8 @@ class Library extends React.Component {
                   show={this.state.showProfileModal}
                   toggleShow={this.toggleModal}
                 />
+                <span className="see-more pull-right"><a href="">See More</a></span>
+                <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_client">
                     <a href="javascript:void(0);">
@@ -1652,15 +1682,21 @@ class Library extends React.Component {
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
+                <div className="swiper-container manage_tasks">
+                  <div className="swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right hide_panel">
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Videos
+                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask" id="create_video">
                     <a href="javascript:void(0);">
@@ -1673,13 +1709,17 @@ class Library extends React.Component {
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
+                <div className="swiper-container manage_tasks">
+                  <div className="swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : mp4 <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <br className="brclear" />
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left hide_panel">
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Templates
@@ -1690,6 +1730,8 @@ class Library extends React.Component {
                   show={this.state.showProfileModal1}
                   toggleShow={this.toggleModal1}
                 />
+                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_template">
                     <a href="javascript:void(0);">
@@ -1707,15 +1749,21 @@ class Library extends React.Component {
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
+                <div className="swiper-container manage_tasks">
+                  <div className="swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
-              </div>
+                  </div>
+                </div>
+                  </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right hide_panel">
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Documents
+                <span className="see-more pull-right"><a href="" >See More</a></span>
+                <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
@@ -1732,9 +1780,13 @@ class Library extends React.Component {
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
+                <div className="swiper-container manage_tasks">
+                  <div className="swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}
                 <p className="show-information" style={{ 'display': 'none' }}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
-              </div>
+                  </div>
+                </div>
+                  </div>
             </div>
           </div>
         </div> : <SharedLibrary data={this.state.sharedFiles} />}

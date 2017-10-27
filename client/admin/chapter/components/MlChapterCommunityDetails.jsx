@@ -71,8 +71,14 @@ class MlChapterCommunityDetails extends React.Component {
     return resp;
   }
 
-  async handleSuccess(response) {
-    window.history.back()
+  handleSuccess(response) {
+    if (response && response.unAuthorized) {
+      toastr.error("Not Authorised");
+      window.history.back()
+    } else if (response && !response.unAuthorized) {
+      toastr.success("Saved Successfully");
+      window.history.back()
+    }
   };
 
   async findComDef() {

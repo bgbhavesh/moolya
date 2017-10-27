@@ -32,9 +32,7 @@ export default class MlCompanyManagement extends Component {
       privateKey: {},
       management: [],
       managementList: [],
-      // indexArray:[],
       selectedIndex: -1,
-      // arrIndex:"",
       managementIndex: "",
       responseImage: "",
       title: '',
@@ -228,7 +226,13 @@ export default class MlCompanyManagement extends Component {
   }
 
   onSaveAction() {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.managementList
     if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.management) {
       setObject = this.context.companyPortfolio.management
@@ -244,7 +248,6 @@ export default class MlCompanyManagement extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let management1 = this.state.management;
     let management = _.cloneDeep(management1);
@@ -268,7 +271,7 @@ export default class MlCompanyManagement extends Component {
     })
     management = managementArr;
     this.setState({ management: management })
-    this.props.getManagementDetails(management, this.state.privateKey, requiredFields)
+    this.props.getManagementDetails(management, this.state.privateKey)
   }
 
   onLogoFileUpload(fileInfo, image) {
@@ -407,10 +410,6 @@ export default class MlCompanyManagement extends Component {
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
-                      {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title}  onBlur={this.handleBlur}/>*/}
-                      {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isTitlePrivate" onClick={this.onClick.bind(this, "isTitlePrivate")}/>*/}
-                      {/*</div>*/}
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}
                           selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery} queryOptions={titleOption}
@@ -437,11 +436,6 @@ export default class MlCompanyManagement extends Component {
                                data-errMsg="Last Name is required"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName", "isLastNamePrivate")} />
                       </div>
-
-                      {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  onBlur={this.handleBlur}/>*/}
-                      {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>*/}
-                      {/*</div>*/}
                       <div className="form-group mandatory">
                         <span className={`placeHolder ${genderActive}`}>Gender</span>
                         <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender}

@@ -438,14 +438,14 @@ if (Meteor.isServer) {
             {
               "link": "/admin/community/history",
               "name": "History",
-              "uniqueId": "community_Histroy_Details",
+              "uniqueId": "community_History_Details",
               "isLink": true,
               "isMenu": true,
               "image": "",
               "dynamicLink": true,
               "dynamicLinkHandler": "",
               "subMenusId": "community",
-              "subMenuMappingId": "community_Histroy_Details"
+              "subMenuMappingId": "community_History_Details"
             },
             // {
             //   "link" : "/admin/community/assignusers",
@@ -972,7 +972,7 @@ if (Meteor.isServer) {
               "link": "/admin/templates/templateList",
               "name": "Template List",
               "uniqueId": "templates_List",
-              "subMenuMappingId": "",
+              "subMenuMappingId": "templates_List",
               "subMenusId": "templates",
               "isLink": true,
               "isMenu": false,
@@ -982,7 +982,7 @@ if (Meteor.isServer) {
                   "link": "/templates/assignTemplate/:id",
                   "name": "Edit Template",
                   "uniqueId": "templates_assignment_edit",
-                  "subMenuMappingId": "",
+                  "subMenuMappingId": "templates_List",
                   "subMenusId": "templates",
                   "isLink": true,
                   "isMenu": false,
@@ -992,7 +992,7 @@ if (Meteor.isServer) {
                       "link": "/templates/assignTemplate/",
                       "name": " Assign Template",
                       "uniqueId": "templates_assignment",
-                      "subMenuMappingId": "",
+                      "subMenuMappingId": "templates_List",
                       "subMenusId": "templates",
                       "isLink": true,
                       "isMenu": false,
@@ -1003,19 +1003,19 @@ if (Meteor.isServer) {
                 },
               ]
             },
-            /* {
+             {
              "link" : "/admin/templates/history",
              "name" : "History",
              "uniqueId" : "templates_History",
              "isLink" : true,
              "isMenu" : true,
              "image" : "",
-             "dynamicLink" : true,
+             "dynamicLink" : false,
              "dynamicLinkHandler" : "",
              "subMenusId":"templates",
-             "subMenuMappingId":""
-             },*/
-            {
+             "subMenuMappingId": "templates_History"
+             }/*,
+             {
               "link": "/admin/templates/history",
               "name": "History",
               "uniqueId": "templates_History",
@@ -1034,7 +1034,7 @@ if (Meteor.isServer) {
                   "image": ""
                 }
               ]
-            },
+            },*/
           ]
         },
         {

@@ -16,7 +16,7 @@ import MlFunderLookingFor from '../../../../admin/transaction/portfolio/componen
 import FunderCreateServicesView from '../../../../admin/transaction/portfolio/component/Funders/edit/beSpokeHandler'
 import MlBeSpokeListView from '../../../../admin/transaction/portfolio/component/Funders/edit/MlFunderServicesList'
 import {appClient} from '../../../core/appConnection'
-import LibraryParentContainer from '../../../../commons/components/portfolioLibrary/LibraryContainer'
+
 
 export default class MlAppFunderEditTabs extends Component {
   constructor(props) {
@@ -111,8 +111,8 @@ export default class MlAppFunderEditTabs extends Component {
         panelClassName: 'panel',
         title: "Library",
         name: "Library",
-        component: <LibraryParentContainer client={appClient} isAdmin={false} key="8"
-                                     getFunderLibrary={this.getFunderLibrary.bind(this)} componentToLoad={"PortfolioLibrary"}
+        component: <PortfolioLibrary client={appClient} isAdmin={false} key="8"
+                                     getFunderLibrary={this.getFunderLibrary.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

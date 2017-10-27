@@ -960,6 +960,9 @@ button:focus{outline: 0;}
 .requested_input .req_textarea_icon{ margin-right:5px;   top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
 .requested_input .req_textarea_icon.fa-lock{background: #ef4647; }
 
+.requested_input .view_req_textarea_icon{ margin-right:9px;   top: 75px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
+.requested_input .view_req_textarea_icon.fa-lock{background: #ef4647; }
+
 .requested_input .req_header_icon{ margin-right:20px;   top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
 .requested_input .req_header_icon.fa-lock{background: #ef4647; }
 

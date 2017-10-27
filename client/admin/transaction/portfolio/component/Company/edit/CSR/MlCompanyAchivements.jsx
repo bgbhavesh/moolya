@@ -76,7 +76,13 @@ export default class MlCompanyAchivements extends Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionAchievements
     if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.achievements ){
       setObject = this.context.companyPortfolio.achievements
@@ -101,20 +107,12 @@ export default class MlCompanyAchivements extends Component{
 
   onLockChange(fiedName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -180,7 +178,6 @@ export default class MlCompanyAchivements extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
@@ -202,7 +199,7 @@ export default class MlCompanyAchivements extends Component{
     })
     institutionAchievements = arr;
     this.setState({institutionAchievements:institutionAchievements})
-    this.props.getAchivements(institutionAchievements, this.state.privateKey, requiredFields);
+    this.props.getAchivements(institutionAchievements, this.state.privateKey);
   }
 
   onLogoFileUpload(e){

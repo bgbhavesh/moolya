@@ -13,6 +13,8 @@ import ScrollArea from 'react-scrollbar';
 import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
 import { fetchOfficeActionHandler, fetchMyConnectionActionHandler, getMoolyaAdminsActionHandler } from '../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath'
+
 
 export default class MlAppChooseTeam extends React.Component{
 
@@ -78,7 +80,7 @@ export default class MlAppChooseTeam extends React.Component{
           let userInfo = {
             name: user.name,
             profileId: user.profileId,
-            profileImage: user.profileImage,
+            profileImage: generateAbsolutePath(user.profileImage),
             userId: user.userId
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
@@ -95,7 +97,7 @@ export default class MlAppChooseTeam extends React.Component{
           let userInfo = {
             name: user.name,
             profileId: user.profileId,
-            profileImage: user.profileImage,
+            profileImage: generateAbsolutePath(user.profileImage),
             userId: user.userId
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
@@ -111,7 +113,7 @@ export default class MlAppChooseTeam extends React.Component{
         let users = resp.map(function (user) {
           let userInfo = {
             name: user.displayName,
-            profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+            profileImage: user.profileImage?generateAbsolutePath(user.profileImage):'/images/def_profile.png',
             userId: user._id
           };
           let isFind = team.users.find(function (teamUser){ return teamUser.userId == user._id });
@@ -372,7 +374,7 @@ export default class MlAppChooseTeam extends React.Component{
                         return (
                          <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                             <a href="">
-                              <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                              <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"} /><br />
                               <div className="tooltiprefer">
                                 <span>{user.name}</span>
                               </div>

@@ -101,7 +101,13 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionLookingFor
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.lookingFor)
       setObject = this.context.institutionPortfolio.lookingFor
@@ -110,15 +116,9 @@ export default class MlInstitutionEditLookingFor extends Component {
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
     var privateKey = {
       keyName: fieldName,
@@ -127,7 +127,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       index: this.state.selectedIndex,
       tabName: KEY
     }
-    this.setState({data: details, privateKey: privateKey}, function () {
+    this.setState({privateKey: privateKey}, function () {
       // this.sendDataToParent()
     })
   }
@@ -168,7 +168,6 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionLookingFor1 = this.state.institutionLookingFor;
     let institutionLookingFor = _.cloneDeep(institutionLookingFor1);
@@ -189,8 +188,7 @@ export default class MlInstitutionEditLookingFor extends Component {
 
     institutionLookingFor = arr;
     this.setState({institutionLookingFor: institutionLookingFor})
-    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey, requiredFields);
-
+    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey);
   }
 
 

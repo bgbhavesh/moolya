@@ -1091,6 +1091,9 @@ p{margin-top:10px;}
     margin:0px;padding:0px;
     li{
       float: left;position:relative;margin-right:20px;
+      .title{
+        width: 80px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; color: #fff; background: #273545; border-radius: 0 0 4px 4px;
+      }
      .fa{
           position: absolute; width: 20px; height: 20px; background: #ef4647; border-radius: 50%; color: #fff; line-height: 20px; font-size: 12px;     right: -10px; top: -5px; z-index: 999;}
         img{

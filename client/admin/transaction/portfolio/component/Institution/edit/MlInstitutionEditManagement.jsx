@@ -209,7 +209,13 @@ export default class MlInstitutionEditManagement extends Component{
   }
 
   onSaveAction() {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionManagementList
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.management) {
       setObject = this.context.institutionPortfolio.management
@@ -225,7 +231,6 @@ export default class MlInstitutionEditManagement extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionManagement1 = this.state.institutionManagement;
     let institutionManagement = _.cloneDeep(institutionManagement1);
@@ -249,7 +254,7 @@ export default class MlInstitutionEditManagement extends Component{
     })
     institutionManagement = managementArr;
     this.setState({institutionManagement:institutionManagement})
-    this.props.getManagementDetails(institutionManagement, this.state.privateKey, requiredFields)
+    this.props.getManagementDetails(institutionManagement, this.state.privateKey)
   }
 
   onLogoFileUpload(e){

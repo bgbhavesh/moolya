@@ -176,12 +176,10 @@ export default class SharePopOver extends React.Component {
     let data = that.state.selectedDatasToShare || [];
     let datas = data.map(function(value, index) {
       return (
-
-        <div className="thumbnail">
-          <FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
-       <img src={generateAbsolutePath(value.fileUrl)}style={{'width':'100px'}} />
-          <div id="images" className="title">{value.fileName}</div>
-        </div>
+        <ul className="doc_upload" key={index}>
+          <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
+            <img src={generateAbsolutePath(value.fileUrl)}/><div className="title">{value.fileName}</div></li>
+        </ul>
       )
     })
     return datas;

@@ -7,6 +7,9 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
+
 const genderValues = [
   {value: 'male', label: 'Male'},
   {value: 'female', label: 'Female'},
@@ -158,7 +161,7 @@ export default class MlFunderAboutView extends React.Component{
                             {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                             {/*</div>*/}
                             <div className="previewImg ProfileImg">
-                              <img src={this.state.data.profilePic?this.state.data.profilePic:genderImage}/>
+                              <img src={this.state.data.profilePic? generateAbsolutePath(this.state.data.profilePic) : genderImage}/>
                             </div>
                           </div>
                           <div className="clearfix"></div>

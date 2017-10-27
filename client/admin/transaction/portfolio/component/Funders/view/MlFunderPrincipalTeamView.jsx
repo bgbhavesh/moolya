@@ -7,6 +7,9 @@ import NoData from '../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel } from "../../../../../utils/formElemUtil";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+
 var options = [
   {value: 'Type of Funding', label: 'Type of Funding'},
   {value: '2', label: '2'}
@@ -213,7 +216,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div>
                                   <FontAwesome className='pull-left' name='trash-o'/>
                                   <FontAwesome className='pull-right' name='lock'/></div>
-                                  <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} className="c_image"/>
+                                  <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} className="c_image"/>
                                   <div className="block_footer nopadding"><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                     className="small">{principal.designation}</p></div>
                                   {/*<div className="ml_icon_btn">*/}
@@ -236,7 +239,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 return (
                                   <li key={idx} onClick={that.onSelectPrincipal.bind(that, idx)}>
                                     <div className="team-block">
-                                      <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}
+                                      <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}
                                            className="team_img"/>
                                       <h3>
                                         {principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}<br /><b>{principal.designation}</b>
@@ -257,7 +260,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
                                         <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                        <img src={selectedPrincipal.logo ? selectedPrincipal.logo.fileUrl : "/images/def_profile.png"}/>
+                                        <img src={selectedPrincipal.logo ? generateAbsolutePath(selectedPrincipal.logo.fileUrl) : "/images/def_profile.png"}/>
                                         <div><p>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</p><p
                                           className="small">{selectedPrincipal.designation}</p></div>
                                         {/*<div className="ml_icon_btn">*/}
@@ -360,7 +363,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <FontAwesome className='pull-left' name='trash-o'/>
                                     <FontAwesome className='pull-right' name='lock'/>
                                   </div>
-                                  <img className="c_image" src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
+                                  <img className="c_image" src={team.logo ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"}/>
                                   <div className="block_footer nopadding"><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
                                     <p className="small">{team.designation}</p>
                                   </div>
@@ -379,7 +382,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 return (
                                   <li onClick={that.onSelectTeam.bind(that, idx)} key={idx}>
                                     <div className="team-block">
-                                      <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}
+                                      <img src={team.logo ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"}
                                            className="team_img"/>
                                       <h3>
                                         {team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}<br /><b>{team.designation}Founder</b>
@@ -400,7 +403,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
                                         <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                        <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
+                                        <img src={selectedTeam.logo ? generateAbsolutePath(selectedTeam.logo.fileUrl) : "/images/def_profile.png"}/>
                                         <div>
                                           <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>
                                           <p className="small">{selectedTeam.designation}</p>

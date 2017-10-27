@@ -14,6 +14,7 @@ import _ from 'lodash'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../commons/components/loader/loader";
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
@@ -167,7 +168,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                          {this.state.portfolioIdeatorInfo.problemStatement}
                          <br className="brclear"/>
                          {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
-                           return <img className="upload-image img upload" src={imgLink.fileUrl} key={i}/>
+                           return <img className="upload-image img upload" src={generateAbsolutePath(imgLink.fileUrl)} key={i}/>
                          })}
                        </p>
                      ):(<NoData tabName={this.props.tabName}/>)}
@@ -187,7 +188,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                        {this.state.portfolioIdeatorInfo.solutionStatement}
                        <br className="brclear"/>
                        {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
-                         return <img className="upload-image img upload" src={imgLink.fileUrl} key={i}/>
+                         return <img className="upload-image img upload" src={generateAbsolutePath(imgLink.fileUrl)} key={i}/>
                        })}
                      </p>):(<NoData tabName={this.props.tabName}/>)}
                    </div>

@@ -91,6 +91,7 @@ class Library extends React.Component {
     this.uploadTemplate = this.uploadTemplate.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.toggleShowImageUploadCropper = this.toggleShowImageUploadCropper.bind(this);
+    // this.previewClicked = this.previewClicked.bind(this);
   }
 
   toggleShowImageUploadCropper(evt) {
@@ -159,6 +160,10 @@ class Library extends React.Component {
     //   this.getLibraryDetails(userId);
     // }
   }
+
+  // previewClicked(type, path){
+  //   this.props.previewClicked(type, path);
+  // }
 
 
   async getShareMembersInfo() {

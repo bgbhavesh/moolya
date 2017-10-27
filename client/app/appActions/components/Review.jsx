@@ -2,6 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import StarRatings from '../../../app/commons/components/StarRatings';
 import {reviewActionHandler,fetchReviewsActionHandler} from "../actions/reviewActionHandler";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 var FontAwesome = require('react-fontawesome');
 import moment from "moment";
 export default class Review extends React.Component {
@@ -94,7 +95,7 @@ export default class Review extends React.Component {
                return (<li className="click_full" key={id}>
                  <div className="media">
                    <div className="media-left media-top">
-                     <img src={review.userProfileImage||"/images/img2.png"} className="media-object" />
+                     <img src={review&&review.userProfileImage?generateAbsolutePath(review.userProfileImage):"/images/img2.png"} className="media-object" />
                    </div>
                    <div className="media-body rating_xs">
                      <h4 className="media-heading">{review.userName}<span>{review.createdOn&& moment(review.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>
@@ -112,7 +113,7 @@ export default class Review extends React.Component {
             <li className="click_full">
                 <div className="media">
                   <div className="media-left media-top">
-                    <img src={this.state.selectedReview.userProfileImage||"/images/img2.png"} className="media-object" />
+                    <img src={this.state.selectedReview&&this.state.selectedReview.userProfileImage?generateAbsolutePath(this.state.selectedReview.userProfileImage):"/images/img2.png"} className="media-object" />
                   </div>
                   <div className="media-body rating_xs">
                     <h4 className="media-heading">{this.state.selectedReview.userName}<span>{this.state.selectedReview.createdOn&& moment(this.state.selectedReview.createdOn).format('DD-MM-YYYY hh:mm:ss')}</span></h4>

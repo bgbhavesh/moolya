@@ -74,7 +74,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     this.institutionAwardServer = response && response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.institutionAwards){
       this.setState({selectedIndex:this.state.institutionAwards.length})
     }else{
@@ -83,7 +83,13 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.institutionAwards
     if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.awardsRecognition ){
       setObject = this.context.institutionPortfolio.awardsRecognition
@@ -122,26 +128,13 @@ export default class MlInstitutionEditAwards extends React.Component{
     })
   }
   onLockChange(fiedName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data:details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -168,13 +161,11 @@ export default class MlInstitutionEditAwards extends React.Component{
     if(selectedAward){
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
       this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
-        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
         // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
-        // this.setState({"selectedVal": '', awardName: ''})
         // this.sendDataToParent()
       })
     }
@@ -207,7 +198,6 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionAwards;
     let institutionAwards = _.cloneDeep(awards);
@@ -229,7 +219,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     })
     institutionAwards = arr;
     this.setState({institutionAwards:institutionAwards})
-    this.props.getAwardsDetails(institutionAwards, this.state.privateKey, requiredFields);
+    this.props.getAwardsDetails(institutionAwards, this.state.privateKey);
   }
 
   onLogoFileUpload(e){

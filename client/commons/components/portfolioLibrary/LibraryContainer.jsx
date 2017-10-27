@@ -3,6 +3,7 @@ import PortfolioLibrary from './PortfolioLibrary';
 import SharedLibrary from  './sharedLibrary';
 import { fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler';
 import MlConnectionHeader from './connectionHeader'
+// import MlFilePreview from '../../../app/commons/components/MlFilePreview';
 import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer'
 // import ShowMore from './seeMore'
 
@@ -11,13 +12,26 @@ export default class LibraryParentContainer extends Component {
   constructor(props) {
     super(props)
     this.state ={
-      componentToLoad: this.props.componentToLoad ? this.props.componentToLoad : "",
+      // componentToLoad: props.componentToLoad ? props.componentToLoad : "",
       data:[],
       sharedFiles:[],
       currentState:""
     }
-    this.seeMoreData.bind(this);
+
+    // this.previewClicked = this.previewClicked.bind(this);
+    // this.closePreview = this.closePreview.bind(this);
   }
+  //
+  // componentWillReceiveProps(nextProps){
+  //   let state = {};
+  //   if(nextProps.componentToLoad && nextProps.componentToLoad !== this.state.componentToLoad){
+  //     state.previewComponentToLoad = this.state.componentToLoad;
+  //   }
+  //
+  //   state.componentToLoad = nextProps.componentToLoad;
+  //
+  //   this.setState(state);
+  // }
 
   viewComponent(view) {
     this.setState({
@@ -52,6 +66,19 @@ export default class LibraryParentContainer extends Component {
     this.setState({ componentToLoad: toView, data: data, currentState: current, type: type})
   }
 
+  // closePreview(){
+  //   this.setState({ componentToLoad: this.state.previewComponentToLoad , previewComponentToLoad :''});
+  // }
+  //
+  // previewClicked(fileType, filePath){
+  //   this.setState({
+  //     componentToLoad :'preview',
+  //     fileType,
+  //     filePath
+  //   });
+  // }
+
+
   render() {
 
     switch(this.state.componentToLoad){
@@ -62,6 +89,7 @@ export default class LibraryParentContainer extends Component {
           isAdmin={this.props.isAdmin}
           tabName="Library"
           client={this.props.client}
+          // previewClicked = {this.props.previewClicked}
           key="7"
           portfolioDetailsId={this.props.portfolioDetailsId}
           getSelectedAnnotations={this.props.getSelectedAnnotations}
@@ -152,6 +180,8 @@ export default class LibraryParentContainer extends Component {
               </div>
             </div>
           </div>
+          // <MlFilePreview fileType = {this.state.fileType} filePath = {this.state.filePath}
+    // closePreview={this.closePreview}/>
         )
         break;
     }

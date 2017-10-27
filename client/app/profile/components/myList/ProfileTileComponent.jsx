@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import MlLoader from "../../../../commons/components/loader/loader";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 export default class ProfileTileComponent extends Component {
   getModuleName(modulName) {
@@ -41,7 +42,7 @@ export default class ProfileTileComponent extends Component {
               <div className="col-md-3 col-sm-4 col-lg-2">
                 <div className={"ideators_list_block " + profileTypeBlock}>
                   <h3>{data.displayName}</h3>
-                  <img src={data.profileImage?data.profileImage:'/images/img2.png'} className="c_image" />
+                  <img src={generateAbsolutePath(data.profileImage)?generateAbsolutePath(data.profileImage):'/images/img2.png'} className="c_image" />
                   <div className="block_footer">
                     <span>{data.countryName}</span>
                   </div>

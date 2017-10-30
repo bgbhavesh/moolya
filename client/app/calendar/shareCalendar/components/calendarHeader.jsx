@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
-import {getSharedConnectionsActionHandler } from '../actions/fetchConnectionsForCalendar'
+import {getSharedConnectionsActionHandler } from '../actions/fetchConnectionsForCalendar';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 
 export default class MlCalendarHead extends Component {
   constructor(props) {
@@ -73,7 +75,7 @@ export default class MlCalendarHead extends Component {
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
             <a href="" onClick={()=>that.resetWithAll()}>
-              <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
+              <img src={that.state.profilePic ? generateAbsolutePath(that.state.profilePic) : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}
                 <span ref={(node) => {
@@ -91,7 +93,7 @@ export default class MlCalendarHead extends Component {
             console.log('profile.userId', profile.userId)
             return (
               <a href="" onClick={()=>that.changeProfile(profile.userId)}>
-                <img src={profile.profilePic ? profile.profilePic: "/images/def_profile.png"}/><br />
+                <img src={profile.profilePic ? generateAbsolutePath(profile.profilePic): "/images/def_profile.png"}/><br />
                 <div className="tooltiprefer">
                   {/*Need to show only first name*/}
                   {profile.displayName ? profile.displayName:"User"}

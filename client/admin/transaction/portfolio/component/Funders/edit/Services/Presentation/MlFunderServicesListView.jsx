@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import BeSpokeHandler from '../Container/beSpokeHandler'
 import FunderAboutView from '../../MlFunderServiceBooking'
 import MlAppServiceManageSchedule from '../../../../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
-
+import generateAbsolutePath from '../../../../../../../../../lib/mlGenerateAbsolutePath'
 
 export default class  MlFunderServicesListView extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ export default class  MlFunderServicesListView extends Component {
                    {/*<span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>*/}
                     <button className={`btn ${service.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{service.mode}</button>
                     <div className="clearfix"></div>
-                    <img className="c_image" src={service.beSpokeCreatorProfileImage?service.beSpokeCreatorProfileImage:'/images/def_profile.png'}/>
+                    <img className="c_image" src={service.beSpokeCreatorProfileImage?generateAbsolutePath(service.beSpokeCreatorProfileImage):'/images/def_profile.png'}/>
                     <div className="clearfix"></div>
                     <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
                     <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>

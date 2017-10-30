@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {getUserActiveProfileDetails} from "../../activity/actions/activityActionHandler";
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath'
+
 
 export default class MlCalendarHeader extends Component {
   constructor(props) {
@@ -111,7 +113,7 @@ export default class MlCalendarHeader extends Component {
         <ul className="users_list well well-sm">
           <li>
             <a href="" onClick={()=>that.changeProfile(consolidated, false)}>
-              <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
+              <img src={that.state.profilePic ? generateAbsolutePath(that.state.profilePic): "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>{that.state.displayName ? that.state.displayName : "All"}</span>
               </div>

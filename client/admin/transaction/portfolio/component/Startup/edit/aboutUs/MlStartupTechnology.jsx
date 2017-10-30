@@ -12,7 +12,7 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import { connect } from 'react-redux';
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "technologies"
 
 class MlStartupTechnology extends Component{
@@ -306,7 +306,7 @@ class MlStartupTechnology extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.technologyName?details.technologyName:" "}</h3>
                       </div>
                     </a>

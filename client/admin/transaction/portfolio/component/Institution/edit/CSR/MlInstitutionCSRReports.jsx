@@ -2,6 +2,8 @@ import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchInstitutionPortfolioReports} from '../../../../actions/findPortfolioInstitutionDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
+
 
 export default class MlInstitutionCSRReports extends React.Component{
   constructor(props){
@@ -19,6 +21,18 @@ export default class MlInstitutionCSRReports extends React.Component{
       uploadedData: resp
     });
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
+  }
+
   componentWillMount() {
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
@@ -79,7 +93,18 @@ export default class MlInstitutionCSRReports extends React.Component{
   onFileUploadCallBack(type, file, resp) {
     let that = this;
     let data = this.state.uploadedData;
+    let result = JSON.parse(resp);
     if (resp && type) {
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       var link = $.parseJSON(resp).result;
       if( data && data[`${type}`] ) {
         data[`${type}`].push({fileUrl:link,fileName:file.name})

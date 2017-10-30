@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { Component, PropTypes } from "react";
 import {render} from "react-dom";
 import MlCompanyStartupIncubators from "./MlCompanyStartupIncubators";
 import MlCompanySectors from "./MlCompanySectors";
@@ -15,14 +15,21 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
       tabs: [],
       portfolioIncubators:{},
       startupIncubators:{},
-      sectorsAndServices:{},
+      sectorsAndServices:[],
       listOfIncubators:{},
       admin: true,
       activeTab:"Startup Incubators",
     }
     ;
+    this.getChildContext.bind(this)
   }
 
+  getChildContext() {
+    return {
+      companyPortfolio: this.state.companyPortfolio,
+      portfolioKeys: this.state.portfolioKeys
+    }
+  }
   /**
    * handling different condition for app and admin
    * */
@@ -64,7 +71,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanySectors key="2" getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanySectors key="2" client={client} getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} tabName="sectorsAndServices" />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
     ]
     return tabs;
@@ -77,11 +84,11 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
     let updateItem = _.omit(details, 'logo');
     this.props.getIncubators(updateItem,"startupIncubators", privateKey);
   }
-  getSectors(details, privateKey){
+  getSectors(details, privateKey,requiredFields){
     let data = this.state.sectorsAndServices;
     data = details;
     this.setState({sectorsAndServices : data})
-    this.props.getIncubators(data,"sectorsAndServices", privateKey);
+    this.props.getIncubators(data,"sectorsAndServices", privateKey,requiredFields);
   }
   getListOfIncubators(details, privateKey){
     let data = this.state.listOfIncubators;
@@ -140,4 +147,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
     }
   }
 }
-
+MlCompanyIncubatorsEditTabs.childContextTypes = {
+  companyPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
+};

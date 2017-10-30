@@ -170,8 +170,15 @@ let startupPortfolioSchema = `
     }
     
     type sectorsAndServicesOutput{
-        sectorsAndServicesDescription:String, 
-        isSectorsAndServicesPrivate :Boolean
+        industryTypeId:String,
+        industryTypeName :String
+        domainType:String,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean,
+        isActive:Boolean
+        subDomainId : String
+        subDomainName :String
+        index: Int
         privateFields:[PrivateKeys]
     }
     
@@ -317,7 +324,7 @@ let startupPortfolioSchema = `
       compliances       : compliancesOutput,
       licenses          : licensesOutput,
       startupIncubators : startupIncubatorsOutput
-      sectorsAndServices  : sectorsAndServicesOutput
+      sectorsAndServices  :[sectorsAndServicesOutput]
       listOfIncubators    : listOfIncubatorsOutput
       partners            : [PartnersOutput] 
       achievements        : [achievementsOutput]
@@ -436,8 +443,14 @@ let startupPortfolioSchema = `
     }
     
     input sectorsAndServices{
-        sectorsAndServicesDescription:String, 
-        isSectorsAndServicesPrivate :Boolean
+        industryTypeId:String,
+        industryTypeName :String
+        domainType:String,
+        makePrivate:Boolean,
+        isActive:Boolean
+        subDomainId : String
+        subDomainName :String
+        index: Int
     }
     
     input listOfIncubators{
@@ -605,7 +618,7 @@ let startupPortfolioSchema = `
         employeeBreakupDepartmentChart: [employeeBreakupDepartment]
         data                : data
         startupIncubators   : startupIncubators
-        sectorsAndServices  : sectorsAndServices
+        sectorsAndServices  : [sectorsAndServices]
         listOfIncubators    : listOfIncubators
         partners            : [partnersInput]
         achievements        : [achievements]

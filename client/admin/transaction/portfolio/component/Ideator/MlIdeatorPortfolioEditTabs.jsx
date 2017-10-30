@@ -48,7 +48,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         panelClassName: 'panel',
         title: "Ideas",
         component: <MlIdeatorIdeas tabName="ideas" key="2" getIdeas={this.getIdeas.bind(this)}
-                                   portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/>
+                                   portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId} client={client}/>
       },
       {
         tabClassName: 'tab',

@@ -24,6 +24,7 @@ export default class MlCompanyAwards extends Component{
       data:{},
       privateKey:{},
       awards: [],
+      fileName:"",
       popoverOpen:false,
       selectedIndex:-1,
       awardsList:[],
@@ -227,7 +228,7 @@ export default class MlCompanyAwards extends Component{
 
   onLogoFileUpload(image,fileInfo){
     let file=image;
-    let fileName=fileInfo.name;
+    let fileName=this.state.fileName;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -248,25 +249,30 @@ export default class MlCompanyAwards extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
         }
-        this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
+        this.libraryAction(fileObjectStructure);
+      }
+      if (result.success) {
+        this.setState({loading: true})
+        this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client);
+    if (resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -315,11 +321,12 @@ export default class MlCompanyAwards extends Component{
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image,e) {
+  handleUploadAvatar(image,file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image,e);
+    this.setState({fileName: file.name})
+    this.onLogoFileUpload(image,file);
   }
 
   render(){

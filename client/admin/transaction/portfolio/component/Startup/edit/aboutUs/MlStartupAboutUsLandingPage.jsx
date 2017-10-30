@@ -6,7 +6,7 @@ var Select = require('react-select');
 var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlStartupAboutUs extends Component{
   constructor(props){
     super(props)
@@ -66,7 +66,7 @@ export default class MlStartupAboutUs extends Component{
         })
         if(logos.length>0){
              aboutUsImages=logos.map(function (items,id) {
-               return ( <img src={items.fileUrl} key={id}/>)
+               return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
               })
         }

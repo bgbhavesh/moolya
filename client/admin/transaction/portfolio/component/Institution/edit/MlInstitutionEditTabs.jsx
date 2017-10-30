@@ -144,7 +144,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Partner",
-        component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)}
+        component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} client={client}
                                               portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
       {
@@ -159,7 +159,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "R&D",
-        component: <MlInstitutionEditRD key="12" getRDDetails={this.getRDDetails.bind(this)}
+        component: <MlInstitutionEditRD key="12" getRDDetails={this.getRDDetails.bind(this)} client={client}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>
       },
       {
@@ -174,7 +174,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Intrapreneur",
-        component: <MlInstitutionEditIntrapreneur key="14"
+        component: <MlInstitutionEditIntrapreneur key="14" client={client}
                                                   getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)}
                                                   portfolioDetailsId={this.props.portfolioDetailsId} tabName="intrapreneurRecognition"/>
       },

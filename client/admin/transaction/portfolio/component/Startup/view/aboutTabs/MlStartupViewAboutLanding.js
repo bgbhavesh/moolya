@@ -10,7 +10,7 @@ var Rating = require('react-rating');
 import MlStartupViewAboutusTabs from './MlStartupViewAboutusTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../../portfolio/actions/findPortfolioStartupDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlStartupViewAboutLanding extends Component {
   constructor(props) {
     super(props)
@@ -74,7 +74,7 @@ export default class MlStartupViewAboutLanding extends Component {
         })
         if (logos.length > 0) {
           aboutUsImages = logos.map(function (items, id) {
-            return ( <img src={items.fileUrl} key={id}/>)
+            return ( <img src={generateAbsolutePath(items.fileUrl)} key={id}/>)
 
           })
         }

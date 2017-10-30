@@ -22,6 +22,7 @@ export default class MlServiceProviderAwards extends Component {
     this.state = {
       loading: false,
       data: {},
+      fileName:"",
       serviceProviderAwards: [],
       popoverOpen: false,
       selectedIndex: -1,
@@ -238,7 +239,7 @@ export default class MlServiceProviderAwards extends Component {
   }
 
   onLogoFileUpload(image,fileInfo) {
-    let fileName=fileInfo.name;
+    let fileName=this.state.fileName;
     let file=image;
     if(file){
       let data = {
@@ -265,7 +266,7 @@ export default class MlServiceProviderAwards extends Component {
       let userOption = confirm("Do you want to add the file into the library")
       if(userOption){
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -283,7 +284,12 @@ export default class MlServiceProviderAwards extends Component {
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages() {
@@ -326,11 +332,12 @@ export default class MlServiceProviderAwards extends Component {
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image,e) {
+  handleUploadAvatar(image,file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image,e);
+    this.setState({ fileName: file.name })
+    this.onLogoFileUpload(image,file);
   }
 
   render() {

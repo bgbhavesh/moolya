@@ -106,7 +106,7 @@ export default class MlAppCompaniesEditTabs extends Component {
         panelClassName: 'panel',
         title: "Awards",
         name: "Awards",
-        component: <MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
+        component: <MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} client={appClient}
                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {

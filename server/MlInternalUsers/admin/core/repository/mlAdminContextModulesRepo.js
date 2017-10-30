@@ -528,7 +528,10 @@ let CoreModules = {
 
     if (fieldsProj.sort) {
       pipeline.push({'$sort': fieldsProj.sort});
+    }else{
+      pipeline.push({'$sort': {'createdAt':-1}});
     }
+
     if (fieldsProj.skip) {
       pipeline.push({'$skip': parseInt(fieldsProj.skip)});
     }
@@ -1059,6 +1062,8 @@ let CoreModules = {
 
     if (fieldsProj.sort) {
       piplelineQuery.push({'$sort': fieldsProj.sort});
+    }else{
+      piplelineQuery.push({'$sort':{'createdAt':-1}});
     }
     if (fieldsProj.skip) {
       piplelineQuery.push({'$skip': parseInt(fieldsProj.skip)});

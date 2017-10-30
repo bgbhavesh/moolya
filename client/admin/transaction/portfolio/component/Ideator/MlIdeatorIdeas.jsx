@@ -17,6 +17,7 @@ export default class MlIdeatorIdeas extends Component{
     this.state={
       loading: true,
       data:{},
+      fileName:"",
       privateKey:{},
       privateValues:[],
       showProfileModal: false,
@@ -132,17 +133,22 @@ export default class MlIdeatorIdeas extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
-  onLogoFileUpload(image,fileInfo){
+  onLogoFileUpload(image){
     // if(e.target.files[0].length ==  0)
     //   return;
     // let file = e.target.files[0];
     //let fileName = e.target.files[0].name;
     //let name = e.target.name;
+    let fileName = this.state.fileName;
     let file=image;
-    let fileName=fileInfo.name;
     if(file){
       let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -161,7 +167,7 @@ export default class MlIdeatorIdeas extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if(userOption){
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -181,11 +187,12 @@ export default class MlIdeatorIdeas extends Component{
       showProfileModal: !status
     });
   }
-  handleUploadAvatar(image,e) {
+  handleUploadAvatar(image,file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image,e);
+    this.setState({ fileName: file.name})
+    this.onLogoFileUpload(image);
   }
   render(){
     let that = this;

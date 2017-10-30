@@ -30,6 +30,7 @@ export default class MlIdeatorDetails extends Component{
       privateKey: {},
       defaultProfilePic: "/images/def_profile.png",
       privateValues: [],
+      fileName:"",
       showProfileModal: false,
       uploadingAvatar: false
     }
@@ -206,7 +207,7 @@ export default class MlIdeatorDetails extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if(userOption){
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
@@ -224,7 +225,12 @@ export default class MlIdeatorDetails extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async deleteProfilePic() {
@@ -242,10 +248,11 @@ export default class MlIdeatorDetails extends Component{
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image) {
+  handleUploadAvatar(image, file) {
     this.setState({
       uploadingAvatar: true,
     });
+    this.setState({ fileName: file.name })
     this.onFileUpload(image);
   }
   render(){

@@ -157,6 +157,12 @@ export default class MlIdeatorAudience extends React.Component{
     console.log(this.props.client)
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
     return resp;
   }
   async removeProblemAndSolutionPic(typeOfImage,fileUrl){

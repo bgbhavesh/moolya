@@ -9,7 +9,7 @@ import {fetchIdeaActionHandler} from "../../../../../app/portfolio/ideators/acti
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlIdeaView extends React.Component {
   constructor(props) {
@@ -139,7 +139,7 @@ export default class MlIdeaView extends React.Component {
             <h2>About Ideas</h2>
             <div className="ideas_swiper 4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
               <div className="swiper-wrapper">
-                <div className="swiper-slide ideas_block" name="idea1" style={{'backgroundImage': 'url(' +image+ ')'}}>
+                <div className="swiper-slide ideas_block" name="idea1" style={{'backgroundImage': 'url(' +generateAbsolutePath(image)+ ')'}}>
                   <h3 className="rating_xs"><p>{this.state.portfolioIdeatorInfo.title}</p></h3>
                 </div>
             {/*<div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">*/}

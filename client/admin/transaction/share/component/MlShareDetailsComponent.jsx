@@ -10,6 +10,8 @@ import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
+
 
 export default class MlShareDetailsComponent extends React.Component {
   constructor(props){
@@ -139,7 +141,7 @@ export default class MlShareDetailsComponent extends React.Component {
                       return (
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
-                          <img src={ user.profilePic ? user.profilePic : "/images/def_profile.png"}/>
+                          <img src={ user.profilePic ? generateAbsolutePath(user.profilePic) : "/images/def_profile.png"}/>
                           <span>{user.displayName}</span>
                         </li>
                       )
@@ -161,7 +163,7 @@ export default class MlShareDetailsComponent extends React.Component {
                         <li key={index}>
                           {/*<FontAwesome name='minus'/>*/}
                           {file.fileType === "image" || file.fileType === "template" ?
-                            <img src={ file.url ? file.url : "/images/doc.png"}/> :
+                            <img src={ file.url ? generateAbsolutePath(file.url) : "/images/doc.png"}/> :
                             file.fileType === "document" ? <img src="/images/doc.png"/> :
                               <img src="/images/video_1.jpg"/> }
                         </li>

@@ -8,7 +8,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlStartupViewTechnologies extends React.Component {
   constructor(props) {
     super(props);
@@ -117,7 +117,7 @@ export default class MlStartupViewTechnologies extends React.Component {
               {technologiesArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                   <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
+                    <img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)} className="team_img"/>
                     <h3>
                       {details.technologyName&&details.technologyName} <br />
                     </h3>

@@ -290,7 +290,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
         }
       } else {
         let code = 404;
-        response = new MlRespPayload().errorPayload('File name already Exist', code);
+        response = new MlRespPayload().errorPayload('Image with the same file name already exists in the library', code);
       }
       return response;
     }

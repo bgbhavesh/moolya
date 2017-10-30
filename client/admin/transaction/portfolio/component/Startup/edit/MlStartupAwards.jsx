@@ -23,6 +23,7 @@ export default class MlStartupAwards extends Component{
     this.state={
       loading: true,
       data:{},
+      fileName:"",
       privateKey:{},
       startupAwards: [],
       popoverOpen:false,
@@ -229,6 +230,7 @@ export default class MlStartupAwards extends Component{
 
   onLogoFileUpload(fileInfo,image){
     let fileName = fileInfo.name;
+    this.setState({fileName: fileName})
     let file =image;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
@@ -250,17 +252,17 @@ export default class MlStartupAwards extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
+      }
+      if (result.success) {
+        this.setState({loading: true})
+        this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -268,7 +270,12 @@ export default class MlStartupAwards extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 

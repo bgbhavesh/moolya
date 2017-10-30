@@ -38,7 +38,7 @@ class MlAppServiceSelectTask extends Component{
 
   componentWillMount() {
     this.props.activeComponent('SessionDetails');
-    this.props.setSessionId('');
+    // this.props.setSessionId('');
     // console.log(this.props.task)
     this.getOffices();
   }

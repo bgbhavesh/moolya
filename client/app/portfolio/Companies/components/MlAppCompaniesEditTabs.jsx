@@ -205,7 +205,8 @@ export default class MlAppCompaniesEditTabs extends Component {
     }
     data['management'] = details;
     this.setState({companyPortfolio: data})
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getAwardsDetails(details, privateKey, requiredFields) {
@@ -265,7 +266,8 @@ export default class MlAppCompaniesEditTabs extends Component {
     } else {
       let data = this.state.companyPortfolio;
       data[tabName] = details;
-      this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
+      var object = omitDeep(data, 'logo');
+      this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
     }
   }
 

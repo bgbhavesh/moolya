@@ -26,16 +26,18 @@ export default class MlServiceProviderClients extends Component {
       privateKey:{},
       showProfileModal: false,
       uploadingAvatar: false
-    }
+    };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
-    this.fetchPortfolioDetails.bind(this);
+    // this.imagesDisplay.bind(this);
+    // this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
     this.onLogoFileUpload = this.onLogoFileUpload.bind(this);
+    this.onStatusChangeNotify = this.onStatusChangeNotify.bind(this)
     return this;
   }
 
@@ -48,7 +50,7 @@ export default class MlServiceProviderClients extends Component {
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
+    // this.imagesDisplay();
   }
 
   componentWillMount() {
@@ -64,9 +66,6 @@ export default class MlServiceProviderClients extends Component {
     if (empty) {
       if (response && response.length>0) {
         this.setState({loading: false, serviceProviderClients: response, serviceProviderClientsList: response});
-        // _.each(response.privateFields, function (pf) {
-        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        // })
       }
       else{
         this.setState({loading:false})
@@ -97,6 +96,7 @@ export default class MlServiceProviderClients extends Component {
     if (details && details.logo) {
       delete details.logo['__typename'];
     }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -150,6 +150,7 @@ export default class MlServiceProviderClients extends Component {
     if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.clients)
       setObject = this.context.serviceProviderPortfolio.clients
     this.setState({serviceProviderClientsList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onStatusChangeNotify(e) {
@@ -186,6 +187,7 @@ export default class MlServiceProviderClients extends Component {
     let data = this.state.data;
     let clients = this.state.serviceProviderClients;
     let serviceProviderClients = _.cloneDeep(clients);
+    data.logo = this.curSelectLogo;
     data.index = this.state.selectedIndex;
     if(isSaveClicked){
       serviceProviderClients[this.state.selectedIndex] = data;
@@ -209,7 +211,8 @@ export default class MlServiceProviderClients extends Component {
 
   onLogoFileUpload(image, fileInfo) {
     let file = image;
-    let fileName = this.state.fileName;
+    // let fileName = this.state.fileName;
+    const fileName = fileInfo.name;
     if(file){
       let data = {
         moduleName: "PORTFOLIO",
@@ -243,9 +246,15 @@ export default class MlServiceProviderClients extends Component {
         this.libraryAction(fileObjectStructure)
       }
       if (result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
         this.setState({loading: true})
         this.fetchOnlyImages();
-        this.imagesDisplay();
+        // this.imagesDisplay();
+      }else {
+        this.setState({loading: false})
       }
     }
   }
@@ -282,21 +291,21 @@ export default class MlServiceProviderClients extends Component {
    * @Note: check its usage and need to remove it
    * @function: imagesDisplay()
    */
-  async imagesDisplay() {
-    const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
-    if (response) {
-      let detailsArray = response && response.clients ? response.clients : []
-      let dataDetails = this.state.serviceProviderClients
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj, key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
-      let listDetails = this.state.serviceProviderClientsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, serviceProviderClients: cloneBackUp, serviceProviderClientsList: cloneBackUpList});
-    }
-  }
+  // async imagesDisplay() {
+  //   const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
+  //   if (response) {
+  //     let detailsArray = response && response.clients ? response.clients : []
+  //     let dataDetails = this.state.serviceProviderClients
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     _.each(detailsArray, function (obj, key) {
+  //       cloneBackUp[key]["logo"] = obj.logo;
+  //     })
+  //     let listDetails = this.state.serviceProviderClientsList || [];
+  //     listDetails = cloneBackUp
+  //     let cloneBackUpList = _.cloneDeep(listDetails);
+  //     this.setState({loading: false, serviceProviderClients: cloneBackUp, serviceProviderClientsList: cloneBackUpList});
+  //   }
+  // }
 
   emptyClick(e) {
     if (this.state.popoverOpen)
@@ -347,19 +356,20 @@ export default class MlServiceProviderClients extends Component {
                     </a>
                   </div>
                   {clientsArray.map(function (details, idx) {
-                    if(details.makePrivate){
+                  /*  if(details.makePrivate){
                       $("#makePrivate"+idx).removeClass('un_lock fa-unlock').addClass('fa-lock');
                     }else{
                       $("#makePrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
-                    }
+                    }*/
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a id={"create_client" + idx}>
                         <div className="list_block">
-                          {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
-                          <FontAwesome name='unlock' id={"makePrivate" + idx}
-                                       defaultValue={details.makePrivate}/>
+                          {/*<FontAwesome name='unlock' id={"makePrivate" + idx} defaultValue={details.makePrivate}/>*/}
+                          <FontAwesome name='unlock' id={"makePrivate"} defaultValue={details.makePrivate}/>
+                          <input type="checkbox" className="lock_input" id="makePrivate" checked={details.makePrivate} />
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
-                            <img src={details.logo && details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl): "/images/def_profile.png"}/></div>
+                            <img src={details.logo && details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl): "/images/def_profile.png"}/>
+                          </div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                           <h3>{details.companyName ? details.companyName : ""} </h3>
                         </div>
@@ -403,11 +413,13 @@ export default class MlServiceProviderClients extends Component {
                         </div> : ""}
                         <div className="clearfix"></div>
                         <div className="form-group">
-                          <div className="input_types"><input id="makePrivate" type="checkbox"
-                                                              checked={this.state.data && this.state.data.makePrivate}
-                                                              name="checkbox"
-                                                              onChange={this.onStatusChangeNotify.bind(this)}/><label
-                            htmlFor="checkbox1"><span></span>Make Private</label></div>
+                          <div className="input_types">
+                            <input id="makePrivate" type="checkbox"
+                                   checked={this.state.data && this.state.data.makePrivate}
+                                   name="checkbox"
+                                   onChange={this.onStatusChangeNotify}/>
+                            <label htmlFor="checkbox1"><span></span>Make Private</label>
+                          </div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
                           <a className="save_btn" onClick={this.onSaveAction}>Save</a>

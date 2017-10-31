@@ -33,7 +33,8 @@ export default class MlCompanyPartners extends React.Component {
       clusterId:'',
       privateKeys:[],
       privateKey:{},
-    }
+    };
+    this.curSelectLogo = {};
     this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this);
     this.libraryAction.bind(this);
@@ -53,8 +54,8 @@ export default class MlCompanyPartners extends React.Component {
 
   componentWillMount() {
     this.fetchClusterId();
- const resp =   this.fetchPortfolioDetails();
- return resp;
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchClusterId() {
     const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
@@ -144,6 +145,7 @@ export default class MlCompanyPartners extends React.Component {
       setObject = this.context.companyPortfolio.partners
     }
     this.setState({partnersList: setObject, popoverOpenP: false})
+    this.curSelectLogo = {}
   }
 
   addPrincipal() {
@@ -177,13 +179,11 @@ export default class MlCompanyPartners extends React.Component {
     })
   }
 
-  onPrincipalTileClick(index, e) {
+  onTileClick(index, e) {
     let cloneArray = _.cloneDeep(this.state.partners);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -191,14 +191,6 @@ export default class MlCompanyPartners extends React.Component {
       popoverOpenP: !(this.state.popoverOpenP)},()=>{
       this.lockPrivateKeys(index)
     });
-
-    // setTimeout(function () {
-    //   _.each(details.privateFields, function (pf) {
-    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    //   })
-    // }, 10)
-
-
   }
 
   //todo:// context data connection first time is not coming have to fix
@@ -217,27 +209,27 @@ export default class MlCompanyPartners extends React.Component {
 
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
-      let fun = this.state.partners;
-      let partners = _.cloneDeep(fun);
-      data.index = this.state.selectedIndex;
+    let fun = this.state.partners;
+    let partners = _.cloneDeep(fun);
+    data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
       if(isSaveClicked){
         partners[this.state.selectedIndex] = data;
       }
       let arr = [];
       _.each(partners, function (item) {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
             delete item[propName];
           }
         }
         let newItem = _.omit(item, "__typename");
         newItem =_.omit(newItem,"privateFields");
-        // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
     partners = arr;
-      this.setState({partners: partners})
-      this.props.getPartnersDetails(partners, this.state.privateKey);
+    this.setState({partners: partners})
+    this.props.getPartnersDetails(partners, this.state.privateKey);
   }
 
   onPrincipalLogoFileUpload(e) {
@@ -267,7 +259,11 @@ export default class MlCompanyPartners extends React.Component {
         }
         this.libraryAction(fileObjectStructure)
       }
-      if (result.success) {
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
         toastr.success("Photo Updated Successfully");
         this.setState({loading: true})
         this.fetchOnlyImages();
@@ -287,7 +283,6 @@ export default class MlCompanyPartners extends React.Component {
   }
 
   async fetchOnlyImages() {
-
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
       if (response && response.partners && !_.isEmpty(response.partners)) {
         let thisState = this.state.selectedIndex;
@@ -335,21 +330,18 @@ export default class MlCompanyPartners extends React.Component {
                           {that.state.partnersList.map(function (principal, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="" id={"create_clientP" + idx}>
-                                  <div className="list_block notrans funding_list"
-                                       onClick={that.onPrincipalTileClick.bind(that, idx)}>
-                                    <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
-                                    <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                    <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
-                                    <div>
-                                      <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
-                                    <div className="ml_icon_btn">
-                                      <a href="" className="save_btn"><FontAwesome name='facebook'/></a>
-                                      <a href="" className="save_btn"><FontAwesome name='twitter'/></a>
-                                      <a href="" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                    </div>
+                                <div className="list_block notrans funding_list"
+                                     onClick={that.onTileClick.bind(that, idx)} id={"create_clientP" + idx}>
+                                  <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
+                                  <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
+                                  <div>
+                                    <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
+                                  <div className="ml_icon_btn">
+                                    <a href="" className="save_btn"><FontAwesome name='facebook'/></a>
+                                    <a href="" className="save_btn"><FontAwesome name='twitter'/></a>
+                                    <a href="" className="save_btn"><FontAwesome name='linkedin'/></a>
                                   </div>
-                                </a>
+                                </div>
                               </div>
                             )
                           })}

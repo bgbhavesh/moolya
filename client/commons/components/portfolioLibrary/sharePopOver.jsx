@@ -175,10 +175,26 @@ export default class SharePopOver extends React.Component {
     let that = this;
     let data = that.state.selectedDatasToShare || [];
     let datas = data.map(function(value, index) {
+      let url = generateAbsolutePath(value.fileUrl);
+      if(value.libraryType === 'video') url = '/images/video.png';
+      else if(value.fileName && value.fileName.split('.')[1]) {
+        let type = value.fileName.split('.')[1];
+        if (type === 'pdf') {
+          url = `/images/${type}.png`;
+        } else if (type === 'xls' || type === 'xlsx') {
+          url = `/images/xls.png`;
+        } else if (type === 'ppt') {
+          url = `/images/${type}.png`;
+        } else if(type === 'doc' || type === 'docs' || type === 'docx'){
+
+          url = `/images/doc.png`;
+        }
+      }
+      console.log('url=',url);
       return (
         <ul className="doc_upload" key={index}>
           <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
-            <img src={generateAbsolutePath(value.fileUrl)}/><div className="title">{value.fileName}</div></li>
+            <img src={url}/><div className="title">{value.fileName}</div></li>
         </ul>
       )
     })

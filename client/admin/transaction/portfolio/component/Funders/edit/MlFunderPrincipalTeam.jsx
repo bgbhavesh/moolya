@@ -651,7 +651,7 @@ export default class MlFunderPrincipalTeam extends Component {
                               </div>
                               <div className="previewImg ProfileImg">
                                 <img
-                                  src={this.state.selectLogo && this.state.selectLogo.fileUrl} />
+                                  src={this.state.selectLogo && generateAbsolutePath(this.state.selectLogo.fileUrl)} />
                               </div>
                             </div> : <div></div>
                           }
@@ -804,7 +804,7 @@ export default class MlFunderPrincipalTeam extends Component {
                               </div>
                               <div className="previewImg ProfileImg">
                                 <img
-                                  src={this.state.selectLogoTeam && this.state.selectLogoTeam.fileUrl } />
+                                  src={this.state.selectLogoTeam && generateAbsolutePath(this.state.selectLogoTeam.fileUrl) } />
                               </div>
                             </div> : <div></div>
                           }

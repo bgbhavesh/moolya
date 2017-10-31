@@ -5,6 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import dashboardRoutes from '../actions/routesActionHandler';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 export default class MlCommunityList extends Component {
 
   constructor(props){
@@ -135,7 +136,7 @@ export default class MlCommunityList extends Component {
               </div>
                 <h3>{prop.name}</h3>
               {/*<span className={`ml2 ml-${icon}`}></span>*/}
-              <img src={`${prop.profile&&prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
+              <img src={`${prop.profile&&prop.profile.profileImage?generateAbsolutePath(prop.profile.profileImage):"/images/ideator_01.png"}`} className="c_image"/>
               <div className="block_footer">
                 {/*<span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>*/}
                 <span>{prop.chapterName} - {prop.communityDefName}</span>

@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import dashboardRoutes from '../actions/routesActionHandler';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlAppSubChapterList extends Component {
 
   constructor(props){
@@ -19,7 +21,7 @@ export default class MlAppSubChapterList extends Component {
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
           <a href={dashboardRoutes.subChapterAnchorRoute(prop.clusterId,prop.chapterId,prop._id, v)}>
-            <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={prop.subChapterImageLink}/> : <span
+            <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={generateAbsolutePath(prop.subChapterImageLink)}/> : <span
               className="ml ml-moolya-symbol"></span>}</div>
           </a>
           <h3>{prop.subChapterDisplayName} </h3>

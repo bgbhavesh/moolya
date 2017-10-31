@@ -1110,6 +1110,17 @@ class Library extends React.Component {
     let that = this;
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
     const Documents = documentData.map(function (show, id) {
+      var docType = 'doc';
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'ppt'){
+          docType = type;
+        }
+      }
       return (
         <div className="thumbnail swiper-slide" key={id}>
 
@@ -1128,7 +1139,7 @@ class Library extends React.Component {
 
 
           <a href="" data-toggle="modal" data-target=".documentpop"
-            onClick={that.randomDocument.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src="/images/doc.png" /></a>
+            onClick={that.randomDocument.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src={`/images/${docType}.png`} /></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -1147,6 +1158,17 @@ class Library extends React.Component {
     const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
     const popDocuments = popDocumentData.map(function (show, id) {
+      var docType = 'doc';
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'ppt'){
+          docType = type;
+        }
+      }
       if (show.inCentralLibrary) {
         return (
           <div className="thumbnail swiper-slide" key={id}>
@@ -1172,7 +1194,7 @@ class Library extends React.Component {
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
               onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
-              <img src="/images/doc.png" /></a> :
+              <img src={`/images/${docType}.png`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={generateAbsolutePath(show.fileUrl)} /></a>}
             <div id="templates" className="title">{show.fileName}</div>

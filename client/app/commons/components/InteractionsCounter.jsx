@@ -2,6 +2,8 @@ import React from 'react';
 import { render } from 'react-dom'
 import _ from 'lodash';
 import {fetchInteractionsCountActionHandler} from '../actions/fetchInteractionCountActionHandler';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class InteractionsCounter extends React.Component{
   constructor(props){
@@ -85,7 +87,7 @@ export default class InteractionsCounter extends React.Component{
             <span className="fa fa-angle-left fa-2x"/>
           </a>*/}
           <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}>
-            <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
+            <img src={props && props.portfolioImage ? generateAbsolutePath(props.portfolioImage) : "/images/ideator_01.png"}
                  data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
                  data-placement="right"/>
             &nbsp; {props && props.portfolioUserName ? props.portfolioUserName : ''}

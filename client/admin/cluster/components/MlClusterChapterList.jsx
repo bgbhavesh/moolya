@@ -14,7 +14,7 @@ export default class MlClusterChapterList extends Component
   render(){
     const data=this.props.data||[];
     const list=  data.map((prop ,idx) =>{
-      let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={`${prop.countryFlag}`}/>:<span className="ml my-ml-chapter"></span>;
+      let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={Meteor.settings.public.countriesFlagBaseUrl+prop.countryFlag}/>:<span className="ml my-ml-chapter"></span>;
       let icon, status;
 
       if(prop.status.description == "Active"){

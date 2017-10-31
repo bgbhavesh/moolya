@@ -222,10 +222,9 @@ export default class MlAppFunderEditTabs extends Component {
   getServiceDetails(details, privatekey) {
     if (details.services) {
       let portfolioId = details.portfolioId;
-      console.log()
       this.saveDataToServices(portfolioId)
     }
-    console.log(details)
+    // console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio: data})
@@ -234,7 +233,7 @@ export default class MlAppFunderEditTabs extends Component {
 
   async saveDataToServices(portfolioId) {
     const resp = await getProfileBasedOnPortfolio(portfolioId)
-    this.saveServiceDetails()
+    // this.saveServiceDetails()
     return resp
   }
 

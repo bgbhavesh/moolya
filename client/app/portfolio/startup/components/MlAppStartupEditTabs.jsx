@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import _ from 'lodash'
+import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupAboutUs from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
 import MlStartupManagement from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
@@ -148,46 +149,32 @@ class MlAppStartupEditTabs extends Component {
   getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 
   getManagementDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
-    if (data && !data.management) {
-      data['management'] = [];
-    }
     data['management'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 
   getInvestorDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data['investor'] = details;
     this.setState({startupPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['investor'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 
   getAwardsDetails(details, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
-    if (data && !data.awardsRecognition) {
-      data['awardsRecognition'] = [];
-    }
+    data['awardsRecognition'] = details;
     this.setState({startupPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 
   getLookingForDetails(details, privatekey, requiredFields) {

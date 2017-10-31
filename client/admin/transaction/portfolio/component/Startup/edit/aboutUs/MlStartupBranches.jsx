@@ -33,8 +33,8 @@ class MlStartupBranches extends Component{
       selectedObject:"default"
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -46,8 +46,8 @@ class MlStartupBranches extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
   }
+
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.branches)
     if(!empty){
@@ -67,6 +67,7 @@ class MlStartupBranches extends Component{
       setObject = this.context.startupPortfolio.branches
     }
     this.setState({startupBranchesList:setObject,popoverOpen : false})
+    this.curSelectLogo = {}
   }
   addBranch(){
     this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
@@ -81,9 +82,7 @@ class MlStartupBranches extends Component{
     let cloneArray = _.cloneDeep(this.state.startupBranches);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
@@ -176,6 +175,7 @@ class MlStartupBranches extends Component{
     let branches = this.state.startupBranches;
     let startupBranches = _.cloneDeep(branches);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       startupBranches[this.state.selectedIndex] = data;
     }
@@ -217,11 +217,14 @@ class MlStartupBranches extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
         }
+        this.setState({loading: true})
+        this.fetchOnlyImages();
       }
     }
   }
@@ -252,25 +255,6 @@ class MlStartupBranches extends Component{
       }else {
         this.setState({loading: false})
       }
-    }
-  }
-
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      let dataDetails =this.state.startupBranches
-      let detailsArray = response&&response.branches?response.branches:[]
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(detailsArray, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-          cloneBackUp[key]["privateFields"] = obj.privateFields;
-        })
-      }
-      let listDetails = this.state.startupBranchesList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupBranches:cloneBackUp,startupBranchesList:cloneBackUpList});
     }
   }
 

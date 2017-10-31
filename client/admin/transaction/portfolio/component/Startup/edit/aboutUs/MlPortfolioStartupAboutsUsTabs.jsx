@@ -1,5 +1,6 @@
 import React from "react";
 import _ from 'lodash'
+import omitDeep from 'omit-deep-lodash';
 import MlStartupAboutUs from "./MlStartupAboutUs";
 import MlStartupRating from "./MlStartupRating";
 import MlStartupClients from "./MlStartupClients";
@@ -154,7 +155,10 @@ export default class MlStartupTab extends React.Component {
     ]
     return tabs;
   }
-
+  /**
+   * @Note : need to check the use of maintaining state in this file
+   * seems there is no use to maintain state in this file
+   * */
   getStartupAboutUs(details, privateKey) {
     let data = this.state.portfolioStartupAboutUs;
     data = details;
@@ -177,7 +181,7 @@ export default class MlStartupTab extends React.Component {
   getStartupClients(details, privateKey, requiredFields) {
     let data = this.state.portfolioStartupClients;
     data = details;
-    this.setState({portfolioStartupClients: data})
+    this.setState({portfolioStartupClients: data});
     this.props.getPortfolioStartupAboutUsDetails(data, "clients", privateKey, requiredFields);
   }
 
@@ -197,24 +201,12 @@ export default class MlStartupTab extends React.Component {
 
   getStartupBranches(details, privateKey, requiredFields) {
     this.setState({portfolioStartupBranches: details})
-    let ary = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      ary.push(updateItem)
-    })
-    var sendData = ary;
-    this.props.getPortfolioStartupAboutUsDetails(sendData, "branches", privateKey, requiredFields);
+    this.props.getPortfolioStartupAboutUsDetails(details, "branches", privateKey, requiredFields);
   }
 
   getStartupTechnology(details, privateKey, requiredFields) {
     this.setState({portfolioStartupTechnologies: details})
-    let ary = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      ary.push(updateItem)
-    })
-    var sendData = ary;
-    this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies", privateKey, requiredFields);
+    this.props.getPortfolioStartupAboutUsDetails(details, "technologies", privateKey, requiredFields);
   }
 
   getStartupLegalIssue(details, privateKey) {

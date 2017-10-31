@@ -19,10 +19,11 @@ export default class MlStartupData extends React.Component{
 
   }
 
-  async componentWillMount() {
-    this.fetchPortfolioData()
-    console.log('---response from server---',resp)
+  componentWillMount() {
+    const resp = this.fetchPortfolioData()
+    return resp
   }
+
   async fetchPortfolioData(){
     const resp = await fetchStartupPortfolioData(this.props.portfolioDetailsId,this.props.client)
     this.setState({
@@ -37,6 +38,7 @@ export default class MlStartupData extends React.Component{
   if(WinWidth > 768){
     $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
 }
+
   componentDidMount()
   {
     $(function() {
@@ -50,7 +52,6 @@ export default class MlStartupData extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-
   }
 
   documentUpload(type, e) {

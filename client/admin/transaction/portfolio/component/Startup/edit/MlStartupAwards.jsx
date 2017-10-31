@@ -35,11 +35,11 @@ export default class MlStartupAwards extends Component{
       uploadingAvatar: false
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -56,7 +56,6 @@ export default class MlStartupAwards extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -103,15 +102,14 @@ export default class MlStartupAwards extends Component{
       setObject = this.context.startupPortfolio.awardsRecognition
     }
     this.setState({startupAwardsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAwards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index,
       data:details,selectedObject : index,
       "selectedVal" : details.awardId,
@@ -208,6 +206,7 @@ export default class MlStartupAwards extends Component{
     let awards = this.state.startupAwards;
     let startupAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       startupAwards[this.state.selectedIndex] = data;
     }
@@ -259,10 +258,13 @@ export default class MlStartupAwards extends Component{
         }
         this.libraryAction(fileObjectStructure)
       }
-      if (result.success) {
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        }
         this.setState({loading: true})
         this.fetchOnlyImages();
-        this.imagesDisplay();
       }
     }
   }
@@ -297,26 +299,6 @@ export default class MlStartupAwards extends Component{
     }
   }
 
-
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      let dataDetails =this.state.startupAwards
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.startupAwardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupAwards:cloneBackUp,startupAwardsList:cloneBackUpList});
-    }
-  }
   toggleModal() {
     const that = this;
     this.setState({

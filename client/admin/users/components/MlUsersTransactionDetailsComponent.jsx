@@ -3,6 +3,8 @@ import {render} from 'react-dom';
 // import {findBackendUserActionHandler} from '../actions/findUserAction'
 let Select = require('react-select');
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlUsersTransactionDetailsComponent extends React.Component {
   constructor(props){
     super(props);
@@ -76,7 +78,7 @@ export default class MlUsersTransactionDetailsComponent extends React.Component 
               </div>
               <div className="col-md-3 text-center">
                 <div className="profile_block">
-                  <img src={that.state.profileImage} />
+                  <img src={generateAbsolutePath(that.state.profileImage)} />
                   <span>
                   {that.state.firstName}<br />{that.state.role}
                 </span>
@@ -94,7 +96,7 @@ export default class MlUsersTransactionDetailsComponent extends React.Component 
               </div>
               <div className="col-md-3 text-center">
                 <div className="profile_block">
-                  <img src={that.state.profileImage} />
+                  <img src={generateAbsolutePath(that.state.profileImage)} />
                   <span>
                     {that.state.firstName}<br />{that.state.role}
                 </span>

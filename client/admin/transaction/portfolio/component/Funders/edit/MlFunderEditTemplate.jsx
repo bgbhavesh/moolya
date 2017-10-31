@@ -203,8 +203,9 @@ export default class MlFunderEditTemplate extends Component {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
-    this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.setState({funderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
   /**

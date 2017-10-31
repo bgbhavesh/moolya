@@ -20,10 +20,10 @@ export default class MlInstitutionClients extends Component{
       loading: false,
       data:{},
       privateKey:{},
-      institutionClients:this.props.employmentDetails || [],
+      institutionClients:this.props.clientsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      institutionClientsList:this.props.employmentDetails || [],
+      institutionClientsList:this.props.clientsDetails || [],
       selectedVal:null,
       selectedObject:"default"
     };

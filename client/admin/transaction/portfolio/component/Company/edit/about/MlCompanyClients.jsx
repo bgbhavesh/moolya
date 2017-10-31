@@ -20,17 +20,17 @@ export default class MlCompanyClients extends Component{
       loading: false,
       data:{},
       privateKey:{},
-      companyClients:this.props.employmentDetails || [],
+      companyClients:this.props.clientsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      companyClientsList:this.props.employmentDetails || [],
+      companyClientsList:this.props.clientsDetails || [],
       selectedVal:null,
       selectedObject:"default"
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -42,7 +42,6 @@ export default class MlCompanyClients extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.clients)
@@ -64,44 +63,41 @@ export default class MlCompanyClients extends Component{
     let cloneArray = _.cloneDeep(this.state.companyClients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
+    this.curSelectLogo = details.logo;
   }
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if(className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.companyClients
     if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.clients ){
       setObject = this.context.companyPortfolio.clients
     }
     this.setState({companyClientsList:setObject,popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onStatusChangeNotify(e)
@@ -135,13 +131,15 @@ export default class MlCompanyClients extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
-  sendDataToParent(){
-    const requiredFields = this.getFieldValidations();
+  sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let clients = this.state.companyClients;
     let companyClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    companyClients[this.state.selectedIndex] = data;
+    data.logo = this.curSelectLogo;
+    if (isSaveClicked){
+      companyClients[this.state.selectedIndex] = data;
+    }
     let arr = [];
     _.each(companyClients, function (item)
     {
@@ -152,13 +150,11 @@ export default class MlCompanyClients extends Component{
       }
       let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      arr.push(newItem)
     })
     companyClients = arr;
     this.setState({companyClients:companyClients})
-    this.props.getClients(companyClients, this.state.privateKey, requiredFields);
-
+    this.props.getClients(companyClients, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -183,11 +179,14 @@ export default class MlCompanyClients extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
         }
+        this.setState({loading: true})
+        this.fetchOnlyImages();
       }
     }
   }
@@ -217,26 +216,6 @@ export default class MlCompanyClients extends Component{
       }else {
         this.setState({loading: false})
       }
-    }
-  }
-
-  async imagesDisplay(){
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
-      let dataDetails =this.state.companyClients;
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response&&response.clients?response.clients:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0) {
-        _.each(dataDetails, function (obj, key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.companyClientsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, companyClients:cloneBackUp,companyClientsList:cloneBackUpList});
     }
   }
 
@@ -281,7 +260,9 @@ export default class MlCompanyClients extends Component{
                       <a href="" id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                          <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl?generateAbsolutionPath(details.logo.fileUrl):''}/></div>
+                          <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
+                            <img src={details.logo&&details.logo.fileUrl?generateAbsolutionPath(details.logo.fileUrl):"/images/sub_default.jpg"}/>
+                          </div>
                           <h3>{details.clientName || ''} </h3>
                         </div>
                       </a>

@@ -190,7 +190,6 @@ export default class SharePopOver extends React.Component {
           url = `/images/doc.png`;
         }
       }
-      console.log('url=',url);
       return (
         <ul className="doc_upload" key={index}>
           <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>

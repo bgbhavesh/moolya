@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import backendUserRoute from "../actions/routesBackendUserLIst";
 let FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar'
+import ScrollArea from 'react-scrollbar';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlBackendUserListView extends Component {
 
@@ -42,7 +43,7 @@ export default class MlBackendUserListView extends Component {
               <div className="provider_mask">
                 <img src="/images/funder_bg.png"/>
                 <img className="user_pic"
-                     src={genderImage}/>
+                     src={generateAbsolutePath(genderImage)}/>
               </div>
             </a>
             <h3>{username} <br />

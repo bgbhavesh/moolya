@@ -14,6 +14,7 @@ import MlStepAvailability from './MlStepAvailabilityComponent'
 import MlLoader from '../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 
 let IdentityOptions = [
@@ -230,7 +231,7 @@ class MlEditAssignTemplate extends React.Component{
   showTemplateImage(row){
 
     console.log(row);
-    window.open(row.templateImage)
+    window.open(generateAbsolutePath(row.templateImage))
   }
 
   render(){

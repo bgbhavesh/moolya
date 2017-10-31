@@ -11,6 +11,8 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+import {client} from '../../../../../core/apolloConnection'
+
 
 const KEY = "researchAndDevelopment"
 
@@ -235,8 +237,13 @@ export default class MlInstitutionEditRD extends React.Component{
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, client)
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 

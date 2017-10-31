@@ -12,6 +12,7 @@ import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 import CropperModal from '../../../commons/components/cropperModal';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 // import {getAdminUserContext} from "../../../commons/getAdminUserContext";
@@ -369,7 +370,7 @@ class MlSubChapterDetails extends React.Component {
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
-                            src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
+                            src={this.state.data && this.state.data.subChapterImageLink ? generateAbsolutePath(this.state.data.subChapterImageLink) : '/images/def_profile.png'}/>
                           {/*<img src="/images/ideator_01.png"/>*/}
                         </div>
                       </div>
@@ -427,7 +428,7 @@ class MlSubChapterDetails extends React.Component {
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
-                            src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
+                            src={this.state.data && this.state.data.subChapterImageLink ? generateAbsolutePath(this.state.data.subChapterImageLink) : '/images/def_profile.png'}/>
                         </div>
                       </div>
                       <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload} show={this.state.showImageUploadModal} uploadingImage={this.state.uploadingImage} cropperStyle={"circle"}/>

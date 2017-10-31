@@ -6,6 +6,8 @@ import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import { createContainer } from 'meteor/react-meteor-data';
 import _ from 'lodash';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 var FontAwesome = require('react-fontawesome');
 
 
@@ -101,7 +103,7 @@ class  MlAdminProfileApp extends Component {
           <img className="logo" src="/images/logo.png" />
         </a>
         <div className="ml_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}
+          <h1 id="NavLbl" className="" style={{'background':`url(${generateAbsolutePath(this.state.profilePic)}) center center`}}
           ></h1>
           <ol>
             <li data-toggle="tooltip" title="My Profile" data-placement="right">

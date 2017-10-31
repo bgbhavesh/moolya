@@ -6,7 +6,8 @@ var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {findBackendUserActionHandler} from '../actions/findUserAction'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
-import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction'
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlInternalRequestDetailsComponent extends React.Component {
@@ -162,7 +163,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
               </div>
               <div className="col-md-3 text-center">
                 <div className="profile_block">
-                  <img src={this.state.profileImage} />
+                  <img src={generateAbsolutePath(this.state.profileImage)} />
                   <span>
                     {this.state.firstName}<br />{this.state.role}
                 </span>

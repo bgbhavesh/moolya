@@ -46,7 +46,7 @@ export default class MlMicroSitePreview extends React.Component {
               </iframe>
             </div>)
             :
-            (<div align="center" style={{fontSize: '30px'}}>Portifolio not requested for Live</div>)
+            (<div align="center" style={{'text-align':'center','margin': '20px 0 0 0','fontSize': '25px','color': '#ef4647' }}>Portifolio not requested for Live</div>)
         }
       </div>)
   }

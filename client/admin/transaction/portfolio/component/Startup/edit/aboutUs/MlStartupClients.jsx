@@ -20,17 +20,18 @@ class MlStartupClients extends Component{
       loading: false,
       data:{},
       privateKey:{},
-      startupClients:this.props.employmentDetails || [],
+      startupClients: this.props.clientsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      startupClientsList:this.props.employmentDetails || [],
+      startupClientsList: this.props.clientsDetails || [],
       selectedVal:null,
       selectedObject:"default"
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
+    // this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -42,7 +43,7 @@ class MlStartupClients extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
+    // this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
@@ -64,9 +65,10 @@ class MlStartupClients extends Component{
     let cloneArray = _.cloneDeep(this.state.startupClients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    // if(details && details.logo){
+    //   delete details.logo['__typename'];
+    // }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
@@ -77,24 +79,16 @@ class MlStartupClients extends Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   onSaveAction(e){
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
@@ -108,6 +102,7 @@ class MlStartupClients extends Component{
       setObject = this.context.startupPortfolio.clients
     }
     this.setState({startupClientsList:setObject,popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onStatusChangeNotify(e)
@@ -145,6 +140,7 @@ class MlStartupClients extends Component{
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked) {
       startupClients[this.state.selectedIndex] = data;
     }
@@ -158,8 +154,8 @@ class MlStartupClients extends Component{
       }
       let newItem = _.omit(item, "__typename");
       newItem = _.omit(newItem, ["privateFields"])
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
@@ -188,11 +184,15 @@ class MlStartupClients extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
+        this.setState({loading: true})
+        this.fetchOnlyImages();
+        // this.imagesDisplay();
       }
     }
   }
@@ -200,7 +200,12 @@ class MlStartupClients extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages(){
@@ -220,25 +225,25 @@ class MlStartupClients extends Component{
     }
   }
 
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
-      let dataDetails =this.state.startupClients;
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response&&response.clients?response.clients:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0) {
-        _.each(dataDetails, function (obj, key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.startupClientsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupClients:cloneBackUp,startupClientsList:cloneBackUpList});
-    }
-  }
+  // async imagesDisplay(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response && response.clients) {
+  //     let dataDetails =this.state.startupClients;
+  //     if(!dataDetails || dataDetails.length<1){
+  //       dataDetails = response&&response.clients?response.clients:[]
+  //     }
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     if(cloneBackUp && cloneBackUp.length>0) {
+  //       _.each(dataDetails, function (obj, key) {
+  //         cloneBackUp[key]["logo"] = obj.logo;
+  //       })
+  //     }
+  //     let listDetails = this.state.startupClientsList || [];
+  //     listDetails = cloneBackUp
+  //     let cloneBackUpList = _.cloneDeep(listDetails);
+  //     this.setState({loading: false, startupClients:cloneBackUp,startupClientsList:cloneBackUpList});
+  //   }
+  // }
 
   emptyClick(e) {
     if (this.state.popoverOpen)

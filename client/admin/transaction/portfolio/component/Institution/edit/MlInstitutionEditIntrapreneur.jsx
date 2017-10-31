@@ -7,6 +7,8 @@ import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import Datetime from "react-datetime";
+import {client} from '../../../../../core/apolloConnection'
+
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchInstitutionDetailsHandler} from "../../../actions/findPortfolioInstitutionDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
@@ -225,8 +227,13 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, client)
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 

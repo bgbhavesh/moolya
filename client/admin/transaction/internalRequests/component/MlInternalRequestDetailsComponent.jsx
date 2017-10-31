@@ -6,7 +6,8 @@ var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {findBackendUserActionHandler} from '../actions/findUserAction'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
-import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction'
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlInternalRequestDetailsComponent extends React.Component {
@@ -23,22 +24,22 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     }
     return this;
   }
+
   componentDidMount() {
     initalizeFloatLabel();
-    // console.log(this.props.data)
   }
+
   componentWillReceiveProps(newProps){
-   /* let type=newProps.type;
-    if(type=="approval"){
-      this.setState({"dispalyStatus":true})
-    }*/
     let userId=newProps.data.userId
-    this.setState({"status":newProps.data.status})
+    var isDisabled = false
+    if (newProps.data.status === "Approved") {
+      isDisabled = true
+    }
+    this.setState({"status": newProps.data.status, isStatusDisabled: isDisabled})
     if(userId){
       const resp=this.findBackendUser()
       return resp;
     }
-
   }
 
   async findBackendUser() {
@@ -76,12 +77,12 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
             this.setState({"departmentName":roleIds[0].departmentName})
             this.setState({"subDepartmentName":roleIds[0].subDepartmentName})
           }
-
         }
         this.setState({profileImage:userDetails.profile.profileImage})
       }
     }
   }
+
   async  onStatusSelect(val){
     this.setState({"status":val.value})
     let status=val.value
@@ -144,8 +145,11 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
                   <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status}  onChange={this.onStatusSelect.bind(this)} />
+                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status} disabled={this.state.isStatusDisabled} onChange={this.onStatusSelect.bind(this)} />
                 </div>
+                <br className="clearfix" />
+                <br className="clearfix" />
+                <br className="clearfix" />
                 <br className="clearfix" />
               </div>
             </div>
@@ -159,7 +163,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
               </div>
               <div className="col-md-3 text-center">
                 <div className="profile_block">
-                  <img src={this.state.profileImage} />
+                  <img src={generateAbsolutePath(this.state.profileImage)} />
                   <span>
                     {this.state.firstName}<br />{this.state.role}
                 </span>

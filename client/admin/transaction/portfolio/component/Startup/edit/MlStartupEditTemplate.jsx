@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from 'react-redux';
 import _ from "lodash";
+import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupManagement from "./MlStartupManagement";
 import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
@@ -127,7 +128,9 @@ class MlStartupEditTemplate extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    // this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getDataDetails(details, tabName) {
@@ -138,40 +141,29 @@ class MlStartupEditTemplate extends Component {
 
   getManagementDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
-    if (data && !data.management) {
-      data['management'] = [];
-    }
+    // if (data && !data.management) {
+    //   data['management'] = [];
+    // }
     data['management'] = details;
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getInvestorDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data['investor'] = details;
     this.setState({startupPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['investor'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getAwardsDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
-    if (data && !data.awardsRecognition) {
-      data['awardsRecognition'] = [];
-    }
+    data['awardsRecognition'] = details;
     this.setState({startupPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getLookingForDetails(details, privateKey, requiredFields) {

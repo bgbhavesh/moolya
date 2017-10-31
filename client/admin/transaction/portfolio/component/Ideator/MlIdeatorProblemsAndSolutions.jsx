@@ -147,7 +147,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(file,name, resp){
+  onFileUploadCallBack(name,file, resp){
+    console.log('file', file)
       if(resp){
           let result = JSON.parse(resp)
         let userOption = confirm("Do you want to add the file into the library")
@@ -170,8 +171,14 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
+
   async removeProblemAndSolutionPic(typeOfImage,fileUrl){
       if(typeOfImage && fileUrl){
         let portfolioDetailsId = this.props.portfolioDetailsId;

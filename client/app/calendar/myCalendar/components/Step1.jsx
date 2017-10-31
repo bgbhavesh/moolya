@@ -29,14 +29,13 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
-    this.state={service:"", serviceSeeker:[], seeker: "", orderId:""};
+    this.state={service:"", serviceSeeker:[], seeker: this.props.seviceSeeker, orderId:""};
     this.testQuery.bind(this);
     this.saveData.bind(this);
   }
 
   componentWillMount() {
     this.props.activeComponent('BasicInfo');
-    this.props.setSessionId('');
   }
   //
   // componentWillUpdate() {
@@ -173,7 +172,9 @@ this.bookDetails(data)
         year: year
       };
       console.log('Data :',data);
-      this.bookDetails(data)
+      this.bookDetails(data);
+      this.props.selectedServiceSeeker(selectedSeeker);
+      this.props.setSessionId('');
       if(currentSeeker.serviceId){
         this.props.selectedService(currentSeeker.serviceId);
       }

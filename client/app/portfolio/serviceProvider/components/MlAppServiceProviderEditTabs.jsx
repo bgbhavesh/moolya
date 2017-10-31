@@ -214,20 +214,25 @@ export default class MlAppServiceProviderEditTabs extends Component {
   }
 
   getServiceProviderClients(details, privateKey, requiredFields,) {
-    let data = this.state.serviceProviderPortfolio;
-    if (data && !data.clients) {
-      data['clients'] = [];
-    }
-    this.setState({serviceProviderPortfolio: data})
+    // let data = this.state.serviceProviderPortfolio;
+    // if (data && !data.clients) {
+    //   data['clients'] = [];
+    // }
+    // this.setState({serviceProviderPortfolio: data})
+    // data['clients'] = details;
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['clients'] = arr;
+    // this.setState({serviceProviderPortfolio: data})
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    var data = this.state.serviceProviderPortfolio;
     data['clients'] = details;
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['clients'] = arr;
     this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 
 

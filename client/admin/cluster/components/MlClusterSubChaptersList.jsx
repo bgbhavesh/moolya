@@ -3,6 +3,8 @@ import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findRoleActionHandler} from '../../settings/rolesAndPermissions/actions/findRoleAction'
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlClusterSubChaptersList extends Component
 {
   constructor(props){
@@ -68,7 +70,7 @@ export default class MlClusterSubChaptersList extends Component
               <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
               {prop.isDefaultSubChapter?<div className="list-moolya-icon"><span className="ml ml-moolya-symbol"></span></div>:<span></span>}
               <a href={clusterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>
-                  <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={prop.subChapterImageLink}/> : <span
+                  <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={generateAbsolutePath(prop.subChapterImageLink)}/> : <span
                     className="ml ml-moolya-symbol"></span>}</div>
               </a>
               <h3>{prop.subChapterDisplayName}</h3>

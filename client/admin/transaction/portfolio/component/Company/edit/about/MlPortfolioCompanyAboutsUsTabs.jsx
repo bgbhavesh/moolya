@@ -69,6 +69,10 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
     return tabs;
   }
 
+  /**
+   * @Note : need to check the use of maintaining state in this file
+   * seems there is no use to maintain state in this file
+   * */
   getAboutUs(details, privateKey){
     let data = this.state.portfolioAboutUs;
     data=details;

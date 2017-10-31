@@ -62,7 +62,7 @@ export default class MlSubChapterList extends Component {
             <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
             {prop.isDefaultSubChapter?<div className="list-moolya-icon"><span className="ml ml-moolya-symbol"></span></div>:<span></span>}
             <a href={chapterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>
-              <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={prop.subChapterImageLink}/> : <span
+              <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={Meteor.settings.public.countriesFlagBaseUrl+prop.subChapterImageLink}/> : <span
                 className="ml ml-moolya-symbol"></span>}</div>
             </a>
             <h3>{prop.subChapterName}</h3>

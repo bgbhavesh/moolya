@@ -154,7 +154,7 @@ export default class MlAppInstitutionEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Partner",
         name: "Partner",
-        component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)}
+        component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} client={appClient}
                                               portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
       {

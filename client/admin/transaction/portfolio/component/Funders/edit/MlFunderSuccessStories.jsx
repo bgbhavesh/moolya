@@ -30,7 +30,7 @@ export default class MlFunderSuccessStories extends Component {
       uploadingAvatar: false,
       showProfileModal: false,
     }
-    this.curSelectLogo = {}
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this);

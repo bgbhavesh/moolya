@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import dashboardRoutes from '../actions/routesActionHandler';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 export default class MlAppChapterList extends Component {
 
   constructor(props){
@@ -15,7 +16,7 @@ export default class MlAppChapterList extends Component {
     const data=this.props.data||[];
     const v = this.state.v;
     const list=  data.map((prop) =>{
-      let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={`${prop.countryFlag}`}/>:<span className="ml my-ml-chapter"></span>;
+      let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={`${generateAbsolutePath(prop.countryFlag)}`}/>:<span className="ml my-ml-chapter"></span>;
       return (
       <div className="col-lg-2 col-md-4 col-sm-4" key={prop.displayName}>
         <div className="list_block">

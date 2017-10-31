@@ -20,10 +20,10 @@ export default class MlInstitutionClients extends Component{
       loading: false,
       data:{},
       privateKey:{},
-      institutionClients:this.props.employmentDetails || [],
+      institutionClients:this.props.clientsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      institutionClientsList:this.props.employmentDetails || [],
+      institutionClientsList:this.props.clientsDetails || [],
       selectedVal:null,
       selectedObject:"default"
     };
@@ -193,7 +193,12 @@ export default class MlInstitutionClients extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages(){

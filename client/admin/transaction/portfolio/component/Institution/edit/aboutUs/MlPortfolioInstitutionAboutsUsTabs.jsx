@@ -69,6 +69,10 @@ export default class MlInstitutionTab extends React.Component{
     return tabs;
   }
 
+  /**
+   * @Note : need to check the use of maintaining state in this file
+   * seems there is no use to maintain state in this file
+   * */
   getInstitutionAboutUs(details, privateKey){
     let data = this.state.portfolioInstitutionAboutUs;
     data=details;

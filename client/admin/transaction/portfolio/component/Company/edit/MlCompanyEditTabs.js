@@ -197,7 +197,8 @@ export default class MlCompanyEditTabs extends Component {
     }
     data['management'] = details;
     this.setState({companyPortfolio: data})
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getLookingForDetails(details, privateKey, requiredFields) {
@@ -262,7 +263,8 @@ export default class MlCompanyEditTabs extends Component {
   getCSRDetails(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getRDDetails(details, privateKey, requiredFields) {

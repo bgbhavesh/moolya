@@ -141,14 +141,10 @@ export default class MlServiceProviderEditTabs extends Component {
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
     }
-    this.setState({serviceProviderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    data['awardsRecognition'] = details;
+    this.setState({serviceProviderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 
   getServiceProviderMCL(details, privateKey) {

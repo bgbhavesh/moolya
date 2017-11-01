@@ -29,12 +29,12 @@ export default class MlInstitutionEditRD extends React.Component{
       institutionRDList:[],
       selectedObject:"default"
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -48,7 +48,6 @@ export default class MlInstitutionEditRD extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -94,15 +93,14 @@ export default class MlInstitutionEditRD extends React.Component{
       setObject = this.context.institutionPortfolio.researchAndDevelopment
     }
     this.setState({institutionRDList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.institutionRD);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
                     selectedObject : index,
                     popoverOpen : !(this.state.popoverOpen)},()=>{
@@ -184,6 +182,7 @@ export default class MlInstitutionEditRD extends React.Component{
     let awards = this.state.institutionRD;
     let institutionRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionRD[this.state.selectedIndex] = data;
     }
@@ -226,12 +225,15 @@ export default class MlInstitutionEditRD extends React.Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          }
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
-      }
     }
   }
 
@@ -253,7 +255,7 @@ export default class MlInstitutionEditRD extends React.Component{
     if (response && response.researchAndDevelopment) {
       let dataDetails =this.state.institutionRD
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.researchAndDevelopment[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -264,28 +266,6 @@ export default class MlInstitutionEditRD extends React.Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.researchAndDevelopment) {
-      let dataDetails =this.state.institutionRD
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.researchAndDevelopment?response.researchAndDevelopment:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionRDList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionRD:cloneBackUp,institutionRDList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');

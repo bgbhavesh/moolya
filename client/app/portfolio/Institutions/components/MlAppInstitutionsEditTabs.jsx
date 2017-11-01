@@ -230,7 +230,8 @@ export default class MlAppInstitutionEditTabs extends Component {
     }
     data['management'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 
   getInvestorDetails(details, privatekey) {

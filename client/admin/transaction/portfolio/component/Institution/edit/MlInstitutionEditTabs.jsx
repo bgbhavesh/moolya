@@ -93,7 +93,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
-        component: <MlInstitutionEditInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
+        component: <MlInstitutionEditInvestor  client={client} key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
                                               portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
@@ -195,7 +195,8 @@ export default class MlInstitutionEditTab extends Component {
     }
     data['management'] = details;
     this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privateKey, requiredFields);
   }
 
   getInvestorDetails(details, privateKey) {

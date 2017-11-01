@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
+import omitDeep from 'omit-deep-lodash';
+import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import MlInstitutionAboutUs from "../../../../admin/transaction/portfolio/component/Institution/edit/aboutUs/MlInstitutionAboutUsLandingPage"
 import MlInstitutionEditManagement from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditManagement"
 import MlInstitutionInvestor from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditInvestor";
@@ -14,12 +15,11 @@ import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/componen
 import MlInstitutionCSREditTabs from "../../../../admin/transaction/portfolio/component/Institution/edit/CSR/MlInstitutionCSREditTabs";
 import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditPartners";
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/edit/incubators/MlInstitutionIncubatorsEditTabs";
-
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
 // import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
-export default class MlAppInstitutionEditTabs extends React.Component {
+export default class MlAppInstitutionEditTabs extends Component {
 
   constructor(props) {
     super(props)
@@ -201,7 +201,8 @@ export default class MlAppInstitutionEditTabs extends React.Component {
   getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 
   getCSRDetails(details, tabName, privatekey, requiredFields) {
@@ -236,26 +237,16 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     let data = this.state.institutionPortfolio;
     data['investor'] = details;
     this.setState({institutionPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['investor'] = arr;
-    this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey);
   }
 
   getPartnersDetails(details, privatekey) {
     let data = this.state.institutionPortfolio;
     data['partners'] = details;
     this.setState({institutionPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['partners'] = arr;
-    this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey);
   }
 
   getAwardsDetails(details, privatekey, requiredFields) {
@@ -263,14 +254,10 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
     }
-    this.setState({institutionPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
     data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
+    this.setState({institutionPortfolio: data})
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 
   getIntrapreneurDetails(details, privatekey) {
@@ -279,15 +266,10 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     if (data && !data.awardsRecognition) {
       data['intrapreneurRecognition'] = [];
     }
-    this.setState({institutionPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
     data['intrapreneurRecognition'] = arr;
-
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.setState({institutionPortfolio: data})
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey);
   }
 
   getRDDetails(details, privatekey, requiredFields) {
@@ -295,14 +277,10 @@ export default class MlAppInstitutionEditTabs extends React.Component {
     if (data && !data.awardsRecognition) {
       data['researchAndDevelopment'] = [];
     }
-    this.setState({institutionPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['researchAndDevelopment'] = arr;
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
+    data['researchAndDevelopment'] = details;
+    this.setState({institutionPortfolio: data});
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 
   getLookingForDetails(details, privatekey, requiredFields) {

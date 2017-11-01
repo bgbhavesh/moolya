@@ -32,6 +32,7 @@ export default class MlInstitutionEditManagement extends Component{
       responseImage:"",
       gender:null,
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.onSaveAction = this.onSaveAction.bind(this);
     this.onClick.bind(this);
@@ -101,6 +102,7 @@ export default class MlInstitutionEditManagement extends Component{
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
+    this.curSelectLogo = managmentDetails.logo
   }
   optionsBySelectTitle(val){
     let data = _.cloneDeep(this.state.data);
@@ -223,6 +225,7 @@ export default class MlInstitutionEditManagement extends Component{
     this.setState({institutionManagementList: setObject}, () => {
       $('#management-form').slideUp();
     })
+    this.curSelectLogo = {}
   }
 
   getFieldValidations() {
@@ -235,6 +238,7 @@ export default class MlInstitutionEditManagement extends Component{
     let institutionManagement1 = this.state.institutionManagement;
     let institutionManagement = _.cloneDeep(institutionManagement1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionManagement[this.state.selectedIndex] = data;
     }
@@ -247,9 +251,9 @@ export default class MlInstitutionEditManagement extends Component{
       }
       item = _.omit(item, "__typename");
       let newItem = _.omit(item, 'privateFields');
-      if(item && item.logo){
-        newItem = _.omit(item, 'logo')
-      }
+      // if(item && item.logo){
+      //   newItem = _.omit(item, 'logo')
+      // }
       managementArr.push(newItem)
     })
     institutionManagement = managementArr;
@@ -280,6 +284,10 @@ export default class MlInstitutionEditManagement extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
+      this.curSelectLogo = {
+        fileName: file && file.name ? file.name : "",
+        fileUrl: result.result
       }
       var temp = $.parseJSON(resp).result;
       details=_.omit(details,[name]);

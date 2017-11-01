@@ -29,6 +29,7 @@ export default class MlStartupLookingFor extends Component {
     this.tabName = this.props.tabName || ""
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     return this;
   }
 
@@ -109,6 +110,14 @@ export default class MlStartupLookingFor extends Component {
     })
   }
 
+  handleBlur(e) {
+    var details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.target.value});
+    this.setState({data: details})
+  }
+
   onSaveAction(e) {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
@@ -158,11 +167,9 @@ export default class MlStartupLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label,
-      lookingDescription: selObject.about
+      ["lookingForName"]: selObject.label
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.sendDataToParent()
@@ -204,7 +211,6 @@ export default class MlStartupLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForDisplayName
           value:_id
-          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -272,7 +278,7 @@ export default class MlStartupLookingFor extends Component {
 
                             <div className="form-group">
                               <textarea type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label" disabled="disabled"
+                                     className="form-control float-label" onBlur={this.handleBlur}
                                      defaultValue={this.state.data.lookingDescription}>
                               </textarea>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"

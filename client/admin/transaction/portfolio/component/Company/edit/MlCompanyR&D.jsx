@@ -359,7 +359,7 @@ export default class MlCompanyRAndD extends Component{
                                    className="form-control float-label"
                                    defaultValue={this.state.data.researchAndDevelopmentName} ref={"researchAndDevelopmentName"}
                                    onBlur={this.handleBlur.bind(this)} data-required={true}
-                                   data-errMsg="Name is required"/>
+                                   data-errMsg="R&D Name is required"/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>
                         </div>

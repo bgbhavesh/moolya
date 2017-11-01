@@ -372,9 +372,10 @@ class MlStartupBranches extends Component{
 
                         <div className="form-group mandatory">
                           <input type="text" name="branchAddress1" placeholder="Flat/House/Floor/Building"
-                                 className="form-control float-label" ref={"branchAddress1"}
+                                 className="form-control float-label" ref={"branchAddress1"} data-required={true}
+                                 data-errMsg="Flat/House/Floor/Building is required"
                                  defaultValue={this.state.data.branchAddress1} onBlur={this.handleBlur.bind(this)}
-                                  />
+                          />
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressOnePrivate" defaultValue={this.state.data.isAddressOnePrivate} onClick={this.onLockChange.bind(this, "branchAddress1", "isAddressOnePrivate")}/>
                         </div>
 

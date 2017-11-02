@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import hierarchyRoutes from '../actions/hierarchyRoutes';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class MlClustersListHierarchy extends Component {
 
@@ -26,7 +28,7 @@ export default class MlClustersListHierarchy extends Component {
           <div className="list_block">
             <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
             <a href={hierarchyRoutes.chapterListRoute(prop.id)}>
-              <div className={"hex_outer"}><img src={prop.countryFlag}/></div>
+              <div className={"hex_outer"}><img src={Meteor.settings.public.countriesFlagBaseUrl+prop.countryFlag}/></div>
             </a>
             <h3>{prop.displayName}</h3>
           </div>

@@ -5,6 +5,8 @@ import {multipartASyncFormHandler} from '../../../../../../../../commons/MlMulti
 import Moolyaselect from '../../../../../../../commons/components/MlAdminSelectWrapper'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../../../../../lib/mlGenerateAbsolutePath'
+
 
 
 var Select = require('react-select');
@@ -171,7 +173,7 @@ export default class  BeSpokeView extends Component {
                             return(
                               <div className="upload-image">
                                 <FontAwesome className="pull-right" onClick={()=>that.props.deleteAttachments(id, index)} name='minus'/>
-                                <img src={image} id="output"/>
+                                <img src={generateAbsolutePath(image)} id="output"/>
                               </div>
                             )
                           }): [] }

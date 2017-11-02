@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 
 import _ from 'lodash';
 
@@ -39,7 +41,7 @@ export default class MlAppMapMarker extends Component {
       <div>
         <div data-toggle="tooltip" title={this.props.status.firstName+" "+this.props.status.lastName} className="map_profiles" onClick={this.markerClickActionHandler.bind(this, this.props)} id={this.props.markerId}>
           <span className={`ml ${status}`}></span>
-          <img src={`${this.props.status&&this.props.status.profileImage?this.props.status.profileImage:"/images/def_profile.png"}`}/>
+          <img src={`${this.props.status&&this.props.status.profileImage?generateAbsolutePath(this.props.status.profileImage):"/images/def_profile.png"}`}/>
         </div>
       </div>
     );

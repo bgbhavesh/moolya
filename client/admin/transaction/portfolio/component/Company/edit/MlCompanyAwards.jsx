@@ -13,6 +13,7 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 const KEY = "awardsRecognition"
 
@@ -24,6 +25,7 @@ export default class MlCompanyAwards extends Component{
       data:{},
       privateKey:{},
       awards: [],
+      fileName:"",
       popoverOpen:false,
       selectedIndex:-1,
       awardsList:[],
@@ -33,11 +35,11 @@ export default class MlCompanyAwards extends Component{
       uploadingAvatar: false
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this)
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -54,7 +56,6 @@ export default class MlCompanyAwards extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -99,15 +100,14 @@ export default class MlCompanyAwards extends Component{
       setObject = this.context.companyPortfolio.awardsRecognition
     }
     this.setState({awardsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.awards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
       selectedObject : index,
       "selectedVal" : details.awardId,
@@ -205,6 +205,7 @@ export default class MlCompanyAwards extends Component{
     let awards = this.state.awards;
     awards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       awards[this.state.selectedIndex] = data;
     }
@@ -212,7 +213,7 @@ export default class MlCompanyAwards extends Component{
     _.each(awards, function (item)
     {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
             delete item[propName];
           }
         }
@@ -227,7 +228,7 @@ export default class MlCompanyAwards extends Component{
 
   onLogoFileUpload(image,fileInfo){
     let file=image;
-    let fileName=fileInfo.name;
+    let fileName=this.state.fileName;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -248,28 +249,34 @@ export default class MlCompanyAwards extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
         }
-        this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
+        this.libraryAction(fileObjectStructure);
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
+        this.setState({loading: true})
+        this.fetchOnlyImages();
       }
     }
   }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client);
+    if (resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
-
-
 
   async fetchOnlyImages(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
@@ -289,42 +296,23 @@ export default class MlCompanyAwards extends Component{
     }
   }
 
-
-  async imagesDisplay(){
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      let dataDetails =this.state.awards
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.awardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, awards:cloneBackUp,awardsList:cloneBackUpList});
-    }
-  }
   toggleModal() {
     const that = this;
     this.setState({
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image,e) {
+  handleUploadAvatar(image,file) {
     this.setState({
       uploadingAvatar: true,
     });
-    this.onLogoFileUpload(image,e);
+    this.setState({fileName: file.name})
+    this.onLogoFileUpload(image,file);
   }
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
-    var valid = function( current ){
+    var validDate = function( current ){
       return current.isBefore( yesterday );
     };
     let query=gql`query{
@@ -366,11 +354,11 @@ export default class MlCompanyAwards extends Component{
                   {awardsList.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="" id={"create_client"+idx}>
-                        <div className="list_block">
+                        <div className="list_block" onClick={that.onTileClick.bind(that, idx)}>
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                          <div className="hex_outer"><img
+                            src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                           <h3>{details.awardName?details.awardName:""}</h3>
                         </div>
                       </a>
@@ -394,7 +382,7 @@ export default class MlCompanyAwards extends Component{
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                   inputProps={{placeholder: "Select Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
-                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ validDate }/>
                       </div>
                       <div className="form-group">
                         <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur}/>

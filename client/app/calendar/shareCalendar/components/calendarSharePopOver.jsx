@@ -7,6 +7,7 @@ import {getMoolyaAdminsActionHandler,getTeamUsersActionHandler,fetchOfficeAction
 import moment from "moment";
 import {fetchConnections} from '../actions/fetchConnectionsForCalendar'
 import {storeSharedDetailsHandler} from '../actions/mlSharedCalendarActionHandler'
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 
 export default class CalendarSharePopOver extends React.Component {
@@ -177,7 +178,7 @@ export default class CalendarSharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="doc_upload" key={index}>
-          <li>{<FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>}<img src={value.fileUrl}/></li>
+          <li>{<FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>}<img src={generateAbsolutePath(value.fileUrl)}/></li>
         </ul>
       )
     })
@@ -190,7 +191,7 @@ export default class CalendarSharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       return (
         <ul className="img_upload ul-hide" key={index}>
-          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index)}/> : <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+          <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index)}/> : <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={value.profileImage?generateAbsolutePath(value.profileImage):""}/><span>{value.name}</span></li>
         </ul>
       )
     })
@@ -258,7 +259,7 @@ export default class CalendarSharePopOver extends React.Component {
       if(value.name.match(search)) {
         return (
           <ul className="img_upload ul-hide" key={index}>
-            <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+            <li >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
           </ul>
         )
       }

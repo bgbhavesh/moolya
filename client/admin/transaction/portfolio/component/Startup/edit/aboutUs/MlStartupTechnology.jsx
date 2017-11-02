@@ -12,7 +12,7 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import { connect } from 'react-redux';
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "technologies"
 
 class MlStartupTechnology extends Component{
@@ -30,9 +30,9 @@ class MlStartupTechnology extends Component{
       selectedObject:"default"
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
     this.onOptionSelected = this.onOptionSelected.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -44,8 +44,8 @@ class MlStartupTechnology extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
   }
+
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.technologies)
     if(!empty){
@@ -66,6 +66,7 @@ class MlStartupTechnology extends Component{
       setObject = this.context.startupPortfolio.technologies
     }
     this.setState({startupTechnologiesList:setObject,popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   addTechnology(){
@@ -81,31 +82,21 @@ class MlStartupTechnology extends Component{
     let cloneArray = _.cloneDeep(this.state.startupTechnologies);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
+    this.curSelectLogo = details.logo;
   }
 
   onLockChange(fieldName, field, e){
     var isPrivate = false
-    // let details = this.state.data||{};
-    // let key = field;
-    // details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      // details=_.extend(details,{[key]:true});
       isPrivate = true
     }
-    // else{
-    //   details=_.extend(details,{[key]:false});
-    // }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
@@ -165,6 +156,7 @@ class MlStartupTechnology extends Component{
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
+    data.logo = this.curSelectLogo;
     data.index = this.state.selectedIndex;
     if(isSaveClicked){
       startupTechnologies[this.state.selectedIndex] = data;
@@ -178,7 +170,7 @@ class MlStartupTechnology extends Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      newItem = _.omit(item, "privateFields");
+      newItem = _.omit(newItem, "privateFields");
       arr.push(newItem)
     })
     startupTechnologies = arr;
@@ -207,20 +199,28 @@ class MlStartupTechnology extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
+        this.setState({loading: true})
+        this.fetchOnlyImages();
       }
     }
   }
 
-    async libraryAction(file) {
-      let portfolioDetailsId = this.props.portfolioDetailsId;
-      const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
+    if (resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
       return resp;
     }
+  }
 
 
   async fetchOnlyImages(){
@@ -237,23 +237,6 @@ class MlStartupTechnology extends Component{
       }else {
         this.setState({loading: false})
       }
-    }
-  }
-
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.technologies) {
-      let detailsArray = response&&response.technologies?response.technologies:[]
-      let dataDetails =this.state.startupTechnologies
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-        cloneBackUp[key]["privateFields"] = obj.privateFields;
-      })
-      let listDetails = this.state.startupTechnologiesList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupTechnologies:cloneBackUp,startupTechnologiesList:cloneBackUpList});
     }
   }
 
@@ -306,7 +289,9 @@ class MlStartupTechnology extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                          <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}/>
+                        </div>
                         <h3>{details.technologyName?details.technologyName:" "}</h3>
                       </div>
                     </a>

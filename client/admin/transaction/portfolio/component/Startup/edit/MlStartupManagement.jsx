@@ -36,12 +36,14 @@ export default class MlStartupManagement extends Component{
       selectedIndex:-1,
       title:'',
       clusterId:'',
+      fileName:"",
       managementIndex:"",
       responseImage:"",
       showProfileModal: false,
       uploadingAvatar: false,
     }
-    this.tabName = this.props.tabName || ""
+    this.tabName = this.props.tabName || "";
+    this.curSelectLogo = {}
     this.onSaveAction = this.onSaveAction.bind(this);
     this.onClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
@@ -113,7 +115,9 @@ export default class MlStartupManagement extends Component{
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
+    this.curSelectLogo = managmentDetails.logo
   }
+
   optionsBySelectTitle(val){
     let data = _.cloneDeep(this.state.data);
     data.title=val;
@@ -239,6 +243,7 @@ export default class MlStartupManagement extends Component{
     this.setState({startupManagementList: setObject}, () => {
       $('#management-form').slideUp();
     })
+    this.curSelectLogo = {}
   }
 
   getFieldValidations() {
@@ -251,6 +256,7 @@ export default class MlStartupManagement extends Component{
     let startupManagement1 = this.state.startupManagement;
     let startupManagement = _.cloneDeep(startupManagement1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       startupManagement[this.state.selectedIndex] = data;
     }
@@ -263,9 +269,9 @@ export default class MlStartupManagement extends Component{
       }
       let newItem = _.omit(item, "__typename")
       newItem = _.omit(newItem, "privateFields")
-      if(newItem && newItem.logo){
-        newItem = _.omit(newItem, 'logo')
-      }
+      // if(newItem && newItem.logo){
+      //   newItem = _.omit(newItem, 'logo')
+      // }
       managementArr.push(newItem)
     })
     startupManagement = managementArr;
@@ -276,7 +282,8 @@ export default class MlStartupManagement extends Component{
   onLogoFileUpload(image,fileInfo){
     let file=image;
     let name = 'logo';
-    let fileName = fileInfo.name;
+    const fileName = fileInfo.name;
+    this.setState({fileName: fileName})
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
@@ -298,11 +305,11 @@ export default class MlStartupManagement extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if(userOption){
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
-        }
+        };
         this.libraryAction(fileObjectStructure)
       }
       var temp = $.parseJSON(resp).result;
@@ -312,10 +319,14 @@ export default class MlStartupManagement extends Component{
         that.sendDataToParent()
         that.imagesDisplay()
       })
-      // if(result.success){
-      //   that.setState({loading:true})
-      //   that.fetchOnlyImages();
-      // }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        }
+        //   that.setState({loading:true})
+        //   that.fetchOnlyImages();
+      }
     }
   }
 
@@ -323,7 +334,12 @@ export default class MlStartupManagement extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 

@@ -27,7 +27,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       selectedObject: "default"
     };
     this.tabName = this.props.tabName || ""
-    this.fetchPortfolioDetails.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     return this;
   }
@@ -101,7 +101,13 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   onSaveAction(e) {
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionLookingFor
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.lookingFor)
       setObject = this.context.institutionPortfolio.lookingFor
@@ -110,15 +116,9 @@ export default class MlInstitutionEditLookingFor extends Component {
 
   onLockChange(fieldName, field, e) {
     var isPrivate = false;
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
       isPrivate = true
-    } else {
-      details = _.extend(details, {[key]: false});
     }
     var privateKey = {
       keyName: fieldName,
@@ -127,7 +127,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       index: this.state.selectedIndex,
       tabName: KEY
     }
-    this.setState({data: details, privateKey: privateKey}, function () {
+    this.setState({privateKey: privateKey}, function () {
       // this.sendDataToParent()
     })
   }
@@ -146,18 +146,23 @@ export default class MlInstitutionEditLookingFor extends Component {
     })
   }
 
+  handleBlur(e) {
+    var details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.target.value});
+    this.setState({data: details})
+  }
+
   onOptionSelected(selectedId, callback, selObject) {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label,
-      lookingDescription: selObject.about
+      ["lookingForName"]: selObject.label
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
-      // this.setState({"selectedVal": selectedId})
       // this.sendDataToParent()
     })
   }
@@ -168,7 +173,6 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   sendDataToParent(isSaveClicked) {
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionLookingFor1 = this.state.institutionLookingFor;
     let institutionLookingFor = _.cloneDeep(institutionLookingFor1);
@@ -189,8 +193,7 @@ export default class MlInstitutionEditLookingFor extends Component {
 
     institutionLookingFor = arr;
     this.setState({institutionLookingFor: institutionLookingFor})
-    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey, requiredFields);
-
+    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey);
   }
 
 
@@ -199,7 +202,6 @@ export default class MlInstitutionEditLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
-          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -267,7 +269,7 @@ export default class MlInstitutionEditLookingFor extends Component {
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label" disabled="disabled"
+                                     className="form-control float-label" onBlur={this.handleBlur}
                                      defaultValue={this.state.data.lookingDescription}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}
                                            onClick={this.onLockChange.bind(this, "lookingDescription", "isDescriptionPrivate")}/>

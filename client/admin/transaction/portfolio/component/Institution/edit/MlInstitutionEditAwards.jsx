@@ -31,12 +31,12 @@ export default class MlInstitutionEditAwards extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -50,7 +50,6 @@ export default class MlInstitutionEditAwards extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -74,7 +73,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     this.institutionAwardServer = response && response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
-    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
     if(this.state.institutionAwards){
       this.setState({selectedIndex:this.state.institutionAwards.length})
     }else{
@@ -83,21 +82,26 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   onSaveAction(e){
-    this.sendDataToParent(true)
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject =  this.state.institutionAwards
     if(this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.awardsRecognition ){
       setObject = this.context.institutionPortfolio.awardsRecognition
     }
     this.setState({institutionAwardsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.institutionAwards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
       "selectedVal" : details.awardId,
       selectedObject : index,popoverOpen : !(this.state.popoverOpen)},()=>{
@@ -122,26 +126,13 @@ export default class MlInstitutionEditAwards extends React.Component{
     })
   }
   onLockChange(fiedName, field, e){
-    var isPrivate = false
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    // this.setState({privateKey:privateKey})
-    // this.setState({data:details}, function () {
-    //   this.sendDataToParent()
-    // })
     var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -168,13 +159,11 @@ export default class MlInstitutionEditAwards extends React.Component{
     if(selectedAward){
       details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
       this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
-        // this.setState({"selectedVal": selectedAward, awardName: selObject.label})
         // this.sendDataToParent()
       })
     }else {
       details = _.extend(details, {["awardId"]: '', "awardName": ''});
       this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
-        // this.setState({"selectedVal": '', awardName: ''})
         // this.sendDataToParent()
       })
     }
@@ -207,11 +196,11 @@ export default class MlInstitutionEditAwards extends React.Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let awards = this.state.institutionAwards;
     let institutionAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionAwards[this.state.selectedIndex] = data;
     }
@@ -229,7 +218,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     })
     institutionAwards = arr;
     this.setState({institutionAwards:institutionAwards})
-    this.props.getAwardsDetails(institutionAwards, this.state.privateKey, requiredFields);
+    this.props.getAwardsDetails(institutionAwards, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -254,19 +243,27 @@ export default class MlInstitutionEditAwards extends React.Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          };
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
-      }
     }
   }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -276,7 +273,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     if (response && response.awardsRecognition) {
       let dataDetails =this.state.institutionAwards
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.awardsRecognition[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -287,28 +284,6 @@ export default class MlInstitutionEditAwards extends React.Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      let dataDetails =this.state.institutionAwards
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionAwardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionAwards:cloneBackUp,institutionAwardsList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');

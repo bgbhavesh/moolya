@@ -16,6 +16,17 @@
   return query;
 }
 
+/*Fix for Issue : MOOLYA-2146*/
+var setDefaultSort=function(sortObj,sortField,sortVal,moduleName){
+    if(_lodash.isEmpty((sortObj||{}).sort)&&sortField){
+      //default sort is for specific modules
+      var allowedModules=['department','subDepartment','entity','stageOfCompany','businessType','citizenship','lookingFor','roles','REQUESTTYPE','transactionTypes','roleType','ACCOUNTTYPE','kycCategory','documentFormat','specification','industry','profession','documentType','userType','SubDomain','documentMapping','processmapping','awards','Assets','Technologies','FundingType'];
+      if(!moduleName||_lodash.indexOf(allowedModules,moduleName)<0){return;};
+        sortObj.sort={};
+        sortObj.sort[sortField]=sortVal||-1;
+    };
+  }
+
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
   const findOptions = {
@@ -34,6 +45,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let sortObj = getQuery.sortFunction(args);
     findOptions.sort=sortObj||{};
   }
+  //Fix for Issue : MOOLYA-2146
+  setDefaultSort(findOptions,'createdDate',-1,args.module);
 
   let action="READ";
 

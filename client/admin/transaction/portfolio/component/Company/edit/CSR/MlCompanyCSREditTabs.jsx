@@ -65,7 +65,7 @@ export default class MlCompanyCSREditTabs extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Achivements",
-        component: <MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} tabName={"achievements"}
+        component: <MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} tabName={"achievements"} client={client}
                                          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports", component:<MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},

@@ -15,7 +15,7 @@ import MlFunderServices from './MlFunderServices'
 import MlFunderLookingFor from './MlFunderLookingFor'
 import {client} from '../../../../../core/apolloConnection'
 
-export default class MlFunderEditTemplate extends React.Component {
+export default class MlFunderEditTemplate extends Component {
   constructor(props) {
     super(props)
     this.state = {tabs: [], aboutUs: {}, funderPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
@@ -203,8 +203,9 @@ export default class MlFunderEditTemplate extends React.Component {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
-    this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.setState({funderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
   /**

@@ -11,6 +11,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {pick} from 'lodash'
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlUsersAbout extends Component {
   constructor(props) {
@@ -342,7 +343,7 @@ export default class MlUsersAbout extends Component {
 
                       <div className="form-group steps_pic_upload">
                         <div className="previewImg ProfileImg">
-                          <img src={regInfo.profileImage ? regInfo.profileImage : genderImage}/>
+                          <img src={regInfo.profileImage ? generateAbsolutePath(regInfo.profileImage) : genderImage}/>
                         </div>
                       </div>
                       <br className="brclear"/>

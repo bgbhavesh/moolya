@@ -7,6 +7,7 @@
  * */
 import React, {Component, PropTypes} from "react";
 import _ from "lodash";
+import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
@@ -140,14 +141,10 @@ export default class MlServiceProviderEditTabs extends Component {
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
     }
-    this.setState({serviceProviderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    data['awardsRecognition'] = details;
+    this.setState({serviceProviderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 
   getServiceProviderMCL(details, privateKey) {
@@ -188,19 +185,24 @@ export default class MlServiceProviderEditTabs extends Component {
   }
 
   getServiceProviderClients(details, privateKey, requiredFields) {
-    let data = this.state.serviceProviderPortfolio;
-    if (data && !data.clients) {
-      data['clients'] = [];
-    }
+    // let data = this.state.serviceProviderPortfolio;
+    // if (data && !data.clients) {
+    //   data['clients'] = [];
+    // }
+    // this.setState({serviceProviderPortfolio: data})
+    // let arr = [];
+    // _.each(details, function (obj) {
+    //   let updateItem = _.omit(obj, 'logo');
+    //   arr.push(updateItem)
+    // })
+    // data['clients'] = arr;
+    // this.setState({serviceProviderPortfolio: data})
+    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    var data = this.state.serviceProviderPortfolio;
+    data['clients'] = details;
     this.setState({serviceProviderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['clients'] = arr;
-    this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo')
+    this.props.getPortfolioDetails({serviceProviderPortfolio: object}, privateKey, requiredFields);
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {

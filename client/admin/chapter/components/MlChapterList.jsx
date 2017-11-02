@@ -8,7 +8,7 @@ export default class MlChapterList extends Component {
   render(){
     const data=this.props.data||[];
     const list=  data.map((prop, idx) => {
-      let image=prop.chapterImage&&prop.chapterImage.trim()!==""?<img src={`${prop.chapterImage}`}/>:<span className="ml my-ml-chapter"></span>;
+      let image=prop.chapterImage&&prop.chapterImage.trim()!==""?<img src={Meteor.settings.public.countriesFlagBaseUrl+prop.chapterImage}/>:<span className="ml my-ml-chapter"></span>;
       let icon, status;
 
       if(prop.status.description == "Active"){

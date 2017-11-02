@@ -181,13 +181,7 @@ export default class MlAppFunderEditTabs extends Component {
       data['principal'] = [];
     }
     data['principal'] = details;
-    this.setState({funderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['principal'] = arr;
+    this.setState({funderPortfolio: data});
     var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
@@ -198,13 +192,7 @@ export default class MlAppFunderEditTabs extends Component {
       data['team'] = [];
     }
     data['team'] = details;
-    this.setState({funderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['team'] = arr;
+    this.setState({funderPortfolio: data});
     var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
@@ -215,17 +203,17 @@ export default class MlAppFunderEditTabs extends Component {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
-    this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    this.setState({funderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
   }
 
   getServiceDetails(details, privatekey) {
     if (details.services) {
       let portfolioId = details.portfolioId;
-      console.log()
       this.saveDataToServices(portfolioId)
     }
-    console.log(details)
+    // console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio: data})
@@ -234,7 +222,7 @@ export default class MlAppFunderEditTabs extends Component {
 
   async saveDataToServices(portfolioId) {
     const resp = await getProfileBasedOnPortfolio(portfolioId)
-    this.saveServiceDetails()
+    // this.saveServiceDetails()
     return resp
   }
 

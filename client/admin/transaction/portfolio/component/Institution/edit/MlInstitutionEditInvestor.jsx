@@ -29,9 +29,9 @@ export default class MlInstitutionEditInvestor extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.curSelectLogo = {};
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -45,7 +45,6 @@ export default class MlInstitutionEditInvestor extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
   }
   componentWillMount(){
     const resp= this.fetchPortfolioDetails();
@@ -80,9 +79,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     let cloneArray = _.cloneDeep(this.state.institutionInvestor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex: index,
                    data:details,
                    "selectedVal" : details.fundingTypeId,
@@ -168,6 +165,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
       setObject = this.context.institutionPortfolio.investor
     }
     this.setState({institutionInvestorList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   sendDataToParent(isSaveClicked) {
@@ -175,6 +173,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     let institutionInvestor1 = this.state.institutionInvestor;
     let institutionInvestor = _.cloneDeep(institutionInvestor1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionInvestor[this.state.selectedIndex] = data;
     }
@@ -215,19 +214,27 @@ export default class MlInstitutionEditInvestor extends React.Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          };
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay()
         }
       }
-    }
   }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages(){
@@ -235,7 +242,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     if (response && response.investor) {
       let dataDetails =this.state.institutionInvestor
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.investor[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -243,22 +250,6 @@ export default class MlInstitutionEditInvestor extends React.Component{
       }else {
         this.setState({loading: false})
       }
-    }
-  }
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.investor) {
-      let detailsArray = response.investor?response.investor:[]
-      let dataDetails =this.state.institutionInvestor
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
-      let listDetails = this.state.institutionInvestorList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionInvestor:cloneBackUp,institutionInvestorList:cloneBackUpList});
     }
   }
 

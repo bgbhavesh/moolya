@@ -32,6 +32,7 @@ export default class MlInstitutionEditManagement extends Component{
       responseImage:"",
       gender:null,
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.onSaveAction = this.onSaveAction.bind(this);
     this.onClick.bind(this);
@@ -101,6 +102,7 @@ export default class MlInstitutionEditManagement extends Component{
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
+    this.curSelectLogo = managmentDetails.logo
   }
   optionsBySelectTitle(val){
     let data = _.cloneDeep(this.state.data);
@@ -209,7 +211,13 @@ export default class MlInstitutionEditManagement extends Component{
   }
 
   onSaveAction() {
-    this.sendDataToParent(true);
+    const requiredFields = this.getFieldValidations();
+    if (requiredFields && !requiredFields.errorMessage) {
+      this.sendDataToParent(true)
+    }else {
+      toastr.error(requiredFields.errorMessage);
+      return
+    }
     var setObject = this.state.institutionManagementList
     if (this.context && this.context.institutionPortfolio && this.context.institutionPortfolio.management) {
       setObject = this.context.institutionPortfolio.management
@@ -217,6 +225,7 @@ export default class MlInstitutionEditManagement extends Component{
     this.setState({institutionManagementList: setObject}, () => {
       $('#management-form').slideUp();
     })
+    this.curSelectLogo = {}
   }
 
   getFieldValidations() {
@@ -225,11 +234,11 @@ export default class MlInstitutionEditManagement extends Component{
   }
 
   sendDataToParent(isSaveClicked){
-    const requiredFields = this.getFieldValidations();
     let data = this.state.data;
     let institutionManagement1 = this.state.institutionManagement;
     let institutionManagement = _.cloneDeep(institutionManagement1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionManagement[this.state.selectedIndex] = data;
     }
@@ -242,14 +251,14 @@ export default class MlInstitutionEditManagement extends Component{
       }
       item = _.omit(item, "__typename");
       let newItem = _.omit(item, 'privateFields');
-      if(item && item.logo){
-        newItem = _.omit(item, 'logo')
-      }
+      // if(item && item.logo){
+      //   newItem = _.omit(item, 'logo')
+      // }
       managementArr.push(newItem)
     })
     institutionManagement = managementArr;
     this.setState({institutionManagement:institutionManagement})
-    this.props.getManagementDetails(institutionManagement, this.state.privateKey, requiredFields)
+    this.props.getManagementDetails(institutionManagement, this.state.privateKey)
   }
 
   onLogoFileUpload(e){
@@ -276,6 +285,10 @@ export default class MlInstitutionEditManagement extends Component{
         }
         this.libraryAction(fileObjectStructure)
       }
+      this.curSelectLogo = {
+        fileName: file && file.name ? file.name : "",
+        fileUrl: result.result
+      }
       var temp = $.parseJSON(resp).result;
       details=_.omit(details,[name]);
       details=_.extend(details,{[name]:{fileName: file.fileName,fileUrl: temp}});
@@ -293,7 +306,12 @@ export default class MlInstitutionEditManagement extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 

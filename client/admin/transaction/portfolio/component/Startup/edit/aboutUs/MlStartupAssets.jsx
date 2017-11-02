@@ -12,7 +12,7 @@ import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStart
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
-
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = 'assets'
 
 class MlStartupAssets extends Component{
@@ -201,7 +201,12 @@ class MlStartupAssets extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -288,7 +293,9 @@ class MlStartupAssets extends Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>*/}
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}>
+                          <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}/>
+                        </div>
                         <h3>{details.assetTypeName?details.assetTypeName:""}<span className="assets-list">{details.quantity?details.quantity:"0"}</span></h3>
                       </div>
                     </a>
@@ -312,7 +319,7 @@ class MlStartupAssets extends Component{
                                   selectedValue={this.state.selectedVal}
                                   data-required={true} data-errMsg="Asset Type is required"/>
                     <div className="form-group mandatory">
-                      <input type="text" name="quantity" placeholder="Enter Number of Quantity" ref={"quantity"}
+                      <input type="number" name="quantity" placeholder="Enter Number of Quantity" ref={"quantity"}
                              className="form-control float-label" defaultValue={this.state.data.quantity}
                              onBlur={this.handleBlur.bind(this)} data-required={true}
                              data-errMsg="Number of Quantity is required"/>

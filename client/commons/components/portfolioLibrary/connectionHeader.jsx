@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {getSharedConnectionsActionHandler} from "../../actions/mlLibraryActionHandler";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlConnectionHeader extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ export default class MlConnectionHeader extends Component {
               <span key={idx}>
                 <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
                   <a href="" onClick={()=>that.changeProfile(profile.userId, idx)}>
-                    <img src={profile.profilePic ? profile.profilePic : "/images/def_profile.png"}/><br />
+                    <img src={profile.profilePic ? generateAbsolutePath(profile.profilePic) : "/images/def_profile.png"}/><br />
                     <div className="tooltiprefer">
                       <span>{profile.displayName ? profile.displayName : "All"}</span>
                     </div>

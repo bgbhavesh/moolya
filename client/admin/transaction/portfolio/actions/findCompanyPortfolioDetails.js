@@ -268,11 +268,23 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                      }
                   }
                   sectorsAndServices{
-                     sectorsAndServicesDescription, 
-                     isSectorsAndServicesPrivate,
+                     industryTypeId
+                     industryTypeName
+                     domainType
+                     makePrivate
+                     subDomainId
+                     subDomainName
+                     isActive
+                     index
+                    logo{
+                       fileName
+                        fileUrl
+                      }
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        index
+                        tabName
                      }
                   }
                   listOfIncubators{

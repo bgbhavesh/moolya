@@ -91,9 +91,7 @@ export default class MlFunderAreaOfInterest extends Component {
     let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -133,7 +131,8 @@ export default class MlFunderAreaOfInterest extends Component {
       popoverOpen: !(this.state.popoverOpen),
       data: {},
       industryTypeId: null,
-      industryTypeName: null
+      industryTypeName: null,
+      selectedVal: null
     })
     if (this.state.funderAreaOfInterest) {
       this.setState({selectedIndex: this.state.funderAreaOfInterest.length})
@@ -327,8 +326,7 @@ export default class MlFunderAreaOfInterest extends Component {
         }
       }
       let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      updateItem =_.omit(updateItem,"privateFields");
+      let updateItem =_.omit(newItem,"privateFields");
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;

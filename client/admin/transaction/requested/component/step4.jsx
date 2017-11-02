@@ -19,7 +19,8 @@ import _ from 'lodash'
 import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
 import CropperModal from '../../../../commons/components/cropperModal';
-import generateAbsolutePath from "../../../../../lib/mlGenerateAbsolutePath"
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+
 
 export default class Step4 extends React.Component{
   constructor(props) {

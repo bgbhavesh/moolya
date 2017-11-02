@@ -13,7 +13,8 @@
       "minioConfig":{
         "bucketName":"moolya-users",
         "endPoint":"s3.raksan.in",
-        "port":443
+        "port":443,
+        "secure":true
       }
     }
   },

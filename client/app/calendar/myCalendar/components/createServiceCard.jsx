@@ -77,6 +77,10 @@ class MlAppServiceManageSchedule extends Component {
     console.log(resp)
   }
 
+  selectedServiceSeeker(seviceSeeker){
+    this.setState({seviceSeeker});
+  }
+
   componentDidMount() {
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
@@ -320,6 +324,8 @@ class MlAppServiceManageSchedule extends Component {
           bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
+          selectedServiceSeeker={this.selectedServiceSeeker.bind(this)}
+          seviceSeeker={this.state.seviceSeeker||''}
           setSessionId={this.setSessionId.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
           appointmentDate={this.props.appointmentDate}

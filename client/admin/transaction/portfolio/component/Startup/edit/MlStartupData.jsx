@@ -19,10 +19,11 @@ export default class MlStartupData extends React.Component{
 
   }
 
-  async componentWillMount() {
-    this.fetchPortfolioData()
-    console.log('---response from server---',resp)
+  componentWillMount() {
+    const resp = this.fetchPortfolioData()
+    return resp
   }
+
   async fetchPortfolioData(){
     const resp = await fetchStartupPortfolioData(this.props.portfolioDetailsId,this.props.client)
     this.setState({
@@ -37,6 +38,7 @@ export default class MlStartupData extends React.Component{
   if(WinWidth > 768){
     $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
 }
+
   componentDidMount()
   {
     $(function() {
@@ -50,7 +52,6 @@ export default class MlStartupData extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-
   }
 
   documentUpload(type, e) {
@@ -95,7 +96,12 @@ export default class MlStartupData extends React.Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   loopingTheUploadedData(type) {

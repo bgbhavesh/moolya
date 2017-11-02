@@ -514,7 +514,7 @@ export default class MlMyProfile extends React.Component {
 
                       </span>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?generateAbsolutePath(this.state.uploadedProfilePic:profilePic):''}/>
+                        <img src={this.state.uploadedProfilePic && this.state.uploadedProfilePic !== " " ?generateAbsolutePath(this.state.uploadedProfilePic):profilePic}/>
                       </div>
                     </div>
                   </form>

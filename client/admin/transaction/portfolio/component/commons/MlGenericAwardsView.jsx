@@ -113,7 +113,7 @@ export default class MlGenericAwardsView extends React.Component {
                              key={idx}>
                           <div className="list_block notrans funding_list">
                             <div>
-                              <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
+                              <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
                               <h3>{details.awardName?details.awardName:""}</h3>
                             </div>
                           </div>
@@ -133,7 +133,7 @@ export default class MlGenericAwardsView extends React.Component {
                     return (
                       <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                         <div className="team-block" name="funding_01">
-                          <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                          <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} className="team_img"/>
                           <h3>
                             {details.awardName?details.awardName:""} <br />
                           </h3>

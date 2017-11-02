@@ -175,13 +175,26 @@ export default class SharePopOver extends React.Component {
     let that = this;
     let data = that.state.selectedDatasToShare || [];
     let datas = data.map(function(value, index) {
-      return (
+      let url = generateAbsolutePath(value.fileUrl);
+      if(value.libraryType === 'video') url = '/images/video.png';
+      else if(value.fileName && value.fileName.split('.')[1]) {
+        let type = value.fileName.split('.')[1];
+        if (type === 'pdf') {
+          url = `/images/${type}.png`;
+        } else if (type === 'xls' || type === 'xlsx') {
+          url = `/images/xls.png`;
+        } else if (type === 'ppt') {
+          url = `/images/${type}.png`;
+        } else if(type === 'doc' || type === 'docs' || type === 'docx'){
 
-        <div className="thumbnail">
-          <FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
-       <img src={generateAbsolutePath(value.fileUrl)}style={{'width':'100px'}} />
-          <div id="images" className="title">{value.fileName}</div>
-        </div>
+          url = `/images/doc.png`;
+        }
+      }
+      return (
+        <ul className="doc_upload" key={index}>
+          <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/>
+            <img src={url}/><div className="title">{value.fileName}</div></li>
+        </ul>
       )
     })
     return datas;
@@ -192,7 +205,7 @@ export default class SharePopOver extends React.Component {
     let data = that.state.teamData || [];
     let datas = data.map(function(value, index) {
       return (
-          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+          <li key={index}>{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
       )
     })
     return datas;
@@ -268,7 +281,7 @@ export default class SharePopOver extends React.Component {
     let datas = data.map(function(value, index) {
       if(value.name.match(search)) {
         return (
-            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? value.profileImage:"/images/ideator_01.png"}/><span>{value.name}</span></li>
+            <li key={index} >{value && value.isAdded ? <FontAwesome name='check' onClick={that.deleteTeamMembers.bind(that,index, 'delete')} />: <FontAwesome name='plus' onClick={that.addTeamMembers.bind(that,index)}/>}<img src={ value.profileImage ? generateAbsolutePath(value.profileImage):"/images/ideator_01.png"}/><span>{value.name}</span></li>
         )
       }
       })

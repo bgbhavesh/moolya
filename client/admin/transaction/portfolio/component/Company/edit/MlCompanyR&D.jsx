@@ -27,12 +27,12 @@ export default class MlCompanyRAndD extends Component{
       companyRDList:[],
       selectedObject:"default"
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -46,7 +46,6 @@ export default class MlCompanyRAndD extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
 
@@ -93,6 +92,7 @@ export default class MlCompanyRAndD extends Component{
       setObject = this.context.companyPortfolio.researchAndDevelopment
     }
     this.setState({companyRDList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
@@ -102,6 +102,7 @@ export default class MlCompanyRAndD extends Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index,
       data:details,
       selectedObject : index,
@@ -206,6 +207,7 @@ export default class MlCompanyRAndD extends Component{
     let awards = this.state.companyRD;
     let companyRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       companyRD[this.state.selectedIndex] = data;
     }
@@ -213,7 +215,7 @@ export default class MlCompanyRAndD extends Component{
     _.each(companyRD, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
           delete item[propName];
         }
       }
@@ -248,19 +250,27 @@ export default class MlCompanyRAndD extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          }
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
-      }
     }
   }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if (resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
   async fetchOnlyImages(){
@@ -268,7 +278,7 @@ export default class MlCompanyRAndD extends Component{
     if (response && response.researchAndDevelopment) {
       let dataDetails =this.state.companyRD
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.researchAndDevelopment[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -279,28 +289,6 @@ export default class MlCompanyRAndD extends Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.researchAndDevelopment) {
-      let dataDetails =this.state.companyRD
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.researchAndDevelopment?response.researchAndDevelopment:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.companyRDList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, companyRD:cloneBackUp,companyRDList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
@@ -371,7 +359,7 @@ export default class MlCompanyRAndD extends Component{
                                    className="form-control float-label"
                                    defaultValue={this.state.data.researchAndDevelopmentName} ref={"researchAndDevelopmentName"}
                                    onBlur={this.handleBlur.bind(this)} data-required={true}
-                                   data-errMsg="Name is required"/>
+                                   data-errMsg="R&D Name is required"/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>
                         </div>

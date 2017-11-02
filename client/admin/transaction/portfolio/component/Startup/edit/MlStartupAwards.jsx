@@ -23,6 +23,7 @@ export default class MlStartupAwards extends Component{
     this.state={
       loading: true,
       data:{},
+      fileName:"",
       privateKey:{},
       startupAwards: [],
       popoverOpen:false,
@@ -34,11 +35,11 @@ export default class MlStartupAwards extends Component{
       uploadingAvatar: false
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -55,7 +56,6 @@ export default class MlStartupAwards extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -102,15 +102,14 @@ export default class MlStartupAwards extends Component{
       setObject = this.context.startupPortfolio.awardsRecognition
     }
     this.setState({startupAwardsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAwards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index,
       data:details,selectedObject : index,
       "selectedVal" : details.awardId,
@@ -207,6 +206,7 @@ export default class MlStartupAwards extends Component{
     let awards = this.state.startupAwards;
     let startupAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       startupAwards[this.state.selectedIndex] = data;
     }
@@ -229,6 +229,7 @@ export default class MlStartupAwards extends Component{
 
   onLogoFileUpload(fileInfo,image){
     let fileName = fileInfo.name;
+    this.setState({fileName: fileName})
     let file =image;
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
@@ -250,17 +251,20 @@ export default class MlStartupAwards extends Component{
       let userOption = confirm("Do you want to add the file into the library")
       if (userOption) {
         let fileObjectStructure = {
-          fileName: file.name,
+          fileName: this.state.fileName,
           fileType: file.type,
           fileUrl: result.result,
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
         }
+        this.setState({loading: true})
+        this.fetchOnlyImages();
       }
     }
   }
@@ -268,7 +272,12 @@ export default class MlStartupAwards extends Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    return resp;
+    if(resp.code === 404) {
+      toastr.error(resp.result)
+    } else {
+      toastr.success(resp.result)
+      return resp;
+    }
   }
 
 
@@ -290,26 +299,6 @@ export default class MlStartupAwards extends Component{
     }
   }
 
-
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      let dataDetails =this.state.startupAwards
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.startupAwardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupAwards:cloneBackUp,startupAwardsList:cloneBackUpList});
-    }
-  }
   toggleModal() {
     const that = this;
     this.setState({

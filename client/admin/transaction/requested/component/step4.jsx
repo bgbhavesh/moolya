@@ -19,7 +19,7 @@ import _ from 'lodash'
 import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
 import CropperModal from '../../../../commons/components/cropperModal';
-
+import generateAbsolutePath from "../../../../../lib/mlGenerateAbsolutePath"
 
 export default class Step4 extends React.Component{
   constructor(props) {
@@ -372,7 +372,7 @@ export default class Step4 extends React.Component{
               <form>
                 <div className="form-group steps_pic_upload">
                   <div className="previewImg ProfileImg">
-                    <img src={this.props.uploadedProfileImg}/>
+                    <img src={generateAbsolutePath(this.props.uploadedProfileImg)}/>
                   </div>
                   <div className="fileUpload mlUpload_btn">
                     <span onClick={this.toggleProfileModal}>Profile Pic</span>

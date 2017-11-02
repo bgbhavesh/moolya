@@ -14,6 +14,7 @@ import MlAppActionComponent from "../../../app/commons/components/MlAppActionCom
 import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import MlLoader from "../../../commons/components/loader/loader";
 import _underscore from "underscore";
+import generateAbsolutePath from "../../../../lib/mlGenerateAbsolutePath"
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var diff = require('deep-diff').diff;
@@ -431,7 +432,7 @@ export default class MlAppRegStep4 extends React.Component {
                 <form>
                   <div className="form-group steps_pic_upload">
                     <div className="previewImg ProfileImg">
-                      <img src={this.props.uploadedProfileImg}/>
+                      <img src={generateAbsolutePath(this.props.uploadedProfileImg)}/>
                     </div>
                     <div className="fileUpload mlUpload_btn">
                       <span>Profile Pic</span>

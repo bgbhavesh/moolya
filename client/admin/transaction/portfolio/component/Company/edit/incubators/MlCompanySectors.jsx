@@ -236,33 +236,14 @@ export default class MlCompanySectors extends React.Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      updateItem =_.omit(updateItem,"privateFields");
+      let updateItem = _.omit(newItem, "privateFields");
       arr.push(updateItem)
     })
     companysectorsAndServices = arr;
     this.setState({companysectorsAndServices: companysectorsAndServices})
     this.props.getSectors(companysectorsAndServices, this.state.privateKey);
-    // let data = this.state.data;
-    // for (var propName in data) {
-    //   if (data[propName] === null || data[propName] === undefined) {
-    //     delete data[propName];
-    //   }
-    // }
-    // data=_.omit(data,["privateFields"]);
-    // this.props.getSectors(data, this.state.privateKey)
   }
-  // onLockChange(fieldName, field, e) {
-  //   var isPrivate = false;
-  //   let className = e.target.className;
-  //   if (className.indexOf("fa-lock") != -1) {
-  //     isPrivate = true;
-  //   }
-  //   var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
-  //   this.setState({data: details, privateKey:privateKey}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
+
   updatePrivateKeys(selIndex){
     var privateValues = this.companysectorsAndServicesServer && this.companysectorsAndServicesServer[selIndex]?this.companysectorsAndServicesServer[selIndex].privateFields : []
     var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
@@ -278,9 +259,6 @@ export default class MlCompanySectors extends React.Component{
     let cloneArray = _.cloneDeep(this.state.companysectorsAndServices);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
     this.setState({
       selectedIndex: index,
       data: details,

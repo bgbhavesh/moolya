@@ -1,10 +1,9 @@
 import React from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {fetchfunderPortfolioAreaInterest} from "../../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import NoData from '../../../../../../commons/components/noData/noData'
-
+import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlFunderAreaOfInterestView extends React.Component {
   constructor(props, context) {
@@ -71,7 +70,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     if (response) {
       this.setState({loading: false, funderAreaOfInterestList: response});
     }
-    const privateFields = response && response.privateFields.length?response.privateFields:[]
+    const privateFields = response && response.privateFields && response.privateFields.length?response.privateFields:[]
     _.each(privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -108,7 +107,9 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                       {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
                         return (<div className="col-lg-2 col-md-3 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
                           <div className="list_block list_block_intrests notrans">
-                            <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                            <div className="hex_outer">
+                              <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"}/>
+                            </div>
                             <h3>{say.industryTypeName}</h3>
                           </div>
                         </div>)
@@ -129,7 +130,9 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                           return (<li key={value} className="active">
                             <div className="list_block list_block_intrests notrans"
                                  onClick={that.viewDetails.bind(that, value)}>
-                              <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                              <div className="hex_outer">
+                                <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"}/>
+                              </div>
                               <h3>{say.industryTypeName}</h3>
                             </div>
                           </li>)

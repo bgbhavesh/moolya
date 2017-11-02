@@ -255,7 +255,7 @@ export default class MlAppInstitutionEditTabs extends Component {
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
     }
-    data['awardsRecognition'] = arr;
+    data['awardsRecognition'] = details;
     this.setState({institutionPortfolio: data})
     var object = omitDeep(data, 'logo');
     this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
@@ -267,7 +267,7 @@ export default class MlAppInstitutionEditTabs extends Component {
     if (data && !data.awardsRecognition) {
       data['intrapreneurRecognition'] = [];
     }
-    data['intrapreneurRecognition'] = arr;
+    data['intrapreneurRecognition'] = details;
     this.setState({institutionPortfolio: data})
     var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey);

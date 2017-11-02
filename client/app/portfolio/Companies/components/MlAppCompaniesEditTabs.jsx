@@ -245,7 +245,8 @@ export default class MlAppCompaniesEditTabs extends Component {
   getIncubators(details, tabName, privateKey) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey);
   }
 
   getPartnersDetails(details, privateKey) {

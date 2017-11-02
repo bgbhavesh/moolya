@@ -81,7 +81,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
     let data = this.state.startupIncubators;
     data=details;
     this.setState({startupIncubators : data})
-    let updateItem = _.omit(details, 'logo');
+    // let updateItem = _.omit(details, 'logo');
     this.props.getIncubators(updateItem,"startupIncubators", privateKey);
   }
   getSectors(details, privateKey,requiredFields){

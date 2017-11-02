@@ -233,13 +233,24 @@ export default class  SharedLibrary extends React.Component {
     let that = this;
     let documentData = that.state.documentDetails || [];
     const Documents = documentData.map(function (show, id) {
+      var docType = 'doc';
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'ppt'){
+          docType = type;
+        }
+      }
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
           {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentspop"
              onClick={that.randomDocument.bind(that, generateAbsolutePath(show.file.url), id)}>
-            <img src="/images/doc.png"/></a>
+            <img src={`/images/${docType}.png`}/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )

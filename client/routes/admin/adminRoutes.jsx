@@ -103,21 +103,21 @@ adminSection.route('/', {
 adminSection.route('/myprofile/personalInfo', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'personalInfo'}}/>,adminContent:< MlMyProfile/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader module={'personalInfo'} breadcrum={{type:'myprofile','showBreadCrum':true,'module':'personalInfo'}}/>,adminContent:< MlMyProfile/>})
   }
 });
 
 adminSection.route('/myprofile/AddressBook', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'AddressBook'}}/>,adminContent:< MyProfileAddressBook/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader module="AddressBook" breadcrum={{type:'myprofile','showBreadCrum':true,'module':'AddressBook'}}/>,adminContent:< MyProfileAddressBook/>})
   }
 });
 
 adminSection.route('/myprofile/Settings', {
   name: 'myprofile',
   action(){
-    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  breadcrum={{type:'myprofile','showBreadCrum':true,'module':'Settings'}}/>,adminContent:< MyProfileSettings/>})
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader  module={'Settings'} breadcrum={{type:'myprofile','showBreadCrum':true,'module':'Settings'}}/>,adminContent:< MyProfileSettings/>})
   }
 });
 adminSection.route('/switchprofile', {

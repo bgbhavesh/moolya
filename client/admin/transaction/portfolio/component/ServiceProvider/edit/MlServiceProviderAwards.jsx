@@ -32,13 +32,13 @@ export default class MlServiceProviderAwards extends Component {
       privateKey:{},
       showProfileModal: false,
       uploadingAvatar: false
-    }
+    };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -55,7 +55,6 @@ export default class MlServiceProviderAwards extends Component {
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
 
@@ -108,15 +107,14 @@ export default class MlServiceProviderAwards extends Component {
       setObject = this.context.serviceProviderPortfolio.awardsRecognition
     }
     this.setState({serviceProviderAwardsList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e) {
     let cloneArray = _.cloneDeep(this.state.serviceProviderAwards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo;
     this.setState({
       selectedIndex: index,
       data: details,
@@ -219,6 +217,7 @@ export default class MlServiceProviderAwards extends Component {
     let awards = this.state.serviceProviderAwards;
     let serviceProviderAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       serviceProviderAwards[this.state.selectedIndex] = data;
     }
@@ -273,10 +272,13 @@ export default class MlServiceProviderAwards extends Component {
         }
         this.libraryAction(fileObjectStructure)
       }
-      if (result.success) {
-        this.setState({loading: true})
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        }
+        this.setState({loading: true});
         this.fetchOnlyImages();
-        this.imagesDisplay();
       }
     }
   }
@@ -310,22 +312,6 @@ export default class MlServiceProviderAwards extends Component {
     }
   }
 
-
-  async imagesDisplay() {
-    const response = await fetchServiceProviderPortfolioAwards(this.props.portfolioDetailsId);
-    if (response) {
-      let detailsArray = response ? response : []
-      let dataDetails = this.state.serviceProviderAwards
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj, key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
-      let listDetails = this.state.serviceProviderAwardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, serviceProviderAwards: cloneBackUp, serviceProviderAwardsList: cloneBackUpList});
-    }
-  }
   toggleModal() {
     const that = this;
     this.setState({
@@ -389,8 +375,10 @@ export default class MlServiceProviderAwards extends Component {
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"
                             checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                              <img
+                                src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}/>
+                            </div>
                             <h3>{details.awardName ? details.awardName : ""}</h3>
                           </div>
                         </a>

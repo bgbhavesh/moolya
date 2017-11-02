@@ -31,10 +31,11 @@ export default class MlStartupInvestor extends Component{
       showProfileModal: false,
       uploadingAvatar: false
     }
-    this.tabName = this.props.tabName || ""
+    this.tabName = this.props.tabName || "";
+    this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
-    this.imagesDisplay.bind(this);
+    // this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
@@ -51,7 +52,7 @@ export default class MlStartupInvestor extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
+    // this.imagesDisplay()
   }
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
@@ -87,9 +88,9 @@ export default class MlStartupInvestor extends Component{
     let cloneArray = _.cloneDeep(this.state.startupInvestor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    // if(details && details.logo){
+    //   delete details.logo['__typename'];
+    // }
     this.setState({ selectedIndex: index,
                     data:details,
                     selectedObject : index,
@@ -97,7 +98,7 @@ export default class MlStartupInvestor extends Component{
                     "selectedVal" : details.fundingTypeId}, () => {
                     this.lockPrivateKeys(index)
     });
-
+    this.curSelectLogo = details.logo
    /* setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -125,31 +126,22 @@ export default class MlStartupInvestor extends Component{
 
   onLockChange(fieldName, field, e){
     var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:this.props.tabName}
-    this.setState({data: details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
-  onStatusChangeNotify(e)
-  {
-    var isPrivate = false;
+  onStatusChangeNotify(e){
     let updatedData = this.state.data||{};
     let key = e.target.id;
     updatedData=_.omit(updatedData,[key]);
     if (e.currentTarget.checked) {
       updatedData=_.extend(updatedData,{[key]:true});
-      isPrivate = true
     } else {
       updatedData=_.extend(updatedData,{[key]:false});
     }
@@ -189,6 +181,7 @@ export default class MlStartupInvestor extends Component{
       setObject = this.context.startupPortfolio.investor
     }
     this.setState({startupInvestorList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   getFieldValidations() {
@@ -201,6 +194,7 @@ export default class MlStartupInvestor extends Component{
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       startupInvestor[this.state.selectedIndex] = data;    //startupInvestor[this.state.index] = data;
     }
@@ -249,11 +243,15 @@ export default class MlStartupInvestor extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay()
-        }
+      }
+      if (result && result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
+        this.setState({loading: true});
+        this.fetchOnlyImages();
+        // this.imagesDisplay()
       }
     }
   }
@@ -272,11 +270,12 @@ export default class MlStartupInvestor extends Component{
   async fetchOnlyImages(){
     const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.investor) {
+      const thisState=this.state.selectedIndex;
       let dataDetails =this.state.startupInvestor
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
-        let curUpload=response.investor[this.state.selectedIndex]
+        let curUpload=response.investor[thisState]
         specificData['logo']= curUpload['logo']
         this.setState({loading: false, startupInvestor:cloneBackUp });
       }else {
@@ -285,21 +284,21 @@ export default class MlStartupInvestor extends Component{
     }
   }
 
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.investor) {
-      let detailsArray = response.investor?response.investor:[]
-      let dataDetails =this.state.startupInvestor
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
-      let listDetails = this.state.startupInvestorList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupInvestor:cloneBackUp,startupInvestorList:cloneBackUpList});
-    }
-  }
+  // async imagesDisplay(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response && response.investor) {
+  //     let detailsArray = response.investor?response.investor:[]
+  //     let dataDetails =this.state.startupInvestor
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     _.each(detailsArray, function (obj,key) {
+  //       cloneBackUp[key]["logo"] = obj.logo;
+  //     })
+  //     let listDetails = this.state.startupInvestorList || [];
+  //     listDetails = cloneBackUp
+  //     let cloneBackUpList = _.cloneDeep(listDetails);
+  //     this.setState({loading: false, startupInvestor:cloneBackUp,startupInvestorList:cloneBackUpList});
+  //   }
+  // }
   toggleModal() {
     const that = this;
     this.setState({

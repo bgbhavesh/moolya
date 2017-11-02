@@ -20,17 +20,17 @@ export default class MlInstitutionClients extends Component{
       loading: false,
       data:{},
       privateKey:{},
-      institutionClients:this.props.employmentDetails || [],
+      institutionClients:this.props.clientsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      institutionClientsList:this.props.employmentDetails || [],
+      institutionClientsList:this.props.clientsDetails || [],
       selectedVal:null,
       selectedObject:"default"
     };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -42,7 +42,6 @@ export default class MlInstitutionClients extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.clients)
@@ -64,9 +63,7 @@ export default class MlInstitutionClients extends Component{
     let cloneArray = _.cloneDeep(this.state.institutionClients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
@@ -100,6 +97,7 @@ export default class MlInstitutionClients extends Component{
       setObject = this.context.institutionPortfolio.clients
     }
     this.setState({institutionClientsList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onStatusChangeNotify(e)
@@ -137,6 +135,7 @@ export default class MlInstitutionClients extends Component{
     let clients = this.state.institutionClients;
     let institutionClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionClients[this.state.selectedIndex] = data;
     }
@@ -149,8 +148,7 @@ export default class MlInstitutionClients extends Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      newItem = _.omit(newItem, ["privateFields"])
-      let updateItem = _.omit(newItem, 'logo');
+      let updateItem =_.omit(newItem, ["privateFields"])
       arr.push(updateItem)
     })
     institutionClients = arr;
@@ -181,13 +179,16 @@ export default class MlInstitutionClients extends Component{
           libraryType: "image"
         }
         this.libraryAction(fileObjectStructure)
+      }
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          };
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
       }
-    }
   }
 
   async libraryAction(file) {
@@ -215,26 +216,6 @@ export default class MlInstitutionClients extends Component{
       }else {
         this.setState({loading: false})
       }
-    }
-  }
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
-      let dataDetails =this.state.institutionClients;
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response&&response.clients?response.clients:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0) {
-        _.each(dataDetails, function (obj, key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionClientsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionClients:cloneBackUp,institutionClientsList:cloneBackUpList});
     }
   }
 

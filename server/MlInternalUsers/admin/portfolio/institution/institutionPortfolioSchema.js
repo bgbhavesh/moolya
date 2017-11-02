@@ -193,6 +193,12 @@ let institutePortfolioSchema = `
         index: Int
         privateFields:[PrivateKeys]
     }
+     
+     type sectorsAndServicesOutputINS{
+        sectorsAndServicesDescription:String, 
+        isSectorsAndServicesPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
     
     type InstitutionPortfolio{
       portfolioDetailsId: String
@@ -219,7 +225,7 @@ let institutePortfolioSchema = `
       accountType : String
       researchAndDevelopment: [researchAndDevelopmentOutput]
       institutionIncubators : institutionIncubatorsOutput
-      sectorsAndServices  : sectorsAndServicesOutput
+      sectorsAndServices  : sectorsAndServicesOutputINS
       listOfIncubators    : listOfIncubatorsOutput
       reports             : dataOutput
       communityType   : String
@@ -292,6 +298,11 @@ let institutePortfolioSchema = `
        fileName:String
      }
      
+     input sectorsAndServicesINS{
+        sectorsAndServicesDescription:String, 
+        isSectorsAndServicesPrivate :Boolean
+    }
+    
     input memberships{
         description:String, 
         isDescriptionPrivate :Boolean
@@ -413,7 +424,7 @@ let institutePortfolioSchema = `
         partners            : [partnersInput]
         researchAndDevelopment : [researchAndDevelopmentData]
         institutionIncubators : institutionIncubators
-        sectorsAndServices  : sectorsAndServices
+        sectorsAndServices  : sectorsAndServicesINS
         listOfIncubators    : listOfIncubators
         reports : data
     }

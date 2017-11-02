@@ -25,7 +25,7 @@ export default class MlAdminProfileHeader extends Component {
           let json={
             "link": "/admin/myprofile/"+documents[i].tabName,
             "name":documents[i].tabCode ,
-            "uniqueId": "myprofile_tabs",
+            "uniqueId": this.props.module === documents[i].tabName ? "myprofile" :"myprofile_tabs",
             "isLink": true,
             "isMenu": false,
             "image": ""

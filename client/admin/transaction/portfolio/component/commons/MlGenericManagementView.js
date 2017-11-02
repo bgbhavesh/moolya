@@ -158,7 +158,9 @@ export default class MlGenericManagementView extends React.Component {
                         return (
                           <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                             <div className="team-block" name="funding_01">
-                              <img src={generateAbsolutePath(genderImage)} className="team_img"/>
+                              <img
+                                src={details && details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}
+                                className="team_img"/>
                               <h3>
                                 {details.firstName} <br /><b>{details.designation}</b>
                               </h3>

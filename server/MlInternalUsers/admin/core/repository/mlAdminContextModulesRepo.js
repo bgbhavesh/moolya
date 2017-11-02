@@ -840,6 +840,7 @@ let CoreModules = {
       },
       {
         $project: {
+          "departmentId":1,
           "departmentName": 1,
           "subDepartmentId": 1,
           "subDepartmentName": 1,

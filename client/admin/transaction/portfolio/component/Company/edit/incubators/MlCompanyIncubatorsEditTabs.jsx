@@ -21,15 +21,15 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
       activeTab:"Startup Incubators",
     }
     ;
-    this.getChildContext.bind(this)
+    // this.getChildContext.bind(this)
   }
 
-  getChildContext() {
-    return {
-      companyPortfolio: this.state.companyPortfolio,
-      portfolioKeys: this.state.portfolioKeys
-    }
-  }
+  // getChildContext() {
+  //   return {
+  //     companyPortfolio: this.state.companyPortfolio,
+  //     portfolioKeys: this.state.portfolioKeys
+  //   }
+  // }
   /**
    * handling different condition for app and admin
    * */
@@ -77,12 +77,16 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
     return tabs;
   }
 
+  /**
+   * @Note : need to check the use of maintaining state in this file
+   * seems there is no use to maintain state in this file
+   * */
   getStartupIncubators(details, privateKey){
     let data = this.state.startupIncubators;
     data=details;
     this.setState({startupIncubators : data})
-    let updateItem = _.omit(details, 'logo');
-    this.props.getIncubators(updateItem,"startupIncubators", privateKey);
+    // let updateItem = _.omit(details, 'logo');
+    this.props.getIncubators(details,"startupIncubators", privateKey);
   }
   getSectors(details, privateKey,requiredFields){
     let data = this.state.sectorsAndServices;
@@ -147,7 +151,7 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
     }
   }
 }
-MlCompanyIncubatorsEditTabs.childContextTypes = {
-  companyPortfolio: PropTypes.object,
-  portfolioKeys :PropTypes.object,
-};
+// MlCompanyIncubatorsEditTabs.childContextTypes = {
+//   companyPortfolio: PropTypes.object,
+//   portfolioKeys :PropTypes.object,
+// };

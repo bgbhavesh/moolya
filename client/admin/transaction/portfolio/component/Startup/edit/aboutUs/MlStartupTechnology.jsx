@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "technologies"
-
+import Confirm from '../../../../../../../commons/utils/confirm';
 class MlStartupTechnology extends Component{
   constructor(props, context){
     super(props);
@@ -189,17 +189,20 @@ class MlStartupTechnology extends Component{
   }
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result && result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",

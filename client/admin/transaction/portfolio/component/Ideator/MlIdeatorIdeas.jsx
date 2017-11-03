@@ -9,7 +9,7 @@ import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryAct
 import CropperModal from '../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../commons/utils/confirm';
 
 export default class MlIdeatorIdeas extends Component{
   constructor(props, context){
@@ -163,17 +163,21 @@ export default class MlIdeatorIdeas extends Component{
       showProfileModal: false
     });
     if(resp){
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if(result.success){
         this.setState({loading:true})
         this.fetchPortfolioDetails();

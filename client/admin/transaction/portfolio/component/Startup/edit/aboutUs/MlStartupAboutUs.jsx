@@ -10,6 +10,7 @@ import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolute
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash'
 var Select = require('react-select');
+import Confirm from '../../../../../../../commons/utils/confirm';
 
 const KEY = 'aboutUs'
 
@@ -99,17 +100,20 @@ class MlStartupAboutUs extends React.Component{
   }
   onFileUploadCallBack(name,file, resp){
     if(resp){
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if(result.success){
         this.fetchOnlyImages();
       }

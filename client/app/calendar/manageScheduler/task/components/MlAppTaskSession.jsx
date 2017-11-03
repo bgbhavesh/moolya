@@ -39,7 +39,7 @@ export default class MlAppTaskSession extends Component {
       let userSession = _.range(response ? response.noOfSession : 0);
       console.log(userSession);
       let sessionData = [];
-      _.each(response.session, function (item, value) {
+      _.each(userSession, function (item, value) {
         sessionData.push({
           duration: { hours: 0, minutes: 0 },
           activities: [],

@@ -2383,3 +2383,28 @@ li.sameWorkTime:after {
   transition-duration: 0ms !important;
   transform: inherit !important;
 }
+
+.alert_pop{
+  position: fixed; z-index: 99; background: rgba(51, 51, 51, 0.68); margin: 0 auto; width: 100%; height: 100%;
+  .dialog{
+    margin: 0 auto; width: 30%; background: $mlWhite; padding: 10px;margin-top: 10%;text-align: center;border-radius: 4px;
+  }
+  .ml_btn{
+    text-align: center;
+  }
+  /*.controls{text-align: center;
+    .doAction{background: $mlBlue;color: $mlWhite;
+      &:after{border-color: transparent transparent transparent $mlBlue;}
+      &:before{border-color: transparent $mlBlue transparent transparent;}
+    }
+    .cancelAction{background: $mlRed;color: $mlWhite;
+      &:after{border-color: transparent transparent transparent $mlRed;}
+      &:before{border-color: transparent $mlRed transparent transparent;}
+    }
+  }*/
+  .close{background: $mlRed; border: 0px; line-height: 27px; position: absolute; text-decoration: none; font-size: 14px; height: 30px; width: 15px; color: $mlWhite;text-shadow: none;text-align: center;opacity:1;right: -1px; z-index: 99;top: -12px;display: none;
+    span{display: block; margin-top: -4px; font-size: 20px;}
+    &:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlRed;top: 0px;}
+    &:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
+  }
+}

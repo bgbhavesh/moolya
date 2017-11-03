@@ -7,9 +7,9 @@ import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeat
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
+import Confirm from '../../../../../commons/utils/confirm';
 
 export default class MlIdeatorAudience extends React.Component{
   constructor(props, context){
@@ -139,16 +139,19 @@ export default class MlIdeatorAudience extends React.Component{
     if(resp){
       console.log(file)
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       this.fetchOnlyImages();
     }
   }

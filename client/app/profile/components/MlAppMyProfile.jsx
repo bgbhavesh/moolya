@@ -360,6 +360,29 @@ class MlAppMyProfile extends Component {
     this.setState({getOTPClicked:false});
   }
 
+  showPassword(){
+    // $("#showPasswordText").toggleClass('fa-eye-slash', 'fa-eye');
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+      $("#showPasswordText").removeClass("fa-eye-slash").addClass("fa-eye")
+    } else {
+      x.type = "password";
+      $("#showPasswordText").removeClass("fa-eye").addClass("fa-eye-slash")
+    }
+  }
+
+  showConfirmPassword() {
+    var x = document.getElementById("confirmPassword");
+    if (x.type === "password") {
+      $("#showConfirmPasswordText").removeClass("fa-eye-slash").addClass("fa-eye")
+      x.type = "text";
+    } else {
+      x.type = "password";
+      $("#showConfirmPasswordText").removeClass("fa-eye").addClass("fa-eye-slash")
+    }
+  }
+
   render(){
     const _this = this;
   const showLoader=this.state.loading;
@@ -473,7 +496,7 @@ class MlAppMyProfile extends Component {
                     {
                       isMobileVerified||(this.state.mobileNumber=="")?<div></div>:
                         <div className="form-group">
-                          <a href="" className="mlUpload_btn" onClick={this.sendSmsOtp.bind(this)}>Get OTP</a>
+                          <a href="" className="mlUpload_btn" onClick={this.sendSmsOtp.bind(this)}>Verify Now</a>
                         </div>
                     }
                     {
@@ -486,8 +509,8 @@ class MlAppMyProfile extends Component {
                             <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a data-toggle="modal" data-target=".termsConditionsPop">Terms and Conditions</a> and <a data-toggle="modal" data-target=".privacyPop"> 'Privacy Policy'</a></label>
                           </div>
                           <div className="ml_btn">
-                            <a href="" className="cancel_btn" onClick={this.verifyMobileNumber.bind(this)}>Submit</a>
-                            <a href="" className="cancel_btn" onClick={this.resendSmsOtp.bind(this)}>Resend</a>
+                            <a href="" className="cancel_btn" onClick={this.verifyMobileNumber.bind(this)}>Validate</a>
+                            <a href="" className="cancel_btn" onClick={this.resendSmsOtp.bind(this)}>Resend OTP</a>
                             <a href="" className="save_btn" onClick={this.cancelOtpRequest.bind(this)}>Cancel</a>
                           </div>
                         </div>
@@ -528,21 +551,21 @@ class MlAppMyProfile extends Component {
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
                     {this.state.PasswordReset?(
                       <div>
-                        {this.state.showPasswordFields ?
-                          <div className="form-group mandatory">
-                            <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                            <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
+                        {/*{this.state.showPasswordFields ?*/}
+                          {/*<div className="form-group mandatory">*/}
+                            {/*<text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>*/}
+                            {/*<input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>*/}
 
-                          </div> : <div></div>}
+                          {/*</div> : <div></div>}*/}
                       <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                         <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>
-
+                        <FontAwesome name='eye-slash' id="showPasswordText" className="input_icon" onClick={this.showPassword.bind(this)}/>
                       </div>
                       <div className="form-group mandatory">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                         <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
-
+                        <FontAwesome name='eye-slash' id="showConfirmPasswordText" className="input_icon" onClick={this.showConfirmPassword.bind(this)}/>
                       </div>
                         <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
                   </form>

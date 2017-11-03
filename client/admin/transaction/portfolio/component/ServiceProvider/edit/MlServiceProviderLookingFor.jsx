@@ -25,7 +25,7 @@ export default class MlServiceProviderLookingFor extends Component {
       selectedObject: "default"
     }
     this.tabName = this.props.tabName || ""
-    this.fetchPortfolioDetails.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this)
   }
 
@@ -78,6 +78,14 @@ export default class MlServiceProviderLookingFor extends Component {
     } else {
       this.setState({selectedIndex: 0})
     }
+  }
+
+  handleBlur(e) {
+    var details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.target.value});
+    this.setState({data: details})
   }
 
   onTileClick(index, e) {
@@ -171,11 +179,9 @@ export default class MlServiceProviderLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label,
-      lookingDescription: selObject.about
+      ["lookingForName"]: selObject.label
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.sendDataToParent()
@@ -218,7 +224,6 @@ export default class MlServiceProviderLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
-          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -286,7 +291,7 @@ export default class MlServiceProviderLookingFor extends Component {
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label" disabled="disabled"
+                                     className="form-control float-label" onBlur={this.handleBlur}
                                      defaultValue={this.state.data.lookingDescription}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
                                            defaultValue={this.state.data.isDescriptionPrivate}

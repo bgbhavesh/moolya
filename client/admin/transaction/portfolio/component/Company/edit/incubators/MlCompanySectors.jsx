@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from "lodash";
 import gql from "graphql-tag";
@@ -14,6 +12,8 @@ import CropperModal from '../../../../../../../../client/commons/components/crop
 import { putDataIntoTheLibrary } from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import { multipartASyncFormHandler } from "../../../../../../../../client/commons/MlMultipartFormAction";
 import {mlFieldValidations} from "../../../../../../../../client/commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+
 const KEY = "sectorsAndServices"
 
 export default class MlCompanySectors extends React.Component{
@@ -236,33 +236,14 @@ export default class MlCompanySectors extends React.Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      updateItem =_.omit(updateItem,"privateFields");
+      let updateItem = _.omit(newItem, "privateFields");
       arr.push(updateItem)
     })
     companysectorsAndServices = arr;
     this.setState({companysectorsAndServices: companysectorsAndServices})
     this.props.getSectors(companysectorsAndServices, this.state.privateKey);
-    // let data = this.state.data;
-    // for (var propName in data) {
-    //   if (data[propName] === null || data[propName] === undefined) {
-    //     delete data[propName];
-    //   }
-    // }
-    // data=_.omit(data,["privateFields"]);
-    // this.props.getSectors(data, this.state.privateKey)
   }
-  // onLockChange(fieldName, field, e) {
-  //   var isPrivate = false;
-  //   let className = e.target.className;
-  //   if (className.indexOf("fa-lock") != -1) {
-  //     isPrivate = true;
-  //   }
-  //   var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName};
-  //   this.setState({data: details, privateKey:privateKey}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
+
   updatePrivateKeys(selIndex){
     var privateValues = this.companysectorsAndServicesServer && this.companysectorsAndServicesServer[selIndex]?this.companysectorsAndServicesServer[selIndex].privateFields : []
     var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
@@ -278,9 +259,7 @@ export default class MlCompanySectors extends React.Component{
     let cloneArray = _.cloneDeep(this.state.companysectorsAndServices);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -378,13 +357,13 @@ export default class MlCompanySectors extends React.Component{
                           return (
                             <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                               <a href="" id={"create_client" + idx}>
-                                <div className="list_block list_block_intrests notrans">`
+                                <div className="list_block list_block_intrests notrans" onClick={that.onTileClick.bind(that, idx)}>
                                   <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
                                   <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                                  <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                                  <div className="hex_outer">
                                     {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                    <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} /></div>
+                                    <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} /></div>
                                   </div>
                                   <h3>{details.industryTypeName}</h3>
                                 </div>

@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import chapterRoutes from "../actions/chapterRoutes";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
-import {findRoleActionHandler} from '../../settings/rolesAndPermissions/actions/findRoleAction'
+import {findRoleActionHandler} from '../../settings/rolesAndPermissions/actions/findRoleAction';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlSubChapterList extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ export default class MlSubChapterList extends Component {
             <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
             {prop.isDefaultSubChapter?<div className="list-moolya-icon"><span className="ml ml-moolya-symbol"></span></div>:<span></span>}
             <a href={chapterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>
-              <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={Meteor.settings.public.countriesFlagBaseUrl+prop.subChapterImageLink}/> : <span
+              <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={generateAbsolutePath(prop.subChapterImageLink)}/> : <span
                 className="ml ml-moolya-symbol"></span>}</div>
             </a>
             <h3>{prop.subChapterName}</h3>

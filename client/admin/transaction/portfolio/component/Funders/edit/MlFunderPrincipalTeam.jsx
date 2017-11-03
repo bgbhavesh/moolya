@@ -250,10 +250,10 @@ export default class MlFunderPrincipalTeam extends Component {
     let cloneArray = _.cloneDeep(this.state.funderPrincipal);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
-    let imgLogo = principal.logo? principal.logo : {};
+    // if (details && details.logo) {
+    //   delete details.logo['__typename'];
+    // }
+    let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
@@ -291,10 +291,10 @@ export default class MlFunderPrincipalTeam extends Component {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
-    let imgLogo = team.logo? team.logo : {};
+    // if (details && details.logo) {
+    //   delete details.logo['__typename'];
+    // }
+    let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,

@@ -170,6 +170,7 @@ export async function findUserRegistrationActionHandler(registrationId) {
           }
           isActive
           isShowOnMap
+          userProfileImage
         }
       }
     `,

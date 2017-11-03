@@ -7,7 +7,7 @@ import {updateClusterActionHandler} from '../actions/updateCluster'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../utils/formElemUtil';
-import MlLoader from '../../../commons/components/loader/loader'
+import MlLoader from '../../../commons/components/loader/loader';
 
 
 
@@ -157,7 +157,7 @@ class MlClusterDetails extends React.Component {
                         {/*/!*<input type="file" ref="uploadImage" className="upload"/>*!/*/}
                       {/*</div>*/}
                       <div className="previewImg">
-                          <img src={this.state.data && this.state.data.countryFlag}/>
+                          <img src={this.state.data && Meteor.settings.public.countriesFlagBaseUrl+this.state.data.countryFlag}/>
                       </div>
 
                     </div>

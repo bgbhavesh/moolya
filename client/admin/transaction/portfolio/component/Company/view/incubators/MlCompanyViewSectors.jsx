@@ -1,6 +1,5 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import ScrollArea from "react-scrollbar";
 import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
@@ -9,10 +8,10 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-import ScrollArea from "react-scrollbar";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = "sectorsAndServices"
 
-export default class MlCompanyViewSectors extends React.Component{
+export default class MlCompanyViewSectors extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -201,7 +200,9 @@ export default class MlCompanyViewSectors extends React.Component{
                       {sectorsAndServicesArray && sectorsAndServicesArray.map(function (say, value) {
                         return (<div className="col-lg-2 col-md-3 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
                           <div className="list_block list_block_intrests notrans">
-                            <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                            <div className="hex_outer">
+                              <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"} />
+                            </div>
                             <h3>{say.industryTypeName}</h3>
                           </div>
                         </div>)
@@ -222,7 +223,9 @@ export default class MlCompanyViewSectors extends React.Component{
                           return (<li key={value} className="active">
                             <div className="list_block list_block_intrests notrans"
                                  onClick={that.viewDetails.bind(that, value)}>
-                              <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                              <div className="hex_outer">
+                                <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"}/>
+                              </div>
                               <h3>{say.industryTypeName}</h3>
                             </div>
                           </li>)

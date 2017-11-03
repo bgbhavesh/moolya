@@ -14,6 +14,7 @@ import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrappe
 import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+import Confirm from '../../../../../../commons/utils/confirm';
 
 const KEY = 'management';
 export default class MlInstitutionEditManagement extends Component{
@@ -275,16 +276,18 @@ export default class MlInstitutionEditManagement extends Component{
     let details =this.state.data;
     if(resp){
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       this.curSelectLogo = {
         fileName: file && file.name ? file.name : "",
         fileUrl: result.result

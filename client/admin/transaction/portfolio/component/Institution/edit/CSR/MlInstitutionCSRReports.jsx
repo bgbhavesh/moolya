@@ -3,6 +3,7 @@ import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipar
 import {fetchInstitutionPortfolioReports} from '../../../../actions/findPortfolioInstitutionDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
+import Confirm from '../../../../../../../commons/utils/confirm';
 
 
 export default class MlInstitutionCSRReports extends React.Component{
@@ -95,16 +96,19 @@ export default class MlInstitutionCSRReports extends React.Component{
     let data = this.state.uploadedData;
     let result = JSON.parse(resp);
     if (resp && type) {
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       var link = $.parseJSON(resp).result;
       if( data && data[`${type}`] ) {
         data[`${type}`].push({fileUrl:link,fileName:file.name})

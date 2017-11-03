@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import hierarchyRoutes from "../actions/hierarchyRoutes";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+
 export default class MlClusterSubChaptersListHierarchy extends Component
 {
   constructor(props){
@@ -32,15 +33,18 @@ export default class MlClusterSubChaptersListHierarchy extends Component
           status = "assign";
           // icon = "assign";
         }
+        var imageLink = prop.subChapterImageLink ? generateAbsolutePath(prop.subChapterImageLink) : "/images/sub_default.jpg";
         return(
           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
             <div className="list_block">
               <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
               <a href={hierarchyRoutes.hierarchyDetails(prop.clusterId,prop._id,prop.isDefaultSubChapter)}>
-                <div className={"hex_outer"}><span
-                  className={prop.isDefaultSubChapter ? "ml ml-moolya-symbol" : "/images/def_profile.png"}></span></div>
+                <div className={"hex_outer"}>
+                  {prop.isDefaultSubChapter ? <span className={"ml ml-moolya-symbol"}></span> :
+                    <img src={imageLink}/>}
+                </div>
               </a>
-              <h3>{prop.isDefaultSubChapter ? "Moolya" : prop.subChapterName}</h3>
+              <h3>{prop.isDefaultSubChapter ? "moolya" : prop.subChapterName}</h3>
             </div>
           </div>
         )

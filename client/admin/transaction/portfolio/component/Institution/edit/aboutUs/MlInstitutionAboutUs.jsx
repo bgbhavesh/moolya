@@ -6,7 +6,7 @@ import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipar
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../../commons/utils/confirm';
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -81,16 +81,19 @@ export default class MlInstitutionAboutUs extends React.Component{
   onFileUploadCallBack(name,file, resp){
     if(resp){
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure);
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if(result.success){
         this.fetchOnlyImages();
       }

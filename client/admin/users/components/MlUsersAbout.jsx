@@ -190,7 +190,8 @@ export default class MlUsersAbout extends Component {
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:regInfo.clusterId}}};
     let chapterOption = {options: {variables: {id: regInfo.clusterId}}};
     let genderImage = regDetail.gender==='female'?"/images/female.jpg":"/images/ideator_01.png";
-
+    const {userProfileImage} = this.state.data;
+    const profileImage = userProfileImage ? userProfileImage : regInfo.profileImage;
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -343,7 +344,7 @@ export default class MlUsersAbout extends Component {
 
                       <div className="form-group steps_pic_upload">
                         <div className="previewImg ProfileImg">
-                          <img src={regInfo.profileImage ? generateAbsolutePath(regInfo.profileImage) : genderImage}/>
+                          <img src={profileImage ? generateAbsolutePath(profileImage) : genderImage}/>
                         </div>
                       </div>
                       <br className="brclear"/>

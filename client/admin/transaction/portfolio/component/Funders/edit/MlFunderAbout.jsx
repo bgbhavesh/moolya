@@ -11,7 +11,7 @@ import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldV
 import MlLoader from '../../../../../../commons/components/loader/loader';
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 const genderValues = [
   { value: 'male', label: 'Male' },
@@ -251,17 +251,20 @@ export default class MlFunderAbout extends React.Component {
   }
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         this.setState({ profilePic: result.result })
         this.setState({ loading: true, uploadingAvatar: false })

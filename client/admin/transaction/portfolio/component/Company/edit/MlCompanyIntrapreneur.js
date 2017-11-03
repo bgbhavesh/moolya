@@ -11,7 +11,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-
+import Confirm from '../../../../../../commons/utils/confirm';
 import  generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 var FontAwesome = require('react-fontawesome');
 
@@ -208,17 +208,18 @@ export default class MlCompanyIntrapreneur extends React.Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
         if (result.success) {
           this.curSelectLogo = {
             fileName: file && file.name ? file.name : "",

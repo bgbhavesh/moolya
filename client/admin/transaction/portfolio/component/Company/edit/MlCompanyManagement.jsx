@@ -16,7 +16,7 @@ import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPo
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 const KEY = 'management'
 
 const genderValues = [
@@ -288,17 +288,20 @@ export default class MlCompanyManagement extends Component {
     let that = this;
     let details = this.state.data;
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       this.curSelectLogo = {
         fileName: file && file.name ? file.name : "",
         fileUrl: result.result

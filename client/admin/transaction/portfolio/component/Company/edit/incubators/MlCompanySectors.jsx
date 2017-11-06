@@ -13,7 +13,7 @@ import { putDataIntoTheLibrary } from '../../../../../../../commons/actions/mlLi
 import { multipartASyncFormHandler } from "../../../../../../../../client/commons/MlMultipartFormAction";
 import {mlFieldValidations} from "../../../../../../../../client/commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../../commons/utils/confirm';
 const KEY = "sectorsAndServices"
 
 export default class MlCompanySectors extends React.Component{
@@ -150,17 +150,19 @@ export default class MlCompanySectors extends React.Component{
 
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",
@@ -347,7 +349,7 @@ export default class MlCompanySectors extends React.Component{
                               <div className="hex_outer">
                                 <span className="ml ml-plus "></span>
                               </div>
-                              <h3>Add Area Of Interest</h3>
+                              <h3>Add Sectors And Services</h3>
                             </div>
                           </a>
                         </div>
@@ -378,7 +380,7 @@ export default class MlCompanySectors extends React.Component{
                   {/*popover */}
                   <Popover placement="right" isOpen={this.state.popoverOpen}
                            target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                    <PopoverTitle>Add New Area of Interest</PopoverTitle>
+                    <PopoverTitle>Add Sectors And Services</PopoverTitle>
                     <PopoverContent>
                       <div className="ml_create_client">
                         <div className="medium-popover">

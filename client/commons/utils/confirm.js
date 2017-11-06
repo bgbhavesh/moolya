@@ -17,13 +17,15 @@ function Confirm(title, msg, trueBTN, falseBTN,cb) { /*change*/
     "</div>";
 
   $('body').prepend($content);
-  $('.doAction').click(function () {
+  $('.doAction').click(function (e) {
+    e.preventDefault();
     $(this).parents('.dialog-ovelay').fadeOut(500, function () {
       $(this).remove();
       cb(true);
     });
   });
-  $('.cancelAction, .fa-close').click(function () {
+  $('.cancelAction, .fa-close').click(function (e) {
+    e.preventDefault();
     $(this).parents('.dialog-ovelay').fadeOut(500, function () {
       $(this).remove();
       cb(false);

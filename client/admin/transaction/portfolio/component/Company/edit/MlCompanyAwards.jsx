@@ -14,7 +14,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 const KEY = "awardsRecognition"
 
 export default class MlCompanyAwards extends Component{
@@ -228,7 +228,8 @@ export default class MlCompanyAwards extends Component{
 
   onLogoFileUpload(image,fileInfo){
     let file=image;
-    let fileName=this.state.fileName;
+    // let fileName=this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
@@ -245,17 +246,20 @@ export default class MlCompanyAwards extends Component{
       showProfileModal: false
     });
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure);
         }
-        this.libraryAction(fileObjectStructure);
-      }
+      });
+
       if (result && result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",

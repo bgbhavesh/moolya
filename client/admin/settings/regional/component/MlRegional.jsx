@@ -307,7 +307,7 @@ class MlRegional extends React.Component{
                   >
                     <form>
                       <div className="previewImg">
-                        <img ref="url" src={this.state.data.regionalFlag}/>
+                        <img ref="url" src={Meteor.settings.public.countriesFlagBaseUrl+this.state.data.regionalFlag}/>
                       </div>
                       <div className="form-group">
                         <textarea ref="about" defaultValue={this.state.data && this.state.data.aboutRegion} placeholder="About" className="form-control float-label" id=""></textarea>

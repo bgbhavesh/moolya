@@ -16,7 +16,7 @@ import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPo
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 const KEY = 'management'
 
 const genderValues = [
@@ -43,6 +43,7 @@ export default class MlCompanyManagement extends Component {
       showProfileModal: false
     }
     this.tabName = this.props.tabName || ""
+    this.curSelectLogo = {};
     this.onSaveAction = this.onSaveAction.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.onClick.bind(this);
@@ -100,6 +101,7 @@ export default class MlCompanyManagement extends Component {
     this.setState({ loading: true })
     let managmentDetails = this.state.management[index]
     managmentDetails = _.omit(managmentDetails, "__typename");
+    this.curSelectLogo = managmentDetails.logo
     this.setState({ selectedIndex: index });
     this.setState({ data: managmentDetails }, function () {
       this.setState({ loading: false }, function () {
@@ -207,7 +209,7 @@ export default class MlCompanyManagement extends Component {
       const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({ loading: false, management: response.management, managementList: response.management });
-        this.fetchOnlyImages()
+        // this.fetchOnlyImages()
       } else {
         this.setState({ loading: false })
       }
@@ -242,6 +244,7 @@ export default class MlCompanyManagement extends Component {
     this.setState({managementList: setObject}, () => {
       $('#management-form').slideUp();
     })
+    this.curSelectLogo = {};
   }
 
   getFieldValidations() {
@@ -254,22 +257,20 @@ export default class MlCompanyManagement extends Component {
     let management1 = this.state.management;
     let management = _.cloneDeep(management1);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       management[this.state.selectedIndex] = data;
     }
     let managementArr = [];
     _.each(management, function (item) {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === '__typename' || propName === 'logo') {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === '__typename') {
           delete item[propName];
         }
       }
       let newItem = _.omit(item, "__typename")
-      newItem = _.omit(item, "privateFields")
-      if (item && item.logo) {
-        newItem = _.omit(item, 'logo')
-      }
-      managementArr.push(newItem)
+      var newItemValue = _.omit(newItem, "privateFields")
+      managementArr.push(newItemValue)
     })
     management = managementArr;
     this.setState({ management: management })
@@ -287,17 +288,24 @@ export default class MlCompanyManagement extends Component {
     let that = this;
     let details = this.state.data;
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
+      this.curSelectLogo = {
+        fileName: file && file.name ? file.name : "",
+        fileUrl: result.result
+      };
       var temp = $.parseJSON(resp).result;
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: { fileName: file.fileName, fileUrl: temp } });
@@ -326,25 +334,25 @@ export default class MlCompanyManagement extends Component {
   }
 
 
-  async fetchOnlyImages() {
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      this.setState({ loading: false })
-      let thisState = this.state.selectedIndex;
-      let dataDetails = this.state.management
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if (specificData) {
-        let curUpload = response.management[thisState]
-        specificData['logo'] = curUpload['logo'] ? curUpload['logo'] : " "
-        this.setState({ loading: false, management: cloneBackUp, data: specificData }, function () {
-          $('#management-form').slideDown();
-        });
-      } else {
-        this.setState({ loading: false })
-      }
-    }
-  }
+  // async fetchOnlyImages() {
+  //   const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response) {
+  //     this.setState({ loading: false })
+  //     let thisState = this.state.selectedIndex;
+  //     let dataDetails = this.state.management
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if (specificData) {
+  //       let curUpload = response.management[thisState]
+  //       specificData['logo'] = curUpload['logo'] ? curUpload['logo'] : " "
+  //       this.setState({ loading: false, management: cloneBackUp, data: specificData }, function () {
+  //         $('#management-form').slideDown();
+  //       });
+  //     } else {
+  //       this.setState({ loading: false })
+  //     }
+  //   }
+  // }
 
   handleUploadAvatar(image, file) {
     this.setState({
@@ -404,7 +412,7 @@ export default class MlCompanyManagement extends Component {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? generateAbsolutePath(user.logo.fileUrl) : genderImage} /></div>
+                          <div className="hex_outer"><img src={user.logo && user.logo.fileUrl? generateAbsolutePath(user.logo.fileUrl) : genderImage} /></div>
                           <h3>{user.firstName ? user.firstName : ""}</h3>
                         </div>
                       </div>
@@ -469,7 +477,6 @@ export default class MlCompanyManagement extends Component {
                       </div>
 
                       <div className="form-group date-pick-wrap">
-                        {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label"  onBlur={this.handleBlur}/>*/}
                         <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                           inputProps={{ placeholder: "Joining Date to this Company",readOnly:true }}
                           closeOnSelect={true} value={this.state.data.joiningDate}

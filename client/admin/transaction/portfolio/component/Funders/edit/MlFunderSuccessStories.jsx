@@ -12,7 +12,7 @@ import MlLoader from '../../../../../../commons/components/loader/loader'
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 export default class MlFunderSuccessStories extends Component {
   constructor(props, context) {
@@ -202,16 +202,19 @@ export default class MlFunderSuccessStories extends Component {
   onFileUploadCallBack(file, resp) {
     if (resp) {
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",
@@ -315,8 +318,8 @@ export default class MlFunderSuccessStories extends Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-4 col-sm-4">
-                      <a href="" id="team_listdefault" data-placement="top" data-class="large_popover">
-                        <div className="list_block notrans" onClick={this.addSuccess.bind(this)}>
+                      <a href="" id="team_listdefault" data-placement="top" data-class="large_popover" onClick={this.addSuccess.bind(this)}>
+                        <div className="list_block notrans" >
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
                           <h3 onClick={this.addSuccess.bind(this)}>Add New</h3>
                         </div>
@@ -329,15 +332,12 @@ export default class MlFunderSuccessStories extends Component {
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                           <a href="" id={"team_list" + idx}>
 
-                            <div className="list_block notrans funding_list">
+                            <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, idx)}>
                               <div>
                                 <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
                               </div>
-                              {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                              <div className="" onClick={that.onTileClick.bind(that, idx)}>
                                 <img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} />
-                              </div>
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>

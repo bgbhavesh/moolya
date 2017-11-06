@@ -13,7 +13,7 @@ import CropperModal from '../../../../../../commons/components/cropperModal';
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
 import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 export default class MlFunderAreaOfInterest extends Component {
   constructor(props, context) {
@@ -91,9 +91,7 @@ export default class MlFunderAreaOfInterest extends Component {
     let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -133,7 +131,8 @@ export default class MlFunderAreaOfInterest extends Component {
       popoverOpen: !(this.state.popoverOpen),
       data: {},
       industryTypeId: null,
-      industryTypeName: null
+      industryTypeName: null,
+      selectedVal: null
     })
     if (this.state.funderAreaOfInterest) {
       this.setState({selectedIndex: this.state.funderAreaOfInterest.length})
@@ -235,17 +234,20 @@ export default class MlFunderAreaOfInterest extends Component {
 
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",
@@ -327,8 +329,7 @@ export default class MlFunderAreaOfInterest extends Component {
         }
       }
       let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      updateItem =_.omit(updateItem,"privateFields");
+      let updateItem =_.omit(newItem,"privateFields");
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;

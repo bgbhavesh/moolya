@@ -13,7 +13,8 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = 'assets'
+const KEY = 'assets';
+import Confirm from '../../../../../../../commons/utils/confirm';
 
 class MlStartupAssets extends Component{
   constructor(props, context){
@@ -179,22 +180,25 @@ class MlStartupAssets extends Component{
   }
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
+          if (result.success) {
+            this.setState({loading: true})
+            this.fetchOnlyImages();
+            this.imagesDisplay();
+          }
         }
-        this.libraryAction(fileObjectStructure)
-        if (result.success) {
-          this.setState({loading: true})
-          this.fetchOnlyImages();
-          this.imagesDisplay();
-        }
-      }
+      });
+
     }
   }
 

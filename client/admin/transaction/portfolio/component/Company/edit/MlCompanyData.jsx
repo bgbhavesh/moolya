@@ -5,11 +5,9 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../../commons/actions/mlLibraryActionHandler'
-
 import {fetchCompanyPortfolioData} from "../../../actions/findCompanyPortfolioDetails";
-
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 export default class MlCompanyData extends React.Component{
   constructor(props){
@@ -87,17 +85,20 @@ export default class MlCompanyData extends React.Component{
 
   onFileUploadCallBack(type, file, resp) {
     if (resp && type) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure);
         }
-        this.libraryAction(fileObjectStructure);
-      }
+      });
+
       this.fetchPortfolioData();
     }
   }

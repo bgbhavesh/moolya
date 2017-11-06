@@ -13,7 +13,7 @@ import MlLoader from '../../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper'
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 const KEY = "partners"
 
 export default class MlInstitutionEditPartners extends React.Component {
@@ -34,6 +34,7 @@ export default class MlInstitutionEditPartners extends React.Component {
       privateKey:{},
       fileName:""
     }
+    this.curSelectLogo = {};
     this.handleBlur.bind(this);
     this.onSavePartnerAction.bind(this);
     this.libraryAction.bind(this);
@@ -156,6 +157,7 @@ export default class MlInstitutionEditPartners extends React.Component {
       setObject = this.context.institutionPortfolio.partners
     }
     this.setState({partnersList:setObject, popoverOpenP: false})
+    this.curSelectLogo = {}
   }
 
   addPartner() {
@@ -193,9 +195,7 @@ export default class MlInstitutionEditPartners extends React.Component {
     let cloneArray = _.cloneDeep(this.state.partners);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -238,6 +238,7 @@ export default class MlInstitutionEditPartners extends React.Component {
     let fun = this.state.partners;
     let partners = _.cloneDeep(fun);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       partners[this.state.selectedIndex] = data;
     }
@@ -280,17 +281,24 @@ export default class MlInstitutionEditPartners extends React.Component {
   onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file&&file.type?file.type:"",
-          fileUrl: result.result,
-          libraryType: "image"
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file&&file.type?file.type:"",
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
+        this.curSelectLogo = {
+          fileName: file && file.name ? file.name : "",
+          fileUrl: result.result
+        };
         toastr.success("Photo Updated Successfully");
         this.setState({loading: true})
         this.fetchOnlyImages();

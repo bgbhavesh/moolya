@@ -127,39 +127,39 @@ export default class MlFunderEditTemplate extends Component {
     return tabs;
   }
 
+
+  //todo://need to pass all function to common function ["sendDataToParentPortfolio"] to send data to wrapper {"APP+ADMIN"}
   getLookingFor(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['lookingFor'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    // var object = omitDeep(data, 'logo')
+    // this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
   getSuccessStoriesDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
-    this.setState({funderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['successStories'] = arr;
-    var object = omitDeep(data, 'logo')
-    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
+    this.setState({funderPortfolio: data});
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
   getAboutus(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['funderAbout'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
   getInvestmentsDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
   getPrincipalDetails(details, privateKey, requiredFields) {
@@ -169,13 +169,6 @@ export default class MlFunderEditTemplate extends Component {
     }
     data['principal'] = details;
     this.setState({funderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['principal'] = arr;
-    // this.props.getPortfolioDetails({funderPortfolio: data}, privateKey);
     var object = omitDeep(data, 'logo')
     this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
@@ -186,14 +179,8 @@ export default class MlFunderEditTemplate extends Component {
       data['team'] = [];
     }
     data['team'] = details;
-    this.setState({funderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['team'] = arr;
-    var object = omitDeep(data, 'logo')
+    this.setState({funderPortfolio: data});
+    var object = omitDeep(data, 'logo');
     this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -203,16 +190,24 @@ export default class MlFunderEditTemplate extends Component {
       data['areaOfInterest'] = [];
     }
     data['areaOfInterest'] = details;
-    this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.setState({funderPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
+  /**
+   * @Note: send data to parent portfolio
+   * */
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
+  }
   /**
    * check need and remove it
    * */
   getFunderNewsDetails(details, privateKey) {
     let data = this.state.funderPortfolio;
-    if (data && !data.lookingFor) {
+    if (data && !data.news) {
       data['news'] = [];
     }
     data['news'] = details;

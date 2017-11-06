@@ -13,7 +13,7 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 const KEY = "awardsRecognition"
 
@@ -31,12 +31,12 @@ export default class MlInstitutionEditAwards extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -50,7 +50,6 @@ export default class MlInstitutionEditAwards extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -95,15 +94,14 @@ export default class MlInstitutionEditAwards extends React.Component{
       setObject = this.context.institutionPortfolio.awardsRecognition
     }
     this.setState({institutionAwardsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.institutionAwards);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
       "selectedVal" : details.awardId,
       selectedObject : index,popoverOpen : !(this.state.popoverOpen)},()=>{
@@ -202,6 +200,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     let awards = this.state.institutionAwards;
     let institutionAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionAwards[this.state.selectedIndex] = data;
     }
@@ -234,22 +233,28 @@ export default class MlInstitutionEditAwards extends React.Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
+      });
+
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          };
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
-      }
     }
   }
 
@@ -271,7 +276,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     if (response && response.awardsRecognition) {
       let dataDetails =this.state.institutionAwards
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.awardsRecognition[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -282,28 +287,6 @@ export default class MlInstitutionEditAwards extends React.Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      let dataDetails =this.state.institutionAwards
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionAwardsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionAwards:cloneBackUp,institutionAwardsList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');

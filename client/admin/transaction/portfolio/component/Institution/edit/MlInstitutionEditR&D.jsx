@@ -12,7 +12,7 @@ import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibrary
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import {client} from '../../../../../core/apolloConnection'
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 const KEY = "researchAndDevelopment"
 
@@ -29,12 +29,12 @@ export default class MlInstitutionEditRD extends React.Component{
       institutionRDList:[],
       selectedObject:"default"
     };
+    this.curSelectLogo = {}
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -48,7 +48,6 @@ export default class MlInstitutionEditRD extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -94,15 +93,14 @@ export default class MlInstitutionEditRD extends React.Component{
       setObject = this.context.institutionPortfolio.researchAndDevelopment
     }
     this.setState({institutionRDList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.institutionRD);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
                     selectedObject : index,
                     popoverOpen : !(this.state.popoverOpen)},()=>{
@@ -184,6 +182,7 @@ export default class MlInstitutionEditRD extends React.Component{
     let awards = this.state.institutionRD;
     let institutionRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionRD[this.state.selectedIndex] = data;
     }
@@ -217,21 +216,26 @@ export default class MlInstitutionEditRD extends React.Component{
   onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
+      });
+
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          }
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
-      }
     }
   }
 
@@ -253,7 +257,7 @@ export default class MlInstitutionEditRD extends React.Component{
     if (response && response.researchAndDevelopment) {
       let dataDetails =this.state.institutionRD
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.researchAndDevelopment[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -264,28 +268,6 @@ export default class MlInstitutionEditRD extends React.Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.researchAndDevelopment) {
-      let dataDetails =this.state.institutionRD
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.researchAndDevelopment?response.researchAndDevelopment:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionRDList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionRD:cloneBackUp,institutionRDList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
@@ -356,7 +338,7 @@ export default class MlInstitutionEditRD extends React.Component{
                                    className="form-control float-label" ref={"researchAndDevelopmentName"}
                                    defaultValue={this.state.data.researchAndDevelopmentName}
                                    onBlur={this.handleBlur.bind(this)} data-required={true}
-                                   data-errMsg="Name is required"/>
+                                   data-errMsg="R&D Name is required"/>
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isResearchAndDevelopmentNamePrivate" defaultValue={this.state.data.isResearchAndDevelopmentNamePrivate}  onClick={this.onLockChange.bind(this, "researchAndDevelopmentName", "isResearchAndDevelopmentNamePrivate")}/>
                           </div>
                         </div>

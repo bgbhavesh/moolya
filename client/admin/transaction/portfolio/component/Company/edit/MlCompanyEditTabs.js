@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import _ from "lodash";
+import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlCompanyManagement from "./MlCompanyManagement";
 import MlCompanyAboutUsLandingPage from "./about/MlCompanyAboutUsLandingPage";
@@ -179,7 +180,8 @@ export default class MlCompanyEditTabs extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getDataDetails(details, tabName) {
@@ -195,7 +197,8 @@ export default class MlCompanyEditTabs extends Component {
     }
     data['management'] = details;
     this.setState({companyPortfolio: data})
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getLookingForDetails(details, privateKey, requiredFields) {
@@ -213,15 +216,10 @@ export default class MlCompanyEditTabs extends Component {
     if (data && !data.awardsRecognition) {
       data['awardsRecognition'] = [];
     }
+    data['awardsRecognition'] = details;
     this.setState({companyPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getMCL(details, privateKey) {
@@ -248,30 +246,26 @@ export default class MlCompanyEditTabs extends Component {
   getIncubators(details, tabName, privateKey,requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey,requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey,requiredFields);
   }
 
   getPartnersDetails(details, privateKey) {
-
     let data = this.state.companyPortfolio;
     if (data && !data.partners) {
       data['partners'] = [];
     }
+    data['partners'] = details;
     this.setState({companyPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['partners'] = arr;
-
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey);
   }
 
   getCSRDetails(details, tabName, privateKey, requiredFields) {
     let data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getRDDetails(details, privateKey, requiredFields) {
@@ -279,31 +273,21 @@ export default class MlCompanyEditTabs extends Component {
     if (data && !data.researchAndDevelopment) {
       data['researchAndDevelopment'] = [];
     }
-    this.setState({companyPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['researchAndDevelopment'] = arr;
-    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey, requiredFields);
+    data['researchAndDevelopment'] = details;
+    this.setState({companyPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey, requiredFields);
   }
 
   getIntrapreneurDetails(details, privateKey) {
-
     let data = this.state.companyPortfolio;
     if (data && !data.intrapreneurRecognition) {
       data['intrapreneurRecognition'] = [];
     }
-    this.setState({companyPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['intrapreneurRecognition'] = arr;
-
-    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privateKey);
+    data['intrapreneurRecognition'] = details;
+    this.setState({companyPortfolio: data});
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({companyPortfolio: object}, privateKey);
   }
 
   componentWillMount() {

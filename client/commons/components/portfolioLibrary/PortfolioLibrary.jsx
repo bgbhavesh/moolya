@@ -25,7 +25,8 @@ import SharePopOver from './sharePopOver'
 import MlConnectionHeader from './connectionHeader'
 import SharedLibrary from './sharedLibrary';
 import CropperModal from '../cropperModal';
-import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+import Confirm from '../../../commons/utils/confirm';
 
 
 
@@ -640,14 +641,15 @@ class Library extends React.Component {
     if (resp !== 'Maximum file size exceeded') {
       var link = JSON.parse(resp).result;
       if (!this.state.isLibrary) {
-        let userOption = confirm("Do you want to add the file into the library")
-        if (userOption) {
-          let addToCentralLibrary = true;
-          this.storeData(link, type, addToCentralLibrary)
-        } else {
-          let addToCentralLibrary = false;
-          this.storeData(link, type, addToCentralLibrary)
-        }
+        Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+          if(ifConfirm){
+            let addToCentralLibrary = true;
+            this.storeData(link, type, addToCentralLibrary)
+          } else {
+            let addToCentralLibrary = false;
+            this.storeData(link, type, addToCentralLibrary)
+          }
+        });
       } else {
         let addToCentralLibrary = true;
         this.storeData(link, type, addToCentralLibrary)

@@ -11,7 +11,7 @@ import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFo
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-
+import Confirm from '../../../../../../commons/utils/confirm';
 import  generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 var FontAwesome = require('react-fontawesome');
 
@@ -31,11 +31,11 @@ export default class MlCompanyIntrapreneur extends React.Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.curSelectLogo = {}
     this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -49,7 +49,6 @@ export default class MlCompanyIntrapreneur extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -88,6 +87,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
       setObject = this.context.companyPortfolio.intrapreneurRecognition;
     }
     this.setState({institutionIntrapreneurList: setObject, popoverOpen: false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
@@ -97,6 +97,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
       selectedObject : index,
       popoverOpen : !(this.state.popoverOpen)},()=>{
@@ -174,6 +175,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
     let intrapreneur = this.state.institutionIntrapreneur;
     let institutionIntrapreneur = _.cloneDeep(intrapreneur);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if (isSaveClicked) {
       institutionIntrapreneur[this.state.selectedIndex] = data;
     }
@@ -181,7 +183,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
     _.each(institutionIntrapreneur, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
           delete item[propName];
         }
       }
@@ -206,23 +208,27 @@ export default class MlCompanyIntrapreneur extends React.Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
+      });
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          }
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
       }
-    }
   }
 
   async libraryAction(file) {
@@ -243,7 +249,7 @@ export default class MlCompanyIntrapreneur extends React.Component{
     if (response && response.intrapreneurRecognition) {
       let dataDetails =this.state.institutionIntrapreneur;
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.intrapreneurRecognition[this.state.selectedIndex]
         specificData['logo']= curUpload['logo'];
@@ -254,28 +260,6 @@ export default class MlCompanyIntrapreneur extends React.Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.intrapreneurRecognition) {
-      let dataDetails =this.state.institutionIntrapreneur
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.intrapreneurRecognition?response.intrapreneurRecognition:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionIntrapreneurList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionIntrapreneur:cloneBackUp,institutionIntrapreneurList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');

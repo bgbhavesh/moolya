@@ -28,7 +28,7 @@ export default class MlFunderLookingFor extends Component {
       selectedObject: "default"
     };
     this.tabName = this.props.tabName || ""
-    this.fetchPortfolioDetails.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   componentWillMount() {
@@ -72,6 +72,14 @@ export default class MlFunderLookingFor extends Component {
     }
     this.funderLookingForServer = response
 
+  }
+
+  handleBlur(e) {
+    var details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.target.value});
+    this.setState({data: details})
   }
 
   addLookingFor() {
@@ -167,11 +175,9 @@ export default class MlFunderLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject && selObject.label ? selObject.label : '',
-      lookingDescription: selObject && selObject.about ? selObject.about : ''
+      ["lookingForName"]: selObject && selObject.label ? selObject.label : ''
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.sendDataToParent()
@@ -214,7 +220,6 @@ export default class MlFunderLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
-          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -283,7 +288,7 @@ export default class MlFunderLookingFor extends Component {
                                           data-errMsg="Looking for is required"/>
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label" disabled="disabled"
+                                     className="form-control float-label" onBlur={this.handleBlur}
                                      defaultValue={this.state.data.lookingDescription}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
                                            defaultValue={this.state.data.isDescriptionPrivate}

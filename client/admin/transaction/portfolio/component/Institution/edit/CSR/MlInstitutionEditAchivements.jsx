@@ -11,6 +11,7 @@ import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+import Confirm from '../../../../../../../commons/utils/confirm';
 
 const KEY = "achievements"
 
@@ -28,11 +29,11 @@ export default class MlInstitutionEditAchivements extends Component{
       selectedVal:null,
       selectedObject:"default"
     };
+    this.curSelectLogo = {};
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
-    this.imagesDisplay.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -46,7 +47,6 @@ export default class MlInstitutionEditAchivements extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -89,15 +89,14 @@ export default class MlInstitutionEditAchivements extends Component{
       setObject = this.context.institutionPortfolio.achievements
     }
     this.setState({institutionAchievementsList:setObject, popoverOpen : false})
+    this.curSelectLogo = {}
   }
 
   onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.institutionAchievements);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if(details && details.logo){
-      delete details.logo['__typename'];
-    }
+    this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen)});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
@@ -182,6 +181,7 @@ export default class MlInstitutionEditAchivements extends Component{
     let achievements = this.state.institutionAchievements;
     let institutionAchievements = _.cloneDeep(achievements);
     data.index = this.state.selectedIndex;
+    data.logo = this.curSelectLogo;
     if(isSaveClicked){
       institutionAchievements[this.state.selectedIndex] = data;
     }
@@ -214,23 +214,29 @@ export default class MlInstitutionEditAchivements extends Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
+      });
+
         if (result.success) {
+          this.curSelectLogo = {
+            fileName: file && file.name ? file.name : "",
+            fileUrl: result.result
+          };
           this.setState({loading: true})
           this.fetchOnlyImages();
-          this.imagesDisplay();
         }
       }
-    }
   }
 
   async libraryAction(file) {
@@ -251,7 +257,7 @@ export default class MlInstitutionEditAchivements extends Component{
     if (response && response.achievements) {
       let dataDetails =this.state.institutionAchievements
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.achievements[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
@@ -262,28 +268,6 @@ export default class MlInstitutionEditAchivements extends Component{
       }
     }
   }
-
-
-  async imagesDisplay(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.achievements) {
-      let dataDetails =this.state.institutionAchievements
-      if(!dataDetails || dataDetails.length<1){
-        dataDetails = response.achievements?response.achievements:[]
-      }
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      if(cloneBackUp && cloneBackUp.length>0){
-        _.each(dataDetails, function (obj,key) {
-          cloneBackUp[key]["logo"] = obj.logo;
-        })
-      }
-      let listDetails = this.state.institutionAchievementsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionAchievements:cloneBackUp,institutionAchievementsList:cloneBackUpList});
-    }
-  }
-
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');

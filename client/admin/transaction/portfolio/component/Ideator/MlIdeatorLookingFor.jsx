@@ -23,8 +23,8 @@ export default class MlIdeatorLookingFor extends Component {
       ideatorLookingForList: [],
       selectedVal: null,
       selectedObject: "default"
-    }
-    this.fetchPortfolioDetails.bind(this);
+    };
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   componentWillMount() {
@@ -92,6 +92,14 @@ export default class MlIdeatorLookingFor extends Component {
     });
   }
 
+  handleBlur(e) {
+    var details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.target.value});
+    this.setState({data: details})
+  }
+
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.IdeatorLookingForServer && this.IdeatorLookingForServer[selIndex]?this.IdeatorLookingForServer[selIndex].privateFields : []
@@ -143,11 +151,9 @@ export default class MlIdeatorLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label,
-      lookingDescription: selObject.about
+      ["lookingForName"]: selObject.label
     });
     this.setState({data: details, selectedVal: selectedId}, function () {
       // this.sendDataToParent()
@@ -183,7 +189,6 @@ export default class MlIdeatorLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
-          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -251,7 +256,7 @@ export default class MlIdeatorLookingFor extends Component {
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label" disabled="disabled"
+                                     className="form-control float-label" onBlur={this.handleBlur}
                                      defaultValue={this.state.data.lookingDescription}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
                                            defaultValue={this.state.data.isDescriptionPrivate}

@@ -228,7 +228,8 @@ export default class MlCompanyAwards extends Component{
 
   onLogoFileUpload(image,fileInfo){
     let file=image;
-    let fileName=this.state.fileName;
+    // let fileName=this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     if(file){
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));

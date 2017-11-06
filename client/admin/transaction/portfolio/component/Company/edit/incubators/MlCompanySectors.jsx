@@ -349,7 +349,7 @@ export default class MlCompanySectors extends React.Component{
                               <div className="hex_outer">
                                 <span className="ml ml-plus "></span>
                               </div>
-                              <h3>Add Area Of Interest</h3>
+                              <h3>Add Sectors And Services</h3>
                             </div>
                           </a>
                         </div>
@@ -380,7 +380,7 @@ export default class MlCompanySectors extends React.Component{
                   {/*popover */}
                   <Popover placement="right" isOpen={this.state.popoverOpen}
                            target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                    <PopoverTitle>Add New Area of Interest</PopoverTitle>
+                    <PopoverTitle>Add Sectors And Services</PopoverTitle>
                     <PopoverContent>
                       <div className="ml_create_client">
                         <div className="medium-popover">

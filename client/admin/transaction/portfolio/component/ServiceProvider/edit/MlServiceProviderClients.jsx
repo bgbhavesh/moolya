@@ -213,7 +213,7 @@ export default class MlServiceProviderClients extends Component {
   onLogoFileUpload(image, fileInfo) {
     let file = image;
     // let fileName = this.state.fileName;
-    const fileName = fileInfo.name;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     if(file){
       let data = {
         moduleName: "PORTFOLIO",

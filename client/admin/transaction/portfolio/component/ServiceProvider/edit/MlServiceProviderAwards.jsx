@@ -238,7 +238,8 @@ export default class MlServiceProviderAwards extends Component {
   }
 
   onLogoFileUpload(image,fileInfo) {
-    let fileName=this.state.fileName;
+    // let fileName=this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     let file=image;
     if(file){
       let data = {

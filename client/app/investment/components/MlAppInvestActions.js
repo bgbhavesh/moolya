@@ -221,7 +221,11 @@ async function changeStage(that, currentStage, currentStageName){
     response = await createStageActionHandler(dataToInsert);
   }
   if(response.success){
-    toastr.success(`Portfolio moved to ${currentStageName}  stage`);
+    if(response.result === "Onboard request to sent to user"){
+      toastr.success(response.result );
+    } else{
+      toastr.success(`Portfolio moved to ${currentStageName}  stage`);
+    }
     that.props.fetchPortfolio();
   } else {
     toastr.error(response.result)

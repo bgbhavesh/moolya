@@ -120,7 +120,7 @@ export default class  SharedLibrary extends React.Component {
   randomVideo(link, index) {
     let data = this.state.videoDetails|| [];
     let videoPreviewUrl;
-    videoPreviewUrl = data[index].file.url;
+    videoPreviewUrl = generateAbsolutePath(data[index].file.url);
     this.setState({previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl});
   }
 
@@ -209,7 +209,8 @@ export default class  SharedLibrary extends React.Component {
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download' /></a>:<div></div>}
+          <br/>
           <a href="" data-toggle="modal" data-target=".videospop"
              onClick={that.randomVideo.bind(that, generateAbsolutePath(show.file.url), id)}>
             <video width="120" height="100" controls>

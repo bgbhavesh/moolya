@@ -110,12 +110,13 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
     }
   }else {
     let tempObject = {
-      portfolioId: portfolioDetails._id,
+      portfolioId: portfolioDetails && portfolioDetails._id,
       isPrivate: true
     }
     let tempArray = []
     tempArray.push(tempObject)
-    args.files.portfolioReference = tempArray;
+    if(tempObject && tempObject.portfolioId) args.files.portfolioReference = tempArray;
+    else return
   }
   if(!dataExists){
     var newCollection = mlDBController.update('MlLibrary', {_id:args.id},args.files,{$set:1}, context)

@@ -177,7 +177,7 @@ export default class MlAssignComponent extends React.Component {
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Selected record is not assigned to you");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");

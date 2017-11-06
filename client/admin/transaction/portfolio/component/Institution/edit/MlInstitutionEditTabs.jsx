@@ -77,7 +77,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlInstitutionAboutUs key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlInstitutionAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          backClickHandler={this.backClickHandler.bind(this)}/>
       },

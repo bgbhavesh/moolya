@@ -107,7 +107,7 @@ export default class MlAppServiceList extends Component {
                         <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                         <span className="price pull-right">{service.status ? service.status.toUpperCase() : ''}</span>
                         <div className="clearfix"></div>
-                        <i className="c_image ml my-ml-Ideator"></i>
+                        <i className="c_image ml my-ml-service"></i>
                         <div className="clearfix"></div>
                         <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
                         <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>

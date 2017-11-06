@@ -1050,7 +1050,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             $filter: {
               input: "$transactionLog",
               as: "transaction",
-              cond: { $eq: [ "$$transaction.transactionType", 'investments' ] }
+              cond: { $ne: [ "$$transaction.transactionType", 'investments' ] }
             }
           },
           'transactionLog': {

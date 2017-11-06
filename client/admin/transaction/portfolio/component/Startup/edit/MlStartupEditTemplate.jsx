@@ -58,7 +58,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlStartupAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.backClickHandler.bind(this)}/>
       },

@@ -351,12 +351,14 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
           const lastNameUser = user.profile && user.profile.lastName ? user.profile.lastName : "";
           let uniqueSeoName = firstNameUser + '-' + lastNameUser;
           uniqueSeoName = uniqueSeoName.replace(/ /g, "-");
+          let date = new Date();
           let siteMapDetails = {
             userId: regRecord.userId,
             portFolioId: args.portfoliodetailsId,
             priority: 1,
             changeFreq:'daily',
-            uniqueSeoName:uniqueSeoName
+            uniqueSeoName:uniqueSeoName,
+            lastmodISO:date.toISOString()
           }
 
           MlSiteMapInsertion.mlCreateSEOUrl(siteMapDetails, urlFormationObject);

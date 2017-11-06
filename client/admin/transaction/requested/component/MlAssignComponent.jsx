@@ -97,22 +97,25 @@ export default class MlAssignComponent extends React.Component {
   }
 
   async assignUser(){
-    let params={
-      "cluster": this.state.selectedCluster,
-      "chapter": this.state.selectedChapter,
-      "subChapter": this.state.selectedSubChapter,
-      "community": this.state.selectedCommunity,
-      "department": this.state.selectedDepartment,
-      "subDepartment": this.state.selectedSubDepartment,
-      "role": this.state.selectedRole,
-      "user": this.state.selectedUser
-    }
-    //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
-    let data = this.props.data
-    let transactionIds = []
-    data.map(function (transaction) {
-      transactionIds.push(transaction.registrationId)
-    })
+    if(this.state && !this.state.selectedUser){
+      toastr.error("please select a user to assign");
+    }else{
+      let params={
+        "cluster": this.state.selectedCluster,
+        "chapter": this.state.selectedChapter,
+        "subChapter": this.state.selectedSubChapter,
+        "community": this.state.selectedCommunity,
+        "department": this.state.selectedDepartment,
+        "subDepartment": this.state.selectedSubDepartment,
+        "role": this.state.selectedRole,
+        "user": this.state.selectedUser
+      }
+      //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+      let data = this.props.data
+      let transactionIds = []
+      data.map(function (transaction) {
+        transactionIds.push(transaction.registrationId)
+      })
 
       const response = await assignUserForTransactionAction("Registration", params, transactionIds, "Registration", "assignTransaction");
       if (response.success) {
@@ -134,6 +137,7 @@ export default class MlAssignComponent extends React.Component {
         this.props.closePopOver(false)
         FlowRouter.reload();
       }
+    }
   }
 
 
@@ -173,7 +177,7 @@ export default class MlAssignComponent extends React.Component {
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Selected record is not assigned to you");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");

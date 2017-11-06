@@ -280,7 +280,8 @@ export default class MlCompanyManagement extends Component {
   onLogoFileUpload(image, fileInfo) {
     let file = image;
     let name = "logo";
-    let fileName = this.state.fileName;
+    // let fileName = this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     let data = { moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId: this.props.portfolioDetailsId, portfolio: { management: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] } };
     let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, name, file));
   }

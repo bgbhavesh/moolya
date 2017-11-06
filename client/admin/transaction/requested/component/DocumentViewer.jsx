@@ -81,7 +81,7 @@ export default class DocumentViewer extends React.Component{
   showModal(index) {
     let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
     let imagePreviewUrl;
-    imagePreviewUrl = data[index].fileUrl;
+    imagePreviewUrl = generateAbsolutePath(data[index].fileUrl);
 
     this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
 

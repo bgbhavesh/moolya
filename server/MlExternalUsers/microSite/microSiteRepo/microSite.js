@@ -35,7 +35,9 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     let displayName = userObject.profile.displayName;
     portFolio.displayName = displayName;
     if (userObject.profile)
+    {
       portFolio.profilePic = userObject.profile.profileImage ? generateAbsolutePath(userObject.profile.profileImage) : '';
+    }
 
     let defaultProfile = new MlUserContext().userProfileDetails(userID)
     let profileId = defaultProfile.profileId;
@@ -48,8 +50,10 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
     }
     let resultParentPortFolio = await mlDBController.findOne('MlPortfolioDetails', queryProfileId);
     if (resultParentPortFolio) {
-      portFolio.clusterName = resultParentPortFolio.clusterName
-      portFolio.chapterName = resultParentPortFolio.chapterName
+      portFolio.clusterName = resultParentPortFolio.clusterName;
+      portFolio.chapterName = resultParentPortFolio.chapterName;
+      portFolio.industryName = await getIndustryName(resultParentPortFolio.industryId);
+      portFolio.identityType = resultParentPortFolio.identityType?resultParentPortFolio.identityType:'';
     } else {
       return 'Next';
     }
@@ -71,11 +75,13 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
       'CMP': getCMPMenu(dynamicLinksClasses),
       'INS': getINSMenu(dynamicLinksClasses)
     }
-    let communityCode = ''
+    let communityCode = '';
     if (resultParentPortFolio) {
       communityCode = resultParentPortFolio.communityCode;
       if (communityCode)
+      {
         portFolio.listView = dynamicListMenu[communityCode]
+      }
     }
 
 
@@ -127,16 +133,24 @@ async function IDE(portFolio, query) {
     }
 
     //Get LookingFor Description
+
     if (resultIDEPortfolio.lookingFor) {
       portFolio.lookingForDescription = resultIDEPortfolio.lookingFor[0].lookingDescription ? resultIDEPortfolio.lookingFor[0].lookingDescription : resultIDEPortfolio.lookingFor[0].lookingForName;
 
     }
+    portFolio.problemStatement='';
+    portFolio.solutionStatement='';
+    portFolio.IPandTM=''
+
     if (resultIDEPortfolio.problemSolution) {
       portFolio.problemStatement = resultIDEPortfolio.problemSolution.problemStatement ? resultIDEPortfolio.problemSolution.problemStatement : ''
       portFolio.solutionStatement = resultIDEPortfolio.problemSolution.solutionStatement ? resultIDEPortfolio.problemSolution.solutionStatement : ''
 
     }
-    portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+   if(resultIDEPortfolio.intellectualPlanning)
+   {
+     portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning.IPdescription ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+   }
     appendKeywords(portFolio);
     return portFolio
   }
@@ -147,13 +161,22 @@ async function STU(portFolio, query) {
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     portFolio.communityTypes = resultStartUpPortFolio.communityType;
+    portFolio.aboutDiscription=''
     if (resultStartUpPortFolio.aboutUs) {
+
       let aboutUs = resultStartUpPortFolio.aboutUs;
       portFolio.aboutDiscription = aboutUs.startupDescription ? aboutUs.startupDescription : ''
     }
+
+    portFolio.servicesProducts ='';
+    if(resultStartUpPortFolio.serviceProducts){
+
+      portFolio.servicesProducts = resultStartUpPortFolio.serviceProducts.spDescription?resultStartUpPortFolio.serviceProducts.spDescription:'';
+    }
     getManagementInfo(portFolio, resultStartUpPortFolio);
+    getTechnologyInfo(portFolio, resultStartUpPortFolio);
+    getAwardsRewards(portFolio, resultStartUpPortFolio);
     getLookingForDescription(portFolio, resultStartUpPortFolio);
-    await getBranches(portFolio, resultStartUpPortFolio);
     appendKeywords(portFolio);
 
   }
@@ -167,7 +190,9 @@ async function FUN(portFolio, query) {
     portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
     portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories)
+    {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
+    }
     getTeamInfo(portFolio, resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
     getAreasOfInterest(portFolio, resultFunderPortfolio);
@@ -185,15 +210,20 @@ async function ServiceProviderPortFolio(portFolio, query) {
     portFolio.communityTypes = resultServicePortFolio.communityType;
 
     if (resultServicePortFolio.about) {
-      let aboutUs = resultServicePortFolio.about
+      let aboutUs = resultServicePortFolio.about;
       portFolio.aboutDiscription = aboutUs.aboutDescription;
 
-    }
+      if( portFolio.identityType ==='Company'){
+        portFolio.companyName = aboutUs.aboutTitle? aboutUs.aboutTitle:'';
+      }
 
+    }
+    portFolio.servicesDescription='';
     if (resultServicePortFolio.services) {
 
       portFolio.servicesDescription = resultServicePortFolio.services.servicesDescription ? resultServicePortFolio.services.servicesDescription : ''
     }
+
     getAwardsRewards(portFolio, resultServicePortFolio);
     getClients(portFolio, resultServicePortFolio);
     getLookingForDescription(portFolio, resultServicePortFolio);
@@ -206,13 +236,14 @@ async function ServiceProviderPortFolio(portFolio, query) {
 async function CMP(portFolio, query) {
   let resultCompanyPortFolio = await getPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
-    portFolio.communityType = 'a Company';
+    portFolio.communityType = "'a Company'";
     portFolio.communityTypes = 'Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
-
+    portFolio.sectorsAndServices='';
+    portFolio.policy='';
     if (resultCompanyPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
 
@@ -242,6 +273,7 @@ async function INS(portFolio, query) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
+    portFolio.sectorsAndServices='';
     if (resultINSPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
 
@@ -280,8 +312,8 @@ function getManagementInfo(portFolio, managementInfo) {
     managementInstitution.forEach(function (management) {
       managementPortFolio.push({
         logo: management.logo ? generateAbsolutePath(management.logo.fileUrl) : '',
-        name: management.firstName + ' ' + management.lastName,
-        designation: management.designation,
+        name: management.firstName?management.firstName:'' + ' ' + management.lastName? management.lastName:'',
+        designation: management.designation?management.designation:'',
         description: management.about ? management.about : ''
       })
     })
@@ -291,7 +323,22 @@ function getManagementInfo(portFolio, managementInfo) {
   return portFolio;
 }
 
+function getTechnologyInfo(portFolio, managementInfo) {
+  let technologiesPortFolio = []
+  let technologies = managementInfo.technologies;
+  if (technologies) {
+    technologies.forEach(function (tech) {
+      technologiesPortFolio.push({
+        logo: tech.logo ? generateAbsolutePath(tech.logo.fileUrl) : '',
+        name: tech.technologyName? tech.technologyName:'',
+        description: tech.technologyDescription ? tech.technologyDescription : ''
+      })
+    })
 
+  }
+  portFolio.technologies = technologiesPortFolio;
+  return portFolio;
+}
 function getTeamInfo(portFolio, resultFunderPortfolio) {
   let teamPortFolio = []
   let principals = resultFunderPortfolio.principal;
@@ -301,8 +348,8 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
     principals.forEach(function (principal) {
       teamPortFolio.push({
         logo: principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : '',
-        name: principal.firstName + ' ' + principal.lastName,
-        designation: principal.designation,
+        name: principal.firstName?principal.firstName:'' + ' ' + principal.lastName?principal.lastName:'',
+        designation: principal.designation?principal.designation:'',
         description: principal.aboutPrincipal ? principal.aboutPrincipal : ''
       })
     })
@@ -312,8 +359,8 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
     teams.forEach(function (team) {
       teamPortFolio.push({
         logo: team.logo ? generateAbsolutePath(team.logo.fileUrl) : '',
-        name: team.firstName + ' ' + team.lastName,
-        designation: team.designation,
+        name: team.firstName?team.firstName :'' + ' ' + team.lastName?team.lastName:'',
+        designation: team.designation?team.designation:'',
         description: team.aboutTeam ? team.aboutTeam : ''
 
       })
@@ -439,10 +486,10 @@ async function getPortFolio(collectionName, query) {
 function getSTUMenu(dynamicLinksClasses) {
   return [
     {name: 'About', className: dynamicLinksClasses.About},
-    {name: 'Management', className: dynamicLinksClasses.Management},
-    {name: 'Technology', className: dynamicLinksClasses.Branches},
-    {name: 'Services and Products', className: dynamicLinksClasses.Looking_For},
-    {name: 'Awards', className: dynamicLinksClasses.Social_Links},
+    {name: 'Team', className: dynamicLinksClasses.Management},
+    {name: 'Technology', className: dynamicLinksClasses.Technology},
+    {name: 'Services and Products', className: dynamicLinksClasses.servicesProducts},
+    {name: 'Awards', className: dynamicLinksClasses.Awards},
     {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
     {name: 'Keywords', className: dynamicLinksClasses.Keywords}
   ];
@@ -503,30 +550,6 @@ function getIDEMenu(dynamicLinksClasses) {
     {name: 'Keywords', className: dynamicLinksClasses.Keywords}
   ]
 }
-async function getBranches(portFolio, resultPortFolioBranches) {
-  let branches = resultPortFolioBranches.branches;
-  let outputBranches = [];
-  if (branches) {
-    await Promise.all(branches.map(async (branch) => {
-      let city = branch.cityId ? await getCity(branch.cityId) : '';
-      let state = branch.stateId ? await getState(branch.stateId) : '';
-      let country = branch.countryId ? await getCountry(branch.countryId) : '';
-
-      outputBranches.push({
-        name: branch.name,
-        branches_logo: branch.logo ? generateAbsolutePath(branch.logo.fileUrl) : '',
-        addr1: branch.address1 ? branch.address1 : '',
-        addr2: branch.address2 ? branch.address2 : '',
-        area: branch.area ? branch.area : 'branch.area',
-        state: state,
-        country: country,
-        city: city
-      })
-    }));
-  }
-
-  portFolio.branches = outputBranches;
-}
 function getDynamicLinksClasses() {
   let dynamicLinksClasses = {
     'About': 'pageAboutDiscription',
@@ -547,7 +570,9 @@ function getDynamicLinksClasses() {
     'Incubator_Sectors': 'pageIncubatorSectors',
     'Intrapreneur': 'pageIntrapreneur',
     'RandD': 'pageRandD',
-    'CSR': 'pageCSR'
+    'CSR': 'pageCSR',
+    'Technology':'pageTechnology',
+    'servicesProducts':'pageServicesProducts'
 
 
   }
@@ -555,33 +580,33 @@ function getDynamicLinksClasses() {
   return dynamicLinksClasses;
 }
 
-async function getCity(cityId) {
-  let result = await
-    mlDBController.findOne('MlCities', {_id: cityId});
-  if (result)
-    return result.name
-  else
-    return ''
-}
-
-async function getState(stateId) {
-  let result = await
-    mlDBController.findOne('MlStates', {_id: stateId});
-  if (result)
-    return result.name;
-  else
-    return '';
-}
-
-
-async function getCountry(countryId) {
-  let result = await
-    mlDBController.findOne('MlCountries', {_id: countryId});
-  if (result)
-    return result.displayName
-  else
-    return '';
-}
+// async function getCity(cityId) {
+//   let result = await
+//     mlDBController.findOne('MlCities', {_id: cityId});
+//   if (result)
+//     return result.name
+//   else
+//     return ''
+// }
+//
+// async function getState(stateId) {
+//   let result = await
+//     mlDBController.findOne('MlStates', {_id: stateId});
+//   if (result)
+//     return result.name;
+//   else
+//     return '';
+// }
+//
+//
+// async function getCountry(countryId) {
+//   let result = await
+//     mlDBController.findOne('MlCountries', {_id: countryId});
+//   if (result)
+//     return result.displayName
+//   else
+//     return '';
+// }
 
 function getPrivateFields(privateFieldsObjects) {
   let privateFields = {}
@@ -592,16 +617,36 @@ function getPrivateFields(privateFieldsObjects) {
   return privateFields
 }
 
-function appendKeywords(portFolio) {
 
-  let keywords = portFolio.displayName + ', ' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes;
+async function getIndustryName(industryId) {
+  let industryName ='';
+  if(industryId)
+  {
+    let industryResult = await mlDBController.findOne('MlIndustries', industryId);
+    industryName  = industryResult.industryDisplayName
+
+  }
+
+  return industryName;
+}
+
+function appendKeywords(portFolio) {
+  let keywords = portFolio.displayName + ', ' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes + ',' +  portFolio.industryName;
+  let focusArea = portFolio.areaOfInterest;
+  if(portFolio.companyName && portFolio.companyName.length > 0){
+    keywords += ','+portFolio.companyName;
+  }
+  if(focusArea && focusArea.length > 0){
+    focusArea.forEach((f)=>{
+      keywords += ',' + f.name;
+    })
+  }
   if (portFolio.chapterName && portFolio.chapterName.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.chapterName;
   if (portFolio.clusterName && portFolio.clusterName.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.clusterName;
-  if (portFolio.communityType && portFolio.communityType.trim().length > 0)
-    keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
+  // if (portFolio.communityType && portFolio.communityType.trim().length > 0)
+  //   keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
   portFolio.keywords = keywords;
-  return portFolio
 }
 export  default  findPortFolioDetails;

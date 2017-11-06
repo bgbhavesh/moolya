@@ -43,6 +43,7 @@ MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
   let stageDetails = mlDBController.findOne('MlStage', {_id:args.stageId} , context);
+  let onBoardRequested = false;
   if(stageDetails) {
     if(args.stage.resourceStage === 'onboard') {
       if (stageDetails && stageDetails.hasInvested) {
@@ -51,9 +52,10 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
           return response
         }
         args.stage.onBoardRequest = true;
+        onBoardRequested = true;
         result = mlDBController.update('MlStage', {_id:args.stageId} , {onBoardRequest: true}, {$set:true}, context);
       let user = mlDBController.findOne('MlPortfolioDetails', {_id: args.stage.resourceId}, context);
-      new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)
+        new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)
       } else {
         let response = new MlRespPayload().errorPayload('Investment to be done prior to On-Boarding', 200);
         return response
@@ -63,7 +65,7 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
     }
     if(result){
       let code = 200;
-      let response = new MlRespPayload().successPayload(result, code);
+      let response = new MlRespPayload().successPayload(onBoardRequested ? "Onboard request to sent to user" :result, code);
       return response
     }
   } else {

@@ -24,6 +24,7 @@ export default class MlAdminHierarchyTabView extends Component {
 
   render() {
     let path = FlowRouter.current().route.name;
+    let currentPath = FlowRouter._current.path;
     let params = FlowRouter.current().params;
     let queryParams = FlowRouter.current().queryParams;
     let menuConfig = this.props.tabOptions||[];
@@ -92,7 +93,7 @@ export default class MlAdminHierarchyTabView extends Component {
     if(hierarchyOption!=undefined){
       tabOptions = hierarchyOption.map(function (option,index) {
         let activeClass="";
-        if(option.uniqueId===path){
+        if(option.link===currentPath){
           activeClass = 'active_btn'
         }
 

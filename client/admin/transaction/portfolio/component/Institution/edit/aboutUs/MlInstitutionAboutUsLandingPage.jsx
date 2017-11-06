@@ -29,8 +29,9 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
     var WinHeight = $(window).height();
+    var height  = this.props.isAdmin ? 465 : 535;
     $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
-    $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+535));
+    $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+height))
   }
 
   componentWillMount(){

@@ -13,7 +13,7 @@ async function getSiteMapUrls() {
       url: '/view' +sMapUrl.seoUrl,
       changefreq: sMapUrl.changeFreq,
       priority: sMapUrl.priority,
-      lastmodISO: '2015-06-27T15:30:00.000Z',
+      lastmodISO: sMapUrl.lastmodISO?sMapUrl.lastmodISO:'2015-06-27T15:30:00.000Z'
     })
   })
   return urls

@@ -14,7 +14,7 @@ import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../commons/utils/confirm';
 
 export default class MlFunderPrincipalTeam extends Component {
   constructor(props, context) {
@@ -250,10 +250,10 @@ export default class MlFunderPrincipalTeam extends Component {
     let cloneArray = _.cloneDeep(this.state.funderPrincipal);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
-    let imgLogo = principal.logo? principal.logo : {};
+    // if (details && details.logo) {
+    //   delete details.logo['__typename'];
+    // }
+    let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
@@ -291,10 +291,10 @@ export default class MlFunderPrincipalTeam extends Component {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
-    let imgLogo = team.logo? team.logo : {};
+    // if (details && details.logo) {
+    //   delete details.logo['__typename'];
+    // }
+    let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
@@ -399,17 +399,20 @@ export default class MlFunderPrincipalTeam extends Component {
 
   onFileUploadCallBack(file,type, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file && file.type ? file.type : "",
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file && file.type ? file.type : "",
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         toastr.success("Photo Updated Successfully");
         this.setState({

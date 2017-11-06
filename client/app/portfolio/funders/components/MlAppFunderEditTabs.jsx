@@ -149,30 +149,33 @@ export default class MlAppFunderEditTabs extends Component {
     let data = this.state.funderPortfolio;
     data['lookingFor'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
-  getSuccessStoriesDetails(details, privatekey, requiredFields) {
+  getSuccessStoriesDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio: data})
-    var object = omitDeep(data, 'logo')
-    this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
-    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    // var object = omitDeep(data, 'logo')
+    // this.props.getPortfolioDetails({funderPortfolio: object}, privatekey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
-  getAboutus(details, privatekey, requiredFields) {
+  getAboutus(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['funderAbout'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
-  getInvestmentsDetails(details, privatekey, requiredFields) {
+  getInvestmentsDetails(details, privateKey, requiredFields) {
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    // this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.funderPortfolio, privateKey, requiredFields)
   }
 
   getPrincipalDetails(details, privatekey, requiredFields) {
@@ -213,11 +216,18 @@ export default class MlAppFunderEditTabs extends Component {
       let portfolioId = details.portfolioId;
       this.saveDataToServices(portfolioId)
     }
-    // console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio: data})
     this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privatekey);
+  }
+
+  /**
+   * @Note: send data to parent portfolio
+   * */
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({funderPortfolio: object}, privateKey, requiredFields);
   }
 
   async saveDataToServices(portfolioId) {

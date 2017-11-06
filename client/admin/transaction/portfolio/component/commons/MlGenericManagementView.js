@@ -112,8 +112,8 @@ export default class MlGenericManagementView extends React.Component {
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.state.clusterId}}};
     const showLoader = _this.state.loading;
     var arrayList = _this.props.data ? _this.props.data : []
-    let gImg = _this.state.viewCurDetail.gender==='female'?'/images/female.jpg':'/images/ideator_01.png';
-    let genderImage = _this.state.viewCurDetail && _this.state.viewCurDetail.logo && _this.state.viewCurDetail.logo.fileUrl?_this.state.viewCurDetail.logo.fileUrl:gImg;
+    const gImg = _this.state.viewCurDetail.gender==='female'?'/images/female.jpg':'/images/ideator_01.png';
+    const genderImage = _this.state.viewCurDetail && _this.state.viewCurDetail.logo && _this.state.viewCurDetail.logo.fileUrl ? generateAbsolutePath(_this.state.viewCurDetail.logo.fileUrl) : gImg;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -137,6 +137,7 @@ export default class MlGenericManagementView extends React.Component {
                             <div className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
                                  key={idx}>
                               <div className="list_block notrans funding_list">
+                                <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
                                 <div>
                                   <p>{details.firstName}</p>
                                   <h3>{details.designation}</h3>
@@ -159,7 +160,7 @@ export default class MlGenericManagementView extends React.Component {
                           <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
                             <div className="team-block" name="funding_01">
                               <img
-                                src={details && details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}
+                                src={details && details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}
                                 className="team_img"/>
                               <h3>
                                 {details.firstName} <br /><b>{details.designation}</b>
@@ -263,7 +264,7 @@ export default class MlGenericManagementView extends React.Component {
                                   <form>
                                     <div className="form-group">
                                       <div className="previewImg ProfileImg">
-                                        <img src={generateAbsolutePath(genderImage)}/>
+                                        <img src={genderImage}/>
                                       </div>
                                     </div>
                                     <br className="brclear"/>

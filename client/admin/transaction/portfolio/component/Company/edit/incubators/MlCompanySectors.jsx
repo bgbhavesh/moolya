@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from "lodash";
 import gql from "graphql-tag";
@@ -14,6 +12,8 @@ import CropperModal from '../../../../../../../../client/commons/components/crop
 import { putDataIntoTheLibrary } from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import { multipartASyncFormHandler } from "../../../../../../../../client/commons/MlMultipartFormAction";
 import {mlFieldValidations} from "../../../../../../../../client/commons/validations/mlfieldValidation";
+import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+import Confirm from '../../../../../../../commons/utils/confirm';
 const KEY = "sectorsAndServices"
 
 export default class MlCompanySectors extends React.Component{
@@ -150,17 +150,19 @@ export default class MlCompanySectors extends React.Component{
 
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",
@@ -259,6 +261,7 @@ export default class MlCompanySectors extends React.Component{
     let cloneArray = _.cloneDeep(this.state.companysectorsAndServices);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
+    this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
@@ -346,7 +349,7 @@ export default class MlCompanySectors extends React.Component{
                               <div className="hex_outer">
                                 <span className="ml ml-plus "></span>
                               </div>
-                              <h3>Add Area Of Interest</h3>
+                              <h3>Add Sectors And Services</h3>
                             </div>
                           </a>
                         </div>
@@ -356,13 +359,13 @@ export default class MlCompanySectors extends React.Component{
                           return (
                             <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                               <a href="" id={"create_client" + idx}>
-                                <div className="list_block list_block_intrests notrans">`
+                                <div className="list_block list_block_intrests notrans" onClick={that.onTileClick.bind(that, idx)}>
                                   <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
                                   <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                                  <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                                  <div className="hex_outer">
                                     {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                    <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? details.logo.fileUrl : "/images/def_profile.png"} /></div>
+                                    <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} /></div>
                                   </div>
                                   <h3>{details.industryTypeName}</h3>
                                 </div>
@@ -377,7 +380,7 @@ export default class MlCompanySectors extends React.Component{
                   {/*popover */}
                   <Popover placement="right" isOpen={this.state.popoverOpen}
                            target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                    <PopoverTitle>Add New Area of Interest</PopoverTitle>
+                    <PopoverTitle>Add Sectors And Services</PopoverTitle>
                     <PopoverContent>
                       <div className="ml_create_client">
                         <div className="medium-popover">

@@ -9,7 +9,7 @@ import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryAct
 import CropperModal from '../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../commons/utils/confirm';
 
 export default class MlIdeatorIdeas extends Component{
   constructor(props, context){
@@ -141,13 +141,11 @@ export default class MlIdeatorIdeas extends Component{
     }
   }
 
-  onLogoFileUpload(image){
+  onLogoFileUpload(image, fileInfo){
     // if(e.target.files[0].length ==  0)
     //   return;
-    // let file = e.target.files[0];
-    //let fileName = e.target.files[0].name;
-    //let name = e.target.name;
-    let fileName = this.state.fileName;
+    // let fileName = this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     let file=image;
     if(file){
       let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
@@ -163,17 +161,21 @@ export default class MlIdeatorIdeas extends Component{
       showProfileModal: false
     });
     if(resp){
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if(userOption){
-        let fileObjectStructure = {
-          fileName: this.state.fileName,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: this.state.fileName,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if(result.success){
         this.setState({loading:true})
         this.fetchPortfolioDetails();
@@ -192,7 +194,7 @@ export default class MlIdeatorIdeas extends Component{
       uploadingAvatar: true,
     });
     this.setState({ fileName: file.name})
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image, file);
   }
   render(){
     let that = this;

@@ -224,6 +224,7 @@ let registrationSchema = `
          isCalendar: Boolean
          promoCode       :   String,
          campaignCode    :   String
+         userProfileImage : String
     }
     
    

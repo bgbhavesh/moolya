@@ -10,7 +10,7 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutionPath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import Confirm from '../../../../../../../commons/utils/confirm';
 const KEY = 'clients'
 
 export default class MlCompanyClients extends Component{
@@ -169,17 +169,20 @@ export default class MlCompanyClients extends Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
       if (result && result.success) {
         this.curSelectLogo = {
           fileName: file && file.name ? file.name : "",

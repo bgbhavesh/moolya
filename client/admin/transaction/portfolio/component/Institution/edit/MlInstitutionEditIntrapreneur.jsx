@@ -15,7 +15,7 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
-
+import  Confirm from '../../../../../../commons/utils/confirm';
 const KEY = "intrapreneurRecognition"
 
 export default class MlInstitutionEditIntrapreneur extends React.Component{
@@ -205,17 +205,20 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
 
   onFileUploadCallBack(file,resp) {
     if (resp) {
-      let result = JSON.parse(resp)
-      let userOption = confirm("Do you want to add the file into the library")
-      if (userOption) {
-        let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
-          fileUrl: result.result,
-          libraryType: "image"
+      let result = JSON.parse(resp);
+
+      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        if(ifConfirm){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
         }
-        this.libraryAction(fileObjectStructure)
-      }
+      });
+
         if (result.success) {
           this.curSelectLogo = {
             fileName: file && file.name ? file.name : "",

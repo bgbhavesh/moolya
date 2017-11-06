@@ -4,15 +4,16 @@ mixin portFolioSlides(managementInfo)
       .swiper-wrapper
         each slide , i in managementInfo
           .swiper-slide
-            img(src=slide.logo)
+            if(slide.logo && slide.logo.length >0 )
+              img(src=slide.logo)
+            else
+              img(src='/images/no-image.png')
             .profile_info
-              h5 #{slide.name}
+              h5 #{slide.name ? slide.name:''}
               h6 #{slide.designation}
               p
                 | #{slide.description}
             span.expand_info
-      // Add Pagination
-      // <div class="swiper-pagination"></div>
       // Add Arrows
     .swiper-button-next
     .swiper-button-prev

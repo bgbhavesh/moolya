@@ -127,16 +127,24 @@ async function IDE(portFolio, query) {
     }
 
     //Get LookingFor Description
+
     if (resultIDEPortfolio.lookingFor) {
       portFolio.lookingForDescription = resultIDEPortfolio.lookingFor[0].lookingDescription ? resultIDEPortfolio.lookingFor[0].lookingDescription : resultIDEPortfolio.lookingFor[0].lookingForName;
 
     }
+    portFolio.problemStatement='';
+    portFolio.solutionStatement='';
+    portFolio.IPandTM=''
+
     if (resultIDEPortfolio.problemSolution) {
       portFolio.problemStatement = resultIDEPortfolio.problemSolution.problemStatement ? resultIDEPortfolio.problemSolution.problemStatement : ''
       portFolio.solutionStatement = resultIDEPortfolio.problemSolution.solutionStatement ? resultIDEPortfolio.problemSolution.solutionStatement : ''
 
     }
-    portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+   if(resultIDEPortfolio.intellectualPlanning)
+   {
+     portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning.IPdescription ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+   }
     appendKeywords(portFolio);
     return portFolio
   }
@@ -147,13 +155,22 @@ async function STU(portFolio, query) {
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     portFolio.communityTypes = resultStartUpPortFolio.communityType;
+    portFolio.aboutDiscription=''
     if (resultStartUpPortFolio.aboutUs) {
+
       let aboutUs = resultStartUpPortFolio.aboutUs;
       portFolio.aboutDiscription = aboutUs.startupDescription ? aboutUs.startupDescription : ''
     }
+
+    portFolio.servicesProducts ='';
+    if(resultStartUpPortFolio.serviceProducts){
+
+      portFolio.servicesProducts = resultStartUpPortFolio.serviceProducts.spDescription?resultStartUpPortFolio.serviceProducts.spDescription:'';
+    }
     getManagementInfo(portFolio, resultStartUpPortFolio);
+    getTechnologyInfo(portFolio, resultStartUpPortFolio);
+    getAwardsRewards(portFolio, resultStartUpPortFolio);
     getLookingForDescription(portFolio, resultStartUpPortFolio);
-    await getBranches(portFolio, resultStartUpPortFolio);
     appendKeywords(portFolio);
 
   }
@@ -280,8 +297,8 @@ function getManagementInfo(portFolio, managementInfo) {
     managementInstitution.forEach(function (management) {
       managementPortFolio.push({
         logo: management.logo ? generateAbsolutePath(management.logo.fileUrl) : '',
-        name: management.firstName + ' ' + management.lastName,
-        designation: management.designation,
+        name: management.firstName?management.firstName:'' + ' ' + management.lastName? management.lastName:'',
+        designation: management.designation?management.designation:'',
         description: management.about ? management.about : ''
       })
     })
@@ -291,7 +308,22 @@ function getManagementInfo(portFolio, managementInfo) {
   return portFolio;
 }
 
+function getTechnologyInfo(portFolio, managementInfo) {
+  let technologiesPortFolio = []
+  let technologies = managementInfo.technologies;
+  if (technologies) {
+    technologies.forEach(function (tech) {
+      technologiesPortFolio.push({
+        logo: tech.logo ? generateAbsolutePath(tech.logo.fileUrl) : '',
+        name: tech.technologyName? tech.technologyName:'',
+        description: tech.technologyDescription ? tech.technologyDescription : ''
+      })
+    })
 
+  }
+  portFolio.technologies = technologiesPortFolio;
+  return portFolio;
+}
 function getTeamInfo(portFolio, resultFunderPortfolio) {
   let teamPortFolio = []
   let principals = resultFunderPortfolio.principal;
@@ -301,8 +333,8 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
     principals.forEach(function (principal) {
       teamPortFolio.push({
         logo: principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : '',
-        name: principal.firstName + ' ' + principal.lastName,
-        designation: principal.designation,
+        name: principal.firstName?principal.firstName:'' + ' ' + principal.lastName?principal.lastName:'',
+        designation: principal.designation?principal.designation:'',
         description: principal.aboutPrincipal ? principal.aboutPrincipal : ''
       })
     })
@@ -312,8 +344,8 @@ function getTeamInfo(portFolio, resultFunderPortfolio) {
     teams.forEach(function (team) {
       teamPortFolio.push({
         logo: team.logo ? generateAbsolutePath(team.logo.fileUrl) : '',
-        name: team.firstName + ' ' + team.lastName,
-        designation: team.designation,
+        name: team.firstName?team.firstName :'' + ' ' + team.lastName?team.lastName:'',
+        designation: team.designation?team.designation:'',
         description: team.aboutTeam ? team.aboutTeam : ''
 
       })
@@ -439,10 +471,10 @@ async function getPortFolio(collectionName, query) {
 function getSTUMenu(dynamicLinksClasses) {
   return [
     {name: 'About', className: dynamicLinksClasses.About},
-    {name: 'Management', className: dynamicLinksClasses.Management},
-    {name: 'Technology', className: dynamicLinksClasses.Branches},
-    {name: 'Services and Products', className: dynamicLinksClasses.Looking_For},
-    {name: 'Awards', className: dynamicLinksClasses.Social_Links},
+    {name: 'Team', className: dynamicLinksClasses.Management},
+    {name: 'Technology', className: dynamicLinksClasses.Technology},
+    {name: 'Services and Products', className: dynamicLinksClasses.servicesProducts},
+    {name: 'Awards', className: dynamicLinksClasses.Awards},
     {name: 'Looking For', className: dynamicLinksClasses.Looking_For},
     {name: 'Keywords', className: dynamicLinksClasses.Keywords}
   ];
@@ -547,7 +579,9 @@ function getDynamicLinksClasses() {
     'Incubator_Sectors': 'pageIncubatorSectors',
     'Intrapreneur': 'pageIntrapreneur',
     'RandD': 'pageRandD',
-    'CSR': 'pageCSR'
+    'CSR': 'pageCSR',
+    'Technology':'pageTechnology',
+    'servicesProducts':'pageServicesProducts'
 
 
   }

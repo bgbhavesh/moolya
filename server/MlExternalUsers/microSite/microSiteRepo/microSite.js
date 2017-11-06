@@ -184,7 +184,9 @@ async function FUN(portFolio, query) {
     portFolio.communityType = getCommunityType(resultFunderPortfolio) // Replacing trailing 's'
     portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories)
+    {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
+    }
     getTeamInfo(portFolio, resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
     getAreasOfInterest(portFolio, resultFunderPortfolio);
@@ -202,11 +204,11 @@ async function ServiceProviderPortFolio(portFolio, query) {
     portFolio.communityTypes = resultServicePortFolio.communityType;
 
     if (resultServicePortFolio.about) {
-      let aboutUs = resultServicePortFolio.about
+      let aboutUs = resultServicePortFolio.about;
       portFolio.aboutDiscription = aboutUs.aboutDescription;
 
     }
-
+    portFolio.servicesDescription='';
     if (resultServicePortFolio.services) {
 
       portFolio.servicesDescription = resultServicePortFolio.services.servicesDescription ? resultServicePortFolio.services.servicesDescription : ''
@@ -223,13 +225,14 @@ async function ServiceProviderPortFolio(portFolio, query) {
 async function CMP(portFolio, query) {
   let resultCompanyPortFolio = await getPortFolio('MlCompanyPortfolio', query);
   if (resultCompanyPortFolio) {
-    portFolio.communityType = 'a Company';
+    portFolio.communityType = "'a Company'";
     portFolio.communityTypes = 'Company';
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.companyDescription;
     }
-
+    portFolio.sectorsAndServices='';
+    portFolio.policy='';
     if (resultCompanyPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
 
@@ -259,6 +262,7 @@ async function INS(portFolio, query) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
     }
+    portFolio.sectorsAndServices='';
     if (resultINSPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
 

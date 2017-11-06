@@ -37,6 +37,7 @@ html(prefix='og: http://ogp.me/ns#')
     link(href='/css/ms_styles.css', type='text/css', media='all', rel='stylesheet')
     link(href='/css/font-awesome.css', type='text/css', media='all', rel='stylesheet')
     link(href='/css/swiper.min.css', type='text/css', media='all', rel='stylesheet')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
   body
     include analytics
     script.
@@ -126,6 +127,17 @@ html(prefix='og: http://ogp.me/ns#')
                     img(src='/images/branches_banner.png')
               else
                 h2 Private Content
+            .pageTechnology
+              if(!privateFields.technologies)
+                if(technologies && technologies.length > 0)
+                  include management
+                  +portFolioSlides(technologies)
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
             .pageTeam
               if(!privateFields.teamManagement)
                 if(teamManagement && teamManagement.length > 0)
@@ -211,6 +223,15 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                    img(src='/images/branches_banner.png')
+            .pageServicesProducts
+              if(!privateFields.servicesProducts)
+                if(servicesProducts && servicesProducts.length > 0 )
+                  p
+                    | !{servicesProducts}
+
+                else
+                  .ms_noBranches
+                    img(src='/images/branches_banner.png')
 
             .pageCSR
               if(!privateFields.policy)

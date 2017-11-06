@@ -141,13 +141,11 @@ export default class MlIdeatorIdeas extends Component{
     }
   }
 
-  onLogoFileUpload(image){
+  onLogoFileUpload(image, fileInfo){
     // if(e.target.files[0].length ==  0)
     //   return;
-    // let file = e.target.files[0];
-    //let fileName = e.target.files[0].name;
-    //let name = e.target.name;
-    let fileName = this.state.fileName;
+    // let fileName = this.state.fileName;
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
     let file=image;
     if(file){
       let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
@@ -196,7 +194,7 @@ export default class MlIdeatorIdeas extends Component{
       uploadingAvatar: true,
     });
     this.setState({ fileName: file.name})
-    this.onLogoFileUpload(image);
+    this.onLogoFileUpload(image, file);
   }
   render(){
     let that = this;

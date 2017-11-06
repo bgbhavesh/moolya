@@ -3,7 +3,6 @@
  */
 
 import React, {Component} from "react";
-import {render} from "react-dom";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
@@ -13,18 +12,22 @@ import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/s
 export default class MlAppMyOffice extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: [], showButton:false};
-    this.findUserOffice.bind(this);
+    this.state = {loading: true, data: [], showButton: false, currentSlideIndex: 0};
+    this.onSlideIndexChange = this.onSlideIndexChange.bind(this);
+    this.deactivateOffice = this.deactivateOffice.bind(this);
+    this.enterOffice = this.enterOffice.bind(this);
+    this.addNewOffice = this.addNewOffice.bind(this);
     return this;
   }
 
-  componentDidUpdate() {
+  // componentDidUpdate() {
+  initializeSwiper() {
     var swiper = new Swiper('.profile_container', {
       pagination: '.swiper-pagination',
       effect: 'coverflow',
       grabCursor: true,
       centeredSlides: true,
-      initialSlide: 1,
+      initialSlide: this.state.currentSlideIndex,
       slidesPerView: 'auto',
       coverflow: {
         rotate: 50,
@@ -32,14 +35,23 @@ export default class MlAppMyOffice extends Component {
         depth: 100,
         modifier: 1,
         slideShadows: true
-      }
+      },
+      onSlideChangeEnd: this.onSlideIndexChange,
+      onTouchEnd: this.onSlideIndexChange,
+      onTransitionEnd: this.onSlideIndexChange
     });
+  }
+
+  onSlideIndexChange(swiper) {
+    if (this.state.currentSlideIndex !== swiper.activeIndex) {
+      this.setState({'currentSlideIndex': swiper.activeIndex});
+    }
   }
 
   componentWillMount() {
     const resp = this.findUserOffice();
-    var getExt = this.fetchExternalUserProfiles()
-    return resp;
+    const getExt = this.fetchExternalUserProfiles();
+    // return resp;
   }
 
   async findUserOffice() {
@@ -58,6 +70,7 @@ export default class MlAppMyOffice extends Component {
         this.setState({loading: false, data: response, isRegApp: false});
     } else
       this.setState({loading: false});
+    this.initializeSwiper();
   }
 
   async fetchExternalUserProfiles() {
@@ -69,9 +82,6 @@ export default class MlAppMyOffice extends Component {
       }
       let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
       this.setState({showButton: isFunder})
-      // if(!this.isFunder){
-      //   $('.addOletffice').addClass('disabled')
-      // }
     }
   }
 
@@ -81,41 +91,67 @@ export default class MlAppMyOffice extends Component {
     }else{
       toastr.error('Not Authorised');
     }
-
   }
 
-  async selectOffice(officeId, evt) {
-    let response = await findOfficeAction(officeId);
-    if (response && response.success) {
-      let data = JSON.parse(response.result)
-      if (data[0].office.isExpired) {
-        toastr.error('Office Expired');
+  // async selectOffice(officeId, evt) {
+  //   let response = await findOfficeAction(officeId);
+  //   if (response && response.success) {
+  //     let data = JSON.parse(response.result)
+  //     if (data[0].office.isExpired) {
+  //       toastr.error('Office Expired');
+  //     }
+  //     else if (data[0].office.isActivated) {
+  //       FlowRouter.go('/app/editOffice/' + officeId);
+  //     } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
+  //       toastr.error('Office amount Paid wait for admin approval');
+  //     } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
+  //       FlowRouter.go('/app/payOfficeSubscription/' + officeId)
+  //     } else
+  //       toastr.error('Waiting for admin approval');
+  //   }
+  // }
+
+  async enterOffice(){
+    const offices = this.state.data && this.state.data.length > 0 ? this.state.data : [];
+    if(offices && offices.length){
+      const specOffice = offices[this.state.currentSlideIndex];
+      const officeId = specOffice.officeId;
+      let response = await findOfficeAction(officeId);
+      if (response && response.success) {
+        let data = JSON.parse(response.result)
+        if (data[0].office.isExpired) {
+          toastr.error('Office Expired');
+        }
+        else if (data[0].office.isActivated) {
+          FlowRouter.go('/app/editOffice/' + officeId);
+        } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
+          toastr.error('Office amount Paid wait for admin approval');
+        } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
+          FlowRouter.go('/app/payOfficeSubscription/' + officeId)
+        } else
+          toastr.error('Waiting for admin approval');
       }
-      else if (data[0].office.isActivated) {
-        FlowRouter.go('/app/editOffice/' + officeId);
-      } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
-        toastr.error('Office amount Paid wait for admin approval');
-      } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
-        FlowRouter.go('/app/payOfficeSubscription/' + officeId)
-      } else
-        toastr.error('Waiting for admin approval');
     }
+  }
+
+  deactivateOffice(){
+    console.log('query for deactivate office')
   }
 
   render() {
     let that = this
     let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
-    const userOfficeList = userOffice.map(function (office, id) {
-      return (
-        <div className="swiper-slide office_accounts my-office-main" key={id}
-             onClick={that.selectOffice.bind(that, office.officeId)}>
-          <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
-          <h2>Office Name: {office.officeName}</h2>
-          <h2>Total Member(s): {office.totalusercount}</h2>
-          <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
-        </div>
-      )
-    });
+    // const userOfficeList = userOffice.map(function (office, id) {
+    //   return (
+    //     <div className="swiper-slide office_accounts my-office-main" key={id}
+    //          onClick={that.selectOffice.bind(that, office.officeId)}>
+    //       <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
+    //       <h2>Office Name: {office.officeName}</h2>
+    //       <h2>Total Member(s): {office.totalusercount}</h2>
+    //       <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
+    //     </div>
+    //   )
+    // });
 
     const showLoader = this.state.loading;
     return (
@@ -129,7 +165,7 @@ export default class MlAppMyOffice extends Component {
                     <div className="col-md-6">
                     </div>
                     <div className="col-md-6">
-                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn addOffice">Add new office</a>
+                      <a href="" onClick={this.addNewOffice} className="ideabtn addOffice">Add new office</a>
                     </div>
                   </div>
                 </div> : <div>
@@ -138,21 +174,32 @@ export default class MlAppMyOffice extends Component {
                       <div className="swiper-container profile_container">
                         <div className="swiper-wrapper">
 
-                          {userOfficeList}
+                          {userOffice.map(function (office, id) {
+                            return (
+                              <div className="swiper-slide office_accounts my-office-main" key={id}
+                              /*     onClick={that.selectOffice.bind(that, office.officeId)}*/
+                              >
+                                <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
+                                <h2>Office Name: {office.officeName}</h2>
+                                <h2>Total Member(s): {office.totalusercount}</h2>
+                                <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
+                              </div>
+                            )
+                          })}
 
                         </div>
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="col-md-12 text-center well mart20">
                         {this.state.showButton?<div className="col-md-4 nopadding">
-                          <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice.bind(this)}>Add New
+                          <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice}>Add New
                             Office</a>
                         </div>:<div></div>}
                         <div className="col-md-4 nopadding">
-                          <a href="" className="fileUpload mlUpload_btn disabled">Enter Office</a>
+                          <a href="" className="fileUpload mlUpload_btn" onClick={this.enterOffice}>Enter Office</a>
                         </div>
                         <div className="col-md-4 nopadding">
-                          <a href="" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                          <a href="" className="fileUpload mlUpload_btn" onClick={this.deactivateOffice}>Deactivate Office</a>
                         </div>
                       </div>
                     </div>

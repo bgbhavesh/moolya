@@ -3,11 +3,12 @@
  */
 
 import React, {Component} from "react";
+import _ from "lodash";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
-import _ from "lodash";
 import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/switchUserProfilesActions";
+import {deActivateOfficeActionHandler} from "../actions/updateOfficeMember";
 
 export default class MlAppMyOffice extends Component {
   constructor(props) {
@@ -134,12 +135,22 @@ export default class MlAppMyOffice extends Component {
     }
   }
 
-  deactivateOffice(){
+  async deactivateOffice() {
+    const offices = this.state.data && this.state.data.length > 0 ? this.state.data : [];
+    if (offices && offices.length) {
+      const specOffice = offices[this.state.currentSlideIndex];
+      const officeId = specOffice.officeId;
+      const response = await deActivateOfficeActionHandler(officeId);
+      if (response && response.success)
+        toastr.success(response.result);
+      else if (response && !response.success)
+        toastr.error(response.result);
+    }
     console.log('query for deactivate office')
   }
 
   render() {
-    let that = this
+    // let that = this
     let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
     // const userOfficeList = userOffice.map(function (office, id) {
     //   return (
@@ -165,7 +176,7 @@ export default class MlAppMyOffice extends Component {
                     <div className="col-md-6">
                     </div>
                     <div className="col-md-6">
-                      <a href="" onClick={this.addNewOffice} className="ideabtn addOffice">Add new office</a>
+                      <a href="" onClick={this.addNewOffice} className="ideabtn">Add new office</a>
                     </div>
                   </div>
                 </div> : <div>
@@ -191,16 +202,17 @@ export default class MlAppMyOffice extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="col-md-12 text-center well mart20">
-                        {this.state.showButton?<div className="col-md-4 nopadding">
-                          <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice}>Add New
+                        {this.state.showButton ? <div className="col-md-4 nopadding">
+                          <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice}>Add New
                             Office</a>
-                        </div>:<div></div>}
+                        </div> : <div></div>}
                         <div className="col-md-4 nopadding">
                           <a href="" className="fileUpload mlUpload_btn" onClick={this.enterOffice}>Enter Office</a>
                         </div>
-                        <div className="col-md-4 nopadding">
-                          <a href="" className="fileUpload mlUpload_btn" onClick={this.deactivateOffice}>Deactivate Office</a>
-                        </div>
+                        {this.state.showButton ? <div className="col-md-4 nopadding">
+                          <a href="" className="fileUpload mlUpload_btn" onClick={this.deactivateOffice}>Deactivate
+                            Office</a>
+                        </div> : <div></div>}
                       </div>
                     </div>
                   </div>

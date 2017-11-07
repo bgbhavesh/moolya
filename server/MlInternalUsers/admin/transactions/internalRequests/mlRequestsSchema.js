@@ -28,6 +28,8 @@ let requestsSchema = `
           subChapterName            : String
           communityName             : String
           createdBy                 : String
+          deviceName                : String
+          deviceId                  : String
         }
         
         input byInput{

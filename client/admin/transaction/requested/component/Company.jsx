@@ -211,6 +211,7 @@ export default class Company extends React.Component{
         companyTurnOver       :   this.refs.companyTurnOver.value,
         partnerCompanies      :   this.refs.partnerCompanies.value,
         investors             :   this.refs.investors.value,
+        parentCompany         :   this.refs.parentCompany.value,
         lookingFor            :   this.state.selectedLookingFor,
         companyCEOName        :   this.refs.companyCEOName.value,
         companyManagement     :   this.refs.companyManagement.value,

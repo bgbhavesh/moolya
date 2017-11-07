@@ -139,10 +139,10 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device name" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Device name" defaultValue={this.props&&this.props.data&&this.props.data.deviceName?this.props.data.deviceName:""} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Device ID" defaultValue={this.props&&this.props.data&&this.props.data.deviceId?this.props.data.deviceId:""} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status} disabled={this.state.isStatusDisabled} onChange={this.onStatusSelect.bind(this)} />

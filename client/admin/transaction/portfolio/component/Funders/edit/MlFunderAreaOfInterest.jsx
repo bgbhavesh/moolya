@@ -205,16 +205,22 @@ export default class MlFunderAreaOfInterest extends Component {
   onOptionSelectedIndustry(selectedFunding, callback, selObject) {
     let details = this.state.data;
     details = _.omit(details, ["industryTypeId"]);
-    details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
+    details = _.extend(details, {
+      ["industryTypeId"]: selectedFunding ? selectedFunding : null,
+      "industryTypeName": selObject && selObject.label ? selObject.label : null
+    });
     this.setState({data: details, "selectedVal": selectedFunding, "industryTypeName": selObject.label}, function () {
       // this.sendDataToParent()
     })
   }
 
-  onOptionSelectedSubDomain(selectedSubDomain) {
+  onOptionSelectedSubDomain(selectedSubDomain, cb, selObject) {
     let details = this.state.data;
     details = _.omit(details, ["subDomainId"]);
-    details = _.extend(details, {["subDomainId"]: selectedSubDomain});
+    details = _.extend(details, {
+      ["subDomainId"]: selectedSubDomain ? selectedSubDomain : null,
+      subDomainName: selObject && selObject.label ? selObject.label : null
+    });
     this.setState({data: details, "selectedValDomain": selectedSubDomain}, function () {
       // this.sendDataToParent()
     })
@@ -222,7 +228,7 @@ export default class MlFunderAreaOfInterest extends Component {
   onLogoFileUpload(image, fileInfo) {
     let file = image;
     this.setState({ fileName: fileInfo.name});
-    let fileName = fileInfo.name;
+    const fileName = fileInfo.name;
     let data = {
       moduleName: "PORTFOLIO",
       actionName: "UPLOAD",

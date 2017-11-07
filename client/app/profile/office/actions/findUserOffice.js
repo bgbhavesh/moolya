@@ -25,6 +25,10 @@ export async function findUserOfficeActionHandler() {
   return id
 }
 
+/**
+ * @Note: Need to check the usage of this function
+ * ifNot need to remove it
+ * */
 export async function findDefaultUserProfile() {
   const result = await appClient.query({
     query: gql`

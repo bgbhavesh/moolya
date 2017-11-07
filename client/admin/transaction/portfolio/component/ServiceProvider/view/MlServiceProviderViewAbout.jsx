@@ -178,7 +178,7 @@ export default class MlServiceProviderViewAbout extends React.Component {
                             <FontAwesome name='unlock' className="input_icon view_req_textarea_icon un_lock"
                                                                  id="isDescriptionPrivate"/>{description}
                             <div className="media">
-                                <div className="media-left">
+                                <div className="upload-image">
                                     <a href="">
                                         <img className="media-object" src={generateAbsolutePath(image)}/>
                                     </a>

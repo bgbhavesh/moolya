@@ -4,6 +4,7 @@
 import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchActivitiesActionHandler} from '../actions/activityActionHandler';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAppActivityList extends React.Component{
 
@@ -71,8 +72,8 @@ export default class MlAppActivityList extends React.Component{
                       <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
                       {activity.imageLink ?
-                        <img className="c_image" src={activity.imageLink ? activity.imageLink : "/images/activity_1.jpg"}/>
-                        : <i className="c_image ml my-ml-Ideator"></i>
+                        <img className="c_image" src={activity.imageLink ? generateAbsolutePath(activity.imageLink) : "/images/activity_1.jpg"}/>
+                        : <i className="c_image ml my-ml-activity"></i>
                       }
                       <div className="clearfix"></div>
                       <span className="price">{activity.duration ? `${activity.duration.hours ? activity.duration.hours : 0} Hrs ${activity.duration.minutes ? activity.duration.minutes : 0} Mins` : ''}</span>

@@ -175,7 +175,7 @@ export default class MlAssignHierarchy extends React.Component {
     if(assignRoles&&assignRoles.length>0){
       allRoles = assignRoles
     }
-    if(this.state.finalApproval&&this.state.finalApproval.isChecked){
+    if(this.state.finalApproval&&this.state.finalApproval.isChecked&&this.state.finalApproval.role){
       if(unassignRoles&&unassignRoles.length>0){
         Array.prototype.push.apply(allRoles, unassignRoles)
       }
@@ -208,7 +208,10 @@ export default class MlAssignHierarchy extends React.Component {
       }
       return response;
     } else if (this.state.finalApproval && !this.state.finalApproval.isChecked) {
-      toastr.error("Please check the final approval");
+      toastr.error("Please select Final approval");
+    }
+     else if(!this.state.finalApproval.role) {
+      toastr.error(" Final approval role is mandatory")
     }
   }
 

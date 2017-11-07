@@ -59,6 +59,8 @@ const mlRejectedInternalRequestsTableConfig=new MlViewer.View({
                           subChapterName
                           communityName
                           createdBy
+                          deviceName
+                          deviceId
                       }
                     }
               }

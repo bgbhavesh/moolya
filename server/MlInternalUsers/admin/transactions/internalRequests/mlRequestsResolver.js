@@ -35,7 +35,16 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
       args.requests.createdBy =user.profile.InternalUprofile.moolyaProfile.firstName?user.profile.InternalUprofile.moolyaProfile.firstName:""+" "+user.profile.InternalUprofile.moolyaProfile.lastName?user.profile.InternalUprofile.moolyaProfile.lastName:"";
       args.requests.emailId = user.profile.email;
     }
-
+   let deviceName, deviceId;
+    if(context.browser.includes("Macintosh")) {
+      deviceName = context.browser.split("1")[2].substring(4, 10);
+      deviceId = context.ip;
+    } else {
+      deviceName = context.browser.split("1")[2].substring(2, 8);
+      deviceId = context.ip;
+    }
+    args.requests.deviceName = deviceName;
+    args.requests.deviceId = deviceId;
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   let transactionTypeName = requestDetails.transactionType?requestDetails.transactionType:"";
   let transactionTypeId = requestDetails.transactionId?requestDetails.transactionId:"";

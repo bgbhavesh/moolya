@@ -26,3 +26,23 @@ export async function updateOfficeMemberActionHandler(officeId, memberId,officeM
   const id = result.data.updateOfficeMember;
   return id
 }
+
+export async function deActivateOfficeActionHandler(officeId){
+  const result = await appClient.mutate({
+    mutation:gql`
+      mutation($officeId:String){
+        deActivateOffice(officeId:$officeId){
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables:{
+      officeId
+    }
+  });
+  const resp = result.data.deActivateOffice;
+  return resp
+
+}

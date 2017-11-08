@@ -56,9 +56,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     return validationCheck.validationResponse;
   }
 
-  let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
+ // let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
-  args.registration.accountType = accountTypeName.accountName;
+  //args.registration.accountType = accountTypeName.accountName;
   let subChapterDetails
   if (args.registration.subChapterId) {
     subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.registration.subChapterId}, context) || {};
@@ -469,8 +469,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         let updatedResp = MlRegistration.update({_id: id}, {$unset: {kycDocuments: ""}})
       }*/
       /**Fetch accountType from accountType collection */
-      let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registrationDetails.accountType}, context) || {};
-      args.registrationDetails.accountType = accountTypeName.accountName;
+     // let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registrationDetails.accountType}, context) || {};
+     // args.registrationDetails.accountType = accountTypeName.accountName;
       /**If subChapter is selected by admin*/
       if (details.subChapterId) {
         subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: details.subChapterId}, context) || {};

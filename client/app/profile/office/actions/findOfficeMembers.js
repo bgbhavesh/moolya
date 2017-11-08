@@ -11,6 +11,9 @@ export async function fetchOfficeMembers(officeId,isPrincipal) {
               fetchOfficeMembers(officeId:$officeId, isPrincipal: $isPrincipal){
                 name
                 _id
+                isActive
+                isFreeze
+                isRetire
                 profileImage
               }
           }

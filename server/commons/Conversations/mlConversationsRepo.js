@@ -8,28 +8,30 @@ class ConversationsRepo{
   constructor(){
   }
 
-  async login(context, cb)
+  login(context, cb)
   {
     var authRequest = {userId:context.userId}
     console.log('login attempt server')
     // var checkData = await this.testApi()
     // console.log('............', checkData)
-    var ret = await this.sendRequest('/login', authRequest, 'post');
-    cb(ret);
+    this.sendRequest('/login', authRequest, 'post' , function (res) {
+      cb(res);
+    });
   }
   // subscribe to conversations
-  async createApplication(){
+  createApplication(){
+    const that = this;
     var doc = MlConversations.find().fetch();
     if(doc.length > 0)
       return;
 
     var body = {appName:"moolya"}
-    var ret = await this.sendRequest('/createApplication', body, 'post', true);
-    console.log(ret)
-    if(ret.success){
-      this.setApiKey(ret.result.apiKey)
-    }
-    return ret;
+    this.sendRequest('/createApplication', body, 'post', true, function (res) {
+      if(res.success){
+        that.setApiKey(res.result.apiKey)
+      }
+      cb(res);
+    });
   }
 
   async createUser(moolyaUser, cb){
@@ -66,12 +68,13 @@ class ConversationsRepo{
     return ret;
   }
 
-  async createNotifications(notification){
-    var ret = await this.sendRequest('/createNotification', notification, 'post');
-    return ret;
+  createNotifications(notification){
+    this.sendRequest('/createNotification', notification, 'post', function (res) {
+      cb(res);
+    });
   }
 
-  async sendRequest(endPoint, payload, method, isApplication){
+  sendRequest(endPoint, payload, method, isApplication, cb){
     var options = {
       url: Meteor.settings.private.conversationsBaseURL+endPoint,
       body:payload,
@@ -89,7 +92,7 @@ class ConversationsRepo{
       }
     }
 
-    const result = await new Promise(function (resolve, reject) {
+   new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
         if(err){
           reject(err)
@@ -99,9 +102,9 @@ class ConversationsRepo{
           resolve(body)
         }
       })
-    })
-    console.log('final result', result)
-    return result;
+    }).then((body) => {
+      cb(body);
+    });
   }
 
 /*  async testApi(){

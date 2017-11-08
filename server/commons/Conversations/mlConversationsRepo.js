@@ -14,7 +14,7 @@ class ConversationsRepo{
     console.log('login attempt server')
     // var checkData = await this.testApi()
     // console.log('............', checkData)
-    this.sendRequest('/login', authRequest, 'post' , function (res) {
+    this.sendRequest('/login', authRequest, 'post' ,false,  function (res) {
       if(cb){
         cb(res);
       }
@@ -44,7 +44,7 @@ class ConversationsRepo{
       username:moolyaUser.userName,
       email:moolyaUser.userName,
     }
-    this.sendRequest('/createUser', user, 'post', function (res) {
+    this.sendRequest('/createUser', user, 'post', false, function (res) {
       if(res.success && cb) {
         cb(res)
       }
@@ -68,12 +68,12 @@ class ConversationsRepo{
 
   // Push Notifications to conversations server Notification types are email, sms, push
   async sendNotifications(notification){
-    var ret = await this.sendRequest('/createNotification', notification, 'post');
+    var ret = this.sendRequest('/createNotification', notification, 'post', false);
     return ret;
   }
 
   createNotifications(notification, cb){
-    this.sendRequest('/createNotification', notification, 'post', function (res) {
+    this.sendRequest('/createNotification', notification, 'post', false, function (res) {
       if(cb){
         cb(res);
       }

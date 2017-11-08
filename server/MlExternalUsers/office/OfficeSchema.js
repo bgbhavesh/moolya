@@ -223,12 +223,13 @@ let myOfficeSchema = `
         createOffice(myOffice:myOffice):response
         createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
-        updateOffice(myOffice:myOffice, myOfficeId:String):response
+        # updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         getMyOfficeRole(officeId: String!): response
         updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
         getOfficeTransactionPaymentLink(transactionId: String!):response
         officeMemberGoIndependent(memberId: String, communityCode: String):response
+        deActivateOffice(officeId: String):response
     }
 `;
 
@@ -246,7 +247,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api:'getOfficeUserTypes', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
 
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
+  // {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},

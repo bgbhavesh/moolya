@@ -77,6 +77,8 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
                           communityName
                           createdBy
                           transactionTypeName
+                          deviceName
+                          deviceId
                       }
                     }
               }

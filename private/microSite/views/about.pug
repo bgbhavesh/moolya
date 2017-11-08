@@ -41,6 +41,30 @@ html(prefix='og: http://ogp.me/ns#')
   body
     include analytics
     script.
+      (function ($) {
+        $(window).on("load", function () {
+          $(".content").mCustomScrollbar();
+        });
+      })(jQuery);
+
+    script.
+      $(document).ready(function () {
+        $(".ms_socialNetworks ul li").click(function () {
+          $(".share-url .ms_btn_re").text("Copy");
+        })
+      });
+      function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+        $(".share-url .ms_btn_re").text("Copied")
+      }
+
+
+
+    script.
       window.fbAsyncInit = function () {
         FB.init({
           appId: '328947447490953',
@@ -79,8 +103,10 @@ html(prefix='og: http://ogp.me/ns#')
                 span.m_yel oo
                 span.m_red lya
                 | .global
+            .share-social
+              i.fa.fa-share-alt(aria-hidden='true')
             .ms_socialNetworks
-              label share this profile
+              label share your public profile
               ul
                 li
                   a(href='#' rel='nofollow' onclick='facebookShare("' + currentUrl + '",this)')
@@ -94,6 +120,12 @@ html(prefix='og: http://ogp.me/ns#')
                 li
                   a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'' rel='nofollow')
                     i.fa.fa-google-plus(aria-hidden='true' alt="Share on Google+")
+                .share-url
+                  a.ms_btn_re(href='#', onclick="copyToClipboard('#p1')") Copy
+                  span
+                    | Your Public Profile URL:
+                    br
+                    span#p1 #{currentUrl}
                 //li
                 //  a(href='https://web.whatsapp.com/send?text='+currentUrl+'' data-action="share/whatsapp/share")
                 //    i.fa.fa-whatsapp(aria-hidden='true')
@@ -321,6 +353,17 @@ html(prefix='og: http://ogp.me/ns#')
           span.m_red m
           span.m_yel oo
           span.m_red lya
+          script.
+            $(document).ready(function () {
+              $(".share-social").click(function () {
+                $(".ms_socialNetworks").slideToggle();
+              });
+              $(".ms_socialNetworks li").click(function () {
+                $(".ms_socialNetworks li").removeClass("active");
+                $(this).toggleClass("active");
+              })
+
+            })
           script.
             $('.pages').children().css('display', 'none');
             $('.pageAboutDiscription').css('display', 'block');

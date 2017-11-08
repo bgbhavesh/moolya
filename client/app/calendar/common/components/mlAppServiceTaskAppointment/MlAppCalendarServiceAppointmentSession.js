@@ -5,6 +5,7 @@ import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
 import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
 
@@ -25,8 +26,8 @@ export default class MlAppCalendarServiceAppointmentSession extends Component{
   componentDidMount() {
     let mySwiper = new Swiper('.manage_tasks', {
       speed: 400,
-      spaceBetween:20,
-      slidesPerView:'auto',
+      spaceBetween:15,
+      slidesPerView:5,
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
@@ -81,17 +82,22 @@ export default class MlAppCalendarServiceAppointmentSession extends Component{
                 <div className="swiper-wrapper">
                   { data.activities && data.activities.map((activity, index) => {
                     return (
-                      <div className="swiper-slide funding_list list_block notrans" key={index}>
-                        <p className="online">{activity.mode}</p>
-                        <span>Duration:</span><br />
-                        <div className="form-group">
-                          <label><input type="text" className="form-control inline_input"
-                                        value={activity.duration.hours || 0} disabled /> Hours
-                            <input type="text" className="form-control inline_input"
-                                   value={activity.duration.minutes || 0} disabled /> Mins
-                          </label>
-                        </div>
-                        <h3>{activity.displayName}</h3>
+                      <div className="col-lg-2 col-md-4 col-sm-4 swiper-slide" key={index}>
+                        <div className="card_block" onClick={()=>that.editMode(activity._id, activity.profileId)}><h3>{activity.displayName}</h3>
+                          <div className={activity.isActive ? 'active' : 'inactive'}></div>
+                          <div className="clearfix"></div>
+                          <div className="list_icon mart0">
+                            <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                            <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
+                            <div className="clearfix"></div>
+                            {activity.imageLink ?
+                              <img className="c_image" src={activity.imageLink ? generateAbsolutePath(activity.imageLink) : "/images/activity_1.jpg"}/>
+                              : <i className="c_image ml my-ml-Ideator"></i>
+                            }
+                            <div className="clearfix"></div>
+                            <span className="price">{activity.duration ? `${activity.duration.hours ? activity.duration.hours : 0} Hrs ${activity.duration.minutes ? activity.duration.minutes : 0} Mins` : ''}</span>
+                            <button className={`btn ${activity.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{activity.mode}</button>
+                          </div><div className="block_footer"><span>{activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'}</span></div></div>
                       </div>
                     )
                   })}

@@ -53,6 +53,9 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   }
 }
 
+/**
+ * @Note: {"isActive:true"} removed from query having effect on "MOOLYA-2024"
+ * */
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
@@ -71,8 +74,8 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
           userId: context.userId,
           profileId:defaultProfile.profileId
         }
-      ],
-      isActive:true
+      ]
+      // isActive:true
     };
     officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch();
 
@@ -130,7 +133,6 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
     officeId:args.officeId,
     isPrincipal: args.isPrincipal
   };
-  console.log(query);
   let pipeline = [
     { $match: query },
     { $lookup:
@@ -327,8 +329,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
   return response;
 };
 
-MlResolver.MlMutationResolver['updateOffice'] = (obj, args, context, info) => {
-}
+// MlResolver.MlMutationResolver['updateOffice'] = (obj, args, context, info) => {
+// }
 
 MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info) => {
   let result;
@@ -579,7 +581,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
         let response = new MlRespPayload().errorPayload("Office owner can't freeze/retire", code);
         return response;
       }
-      console.log(memberInfo);
+
       let userInfo = {
         userProfiles: {
           profileId: memberInfo.profileId,
@@ -587,7 +589,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
         }
       };
       let userResponse = MlResolver.MlMutationResolver["deActivateUserProfileByContext"](obj, userInfo, context, info);
-      console.log(userResponse);
+
       if(!userResponse.success){
         let code = 200;
         let response = new MlRespPayload().errorPayload("Unable to freeze/retire, Please contact admin", code);
@@ -618,7 +620,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
         }
       };
       let userResponse = MlResolver.MlMutationResolver["deActivateUserProfileByContext"](obj, userInfo, context, info);
-      console.log(userResponse);
+
       if(!userResponse.success){
         let code = 200;
         let response = new MlRespPayload().errorPayload("Unable to unfreeze, Please contact admin", code);
@@ -993,4 +995,22 @@ MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context
   }
 };
 
-
+MlResolver.MlMutationResolver['deActivateOffice'] = (obj, args, context, info) => {
+  var response = null;
+  var code  = 400;
+  const officeId = args.officeId ? args.officeId : null;
+  if(officeId){
+    const respSC = mlDBController.update('MlOfficeSC', {officeId: officeId}, {isActive: false}, {$set: true}, context);
+    const respOffice = mlDBController.update('MlOffice', {_id: officeId}, {isActive: false}, {$set: true}, context);
+    if(respSC && respOffice){
+      code = 200;
+      response = new MlRespPayload().successPayload('Office Deactivated successfully', code);
+    }else {
+      code = 400;
+      response = new MlRespPayload().errorPayload('Cannot update office', code);
+    }
+  }else {
+    response = new MlRespPayload().errorPayload('Office Id required', code);
+  }
+  return response
+};

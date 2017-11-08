@@ -81,7 +81,7 @@ export default class DocumentViewer extends React.Component{
   showModal(index) {
     let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
     let imagePreviewUrl;
-    imagePreviewUrl = data[index].fileUrl;
+    imagePreviewUrl = generateAbsolutePath(data[index].fileUrl);
 
     this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
 
@@ -95,7 +95,12 @@ export default class DocumentViewer extends React.Component{
   }
 
   render(){
-    let selectedDocs=this.props.selectedDocuments
+    let selectedDocs=this.props.selectedDocuments;
+    let url = this.state.previewImage;
+    let fileType = 'image';
+    if(url.endsWith('doc') || url.endsWith('docs') || url.endsWith('docx') || url.endsWith('pdf')){
+      fileType = 'document';
+    }
     if(selectedDocs.length==0){
       $('.DocCheckBox').attr('checked', false)
     }
@@ -111,13 +116,24 @@ export default class DocumentViewer extends React.Component{
 
       <div className="col-lg-4">
         <Modal isOpen={this.state.modal} toggle={this.closeModal.bind(this, 'modal')}>
-         {/* <ModalHeader toggle={this.closeModal.bind(this, 'modal')}>
+           <ModalHeader  className="show_title"
+             // toggle={this.closeModal.bind(this, 'modal')}
+           >
+             <button type="button" className="close" data-dismiss="modal" onClick={this.closeModal.bind(this, 'modal')} aria-label="Close"><span
+               aria-hidden="true">&times;</span></button>
+          </ModalHeader>
 
-          </ModalHeader>*/}
           <ModalBody>
-            <div className="img_scroll"><img src={this.state.previewImage}/></div>
+            {(fileType === 'image')?
+              <div className="img_scroll"><img src={url} /></div>
+              :
+              <iframe width="100%" height="500px"
+                 src={`https://docs.google.com/gview?url=${url}&embedded=true`}
+                // src='https://docs.google.com/gview?url=https://s3.raksan.in/moolya-users/registrationDocuments/0968a978-a37a-482c-b350-57b54346b6a7-sample.pdf&embedded=true'
+              />}
           </ModalBody>
         </Modal>
+
         <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
              <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}<text style={{'color':'red'}}>{mandatory}</text></label></div>

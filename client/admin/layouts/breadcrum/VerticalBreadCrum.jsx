@@ -164,7 +164,7 @@ export default class VerticalBreadCrum extends Component {
           }
 
           breadCrumObject.push({
-            linkName: properName(breadCrum.subModule),
+            linkName: breadCrum.subModuleName || properName(breadCrum.subModule),
             // linkId: 'subModule',
           });
         }

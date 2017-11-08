@@ -78,7 +78,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlCompanyAboutUsLandingPage key="1" client={client} getAboutus={this.getAboutus.bind(this)}
+        component: <MlCompanyAboutUsLandingPage key="1" isAdmin={true} client={client} getAboutus={this.getAboutus.bind(this)}
                                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                                 backClickHandler={this.backClickHandler.bind(this)}/>
       },

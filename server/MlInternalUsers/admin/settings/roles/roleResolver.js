@@ -40,7 +40,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
 
   if (roleCount > 0) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exist", code);
+    let response = new MlRespPayload().errorPayload("Role already exists", code);
     return response;
   }else if(role && role.modules && role.modules.length == 0){
     let code = 409;

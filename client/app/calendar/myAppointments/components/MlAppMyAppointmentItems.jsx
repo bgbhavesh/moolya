@@ -17,6 +17,7 @@ import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlApp
 import {ongoingAppointmentActionHandler} from '../actions/fetchOngoingAppointments';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import MlLoader from "../../../../commons/components/loader/loader";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAppMyAppointmentItems extends Component{
   constructor(props){
@@ -164,7 +165,7 @@ export default class MlAppMyAppointmentItems extends Component{
                       <span className="profile-text">With</span>
                       <div className="clearfix"></div>
                       {(appointment.appointmentWith && appointment.appointmentWith.userProfilePic) ?
-                        <img className="c_image" src={appointment.appointmentWith.userProfilePic}/>
+                        <img className="c_image" src={generateAbsolutePath(appointment.appointmentWith.userProfilePic)}/>
                         : <i className="c_image ml my-ml-Ideator"></i>
                       }
                       <br />

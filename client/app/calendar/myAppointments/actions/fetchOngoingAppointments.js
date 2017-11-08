@@ -179,6 +179,8 @@ export async function findTaskActionHandler(taskId) {
                   displayName
                   isInternal
                   isExternal
+                  isServiceCardEligible
+                  isActive
                   payment{
                     derivedAmount
                   }

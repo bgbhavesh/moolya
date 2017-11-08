@@ -30,30 +30,83 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("Role Name is required", code);
     return response;
   }
+  var roleCount = mlDBController.find('MlRoles', {roleName:{'$regex' : "^"+role.roleName+"$", "$options" : "i"}} && {displayName:{'$regex' : "^"+role.displayName+"$", "$options" : "i"}}, context).count()
   // if(MlClusters.find({roleName:role.roleName}).count() > 0){
-  if (mlDBController.find('MlRoles', {roleName:{'$regex' : "^"+role.roleName+"$", "$options" : "i"}} && {displayName:{'$regex' : "^"+role.displayName+"$", "$options" : "i"}}, context).count() > 0) {
-    let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exist", code);
-    return response;
-  }
-
-  if (role && role.modules && role.modules.length == 0) {
-    let code = 409;
-    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
-    return response;
-  }
 
   role.createdDateTime = new Date();
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
 
   let uniqModule = _.uniqBy(role.modules, 'moduleId');
+
+  if (roleCount > 0) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exist", code);
+    return response;
+  }else if(role && role.modules && role.modules.length == 0){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    return response;
+  }else if (role.modules && uniqModule && uniqModule.length !== role.modules.length) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please select different module", code);
+    return response;
+  }else{
+
+    _.each(role.modules, function (module)
+    {
+      for(var i = 0; i < module.actions.length; i++){
+        var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+        if(!dbAction){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Invalid Action", code);
+          return response;
+        }
+        module.actions[i].actionId = dbAction._id;
+        module.actions[i].actionCode = dbAction.code;
+      }
+    })
+
+    // Adding Default Modules
+    _.each(dModules, function (module) {
+      var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
+      var isModAvailable = _.findIndex(role.modules, {moduleId: moduleDef._id})
+      if ((isModAvailable < 0) && module) {
+        for (var i = 0; i < module.actions.length; i++) {
+          var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+          module.actions[i].actionId = dbAction._id;
+          module.actions[i].actionCode = dbAction.code;
+        }
+        module["moduleId"] = moduleDef._id
+        module["moduleName"] = moduleDef.name
+        module["isActive"] = true
+        role.modules.push(module)
+      }
+    })
+    let id = mlDBController.insert('MlRoles', role, context)
+    if (id) {
+      let code = 200;
+      let result = {roleId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }
+
+/*  if (role && role.modules && role.modules.length == 0) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    return response;
+  }*/
+
+/*
+
   if (role.modules && uniqModule && uniqModule.length !== role.modules.length) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Please select different module", code);
     return response;
   }
+*/
 
-  _.each(role.modules, function (module)
+ /* _.each(role.modules, function (module)
   {
       for(var i = 0; i < module.actions.length; i++){
         var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
@@ -89,7 +142,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     let result = {roleId: id}
     let response = new MlRespPayload().successPayload(result, code);
     return response
-  }
+  }*/
 };
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {

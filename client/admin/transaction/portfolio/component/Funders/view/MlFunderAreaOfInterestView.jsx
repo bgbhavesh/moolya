@@ -9,8 +9,8 @@ export default class MlFunderAreaOfInterestView extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      loading: false,
-    }
+      loading: false
+    };
     this.fetchPortfolioDetails.bind(this);
     this.viewDetails.bind(this)
     this.showDetails.bind(this)
@@ -18,11 +18,11 @@ export default class MlFunderAreaOfInterestView extends React.Component {
   }
 
   viewDetails(id, e) {
-      this.setState({loading: true})
+      this.setState({loading: true});
       let data = this.state.funderAreaOfInterestList;
       let getData = data[id];
-      let subDomain =getData.subDomainName
-      this.setState({loading: false, viewCurDetail: subDomain});
+      let subDomain =getData.subDomainName;
+    this.setState({loading: false, viewCurDetail: subDomain, selValue: id});
   }
 
   componentDidMount() {
@@ -44,7 +44,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -70,7 +70,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     if (response) {
       this.setState({loading: false, funderAreaOfInterestList: response});
     }
-    const privateFields = response && response.privateFields && response.privateFields.length?response.privateFields:[]
+    const privateFields = response && response.privateFields && response.privateFields.length?response.privateFields:[];
     _.each(privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -127,7 +127,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                     <div className="top_block_scroller" id="forcecentered">
                       <ul className="topscroll_listblock">
                         {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
-                          return (<li key={value} className="active">
+                          return (<li key={value} className={value == that.state.selValue ? "active" : ""}>
                             <div className="list_block list_block_intrests notrans"
                                  onClick={that.viewDetails.bind(that, value)}>
                               <div className="hex_outer">
@@ -155,7 +155,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                         <div className="investement-view-content">
                           <div className="panel panel-default panel-form-view">
                             <div className="panel-body">
-                              <p>Domain : {this.state.viewCurDetail}</p>
+                              <p>Sub-Domain : {this.state.viewCurDetail}</p>
                             </div>
                           </div>
 

@@ -384,6 +384,7 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               displayName
               isInternal
               isExternal
+              imageLink
               payment{
                 derivedAmount
               }

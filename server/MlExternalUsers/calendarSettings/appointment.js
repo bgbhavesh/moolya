@@ -752,6 +752,92 @@ class MlAppointment {
     });
     return response;
   }
+
+  /**
+   * CreatedBy :: Vipul
+   * Method :: getUserAppointmentsBetweenTwoDates
+   * desc :: Fetch User Appointment Between Two Dates
+   * @param userId     :: String  - User Id of a user
+   * @param profileId  :: String  - Profile Id of a user
+   * @param startDay        :: String  - Day of calendar
+   * @param startMonth      :: Integer - Month of calendar
+   * @param startYear       :: Integer - Year of calendar
+   * @param endDay        :: String  - Day of calendar
+   * @param endMonth      :: Integer - Month of calendar
+   * @param endYear       :: Integer - Year of calendar
+   * @returns {{userAppointments: Array}}
+   */
+  getUserAppointmentsBetweenTwoDates( userId, profileId, startDay, startMonth, startYear , endDay, endMonth, endYear) {
+    const that = this;
+    /**
+     * setting starting date object
+     */
+    let startDate = new Date();
+    startDate.setDate(startDay);
+    startDate.setMonth(startMonth);
+    startDate.setYear(startYear);
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setSeconds(0,0);
+
+    /**
+     * setting ending date object
+     */
+    let endDate = new Date();
+    endDate.setDate(endDay);
+    endDate.setMonth(endMonth);
+    endDate.setYear(endYear);
+    endDate.setHours(0);
+    endDate.setMinutes(0);
+    endDate.setSeconds(0,0);
+
+    /**
+     * Fetch user task info and calendar setting
+     */
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
+    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
+    calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
+
+    let appointments = mlDBController.aggregate( 'MlAppointments', [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:startDate } ,endDate: {$lt:endDate} } }
+    ]);
+
+    /**
+     * Adding names to appointments
+     */
+    let userAppointments = appointments.map(function (appointment) {
+      appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
+      let name;
+      if(appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard' ) {
+        name = appointment.appointmentInfo.serviceName + ' ' + appointment.appointmentInfo.sessionId;
+
+      } else if(appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+        name = appointment.appointmentInfo.taskName + ' ' + appointment.appointmentInfo.sessionId;
+
+      } else if(appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+        name = appointment.appointmentInfo.taskName;
+      }
+
+      return {
+        id: appointment.appointmentId,
+        type: appointment.appointmentType,
+        name: name,
+        startDate:appointment.startDate,
+        endDate:appointment.endDate
+      }
+    });
+
+    return userAppointments;
+  }
 }
 
 /**

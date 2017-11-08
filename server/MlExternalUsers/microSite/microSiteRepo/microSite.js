@@ -580,34 +580,6 @@ function getDynamicLinksClasses() {
   return dynamicLinksClasses;
 }
 
-// async function getCity(cityId) {
-//   let result = await
-//     mlDBController.findOne('MlCities', {_id: cityId});
-//   if (result)
-//     return result.name
-//   else
-//     return ''
-// }
-//
-// async function getState(stateId) {
-//   let result = await
-//     mlDBController.findOne('MlStates', {_id: stateId});
-//   if (result)
-//     return result.name;
-//   else
-//     return '';
-// }
-//
-//
-// async function getCountry(countryId) {
-//   let result = await
-//     mlDBController.findOne('MlCountries', {_id: countryId});
-//   if (result)
-//     return result.displayName
-//   else
-//     return '';
-// }
-
 function getPrivateFields(privateFieldsObjects) {
   let privateFields = {}
   _.forEach(privateFieldsObjects, function (value) {

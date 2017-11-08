@@ -213,6 +213,7 @@ class MyTaskAppointments extends Component {
       <div>
         <StepZilla steps={this.setMyTaskAppointmentSteps()}
                    stepsNavigation={true}
+                   showNavigation={false}
                    prevBtnOnLastStep={true}/>
 
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />

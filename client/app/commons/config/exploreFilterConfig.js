@@ -36,20 +36,20 @@ export default filterData = [
       }
     },
   },
-  {
-    type: "SELECT",
-    field: "communityCode",
-    displayName: "Community",
-    isGraphql: true,
-    graphQLQuery: gql`{
-                  data:fetchCommunitiesSelect {
-                      value:code
-                      label:name
-                    }
-                  }
-                `,
-    graphQLOption: {},
-  },
+  // {
+  //   type: "SELECT",
+  //   field: "communityCode",
+  //   displayName: "Community",
+  //   isGraphql: true,
+  //   graphQLQuery: gql`{
+  //                 data:fetchCommunitiesSelect {
+  //                     value:code
+  //                     label:name
+  //                   }
+  //                 }
+  //               `,
+  //   graphQLOption: {},
+  // },
   {
     type: "SELECT",
     field: "industryId",

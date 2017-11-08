@@ -81,6 +81,9 @@
      deliverable: [String]
      isInternal: Boolean
      isExternal : Boolean
+     imageLink : String
+     isActive : Boolean
+     isServiceCardEligible : Boolean
      payment: Payment
    }
    type Activity {

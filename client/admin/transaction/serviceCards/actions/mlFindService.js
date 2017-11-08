@@ -320,10 +320,17 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId,
               id: _id
               mode
               name
+              isInternal
+              isExternal
+              isActive
+              isServiceCardEligible
               displayName
               duration {
                 hours
                 minutes
+              }
+              payment{
+                derivedAmount
               }
             }
           }

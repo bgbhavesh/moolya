@@ -16,6 +16,8 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
 import _ from 'lodash';
+import moment from "moment";
+import Datetime from "react-datetime";
 
 class MlEditDocumentMapping extends React.Component{
   constructor(props){
@@ -115,6 +117,14 @@ class MlEditDocumentMapping extends React.Component{
         this.setState({subChapters: subChaptersId});
       }
 
+      if(this.state.data&&this.state.data.validity){
+        let existData = this.state.data;
+        existData.validity = moment(this.state.data&&this.state.data.validity).format('MM-DD-YYYY hh:mm:ss')
+        this.setState({loading: false,"data":existData});
+      }
+
+
+
 
     }
 
@@ -143,7 +153,7 @@ class MlEditDocumentMapping extends React.Component{
         clusters: this.state.clusters,
         chapters: this.state.chapters,
         subChapters: this.state.subChapters,
-        validity: this.refs.validity.value,
+        validity: this.state.data&&this.state.data.validity,
         inputLength: this.refs.length.value,
         remarks: this.refs.remark.value,
         documentName: this.refs.documentName.value,
@@ -209,6 +219,16 @@ class MlEditDocumentMapping extends React.Component{
     let value = data&&data.value
     this.setState({allowableUnit:value})
   }
+
+  onemploymentDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('MM-DD-YYYY hh:mm:ss');
+      let existData = this.state.data;
+      existData.validity = value
+      this.setState({loading: false,"data":existData});
+    }
+  }
+
   componentDidUpdate()
   {
     var WinHeight = $(window).height();
@@ -340,7 +360,8 @@ class MlEditDocumentMapping extends React.Component{
                               <Moolyaselect ref="subChapter" multiSelect={true}  placeholder={"SubChapter"} mandatory={true}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery}  queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required"/>
 
                             <div className="form-group">
-                              <input type="text"  ref="validity" defaultValue={this.state.data&&this.state.data.validity} placeholder="Validity" className="form-control float-label" id=""/>
+                              {/*<input type="text"  ref="validity" defaultValue={moment(this.state.data&&this.state.data.validity).format('DD-MM-YYYY')} placeholder="Validity" className="form-control float-label" id=""/>*/}
+                              <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity"}}   closeOnSelect={true}  value={this.state.data&&this.state.data.validity} onChange={this.onemploymentDateSelection.bind(this)}/>
                             </div>
                             <div className="form-group">
                               <input type="text"  ref="length" defaultValue={this.state.data&&this.state.data.inputLength} placeholder="Length" className="form-control float-label" id=""/>

@@ -50,7 +50,7 @@ export function loginHandler(endPoint, cb) {
     }
   }).then(result=>{
     if(cb) {
-      cb(result)
+      cb(JSON.parse(result));
     }
   });
 }

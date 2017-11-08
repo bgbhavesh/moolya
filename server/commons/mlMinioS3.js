@@ -8,14 +8,20 @@ let fs = require('fs')
 Meteor.startup(function () {
 
 })
+const port = "9090"
 const minioAccessKey = Meteor.settings.private.minio&&Meteor.settings.private.minio.minioConfig&&Meteor.settings.private.minio.minioConfig.accessKeyId?Meteor.settings.private.minio.minioConfig.accessKeyId:'RakSan987';
 const minioSecretKey = Meteor.settings.private.minio&&Meteor.settings.private.minio.minioConfig&&Meteor.settings.private.minio.minioConfig.secretAccessKey?Meteor.settings.private.minio.minioConfig.secretAccessKey:'RakSan987';
 const endPoint = Meteor.settings.private.minio&&Meteor.settings.private.minio.minioConfig&&Meteor.settings.private.minio.minioConfig.endPoint?Meteor.settings.private.minio.minioConfig.endPoint:"127.0.0.1";
 
+var endPointUsed = "http://" + endPoint+":"+port;
+if (Meteor.settings.public.minio && Meteor.settings.public.minio.minioConfig.secure){
+  endPointUsed = endPoint;
+}
+
 const s3 = new AWS.S3(
   { accessKeyId: minioAccessKey,
     secretAccessKey: minioSecretKey,
-    endpoint: endPoint,
+    endpoint: endPointUsed,
     s3ForcePathStyle: true,
     signatureVersion: 'v4'
   }
@@ -39,7 +45,7 @@ module.exports = class s3Client{
     var params = {
       Bucket:s3Bucket,
       Key: bucketFolder+uniqueId+"-"+filename,
-      ContentType:file.type,
+      ContentType:"application/octet-stream",
       Body: fileData
     }
     s3.putObject(params, Meteor.bindEnvironment(function(err, response) {

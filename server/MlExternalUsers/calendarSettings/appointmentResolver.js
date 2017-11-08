@@ -1058,6 +1058,23 @@ MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) =>
   return response;
 };
 
+MlResolver.MlQueryResolver["fetchMyAppointmentBetweenTwoDates"] = (obj, args, context, info) => {
+  let userId = args.userId ? args.userId : context.userId;
+  let profileId = args.profileId;
+  let date = new Date();
+
+  let startDay = args.startDay ? args.startDay : date.getDate();
+  let startMonth = args.startMonth ? args.startMonth : date.getMonth();
+  let startYear = args.startYear ? args.startYear : date.getFullYear();
+
+  let endDay = args.endDay ? args.endDay : date.getDate();
+  let endMonth = args.endMonth ? args.endMonth : date.getMonth();
+  let endYear = args.endYear ? args.endYear : date.getFullYear();
+
+  let response = MlAppointment.getUserAppointmentsBetweenTwoDates( userId, profileId, startDay, startMonth, startYear , endDay, endMonth, endYear);
+  return response;
+};
+
 MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;

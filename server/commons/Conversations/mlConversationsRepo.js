@@ -8,41 +8,47 @@ class ConversationsRepo{
   constructor(){
   }
 
-  async login(context, cb)
+  login(context, cb)
   {
     var authRequest = {userId:context.userId}
     console.log('login attempt server')
     // var checkData = await this.testApi()
     // console.log('............', checkData)
-    var ret = await this.sendRequest('/login', authRequest, 'post');
-    cb(ret);
+    this.sendRequest('/login', authRequest, 'post' ,false,  function (res) {
+      if(cb){
+        cb(res);
+      }
+    });
   }
   // subscribe to conversations
-  async createApplication(){
+  createApplication(cb){
+    const that = this;
     var doc = MlConversations.find().fetch();
     if(doc.length > 0)
       return;
 
     var body = {appName:"moolya"}
-    var ret = await this.sendRequest('/createApplication', body, 'post', true);
-    console.log(ret)
-    if(ret.success){
-      this.setApiKey(ret.result.apiKey)
-    }
-    return ret;
+    this.sendRequest('/createApplication', body, 'post', true, function (res) {
+      if(res.success){
+        that.setApiKey(res.result.apiKey)
+      }
+      if(cb){
+        cb(res);
+      }
+    });
   }
 
-  async createUser(moolyaUser, cb){
+  createUser(moolyaUser, cb) {
     var user = {
       _id:moolyaUser.userId,
       username:moolyaUser.userName,
       email:moolyaUser.userName,
     }
-    var ret = await this.sendRequest('/createUser', user, 'post');
-    if(ret.success){
-      cb(ret)
-    }
-    return ret;
+    this.sendRequest('/createUser', user, 'post', false, function (res) {
+      if(res.success && cb) {
+        cb(res)
+      }
+    });
   }
 
   // save api key into mlconversations collection
@@ -62,22 +68,25 @@ class ConversationsRepo{
 
   // Push Notifications to conversations server Notification types are email, sms, push
   async sendNotifications(notification){
-    var ret = await this.sendRequest('/createNotification', notification, 'post');
+    var ret = this.sendRequest('/createNotification', notification, 'post', false);
     return ret;
   }
 
-  async createNotifications(notification){
-    var ret = await this.sendRequest('/createNotification', notification, 'post');
-    return ret;
+  createNotifications(notification, cb){
+    this.sendRequest('/createNotification', notification, 'post', false, function (res) {
+      if(cb){
+        cb(res);
+      }
+    });
   }
 
-  async sendRequest(endPoint, payload, method, isApplication){
+  sendRequest(endPoint, payload, method, isApplication, cb){
     var options = {
       url: Meteor.settings.private.conversationsBaseURL+endPoint,
       body:payload,
       method: method,
       json: true
-    }
+    };
 
     console.log(Meteor.settings.private.conversationsBaseURL+endPoint);
     if(!isApplication){
@@ -89,7 +98,7 @@ class ConversationsRepo{
       }
     }
 
-    const result = await new Promise(function (resolve, reject) {
+   new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
         if(err){
           reject(err)
@@ -99,9 +108,11 @@ class ConversationsRepo{
           resolve(body)
         }
       })
-    })
-    console.log('final result', result)
-    return result;
+    }).then((body) => {
+      if(cb) {
+        cb(body);
+      }
+    });
   }
 
 /*  async testApi(){

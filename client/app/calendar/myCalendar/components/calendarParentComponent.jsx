@@ -38,6 +38,7 @@ export default class MLAppMyCalendar extends Component {
       exploreAppointmentIds: []
     };
     this.onNavigate = this.onNavigate.bind(this);
+    this.onViewChange = this.onViewChange.bind(this);
     this.componentToLoad.bind(this);
     this.eventsData.bind(this);
     this.getAllAppointments.bind(this);
@@ -57,6 +58,16 @@ export default class MLAppMyCalendar extends Component {
         this.getAppointmentCounts()
       }
     }.bind(this));
+  }
+
+  onViewChange (view) {
+    let profileId = this.state.profileId;
+    if(profileId) {
+
+    } else {
+
+    }
+    console.log('view',view, profileId);
   }
 
   componentWillUpdate(nextProps, nextState){
@@ -277,6 +288,7 @@ export default class MLAppMyCalendar extends Component {
                 dayData={{days:that.state.data}}
                 dateHeaderEvent={that.componentToLoad.bind(that, 'calendarDayView')}
                 onNavigate={that.onNavigate}
+                onViewChange={that.onViewChange}
                 date={that.state.date}
               />
             </div>

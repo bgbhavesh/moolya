@@ -11,6 +11,8 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import Datetime from "react-datetime";
+import moment from "moment";
 
 let Select = require('react-select');
 
@@ -84,7 +86,7 @@ class MlAddDocumentMapping extends React.Component{
         clusters: this.state.clusters,
         chapters: this.state.chapters,
         subChapters: this.state.subChapters,
-        validity: this.refs.validity.value,
+        validity: this.state.validDate,
         inputLength: this.refs.length.value,
         remarks: this.refs.remark.value,
         documentName: this.refs.documentName.value,
@@ -142,6 +144,14 @@ class MlAddDocumentMapping extends React.Component{
     let value = data&&data.value
     this.setState({allowableUnit:value})
   }
+
+  onemploymentDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('MM-DD-YYYY hh:mm:ss');
+      this.setState({loading: false, validDate: value});
+    }
+  }
+
   render(){
     let MlActionConfig = [
       // {
@@ -249,7 +259,8 @@ class MlAddDocumentMapping extends React.Component{
                           <Moolyaselect ref="subChapter" multiSelect={true} mandatory={true} placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="SubChapter is required"/>
 
                         <div className="form-group">
-                          <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
+                          {/*<input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>*/}
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity",readOnly:true}}   closeOnSelect={true}  onChange={this.onemploymentDateSelection.bind(this)}/>
                         </div>
                         <div className="form-group">
                           <input type="text"  ref="length" placeholder="Length" className="form-control float-label" id=""/>

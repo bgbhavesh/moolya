@@ -4,6 +4,7 @@ import ScrollArea from 'react-scrollbar';
 import Moment from "moment";
 import { initalizeFloatLabel } from "../../../../../commons/utils/formElemUtil";
 import FontAwesome from 'react-fontawesome';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAppTaskMyAppointmentSession extends Component {
 
@@ -19,6 +20,11 @@ export default class MlAppTaskMyAppointmentSession extends Component {
 
   componentDidMount() {
     initalizeFloatLabel();
+    let mySwiper = new Swiper('.manage_tasks', {
+      speed: 400,
+      spaceBetween:15,
+      slidesPerView:5,
+    });
     // $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (290 + $('.app_header').outerHeight(true)));
@@ -66,31 +72,24 @@ export default class MlAppTaskMyAppointmentSession extends Component {
             <div className="panel-body">
               <div className="swiper-container manage_tasks">
                 <div className="swiper-wrapper">
-                  {data.activities && data.activities.map((activity, idx) => {
+                  {data.activities && data.activities.map((activity, index) => {
                     return (
-                      <div className="card_block swiper-slide" key={idx}>
-                        <div className="">
-                          <h3>{activity.displayName}</h3>
-                          {/*<div className="inactive"><FontAwesome onClick={() => that.removeActivity(id, idx)} name='minus' /></div>*/}
+                      <div className="col-lg-2 col-md-4 col-sm-4 swiper-slide" key={index}>
+                        <div className="card_block"><h3>{activity.displayName}</h3>
+                          <div className={activity.isActive ? 'active' : 'inactive'}></div>
                           <div className="clearfix"></div>
                           <div className="list_icon mart0">
-                            <span className="price">Rs. {activity.payment&&activity.payment.derivedAmount ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                            <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                             <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                             <div className="clearfix"></div>
-                            <i className="c_image ml my-ml-Ideator"></i>
+                            {activity.imageLink ?
+                              <img className="c_image" src={activity.imageLink ? generateAbsolutePath(activity.imageLink) : "/images/activity_1.jpg"}/>
+                              : <i className="c_image ml my-ml-Ideator"></i>
+                            }
                             <div className="clearfix"></div>
-                            <span className="price"><div className="form-group">
-                                        <label>
-                                          <span key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="inline_input">{(activity.duration && activity.duration.hours) ? activity.duration.hours : 0}</span> Hours
-                                      <span key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                            className="inline_input"> {(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0}</span>
-                                          Mins
-                                        </label>
-                                      </div></span>
-                            <button className="btn btn-danger pull-right">{activity.mode}</button>
-                          </div>
-                          <div className="block_footer"><span> {activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'} </span></div>
-                        </div>
+                            <span className="price">{activity.duration ? `${activity.duration.hours ? activity.duration.hours : 0} Hrs ${activity.duration.minutes ? activity.duration.minutes : 0} Mins` : ''}</span>
+                            <button className={`btn ${activity.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{activity.mode}</button>
+                          </div><div className="block_footer"><span>{activity.isServiceCardEligible ? 'Service Cardeable' : 'Non-Service Cardeable'}</span></div></div>
                       </div>
                     )
                   })}
@@ -136,7 +135,7 @@ export default class MlAppTaskMyAppointmentSession extends Component {
               <div className="panel-body">
                 <div className="col-md-12 nopadding">
                   <div className="col-md-3 nopadding text-center">
-                    <img src={user.profileImage ? user.profileImage : '/images/img2.png'} className="image" />
+                    <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : '/images/img2.png'} className="image" />
                     <div className="">
                       <span>{`${user.firstName} ${user.lastName}`}</span>
                     </div>
@@ -164,7 +163,7 @@ export default class MlAppTaskMyAppointmentSession extends Component {
                           <a href="">
                             {info.status === 'Accepted' ? <FontAwesome name='circle' style={{ 'position': 'absolute', 'color': 'yellowgreen' }} /> : info.status === 'Pending' ? <FontAwesome name='circle' style={{ 'position': 'absolute', 'color': 'yellow' }} /> :
                               info.status === 'Rejected' ? <FontAwesome name='circle' style={{ 'position': 'absolute', 'color': 'red' }} /> : <FontAwesome name='circle' style={{ 'position': 'absolute', }} />}
-                            <img src={info.profileImage ? info.profileImage : "/images/img2.png"} /><br />
+                            <img src={info.profileImage ? generateAbsolutePath(info.profileImage) : "/images/img2.png"} /><br />
                             <div className="tooltiprefer">
                               <span>{`${info.firstName} ${info.lastName}`}</span>
                             </div>

@@ -66,7 +66,7 @@ export default class MlAppTaskList extends React.Component{
                       <span className="price">Rs. {(task.payment && task.payment.derivedAmount) ? task.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                       <span className="price pull-right">{(task.isExternal && !task.isInternal? 'EXT' : (task.isInternal && !task.isExternal ? 'INT' : (task.isExternal && task.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
-                      <i className="c_image ml my-ml-Ideator"></i>
+                      <i className="c_image ml my-ml-task"></i>
                       <div className="clearfix"></div>
                       <span className="price">{task.duration ? `${task.duration.hours ? task.duration.hours : 0} Hrs ${task.duration.minutes ? task.duration.minutes : 0} Mins` : ''}</span>
                       <span className="price pull-right">{`${task.noOfSession ? task.noOfSession : '0'} Sessions`}</span>

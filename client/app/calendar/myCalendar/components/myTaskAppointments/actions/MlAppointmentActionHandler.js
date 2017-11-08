@@ -52,6 +52,8 @@ export async function fetchTaskActionHandler(taskId) {
                   deliverable
                   isExternal
                   isInternal
+                  isActive
+                  isServiceCardEligible
                   payment{
                     derivedAmount
                   }

@@ -112,8 +112,10 @@ export default class Calender extends Component {
     }
   }
 
-  weekHeaderComponent(){
-    console.log(this, arguments);
+  onView( view ) {
+    if(this.props.onViewChange) {
+      this.props.onViewChange(view);
+    }
   }
 
   render() {
@@ -129,6 +131,7 @@ export default class Calender extends Component {
           defaultView='month'
           defaultDate={that.state.date}
           onNavigate={that.onNavigate.bind(that)}
+          onView={that.onView.bind(that)}
           components={{
             event: that.eventComponent.bind(this),
             dateCellWrapper: that.dateWrapper.bind(this),

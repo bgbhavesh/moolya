@@ -42,7 +42,7 @@ let DocumentMapping = `
         documentId   : String
         documentName : String
         documentDisplayName : String
-        validity    : String
+        validity    : Date
         inputLength : String
         remarks     : String
         allowableMaxSize  : String
@@ -81,7 +81,7 @@ let DocumentMapping = `
         clusters    : [String],
         chapters    : [String],
         subChapters : [String],
-        validity    : String,
+        validity    : Date,
         inputLength : String,
         remarks     : String,
         documentName : String,

@@ -25,6 +25,7 @@ let CoreModules = {
       countriesId.push(country._id);
     })
     let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
+
     countriesId.map(function (id) {
       Clusters.map(function (cluster) {
         if (cluster.countryId == id) {
@@ -33,8 +34,8 @@ let CoreModules = {
       })
     })
     const data = activeCluster;
-    const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-    return {totalRecords: totalRecords, data: data};
+    // const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
+    return {totalRecords: Clusters.length, data: data};
   },
   MlChapterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
 

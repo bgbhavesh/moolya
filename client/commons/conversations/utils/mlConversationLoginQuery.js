@@ -19,8 +19,8 @@ import gql from 'graphql-tag'
 //   return ret;
 // }
 
-export async function loginHandler(endPoint) {
-  const result = await new Promise(function (resolve, reject) {
+export function loginHandler(endPoint, cb) {
+  new Promise(function (resolve, reject) {
     // Make ajax call
     let xmlhttp;
     if (window.XMLHttpRequest) {
@@ -45,10 +45,12 @@ export async function loginHandler(endPoint) {
           else
             reject(xmlhttp.response);
         }
-      }
+      };
       xmlhttp.send()
     }
-  })
-
-  return JSON.parse(result);
+  }).then(result=>{
+    if(cb) {
+      cb(result)
+    }
+  });
 }

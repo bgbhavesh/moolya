@@ -17,7 +17,10 @@ class MlUserContext{
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
             if(!default_User_Profile ){
               //todo: retrieve the first approved profile(Admin may block the profile)
-                default_User_Profile = user_profiles[0]||{};
+                let userActiveProfile = user_profiles.find((profile)=>{
+                  return profile.isActive;
+                })
+                default_User_Profile = userActiveProfile ||{};
             }
           default_User_Profile.email = user.profile.email;
           default_User_Profile.mobileNumber = user.profile.mobileNumber;

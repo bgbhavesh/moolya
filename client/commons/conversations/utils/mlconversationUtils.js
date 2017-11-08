@@ -14,13 +14,13 @@ class ConversationUtils{
   constructor(){
   }
 
-
-  async login(){
-      var response = await loginHandler('conversationlogin');
-      if(response.success){
-        rkConversations.init();
-        rkConversations.utils.setToken(response.authToken);
-      }
+  login(){
+      loginHandler('conversationlogin', function (response) {
+        if(response.success){
+          rkConversations.init();
+          rkConversations.utils.setToken(response.authToken);
+        }
+      });
   }
 
   init(){

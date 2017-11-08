@@ -14,12 +14,14 @@ class ConversationsRepo{
     console.log('login attempt server')
     // var checkData = await this.testApi()
     // console.log('............', checkData)
-    this.sendRequest('/login', authRequest, 'post' , function (res) {
-      cb(res);
+    this.sendRequest('/login', authRequest, 'post' ,false,  function (res) {
+      if(cb){
+        cb(res);
+      }
     });
   }
   // subscribe to conversations
-  createApplication(){
+  createApplication(cb){
     const that = this;
     var doc = MlConversations.find().fetch();
     if(doc.length > 0)
@@ -30,21 +32,23 @@ class ConversationsRepo{
       if(res.success){
         that.setApiKey(res.result.apiKey)
       }
-      cb(res);
+      if(cb){
+        cb(res);
+      }
     });
   }
 
-  async createUser(moolyaUser, cb){
+  createUser(moolyaUser, cb) {
     var user = {
       _id:moolyaUser.userId,
       username:moolyaUser.userName,
       email:moolyaUser.userName,
     }
-    var ret = await this.sendRequest('/createUser', user, 'post');
-    if(ret.success){
-      cb(ret)
-    }
-    return ret;
+    this.sendRequest('/createUser', user, 'post', false, function (res) {
+      if(res.success && cb) {
+        cb(res)
+      }
+    });
   }
 
   // save api key into mlconversations collection
@@ -64,13 +68,15 @@ class ConversationsRepo{
 
   // Push Notifications to conversations server Notification types are email, sms, push
   async sendNotifications(notification){
-    var ret = await this.sendRequest('/createNotification', notification, 'post');
+    var ret = this.sendRequest('/createNotification', notification, 'post', false);
     return ret;
   }
 
-  createNotifications(notification){
-    this.sendRequest('/createNotification', notification, 'post', function (res) {
-      cb(res);
+  createNotifications(notification, cb){
+    this.sendRequest('/createNotification', notification, 'post', false, function (res) {
+      if(cb){
+        cb(res);
+      }
     });
   }
 
@@ -80,7 +86,7 @@ class ConversationsRepo{
       body:payload,
       method: method,
       json: true
-    }
+    };
 
     console.log(Meteor.settings.private.conversationsBaseURL+endPoint);
     if(!isApplication){
@@ -103,7 +109,9 @@ class ConversationsRepo{
         }
       })
     }).then((body) => {
-      cb(body);
+      if(cb) {
+        cb(body);
+      }
     });
   }
 

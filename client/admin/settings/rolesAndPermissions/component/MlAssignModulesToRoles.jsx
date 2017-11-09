@@ -1,14 +1,15 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
-import {graphql} from 'react-apollo';
 import ScrollArea from 'react-scrollbar';
 let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
 import Datetime from "react-datetime";
 import moment from "moment";
 import _ from 'lodash'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
+
+const currentDate= moment().format(Meteor.settings.public.dateFormat);
+
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +36,7 @@ export default class MlAssignModulesToRoles extends React.Component {
       assignModulesToRoles: this.state.assignModulesToRoles.concat([{
         moduleId: '',
         moduleName: '',
-        validFrom: null,
+        validFrom: currentDate,
         validTo: null,
         isActive: '',
         actions: []
@@ -61,17 +62,6 @@ export default class MlAssignModulesToRoles extends React.Component {
   }
 
   componentDidMount() {
-    /*  $(function () {
-     $('.float-label').jvFloat();
-     });
-
-     $('.switch input').change(function () {
-     if ($(this).is(':checked')) {
-     $(this).parent('.switch').addClass('on');
-     } else {
-     $(this).parent('.switch').removeClass('on');
-     }
-     });*/
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
 
@@ -268,7 +258,7 @@ export default class MlAssignModulesToRoles extends React.Component {
               statusCreate=true;
             }
           })
-          let currentDate= moment().format(Meteor.settings.public.dateFormat);
+          // let currentDate= moment().format(Meteor.settings.public.dateFormat);
           let validFrom=that.state.assignModulesToRoles[id].validFrom || currentDate;
           let validTo=that.state.assignModulesToRoles[id].validTo
           if(validFrom&&validFrom!="Invalid date"){

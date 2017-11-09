@@ -323,7 +323,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
           switch (moduleName) {
             case "REGISTRATION": {
               imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
-              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+              imageUploadCallback = Meteor.bindEnvironment(function (resp, serverRes, serverResOb) {
                 let registrationDocumentUploadReq = {
                   registrationId: data.registrationId,
                   docUrl: resp,
@@ -334,6 +334,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                   actionName: data.actionName
                 };
                 MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null, registrationDocumentUploadReq, context, null);
+                serverRes.send(serverResOb);
               });
               break;
             }
@@ -341,7 +342,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
               if (data.portfolioDetailsId) {
                 let portfolio = {};
                 imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "portfolioDocuments/");
-                imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+                imageUploadCallback = Meteor.bindEnvironment(function (resp, serverRes, serverResOb) {
                   let details = MlPortfolioDetails.findOne({"_id": data.portfolioDetailsId});
                   if (details) {
                     let clientPortfolio = data.portfolio;
@@ -402,13 +403,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                     portfolio.removeKeys = [];
                     MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                   }
+                  serverRes.send(serverResOb);
                 });
               }
             }
               break;
             case "PROFILE": {
               imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
-              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+              imageUploadCallback = Meteor.bindEnvironment(function (resp, serverRes, serverResOb) {
                 // MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
                 MlResolver.MlMutationResolver['uploadUserImage'](null, {
                   userId: data.userId,
@@ -416,12 +418,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                   actionName: data.actionName,
                   userProfilePic: resp
                 }, context, null);
+                serverRes.send(serverResOb);
               });
               break;
             }
             case "SUBCHAPTER": {
               imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
-              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+              imageUploadCallback = Meteor.bindEnvironment(function (resp,serverRes,serverResOb) {
                 if (data.subChapterId) {
                   MlResolver.MlMutationResolver['updateSubChapter'](null, {
                     subChapterId: data.subChapterId,
@@ -430,12 +433,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                     subChapterDetails: {subChapterImageLink: resp}
                   }, context, null);
                 }
+                serverRes.send(serverResOb);
               });
               break;
             }
             case "PORTFOLIO_PROFILE_IMG": {
               imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
-              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+              imageUploadCallback = Meteor.bindEnvironment(function (resp,serverRes,serverResOb) {
                 let portfolioDocumentUploadReq = {
                   portfolioId: data.portfolioId,
                   docUrl: resp,
@@ -444,12 +448,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                   actionName: data.actionName
                 };
                 MlResolver.MlMutationResolver['updatePortfolioProfilePic'](null, portfolioDocumentUploadReq, context, null);
+                serverRes.send(serverResOb);
               });
               break;
             }
             case "PORTFOLIO_IDEA_IMG": {
               imageUploaderPromise = new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
-              imageUploadCallback = Meteor.bindEnvironment(function (resp) {
+              imageUploadCallback = Meteor.bindEnvironment(function (resp,serverRes,serverResOb) {
                 let ideaImage = {fileUrl: resp, fileName: file.name};
                 if (data.isCreate) {
                   MlResolver.MlMutationResolver['createIdea'](null, {
@@ -469,6 +474,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                     ideaId: data.ideaId
                   }, context, null);
                 }
+                serverRes.send(serverResOb);
               });
               break;
             }
@@ -478,11 +484,15 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
             imageUploaderPromise.then(function (uploadResp) { //sucess
               let response = null;
               if (uploadResp) {
-                imageUploadCallback(uploadResp);
+               // imageUploadCallback(uploadResp,res);
                 let code = 200;
                 response = JSON.stringify(new MlRespPayload().successPayload(uploadResp, code));
+                imageUploadCallback(uploadResp, res, response);
+
+              }else{
+                res.send(response);
               }
-              res.send(response);
+            //  res.send(response);
             }, function (err) { //err
               let response = new MlRespPayload().errorPayload("Failed to Upload the resource", 404);
               res.send(response);

@@ -80,7 +80,7 @@ class MlAppServiceBasicInfo extends Component {
     }else if(value === 'Monthly'){
       days=30;
     }else if(value === 'Quarterly'){
-      days=120;
+      days=90;
     }else if(value === 'Yearly'){
       days=365;
     }

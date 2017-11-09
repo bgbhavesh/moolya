@@ -148,9 +148,9 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     let loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
+
           <div className="requested_input">
-            {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? (
+
               <div className="col-lg-12 col-sm-12">
                 <div className="row">
                   <h2>Intellectual Property And Trademark</h2>
@@ -162,17 +162,16 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
                       </div>
                     <div className="panel-body">
                       {this.state.portfolioIdeatorInfo.IPdescription}
-                    </div>
+                      {loading === true ? ( <MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? this.state.portfolioIdeatorInfo.IPdescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
+                        </div>
                       </div>
                   </div>
 
                 </div>
               </div>
-            ) : (<NoData tabName={this.props.tabName}/>)
-            }
+
           </div>
-        )
-        }
+
         </div>
     )
   }

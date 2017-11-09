@@ -119,11 +119,11 @@ export default MlAccounts=class MlAccounts {
 
     // IF User is not found with the token, it means link "is Already Verified"
       var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token}, {})
-      if(!user) return {email:null, error: true,reason:"Email is already Verified", code:403, status:"VERIFIED"};
+      if(!user) return {email:null, error: true,reason:"EMAIL ALREADY VERIFIED", code:403};
 
     // IF User is not found with the token and Status, it means link "has been rendered inactive"
       user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},{});/*Status check to handle the verification for rejected registraiton: MOOLYA-3421*/
-      if (!user)  return {email:null, error: true,reason:"Registration has been renderd inactive", code:403, status:"INACTIVE"};//throw new Error(403, "Verify email link expired");
+      if (!user)  return {email:null, error: true,reason:"REGISTRATION INACTIVATED", code:403};//throw new Error(403, "Verify email link expired");
 
       var tokenRecord = _.find(user.services.email.verificationTokens, function (t) {
         return t.token == token;
@@ -159,7 +159,7 @@ export default MlAccounts=class MlAccounts {
         subject: "Email Verification",
         context: {}
       })
-      return {email:null, error: true,reason:"Verify email link expired", code:403, status:"EXPIRED"};
+      return {email:null, error: true,reason:"LINK EXPIRED", code:403};
     }
 
     let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },

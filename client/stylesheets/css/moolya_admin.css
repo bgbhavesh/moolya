@@ -758,7 +758,7 @@ button:focus{outline: 0;}
 
 .panel.panel-form .panel-heading{padding: 5px 5px;font-weight: normal;}
 .panel.panel-form .panel-body{padding: 0px;}
-.panel.panel-form .panel-body textarea{border:0px;height: 225px;}
+.panel.panel-form .panel-body textarea{border:0px;height: 215px;}
 
 .panel.panel-form-view .panel-heading{font-weight: normal;font-size: 20px; color: #273545; text-shadow: 1px 1px 0px #fff;}
 .panel.panel-form-view .panel-body h4{font-size: 20px; color: #273545; font-weight: bold; text-shadow: none;padding-bottom: 12px;}

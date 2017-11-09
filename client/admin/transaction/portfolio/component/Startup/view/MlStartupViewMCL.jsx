@@ -37,9 +37,14 @@ export default class MlStartupViewMCL extends React.Component {
   componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
   componentWillMount(){
     this.fetchPortfolioStartupDetails();
@@ -141,7 +146,15 @@ export default class MlStartupViewMCL extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div>
+        <div className="tab_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="tab_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
         {showLoader === true ? ( <MlLoader/>) : (
+
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
 
@@ -190,9 +203,13 @@ export default class MlStartupViewMCL extends React.Component {
 
 
               </div>
-            </div>
+
+
+          </div>
           )
         }
+          </ScrollArea>
+        </div>
       </div>
     )
   }

@@ -7,6 +7,7 @@ import MlAppActionComponent from "../../commons/components/MlAppActionComponent"
 import MlAccordion from '../../commons/components/MlAccordion';
 import MlAppInvestAction from './MlAppInvestActions';
 import NoDataList from '../../../commons/components/noData/noDataList';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import MlLoader from "../../../commons/components/loader/loader";
 export default class MlAppInvestmentItem extends Component {
 
@@ -111,7 +112,7 @@ export default class MlAppInvestmentItem extends Component {
                           <h3>
                             {data.user.name}
                           </h3>
-                          <div className="list_icon"><span className="ml ml-ideator"></span></div>
+                          <div className="list_icon">{data.profileImage ? <img src={generateAbsolutePath(data.profileImage)} className="c_image"/>:<span className="ml ml-ideator"></span>}</div>
                           <p>
                             {data.idea[0] && data.idea[0].title && data.idea[0].title.substr(0,20)}{ data.idea && data.idea[0] && data.idea[0].title && data.idea[0].title.length ? '...' : ''}
                           </p>
@@ -135,7 +136,7 @@ export default class MlAppInvestmentItem extends Component {
                               <h3>
                                 {data.user.name}
                               </h3>
-                              <div className="list_icon"><span className="ml ml-ideator"></span></div>
+                              <div className="list_icon">{data.profileImage ? <img src={generateAbsolutePath(data.profileImage)} className="c_image"/>:<span className="ml ml-ideator"></span>}</div>
                               <p>
                                 { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description ? data.startup[0].aboutUs.description.substr(0,30) : '' }
                                 { data && data.startup && data.startup[0] && data.startup[0].aboutUs && data.startup[0].aboutUs.description && data.startup[0].aboutUs.description.length ? (data.startup[0].aboutUs.description.length>30 ? '...':'') : ''}

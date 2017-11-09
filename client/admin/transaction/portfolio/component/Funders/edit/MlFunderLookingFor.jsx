@@ -175,9 +175,11 @@ export default class MlFunderLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
+    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject && selObject.label ? selObject.label : ''
+      ["lookingForName"]: selObject && selObject.label ? selObject.label : '',
+      lookingDescription: selObject && selObject.about ? selObject.about : ''
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.sendDataToParent()
@@ -220,6 +222,7 @@ export default class MlFunderLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
+          about
         }
       }`;
     const showLoader = this.state.loading;

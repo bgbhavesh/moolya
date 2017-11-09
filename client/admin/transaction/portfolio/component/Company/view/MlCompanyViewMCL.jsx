@@ -9,7 +9,7 @@ import NoData from '../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
 import MlLoader from "../../../../../../commons/components/loader/loader";
-
+import ScrollArea from 'react-scrollbar';
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
@@ -36,8 +36,14 @@ export default class MlCompanyViewMCL extends React.Component {
   componentDidMount(){
     // this.initalizeAnnotaor()
     // this.fetchAnnotations();
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
     initalizeFloatLabel();
   }
 
@@ -156,6 +162,13 @@ export default class MlCompanyViewMCL extends React.Component {
     const showLoader = this.state.loading;
       return (
         <div>
+          <div className="tab_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="tab_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
           {showLoader === true ? ( <MlLoader/>) : (
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
@@ -205,6 +218,8 @@ export default class MlCompanyViewMCL extends React.Component {
             </div>
           )
           }
+            </ScrollArea>
+          </div>
         </div>
       )
   }

@@ -39,8 +39,11 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     if(context.browser.includes("Macintosh")) {
       deviceName = context.browser.split("1")[2].substring(4, 10);
       deviceId = context.ip;
+    } else if(context.browser.includes("Linux")) {
+      deviceName = "Linux";
+      deviceId = context.ip;
     } else {
-      deviceName = context.browser.split("1")[2].substring(2, 8);
+      deviceName = "Windows";
       deviceId = context.ip;
     }
     args.requests.deviceName = deviceName;

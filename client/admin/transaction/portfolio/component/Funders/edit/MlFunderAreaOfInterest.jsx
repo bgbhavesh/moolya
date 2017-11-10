@@ -87,15 +87,16 @@ export default class MlFunderAreaOfInterest extends Component {
     })
   }
 
-  onTileClick(index, e) {
+  onTileClick(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.funderAreaOfInterest);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    var details = _.find(cloneArray, {index: index});
     details = _.omit(details, "__typename");
-    this.curSelectLogo = details.logo
+    this.curSelectLogo = details.logo;
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       popoverOpen: !(this.state.popoverOpen),
       "selectedVal": details.industryTypeId,
      "selectedValDomain": details.subDomainId},() => {
@@ -259,8 +260,8 @@ export default class MlFunderAreaOfInterest extends Component {
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         }
-        this.setState({ loading: true })
-        this.fetchOnlyImages();
+        // this.setState({ loading: true })
+        // this.fetchOnlyImages();
       }
       this.toggleModal();
       this.setState({ uploadingAvatar: false })
@@ -278,7 +279,10 @@ export default class MlFunderAreaOfInterest extends Component {
     }
   }
 
-
+  /**
+   * @Note: with latest changes @fetchOnlyImages dependency removed
+   * @handling logo view on client only
+   * */
   async fetchOnlyImages() {
     const response = await fetchfunderPortfolioAreaInterest(this.props.portfolioDetailsId);
     if (response) {
@@ -318,6 +322,12 @@ export default class MlFunderAreaOfInterest extends Component {
     })
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
     let investment = this.state.funderAreaOfInterest;
@@ -325,7 +335,8 @@ export default class MlFunderAreaOfInterest extends Component {
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      funderAreaOfInterest[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(funderAreaOfInterest, this.state.selectedIndex);
+      funderAreaOfInterest[actualIndex] = data;
     }
     let arr = [];
     _.each(funderAreaOfInterest, function (item) {
@@ -407,7 +418,7 @@ export default class MlFunderAreaOfInterest extends Component {
                                 <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                                <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                                <div className="hex_outer" onClick={that.onTileClick.bind(that, details.index, idx)}>
                                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
                                   <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} /></div>
                                 </div>

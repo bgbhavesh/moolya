@@ -24,7 +24,7 @@ export default class MlAppMyTransaction extends Component {
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12">
-          <h2>My Transactions</h2>
+          <h2>My Transactions on moolya</h2>
           <MlTableViewContainer {...mlMyTransactionTableConfig}/>
           </div>
         </div>

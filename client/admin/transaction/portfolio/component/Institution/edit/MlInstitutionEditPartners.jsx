@@ -408,6 +408,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                               </div>
                             </div>:<div></div>
                           }
+                          <br className="brclear" />
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
                           </div>

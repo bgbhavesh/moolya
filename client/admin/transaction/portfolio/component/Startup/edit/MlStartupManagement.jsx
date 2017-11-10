@@ -208,7 +208,7 @@ export default class MlStartupManagement extends Component{
       const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({loading: false, startupManagement: response.management, startupManagementList: response.management});
-        this.fetchOnlyImages()
+        // this.fetchOnlyImages()
 
       }else{
         this.setState({loading:false})

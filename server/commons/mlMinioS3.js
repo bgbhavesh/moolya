@@ -51,11 +51,15 @@ module.exports = class s3Client{
     s3.putObject(params, Meteor.bindEnvironment(function(err, response) {
       console.log(response);
       if(err){
-        callback(err, response);
+        if(callback){
+          callback(err, response);
+        }
       }
       else{
         let url = `${bucketFolder}${uniqueId}-${filename}`;
-        callback(err,url);
+        if(callback){
+          callback(err,url);
+        }
       }
     }));
   }

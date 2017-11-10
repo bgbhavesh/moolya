@@ -244,7 +244,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'book',
         displayName:'Book',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-book_now'
       },
     ]
     let actionOptions= this.props.actionOptions|| [];

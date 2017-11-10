@@ -97,14 +97,15 @@ export default class MlInstitutionEditAwards extends React.Component{
     this.curSelectLogo = {}
   }
 
-  onTileClick(index, e){
+  onTileClick(index, uiIndex,e){
     let cloneArray = _.cloneDeep(this.state.institutionAwards);
-    let details = cloneArray[index]
+    //let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
       "selectedVal" : details.awardId,
-      selectedObject : index,popoverOpen : !(this.state.popoverOpen)},()=>{
+      selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
     // setTimeout(function () {
@@ -194,6 +195,12 @@ export default class MlInstitutionEditAwards extends React.Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
+  
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
 
   sendDataToParent(isSaveClicked){
     let data = this.state.data;
@@ -202,7 +209,8 @@ export default class MlInstitutionEditAwards extends React.Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      institutionAwards[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(institutionAwards, this.state.selectedIndex);
+      institutionAwards[actualIndex] = data;
     }
     let arr = [];
     _.each(institutionAwards, function (item)
@@ -252,8 +260,8 @@ export default class MlInstitutionEditAwards extends React.Component{
             fileName: file && file.name ? file.name : "",
             fileUrl: result.result
           };
-          this.setState({loading: true})
-          this.fetchOnlyImages();
+          // this.setState({loading: true})
+          // this.fetchOnlyImages();
         }
     }
   }
@@ -335,7 +343,7 @@ export default class MlInstitutionEditAwards extends React.Component{
                           <div className="list_block">
                             <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                             {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that,details.index,idx)}><img
                               src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.awardName?details.awardName:""}</h3>
                           </div>

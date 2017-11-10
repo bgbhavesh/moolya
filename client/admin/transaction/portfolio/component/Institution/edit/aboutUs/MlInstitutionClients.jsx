@@ -60,12 +60,13 @@ export default class MlInstitutionClients extends Component{
     }
   }
 
-  onTileSelect(index, e){
+  onTileSelect(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.institutionClients);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
+    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -131,6 +132,12 @@ export default class MlInstitutionClients extends Component{
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let clients = this.state.institutionClients;
@@ -138,7 +145,8 @@ export default class MlInstitutionClients extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      institutionClients[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(institutionClients, this.state.selectedIndex);
+      institutionClients[actualIndex] = data;
     }
     let arr = [];
     _.each(institutionClients, function (item)
@@ -189,8 +197,8 @@ export default class MlInstitutionClients extends Component{
             fileName: file && file.name ? file.name : "",
             fileUrl: result.result
           };
-          this.setState({loading: true})
-          this.fetchOnlyImages();
+          // this.setState({loading: true})
+          // this.fetchOnlyImages();
         }
       }
   }
@@ -264,7 +272,8 @@ export default class MlInstitutionClients extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl):""}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, details.index ,idx)}>
+                          <img src={details.logo&&details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl):""}/></div>
                         <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>

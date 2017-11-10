@@ -196,7 +196,8 @@ class MlChapterCommunityDetails extends React.Component {
               pararms.clusterId+"/"+pararms.chapterId+"/"+
               pararms.subChapterId+"/"+pararms.subChapterName+"/communities");
           } else {
-            FlowRouter.go('/admin/communities')
+            // FlowRouter.go('/admin/communities')
+            window.history.back()
           }
         }
       }

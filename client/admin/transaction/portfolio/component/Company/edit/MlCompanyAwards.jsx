@@ -208,7 +208,8 @@ export default class MlCompanyAwards extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      const actualIndex = _.findIndex(awards, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(awards, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       awards[actualIndex] = data;
       // awards[this.state.selectedIndex] = data;
     }

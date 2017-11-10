@@ -101,9 +101,10 @@ export default class MlStartupManagement extends Component{
     // this.setState({data:{}})
     // $('#management-form').slideDown();
   }
-  onSelectUser(index, e){
+  onSelectUser(index,uiIndex, e){
     this.setState({loading:true})
-    let managmentDetails = this.state.startupManagement[index]
+    //let managmentDetails = this.state.startupManagement[index]
+    let managmentDetails = _.find(this.state.startupManagement,{index:index});
     managmentDetails = _.omit(managmentDetails, "__typename");
     // this.setState({selectedIndex:index});
     this.setState({selectedIndex:index, data:managmentDetails}, function () {
@@ -207,7 +208,7 @@ export default class MlStartupManagement extends Component{
       const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({loading: false, startupManagement: response.management, startupManagementList: response.management});
-        this.fetchOnlyImages()
+        // this.fetchOnlyImages()
 
       }else{
         this.setState({loading:false})
@@ -251,7 +252,11 @@ export default class MlStartupManagement extends Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
-
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
   sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let startupManagement1 = this.state.startupManagement;
@@ -259,7 +264,8 @@ export default class MlStartupManagement extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      startupManagement[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(startupManagement, this.state.selectedIndex);
+      startupManagement[actualIndex] = data;
     }
     let managementArr = [];
     _.each(startupManagement, function (item) {
@@ -433,7 +439,7 @@ export default class MlStartupManagement extends Component{
                     let genderImage = user.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
-                        <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
+                        <div className="list_block" onClick={that.onSelectUser.bind(that,user.index, index)}>
                           <div className="hex_outer"><img src={user.logo ? generateAbsolutePath(user.logo.fileUrl) : genderImage} className="p_image"/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>

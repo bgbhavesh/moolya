@@ -604,6 +604,7 @@ class Library extends React.Component {
 
 
   toggleDocumentLock(details, id) {
+    this.setState({previewDocument:''}); // Empty Iframe
     let documents = this.state.documentSpecifications;
     let document = {}
     documents.map(function (data) {
@@ -1110,6 +1111,7 @@ class Library extends React.Component {
 
   documents() {
     let that = this;
+
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
@@ -1660,7 +1662,12 @@ class Library extends React.Component {
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
-                <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
+                {this.state.previewDocument&&(this.state.previewDocument).endsWith('.pdf')?
+                  <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
+                  :
+
+                  <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewDocument}`} />
+                }
                 {/*{<MlFileViewer/>}*/}
                 {/*<div className="img_scroll"><MlDocViewer/></div>*/}
               </div>

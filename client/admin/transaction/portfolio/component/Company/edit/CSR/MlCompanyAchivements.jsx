@@ -184,7 +184,8 @@ export default class MlCompanyAchivements extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      const actualIndex = _.findIndex(institutionAchievements, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(institutionAchievements, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       institutionAchievements[actualIndex] = data;
       // institutionAchievements[this.state.selectedIndex] = data;
     }

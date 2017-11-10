@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import ScrollArea from 'react-scrollbar';
 import CDNImage from '../CDNImage/CDNImage';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlAnchorUserGrid extends PureComponent {
 
@@ -22,7 +23,7 @@ export default class MlAnchorUserGrid extends PureComponent {
             <div className={this.props.classNames || "col-md-6 col-sm-6"} key={index}>
               <div className="list_block provider_block" onClick={() => this.props.clickHandler(user.userId)}>
                 <div className="provider_mask">
-                  <CDNImage className="user_pic" src={user.profileImage ? user.profileImage : '/images/def_profile.png'} />
+                  <CDNImage className="user_pic" src={user.profileImage ? generateAbsolutePath(user.profileImage) : '/images/def_profile.png'} />
                 </div>
                 <h3>{user.displayName}</h3>
               </div>

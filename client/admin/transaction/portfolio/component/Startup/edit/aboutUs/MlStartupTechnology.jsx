@@ -78,11 +78,12 @@ class MlStartupTechnology extends Component{
     }
   }
 
-  onTileClick(index, e){
+  onTileClick(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.startupTechnologies);
-    let details = cloneArray[index]
+    //let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
+    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -151,15 +152,22 @@ class MlStartupTechnology extends Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
+    getActualIndex(dataArray, checkIndex){
+        var response = _.findIndex(dataArray, {index: checkIndex});
+        response = response >= 0 ? response : checkIndex;
+        return response;
+    }
 
-  sendDataToParent(isSaveClicked){
+
+    sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let technologies = this.state.startupTechnologies;
     let startupTechnologies = _.cloneDeep(technologies);
     data.logo = this.curSelectLogo;
     data.index = this.state.selectedIndex;
     if(isSaveClicked){
-      startupTechnologies[this.state.selectedIndex] = data;
+        const actualIndex = this.getActualIndex(startupTechnologies, this.state.selectedIndex);
+      startupTechnologies[actualIndex] = data;
     }
     let arr = [];
     _.each(startupTechnologies, function (item)
@@ -208,8 +216,8 @@ class MlStartupTechnology extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        //this.setState({loading: true})
+        //this.fetchOnlyImages();
       }
     }
   }
@@ -292,7 +300,7 @@ class MlStartupTechnology extends Component{
                     <a href="" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                        <div className="hex_outer" onClick={that.onTileClick.bind(that,details.index, idx)}>
                           <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}/>
                         </div>
                         <h3>{details.technologyName?details.technologyName:" "}</h3>

@@ -123,7 +123,7 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
-        <span className="version">Var.&beta;eta 1.0.0 / 111117</span>
+        <span className="version">Ver.&beta;eta 1.0.0 / 111117</span>
         {breadcrumType ?
           <DynamicBreadcrum/>
           :

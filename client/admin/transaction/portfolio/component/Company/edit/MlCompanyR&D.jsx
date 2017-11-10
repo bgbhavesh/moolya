@@ -211,7 +211,8 @@ export default class MlCompanyRAndD extends Component{
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
       // companyRD[this.state.selectedIndex] = data;
-      const actualIndex = _.findIndex(companyRD, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(companyRD, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       companyRD[actualIndex] = data;
     }
     let arr = [];

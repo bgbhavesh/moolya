@@ -8,14 +8,17 @@ import formHandler from "../../../commons/containers/MlFormHandler";
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
-import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
+// import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
 import {findSubChapterActionHandler} from "../../../../client/admin/subChapter/actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
+import {multipartFormHandler, multipartASyncFormHandler} from "../../../commons/MlMultipartFormAction";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
 import {client} from '../../core/apolloConnection';
+import CropperModal from '../../../commons/components/cropperModal';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 var _ = require('lodash');
 
 
@@ -32,7 +35,8 @@ class MlAssignChapterBackendUsers extends React.Component {
       users: [{username: '', _id: ''}],
       chapterAdmin: false,
       userDisplayName: '',
-      username: ''
+      username: '',
+      showProfileModal: false
     }
 
     this.addEventHandler.bind(this);
@@ -40,6 +44,9 @@ class MlAssignChapterBackendUsers extends React.Component {
     this.findSubChapterDetails.bind(this);
     this.updateSelectedBackEndUser.bind(this);
     this.filterClusterBasedRoles.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
+    this.toggleProfileModal = this.toggleProfileModal.bind(this);
+    this.onUploadAvatar = this.onUploadAvatar.bind(this);
     return this;
   }
 
@@ -70,6 +77,43 @@ class MlAssignChapterBackendUsers extends React.Component {
     const resp = this.findUserDetails(index);
   }
 
+  async onFileUpload(imageFile){
+    let user = {
+      profile:{
+        profileImage:" "
+      }
+    }
+    let file=imageFile || document.getElementById("profilePic").files[0];
+    if(file) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  onFileUploadCallBack(output) {
+    if ( output ) {
+      this.setState({
+        profileImage: JSON.parse(output).result,
+        profilePic: null
+      })
+    }
+  }
+
+  onUploadAvatar(image) {
+    this.onFileUpload(image);
+    this.setState({
+      profilePic: image,
+    });
+    this.toggleProfileModal();
+  }
+
+  toggleProfileModal() {
+    this.setState({
+      showProfileModal: !this.state.showProfileModal,
+    });
+  }
+
   async findUserDetails(userId) {
     const userDetails = await findAdminUserDetails(userId,client);
     if (userDetails) {
@@ -77,7 +121,8 @@ class MlAssignChapterBackendUsers extends React.Component {
         selectedBackendUser: userId,
         username: userDetails.userName,
         userDisplayName: userDetails.displayName,
-        isActive: userDetails.deActive
+        isActive: userDetails.deActive,
+        profileImage: userDetails.profileImage
       })
       // this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
       let alsoAs = userDetails.alsoAssignedas;
@@ -150,7 +195,7 @@ class MlAssignChapterBackendUsers extends React.Component {
       subChapterId : params.subChapterId,
       communityId : params.communityId
     }
-    let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
+    let response = await multipartFormHandler(data, this.state.profilePic);
     return response;
   }
 
@@ -192,7 +237,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   resetBackendUsers() {
     this.setState({loading: true});
-    this.setState({selectedBackendUser: '', userDisplayName: '', username: '', alsoAssignedAs: "", loading: false});
+    this.setState({profileImage: null, selectedBackendUser: '', userDisplayName: '', username: '', alsoAssignedAs: "", loading: false});
   }
 
   render() {
@@ -221,6 +266,14 @@ class MlAssignChapterBackendUsers extends React.Component {
       }
     ]
     let that = this;
+    let gImage = this.state.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let genderImage = (!this.state.profileImage || this.state.profileImage == " "?gImage:generateAbsolutePath(this.state.profileImage))
+    // var urlCreator = window.URL || window.webkitURL;
+    // let imageUrl = '';
+    // if (this.state.profilePic)
+    //   imageUrl = urlCreator.createObjectURL(this.state.profilePic);
+
+    // console.log('&&&&&&&&&&', imageUrl);
     let queryOptions = {
       options: {
         variables: {
@@ -267,7 +320,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                             <div className="list_block provider_block">
                               <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                               <div className="provider_mask"><img src="/images/funder_bg.png"/> <img
-                                className="user_pic" src="/images/def_profile.png"/></div>
+                                className="user_pic" src={genderImage}/></div>
                               <h3>Assign <br/> Backend Users</h3>
                             </div>
                           </div>
@@ -289,12 +342,18 @@ class MlAssignChapterBackendUsers extends React.Component {
                         <form>
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
-                              <span>Profile Pic</span>
-                              <input type="file" className="upload" ref="profilePic"/>
+                              <span onClick={this.toggleProfileModal}>Profile Pic</span>
                             </div>
                             <div className="previewImg ProfileImg">
-                              <img src="/images/def_profile.png"/>
+                              <img src={this.state.profilePic ? generateAbsolutePath(this.state.profilePic) : genderImage}/>
                             </div>
+                            <CropperModal
+                              handleImageUpload={this.onUploadAvatar}
+                              uploadingImage={false}
+                              show={this.state.showProfileModal}
+                              toggleShow={this.toggleProfileModal}
+                              cropperStyle="circle"
+                            />
                           </div>
                           <br className="brclear"/>
                           <div className="form-group">

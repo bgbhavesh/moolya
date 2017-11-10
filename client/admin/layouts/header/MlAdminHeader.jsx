@@ -27,7 +27,7 @@ export default class MlAdminHeader extends Component {
         <BugReportWrapper />
 
         <MlAdminProfile/>
-          <span className="version">Var.&beta;eta 1.0.0 / 111117</span>
+          <span className="version">Ver.&beta;eta 1.0.0 / 111117</span>
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
           <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>

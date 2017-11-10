@@ -108,7 +108,7 @@ export default class MlAppStartupViewTabs extends Component {
         panelClassName: 'panel',
         title: "M C & L",
         name: "M C And L",
-        component: <MlStartupViewMCL key="9" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlStartupViewMCL  isAdmin={false} key="9" portfolioDetailsId={this.props.portfolioDetailsId}
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {

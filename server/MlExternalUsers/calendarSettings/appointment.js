@@ -787,9 +787,9 @@ class MlAppointment {
     endDate.setDate(endDay);
     endDate.setMonth(endMonth);
     endDate.setYear(endYear);
-    endDate.setHours(0);
-    endDate.setMinutes(0);
-    endDate.setSeconds(0,0);
+    endDate.setHours(23);
+    endDate.setMinutes(59);
+    endDate.setSeconds(59,0);
 
     /**
      * Fetch user task info and calendar setting

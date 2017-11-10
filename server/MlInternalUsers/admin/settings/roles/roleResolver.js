@@ -325,23 +325,66 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
 
     let query = {};
     query.isActive = true;
-    if(args.clusterId){
-      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
-      query.assignRoles['$elemMatch'].cluster = {$in: ['all', args.clusterId]};
+    if(department.isSystemDefined){
+
+        if(args.clusterId){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = {$in: ['all', args.clusterId]};
+        }
+        if(args.chapterId){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].chapter = {$in: ['all', args.chapterId] };
+        }
+        if(args.subChapterId){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].subChapter = {$in: ['all', args.subChapterId] };
+          subChapter = mlDBController.findOne('MlSubChapters', {_id:subChapterId}, context)
+        }
+        if(args.communityId){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].community = {$in: ['all', args.communityId] };
+        }
+
+    }else{
+
+        if(levelCode == "COMMUNITY"){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = args.clusterId;
+          query.assignRoles['$elemMatch'].chapter = args.chapterId;
+          query.assignRoles['$elemMatch'].subChapter = args.subChapterId;
+          query.assignRoles['$elemMatch'].community = args.communityId;
+
+        }
+        else if(levelCode == "SUBCHAPTER"){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = args.clusterId;
+          query.assignRoles['$elemMatch'].chapter = args.chapterId;
+          query.assignRoles['$elemMatch'].subChapter = args.subChapterId;
+          query.assignRoles['$elemMatch'].community = {$in: ['all']};
+        }
+        else if(levelCode == "CHAPTER"){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = args.clusterId;
+          query.assignRoles['$elemMatch'].chapter = args.chapterId;
+          query.assignRoles['$elemMatch'].subChapter = {$in: ['all']};
+          query.assignRoles['$elemMatch'].community = {$in: ['all']};
+        }
+        else if (levelCode == "CLUSTER_COMMUNITY") {
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = args.clusterId;
+          query.assignRoles['$elemMatch'].chapter = {$in: ['all']};
+          query.assignRoles['$elemMatch'].subChapter = {$in: ['all']};
+          query.assignRoles['$elemMatch'].community = args.communityId;
+        }
+        else if(levelCode == "CLUSTER"){
+          query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+          query.assignRoles['$elemMatch'].cluster = {$in: [args.clusterId]};
+          query.assignRoles['$elemMatch'].chapter = {$in: ['all']};
+          query.assignRoles['$elemMatch'].subChapter = {$in: ['all']};
+          query.assignRoles['$elemMatch'].community = {$in: ['all']};
+        }
     }
-    if(args.chapterId){
-      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
-      query.assignRoles['$elemMatch'].chapter = {$in: ['all', args.chapterId] };
-    }
-    if(args.subChapterId){
-      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
-      query.assignRoles['$elemMatch'].subChapter = {$in: ['all', args.subChapterId] };
-      subChapter = mlDBController.findOne('MlSubChapters', {_id:subChapterId}, context)
-    }
-    if(args.communityId){
-      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
-      query.assignRoles['$elemMatch'].community = {$in: ['all', args.communityId] };
-    }
+
     if(args.departmentId){
       query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
       query.assignRoles['$elemMatch'].department = {$in: ['all', args.departmentId] };

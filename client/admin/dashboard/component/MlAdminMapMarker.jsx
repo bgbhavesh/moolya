@@ -65,6 +65,19 @@ export default class MlAdminMapMarker extends Component {
     if(this.props.status && (this.props.status.code == 111)){
       status = "active"
     }
+
+    if(_.isBoolean(this.props.status)){
+      if(this.props.isActive && !this.props.status){
+        status = "workinprogress"
+      }
+      if(!this.props.isActive && !this.props.status){
+        status = "inactive"
+      }
+      if(this.props.isActive && this.props.status){
+        status = "active"
+      }
+    }
+
     // console.log(this.props.flag);
     // console.log(this.props.text);
     return (
@@ -81,7 +94,7 @@ export default class MlAdminMapMarker extends Component {
           {this.props.isHover ? (<div>{this.props.HoverComponent}</div>) : ""}
         </div>
         :
-        <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
+        <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
              onMouseOver={this.onMouseEnterContent.bind(this,this.props.hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
              onClick={this.markerClickActionHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">

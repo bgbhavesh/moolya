@@ -96,6 +96,7 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
   }
 
   componentWillMount() {
+    this.fetchPortfolioInfo();
     let resp = this.validateUserForAnnotation();
     return resp
   }
@@ -114,7 +115,7 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
       $('.comment-input-box').slideToggle();
     });
 
-    this.fetchPortfolioInfo();
+
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -141,9 +142,9 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
     let loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
+
           <div className="requested_input">
-            {this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ? (
+
               <div className="col-lg-12 col-sm-12">
                 <div className="row">
                   <h2>Strategy and Planning</h2>
@@ -154,17 +155,16 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
                         <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" />
                       </div>
                     <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.spDescription}
+                      {loading === true ? ( <MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ? this.state.portfolioIdeatorInfo.spDescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
                     </div>
                       </div>
                   </div>
 
                 </div>
               </div>
-            ) : (<NoData tabName={this.props.tabName}/>)}
+
           </div>
-        )
-        }
+
         </div>
     )
   }

@@ -246,18 +246,16 @@ export default class MlFunderPrincipalTeam extends Component {
     })
   }
 
-  onPrincipalTileClick(index, principal, e) {
+  onPrincipalTileClick(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.funderPrincipal);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    var details = _.find(cloneArray, {index: index});
     details = _.omit(details, "__typename");
-    // if (details && details.logo) {
-    //   delete details.logo['__typename'];
-    // }
     let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       selectLogo: imgLogo,
       popoverOpenP: !(this.state.popoverOpenP)
     }, () => {
@@ -287,19 +285,17 @@ export default class MlFunderPrincipalTeam extends Component {
     })
   }
 
-  onTeamTileClick(index, team, e) {
+  onTeamTileClick(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    var details = _.find(cloneArray, {index: index});
     details = _.omit(details, "__typename");
-    // if (details && details.logo) {
-    //   delete details.logo['__typename'];
-    // }
     let imgLogo = details.logo? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
       selectLogoTeam: imgLogo,
-      selectedObject: index,
+      selectedObject: uiIndex,
       popoverOpenT: !(this.state.popoverOpenT)
     }, () => {
       this.lockPrivateKeys(index, false, "team")
@@ -317,6 +313,12 @@ export default class MlFunderPrincipalTeam extends Component {
     return {tabName: this.state.selectedTab, errorMessage: ret, index: this.state.selectedIndex}
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked) {
     var data = this.state.data;
     var selectedTab = this.state.selectedTab;
@@ -325,8 +327,10 @@ export default class MlFunderPrincipalTeam extends Component {
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogo;
-      if (isSaveClicked)
-        funderPrincipal[this.state.selectedIndex] = data;
+      if (isSaveClicked){
+        const actualIndex = this.getActualIndex(funderPrincipal, this.state.selectedIndex);
+        funderPrincipal[actualIndex] = data;
+      }
       let arr = [];
       _.each(funderPrincipal, function (item) {
         for (var propName in item) {
@@ -346,8 +350,11 @@ export default class MlFunderPrincipalTeam extends Component {
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogoTeam;
-      if (isSaveClicked)
-        funderTeam[this.state.selectedIndex] = data;
+      if (isSaveClicked){
+        const actualIndex = this.getActualIndex(funderTeam, this.state.selectedIndex);
+        funderTeam[actualIndex] = data;
+      }
+
       let arr = [];
       _.each(funderTeam, function (item) {
         for (var propName in item) {
@@ -415,10 +422,10 @@ export default class MlFunderPrincipalTeam extends Component {
 
       if (result.success) {
         toastr.success("Photo Updated Successfully");
-        this.setState({
-          loading: true
-        })
-        this.fetchOnlyImages();
+        // this.setState({
+        //   loading: true
+        // })
+        // this.fetchOnlyImages();
       }
       let logoObj = {
         fileName: file && file.name ? file.name : "",
@@ -454,6 +461,10 @@ export default class MlFunderPrincipalTeam extends Component {
     }
   }
 
+  /**
+   * @Note: with latest changes @fetchOnlyImages dependency removed
+   * @handling logo view on client only
+   * */
   async fetchOnlyImages() {
     if (this.state.selectedTab == "principal") {
       const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
@@ -566,7 +577,7 @@ export default class MlFunderPrincipalTeam extends Component {
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <a href="" id={"create_clientP" + idx}>
                                   <div className="list_block notrans funding_list"
-                                       onClick={that.onPrincipalTileClick.bind(that, idx, principal)}>
+                                       onClick={that.onPrincipalTileClick.bind(that, principal.index, idx )}>
                                     <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
                                     <img src={principal.logo && principal.logo.fileUrl ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} />
@@ -606,8 +617,9 @@ export default class MlFunderPrincipalTeam extends Component {
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <a href="" id={"create_clientT" + idx}>
                                   <div className="list_block notrans funding_list"
-                                       onClick={that.onTeamTileClick.bind(that, idx, team)}>
-                                    <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
+                                       onClick={that.onTeamTileClick.bind(that, team.index, idx)}>
+                                    <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} />
+                                    <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
                                     {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
                                     <img src={team.logo && team.logo.fileUrl ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"} />
                                     <div><p>{team.firstName}</p><p

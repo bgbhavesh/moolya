@@ -4,16 +4,17 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import {pick} from 'lodash'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {findSubChapterActionHandler} from '../../actions/findSubChapter';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import {findBackendUserActionHandler} from '../../../transaction/internalRequests/actions/findUserAction';
 import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
 import {fetchUserDetailsHandler} from "../../../../app/commons/actions/fetchUserDetails";
 import {registerAsInfo} from '../../../transaction/requested/actions/registrationAs'
-import {pick} from 'lodash'
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 //todo:// this file is to be placed in the commons as it is been used by both admin and app
 export default class MlAnchorInfoView extends React.Component {
@@ -103,7 +104,7 @@ export default class MlAnchorInfoView extends React.Component {
       objective: objective || [],
       contactDetails: contactDetails || [],
       subChapterName: response && response.subChapterName ? response.subChapterName : "SubChapter Name",
-      subChapterImageLink: response && response.subChapterImageLink ? response.subChapterImageLink : "/images/startup_default.png"
+      subChapterImageLink: response && response.subChapterImageLink ? generateAbsolutePath(response.subChapterImageLink) : "/images/startup_default.png"
     })
     this.getAnchorUsers();
   }

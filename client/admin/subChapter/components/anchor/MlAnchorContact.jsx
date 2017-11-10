@@ -7,6 +7,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
 // import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 //todo:// replace set-time out for sending data to parent need to change
 export default class MlAnchorContact extends React.Component {
@@ -43,7 +44,7 @@ export default class MlAnchorContact extends React.Component {
 
   selectContact(index) {
     // this.setState({ formData: this.state.contactDetails[index], selectedContact: index });
-    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });ml
+    this.sendDataToParent({ selectedIndex: index, formData: this.props.contactDetails[index] });
   }
 
   onOptionSelectedCountry(val) {
@@ -155,7 +156,8 @@ export default class MlAnchorContact extends React.Component {
                       <div className="list_block provider_block">
                         <div className="cluster_status active_cl"></div>
                         <div className="provider_mask"><img src="/images/funder_bg.png" />
-                          <img className="user_pic" src={user.picURL || "/images/def_profile.png"} /></div>
+                          <img className="user_pic" src={user.picURL ? generateAbsolutePath(user.picURL) : "/images/def_profile.png"}/>
+                        </div>
                         <h3>{user.addressTypeName || 'No address name'}</h3>
                       </div>
                     </div>

@@ -177,14 +177,18 @@ class MlAuthorization
     }
 
     validateRole(roleId, accessModule, accessAction){
+    const _this = this;
       let ret = false;
       let role = mlDBController.findOne('MlRoles', {_id: roleId})
       if(role)
       {
         role.modules.map(function (module) {
-          if(module && !module.isActive)
+          let isValidity = _this.validateModuleValidity(module);
+          if(!isValidity)
             return;
-          if(module.moduleId == "all" || module.moduleId == accessModule._id){
+          else if(module && !module.isActive)
+            return;
+          else if(module.moduleId == "all" || module.moduleId == accessModule._id){
             let actions = module.actions;
             actions.map(function (action) {
               if(action.actionId == "all" || action.actionId == accessAction._id || action.actionId == accessAction.code){
@@ -197,6 +201,17 @@ class MlAuthorization
       }
       return ret;
     }
+
+  validateModuleValidity(module) {
+    var response = false;
+    const fromDate = module.validFrom ? module.validFrom : new Date();
+    const toDate = module.validTo ? module.validTo : new Date();
+    const curDate = new Date();
+    console.log(".............", curDate);
+    if (curDate >= fromDate && curDate <= toDate)
+      response = true;
+    return response
+  }
 
       validateDataContext(userProfileDetails, moduleName, actionName, variables, isContextSpecSearch){
         if(isContextSpecSearch || moduleName == 'GLOBALSETTINGS' || moduleName == 'MASTERSETTINGS')

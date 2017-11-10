@@ -103,13 +103,14 @@ export default class MlCompanyAwards extends Component{
     this.curSelectLogo = {}
   }
 
-  onTileClick(index, e){
+  onTileClick(index,uiIndex,e){
     let cloneArray = _.cloneDeep(this.state.awards);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,
-      selectedObject : index,
+      selectedObject : uiIndex,
       "selectedVal" : details.awardId,
       popoverOpen : !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
@@ -207,7 +208,9 @@ export default class MlCompanyAwards extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      awards[this.state.selectedIndex] = data;
+      const actualIndex = _.findIndex(awards, {index: this.state.selectedIndex});
+      awards[actualIndex] = data;
+      // awards[this.state.selectedIndex] = data;
     }
     let arr = [];
     _.each(awards, function (item)
@@ -265,8 +268,8 @@ export default class MlCompanyAwards extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        // this.setState({loading: true})
+        // this.fetchOnlyImages();
       }
     }
   }
@@ -358,7 +361,7 @@ export default class MlCompanyAwards extends Component{
                   {awardsList.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="" id={"create_client"+idx}>
-                        <div className="list_block" onClick={that.onTileClick.bind(that, idx)}>
+                        <div className="list_block" onClick={that.onTileClick.bind(that, details.index,idx)}>
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                           <div className="hex_outer"><img

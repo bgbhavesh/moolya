@@ -178,15 +178,16 @@ export default class MlCompanyPartners extends React.Component {
     })
   }
 
-  onTileClick(index, e) {
+  onTileClick(index,uiIndex,e) {
     let cloneArray = _.cloneDeep(this.state.partners);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       popoverOpenP: !(this.state.popoverOpenP)},()=>{
       this.lockPrivateKeys(index)
     });
@@ -213,7 +214,9 @@ export default class MlCompanyPartners extends React.Component {
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
       if(isSaveClicked){
-        partners[this.state.selectedIndex] = data;
+        const actualIndex = _.findIndex(partners, {index: this.state.selectedIndex});
+        partners[actualIndex] = data;
+        // partners[this.state.selectedIndex] = data;
       }
       let arr = [];
       _.each(partners, function (item) {
@@ -267,8 +270,8 @@ export default class MlCompanyPartners extends React.Component {
           fileUrl: result.result
         };
         toastr.success("Photo Updated Successfully");
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        // this.setState({loading: true})
+        // this.fetchOnlyImages();
       }
     }
   }
@@ -333,7 +336,7 @@ export default class MlCompanyPartners extends React.Component {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <div className="list_block notrans funding_list"
-                                     onClick={that.onTileClick.bind(that, idx)} id={"create_clientP" + idx}>
+                                     onClick={that.onTileClick.bind(that,details.index,idx)} id={"create_clientP" + idx}>
                                   <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                                   <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
                                   <div>

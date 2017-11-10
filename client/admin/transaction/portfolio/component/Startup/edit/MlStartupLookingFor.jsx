@@ -167,9 +167,11 @@ export default class MlStartupLookingFor extends Component {
     let details = this.state.data;
     details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
+    details = _.omit(details, ["lookingDescription"]);
     details = _.extend(details, {
       ["lookingForId"]: selectedId,
-      ["lookingForName"]: selObject.label
+      ["lookingForName"]: selObject.label,
+      lookingDescription: selObject.about
     });
     this.setState({data: details, "selectedVal": selectedId}, function () {
       // this.sendDataToParent()
@@ -211,6 +213,7 @@ export default class MlStartupLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForDisplayName
           value:_id
+          about
         }
       }`;
     const showLoader = this.state.loading;

@@ -141,17 +141,19 @@ export default class EmailVerification extends React.Component{
     return response;
   }*/
  componentDidMount(){
-   setTimeout(function(){
-     this.setState({canResend:true})
-   }.bind(this),30000)
+   if(this.state.emailVerificationSuccess){
+     setTimeout(function(){
+       this.setState({canResend:true})
+     }.bind(this),30000)
 
-   var timeleft = 30;
-   var downloadTimer = setInterval(function(){
-     timeleft--;
-     document.getElementById("countdowntimer").textContent = timeleft;
-     if(timeleft <= 0)
-       clearInterval(downloadTimer);
-   },1000);
+     var timeleft = 30;
+     var downloadTimer = setInterval(function(){
+       timeleft--;
+       document.getElementById("countdowntimer").textContent = timeleft;
+       if(timeleft <= 0)
+         clearInterval(downloadTimer);
+     },1000);
+   }
  }
 
   // async verifyMobileNumber(){
@@ -195,6 +197,17 @@ export default class EmailVerification extends React.Component{
 
      let mobileNumber=this.state.mobileNumber||"";
      let emailVerificationSuccess=this.state.emailVerificationSuccess;
+     let linkInactive = null;
+     let emailAlreadyVerified= null;
+     let regExpired = null;
+     if(!emailVerificationSuccess){
+       if(this.state.emailVerificationMessage === "REGISTRATION INACTIVATED")
+         linkInactive = true;
+       else if(this.state.emailVerificationMessage === "LINK EXPIRED")
+         regExpired = true
+       else if(this.state.emailVerificationMessage === "EMAIL ALREADY VERIFIED")
+         emailAlreadyVerified = true
+     }
      let mobileNumberVerificationSuccess=this.state.mobileNumberVerified;
      const showLoader=this.state.loading;
     return (
@@ -235,11 +248,21 @@ export default class EmailVerification extends React.Component{
                 </div>
               </div>
             }
-            {!emailVerificationSuccess&&<div>
-              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
-              <p style={{'fontSize':'24px'}}>Your verification link has expired.<br/>Please contact us at <a style={{'color':'#ef4647'}} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
+            {linkInactive&&<div>
+              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Inactive!</h2>
+              <p style={{'fontSize':'24px'}}>This email link has been rendered inactive, due to admin action.<br/>Please contact us at <a style={{'color':'#ef4647'}} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
               {/*<a href="/login" className="save_btn" >Login</a>*/}
              </div>}
+            {regExpired&&<div>
+              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
+              <p style={{'fontSize':'24px'}}>We have already sent you email with new activation link.<br/> We request you to click and verify this new email verification link before 72 hrs</p>
+              {/*<a href="/login" className="save_btn" >Login</a>*/}
+            </div>}
+            {emailAlreadyVerified&&<div>
+              <img src="../images/success_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Already Verified!</h2>
+              <p style={{'fontSize':'24px'}}>Thank you, you have already verified your email earlier</p>
+              {/*<a href="/login" className="save_btn" >Login</a>*/}
+            </div>}
 
             {mobileNumberVerificationSuccess&&
               <div>

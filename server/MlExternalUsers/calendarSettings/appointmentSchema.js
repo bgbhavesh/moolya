@@ -191,6 +191,14 @@ let appointment = `
     appointments: [myAppointmentData]
   }
   
+  type myAppointmentsBetweenTwoDatesResponse{
+    id: String
+    type: String
+    name: String
+    startDate: Date
+    endDate: Date
+  }
+  
   type AppointmentDuration {
     hours: Int
     minutes: Int
@@ -233,6 +241,7 @@ let appointment = `
      fetchProfileAppointmentCounts( profileId: String, month:Int, year: Int): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(userId: String, profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
+     fetchMyAppointmentBetweenTwoDates(userId: String, profileId: String!, startDay: Int, startMonth: Int, startYear: Int , endDay: Int, endMonth: Int, endYear: Int): [myAppointmentsBetweenTwoDatesResponse]
      fetchSelfTask(selfTaskId: String): selfTask
      fetchSlotDetails(appointmentId: [String]): [SlotInfo]
   }

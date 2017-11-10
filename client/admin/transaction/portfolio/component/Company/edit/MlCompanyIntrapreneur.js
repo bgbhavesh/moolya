@@ -225,8 +225,8 @@ export default class MlCompanyIntrapreneur extends React.Component{
             fileName: file && file.name ? file.name : "",
             fileUrl: result.result
           }
-          this.setState({loading: true})
-          this.fetchOnlyImages();
+          // this.setState({loading: true})
+          // this.fetchOnlyImages();
         }
       }
   }

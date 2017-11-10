@@ -75,15 +75,16 @@ export default class MlInstitutionEditInvestor extends React.Component{
       this.setState({selectedIndex:0})
     }
   }
-  onTileClick(index, e){
+  onTileClick(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.institutionInvestor);
-    let details = cloneArray[index]
+    //let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex: index,
                    data:details,
                    "selectedVal" : details.fundingTypeId,
-                   selectedObject : index,
+                   selectedObject : uiIndex,
                    popoverOpen : !(this.state.popoverOpen)},()=>{
                        this.lockPrivateKeys(index)
                  });
@@ -167,6 +168,11 @@ export default class MlInstitutionEditInvestor extends React.Component{
     this.setState({institutionInvestorList: setObject, popoverOpen: false})
     this.curSelectLogo = {}
   }
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
 
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
@@ -175,7 +181,8 @@ export default class MlInstitutionEditInvestor extends React.Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      institutionInvestor[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(institutionInvestor, this.state.selectedIndex);
+      institutionInvestor[actualIndex] = data;
     }
     let arr = [];
     _.each(institutionInvestor, function (item) {
@@ -223,8 +230,8 @@ export default class MlInstitutionEditInvestor extends React.Component{
             fileName: file && file.name ? file.name : "",
             fileUrl: result.result
           };
-          this.setState({loading: true})
-          this.fetchOnlyImages();
+          // this.setState({loading: true})
+          // this.fetchOnlyImages();
         }
       }
   }
@@ -299,7 +306,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                         <a id={"create_client"+idx}>
                           <div className="list_block">
                             <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
-                            <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that, idx)}><img
+                            <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that,details.index, idx)}><img
                               src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                             <h3>{details.investorName ? details.investorName : ''}</h3>
                           </div>

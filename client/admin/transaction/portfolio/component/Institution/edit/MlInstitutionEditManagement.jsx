@@ -88,9 +88,10 @@ export default class MlInstitutionEditManagement extends Component{
     // this.setState({data:{}})
     // $('#management-form').slideDown();
   }
-  onSelectUser(index, e){
+  onSelectUser(index,uiIndex, e){
     this.setState({loading:true})
-    let managmentDetails = this.state.institutionManagement[index]
+    //let managmentDetails = this.state.institutionManagement[index]
+    let managmentDetails = _.find(this.state.institutionManagement,{index:index});
     managmentDetails = _.omit(managmentDetails, "__typename");
     this.setState({selectedIndex:index});
     this.setState({data:managmentDetails}, function () {
@@ -190,7 +191,7 @@ export default class MlInstitutionEditManagement extends Component{
       const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({loading: false, institutionManagement: response.management, institutionManagementList: response.management});
-        this.fetchOnlyImages()
+        // this.fetchOnlyImages()
 
       }else{
         this.setState({loading:false})
@@ -233,7 +234,11 @@ export default class MlInstitutionEditManagement extends Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
-
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
   sendDataToParent(isSaveClicked){
     let data = this.state.data;
     let institutionManagement1 = this.state.institutionManagement;
@@ -241,7 +246,8 @@ export default class MlInstitutionEditManagement extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      institutionManagement[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(institutionManagement, this.state.selectedIndex);
+      institutionManagement[actualIndex] = data;
     }
     let managementArr = [];
     _.each(institutionManagement, function (item) {
@@ -384,7 +390,7 @@ export default class MlInstitutionEditManagement extends Component{
                   {managementArr.map(function (user, index) {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
-                        <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
+                        <div className="list_block notrans" onClick={that.onSelectUser.bind(that,user.index, index)}>
                           <div className="hex_outer"><img src={user.logo ? generateAbsolutePath(user.logo.fileUrl) : "/images/def_profile.png"}/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>

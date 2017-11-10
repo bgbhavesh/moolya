@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import ScrollArea from 'react-scrollbar';
 import CDNImage from '../CDNImage/CDNImage';
-import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAnchorUserGrid extends PureComponent {
 

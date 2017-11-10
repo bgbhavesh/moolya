@@ -169,38 +169,38 @@ class MlStartupAssets extends Component{
 
   }
 
-  onLogoFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
-  }
-  onFileUploadCallBack(file,resp) {
-    if (resp) {
-      let result = JSON.parse(resp);
-
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
-            fileName: file.name,
-            fileType: file.type,
-            fileUrl: result.result,
-            libraryType: "image"
-          }
-          this.libraryAction(fileObjectStructure)
-          if (result.success) {
-            this.setState({loading: true})
-            this.fetchOnlyImages();
-            this.imagesDisplay();
-          }
-        }
-      });
-
-    }
-  }
+  // onLogoFileUpload(e){
+  //   if(e.target.files[0].length ==  0)
+  //     return;
+  //   let file = e.target.files[0];
+  //   let name = e.target.name;
+  //   let fileName = e.target.files[0].name;
+  //   let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+  //   let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
+  // }
+  // onFileUploadCallBack(file,resp) {
+  //   if (resp) {
+  //     let result = JSON.parse(resp);
+  //
+  //     Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+  //       if(ifConfirm){
+  //         let fileObjectStructure = {
+  //           fileName: file.name,
+  //           fileType: file.type,
+  //           fileUrl: result.result,
+  //           libraryType: "image"
+  //         }
+  //         this.libraryAction(fileObjectStructure)
+  //         if (result.success) {
+  //           this.setState({loading: true})
+  //           this.fetchOnlyImages();
+  //           this.imagesDisplay();
+  //         }
+  //       }
+  //     });
+  //
+  //   }
+  // }
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
@@ -214,39 +214,39 @@ class MlStartupAssets extends Component{
   }
 
 
-  async fetchOnlyImages(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.assets) {
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.startupAssets
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response.assets[thisState]
-        specificData['logo']= curUpload['logo']
-        this.setState({loading: false, startupAssets:cloneBackUp });
-      }else {
-        this.setState({loading: false})
-      }
-    }
-  }
+  // async fetchOnlyImages(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response && response.assets) {
+  //     let thisState=this.state.selectedIndex;
+  //     let dataDetails =this.state.startupAssets
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if(specificData){
+  //       let curUpload=response.assets[thisState]
+  //       specificData['logo']= curUpload['logo']
+  //       this.setState({loading: false, startupAssets:cloneBackUp });
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
 
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.assets) {
-      let detailsArray = response&&response.assets?response.assets:[]
-      let dataDetails =this.state.startupAssets
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-        cloneBackUp[key]["privateFields"] = obj.privateFields;
-      })
-      let listDetails = this.state.startupAssetsList || [];
-      listDetails = cloneBackUp
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupAssets:cloneBackUp,startupAssetsList:cloneBackUpList});
-    }
-  }
+  // async imagesDisplay(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response && response.assets) {
+  //     let detailsArray = response&&response.assets?response.assets:[]
+  //     let dataDetails =this.state.startupAssets
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     _.each(detailsArray, function (obj,key) {
+  //       cloneBackUp[key]["logo"] = obj.logo;
+  //       cloneBackUp[key]["privateFields"] = obj.privateFields;
+  //     })
+  //     let listDetails = this.state.startupAssetsList || [];
+  //     listDetails = cloneBackUp
+  //     let cloneBackUpList = _.cloneDeep(listDetails);
+  //     this.setState({loading: false, startupAssets:cloneBackUp,startupAssetsList:cloneBackUpList});
+  //   }
+  // }
 
   emptyClick(e) {
     if (this.state.popoverOpen)

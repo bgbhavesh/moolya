@@ -758,7 +758,7 @@ button:focus{outline: 0;}
 
 .panel.panel-form .panel-heading{padding: 5px 5px;font-weight: normal;}
 .panel.panel-form .panel-body{padding: 0px;}
-.panel.panel-form .panel-body textarea{border:0px;height: 225px;}
+.panel.panel-form .panel-body textarea{border:0px;height: 215px;}
 
 .panel.panel-form-view .panel-heading{font-weight: normal;font-size: 20px; color: #273545; text-shadow: 1px 1px 0px #fff;}
 .panel.panel-form-view .panel-body h4{font-size: 20px; color: #273545; font-weight: bold; text-shadow: none;padding-bottom: 12px;}
@@ -1187,7 +1187,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .team-block{background:#273545;border-radius:8px;text-align:center;margin-bottom:10px;}
 .team-block.active{background:#ef4647;}
 .team-block .team_img{border-radius:50%;border:#17273a solid 2px; margin-top:10px; width: 110px; height: 110px;margin-bottom: 10px;}
-.team-block h3{font-size: 14px;text-shadow:none;color:#273545; padding:0px 10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;    height: 37px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+.team-block h3{font-size: 14px;text-shadow:none;color:#273545; padding:10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;   /* height: 37px; */text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .team-block h3 b{font-weight: normal;font-size: 12px;padding-top: 5px;display: inline-block;}
 .team-block .ml{background: #B9C5CC; border-radius: 50%;  padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee; font-size: 42px; display: inline-block; border: 2px solid #161e27;  margin: 20px 0;}
 
@@ -1279,7 +1279,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .list_block.funding_list .ml_icon_btn {text-align: center; margin-top: 0;}
 .top_block_scroller li .team_img.areaint_img {width: 60px; height: auto; border-radius: 0; margin: 15px 0; border:none !important;}
 .team-block h3 p { font-size: 12px;}
-.team-block h2 {display:block !important; font-size: 13px !important; color: #fff !important; margin: 0 !important; padding: 7px 0 !important; border-bottom: 1px solid #e8e8e8 !important; text-shadow: none; }
+.team-block h2 {display:block !important; font-size: 13px !important; color: #fff !important; margin: 0 !important; padding: 7px 0 !important; border-bottom: 1px solid #e8e8e8 !important; text-shadow: none;text-overflow: ellipsis;white-space: nowrap;width: 100px;overflow: hidden;}
 .team-block .fund {background: #fff; color: #ef4647; border-radius: 10px; padding: 2px 8px; display: inline-block; }
 .top_block_scroller .topscroll_listblock li {width: 120px; float: left; margin-right: 10px; }
 .topscroll_listblock .list_block{height: 130px; }

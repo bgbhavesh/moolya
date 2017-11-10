@@ -2,7 +2,6 @@
  * Created by vishwadeep on 12/5/17.
  */
 import React from "react";
-// import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import MlAppNewBSpokeOffice from "./MlAppNewBSpokeOffice";
 import MlAppBSpokeOfficeDetails from "./MlAppBSpokeOfficeDetails";
@@ -11,11 +10,12 @@ import {fetchOfficePackages} from "../actions/findOfficeAction";
 export default class MlAppAddOffice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showNewSpokePerson: true, data: []};
+    this.state = {showNewSpokePerson: true, data: []};;
+    this.showNewSpokePerson = this.showNewSpokePerson.bind(this)
     return this;
   }
 
-  initializeMount() {
+  initializeMount(index) {
     $('#details-div').show();
     $('.requested_input').hide();
     var $frame = $('#forcecentered');
@@ -30,7 +30,7 @@ export default class MlAppAddOffice extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: index ? index+1 : 0,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -61,10 +61,10 @@ export default class MlAppAddOffice extends React.Component {
     this.setState({showNewSpokePerson: true})
   }
 
-  showDetails(value, event) {
-    this.initializeMount()
+  showDetails(value, index, event) {
+    this.initializeMount(index);
     console.log(value)
-    this.detailData = value
+    this.detailData = value;
     this.setState({showNewSpokePerson: false})
   }
 
@@ -74,7 +74,7 @@ export default class MlAppAddOffice extends React.Component {
     const data = this.state.data && this.state.data.length > 0 ? this.state.data : []
     const list = data.map(function (value, idx) {
       return (
-        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, value)} key={idx}>
+        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, value, idx)} key={idx}>
           <div className="list_block notrans funding_list">
             <div><p className="fund">{value.totalCount} Members</p>
               <span>Principal: {value.principalUserCount}</span><span>Team: {value.teamUserCount}</span><span>(Limited Community)</span>
@@ -97,7 +97,7 @@ export default class MlAppAddOffice extends React.Component {
 
               <div className="col-lg-12">
                 <div className="row">
-                  <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showNewSpokePerson.bind(this)}>
+                  <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showNewSpokePerson}>
                     <div className="list_block notrans">
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
                       <h3>Add Bespoke Office</h3>
@@ -121,7 +121,7 @@ export default class MlAppAddOffice extends React.Component {
                   <div className="top_block_scroller" id="forcecentered">
                     <ul>
                       <li>
-                        <a onClick={this.showNewSpokePerson.bind(this)}>
+                        <a onClick={this.showNewSpokePerson}>
                           <div className="team-block details-add-block">
                             <h2>Bespoke Office</h2>
                             <span className="ml ml-plus "></span>
@@ -131,7 +131,7 @@ export default class MlAppAddOffice extends React.Component {
                       {this.state.data.map(function (item, say) {
                         return (
                           <li key={say}>
-                            <div className="team-block" onClick={that.showDetails.bind(that, item)}>
+                            <div className="team-block" onClick={that.showDetails.bind(that, item, say)}>
                               <h2>{item.serviceCardName}</h2>
                               <h3>
                                 <p className="fund">{item.totalCount} Mem</p><p>Principal

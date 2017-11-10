@@ -79,12 +79,13 @@ class MlStartupBranches extends Component{
     }
   }
 
-  onTileClick(index, e){
+  onTileClick(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.startupBranches);
-    let details = cloneArray[index]
+   // let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
-    this.setState({selectedIndex:index, data:details,selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
+    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -170,6 +171,11 @@ class MlStartupBranches extends Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
+    getActualIndex(dataArray, checkIndex){
+        var response = _.findIndex(dataArray, {index: checkIndex});
+        response = response >= 0 ? response : checkIndex;
+        return response;
+    }
 
   sendDataToParent(isSaveClicked){
     let data = this.state.data;
@@ -178,7 +184,8 @@ class MlStartupBranches extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      startupBranches[this.state.selectedIndex] = data;
+        const actualIndex = this.getActualIndex(startupBranches, this.state.selectedIndex);
+      startupBranches[actualIndex] = data;
     }
     let arr = [];
     _.each(startupBranches, function (item)
@@ -227,8 +234,8 @@ class MlStartupBranches extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         }
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        //this.setState({loading: true})
+        //this.fetchOnlyImages();
       }
     }
   }
@@ -333,7 +340,7 @@ class MlStartupBranches extends Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that,details.index, idx)}><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
                         <h3>{details.branchName?details.branchName:""}</h3>
                       </div>
                     </a>

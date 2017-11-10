@@ -375,9 +375,9 @@ export default class MlAssignHierarchy extends React.Component {
     let that = this;
     let departmentInfo=this.props.data
     let isMoolya=departmentInfo.isMoolya
-    let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya }}};
-    let departmentQuery = gql` query($isMoolya:Boolean){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+    let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya, clusterId:this.props.data.clusterId}}};
+    let departmentQuery = gql` query($isMoolya:Boolean, $clusterId:String){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya, clusterId:$clusterId){label:departmentName,value:_id}
           }
           `;
     let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department,subDepartmentId:departmentInfo.subDepartmentId}}};

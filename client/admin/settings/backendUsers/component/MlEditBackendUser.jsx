@@ -264,9 +264,10 @@ class MlEditBackendUser extends React.Component{
     if ( currentState ) {
       userProfilesDetails.map((cluster)=> {
         if(cluster.isDefault) {
-          toastr.error("Please select one default profile");
+          toastr.error("Only one default profile can be chosen");
           currentState = !currentState;
-        } else {
+        }
+        else {
           userRoles.map((roleInfo)=>{
             if(roleInfo.isActive) anyActiveRoles = true;
           })
@@ -279,8 +280,14 @@ class MlEditBackendUser extends React.Component{
         toastr.error("Make default is not possible as none of the roles are active")
       }
     } else {
-      userProfilesDetails[id]['isDefault'] = currentState;
-      this.setState({userProfiles: userProfilesDetails})
+      userProfilesDetails.map((cluster)=> {
+        if( cluster.isDefault ) {
+          userProfilesDetails[id]['isDefault'] = currentState;
+          this.setState({userProfiles: userProfilesDetails})
+        } else {
+          toastr.error("Please select one default profile")
+        }
+      })
     }
   }
 

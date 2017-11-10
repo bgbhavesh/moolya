@@ -1780,3 +1780,9 @@ checkAnchorAccess = function (args, context) {
   }
   return isAccess
 }
+
+
+MlResolver.MlQueryResolver['checkDefaultRole'] = (obj, args, context, info) => {
+  var  userInfo = mlDBController.findOne('users',{_id:args.userId},context) || {};
+   return userInfo.profile.InternalUprofile.moolyaProfile.userProfiles;
+};

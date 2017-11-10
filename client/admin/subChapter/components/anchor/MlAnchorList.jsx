@@ -4,15 +4,16 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import ScrollArea from 'react-scrollbar';
+var FontAwesome = require('react-fontawesome');
+import omitDeep from 'omit-deep-lodash';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import CropperModal from '../../../../commons/components/cropperModal';
-import omitDeep from 'omit-deep-lodash';
-var FontAwesome = require('react-fontawesome');
-import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
+import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 //todo:// floatlabel initialize
 export default class MlAnchorList extends React.Component {
@@ -424,7 +425,7 @@ export default class MlAnchorList extends React.Component {
                     <span>Upload Pic</span>
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src={this.state.userData.profile.profileImage} />
+                    <img src={generateAbsolutePath(this.state.userData.profile.profileImage)} />
                   </div>
                 </div>
                 <br className="brclear" />

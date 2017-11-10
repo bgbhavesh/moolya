@@ -549,6 +549,7 @@ let BackEndUser = `
         findExternalUserAddressBook(registrationId:String): externalUserAdditionalInfoSchema
         findBranchAddressInfo: [AddressInfoSchema]
         fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): anchorUsers
+        checkDefaultRole(userId: String): [UserProfiles]
     }
 `
 
@@ -579,6 +580,7 @@ let supportedApi = [
     {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findExternalUserAddressBook',actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'fetchAnchorUsers',actionName:'READ', moduleName:"USERS", isWhiteList: true},
+    {api:'checkDefaultRole',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

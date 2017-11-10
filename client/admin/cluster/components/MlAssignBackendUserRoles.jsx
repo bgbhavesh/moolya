@@ -3,7 +3,7 @@ import {Meteor} from "meteor/meteor";
 import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import {findUserDepartmentypeActionHandler} from "../actions/findUserDepartments";
+import {findUserDepartmentypeActionHandler, checkDefaultRole} from "../actions/findUserDepartments";
 import MoolyaSelect from "../../commons/components/MlAdminSelectWrapper";
 import _ from "lodash";
 import Datetime from "react-datetime";
@@ -39,6 +39,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
         hierarchyCode: ""
       }],
       selectedRole: "",
+      userRoleDetails: [],
       hierarchyLevel: -1
     }
     this.findUserDepartments.bind(this);
@@ -53,6 +54,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     if (this.props.userId) {
       const resp = this.findUserDepartments();
     }
+    this.statusCheck();
   }
   componentDidUpdate(){
     let isActive = this.props.isActive;
@@ -131,11 +133,26 @@ export default class MlAssignBackednUserRoles extends React.Component {
     let roleDetails = this.state.rolesData;
     let cloneBackUp = _.cloneDeep(roleDetails);
     let specificRole = cloneBackUp[did];
+    if(!value){
+      let userData = this.state.userRoleDetails;
+      if( userData.length > 0 ) {
+        userData.map((profile) => {
+          if (profile.clusterId === specificRole.roles[index]['clusterId'] && profile.isDefault) {
+            profile.isDefault && profile.userRoles.length > 1 ? toastr.error("User has multiple roles and if all are disabled login would not be possible") : toastr.error("User has a single role if disabled login would not be possible")
+          }
+        })
+      }
+    }
     specificRole.roles[index]['isActive'] = value;
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
     this.setState({rolesData: roleDetails});
     this.sendRolesToParent();
+  }
+
+  async statusCheck() {
+    const response = await checkDefaultRole(this.props.userId)
+    this.setState({ userRoleDetails: response})
   }
 
   onValidFromChange(index, did, event) {

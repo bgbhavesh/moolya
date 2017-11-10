@@ -297,7 +297,7 @@ class MlAssignBackendUsers extends React.Component {
 
       const showLoader = this.state.loading;
       let gImage = this.state.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
-      let genderImage = (!this.state.profileImage || this.state.profileImage == " "?gImage:this.state.profileImage)
+      let genderImage = (!this.state.profileImage || this.state.profileImage == " "?gImage:generateAbsolutePath(this.state.profileImage))
     console.log(this.state.profilePic);
     var urlCreator = window.URL || window.webkitURL;
     let imageUrl = '';
@@ -317,7 +317,7 @@ class MlAssignBackendUsers extends React.Component {
                       <div className="list_block provider_block">
                         <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                         <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
-                                                                                               src={generateAbsolutePath(genderImage)}/>
+                                                                                               src={genderImage}/>
                         </div>
                         <h3>Assign <br/> Backend Users</h3>
                       </div>
@@ -343,7 +343,7 @@ class MlAssignBackendUsers extends React.Component {
 
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profilePic ? generateAbsolutePath(imageUrl) : generateAbsolutePath(genderImage)}/>
+                        <img src={this.state.profilePic ? generateAbsolutePath(imageUrl) : genderImage}/>
                       </div>
                       <CropperModal
                         handleImageUpload={this.onUploadAvatar}

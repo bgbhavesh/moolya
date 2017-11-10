@@ -237,7 +237,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   resetBackendUsers() {
     this.setState({loading: true});
-    this.setState({selectedBackendUser: '', userDisplayName: '', username: '', alsoAssignedAs: "", loading: false});
+    this.setState({profileImage: null, selectedBackendUser: '', userDisplayName: '', username: '', alsoAssignedAs: "", loading: false});
   }
 
   render() {

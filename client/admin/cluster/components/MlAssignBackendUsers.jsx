@@ -219,7 +219,7 @@ class MlAssignBackendUsers extends React.Component {
 
   resetBackendUers() {
       this.setState({loading: true});
-      this.setState({selectedBackendUser:'', userDisplayName:'', username:'', alsoAssignedAs:"", loading: false});
+      this.setState({profileImage:null, selectedBackendUser:'', userDisplayName:'', username:'', alsoAssignedAs:"", loading: false});
   }
 
   onUploadAvatar(image) {

@@ -154,7 +154,10 @@ export default class MlAppAddOfficeMember extends React.Component{
                     <div className="col-lg-2 col-md-4 col-sm-4" key={i}>
                       <a href={ canView ? '/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id : ''} >
                         <div className="list_block notrans">
-                          <div className="cluster_status active_cl"></div>
+                          {(data.isActive && !data.isFreeze && !data.isRetire)?
+                            <div className="cluster_status active_cl"></div>
+                            :
+                            <div className="cluster_status inactive_cl"></div>}
                           <div className="hex_outer">
                             {
                               data.profileImage

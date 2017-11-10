@@ -2412,3 +2412,9 @@ li.sameWorkTime:after {
     &:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
   }
 }
+.version{right: 55px; position: absolute; top: 20px; color: $mlYellow; text-shadow: none; font-size: 11px;}
+.moolya_app{
+  .version{
+    right: 110px;
+  }
+}

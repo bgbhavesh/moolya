@@ -95,8 +95,28 @@ class MyTaskAppointments extends Component {
     if (taskId) {
       const resp = await fetchTaskActionHandler(taskId);
       if (resp) {
-        this.setState({ selectedTask: resp, selectedTaskId: taskId });
+        this.setState({ selectedTask: resp, selectedTaskId: taskId,selectedSessionId:'' });
       }
+    }
+  }
+
+
+  /**
+   * Method :: saveTask
+   * Desc :: Save the selected task
+   */
+  async  saveTask() {
+    const {selectedTaskId, selectedSessionId, extraUsers, isSessionStep, isTermAndCond} = this.state;
+    let {appointmentDate} = this.props;
+    let date = new Date(appointmentDate);
+    if (!selectedTaskId && !isTermAndCond) {
+      toastr.error('Please select a task');
+    } else if (!isSessionStep && !isTermAndCond) {
+      toastr.success('Go to next step');
+    } else if ((!selectedSessionId && isSessionStep) || (!selectedSessionId && isTermAndCond)) {
+      toastr.error('Please select a session');
+    } else if ((selectedSessionId && selectedTaskId)) {
+      toastr.success('Data Saved');
     }
   }
 
@@ -187,9 +207,14 @@ class MyTaskAppointments extends Component {
     let _this = this;
     let appActionConfig = [
       {
+        showAction: this.state.selectedSessionId?true:false,
+        actionName: 'book',
+        handler: async(event) => _this.props.handler(_this.updateTask.bind(this))
+      },
+      {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => _this.props.handler(_this.updateTask.bind(this))
+        handler: async(event) => _this.props.handler(_this.saveTask.bind(this))
       },
       {
         showAction: true,
@@ -213,6 +238,7 @@ class MyTaskAppointments extends Component {
       <div>
         <StepZilla steps={this.setMyTaskAppointmentSteps()}
                    stepsNavigation={true}
+                   showNavigation={false}
                    prevBtnOnLastStep={true}/>
 
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />

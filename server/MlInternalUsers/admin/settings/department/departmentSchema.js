@@ -67,7 +67,7 @@ let departmentSchema = `
         findDepartment(departmentId:String):Department
         fetchDepartments:[Department]
         fetchActiveDepartment:[Department]
-        fetchMoolyaBasedDepartment(isMoolya:Boolean):[Department]
+        fetchMoolyaBasedDepartment(isMoolya:Boolean,clusterId:String):[Department]
         fetchNonMoolyaBasedDepartment(isMoolya:Boolean,clusterId:String,subChapter:String):[Department]
         fetchDepartmentsForRegistration(cluster:String,chapter:String,subChapter:String):[Department]    
         fetchMoolyaBasedDepartmentRoles(isMoolya:Boolean,clusterId:String):[Department]

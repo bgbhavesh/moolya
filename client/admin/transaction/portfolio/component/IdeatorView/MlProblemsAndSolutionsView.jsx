@@ -152,8 +152,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     let loading = this.state.loading ? this.state.loading : false;
     return (
        <div>
-         {loading === true ? ( <MlLoader/>) : (
-           <div className="requested_input">
+        {/* {loading === true ? ( <MlLoader/>) : (*/}
+           <div className="requested_input" id="psContent">
+
              <h2>Problems and Solutions </h2>
              <div className="tab_wrap_scroll hide_unlock">
                <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
@@ -163,7 +164,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                        <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isProblemPrivate"/>
                    </div>
                    <div className="panel-body">
-                     {this.state.portfolioIdeatorInfo.problemStatement||this.state.portfolioIdeatorInfo.problemImage.length?(
+                    {loading === true ? ( <MlLoader/>) : (<div>{this.state.portfolioIdeatorInfo.problemStatement||this.state.portfolioIdeatorInfo.problemImage.length?(
                        <p>
                          {this.state.portfolioIdeatorInfo.problemStatement}
                          <br className="brclear"/>
@@ -171,7 +172,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                            return <img className="upload-image img upload" src={generateAbsolutePath(imgLink.fileUrl)} key={i}/>
                          })}
                        </p>
-                     ):(<NoData tabName={this.props.tabName}/>)}
+                     ):(<NoData tabName={this.props.tabName}/>)}</div>)}
 
                    </div>
                  </div>
@@ -183,14 +184,14 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                        <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isSolutionPrivate"/>
                    </div>
                    <div className="panel-body">
-                     {this.state.portfolioIdeatorInfo.solutionStatement||this.state.portfolioIdeatorInfo.solutionImage.length?(
+                    {loading === true ? ( <MlLoader/>) : (<div>{this.state.portfolioIdeatorInfo.solutionStatement||this.state.portfolioIdeatorInfo.solutionImage.length?(
                      <p>
                        {this.state.portfolioIdeatorInfo.solutionStatement}
                        <br className="brclear"/>
                        {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
                          return <img className="upload-image img upload" src={generateAbsolutePath(imgLink.fileUrl)} key={i}/>
                        })}
-                     </p>):(<NoData tabName={this.props.tabName}/>)}
+                     </p>):(<NoData tabName={this.props.tabName}/>)}</div>)}
                    </div>
                  </div>
                </div>
@@ -198,8 +199,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
              </div>
              {/*<a href="" id="annotationss">one</a>*/}
-           </div>)
-         }
+           </div>
+          //)}
        </div>
     )
   }

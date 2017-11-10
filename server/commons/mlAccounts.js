@@ -116,15 +116,21 @@ export default MlAccounts=class MlAccounts {
 
   static verifyEmail(token) {
        //var user = Meteor.users.findOne({'services.email.verificationTokens.token': token});
-    var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},{});/*Status check to handle the verification for rejected registraiton: MOOLYA-3421*/
-      if (!user)  return {email:null, error: true,reason:"Verify email link expired", code:403};//throw new Error(403, "Verify email link expired");
+
+    // IF User is not found with the token, it means link "is Already Verified"
+      var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token}, {})
+      if(!user) return {email:null, error: true,reason:"EMAIL ALREADY VERIFIED", code:403};
+
+    // IF User is not found with the token and Status, it means link "has been rendered inactive"
+      user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token,"status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},{});/*Status check to handle the verification for rejected registraiton: MOOLYA-3421*/
+      if (!user)  return {email:null, error: true,reason:"REGISTRATION INACTIVATED", code:403};//throw new Error(403, "Verify email link expired");
 
       var tokenRecord = _.find(user.services.email.verificationTokens, function (t) {
         return t.token == token;
       });
 
-      if (!tokenRecord) return {
-        email: null, error: true, reason:"Verify email link expired", code:403};
+      if (!tokenRecord)
+        return {email: null, error: true, reason:"Verify email link expired", code:403};
 
       var emailsRecord = _.find(user.emails, function (e) {
         return e.address == tokenRecord.address;
@@ -142,11 +148,18 @@ export default MlAccounts=class MlAccounts {
     let hours = moment().diff(linkGenerateDate, 'hours')
     let registrationCommunityName = user&&user.registrationInfo&&user.registrationInfo.communityDefCode&&
                                           user.registrationInfo.communityDefCode? user.registrationInfo.communityDefCode:""
-
     //Expiring token for office memeber if link generated is more than 72hours
     if(registrationCommunityName=="OFB"&&hours>72){
       return  MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
         $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+    }
+    else if(hours>72) {
+      this.sendVerificationEmail(user._id, {
+        emailContentType: "html",
+        subject: "Email Verification",
+        context: {}
+      })
+      return {email:null, error: true,reason:"LINK EXPIRED", code:403};
     }
 
     let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },

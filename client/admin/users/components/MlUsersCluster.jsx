@@ -85,6 +85,7 @@ export default class MlUsersCluster extends Component {
     });
 
     return (
+
       <div className="row ideators_list">
         <h2> Users </h2>
         <div className="list_scroll">

@@ -174,7 +174,7 @@ class MlPortfolio extends React.Component {
       this.setState({annotationData: this.state.annotationData}, function () {
         this.fetchComments(this.state.annotationData.id);
       })
-      this.refs.comment.value = ''
+      this.refs.comment.value = ""
     }
   }
 

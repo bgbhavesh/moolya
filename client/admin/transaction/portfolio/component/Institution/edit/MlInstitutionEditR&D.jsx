@@ -185,7 +185,8 @@ export default class MlInstitutionEditRD extends React.Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      const actualIndex = _.findIndex(institutionRD, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(institutionRD, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       institutionRD[actualIndex] = data;
       // institutionRD[this.state.selectedIndex] = data;
     }

@@ -175,7 +175,8 @@ export default class MlInstitutionEditIntrapreneur extends React.Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      const actualIndex = _.findIndex(institutionIntrapreneur, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(institutionIntrapreneur, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       institutionIntrapreneur[actualIndex] = data;
       // institutionIntrapreneur[this.state.selectedIndex] = data;
     }

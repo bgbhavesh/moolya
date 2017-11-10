@@ -214,7 +214,8 @@ export default class MlCompanyPartners extends React.Component {
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
       if(isSaveClicked){
-        const actualIndex = _.findIndex(partners, {index: this.state.selectedIndex});
+        var actualIndex = _.findIndex(partners, {index: this.state.selectedIndex});
+        actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
         partners[actualIndex] = data;
         // partners[this.state.selectedIndex] = data;
       }

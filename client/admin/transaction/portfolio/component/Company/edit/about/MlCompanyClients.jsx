@@ -139,7 +139,8 @@ export default class MlCompanyClients extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if (isSaveClicked){
-      const actualIndex = _.findIndex(companyClients, {index: this.state.selectedIndex});
+      var actualIndex = _.findIndex(companyClients, {index: this.state.selectedIndex});
+      actualIndex = actualIndex >= 0 ? actualIndex : this.state.selectedIndex;
       companyClients[actualIndex] = data;
       // companyClients[this.state.selectedIndex] = data;
     }
@@ -265,7 +266,8 @@ export default class MlCompanyClients extends Component{
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="" id={"create_client"+idx}>
                         <div className="list_block">
-                          <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                          <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
+                          <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that,details.index, idx)}>
                             <img src={details.logo&&details.logo.fileUrl?generateAbsolutionPath(details.logo.fileUrl):"/images/sub_default.jpg"}/>
                           </div>

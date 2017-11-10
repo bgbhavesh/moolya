@@ -90,12 +90,7 @@ MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, inf
   if(args.status == "WIP" || args.status == "Approved" || args.status == "Rejected"){
     decision = mlHierarchyAssignment.canWorkOnInternalRequest(requestId,"MlRequests",context.userId)
   }
-  if( decision === false ){
-    let code = 401;
-    let result = {message : "User doesn't have privileges to act on this request"}
-    let response = new MlRespPayload().errorPayload(result, code);
-    return response;
-  }else{
+  if( decision === true ){
     let id = mlDBController.update('MlRequests', {requestId:requestId},{status: args.status},  {$set: true},context)
     if(id){
       let code = 200;
@@ -103,6 +98,11 @@ MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, inf
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }
+  }else{
+    let code = 401;
+    let result = {message : "User doesn't have privileges to act on this request"}
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
   }
 }
 

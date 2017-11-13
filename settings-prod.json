@@ -35,8 +35,8 @@
       },
     "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
-    "fromEmailAddr":"noreply@moolya.in",
-    "bugReportEmailAddr":"noreply@moolya.in",
+    "fromEmailAddr":"noreply@moolya.global",
+    "bugReportEmailAddr":"noreply@moolya.global",
     "isEmailDomainCheckEnabled":true,
     "isProdENV":true,
     "isAuditEnabled":true

@@ -20,6 +20,59 @@ export async function requestedAppointmentActionHandler() {
   return data;
 }
 
+export async function getBeSpokeForAppointments (serviceId) {
+  const result = await appClient.query({
+    query: gql`
+    query($serviceId:String){
+        getBeSpokeForAppointments(serviceId:$serviceId){
+    _id
+    about
+    displayName
+    noOfSession
+    sessionFrequency
+    duration{
+        hours
+        minutes
+    }
+    attachments {
+      fileUrl 
+   }
+    industryId
+    mode
+    expectedInput
+    expectedOutput
+    createdAt
+    conversation
+    beSpokeCreatorUserId
+    beSpokeCreatorProfileId
+    beSpokeCreatorProfileImage
+    isBeSpoke
+    isCurrentVersion
+    clusterId
+    clusterName
+    chapterId
+    chapterName
+    subChapterId
+    subChapterName
+    communityId
+    communityName
+    transactionId
+    userId
+    profileId
+    isApproved
+    isLive
+    isReview
+    }
+      }
+    `,
+    variables: {
+      serviceId
+    },
+    forceFetch: true
+  });
+  const taskDetails = result.data.getBeSpokeForAppointments;
+  return taskDetails
+}
 
 export async function servicesForAppointmentsActionHandler() {
   const result = await appClient.query({

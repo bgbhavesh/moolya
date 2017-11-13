@@ -138,40 +138,23 @@ export default class MlCompanyViewEvolution extends React.Component {
     let that = this;
     let achievements = that.state.evolution || {};
     let loading=this.state.loading
-    if(_.isEmpty(achievements)){
+
       return (
-        <div className="portfolio-main-wrap">
-          <NoData tabName={this.props.tabName} />
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          {loading === true ? ( <MlLoader/>) : (
-            <div>
-              {_.isEmpty(achievements) ? (
-                <div className="portfolio-main-wrap">
-                  <NoData tabName={this.props.tabName}/>
-                </div>) : (
-                <div className="portfolio-main-wrap" id="annotatorContent">
-                  <div className="col-lg-12 col-sm-12">
-                    <div className="row">
-                      <h2>Evolution</h2>
-                      <div className="panel panel-default panel-form-view">
-                        <div className="panel-body">
-                          <p>{this.state.evolution && this.state.evolution.evolutionDescription}</p>
-                        </div>
-                      </div>
-                    </div>
+          <div className="portfolio-main-wrap" id="annotatorContent">
+            <div className="col-lg-12 col-sm-12">
+              <div className="row">
+                <h2>Evolution</h2>
+                <div className="panel panel-default panel-form-view">
+                  <div className="panel-body">
+                    {loading === true ? ( <MlLoader/>) : (<p>{this.state.evolution && this.state.evolution.evolutionDescription ? this.state.evolution.evolutionDescription :  (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName}/>
+                    </div>)}</p>)}
                   </div>
                 </div>
-              )
-              }
               </div>
-          )
-          }
+            </div>
           </div>
       )
     }
-  }
+
 }

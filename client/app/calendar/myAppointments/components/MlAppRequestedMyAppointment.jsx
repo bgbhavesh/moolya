@@ -3,15 +3,17 @@
  */
 
 import React from 'react';
-import {requestedAppointmentActionHandler} from '../actions/fetchRequestedAppointments';
+import {requestedAppointmentActionHandler, getBeSpokeForAppointments} from '../actions/fetchRequestedAppointments';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import MlLoader from "../../../../commons/components/loader/loader";
+import BeSpokeView from "../../../../admin/transaction/portfolio/component/Funders/edit/Services/Presentation/beSpokeView"
 export default class MlAppRequestedMyAppointment extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-      appointments:[]
+      appointments:[],
+      showDetails: false
     }
     // this.fetchAppointment();
   }
@@ -34,12 +36,24 @@ export default class MlAppRequestedMyAppointment extends React.Component {
     };
   }
 
+  selectedAppointment(appointmentInfo , context) {
+    this.fetchBeSpokeDetails(appointmentInfo._id);
+  }
+
+  async fetchBeSpokeDetails(serviceId) {
+    const response = await getBeSpokeForAppointments(serviceId)
+    this.setState({ beSpokeDetails: response, showDetails: true})
+    return response;
+  }
+
+
+
   render() {
     const that = this;
     let appointments = that.props.data || [];
     let config=this.props.config;
     return (
-      <div>
+      !(this.state.showDetails) ?<div>
         {config.loading === true ? ( <MlLoader/>) : (
       <div>
         {appointments && !appointments.length ? (<NoDataList moduleName="Requested Appointments"/>) : (
@@ -47,7 +61,7 @@ export default class MlAppRequestedMyAppointment extends React.Component {
             {appointments.map(function (appointment, index) {
               return (
                 <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index}>
-                  <div className="ideators_list_block">
+                  <div className="ideators_list_block" onClick={that.selectedAppointment.bind(that,appointment )}>
                     <div className="inactive"><span>inactive</span></div>
                     {/*<div className="hex_outer"><img src="/images/valuation.png"/></div>
                      <div className="task-status pending"></div>*/}
@@ -64,7 +78,7 @@ export default class MlAppRequestedMyAppointment extends React.Component {
         }
         </div>
         )}
-      </div>
+      </div> : <BeSpokeView data={this.state.beSpokeDetails} module={"appointments"}/>
     )
   }
 }

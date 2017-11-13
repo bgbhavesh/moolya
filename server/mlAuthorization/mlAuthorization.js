@@ -207,7 +207,6 @@ class MlAuthorization
     const fromDate = module.validFrom ? module.validFrom : new Date();
     const toDate = module.validTo ? module.validTo : new Date();
     const curDate = new Date();
-    console.log(".............", curDate);
     if (curDate >= fromDate && curDate <= toDate)
       response = true;
     return response

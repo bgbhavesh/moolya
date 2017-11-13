@@ -131,26 +131,23 @@ export default class MlCompanyViewStartupIncubators extends React.Component{
   render(){
     const showLoader = this.state.loading;
     return (
-      <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+
       <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Startup Incubators</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.state.startupIncubators && this.state.startupIncubators.startupIncubatorsDescription ? this.state.startupIncubators.startupIncubatorsDescription
-                :   <div className="portfolio-main-wrap">
+
+
+                {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.startupIncubators && this.state.startupIncubators.startupIncubatorsDescription ? this.state.startupIncubators.startupIncubatorsDescription :  (<div className="portfolio-main-wrap">
                   <NoData tabName={this.props.tabName}/>
-                </div>
-            }
-            </p>
+                </div>)}</p>)}
+
             </div>
           </div>
         </div>
       </div>
-        )
-        }
-      </div>
+
     )
   }
 }

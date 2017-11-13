@@ -130,27 +130,25 @@ export default class MlInstitutionSectors extends React.Component{
   render(){
     const showLoader = this.state.loading;
     return (
-      <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+
+
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>Sectors And Services</h2>
               <div className="panel panel-default panel-form-view" id="annotatorContent">
 
                 <div className="panel-body">
-                  <p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
+                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
                     :  <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>
-                }</p>
+                }</p>)}
 
                 </div>
               </div>
             </div>
           </div>
-        )
-        }
-      </div>
+
     )
   }
 }

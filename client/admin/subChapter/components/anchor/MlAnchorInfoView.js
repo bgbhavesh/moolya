@@ -277,7 +277,7 @@ export default class MlAnchorInfoView extends React.Component {
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
               {!this.state.selectedUser.profile &&
               <div className="panel panel-default">
-              <div className="panel-heading">title</div>
+              <div className="panel-heading">Title</div>
               <div className="panel-body nopadding anchor_tabs">
               <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick}/>
               </div></div>

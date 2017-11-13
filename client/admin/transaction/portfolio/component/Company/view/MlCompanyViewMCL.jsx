@@ -160,67 +160,67 @@ export default class MlCompanyViewMCL extends React.Component {
 
   render(){
     const showLoader = this.state.loading;
-      return (
-        <div>
-          <div className="tab_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="tab_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-          {showLoader === true ? ( <MlLoader/>) : (
-            <div className="portfolio-main-wrap" id="annotatorContent">
-              <h2>MCL</h2>
+    return (
+      <div>
+        <div className="tab_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="tab_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
+            {showLoader === true ? ( <MlLoader/>) : (
+              <div className="portfolio-main-wrap" id="annotatorContent">
+                <h2>MCL</h2>
 
-              <div className="col-md-6 col-sm-6 nopadding-left">
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Membership</div>
-                  <div className="panel-body ">
+                <div className="col-md-6 col-sm-6 nopadding-left">
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Membership</div>
+                    <div className="panel-body ">
 
-                    {this.state.memberships && this.state.memberships.membershipsDescription ? this.state.memberships.membershipsDescription :  (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                    </div>)}
-
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-
-
-              </div>
-              <div className="col-md-6 col-sm-6 nopadding-right">
-
-
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Compliances</div>
-                  <div className="panel-body ">
-
-                    {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                    </div>)}
-
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Licenses</div>
-                  <div className="panel-body ">
-
-                    {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
+                      {this.state.memberships && this.state.memberships.membershipsDescription ? this.state.memberships.membershipsDescription :  (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
                       </div>)}
 
+                    </div>
                   </div>
+                  <div className="clearfix"></div>
+
+
                 </div>
+                <div className="col-md-6 col-sm-6 nopadding-right">
 
 
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Compliances</div>
+                    <div className="panel-body ">
+
+                      {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>)}
+
+                    </div>
+                  </div>
+                  <div className="clearfix"></div>
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Licenses</div>
+                    <div className="panel-body ">
+
+                      {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>)}
+
+                    </div>
+                  </div>
+
+
+                </div>
               </div>
-            </div>
-          )
-          }
-            </ScrollArea>
-          </div>
+            )
+            }
+          </ScrollArea>
         </div>
-      )
+      </div>
+    )
   }
 }

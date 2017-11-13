@@ -42,7 +42,7 @@ class MlAddAddressType extends React.Component{
       addressName: this.refs.name.value,
       addressDisplayName: this.refs.displayName.value,
       aboutAddress: this.refs.about.value,
-      addressUploadIcon : this.refs.upload.value,
+      // addressUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
     const response = await addAddressTypeActionHandler(Details);
@@ -74,10 +74,10 @@ class MlAddAddressType extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text" ref="name" placeholder="Name" className="form-control float-label" id=""/>
+                  <input type="text" ref="name" placeholder="Name" className="form-control float-label"/>
                 </div>
                 <div className="form-group">
-                  <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
+                  <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
                 </div>
               </form>
             </div>
@@ -92,15 +92,15 @@ class MlAddAddressType extends React.Component{
               >
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
                   </div>
                   <br className="brclear"/>
-                  <div className="form-group ">
-                    <div className="fileUpload mlUpload_btn">
-                      <span>Upload Icon</span>
-                      <input type="file" className="upload" ref="upload"/>
-                    </div>
-                  </div>
+                  {/*<div className="form-group ">*/}
+                    {/*<div className="fileUpload mlUpload_btn">*/}
+                      {/*<span>Upload Icon</span>*/}
+                      {/*<input type="file" className="upload" ref="upload"/>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
                   <br className="brclear"/>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">

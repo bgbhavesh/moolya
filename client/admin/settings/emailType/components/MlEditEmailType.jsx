@@ -61,7 +61,7 @@ class MlEditEmailType extends React.Component{
       emailName: this.refs.name.value,
       emailDisplayName: this.refs.displayName.value,
       aboutEmail: this.refs.about.value,
-      emailUploadIcon : this.refs.upload.value,
+      // emailUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
     const response = await updateEmailTypeActionHandler(Details);
@@ -127,12 +127,12 @@ class MlEditEmailType extends React.Component{
                           <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.emailDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
                         </div>
                         <br className="brclear"/>
-                        <div className="form-group ">
-                          <div className="fileUpload mlUpload_btn">
-                            <span>Upload Icon</span>
-                            <input type="file" className="upload" ref="upload"/>
-                          </div>
-                        </div>
+                        {/*<div className="form-group ">*/}
+                          {/*<div className="fileUpload mlUpload_btn">*/}
+                            {/*<span>Upload Icon</span>*/}
+                            {/*<input type="file" className="upload" ref="upload"/>*/}
+                          {/*</div>*/}
+                        {/*</div>*/}
                         <br className="brclear"/>
                         <br className="brclear"/>
                         <div className="form-group switch_wrap inline_switch">

@@ -60,9 +60,9 @@ class MlEditContactType extends React.Component{
       contactName: this.refs.name.value,
       contactDisplayName: this.refs.displayName.value,
       aboutContact: this.refs.about.value,
-      contactUploadIcon : this.refs.upload.value,
+      // contactUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
-    }
+    };
     const response = await updateContactTypeActionHandler(Details);
     return response;
 
@@ -105,10 +105,10 @@ class MlEditContactType extends React.Component{
                   <div className="form_bg">
                     <form>
                       <div className="form-group">
-                        <input type="text" ref="name" defaultValue={this.state.data&&this.state.data.contactName} placeholder="Name" className="form-control float-label" id=""/>
+                        <input type="text" ref="name" defaultValue={this.state.data&&this.state.data.contactName} placeholder="Name" className="form-control float-label"/>
                       </div>
                       <div className="form-group">
-                        <textarea ref="about" defaultValue={this.state.data&&this.state.data.aboutContact} placeholder="About" className="form-control float-label" id=""></textarea>
+                        <textarea ref="about" defaultValue={this.state.data&&this.state.data.aboutContact} placeholder="About" className="form-control float-label"></textarea>
                       </div>
                     </form>
                   </div>
@@ -126,12 +126,12 @@ class MlEditContactType extends React.Component{
                           <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.contactDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
                         </div>
                         <br className="brclear"/>
-                        <div className="form-group ">
-                          <div className="fileUpload mlUpload_btn">
-                            <span>Upload Icon</span>
-                            <input type="file" className="upload" ref="upload"/>
-                          </div>
-                        </div>
+                        {/*<div className="form-group ">*/}
+                          {/*<div className="fileUpload mlUpload_btn">*/}
+                            {/*<span>Upload Icon</span>*/}
+                            {/*<input type="file" className="upload" ref="upload"/>*/}
+                          {/*</div>*/}
+                        {/*</div>*/}
                         <br className="brclear"/>
                         <br className="brclear"/>
                         <div className="form-group switch_wrap inline_switch">

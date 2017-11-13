@@ -296,6 +296,7 @@ export default class MlAnchorInfoView extends React.Component {
                     <b>Date of Birth : </b>{new Date(this.state.selectedUser.profile.dateOfBirth).toDateString()} <br />
                     <b>Gender : </b>{this.state.selectedUser.profile.genderType} <br />
                     {this.renderSocialLinks(this.state.selectedUser.profile)}
+                    <b>About : </b>{this.state.selectedUser.profile.about} <br />
                     {console.log(this.state.selectedUser)}
                   </p>
                   </div>

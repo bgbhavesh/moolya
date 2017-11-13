@@ -32,7 +32,7 @@ class MlStartupAssets extends Component{
     }
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
-    this.imagesDisplay.bind(this);
+    // this.imagesDisplay.bind(this);
     this.libraryAction.bind(this)
     return this;
   }
@@ -44,7 +44,7 @@ class MlStartupAssets extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.imagesDisplay()
+    // this.imagesDisplay()
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.assets)

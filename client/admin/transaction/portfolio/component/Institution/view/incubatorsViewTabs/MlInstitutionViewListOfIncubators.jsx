@@ -129,25 +129,24 @@ export default class MlInstitutionListOfIncubators extends React.Component{
     const showLoader = this.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>List Of Incubators</h2>
               <div className="panel panel-default panel-form-view" id="annotatorContent">
 
                 <div className="panel-body">
-                  <p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
+                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
                     : <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>
-                }</p>
+                }</p>)}
 
                 </div>
               </div>
             </div>
           </div>
-        )
-        }
+
       </div>
     )
   }

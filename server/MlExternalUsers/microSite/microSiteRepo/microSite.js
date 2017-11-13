@@ -271,12 +271,12 @@ async function INS(portFolio, query) {
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
     portFolio.sectorsAndServices = '';
     if (resultINSPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
-
-
+      portFolio.isSectorsAndServicesPrivate = resultINSPortFolio.sectorsAndServices.isSectorsAndServicesPrivate;
     }
 
     getIntrapreneurInfo(portFolio, resultINSPortFolio);

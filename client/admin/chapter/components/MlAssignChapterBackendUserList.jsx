@@ -1,6 +1,7 @@
 import React from 'react';
 import {fetchAssignUsersActionHandler} from '../../../commons/fetchAssignUsers'
 import {client} from '../../core/apolloConnection';
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAssignChapterBackendUserList extends React.Component{
     constructor(props){
@@ -52,7 +53,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
                   <div className="list_block provider_block">
                     <div className={`cluster_status ${status}_cl`}>{/*<span className={`ml ml-${icon}`}></span>*/}</div>
                     <div className="provider_mask"><img src="/images/funder_bg.png"/>
-                      <img className="user_pic" src="/images/def_profile.png"/>
+                      <img className="user_pic" src={user.profile && user.profile.profileImage?generateAbsolutePath(user.profile.profileImage):"/images/def_profile.png"}/>
                     </div>
                     {/*<h3>{user.username}<br />USA</h3>*/}
                     <h3>{user.username}</h3>

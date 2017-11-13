@@ -24,8 +24,8 @@ export default function ({req})
     userId: user._id,
     loginToken: token,
     ip: req.headers['x-forwarded-for']||req.headers['X-Forwarded-For'],
-    url: req.headers['referer'],
-    browser: req.headers['user-agent']
+    url: req.headers['referer'] ||'-',
+    browser: req.headers['user-agent'] ||'-'
   }
   // This allows us to pass the userId to other parts in meteor
   Fiber.current.graphQLContext = context

@@ -32,7 +32,7 @@ class MlEditDocumentMapping extends React.Component{
       isActive:false,
       documentId   : '',
       displayName  : '',
-      validity    : '',
+      validity    : null,
       length      : '',
       remark      : '',
       documentName   : '',
@@ -153,7 +153,7 @@ class MlEditDocumentMapping extends React.Component{
         clusters: this.state.clusters,
         chapters: this.state.chapters,
         subChapters: this.state.subChapters,
-        validity: this.state.data&&this.state.data.validity,
+        validity: this.state.data&&this.state.data.validity?this.state.data.validity:null,
         inputLength: this.refs.length.value,
         remarks: this.refs.remark.value,
         documentName: this.refs.documentName.value,
@@ -222,7 +222,7 @@ class MlEditDocumentMapping extends React.Component{
 
   onemploymentDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY hh:mm:ss');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       let existData = this.state.data;
       existData.validity = value
       this.setState({loading: false,"data":existData});
@@ -361,7 +361,7 @@ class MlEditDocumentMapping extends React.Component{
 
                             <div className="form-group">
                               {/*<input type="text"  ref="validity" defaultValue={moment(this.state.data&&this.state.data.validity).format('DD-MM-YYYY')} placeholder="Validity" className="form-control float-label" id=""/>*/}
-                              <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity"}}   closeOnSelect={true}  value={this.state.data&&this.state.data.validity} onChange={this.onemploymentDateSelection.bind(this)}/>
+                              <Datetime dateFormat="MM-DD-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity",readOnly:true}}   closeOnSelect={true}  value={this.state.data&&this.state.data.validity} onChange={this.onemploymentDateSelection.bind(this)}/>
                             </div>
                             <div className="form-group">
                               <input type="text"  ref="length" defaultValue={this.state.data&&this.state.data.inputLength} placeholder="Length" className="form-control float-label" id=""/>

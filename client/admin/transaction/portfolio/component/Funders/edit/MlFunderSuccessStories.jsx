@@ -86,9 +86,10 @@ export default class MlFunderSuccessStories extends Component {
     })
   }
 
-  onTileClick(index, e) {
+  onTileClick(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.funderSuccess);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    var details = _.find(cloneArray, {index: index});
     details = _.omit(details, "__typename");
     if (details && details.logo) {
       delete details.logo['__typename'];
@@ -97,7 +98,7 @@ export default class MlFunderSuccessStories extends Component {
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       popoverOpen: !(this.state.popoverOpen)
     }, () => {
       this.lockPrivateKeys(index)
@@ -220,8 +221,8 @@ export default class MlFunderSuccessStories extends Component {
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         }
-        this.setState({ loading: true })
-        this.fetchOnlyImages();
+        // this.setState({ loading: true })
+        // this.fetchOnlyImages();
       }
       this.toggleModal();
       this.setState({ uploadingAvatar: false })
@@ -239,7 +240,10 @@ export default class MlFunderSuccessStories extends Component {
     }
   }
 
-
+  /**
+   * @Note: with latest changes @fetchOnlyImages dependency removed
+   * @handling logo view on client only
+   * */
   async fetchOnlyImages() {
     const response = await fetchfunderPortfolioSuccess(this.props.portfolioDetailsId);
     if (response) {
@@ -262,14 +266,23 @@ export default class MlFunderSuccessStories extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
     let success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    if(isSaveClicked)
-      funderSuccess[this.state.selectedIndex] = data;
+    if(isSaveClicked){
+      const actualIndex = this.getActualIndex(funderSuccess, this.state.selectedIndex);
+      funderSuccess[actualIndex] = data;
+    }
+
     let arr = [];
     _.each(funderSuccess, function (item) {
       for (var propName in item) {
@@ -331,8 +344,7 @@ export default class MlFunderSuccessStories extends Component {
                       return (
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                           <a href="" id={"team_list" + idx}>
-
-                            <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, idx)}>
+                            <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, details.index, idx)}>
                               <div>
                                 <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
                                 <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
@@ -341,15 +353,6 @@ export default class MlFunderSuccessStories extends Component {
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
-
-                            {/*<div className="list_block notrans funding_list"*/}
-                            {/*onClick={that.onTileClick.bind(that, idx)}>*/}
-                            {/*<FontAwesome name='lock'/>*/}
-                            {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                            {/*<img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>*/}
-                            {/*<div><p>{details.storyTitle}</p><p>{details.description}</p></div>*/}
-                            {/*<h3>{details.date ? details.date : "Date : "}</h3>*/}
-                            {/*</div>*/}
                           </a>
                         </div>
                       )

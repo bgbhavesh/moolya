@@ -11,11 +11,15 @@ export default MoolyaCustomDateType = new GraphQLScalarType({
    * @return {String} date as string
    */
   serialize: function (value) {
-    let date = moment(value);
-    if(!date.isValid()) {
-      throw new GraphQLError('Field serialize error: value is an invalid Date');
+    if (value && value != 'Invalid date') {
+      let date = moment(value);
+      if (!date.isValid()) {
+        throw new GraphQLError('Field serialize error: value is an invalid Date');
+      }
+      return date.format();
+    } else {
+      return value
     }
-    return date.format();
   },
   /**
    * Parse value into date

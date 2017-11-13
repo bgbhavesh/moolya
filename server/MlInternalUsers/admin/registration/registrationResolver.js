@@ -251,10 +251,15 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   args.registration=_lodash.omit(args.registration,'subChapterId');
   var countryId=args.registration && args.registration.countryId ?args.registration.countryId :null;
   var cityId = args.registration && args.registration.cityId ? args.registration.cityId : "";
+  var communityType = args.registration && args.registration.registrationType ? args.registration.registrationType :null;
   /**Country is mandatory if subChapter is not specified*/
   if(!requestedSubChapterId&&!countryId){
     response = new MlRespPayload().errorPayload({message:"country is required"},400);
     return response;
+  }
+  /**registration Type is mandatory*/
+  if (!communityType) {
+   return new MlRespPayload().errorPayload("Community Type is mandatory", 400);
   }
   /**set context for systemadmin user*/
   var sysAdmin = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
@@ -279,6 +284,14 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return errResp;
   }
   else if (args.registration) {
+    //Community type and name
+    var communityDef = mlDBController.findOne('MlCommunityDefinition', {code: (communityType || null)}, context) || {};
+    registrationRecord["registrationInfo.registrationType"] = args.registration.registrationType;
+    registrationRecord["registrationInfo.communityName"] = communityDef.name;
+    registrationRecord["registrationInfo.communityDefName"] = communityDef.name;
+    registrationRecord["registrationInfo.communityDefCode"] = communityDef.code;
+
+
     registrationRecord["registrationInfo.email"] = args.registration.email;
     registrationRecord["registrationInfo.firstName"] = args.registration.firstName;
     registrationRecord["registrationInfo.lastName"] = args.registration.lastName;

@@ -169,12 +169,14 @@ async function STU(portFolio, query) {
 
       let aboutUs = resultStartUpPortFolio.aboutUs;
       portFolio.aboutDiscription = aboutUs.startupDescription ? aboutUs.startupDescription : ''
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
 
     portFolio.servicesProducts = '';
     if (resultStartUpPortFolio.serviceProducts) {
 
       portFolio.servicesProducts = resultStartUpPortFolio.serviceProducts.spDescription ? resultStartUpPortFolio.serviceProducts.spDescription : '';
+      portFolio.isServicesProductsDescriptionPrivate = resultStartUpPortFolio.serviceProducts.isDescriptionPrivate;
     }
     getManagementInfo(portFolio, resultStartUpPortFolio);
     getTechnologyInfo(portFolio, resultStartUpPortFolio);
@@ -194,7 +196,7 @@ async function FUN(portFolio, query) {
     portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories) {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
-
+      portFolio.aboutDiscriptionPrivate = resultFunderPortfolio.successStories.isDescriptionPrivate;
     }
     getTeamInfo(portFolio, resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
@@ -226,6 +228,7 @@ async function ServiceProviderPortFolio(portFolio, query) {
     if (resultServicePortFolio.services) {
 
       portFolio.servicesDescription = resultServicePortFolio.services.servicesDescription ? resultServicePortFolio.services.servicesDescription : ''
+      portFolio.isServicesPrivate = resultServicePortFolio.services.isServicesPrivate;
     }
 
     getAwardsRewards(portFolio, resultServicePortFolio);
@@ -251,11 +254,12 @@ async function CMP(portFolio, query) {
     portFolio.policy = '';
     if (resultCompanyPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
-
+      portFolio.isSectorsAndServicesPrivate = resultCompanyPortFolio.sectorsAndServices.isSectorsAndServicesPrivate;
 
     }
     if (resultCompanyPortFolio.policy) {
       portFolio.policy = resultCompanyPortFolio.policy.policyDescription ? resultCompanyPortFolio.policy.policyDescription : '';
+      portFolio.isPolicyDescriptionPrivate = resultCompanyPortFolio.policy.isPolicyDescriptionPrivate;
 
     }
     getManagementInfo(portFolio, resultCompanyPortFolio);

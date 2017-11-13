@@ -84,16 +84,17 @@ export default class MlStartupInvestor extends Component{
     }
   }
 
-  onTileClick(index, e){
+  onTileClick(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.startupInvestor);
-    let details = cloneArray[index]
+   // let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     // if(details && details.logo){
     //   delete details.logo['__typename'];
     // }
     this.setState({ selectedIndex: index,
                     data:details,
-                    selectedObject : index,
+                    selectedObject : uiIndex,
                     popoverOpen : !(this.state.popoverOpen),
                     "selectedVal" : details.fundingTypeId}, () => {
                     this.lockPrivateKeys(index)
@@ -188,6 +189,11 @@ export default class MlStartupInvestor extends Component{
     const ret = mlFieldValidations(this.refs);
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
 
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
@@ -196,7 +202,8 @@ export default class MlStartupInvestor extends Component{
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      startupInvestor[this.state.selectedIndex] = data;    //startupInvestor[this.state.index] = data;
+      const actualIndex = this.getActualIndex(startupInvestor, this.state.selectedIndex);
+      startupInvestor[actualIndex] = data;    //startupInvestor[this.state.index] = data;
     }
     let arr = [];
     _.each(startupInvestor, function (item) {
@@ -252,8 +259,8 @@ export default class MlStartupInvestor extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        this.setState({loading: true});
-        this.fetchOnlyImages();
+        //this.setState({loading: true});
+       // this.fetchOnlyImages();
         // this.imagesDisplay()
       }
     }
@@ -358,7 +365,7 @@ export default class MlStartupInvestor extends Component{
                       <a id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id={"investor_"+idx} defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isInvestorPrivate" checked={details.makePrivate}/>
-                          <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that, idx)}><img
+                          <div className="hex_outer" id={"details"+idx} onClick={that.onTileClick.bind(that,details.index, idx)}><img
                             src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/></div>
                           <h3>{details.investorName ? details.investorName : ''}</h3>
                         </div>

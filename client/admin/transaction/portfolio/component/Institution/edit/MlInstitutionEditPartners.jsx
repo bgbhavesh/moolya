@@ -191,15 +191,16 @@ export default class MlInstitutionEditPartners extends React.Component {
     })
   }
 
-  onPartnerTileClick(index, e) {
+  onPartnerTileClick(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.partners);
-    let details = cloneArray[index]
+    //let details = cloneArray[index]
+    let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       // "selectedVal": details.typeOfFundingId
       popoverOpenP: !(this.state.popoverOpenP)},()=>{
       this.lockPrivateKeys(index)
@@ -231,6 +232,12 @@ export default class MlInstitutionEditPartners extends React.Component {
     })
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked) {
     let data = this.state.data;
     selectedTab = this.state.selectedTab;
@@ -240,7 +247,8 @@ export default class MlInstitutionEditPartners extends React.Component {
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      partners[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(partners, this.state.selectedIndex);
+      partners[actualIndex] = data;
     }
     let arr = [];
     _.each(partners, function (item) {
@@ -300,8 +308,8 @@ export default class MlInstitutionEditPartners extends React.Component {
           fileUrl: result.result
         };
         toastr.success("Photo Updated Successfully");
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        // this.setState({loading: true})
+        // this.fetchOnlyImages();
       }
     }
   }
@@ -368,7 +376,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                           <a href="" id={"create_clientP" + idx}>
                             <div className="list_block notrans funding_list"
-                                 onClick={that.onPartnerTileClick.bind(that, idx)}>
+                                 onClick={that.onPartnerTileClick.bind(that,principal.index, idx)}>
                               <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                               <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
@@ -408,6 +416,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                               </div>
                             </div>:<div></div>
                           }
+                          <br className="brclear" />
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
                           </div>

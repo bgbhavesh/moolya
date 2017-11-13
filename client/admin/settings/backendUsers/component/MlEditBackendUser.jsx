@@ -254,30 +254,41 @@ class MlEditBackendUser extends React.Component{
       this.setState({"deActive":false})
     }
   }
-  onMakeDefultChange(id,event){
-      let userProfilesDetails=this.state.userProfiles
-    if(event.currentTarget.checked){
-        let decision = false;
-        for(let i=0;i<userProfilesDetails.length;i++) {
-          if (userProfilesDetails[i].isDefault == true) {
-            decision = true;
-            break;
-          }
-          else {
-            decision = false;
-          }
+
+  onMakeDefultChange(id,event) {
+    let that = this;
+    let userProfilesDetails=this.state.userProfiles;
+    let userRoles = userProfilesDetails[id].userRoles;
+    let currentState = event.currentTarget.checked;
+    let anyActiveRoles = false;
+    if ( currentState ) {
+      userProfilesDetails.map((cluster)=> {
+        if(cluster.isDefault) {
+          toastr.error("Only one default profile can be chosen");
+          currentState = !currentState;
         }
-      if(decision){
-        userProfilesDetails[id]['isDefault']=false
-        toastr.error("Please select one default profile");
-      }else{
-        userProfilesDetails[id]['isDefault']=true
-        this.setState({userProfiles:userProfilesDetails})
-      }
-      }else {
-        userProfilesDetails[id]['isDefault']=false
+        else {
+          userRoles.map((roleInfo)=>{
+            if(roleInfo.isActive) anyActiveRoles = true;
+          })
+        }
+      })
+      if( anyActiveRoles ) {
+        userProfilesDetails[id]['isDefault'] = currentState;
         this.setState({userProfiles: userProfilesDetails})
+      } else {
+        toastr.error("Make default is not possible as none of the roles are active")
       }
+    } else {
+      userProfilesDetails.map((cluster)=> {
+        if( cluster.isDefault ) {
+          userProfilesDetails[id]['isDefault'] = currentState;
+          this.setState({userProfiles: userProfilesDetails})
+        } else {
+          toastr.error("Please select one default profile")
+        }
+      })
+    }
   }
 
   async  updateBackendUser() {

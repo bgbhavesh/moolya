@@ -39,7 +39,7 @@ export default class MlTaskAppointmentSessions extends Component{
     this.getOffices();
     this.props.setSessionStep(true, false);
     if (isSessionExpand) {
-      this.props.saveDetails('session', '');
+      // this.props.saveDetails('session', '');
     }
   }
 

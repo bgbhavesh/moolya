@@ -85,9 +85,9 @@ export default class MlCSRViewTabs extends Component {
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"Achievements" , component:<MlCompanyViewAchievements key="1" isAdmin={true} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution" , component:<MlCompanyViewEvolution key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution" , component:<MlCompanyViewEvolution key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} tabName={"evolution"}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports" , component:<MlCompanyCSRReports key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Policy" , component:<MlCompanyViewPolicy key="3" client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Policy" , component:<MlCompanyViewPolicy key="4" client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}  tabName={"policy"}/>},
     ]
     return tabs;
   }

@@ -8,6 +8,7 @@ import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../../commons/components/loader/loader"; 
 
 const KEY = "policy"
 
@@ -18,7 +19,8 @@ export default class MlCompanyViewPolicy extends React.Component {
       policy:{},
       data:{},
       annotations:[],
-      content:{}
+      content:{},
+      loading:true
 
     }
     this.createAnnotations.bind(this);
@@ -46,13 +48,13 @@ export default class MlCompanyViewPolicy extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
-      this.setState({policy: responseM.policy});
+      this.setState({policy: responseM.policy,loading:false});
     }
 
     data = {
       policy:this.state.policy,
     }
-    this.setState({data:data})
+    this.setState({data:data,loading:false})
 
   }
   initalizeAnnotaor(){
@@ -100,7 +102,7 @@ export default class MlCompanyViewPolicy extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({isUserValidForAnnotation:response,loading:false})
 
       this.initalizeAnnotaor()
 
@@ -136,13 +138,8 @@ export default class MlCompanyViewPolicy extends React.Component {
   render(){
     let that = this;
     let policy = that.state.policy || {};
-    if(_.isEmpty(policy)){
-      return (
-        <div className="portfolio-main-wrap">
-          <NoData tabName={this.props.tabName} />
-        </div>
-      )
-    } else {
+    let loading=this.state.loading
+
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -150,13 +147,15 @@ export default class MlCompanyViewPolicy extends React.Component {
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body">
-                  <p>{this.state.policy && this.state.policy.policyDescription}</p>
+                  {loading === true ? ( <MlLoader/>) : (<p>{this.state.policy && this.state.policy.policyDescription ? this.state.policy.policyDescription :  (<div className="portfolio-main-wrap">
+                    <NoData tabName={this.props.tabName}/>
+                  </div>)}</p>)}
                 </div>
               </div>
             </div>
           </div>
         </div>
       )
-    }
+
   }
 }

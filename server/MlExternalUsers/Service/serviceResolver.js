@@ -311,6 +311,14 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
   return result;
 };
 
+MlResolver.MlQueryResolver['getBeSpokeForAppointments'] = (obj, args, context, info) => {
+  let query = {
+    _id: args.serviceId
+  };
+  let result = mlDBController.findOne('MlServiceCardDefinition', query , context);
+  return result;
+};
+
 MlResolver.MlQueryResolver['getServiceBasedOnServiceId'] = (obj, args, context, info) => {
   let query = {
     _id: args.serviceId

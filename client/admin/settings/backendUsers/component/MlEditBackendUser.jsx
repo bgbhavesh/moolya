@@ -72,8 +72,8 @@ class MlEditBackendUser extends React.Component{
     OnToggleSwitch(true,true);
     passwordVisibilityHandler();
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       $('input').attr('disabled', 'disabled');
@@ -533,12 +533,7 @@ class MlEditBackendUser extends React.Component{
               default={true}
             >
           <div className="col-md-6 nopadding-left">
-            <div className="left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-              >
+
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
@@ -586,17 +581,10 @@ class MlEditBackendUser extends React.Component{
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
           </div>
           <div className="col-md-6 nopadding-right">
 
-              <div className="left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                >
+
                   <div className="form_bg">
                   <form>
                   <div className="form-group">
@@ -692,8 +680,6 @@ class MlEditBackendUser extends React.Component{
                   }
                   </form>
                   </div>
-                </ScrollArea>
-              </div>
             </div>
             </ScrollArea>
           </div>

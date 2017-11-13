@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import communityRoutes from "../actions/communityRouteHandler"
+import generateAbsolutePath from "../../../../lib/mlGenerateAbsolutePath"
 export default class MlCommunitySubChapterList extends Component {
 
   render(){
@@ -26,7 +27,10 @@ export default class MlCommunitySubChapterList extends Component {
             <div className="list_block">
               <div className={`cluster_status ${status}_cl`}></div>
               <a href={communityRoutes.subChapterCommunityListRoute(prop.clusterId, prop.chapterId, prop._id)}>
-                <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div>
+                <div className={"hex_outer"}>
+                  {prop.subChapterImageLink ? <img src={generateAbsolutePath(prop.subChapterImageLink)}/>:
+                    <span className="ml ml-moolya-symbol"></span>}
+                </div>
               </a>
               <h3>{prop.subChapterName} </h3>
             </div>

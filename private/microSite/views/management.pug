@@ -5,14 +5,17 @@ mixin portFolioSlides(managementInfo)
         each slide , i in managementInfo
           .swiper-slide
             if(slide.logo && slide.logo.length >0 )
-              img(src=slide.logo)
+              if(slide.makePrivate && slide.makePrivate === true)
+                img(src=slide.logo)
+              else
+                img(src='/images/no-image.png')
             else
               img(src='/images/no-image.png')
             .profile_info
-              h5 #{slide.name ? slide.name:''}
-              h6 #{slide.designation}
+              h5 #{slide.makePrivate?'Private':slide.name ? slide.name:''}
+              h6 #{slide.designation?slide.makePrivate?'Private':slide.designation:''}
               p
-                | #{slide.description}
+                | #{slide.description?slide.makePrivate?'Private':slide.description:''}
             span.expand_info
       // Add Arrows
     .swiper-button-next

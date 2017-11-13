@@ -16,6 +16,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {createKYCDocument} from "../actions/createKYCDocumentAction";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+import MlLoader from "../../../commons/components/loader/loader";
 // import {approvedStausForDocuments} from "../actions/approvedStatusForDocuments";
 // import {rejectedStausForDocuments} from "../actions/rejectedStatusForDocuments";
 // import {approvedStatusForUser} from "../actions/approveUser";
@@ -430,9 +431,10 @@ export default class MlAppRegStep5 extends React.Component {
     let communityType = this.props.registrationData && this.props.registrationData.registrationInfo && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : ""
     let that = this;
 
-    //  const showLoader=this.state.loading;
+     const showLoader=this.state.loading;
     return (
-      <div className="step_form_wrap step5">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (<div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           {Object.keys(registrationDocumentsGroup).map(function (key,id) {
             return (<div className="col-md-12" key={id}>
@@ -552,6 +554,7 @@ export default class MlAppRegStep5 extends React.Component {
         </ScrollArea>
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+      </div>)}
       </div>
     )
   }

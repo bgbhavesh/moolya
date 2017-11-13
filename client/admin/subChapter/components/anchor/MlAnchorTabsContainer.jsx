@@ -124,7 +124,7 @@ class MlAnchorTabsContainer extends React.Component {
       case 'users':
         const { profile } = this.state.contact;
         // profile.dateOfBirth = profile.dateOfBirth ? new Date(profile.dateOfBirth) : null;
-        profile.dateOfBirth= profile.dateOfBirth?moment(profile.dateOfBirth).format(Meteor.settings.public.dateFormat):""
+        profile.dateOfBirth = profile.dateOfBirth ? moment(profile.dateOfBirth).format(Meteor.settings.public.dateFormat) : null;
         const updateUserObject = {
           userId: this.state.contact._id,
           userObject: { profile, username: profile.email },

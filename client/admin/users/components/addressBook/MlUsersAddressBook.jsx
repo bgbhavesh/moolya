@@ -39,7 +39,7 @@ export default class MlUsersAddressBook extends React.Component {
 
   componentDidUpdate() {
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.admin_static_height').height(WinHeight-(88+$('.admin_header').outerHeight(true)));
   }
 
   render() {
@@ -55,10 +55,10 @@ export default class MlUsersAddressBook extends React.Component {
         {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <h2>Address Book</h2>
-            <div className="main_wrap_scroll">
+            <div className="admin_static_height">
               <ScrollArea
                 speed={0.8}
-                className="main_wrap_scroll"
+                className="admin_static_height"
                 smoothScrolling={true}
                 default={true}
               >
@@ -89,6 +89,7 @@ export default class MlUsersAddressBook extends React.Component {
                       </div>
                     </form>
                   </div>
+
                 </div>
               </ScrollArea>
             </div>

@@ -14,7 +14,7 @@ var Select = require('react-select');
 export default class  BeSpokeView extends Component {
   constructor(props) {
     super(props)
-    this.state = {updateMode: false}
+    this.state = {updateMode: false, disableMode: false}
   }
 
   componentDidMount() {
@@ -36,6 +36,9 @@ export default class  BeSpokeView extends Component {
   componentWillMount(){
     if(this.props.data){
       this.setState({updateMode: true})
+    }
+    if(this.props.module === 'appointments') {
+      this.setState({disableMode: true})
     }
   }
 
@@ -70,13 +73,13 @@ export default class  BeSpokeView extends Component {
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" defaultValue={this.props.data.displayName} onChange={(e)=>this.props.dataToSet(e.target.value,"displayName")} ></input>
+                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" disabled={this.state.disableMode} defaultValue={this.props.data.displayName} onChange={(e)=>this.props.dataToSet(e.target.value,"displayName")} ></input>
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label">Online
                   </span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox" name="mode" checked={this.props.data.mode === 'online'?false: true} onChange={(e)=>this.props.modeSwitchHandler(e.target.checked,"mode")}  />
+                    <input type="checkbox" name="mode" checked={this.props.data.mode === 'online'?false: true} disabled={this.state.disableMode} onChange={(e)=>this.props.modeSwitchHandler(e.target.checked,"mode")}  />
                     <div className="slider">
                     </div>
                   </label>
@@ -84,18 +87,18 @@ export default class  BeSpokeView extends Component {
                 </div>
                 <div className="clearfix"/>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={(e)=>this.props.dataToSet(e.target.value,"about")} defaultValue={this.props.data.about} ></textarea>
+                  <textarea className="form-control float-label" placeholder="About" disabled={this.state.disableMode} name="about" onBlur={(e)=>this.props.dataToSet(e.target.value,"about")} defaultValue={this.props.data.about} ></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.props.dataToSet(e.target.value,"noOfSession")} defaultValue={this.props.data.noOfSession}  className="form-control inline_input medium_in"/> </label>
+                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" disabled={this.state.disableMode} onChange={(e)=>this.props.dataToSet(e.target.value,"noOfSession")} defaultValue={this.props.data.noOfSession}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
                   <label>Duration &nbsp;</label>
-                    <input type="number" value={this.props.data.duration && this.props.data.duration.hours ? this.props.data.duration.hours : '' }  min="0"  name="hours" onChange={(e)=>this.props.duration(e.target.value,"hours")} className="form-control inline_input"/> Hours
-                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} className="form-control inline_input"/> Mins
+                    <input type="number" value={this.props.data.duration && this.props.data.duration.hours ? this.props.data.duration.hours : '' }  min="0"  name="hours" onChange={(e)=>this.props.duration(e.target.value,"hours")} disabled={this.state.disableMode} className="form-control inline_input"/> Hours
+                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} disabled={this.state.disableMode} className="form-control inline_input"/> Mins
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" defaultValue={this.props.data.expectedInput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedInput")} ></textarea>
+                  <textarea className="form-control float-label" disabled={this.state.disableMode} placeholder="Expected input" name="expectedInput" defaultValue={this.props.data.expectedInput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedInput")} ></textarea>
                 </div>
               </form>
             </div>
@@ -108,6 +111,7 @@ export default class  BeSpokeView extends Component {
                                 labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
                                 isDynamic={true} placeholder="Select Industry Type"
                                 onSelect={(e)=>this.props.industry(e,"industryId")}
+                                disabled={this.state.disableMode}
                                 selectedValue={this.props.data ? this.props.data.industryId : ""}
                                 />
                 </div>
@@ -132,12 +136,13 @@ export default class  BeSpokeView extends Component {
                       placeholder="Frequency"
                       defaultValue={ this.props.data ? this.props.data.sessionFrequency : "" }
                       value={ this.props.data ? this.props.data.sessionFrequency : "" }
+                      disabled={this.state.disableMode}
                       onChange={(e)=>this.props.frequency(e,"sessionFrequency")}>
                     </Select>
                   </div>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" defaultValue={this.props.data.expectedOutput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedOutput")} ></textarea>
+                  <textarea className="form-control float-label" disabled={this.state.disableMode} placeholder="Expected Output" name="expectedOutput" defaultValue={this.props.data.expectedOutput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedOutput")} ></textarea>
                 </div>
                 <div className="clearfix"/>
                 {
@@ -187,10 +192,10 @@ export default class  BeSpokeView extends Component {
           </div>
           </div>
           <br className="brclear"/>
-          <div className="ml_btn" style={{'textAlign':'center'}}>
+          {!this.state.disableMode ?<div className="ml_btn" style={{'textAlign':'center'}}>
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
             <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
-          </div>
+          </div>:<div></div>}
 
           <br className="clearfix"/>
         </div>

@@ -140,15 +140,16 @@ async function IDE(portFolio, query) {
     }
     portFolio.problemStatement = '';
     portFolio.solutionStatement = '';
-    portFolio.IPandTM = ''
+    portFolio.IPandTM = '';
 
     if (resultIDEPortfolio.problemSolution) {
       portFolio.problemStatement = resultIDEPortfolio.problemSolution.problemStatement ? resultIDEPortfolio.problemSolution.problemStatement : ''
       portFolio.solutionStatement = resultIDEPortfolio.problemSolution.solutionStatement ? resultIDEPortfolio.problemSolution.solutionStatement : ''
-
+      portFolio.isProblemPrivate = resultIDEPortfolio.problemSolution.isProblemPrivate ? resultIDEPortfolio.problemSolution.isProblemPrivate:'';
     }
     if (resultIDEPortfolio.intellectualPlanning) {
       portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning.IPdescription ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+      portFolio.isIntellectualPrivate = resultIDEPortfolio.intellectualPlanning.isIntellectualPrivate;
     }
     appendKeywords(portFolio);
     return portFolio
@@ -644,7 +645,7 @@ function appendKeywords(portFolio) {
   if (portFolio.communityType && portFolio.communityType.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
 
-  portFolio.displayKeywords = displayKeywords;
+  portFolio.displayKeywords = displayKeywords.split(',');
   portFolio.keywords = keywords;
 
 }

@@ -226,7 +226,7 @@ export default class MlServiceProviderAwards extends Component {
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
     if(isSaveClicked){
-      const actualIndex = this.getActualIndex(funderAreaOfInterest, this.state.selectedIndex);
+      const actualIndex = this.getActualIndex(serviceProviderAwards, this.state.selectedIndex);
       serviceProviderAwards[actualIndex] = data;
     }
     let arr = [];

@@ -65,6 +65,7 @@ let BackEndUser = `
         firstName: String,
         middleName: String,
         lastName: String,
+        about : String
     }
     
      type internalUserprofile{
@@ -275,6 +276,7 @@ let BackEndUser = `
         firstName: String,
         middleName: String,
         lastName: String,
+        about : String
     }
     
     input userObject{

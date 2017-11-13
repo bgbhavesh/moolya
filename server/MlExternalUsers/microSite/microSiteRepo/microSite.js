@@ -618,23 +618,35 @@ async function getIndustryName(industryId) {
 }
 
 function appendKeywords(portFolio) {
-  let keywords = portFolio.displayName + ', ' + portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes + ',' + portFolio.industryName;
+
+  let keywords = portFolio.chapterName + ', ' + portFolio.clusterName + ', ' + portFolio.communityTypes + ',' + portFolio.industryName;
+
   let focusArea = portFolio.areaOfInterest;
+
   if (portFolio.companyName && portFolio.companyName.length > 0) {
     keywords += ',' + portFolio.companyName;
   }
+
   if (focusArea && focusArea.length > 0) {
     focusArea.forEach((f) => {
       keywords += ',' + f.name;
     })
   }
+
+  let displayKeywords = keywords;
+
+  keywords =  portFolio.displayName +', ' + keywords;
+
   if (portFolio.chapterName && portFolio.chapterName.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.chapterName;
   if (portFolio.clusterName && portFolio.clusterName.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.clusterName;
-  // if (portFolio.communityType && portFolio.communityType.trim().length > 0)
-  //   keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
+  if (portFolio.communityType && portFolio.communityType.trim().length > 0)
+    keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
+
+  portFolio.displayKeywords = displayKeywords;
   portFolio.keywords = keywords;
+
 }
 
 export default findPortFolioDetails;

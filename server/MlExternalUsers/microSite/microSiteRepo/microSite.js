@@ -129,7 +129,9 @@ async function IDE(portFolio, query) {
     let resultIdea = await mlDBController.findOne('MlIdeas', {userId: resultIDEPortfolio.userId});
     if (resultIdea) {
       portFolio.aboutDiscription = resultIdea.ideaDescription ? resultIdea.ideaDescription : '';
+      portFolio.aboutDiscriptionPrivate = (resultIdea.isIdeaTitlePrivate || resultIdea.isIdeaPrivate);
     }
+
 
     //Get LookingFor Description
 
@@ -162,7 +164,7 @@ async function STU(portFolio, query) {
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     portFolio.communityTypes = resultStartUpPortFolio.communityType;
-    portFolio.aboutDiscription = ''
+    portFolio.aboutDiscription = '';
     if (resultStartUpPortFolio.aboutUs) {
 
       let aboutUs = resultStartUpPortFolio.aboutUs;
@@ -192,6 +194,7 @@ async function FUN(portFolio, query) {
     portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories) {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
+
     }
     getTeamInfo(portFolio, resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
@@ -212,6 +215,7 @@ async function ServiceProviderPortFolio(portFolio, query) {
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about;
       portFolio.aboutDiscription = aboutUs.aboutDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
 
       if (portFolio.identityType === 'Company') {
         portFolio.companyName = aboutUs.aboutTitle ? aboutUs.aboutTitle : '';
@@ -241,6 +245,7 @@ async function CMP(portFolio, query) {
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.companyDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
     portFolio.sectorsAndServices = '';
     portFolio.policy = '';

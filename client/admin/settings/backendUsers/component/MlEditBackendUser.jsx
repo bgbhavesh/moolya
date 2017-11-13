@@ -184,7 +184,7 @@ class MlEditBackendUser extends React.Component{
         deActive: this.state.data.profile.isActive,
         isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
         globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
-        genderSelect: response.profile.genderType, dateOfBirth:dateOfBirth ,
+        genderSelect: response.profile.genderType, dateOfBirth: dateOfBirth, about: response.profile.about,
         profilePic: response.profile.profileImage
       })
       let dataDetails = this.state.data
@@ -362,6 +362,7 @@ class MlEditBackendUser extends React.Component{
       InternalUprofile: InternalUprofile,
       genderType:this.state.genderSelect,
       dateOfBirth: this.state.dateOfBirth,
+      about: this.state.about,
       profileImage: this.state.profilePic
     }
     let userObject={

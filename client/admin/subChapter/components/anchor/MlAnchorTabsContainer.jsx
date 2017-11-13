@@ -130,9 +130,9 @@ class MlAnchorTabsContainer extends React.Component {
           userObject: { profile, username: profile.email },
         }
 
-        var updateDetails = this.props
+        var updateDetails = this.props;
         response = await updateBackendUserActionHandler(updateUserObject, updateDetails)
-        this.setState({isUserUpdated: true})
+        this.setState({isUserUpdated: true});
         return response
         break
       default:

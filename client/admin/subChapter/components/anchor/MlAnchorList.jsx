@@ -193,7 +193,7 @@ export default class MlAnchorList extends React.Component {
     const linkTabs = socialLinks.map((link, i) => {
       const { socialLinkTypeName, socialLinkType, socialLinkUrl } = link;
       return (
-        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""}>
+        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""} key={i}>
           <a>{socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick={(evt) => { evt.stopPropagation(); this.removeSocialLink(i) }} /></b></a>
         </li>
       )
@@ -454,7 +454,9 @@ export default class MlAnchorList extends React.Component {
                       onChange={event => this.updateInternalUprofileData('displayName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" className="form-control float-label"></textarea>
+                    <textarea placeholder="About" className="form-control float-label"
+                              value={this.state.userData && this.state.userData.profile && this.state.userData.profile.about}
+                              onChange={event => this.updateProfileData('about', event.target.value)}></textarea>
                   </div>
                   <div className="form-group">
                     <input disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly

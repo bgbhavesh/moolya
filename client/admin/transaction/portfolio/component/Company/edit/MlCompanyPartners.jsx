@@ -183,7 +183,7 @@ export default class MlCompanyPartners extends React.Component {
     // let details = cloneArray[index]
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
-    this.curSelectLogo = details.logo
+    this.curSelectLogo = details.logo;
     this.setState({
       selectedIndex: index,
       data: details,
@@ -329,19 +329,21 @@ export default class MlCompanyPartners extends React.Component {
                             <a href="" id="create_clientPdefault" data-placement="top" data-class="large_popover">
                               <div className="list_block notrans">
                                 <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                                <h3>Add New Principal</h3>
+                                <h3>Add New Partner</h3>
                               </div>
                             </a>
                           </div>
-                          {that.state.partnersList.map(function (principal, idx) {
+                          {that.state.partnersList.map(function (details, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <div className="list_block notrans funding_list"
-                                     onClick={that.onTileClick.bind(that,details.index,idx)} id={"create_clientP" + idx}>
-                                  <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
-                                  <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}/>
+                                     onClick={that.onTileClick.bind(that, details.index, idx)}
+                                     id={"create_clientP" + idx}>
+                                  <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
+                                  <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                                  <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
                                   <div>
-                                    <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
+                                    <p>{details.firstName}</p><p className="small">{details.designation}</p></div>
                                   <div className="ml_icon_btn">
                                     <a href="" className="save_btn"><FontAwesome name='facebook'/></a>
                                     <a href="" className="save_btn"><FontAwesome name='twitter'/></a>

@@ -1,25 +1,22 @@
-import React from "react";
-import {render} from "react-dom";
+import React, {Component} from "react";
+import _ from "lodash";
+import ScrollArea from "react-scrollbar";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import MlLoader from "../../../commons/components/loader/loader";
 import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {updateSubChapterActionHandler} from "../actions/updateSubChapter";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import _ from "lodash";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
-import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 import CropperModal from '../../../commons/components/cropperModal';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
-import gql from "graphql-tag";
-// import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 
-class MlSubChapterDetails extends React.Component {
+class MlSubChapterDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -364,9 +361,9 @@ class MlSubChapterDetails extends React.Component {
                   >
                     <form>
                       <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
+                        <div onClick={this.toggleImageUpload} className="fileUpload mlUpload_btn">
                           <span>Upload Pic</span>
-                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
+                          {/*<input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>*/}
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
@@ -374,6 +371,9 @@ class MlSubChapterDetails extends React.Component {
                           {/*<img src="/images/ideator_01.png"/>*/}
                         </div>
                       </div>
+                      <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload}
+                                    show={this.state.showImageUploadModal} uploadingImage={this.state.uploadingImage}
+                                    cropperStyle={"circle"}/>
                       <br className="brclear"/>
                       <div className="form-group">
                         <input type="text" ref="state" placeholder="State" className="form-control float-label"
@@ -424,14 +424,16 @@ class MlSubChapterDetails extends React.Component {
                     <form>
                       <div className="form-group">
                         <div onClick={this.toggleImageUpload} className="fileUpload mlUpload_btn">
-                          <span>Profile Pic</span>
+                          <span>Upload Pic</span>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img
                             src={this.state.data && this.state.data.subChapterImageLink ? generateAbsolutePath(this.state.data.subChapterImageLink) : '/images/def_profile.png'}/>
                         </div>
                       </div>
-                      <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload} show={this.state.showImageUploadModal} uploadingImage={this.state.uploadingImage} cropperStyle={"circle"}/>
+                      <CropperModal handleImageUpload={this.onImageFileUpload} toggleShow={this.toggleImageUpload}
+                                    show={this.state.showImageUploadModal} uploadingImage={this.state.uploadingImage}
+                                    cropperStyle={"circle"}/>
                       <br className="brclear"/>
 
                       <div className="panel panel-default">

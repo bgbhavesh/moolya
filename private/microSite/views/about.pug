@@ -16,7 +16,7 @@ html(prefix='og: http://ogp.me/ns#')
     meta(property='fb:app_id', content='328947447490953')
     meta(property='og:locale', content='en_US')
     meta(property='og:type', content='website')
-    meta(property='og:title', content=title?title.substr(0,60):'')
+    meta(property='og:title', content=title ? title.substr(0, 60) : '')
     meta(property='og:description', content=desc)
     meta(property='og:url', content=currentUrl)
     meta(property='og:image', content=profilePic)
@@ -28,8 +28,8 @@ html(prefix='og: http://ogp.me/ns#')
 
 
     meta(name='twitter:card', content='summary')
-    meta(name='twitter:description', content=desc?desc:'No Description')
-    meta(name='twitter:title', content=title?title.substr(0,60):'')
+    meta(name='twitter:description', content=desc ? desc : 'No Description')
+    meta(name='twitter:title', content=title ? title.substr(0, 60) : '')
     meta(name='twitter:site', content=twitterHandle)
     meta(name='twitter:creator', content='moolya')
     meta(name='twitter:image', content=profilePic)
@@ -112,13 +112,13 @@ html(prefix='og: http://ogp.me/ns#')
                   a(href='#' rel='nofollow' onclick='facebookShare("' + currentUrl + '",this)')
                     i.fa.fa-facebook(aria-hidden='true')
                 li
-                  a.customer.share(href='http://www.twitter.com/intent/tweet?url='+currentUrl+'', title='Twitter share' rel='nofollow')
-                   i.fa.fa-twitter(aria-hidden='true')
+                  a.customer.share(href='http://www.twitter.com/intent/tweet?url=' + currentUrl + '', title='Twitter share' rel='nofollow')
+                    i.fa.fa-twitter(aria-hidden='true')
                 li
-                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url='+currentUrl+'' rel='nofollow')
+                  a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url=' + currentUrl + '' rel='nofollow')
                     i.fa.fa-linkedin(aria-hidden='true')
                 li
-                  a.customer.share(href='https://plus.google.com/share?url='+currentUrl+'' rel='nofollow')
+                  a.customer.share(href='https://plus.google.com/share?url=' + currentUrl + '' rel='nofollow')
                     i.fa.fa-google-plus(aria-hidden='true' alt="Share on Google+")
                 .share-url
                   a.ms_btn_re(href='#', onclick="copyToClipboard('#p1')") Copy
@@ -133,7 +133,7 @@ html(prefix='og: http://ogp.me/ns#')
       .ms_content_wrap
         .content_left
           .profile_pic
-            img(src=profilePic?profilePic:'/images/no-image.png' alt=displayName)
+            img(src=profilePic ? profilePic : '/images/no-image.png' alt=displayName)
         .content_right
           h1
             | #{displayName} is #{communityType} on #{space}
@@ -150,101 +150,77 @@ html(prefix='og: http://ogp.me/ns#')
         .ms_content.mCustomScrollbar(data-mcs-theme='minimal-dark')
           .pages
             .pageManagement
-              if(!privateFields.management)
-                if(management && management.length > 0)
-                  include management
-                  +portFolioSlides(management)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(management && management.length > 0)
+                include management
+                +portFolioSlides(management)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
+
             .pageTechnology
-              if(!privateFields.technologies)
-                if(technologies && technologies.length > 0)
-                  include management
-                  +portFolioSlides(technologies)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(technologies && technologies.length > 0)
+                include management
+                +portFolioSlides(technologies)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
+
 
             .pageTeam
-              if(!privateFields.teamManagement)
-                if(teamManagement && teamManagement.length > 0)
-                  include management
-                  +portFolioSlides(teamManagement)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(teamManagement && teamManagement.length > 0)
+                include management
+                +portFolioSlides(teamManagement)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
+
             .pageSuccessStories
-              if(!privateFields.successStories)
-                if(successStories && successStories.length > 0)
-                  include management
-                  +portFolioSlides(successStories)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(successStories && successStories.length > 0)
+                include management
+                +portFolioSlides(successStories)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageClients
-              if(!privateFields.clients)
-                if(clients && clients.length > 0)
-                  include management
-                  +portFolioSlides(clients)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(clients && clients.length > 0)
+                include management
+                +portFolioSlides(clients)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageFocusAreas
-              if(!privateFields.areaOfInterest)
-                if(areaOfInterest && areaOfInterest.length > 0)
-                  include management
-                  +portFolioSlides(areaOfInterest)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(areaOfInterest && areaOfInterest.length > 0)
+                include management
+                +portFolioSlides(areaOfInterest)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageAwardsandRewards
-              if(!privateFields.awardsRecognition)
-                if(awardsRecognition && awardsRecognition.length > 0)
-                   include management
-                   +portFolioSlides(awardsRecognition)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(awardsRecognition && awardsRecognition.length > 0)
+                include management
+                +portFolioSlides(awardsRecognition)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageIntrapreneur
-              if(!privateFields.intrapreneurRecognition)
-                if(intrapreneurRecognition && intrapreneurRecognition.length > 0)
-                  include management
-                  +portFolioSlides(intrapreneurRecognition)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(intrapreneurRecognition && intrapreneurRecognition.length > 0)
+                include management
+                +portFolioSlides(intrapreneurRecognition)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageRandD
-              if(!privateFields.researchAndDevelopment)
-                if(researchAndDevelopment && researchAndDevelopment.length > 0)
-                  include management
-                  +portFolioSlides(researchAndDevelopment)
-                else
-                  .ms_noBranches
-                    img(src='/images/branches_banner.png')
+              if(researchAndDevelopment && researchAndDevelopment.length > 0)
+                include management
+                +portFolioSlides(researchAndDevelopment)
               else
-                h2 Private Content
+                .ms_noBranches
+                  img(src='/images/branches_banner.png')
 
             .pageIncubatorSectors
               if(!privateFields.sectorsAndServices)
@@ -254,7 +230,7 @@ html(prefix='og: http://ogp.me/ns#')
 
                 else
                   .ms_noBranches
-                   img(src='/images/branches_banner.png')
+                    img(src='/images/branches_banner.png')
             .pageServicesProducts
               if(!privateFields.servicesProducts)
                 if(servicesProducts && servicesProducts.length > 0 )
@@ -283,7 +259,7 @@ html(prefix='og: http://ogp.me/ns#')
 
                 else
                   .ms_noBranches
-                     img(src='/images/branches_banner.png')
+                    img(src='/images/branches_banner.png')
             .pageIPandTM
               if(!privateFields.IPandTM)
                 if(IPandTM && IPandTM.length > 0 )
@@ -303,7 +279,7 @@ html(prefix='og: http://ogp.me/ns#')
 
                 else
                   .ms_noBranches
-                   img(src='/images/branches_banner.png')
+                    img(src='/images/branches_banner.png')
 
             .pageAwards
               if(!privateFields.awardsDescription)
@@ -311,13 +287,8 @@ html(prefix='og: http://ogp.me/ns#')
                   include awards
               else
                 h2 Private Content
-            .pageBranches
-              if(!privateFields.branches)
-                include branches
-              else
-                h2 Private Content
             .pageLookingFor
-              if(!privateFields.lookingForDescription)
+              if(!lookingForDescriptionPrivate)
                 include looking_for
                 h3 Past winners have included:
                   .img_list
@@ -330,7 +301,7 @@ html(prefix='og: http://ogp.me/ns#')
                 h2 Private Content
             .pageAboutDiscription
               if(!privateFields.aboutDiscription)
-                if(aboutDiscription && aboutDiscription.length  > 0 )
+                if(aboutDiscription && aboutDiscription.length > 0 )
                   p
                     | !{aboutDiscription}
 
@@ -338,7 +309,7 @@ html(prefix='og: http://ogp.me/ns#')
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
               else
-                 h2 Private Content
+                h2 Private Content
 
       .footer
         p
@@ -369,10 +340,10 @@ html(prefix='og: http://ogp.me/ns#')
             $('.pageAboutDiscription').css('display', 'block');
             $($('.ms_btn_ye')[0]).addClass('active_menu')
             $(event).addClass('active_menu')
-            var something = function (linkName,event) {
+            var something = function (linkName, event) {
               $('.ms_btn_ye').removeClass('active_menu');
               $(event).addClass('active_menu')
-              $('.pages').children().css('display','none')
+              $('.pages').children().css('display', 'none')
               $('.' + linkName).css('display', 'block')
             }
 

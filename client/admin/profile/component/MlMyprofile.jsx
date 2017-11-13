@@ -533,15 +533,15 @@ export default class MlMyProfile extends React.Component {
                     <div className="form-group">
                       <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} disabled={true}/>
                     </div>
-                    {this.state.showPasswordFields ?
-                      <div className="form-group">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                        <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
-                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
-                      </div> : <div></div>}
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
                     {this.state.PasswordReset?(
                       <div>
+                        {this.state.showPasswordFields ?
+                          <div className="form-group">
+                            <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
+                            <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
+                            <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                          </div> : <div></div>}
                         <div className="form-group">
                           <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                           <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>

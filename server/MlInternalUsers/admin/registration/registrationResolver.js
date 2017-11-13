@@ -827,7 +827,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         return mail.verified == true
       })
       if (emailVerified) {
-        if (registrationRecord && registrationRecord.status != 'REG_USER_APR') {
+        if (registrationRecord && registrationRecord.status != 'REG_USER_APR' && registrationRecord.status != 'REG_USER_REJ') {
           let kycDocuments = registrationRecord.kycDocuments&&registrationRecord.kycDocuments.length>0?registrationRecord.kycDocuments:[]
          if (kycDocuments && kycDocuments.length >= 1) {
             //mandatory doc exist or not
@@ -872,7 +872,9 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
           }
         } else {
           let code = 555;
-          let response = new MlRespPayload().errorPayload("User already approved", code);
+          const getRegStatus = registrationUserApprovalResponse(registrationRecord.status);
+          let response = new MlRespPayload().errorPayload(getRegStatus, code);
+          // let response = new MlRespPayload().errorPayload("User already approved", code);
           return response;
         }
       } else {
@@ -1964,4 +1966,13 @@ headerCommunityDisplay = (registrationInfo, context) => {
   if (!isMoolya)
     returnName = subChapterName + '/' + chapterName + '/' + registrationInfo.communityName
   return returnName
-}
+};
+
+registrationUserApprovalResponse = (status) => {
+  let response = "User already approved";
+  if (status === "REG_USER_APR")
+    response = "User already approved";
+  else if (status === "REG_USER_REJ")
+    response = "Rejected user can not be approved";
+  return response
+};

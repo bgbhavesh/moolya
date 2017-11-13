@@ -125,6 +125,41 @@ let service=`
     finalAmount:Float
   }
   
+  type BeSpokeServiceInfo{
+    _id: String
+    about: String
+    displayName: String
+    noOfSession: Int
+    sessionFrequency: String
+    duration: Duration
+    attachments: [Attachments]
+    industryId: [String]
+    mode: String
+    expectedInput: String
+    expectedOutput: String
+    createdAt: Date
+    conversation: [String]
+    beSpokeCreatorUserId: String
+    beSpokeCreatorProfileId: String
+    beSpokeCreatorProfileImage: String
+    isBeSpoke: Boolean
+    isCurrentVersion: Boolean
+    clusterId: String
+    clusterName: String
+    chapterId: String
+    chapterName: String
+    subChapterId: String
+    subChapterName: String
+    communityId: String
+    communityName: String
+    transactionId: String
+    userId: String
+    profileId: String
+    isApproved: Boolean
+    isLive: Boolean
+    isReview: Boolean  
+    }
+  
   type UserDetails{
     accountType: String
     chapterId: String
@@ -323,6 +358,7 @@ let service=`
         getServiceBasedOnServiceId(serviceId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String): AdminService
         getTaskFromService(serviceId:String):Service
         fetchServicesForAppointments(profileId:String!): [Service]
+        getBeSpokeForAppointments(serviceId: String): BeSpokeServiceInfo
    }
 
    type Mutation {
@@ -359,7 +395,8 @@ let supportedApi = [
   {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"},
 
   {api:'getServiceBasedOnServiceId',  actionName:'READ',    moduleName:"SERVICECARD", isWhiteList:true},
-  {api:'fetchServicesForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true}
+  {api:'fetchServicesForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true},
+  {api:'getBeSpokeForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true}
 
 ]
 

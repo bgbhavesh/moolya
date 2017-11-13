@@ -42,11 +42,9 @@ class MlAddContactType extends React.Component{
       contactName: this.refs.name.value,
       contactDisplayName: this.refs.displayName.value,
       aboutContact: this.refs.about.value,
-      contactUploadIcon : this.refs.upload.value,
+      // contactUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
-    }
-    console.log(Details)
-
+    };
     const response = await addContactTypeActionHandler(Details);
     return response;
 
@@ -108,12 +106,12 @@ class MlAddContactType extends React.Component{
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <br className="brclear"/>
-                  <div className="form-group ">
-                    <div className="fileUpload mlUpload_btn">
-                      <span>Upload Icon</span>
-                      <input type="file" className="upload" ref="upload"/>
-                    </div>
-                  </div>
+                  {/*<div className="form-group ">*/}
+                    {/*<div className="fileUpload mlUpload_btn">*/}
+                      {/*<span>Upload Icon</span>*/}
+                      {/*<input type="file" className="upload" ref="upload"/>*/}
+                    {/*</div>*/}
+                  {/*</div>*/}
                   <br className="brclear"/>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">

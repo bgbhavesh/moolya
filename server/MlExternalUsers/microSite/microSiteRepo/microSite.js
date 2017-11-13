@@ -129,7 +129,9 @@ async function IDE(portFolio, query) {
     let resultIdea = await mlDBController.findOne('MlIdeas', {userId: resultIDEPortfolio.userId});
     if (resultIdea) {
       portFolio.aboutDiscription = resultIdea.ideaDescription ? resultIdea.ideaDescription : '';
+      portFolio.aboutDiscriptionPrivate = (resultIdea.isIdeaTitlePrivate || resultIdea.isIdeaPrivate);
     }
+
 
     //Get LookingFor Description
 
@@ -140,15 +142,16 @@ async function IDE(portFolio, query) {
     }
     portFolio.problemStatement = '';
     portFolio.solutionStatement = '';
-    portFolio.IPandTM = ''
+    portFolio.IPandTM = '';
 
     if (resultIDEPortfolio.problemSolution) {
       portFolio.problemStatement = resultIDEPortfolio.problemSolution.problemStatement ? resultIDEPortfolio.problemSolution.problemStatement : ''
       portFolio.solutionStatement = resultIDEPortfolio.problemSolution.solutionStatement ? resultIDEPortfolio.problemSolution.solutionStatement : ''
-
+      portFolio.isProblemPrivate = resultIDEPortfolio.problemSolution.isProblemPrivate ? resultIDEPortfolio.problemSolution.isProblemPrivate:'';
     }
     if (resultIDEPortfolio.intellectualPlanning) {
       portFolio.IPandTM = resultIDEPortfolio.intellectualPlanning.IPdescription ? resultIDEPortfolio.intellectualPlanning.IPdescription : ''
+      portFolio.isIntellectualPrivate = resultIDEPortfolio.intellectualPlanning.isIntellectualPrivate;
     }
     appendKeywords(portFolio);
     return portFolio
@@ -161,17 +164,19 @@ async function STU(portFolio, query) {
   if (resultStartUpPortFolio) {
     portFolio.communityType = getCommunityType(resultStartUpPortFolio) // Replacing trailing 's'
     portFolio.communityTypes = resultStartUpPortFolio.communityType;
-    portFolio.aboutDiscription = ''
+    portFolio.aboutDiscription = '';
     if (resultStartUpPortFolio.aboutUs) {
 
       let aboutUs = resultStartUpPortFolio.aboutUs;
       portFolio.aboutDiscription = aboutUs.startupDescription ? aboutUs.startupDescription : ''
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
 
     portFolio.servicesProducts = '';
     if (resultStartUpPortFolio.serviceProducts) {
 
       portFolio.servicesProducts = resultStartUpPortFolio.serviceProducts.spDescription ? resultStartUpPortFolio.serviceProducts.spDescription : '';
+      portFolio.isServicesProductsDescriptionPrivate = resultStartUpPortFolio.serviceProducts.isDescriptionPrivate;
     }
     getManagementInfo(portFolio, resultStartUpPortFolio);
     getTechnologyInfo(portFolio, resultStartUpPortFolio);
@@ -191,6 +196,7 @@ async function FUN(portFolio, query) {
     portFolio.communityTypes = resultFunderPortfolio.communityType;
     if (resultFunderPortfolio.successStories) {
       portFolio.aboutDiscription = resultFunderPortfolio.successStories.description ? resultFunderPortfolio.successStories.description : ''
+      portFolio.aboutDiscriptionPrivate = resultFunderPortfolio.successStories.isDescriptionPrivate;
     }
     getTeamInfo(portFolio, resultFunderPortfolio)
     getSuccessStoriesInfo(portFolio, resultFunderPortfolio);
@@ -211,6 +217,7 @@ async function ServiceProviderPortFolio(portFolio, query) {
     if (resultServicePortFolio.about) {
       let aboutUs = resultServicePortFolio.about;
       portFolio.aboutDiscription = aboutUs.aboutDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
 
       if (portFolio.identityType === 'Company') {
         portFolio.companyName = aboutUs.aboutTitle ? aboutUs.aboutTitle : '';
@@ -221,6 +228,7 @@ async function ServiceProviderPortFolio(portFolio, query) {
     if (resultServicePortFolio.services) {
 
       portFolio.servicesDescription = resultServicePortFolio.services.servicesDescription ? resultServicePortFolio.services.servicesDescription : ''
+      portFolio.isServicesPrivate = resultServicePortFolio.services.isServicesPrivate;
     }
 
     getAwardsRewards(portFolio, resultServicePortFolio);
@@ -240,16 +248,18 @@ async function CMP(portFolio, query) {
     if (resultCompanyPortFolio.aboutUs) {
       let aboutUs = resultCompanyPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.companyDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
     portFolio.sectorsAndServices = '';
     portFolio.policy = '';
     if (resultCompanyPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultCompanyPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
-
+      portFolio.isSectorsAndServicesPrivate = resultCompanyPortFolio.sectorsAndServices.isSectorsAndServicesPrivate;
 
     }
     if (resultCompanyPortFolio.policy) {
       portFolio.policy = resultCompanyPortFolio.policy.policyDescription ? resultCompanyPortFolio.policy.policyDescription : '';
+      portFolio.isPolicyDescriptionPrivate = resultCompanyPortFolio.policy.isPolicyDescriptionPrivate;
 
     }
     getManagementInfo(portFolio, resultCompanyPortFolio);
@@ -271,12 +281,12 @@ async function INS(portFolio, query) {
     if (resultINSPortFolio.aboutUs) {
       let aboutUs = resultINSPortFolio.aboutUs
       portFolio.aboutDiscription = aboutUs.institutionDescription;
+      portFolio.aboutDiscriptionPrivate = aboutUs.isDescriptionPrivate;
     }
     portFolio.sectorsAndServices = '';
     if (resultINSPortFolio.sectorsAndServices) {
       portFolio.sectorsAndServices = resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription ? resultINSPortFolio.sectorsAndServices.sectorsAndServicesDescription : '';
-
-
+      portFolio.isSectorsAndServicesPrivate = resultINSPortFolio.sectorsAndServices.isSectorsAndServicesPrivate;
     }
 
     getIntrapreneurInfo(portFolio, resultINSPortFolio);
@@ -644,7 +654,7 @@ function appendKeywords(portFolio) {
   if (portFolio.communityType && portFolio.communityType.trim().length > 0)
     keywords = keywords + ', ' + portFolio.displayName + " " + portFolio.communityTypes;
 
-  portFolio.displayKeywords = displayKeywords;
+  portFolio.displayKeywords = displayKeywords.split(',');
   portFolio.keywords = keywords;
 
 }

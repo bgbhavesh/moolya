@@ -337,7 +337,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                     {/*<input type="text" placeholder="Branch Type" className="form-control float-label" ref="branchType"/>*/}
                     <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Office Type"
                                   labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true}
-                                  onSelect={that.optionsBySelectOfficeType.bind(that)}
+                                  onSelect={that.optionsBySelectOfficeType.bind(that)} mandatory={true}
                                   selectedValue={that.state.branchType} data-required={true} data-errMsg="Office Type is required"/>
                   </div>
 
@@ -349,39 +349,39 @@ export default class MlAppNewSpokePerson extends React.Component {
                                   selectedValue={that.state.branchAddress}/>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
                            ref="officeLocation" data-required={true} data-errMsg="Office Location is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"
                            ref="streetLocality" data-required={true} data-errMsg="Street/Locality is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
                     <input type="text" placeholder="Landmark" className="form-control float-label"
-                           ref="landmark" data-required={true} data-errMsg="Landmark is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
+                           ref="landmark" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Area" className="form-control float-label" ref="area" data-required={true} data-errMsg="Area is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Town/City" className="form-control float-label"
                            ref="city" data-required={true} data-errMsg="Town/City is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="State" className="form-control float-label" ref="state" data-required={true} data-errMsg="State is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
                     <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Country"
                                   labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
-                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={true}
+                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={true} mandatory={true}
                                   selectedValue={that.state.selectedCountry} data-required={true} data-errMsg="Country is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="number" placeholder="Zip Code" className="form-control float-label" min="0"
                            ref="zipCode" data-required={true} data-errMsg="Zipcode is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>

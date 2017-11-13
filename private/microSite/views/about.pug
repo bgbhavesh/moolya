@@ -142,10 +142,11 @@ html(prefix='og: http://ogp.me/ns#')
             span.m_red lya
             |  from #{chapterName}, #{clusterName}
           ul.ms_menu
-            each list, i in listView
+            if(listView && listView.length >0)
+              each list, i in listView
+                li
+                  a.ms_btn_ye(href='#' + list.name onclick='something("' + list.className + '",this)') #{list.name}
               li
-                a.ms_btn_ye(href='#' + list.name onclick='something("' + list.className + '",this)') #{list.name}
-            li
         .clear
         .ms_content.mCustomScrollbar(data-mcs-theme='minimal-dark')
           .pages
@@ -223,7 +224,7 @@ html(prefix='og: http://ogp.me/ns#')
                   img(src='/images/branches_banner.png')
 
             .pageIncubatorSectors
-              if(!privateFields.sectorsAndServices)
+              if(!isSectorsAndServicesPrivate)
                 if(sectorsAndServices && sectorsAndServices.length > 0 )
                   p
                     | !{sectorsAndServices}
@@ -231,8 +232,11 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
             .pageServicesProducts
-              if(!privateFields.servicesProducts)
+              if(!isServicesProductsDescriptionPrivate)
                 if(servicesProducts && servicesProducts.length > 0 )
                   p
                     | !{servicesProducts}
@@ -240,9 +244,11 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
 
             .pageCSR
-              if(!privateFields.policy)
+              if(!isPolicyDescriptionPrivate)
                 if(policy && policy.length > 0 )
                   p
                     | !{policy}
@@ -250,9 +256,11 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
 
             .pageServices
-              if(!privateFields.servicesDescription)
+              if(!isServicesPrivate)
                 if(servicesDescription && servicesDescription.length > 0 )
                   p
                     | !{servicesDescription}
@@ -260,8 +268,11 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
             .pageIPandTM
-              if(!privateFields.IPandTM)
+              if(!isIntellectualPrivate)
                 if(IPandTM && IPandTM.length > 0 )
                   p
                     | !{IPandTM}
@@ -269,8 +280,12 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
+              else
+                h2 Private Content
+
+
             .pageProblemsandSolutions
-              if(!privateFields.problemStatement)
+              if(!isProblemPrivate)
                 if(problemStatement && problemStatement.length > 0 )
                   p
                     | Problem: !{problemStatement}
@@ -280,13 +295,9 @@ html(prefix='og: http://ogp.me/ns#')
                 else
                   .ms_noBranches
                     img(src='/images/branches_banner.png')
-
-            .pageAwards
-              if(!privateFields.awardsDescription)
-                p
-                  include awards
               else
                 h2 Private Content
+
             .pageLookingFor
               if(!lookingForDescriptionPrivate)
                 include looking_for
@@ -300,7 +311,7 @@ html(prefix='og: http://ogp.me/ns#')
               else
                 h2 Private Content
             .pageAboutDiscription
-              if(!privateFields.aboutDiscription)
+              if(!aboutDiscriptionPrivate)
                 if(aboutDiscription && aboutDiscription.length > 0 )
                   p
                     | !{aboutDiscription}
@@ -311,8 +322,10 @@ html(prefix='og: http://ogp.me/ns#')
               else
                 h2 Private Content
             .pageKeywords
-              span
-                | !{displayKeywords}
+              if(displayKeywords && displayKeywords.length >0)
+                each keyword , i in displayKeywords
+                  span
+                    | #{keyword.trim()}
 
 
       .footer

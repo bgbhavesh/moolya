@@ -158,7 +158,7 @@ class MlOfficeRepo{
         officeLedger["profileId"]             = officeSC.profileId
         officeLedger["officeId"]              = officeSC.officeId
         officeLedger["totalusercount"]        = officeSC.totalusercount
-        officeLedger["principalcount"]        = officeSC.principalcount - 1 // -1 for default principle user
+        officeLedger["principalcount"]        = officeSC.principalcount// - 1 // -1 for default principle user
         officeLedger["teamMembercount"]       = officeSC.teamMembercount
         officeLedger["availableCommunities"]  = officeSC.availableCommunities
         officeLedger["createdOn"]             = new Date();

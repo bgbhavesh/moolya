@@ -20,6 +20,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                 currencyTypes, 
                 dateOfBirth,
                 genderType
+                about
                 InternalUprofile{
                   moolyaProfile{
                     firstName,

@@ -5,12 +5,14 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 const KEY = "evolution"
 export default class MlInstitutionViewEvolution extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data : {}
+      data : {},
+      loading:true
     }
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
@@ -33,7 +35,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({isUserValidForAnnotation:response,loading:false})
 
       this.initalizeAnnotaor()
 
@@ -125,6 +127,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
   }
 
   render() {
+    let showLoader=this.state.loading?this.state.loading:false;
     return (
       <div className="col-lg-12 col-sm-12" >
         <div className="row" id="annotatorContent">
@@ -132,7 +135,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              <p>{this.state.data && this.state.data.institutionEvolutionDescription ? this.state.data.institutionEvolutionDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+              {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionEvolutionDescription ? this.state.data.institutionEvolutionDescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
 
             </div>
           </div>

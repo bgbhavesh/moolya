@@ -140,9 +140,7 @@ class MlAppStartupEditTabs extends Component {
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
-
-
-    ]
+    ];
     return tabs;
   }
 
@@ -177,14 +175,15 @@ class MlAppStartupEditTabs extends Component {
     this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 
-  getLookingForDetails(details, privatekey, requiredFields) {
+  getLookingForDetails(details, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
+    this.setState({startupPortfolio: data});
+    // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey, requiredFields);
+    this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey, requiredFields);
   }
 
   getChartDetails(details, tabName) {
@@ -199,7 +198,7 @@ class MlAppStartupEditTabs extends Component {
     this.props.getPortfolioDetails({startupPortfolio: data}, privatekey);
   }
 
-  getStartupMCL(details, privatekey) {
+  getStartupMCL(details, privateKey) {
     let data = this.state.startupPortfolio;
     if (details.memberships) {
       data['memberships'] = details.memberships;
@@ -211,7 +210,16 @@ class MlAppStartupEditTabs extends Component {
       data['licenses'] = details.licenses;
     }
     this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey);
+    // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privatekey);
+    this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey);
+  }
+
+  /**
+   * @Note: send data to parent portfolio
+   * */
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {

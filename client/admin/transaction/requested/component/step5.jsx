@@ -21,6 +21,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {createKYCDocument} from '../actions/createKYCDocumentAction'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from "../../../../commons/components/loader/loader";
 export default class Step5 extends React.Component {
   constructor(props) {
     super(props);
@@ -505,12 +506,15 @@ export default class Step5 extends React.Component {
     let communityType = this.props.registrationData&&this.props.registrationData.registrationInfo&&this.props.registrationData.registrationInfo.registrationType?this.props.registrationData.registrationInfo.registrationType:""
     let that=this;
 
-   //  const showLoader=this.state.loading;
+    const showLoader=this.state.loading;
     return (
-      <div className="step_form_wrap step5">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (<div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           {Object.keys(registrationDocumentsGroup).map(function(key) {
-            return (<div className="col-md-12"> <div key={key} className="row">
+            return (
+              <div>
+               <div className="col-md-12"> <div key={key} className="row">
                      <h3>{key}</h3>
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
@@ -588,10 +592,12 @@ export default class Step5 extends React.Component {
                   </PopoverContent>
                 </Popover>
                   </div>
+              </div>
             </div>)
           })}
          </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+      </div>)}
       </div>
     )
   }

@@ -72,8 +72,8 @@ class MlEditBackendUser extends React.Component{
     OnToggleSwitch(true,true);
     passwordVisibilityHandler();
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       $('input').attr('disabled', 'disabled');
@@ -184,7 +184,7 @@ class MlEditBackendUser extends React.Component{
         deActive: this.state.data.profile.isActive,
         isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
         globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
-        genderSelect: response.profile.genderType, dateOfBirth:dateOfBirth ,
+        genderSelect: response.profile.genderType, dateOfBirth: dateOfBirth, about: response.profile.about,
         profilePic: response.profile.profileImage
       })
       let dataDetails = this.state.data
@@ -362,6 +362,7 @@ class MlEditBackendUser extends React.Component{
       InternalUprofile: InternalUprofile,
       genderType:this.state.genderSelect,
       dateOfBirth: this.state.dateOfBirth,
+      about: this.state.about,
       profileImage: this.state.profilePic
     }
     let userObject={
@@ -532,12 +533,7 @@ class MlEditBackendUser extends React.Component{
               default={true}
             >
           <div className="col-md-6 nopadding-left">
-            <div className="left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-              >
+
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
@@ -585,17 +581,10 @@ class MlEditBackendUser extends React.Component{
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
           </div>
           <div className="col-md-6 nopadding-right">
 
-              <div className="left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                >
+
                   <div className="form_bg">
                   <form>
                   <div className="form-group">
@@ -691,8 +680,6 @@ class MlEditBackendUser extends React.Component{
                   }
                   </form>
                   </div>
-                </ScrollArea>
-              </div>
             </div>
             </ScrollArea>
           </div>

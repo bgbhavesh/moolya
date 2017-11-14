@@ -1038,7 +1038,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         }
       }},
 
-      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'fromUserId', as:'investerTransactionLog'}},
+      // {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'fromUserId', as:'investerTransactionLog'}},
 
       { '$project':
         {
@@ -1046,13 +1046,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           'registration':1,
           'portfolio':1,
           'office':1,
-          'investerTransactionLog': {
-            $filter: {
-              input: "$transactionLog",
-              as: "transaction",
-              cond: { $ne: [ "$$transaction.transactionType", 'investments' ] }
-            }
-          },
+          // 'investerTransactionLog': {
+          //   $filter: {
+          //     input: "$transactionLog",
+          //     as: "transaction",
+          //     cond: { $ne: [ "$$transaction.transactionType", 'investments' ] }
+          //   }
+          // },
           'transactionLog': {
             $filter: {
               input: "$transactionLog",
@@ -1062,7 +1062,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           }
         }
       },
-      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$investerTransactionLog" ] } }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      // {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$investerTransactionLog" ] } }},
       {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
       {"$unwind" : "$data"},
       {"$replaceRoot": { newRoot: "$data"}}
@@ -1085,7 +1086,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     if(findOptions.limit) {
       pipeline.push({$limit:findOptions.limit});
     }
-
     data = mlDBController.aggregate('users', pipeline, context);
 
     data = data.map(function (doc) {

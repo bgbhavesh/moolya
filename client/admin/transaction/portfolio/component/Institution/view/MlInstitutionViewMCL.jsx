@@ -39,13 +39,12 @@ export default class MlInstitutionViewMCL extends React.Component {
     this.fetchAnnotations();*/
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-
+    this.fetchPortfolioInstitutionDetails();
 
   }
   componentWillMount(){
-    this.validateUserForAnnotation();
-    this.fetchPortfolioInstitutionDetails();
-
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
@@ -66,15 +65,24 @@ export default class MlInstitutionViewMCL extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM.memberships,loading:false});
+      this.setState({memberships: responseM.memberships, loading: true}, function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
     }
     const responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC.compliances,loading:false});
+      this.setState({compliances: responseC.compliances,loading: true},function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
     }
     const responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL.licenses,loading:false});
+      this.setState({licenses: responseL.licenses,loading: true},function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
     }
 
     data = {
@@ -157,25 +165,24 @@ export default class MlInstitutionViewMCL extends React.Component {
     return JSON.stringify(a) === JSON.stringify(b);
   };
 
- 
+
 
   render(){
     const {memberships, compliances, licenses} = this.state;
     let loading=this.state.loading?this.state.loading:false;
 
-    if (!memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
-      return (<NoData tabName="M C & L" />);
-    } else {
+
       return (
-        <div className="portfolio-main-wrap" id="annotatorContent">
+
+       <div className="portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
 
-          <div className="col-md-6 col-sm-6 nopadding-left">
+          <div className="col-md-6 col-sm-6 nopadding-left" >
             <div className="panel panel-default panel-form-view">
               <div className="panel-heading">Membership </div>
               <div className="panel-body ">
 
-                {this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""}
+                {loading === true ? ( <MlLoader/>) : (<p>{memberships.membershipDescription?(this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""):(<NoData tabName="M C & L" />)}</p>)}
 
               </div>
             </div>
@@ -183,14 +190,14 @@ export default class MlInstitutionViewMCL extends React.Component {
 
 
           </div>
-          <div className="col-md-6 col-sm-6 nopadding-right">
+         <div className="col-md-6 col-sm-6 nopadding-right" >
 
 
             <div className="panel panel-default panel-form-view">
               <div className="panel-heading">Compliances</div>
               <div className="panel-body ">
 
-                {this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""}
+                {loading === true ? ( <MlLoader/>) : (<p>{compliances.complianceDescription?(this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""):(<NoData tabName="M C & L" />)}</p>)}
 
               </div>
             </div>
@@ -199,7 +206,7 @@ export default class MlInstitutionViewMCL extends React.Component {
               <div className="panel-heading">Licenses </div>
               <div className="panel-body ">
 
-                {this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""}
+                {loading === true ? ( <MlLoader/>) : (<p>{licenses.licenseDescription?(this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""):(<NoData tabName="M C & L" />)}</p>)}
 
               </div>
             </div>
@@ -207,7 +214,8 @@ export default class MlInstitutionViewMCL extends React.Component {
 
           </div>
         </div>
+
       )
-    }
+
   }
 }

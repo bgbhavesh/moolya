@@ -5,6 +5,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 const KEY = "policy"
 export default class MlInstitutionViewPolicy extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ export default class MlInstitutionViewPolicy extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({isUserValidForAnnotation:response,loading:false})
 
       this.initalizeAnnotaor()
 
@@ -137,7 +138,7 @@ export default class MlInstitutionViewPolicy extends React.Component {
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              <p>{this.state.data && this.state.data.institutionPolicyDescription ? this.state.data.institutionPolicyDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+              {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionPolicyDescription ? this.state.data.institutionPolicyDescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
 
             </div>
           </div>

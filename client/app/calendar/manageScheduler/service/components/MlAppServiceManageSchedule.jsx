@@ -1148,7 +1148,6 @@ class MlAppServiceManageSchedule extends Component {
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           {!this.props.viewMode ? <MlAppScheduleHead type="service" /> : ""}
-          <div className="clearfix" />
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">

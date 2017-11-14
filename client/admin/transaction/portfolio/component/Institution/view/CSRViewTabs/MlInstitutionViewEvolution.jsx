@@ -127,6 +127,7 @@ export default class MlInstitutionViewEvolution extends React.Component {
   }
 
   render() {
+    let showLoader=this.state.loading?this.state.loading:false;
     return (
       <div className="col-lg-12 col-sm-12" >
         <div className="row" id="annotatorContent">

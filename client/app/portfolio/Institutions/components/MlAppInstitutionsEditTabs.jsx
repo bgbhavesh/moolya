@@ -192,9 +192,8 @@ export default class MlAppInstitutionEditTabs extends Component {
                                            getIncubators={this.getIncubators.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}
                                            backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
-      },
-
-    ]
+      }
+    ];
     return tabs;
   }
 
@@ -262,7 +261,6 @@ export default class MlAppInstitutionEditTabs extends Component {
   }
 
   getIntrapreneurDetails(details, privatekey) {
-
     let data = this.state.institutionPortfolio;
     if (data && !data.awardsRecognition) {
       data['intrapreneurRecognition'] = [];
@@ -284,14 +282,15 @@ export default class MlAppInstitutionEditTabs extends Component {
     this.props.getPortfolioDetails({institutionPortfolio: object}, privatekey, requiredFields);
   }
 
-  getLookingForDetails(details, privatekey, requiredFields) {
+  getLookingForDetails(details, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     if (data && !data.lookingFor) {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
-    this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
+    this.setState({institutionPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.institutionPortfolio, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey, requiredFields);
   }
 
   getChartDetails(details, tabName) {
@@ -306,7 +305,7 @@ export default class MlAppInstitutionEditTabs extends Component {
     this.props.getPortfolioDetails({institutionPortfolio: data}, privatekey);
   }
 
-  getInstitutionMCL(details, privatekey) {
+  getInstitutionMCL(details, privateKey) {
     let data = this.state.institutionPortfolio;
     if (details.memberships) {
       data['memberships'] = details.memberships;
@@ -317,9 +316,16 @@ export default class MlAppInstitutionEditTabs extends Component {
     if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privatekey);
+    this.setState({institutionPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.institutionPortfolio, privateKey);
+    // this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
   }
+
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privateKey, requiredFields);
+  }
+
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
     let obj = {

@@ -262,8 +262,9 @@ export default class MlInstitutionEditTab extends Component {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
-    this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
+    this.setState({institutionPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.institutionPortfolio, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey, requiredFields);
   }
 
 
@@ -285,8 +286,9 @@ export default class MlInstitutionEditTab extends Component {
     if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({institutionPortfolio: data})
-    this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
+    this.setState({institutionPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.institutionPortfolio, privateKey);
+    // this.props.getPortfolioDetails({institutionPortfolio: this.state.institutionPortfolio}, privateKey);
   }
 
   getCSRDetails(details, tabName, privateKey, requiredFields) {
@@ -305,6 +307,11 @@ export default class MlInstitutionEditTab extends Component {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey);
+  }
+
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({institutionPortfolio: object}, privateKey, requiredFields);
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {

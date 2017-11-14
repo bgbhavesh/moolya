@@ -304,11 +304,12 @@ class MlHierarchyAssignment {
     var assignedRolehierarchy = null;
     var transaction = mlDBController.findOne(collection, {requestId: transactionId});
     var userRole = this.getUserRoles(userId);
+    var requestRole = this.getUserRoles(transaction.userId);
+
     //checking final approver
-    if(this.checkisFinalApprover(userId)===true){
+    if(this.checkisFinalApprover(userId, requestRole)===true){
       return true;
     }
-    var requestRole = this.getUserRoles(transaction.userId);
     if (this.checkisPlatformAdmin(userRole)) {
       return true;
     }else if(this.checkisPlatformAdmin(requestRole)){
@@ -358,13 +359,15 @@ class MlHierarchyAssignment {
       }else{
         return false;
       }
-    } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
-      if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
-        return true;
-      }else{
-        return false;
-      }
-    }/*else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
+    }
+    // else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
+    //   if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
+    //     return true;
+    //   }else{
+    //     return false;
+    //   }
+    // }
+    /*else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
       return true;
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
       return false;
@@ -442,50 +445,66 @@ class MlHierarchyAssignment {
     }
   }
 
-  checkisFinalApprover(userId){
+  checkisFinalApprover(userId, requestRole){
     let finalApprover = false
+    let canCheckForFinalApproval = false;
     let user = mlDBController.findOne('users', {_id: userId}, {})
     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
+    let requestedDept = mlDBController.findOne('MlDepartments', {_id: requestRole.departmentId}, {})
     userProfiles.map(function (doc, index) {
       if (doc.isDefault) {
         let userRoles = doc && doc.userRoles ? doc.userRoles : [];
         userRoles.map(function (role) {
           //let userhierarchy = this.findHierarchy(role.clusterId, role.departmentId, role.subDepartmentId, role.roleId);
+          let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
+
+          /*
+           Internal Request Dept is SystemDefined then only system defined roles can change the status of the request
+           */
+          if(requestedDept.isSystemDefined){
+            if(roleDetails.isSystemDefined){
+              canCheckForFinalApproval = true
+            }
+          }else{
+            canCheckForFinalApproval = true
+          }
 
           /*
            SubChapter Admin(Moolya/Non-Moolya) is admin of a specific subChapter, use id to figure out if subchapter is a default subchapter(isDefaultSubChapter)
            and then use that to find hierarchy
            */
 
-          var isDefaultSubChapter = true;
-          if(role.subChapterId && role.subChapterId != "all"){
-            let subChapter = mlDBController.findOne('MlSubChapters', {_id: role.subChapterId});
-            isDefaultSubChapter = subChapter.isDefaultSubChapter
-          }
-          let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
-          if(isDefaultSubChapter){
-            var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-              parentDepartment: role.departmentId,
-              parentSubDepartment: role.subDepartmentId,
-              clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
-              isDefaultSubChapter: isDefaultSubChapter,
-              "finalApproval.role":role.roleId
-            }, {})
-          }else{
-            var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-              parentDepartment: role.departmentId,
-              parentSubDepartment: role.subDepartmentId,
-              clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
-              subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
-              isDefaultSubChapter: isDefaultSubChapter,
-              "finalApproval.role":role.roleId
-            }, {})
-          }
+          if(canCheckForFinalApproval){
+            var isDefaultSubChapter = true;
+            if(role.subChapterId && role.subChapterId != "all"){
+              let subChapter = mlDBController.findOne('MlSubChapters', {_id: role.subChapterId});
+              isDefaultSubChapter = subChapter.isDefaultSubChapter
+            }
 
-          if(hierarchy&&hierarchy._id){
+            if(isDefaultSubChapter){
+              var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+                parentDepartment: requestRole.departmentId,
+                parentSubDepartment: requestRole.subDepartmentId,
+                clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+                isDefaultSubChapter: isDefaultSubChapter,
+                "finalApproval.role":role.roleId
+              }, {})
+            }else{
+              var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+                parentDepartment: requestRole.departmentId,
+                parentSubDepartment: requestRole.subDepartmentId,
+                clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+                subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
+                isDefaultSubChapter: isDefaultSubChapter,
+                "finalApproval.role":role.roleId
+              }, {})
+            }
+
+            if(hierarchy&&hierarchy._id){
               if(hierarchy.finalApproval.role == role.roleId ){
                 finalApprover = true;
               }
+            }
           }
         })
       }

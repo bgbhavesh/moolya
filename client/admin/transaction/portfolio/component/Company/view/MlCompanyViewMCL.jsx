@@ -69,7 +69,7 @@ export default class MlCompanyViewMCL extends React.Component {
     let that = this;
     let data = {};
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    /*const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
       this.setState({memberships: responseM.memberships});
     }
@@ -81,7 +81,28 @@ export default class MlCompanyViewMCL extends React.Component {
     if (responseL) {
       this.setState({licenses: responseL.licenses});
     }
-    this.setState({loading: false});
+    this.setState({loading: false});*/
+    const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    if (responseM) {
+      this.setState({memberships: responseM.memberships,loading: true},function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
+    }
+    const responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+    if (responseC) {
+      this.setState({compliances: responseC.compliances,loading: true},function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
+    }
+    const responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
+    if (responseL) {
+      this.setState({licenses: responseL.licenses,loading: true},function () {
+        this.fetchAnnotations();
+        this.setState({loading: false})
+      });
+    }
     data = {
       memberships:this.state.memberships,
       licenses: this.state.licenses,
@@ -160,67 +181,68 @@ export default class MlCompanyViewMCL extends React.Component {
 
   render(){
     const showLoader = this.state.loading;
-      return (
-        <div>
-          <div className="tab_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="tab_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-          {showLoader === true ? ( <MlLoader/>) : (
-            <div className="portfolio-main-wrap" id="annotatorContent">
-              <h2>MCL</h2>
+    return (
+      <div>
+        <div className="tab_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="tab_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
 
-              <div className="col-md-6 col-sm-6 nopadding-left">
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Membership</div>
-                  <div className="panel-body ">
+              <div className="portfolio-main-wrap" id="annotatorContent">
+                <h2>MCL</h2>
 
-                    {this.state.memberships && this.state.memberships.membershipsDescription ? this.state.memberships.membershipsDescription :  (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                    </div>)}
+                <div className="col-md-6 col-sm-6 nopadding-left">
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Membership</div>
+                    <div className="panel-body ">
 
+                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.memberships && this.state.memberships.membershipsDescription ? <div>{this.state.memberships.membershipsDescription}</div> :  (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>)}</p>)}
+
+
+                    </div>
                   </div>
+                  <div className="clearfix"></div>
+
+
                 </div>
-                <div className="clearfix"></div>
+                <div className="col-md-6 col-sm-6 nopadding-right">
 
 
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Compliances</div>
+                    <div className="panel-body ">
+
+                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>)}</p>)}
+
+                    </div>
+                  </div>
+                  <div className="clearfix"></div>
+                  <div className="panel panel-default panel-form-view">
+                    <div className="panel-heading">Licenses</div>
+                    <div className="panel-body ">
+
+                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName}/>
+                      </div>)}</p>)}
+
+
+                    </div>
+                  </div>
+
+
+                </div>
               </div>
-              <div className="col-md-6 col-sm-6 nopadding-right">
 
-
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Compliances</div>
-                  <div className="panel-body ">
-
-                    {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                    </div>)}
-
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Licenses</div>
-                  <div className="panel-body ">
-
-                    {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                      </div>)}
-
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-          )
-          }
-            </ScrollArea>
-          </div>
+          </ScrollArea>
         </div>
-      )
+      </div>
+    )
   }
 }

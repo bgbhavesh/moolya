@@ -4,16 +4,17 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import {pick} from 'lodash'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {findSubChapterActionHandler} from '../../actions/findSubChapter';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import {findBackendUserActionHandler} from '../../../transaction/internalRequests/actions/findUserAction';
 import {findAnchorUserActionHandler} from '../../actions/fetchAnchorUsers'
 import {fetchUserDetailsHandler} from "../../../../app/commons/actions/fetchUserDetails";
 import {registerAsInfo} from '../../../transaction/requested/actions/registrationAs'
-import {pick} from 'lodash'
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 //todo:// this file is to be placed in the commons as it is been used by both admin and app
 export default class MlAnchorInfoView extends React.Component {
@@ -103,7 +104,7 @@ export default class MlAnchorInfoView extends React.Component {
       objective: objective || [],
       contactDetails: contactDetails || [],
       subChapterName: response && response.subChapterName ? response.subChapterName : "SubChapter Name",
-      subChapterImageLink: response && response.subChapterImageLink ? response.subChapterImageLink : "/images/startup_default.png"
+      subChapterImageLink: response && response.subChapterImageLink ? generateAbsolutePath(response.subChapterImageLink) : "/images/startup_default.png"
     })
     this.getAnchorUsers();
   }
@@ -276,7 +277,7 @@ export default class MlAnchorInfoView extends React.Component {
           <div className="col-lx-4 col-sm-4 col-md-4 nopadding-left">
               {!this.state.selectedUser.profile &&
               <div className="panel panel-default">
-              <div className="panel-heading">title</div>
+              <div className="panel-heading">Title</div>
               <div className="panel-body nopadding anchor_tabs">
               <MlAnchorUserGrid users={this.state.data.userDetails} clickHandler={this.handleUserClick}/>
               </div></div>
@@ -295,6 +296,7 @@ export default class MlAnchorInfoView extends React.Component {
                     <b>Date of Birth : </b>{new Date(this.state.selectedUser.profile.dateOfBirth).toDateString()} <br />
                     <b>Gender : </b>{this.state.selectedUser.profile.genderType} <br />
                     {this.renderSocialLinks(this.state.selectedUser.profile)}
+                    <b>About : </b>{this.state.selectedUser.profile.about} <br />
                     {console.log(this.state.selectedUser)}
                   </p>
                   </div>

@@ -83,3 +83,5 @@ h1,h2,h3,h4,h5,h6{font-family:'DINPro-Regular';font-weight:400}
 .ms_swiper .expand_info{position:absolute;top:0;right:0;font-size:25px;cursor:pointer;color:blue;width:20px;height:20px;text-align:right;line-height:19px;border-radius:0;box-sizing:border-box;background:#ef4647 url(../images/expand.png) no-repeat center;background-size:10px auto}
 .ms_swiper .expand_info.collapse{background:#ef4647 url(../images/collapse.png) no-repeat center;background-size:10px auto}
 .ms_socialNetworks:after{bottom:100%;border:solid transparent;content:" ";height:0;width:0;position:absolute;pointer-events:none;border-color:rgba(136,183,213,0);border-bottom-color:#ef4647;border-width:10px;margin-left:-10px;right:13px}
+
+.ms_content .pageKeywords span {display: inline-block; background: #F5F5F5; border: 1px solid #ddd; padding: 2px 4px; border-left: 2px solid #EF4647; border-radius: 0 4px 4px 0; margin-right: 8px; margin-bottom: 8px;}

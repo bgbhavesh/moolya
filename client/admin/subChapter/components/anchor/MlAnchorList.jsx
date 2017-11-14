@@ -4,15 +4,16 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import ScrollArea from 'react-scrollbar';
+var FontAwesome = require('react-fontawesome');
+import omitDeep from 'omit-deep-lodash';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import CropperModal from '../../../../commons/components/cropperModal';
-import omitDeep from 'omit-deep-lodash';
-var FontAwesome = require('react-fontawesome');
-import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
+import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 //todo:// floatlabel initialize
 export default class MlAnchorList extends React.Component {
@@ -40,6 +41,7 @@ export default class MlAnchorList extends React.Component {
       showUploadPicModal: false,
       uploadingPic: false,
     };
+    this.selectedUser = null;
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
     this.handleUserClick = this.handleUserClick.bind(this);
     this.updateProfileData = this.updateProfileData.bind(this);
@@ -83,9 +85,9 @@ export default class MlAnchorList extends React.Component {
         socialLinkUrl: '',
       },
       selectedSocialTab: 0,
-    })
+    });
+    this.selectedUser = id;
     return resp;
-
   }
 
   updateInternalUprofileData(field, value) {
@@ -192,7 +194,7 @@ export default class MlAnchorList extends React.Component {
     const linkTabs = socialLinks.map((link, i) => {
       const { socialLinkTypeName, socialLinkType, socialLinkUrl } = link;
       return (
-        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""}>
+        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""} key={i}>
           <a>{socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick={(evt) => { evt.stopPropagation(); this.removeSocialLink(i) }} /></b></a>
         </li>
       )
@@ -406,7 +408,7 @@ export default class MlAnchorList extends React.Component {
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
           <div className="row">
             <div className="left_wrap left_user_blocks">
-              <MlAnchorUserGrid users={_this.state.data} classnames="col-md-4 col-sm-6" clickHandler={_this.handleUserClick} />
+              <MlAnchorUserGrid users={_this.state.data} classnames="col-md-4 col-sm-6" clickHandler={_this.handleUserClick} selectedUserId={_this.selectedUser}/>
             </div>
           </div>
         </div>
@@ -424,7 +426,8 @@ export default class MlAnchorList extends React.Component {
                     <span>Upload Pic</span>
                   </div>
                   <div className="previewImg ProfileImg">
-                    <img src={this.state.userData.profile.profileImage} />
+                    <img
+                      src={this.state.userData.profile.profileImage ? generateAbsolutePath(this.state.userData.profile.profileImage) : "/images/def_profile.png"}/>
                   </div>
                 </div>
                 <br className="brclear" />
@@ -453,7 +456,9 @@ export default class MlAnchorList extends React.Component {
                       onChange={event => this.updateInternalUprofileData('displayName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" className="form-control float-label"></textarea>
+                    <textarea placeholder="About" className="form-control float-label"
+                              value={this.state.userData && this.state.userData.profile && this.state.userData.profile.about ? this.state.userData.profile.about : ''}
+                              onChange={event => this.updateProfileData('about', event.target.value)}></textarea>
                   </div>
                   <div className="form-group">
                     <input disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly

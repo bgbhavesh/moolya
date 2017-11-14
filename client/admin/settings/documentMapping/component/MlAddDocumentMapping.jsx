@@ -27,7 +27,7 @@ class MlAddDocumentMapping extends React.Component{
       isActive:false,
       documentId   : '',
       displayName  : '',
-      validity    : '',
+      validity    : null,
       length      : '',
       remark      : '',
       documentName   : '',
@@ -86,7 +86,7 @@ class MlAddDocumentMapping extends React.Component{
         clusters: this.state.clusters,
         chapters: this.state.chapters,
         subChapters: this.state.subChapters,
-        validity: this.state.validDate,
+        validity: this.state.validDate?this.state.validDate:null,
         inputLength: this.refs.length.value,
         remarks: this.refs.remark.value,
         documentName: this.refs.documentName.value,
@@ -147,7 +147,7 @@ class MlAddDocumentMapping extends React.Component{
 
   onemploymentDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY hh:mm:ss');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, validDate: value});
     }
   }
@@ -260,7 +260,7 @@ class MlAddDocumentMapping extends React.Component{
 
                         <div className="form-group">
                           {/*<input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>*/}
-                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity",readOnly:true}}   closeOnSelect={true}  onChange={this.onemploymentDateSelection.bind(this)}/>
+                          <Datetime dateFormat="MM-DD-YYYY" timeFormat={false}  inputProps={{placeholder: "Validity",readOnly:true}}   closeOnSelect={true}  onChange={this.onemploymentDateSelection.bind(this)}/>
                         </div>
                         <div className="form-group">
                           <input type="text"  ref="length" placeholder="Length" className="form-control float-label" id=""/>

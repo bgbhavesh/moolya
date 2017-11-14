@@ -90,9 +90,10 @@ export default class MlServiceProviderClients extends Component {
     }
   }
 
-  onTileSelect(index, e) {
+  onTileSelect(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.serviceProviderClients);
-    let details = cloneArray[index]
+    // let details = cloneArray[index]
+    var details = _.find(cloneArray, {index: index});
     details = _.omit(details, "__typename");
     if (details && details.logo) {
       delete details.logo['__typename'];
@@ -101,7 +102,7 @@ export default class MlServiceProviderClients extends Component {
     this.setState({
       selectedIndex: index,
       data: details,
-      selectedObject: index,
+      selectedObject: uiIndex,
       popoverOpen: !(this.state.popoverOpen)},()=>{
       this.lockPrivateKeys(index)
     });
@@ -183,6 +184,12 @@ export default class MlServiceProviderClients extends Component {
     return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
   }
 
+  getActualIndex(dataArray, checkIndex){
+    var response = _.findIndex(dataArray, {index: checkIndex});
+    response = response >= 0 ? response : checkIndex;
+    return response;
+  }
+
   sendDataToParent(isSaveClicked) {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
@@ -191,7 +198,8 @@ export default class MlServiceProviderClients extends Component {
     data.logo = this.curSelectLogo;
     data.index = this.state.selectedIndex;
     if(isSaveClicked){
-      serviceProviderClients[this.state.selectedIndex] = data;
+      const actualIndex = this.getActualIndex(serviceProviderClients, this.state.selectedIndex);
+      serviceProviderClients[actualIndex] = data;
     }
     let arr = [];
     _.each(serviceProviderClients, function (item) {
@@ -254,8 +262,8 @@ export default class MlServiceProviderClients extends Component {
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        this.setState({loading: true})
-        this.fetchOnlyImages();
+        // this.setState({loading: true})
+        // this.fetchOnlyImages();
         // this.imagesDisplay();
       }else {
         this.setState({loading: false})
@@ -274,6 +282,10 @@ export default class MlServiceProviderClients extends Component {
     }
   }
 
+  /**
+   * @Note: with latest changes @fetchOnlyImages dependency removed
+   * @handling logo view on client only
+   * */
   async fetchOnlyImages() {
     const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
@@ -371,7 +383,8 @@ export default class MlServiceProviderClients extends Component {
                           {/*<FontAwesome name='unlock' id={"makePrivate" + idx} defaultValue={details.makePrivate}/>*/}
                           <FontAwesome name='unlock' id={"makePrivate"} defaultValue={details.makePrivate}/>
                           <input type="checkbox" className="lock_input" id="makePrivate" checked={details.makePrivate} />
-                          <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
+                          <div className="hex_outer portfolio-font-icons"
+                               onClick={that.onTileSelect.bind(that, details.index, idx)}>
                             <img src={details.logo && details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl): "/images/def_profile.png"}/>
                           </div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}

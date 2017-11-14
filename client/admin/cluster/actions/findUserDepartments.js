@@ -30,3 +30,30 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
   const id = result.data.data;
   return id
 }
+
+
+export async function checkDefaultRole(userId) {
+  const result = await client.query({
+    query: gql`
+      query ($userId: String) {
+        checkDefaultRole(userId: $userId) {
+            isDefault
+            clusterId
+            clusterName
+            clusterFlag
+            userRoles{
+              isActive
+              clusterId
+            }
+        }
+      }
+    `,
+    variables: {
+      userId
+    },
+    forceFetch:true
+  })
+  const id = result.data.checkDefaultRole;
+  return id
+}
+

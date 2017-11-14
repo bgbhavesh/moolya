@@ -128,7 +128,7 @@ export default class MlSelectComponent extends Component {
     return(
       <div className={`form-group ${mandatoryClass}`}>
         <span className={`placeHolder ${activeClass}`}>{placeholder}</span>
-        {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}
+        {<Select  multi={this.props.multiSelect} matchProp={labelKey} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}
       </div>
     )
   }

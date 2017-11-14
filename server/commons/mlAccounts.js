@@ -149,17 +149,23 @@ export default MlAccounts=class MlAccounts {
     let registrationCommunityName = user&&user.registrationInfo&&user.registrationInfo.communityDefCode&&
                                           user.registrationInfo.communityDefCode? user.registrationInfo.communityDefCode:""
     //Expiring token for office memeber if link generated is more than 72hours
-    if(registrationCommunityName=="OFB"&&hours>72){
-      return  MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
-        $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
-    }
-    else if(hours>72) {
+    // if(registrationCommunityName=="OFB"&&hours>72){
+    //   return  MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+    //     $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+    // }
+    if(hours>72) {
+
+      MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+            $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+
       this.sendVerificationEmail(user._id, {
         emailContentType: "html",
         subject: "Email Verification",
         context: {}
       })
+
       return {email:null, error: true,reason:"LINK EXPIRED", code:403};
+
     }
 
     let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },

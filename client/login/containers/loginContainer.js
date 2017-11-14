@@ -9,6 +9,7 @@ export let loginContainer = {
              else{
                 var user = Meteor.user();
                  if(user && user.profile){
+                   Meteor.logoutOtherClients();
                       callback(user);
                  }
              }

@@ -9,7 +9,6 @@ import Dinstar  from  'dinstar-sms-api';
 var whiteList = ["8801521564"];
 
 
-
 var smsOptions = {
   username:"rsadmin",
   password:"ahwwpgd",

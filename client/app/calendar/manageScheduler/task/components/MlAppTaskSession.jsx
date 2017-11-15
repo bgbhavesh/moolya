@@ -139,9 +139,9 @@ export default class MlAppTaskSession extends Component {
   }
   sendSessionDataToParent() {
     let data = _.cloneDeep(this.state.sessionData);
-    data.forEach(d=> {
-      delete d.isOffline;
-    })
+    // data.forEach(d=> {
+    //   delete d.isOffline;
+    // })
     this.props.getSessionDetails(data, this.state.activities, this.state.data.isExternal);
   }
 
@@ -170,9 +170,11 @@ export default class MlAppTaskSession extends Component {
       let activity = that.state.activities.find(function (activity) {
         return activity._id == value;
       });
-      activity.duration = activity.duration ? activity.duration : {};
-      return sum + (activity.duration.hours ? activity.duration.hours : 0) * 60 + (activity.duration.minutes ? activity.duration.minutes : 0);
-    }, 0);
+      if( activity ) {
+        activity.duration = activity.duration ? activity.duration : {};
+        return sum + (activity.duration.hours ? activity.duration.hours : 0) * 60 + (activity.duration.minutes ? activity.duration.minutes : 0);
+      }}, 0);
+
     sessionData[index].duration = {
       hours: parseInt(totalMinutes / 60),
       minutes: totalMinutes % 60

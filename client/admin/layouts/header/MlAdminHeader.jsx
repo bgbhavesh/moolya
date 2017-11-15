@@ -4,12 +4,19 @@ import MlAdminSearch from  './MlAdminSearch'
 import  MlAdminProfile from './MlAdminProfile'
 import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
 import BugReportWrapper from "../../commons/components/MlAdminBugReportWrapper";
+
+const today = new Date();
+const dd = today.getDate().toString();
+const mm = (today.getMonth()+1).toString(); //January is 0!
+const yy = today.getFullYear().toString().substr(-2)
+const curDate = dd+mm+yy;
+
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
     this.state={
       tabOptions:props.tabOptions,
-    }
+    };
     return this;
   }
   render(){
@@ -27,7 +34,7 @@ export default class MlAdminHeader extends Component {
         <BugReportWrapper />
 
         <MlAdminProfile/>
-          <span className="version">Ver.&beta;eta 1.0.0 / 131117</span>
+          <span className="version">Ver.&beta;eta 1.0.1 / {curDate}</span>
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
           <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>

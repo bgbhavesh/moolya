@@ -2,7 +2,7 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
-
+import {stringTitleFormatter,stringTitleAllFormatter,dateTitleFormatter} from '../../../../commons/utils/formatter';
 //@for displaying  list of departments under assign roles
 function departmentsFormatter (data){
 
@@ -61,7 +61,7 @@ function subChapterFormatter(data){
 function dateFormatter(data){
   let createdDateTime=data&&data.data&&data.data.createdDateTime;
   if(createdDateTime){
-    return <div>{moment(createdDateTime).format('DD-MM-YYYY, HH:MM')}</div>;
+    return <div>{moment(createdDateTime).format('DD-MM-YYYY HH:MM:SS')}</div>;
   } else {
     return <div></div>;
   }
@@ -77,7 +77,7 @@ function createdByFormatter(data){
 function updateddateFormatter(data){
   let updatedDateTime=data&&data.data&&data.data.updatedDateTime;
   if(updatedDateTime){
-    return <div>{moment(updatedDateTime).format('DD-MM-YYYY, HH:MM')}</div>;
+    return <div>{moment(updatedDateTime).format('DD-MM-YYYY HH:MM:SS')}</div>;
   } else {
     return <div></div>;
   }
@@ -116,17 +116,16 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "roleName", title: "Role Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "roleType", title: "Role Type",dataSort:true,customComponent:roleType},
-    {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter},
-    {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
-    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
-    {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
-    {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
-    {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
-    {dataField: "updatedDateTime", title: "Updated Date and Time",dataSort:true,customComponent:updateddateFormatter},
-    {dataField: "updatedBy", title: "Updated By",dataSort:true,customComponent: updatedByFormatter},
-
+    {dataField: "roleType", title: "Role Type",dataSort:true,customComponent:roleType,customTitleFormatter:stringTitleFormatter},
+    {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter,customTitleFormatter:stringTitleFormatter},
+    {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter,customTitleFormatter:stringTitleFormatter},
+    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter,customTitleFormatter:stringTitleAllFormatter},
+    {dataField: "chaptersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter,customTitleFormatter:stringTitleAllFormatter},
+    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter,customTitleFormatter:stringTitleAllFormatter},
+    {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter,customTitleFormatter:dateTitleFormatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter,customTitleFormatter:stringTitleFormatter},
+    {dataField: "updatedDateTime", title: "Updated Date and Time",dataSort:true,customComponent:updateddateFormatter,customTitleFormatter:dateTitleFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true,customComponent: updatedByFormatter,customTitleFormatter:stringTitleFormatter},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,

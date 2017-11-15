@@ -132,7 +132,7 @@ class MlAppServiceManageSchedule extends Component {
           status: service.status,
           validTill: service.validTill,
           daysToExpire: remainingDate,
-          totalAmount: service.payment.tasksAmount
+          totalAmount: service.payment.tasksDerived
         };
 
         if (service.termsAndCondition) {

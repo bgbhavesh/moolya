@@ -38,6 +38,7 @@
        sessionId : String
        duration : Duration
        activities: [String]
+       isOffline: Boolean
    }
 
    type Task {
@@ -127,6 +128,7 @@
        sessionId : String
        duration : duration
        activities: [String]
+       isOffline: Boolean
    }
 
    input attachments {

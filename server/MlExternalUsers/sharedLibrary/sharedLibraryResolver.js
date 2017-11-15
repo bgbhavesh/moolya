@@ -192,7 +192,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
 MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info) => {
   let userId = context.userId;
   let pipeline = [
-    {"$match": { "user.userId": userId , "isExpired": false} },
+    {"$match": { "user.userId": userId ,"sharedEndDate":{ "$gte" : new Date()} }},
     {"$group": { _id: "$owner.userId" } },
     {"$lookup": { from: "users", localField: "_id", foreignField: "_id", as: "user" } },
     {"$unwind": "$user"},

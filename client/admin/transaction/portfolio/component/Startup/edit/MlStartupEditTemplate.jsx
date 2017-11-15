@@ -172,8 +172,9 @@ class MlStartupEditTemplate extends Component {
       data['lookingFor'] = [];
     }
     data['lookingFor'] = details;
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
+    this.setState({startupPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey, requiredFields);
+    // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
   }
 
   getStartupMCL(details, privateKey) {
@@ -187,15 +188,23 @@ class MlStartupEditTemplate extends Component {
     if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
+    this.setState({startupPortfolio: data});
+    this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey);
+    // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
   }
 
   getChartDetails(details, tabName) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({startupPortfolio: data});
+  }
 
+  /**
+   * @Note: send data to parent portfolio
+   * */
+  sendDataToParentPortfolio(data, privateKey, requiredFields){
+    var object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {

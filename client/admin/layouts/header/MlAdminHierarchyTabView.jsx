@@ -93,7 +93,7 @@ export default class MlAdminHierarchyTabView extends Component {
     if(hierarchyOption!=undefined){
       tabOptions = hierarchyOption.map(function (option,index) {
         let activeClass="";
-        if(option.link===currentPath){
+        if(currentPath.includes(option.link)){
           activeClass = 'active_btn'
         }
 

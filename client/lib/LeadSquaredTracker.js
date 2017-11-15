@@ -25,6 +25,7 @@ function pidTracker(OrgId, Domain) {
 
     var JSScript = document.createElement('script');
     JSScript.type = 'text/javascript';
+    JSScript.async = true;
     JSScript.src = JScriptURL;
 
     ElementHead.appendChild(JSScript);
@@ -119,6 +120,7 @@ function logMXWebEvent(orgId, eventCode, note, score) {
     //04 Attach Event Tracking Script to Head Tag
     var JSScript    = document.createElement('script');
     JSScript.type   = 'text/javascript';
+    JSScript.async = true;
     JSScript.src    = JScriptURL;
     JSScript.setAttribute('name', ScriptName);
 

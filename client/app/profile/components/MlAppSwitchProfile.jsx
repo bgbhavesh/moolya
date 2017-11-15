@@ -87,6 +87,9 @@ componentDidUpdate(){
   }
 
   async switchProfile(){
+    /*Fix for Issue: MOOLYA-2445*/
+    let userProfilesCount=this.state.userProfiles&&this.state.userProfiles.length?this.state.userProfiles.length:0;
+    if(userProfilesCount<=1){toastr.success("You do not have any other profile to switch");return;}
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
     const response = await switchProfileActionHandler(profileDetails.profileId);

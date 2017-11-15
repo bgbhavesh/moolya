@@ -122,11 +122,9 @@ this.bookDetails(data)
  async testQuery() {
     if(this.props.serviceId) {
       const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId);
-      console.log(resp);
       this.setState({ serviceSeeker: resp})
     } else {
       const resp = await fetchServiceSeekerHandler(this.props.profileId);
-      console.log(resp);
       this.setState({ serviceSeeker: resp})
     }
   }
@@ -194,7 +192,7 @@ this.bookDetails(data)
 
   render(){
     let getServiceQuery = gql`
-      query($profileId:String!) {
+      query($profileId:String) {
         data:fetchServicesForAppointments(profileId: $profileId) {
           value:_id
           label:name

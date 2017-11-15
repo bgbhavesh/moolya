@@ -64,6 +64,14 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     this.setState({stages:stages})
   }
 
+  removeActionComponent(sIdx, aIdx) {
+    let stages = this.state.stages;
+    //let action =
+    stages[sIdx].stageActions.splice(aIdx, 1);
+    //stages[sIdx].stageActions = action;
+    this.setState({stages:stages})
+  }
+
   optionsBySelectStage(sIdx, selectedValue){
     let stages = this.state.stages;
     let findActionIndex=stages.findIndex(function(obj){
@@ -299,7 +307,16 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                          {stage.stageActions.map(function (action, aIdx) {
                            return(
                              <div className="form_inner_block col-md-4" key={aIdx}>
-                               <div className="add_form_block"><img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
+                               <div className="add_form_block">
+                                 {
+                                   aIdx == 0
+                                     ?
+                                       <img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/>
+                                     :
+                                       <img src="/images/remove.png" onClick={that.removeActionComponent.bind(that, sIdx, aIdx)}/>
+                                 }
+
+                               </div>
                                <div className="form-group">
                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
                                                valueKey={'value'}

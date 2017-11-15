@@ -274,70 +274,31 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 </div>
                                 <div className="col-lg-8 col-md-8 col-sm-8">
                                   <div className="form_bg col-md-12">
-                                    <form>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Name" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"/>
-                                      </div>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Company" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"/>
-                                      </div>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Year of Experience"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"/>
-                                      </div>
+                                      <dl>
+                                        <dt>Name</dt>
+                                        <dd>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</dd>
 
-                                    </form>
+                                        <dt>Company</dt>
+                                        <dd>{selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}</dd>
 
-                                    <form>
+                                        <dt>Year of Experience</dt>
+                                        <dd>{selectedPrincipal.yearsOfExperience ? selectedPrincipal.yearsOfExperience : ""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Disignation"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedPrincipal.designation ? selectedPrincipal.designation : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"/>
-                                      </div>
+                                        <dt>Designation</dt>
+                                        <dd>{selectedPrincipal.designation ? selectedPrincipal.designation : ""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Duration" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedPrincipal.duration ? selectedPrincipal.duration : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isDurationPrivate"/>
-                                      </div>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Qualification"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedPrincipal.qualification ? selectedPrincipal.qualification : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"/>
-                                      </div>
+                                        <dt>Duration</dt>
+                                        <dd>{selectedPrincipal.duration ? selectedPrincipal.duration : ""}</dd>
+
+                                        <dt>Qualification</dt>
+                                        <dd>{selectedPrincipal.qualification ? selectedPrincipal.qualification : ""}</dd>
+
+                                        <dt>About</dt>
+                                        <dd>{selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}</dd>
+                                      </dl>
 
 
-                                    </form>
-
-                                    <form>
-
-                                      <div className="form-group">
-                                        <input type="text" placeholder="About" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"/>
-                                      </div>
-                                    </form>
                                   </div>
                                 </div>
                               </div>
@@ -420,61 +381,28 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 </div>
                                 <div className="col-lg-8 col-md-8 col-sm-8">
                                   <div className="form_bg col-md-12">
-                                    <form>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Name" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisFirstNamePrivate"/>
-                                      </div>
+                                    <dl>
+                                      <dt>Name</dt>
+                                      <dd>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Company" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisCompanyNamePrivate"/>
-                                      </div>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Year of Experience"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisYearsOfExperiencePrivate"/>
-                                      </div>
+                                      <dt>Company</dt>
+                                      <dd>{selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Designation"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedTeam.designation ? selectedTeam.designation : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDesignationPrivate"/>
-                                      </div>
+                                      <dt>Year of Experience</dt>
+                                      <dd>{selectedTeam.yearsOfExperience ? selectedTeam.yearsOfExperience : ""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Duration" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedTeam.duration ? selectedTeam.duration : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisDurationPrivate"/>
-                                      </div>
-                                      <div className="form-group">
-                                        <input type="text" placeholder="Qualification"
-                                               className="form-control float-label" id="cluster_name"
-                                               value={selectedTeam.qualification ? selectedTeam.qualification : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisQualificationPrivate"/>
-                                      </div>
+                                      <dt>Designation</dt>
+                                      <dd>{selectedTeam.designation ? selectedTeam.designation : ""}</dd>
 
-                                      <div className="form-group">
-                                        <input type="text" placeholder="About" className="form-control float-label"
-                                               id="cluster_name"
-                                               value={selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}
-                                               disabled='disabled'/>
-                                        <FontAwesome name='unlock' className="input_icon un_lock" id="teamisAboutTeamPrivate"/>
-                                      </div>
-                                    </form>
+                                      <dt>Duration</dt>
+                                      <dd>{selectedTeam.duration ? selectedTeam.duration : ""}</dd>
+
+                                      <dt>Qualification</dt>
+                                      <dd>{selectedTeam.qualification ? selectedTeam.qualification : ""}</dd>
+
+                                      <dt>About</dt>
+                                      <dd>{selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}</dd>
+                                    </dl>
                                   </div>
                                 </div>
                               </div>

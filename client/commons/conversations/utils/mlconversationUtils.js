@@ -6,9 +6,9 @@ import rkConversations from '../library/rkConversations'
 import rkNotifications from '../library/rkNotifications'
 import {loginHandler} from  './mlConversationLoginQuery'
 // const url = "http://localhost:8081/"
-const url = "https://qarkc.moolya.global/";
-//const url = "http://localhost:8081/";
-//const url = "https://qarkc.moolya.global/"
+// const url = "https://qarkc.moolya.global/";
+const url = Meteor.settings.public.conversationsBaseURL + '/';
+
 
 class ConversationUtils{
   constructor(){

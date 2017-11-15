@@ -10,8 +10,7 @@ class ConversationsRepo{
 
   login(context, cb)
   {
-    var authRequest = {userId:context.userId}
-    console.log('login attempt server')
+    var authRequest = {userId:context.userId};
     // var checkData = await this.testApi()
     // console.log('............', checkData)
     this.sendRequest('/login', authRequest, 'post' ,false,  function (res) {
@@ -88,7 +87,7 @@ class ConversationsRepo{
       json: true
     };
 
-    console.log(Meteor.settings.private.conversationsBaseURL+endPoint);
+    console.log('request end point', Meteor.settings.private.conversationsBaseURL + endPoint);
     if(!isApplication){
       var apiKey = this.getApiKey();
       if(!apiKey)

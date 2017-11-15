@@ -67,12 +67,12 @@ export async function fetchProfileAppointmentCountsHandler (profileId, month, ye
 export async function fetchMyAppointmentBetweenTwoDates (profileId,userId,startDay,startMonth,startYear,endDay,endMonth,endYear) {
   const result = await appClient.query({
     query: gql`
-    query($profileId: String!,$userId : String, $startDay: Int, $startMonth: Int, $startYear: Int , $endDay: Int, $endMonth: Int, $endYear: Int){ 
+    query fetchMyAppointmentBetweenTwoDates($profileId: String!,$userId : String, $startDay: Int, $startMonth: Int, $startYear: Int , $endDay: Int, $endMonth: Int, $endYear: Int){ 
       fetchMyAppointmentBetweenTwoDates(profileId: $profileId,userId: $userId,startDay:$startDay, startMonth:$startMonth,
        startYear: $startYear ,endDay:$endDay, endMonth:$endMonth,endYear: $endYear){
-         name
-         startDate
-         endDate
+         title:name
+         start:startDate 
+         end:endDate 
       }
     }
     `,

@@ -415,7 +415,7 @@ class MlPortfolio extends React.Component {
                           <h6
                             className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>
                           {annotationDetails.roleName?<div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>:""}
-                          <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
+                          <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                         </div>
                         <div className="comment-content">
                           {annotationDetails.text}
@@ -447,7 +447,7 @@ class MlPortfolio extends React.Component {
                           <div className="comment-box">
                             <div className="comment-head">
                               <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
-                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
+                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                             </div>
                             <div className="comment-content">
                               {options.comment}

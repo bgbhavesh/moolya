@@ -11,6 +11,12 @@ import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
 import _ from 'lodash';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
+const today = new Date();
+const dd = today.getDate().toString();
+const mm = (today.getMonth()+1).toString(); //January is 0!
+const yy = today.getFullYear().toString().substr(-2)
+const curDate = dd+mm+yy;
+
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
     super(props, context);
@@ -123,7 +129,7 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
-        <span className="version">Ver.&beta;eta 1.0.0 / 131117</span>
+        <span className="version">Ver.&beta;eta 1.0.1 / {curDate}</span>
         {breadcrumType ?
           <DynamicBreadcrum/>
           :

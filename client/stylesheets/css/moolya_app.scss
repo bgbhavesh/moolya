@@ -106,7 +106,7 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
   .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 20;}
-  .ml_app_profile h1 {box-sizing: border-box; font-size: 100%; text-transform: uppercase; font-weight: normal; position: fixed; top:8px; right: 10px; margin: 0; border-radius: 50%; z-index: 50; cursor: pointer; background-image: url(images/img.png); width: 40px; height: 40px;border:2px solid $mlRed;background-size:cover;}
+  .ml_app_profile h1 {box-sizing: border-box; font-size: 100%; text-transform: uppercase; font-weight: normal; position: fixed; top:8px; right: 10px; margin: 0; border-radius: 50%; z-index: 50; cursor: pointer; background-image: url(images/img.png); width: 40px; height: 40px;border:2px solid transparent;background-size:cover;}
   .ml_app_profile ol, .ml_app_profile li {margin: 0;padding: 0;list-style-type: none;}
   .ml_app_profile li {position: absolute;}
   .ml_app_profile li, .ml_app_profile a {display: block;box-sizing: border-box;/*position: absolute;*//*position: relative;*/top: -5em;right: -5em;/*border: 1px dotted #f00;*/transition: all 0.2s ease-in;}

@@ -335,7 +335,14 @@ class MlPortfolio extends React.Component {
       showAction: true,
       actionName: 'cancel',
       handler: async(event) => {
-        FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
+        if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_approved")
+          FlowRouter.go("/admin/transactions/portfolio/approvedPortfolioList");
+        else if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_requested"){
+          FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+        }
+        else{
+          window.history.back();
+        }
       }
     });
     MlActionConfig.push({

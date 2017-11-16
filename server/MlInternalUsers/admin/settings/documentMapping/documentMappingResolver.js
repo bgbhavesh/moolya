@@ -335,7 +335,9 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
         for(let i=0;i<uniquedocId.length;i++){
           let Documentdata = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: clusterId},
             chapters: {$in: chapterId},
-            subChapters:{$in: subChapterId},isActive:true}]}).fetch();
+            subChapters:{$in: subChapterId},
+            validity : {"$gte": new Date()},
+            isActive:true}]}).fetch();
 
           if(Documentdata.length>=1){
             Documentdata.map(function (doc,index) {
@@ -348,7 +350,9 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
           }else{
             let DocumentdataDetails = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: ["all"]},
               chapters: {$in: ["all"]},
-              subChapters:{$in: ["all"]},isActive:true}]}).fetch();
+              subChapters:{$in: ["all"]},
+              validity : {"$gte": new Date()},
+              isActive:true}]}).fetch();
             DocumentdataDetails.map(function (doc,index) {
               doc.documentType=[];
               DocumentdataDetails[index].documentType[0]=uniquedocId[i]

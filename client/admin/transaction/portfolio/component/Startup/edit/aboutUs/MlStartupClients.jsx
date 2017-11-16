@@ -261,6 +261,13 @@ class MlStartupClients extends Component{
   }
 
   render(){
+    let companyNameActive ='',clientDescriptionActive = ''
+    if(this.state.data.companyName){
+      companyNameActive = 'active'
+    }
+    if(this.state.data.clientDescription){
+      clientDescriptionActive = 'active'
+    }
     let that = this;
     const showLoader = that.state.loading;
     let clientsArray = that.state.startupClientsList || [];
@@ -312,6 +319,7 @@ class MlStartupClients extends Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group mandatory">
+                      <span className={`placeHolder ${companyNameActive}`}>Company Name</span>
                       <input type="text" name="companyName" placeholder="Company Name" ref={"companyName"}
                              className="form-control float-label" defaultValue={this.state.data.companyName}
                              onBlur={this.handleBlur.bind(this)}
@@ -320,6 +328,7 @@ class MlStartupClients extends Component{
                       <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                     </div>
                     <div className="form-group">
+                      <span className={`placeHolder ${clientDescriptionActive}`}>About</span>
                       <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "clientDescription", "isDescriptionPrivate")}/>
                     </div>

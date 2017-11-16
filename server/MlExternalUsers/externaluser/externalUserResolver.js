@@ -519,7 +519,7 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
         'profile.isInternaluser': true, 'profile.isMoolya': true,
         'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': profileDetails.clusterId,
         'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': profileDetails.chapterId,
-        'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId': profileDetails.subChapterId
+        'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleName': "chapteradmin",
       }
     },
     {
@@ -531,6 +531,27 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
     }
   ]
   var response = mlDBController.aggregate('users', query, context)
+  if(!response.length) {
+    var query = [
+      {
+        $match: {
+          'profile.isInternaluser': true, 'profile.isMoolya': true,
+          'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId': profileDetails.clusterId,
+          'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId': profileDetails.chapterId,
+          'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleName': "clusteradmin",
+        }
+      },
+      {
+        "$project": {
+          _id: 1, "displayName": {$concat: ["$profile.firstName", " ", "$profile.lastName"]},
+          "userName": "$username",
+          "profileImage": "$profile.profileImage"
+        }
+      }
+    ]
+    var response = mlDBController.aggregate('users', query, context);
+    return response;
+  }
   return response
 }
 

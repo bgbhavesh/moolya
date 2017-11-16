@@ -8,11 +8,13 @@ import Dinstar  from  'dinstar-sms-api';
 //var whiteList = ["9503777162","8686556168","9885794747","8801521564","9985786859","9999104696","8374448883","7036158859","9490353380","8019650414","7416466589","8748947339","7330867711","9849665462","9490353380", "7503726967"];
 var whiteList = ["8801521564"];
 
+
 var smsOptions = {
   username:"rsadmin",
   password:"ahwwpgd",
   port:0
 };
+
 var isWhiteListEnabled=Meteor.settings.private.smsConfig.isWhiteListEnabled;
 var apiBase = 'smsapi.moolya.in:30880';
 

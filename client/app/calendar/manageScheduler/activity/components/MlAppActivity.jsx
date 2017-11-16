@@ -361,7 +361,6 @@ class MlAppActivity extends Component {
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <MlAppScheduleHead type="activity" />
-          <div className="clearfix" />
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">

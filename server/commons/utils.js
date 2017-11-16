@@ -5,6 +5,8 @@
 /**
  * Updated by shubhankit on 24/8/17
  */
+
+var useragent = require('useragent');
 Number.prototype.round = function(p) {
   p = p || 10;
   return parseFloat( this.toFixed(p) );
@@ -47,4 +49,16 @@ export const getCommunityName = function(communityCode) {
     default:
       return ''
   }
+}
+
+export const userAgent = function(useragentString){
+      let ugDetails= useragent.parse(useragentString||'',null) || {};
+      return {
+           deviceVersion:ugDetails.device.toVersion(),
+           deviceName:ugDetails.device.toString(),
+           osName:ugDetails.os.toString(),
+           osVersion:ugDetails.os.toVersion(),
+           agentName:ugDetails.toString(),
+           agentVersion:ugDetails.toVersion()
+      };
 }

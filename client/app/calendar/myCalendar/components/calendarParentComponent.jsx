@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import Calender from '../../../../commons/calendar/calendar'
-import { fetchAllProfileAppointmentCountsHandler, fetchProfileAppointmentCountsHandler, fetchSlotDetailsHandler } from '../actions/appointmentCount';
+import { fetchAllProfileAppointmentCountsHandler, fetchProfileAppointmentCountsHandler, fetchSlotDetailsHandler, fetchMyAppointmentBetweenTwoDates } from '../actions/appointmentCount';
 import MlCalendarHeader from './calendarHeader'
 import CalCreateTask from './calCreateTask'
 import CalCreateAppointmentView from './calAppointmentDetails'
@@ -35,7 +35,8 @@ export default class MLAppMyCalendar extends Component {
       profile:[],
       slotDetailInfo: [{}],
       indexValue:0,
-      exploreAppointmentIds: []
+      exploreAppointmentIds: [],
+      calendarView:'month'
     };
     this.onNavigate = this.onNavigate.bind(this);
     this.onViewChange = this.onViewChange.bind(this);
@@ -45,6 +46,45 @@ export default class MLAppMyCalendar extends Component {
     this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
     this.appointmentView = this.appointmentView.bind(this);
     this.getSessionNumber.bind(this);
+    this.onViewOrNagivationChange = this.onViewOrNagivationChange.bind(this);
+  }
+
+  async onViewOrNagivationChange(view, currentDate){
+    let startDay,startMonth,startYear, endDay, endMonth, endYear;
+    let date = currentDate || new Date();
+    if(view === 'day'){
+      startDay = date.getDate();
+      startMonth = date.getMonth();
+      startYear = date.getFullYear();
+
+      endDay =startDay;
+      endMonth = startMonth;
+      endYear =startYear;
+    }else if(view === 'week'){
+      startDay = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
+      startMonth = date.getMonth();
+      startYear = date.getFullYear();
+
+      endDay = startDay + 6; // last day is the first day + 6
+      endMonth = startMonth;
+      endYear =startYear;
+    }
+
+    let profileId = this.state.profileId;
+    let userId = Meteor.userId();
+    if(profileId && (view === 'day' || view === 'week')) {
+      let resp = await fetchMyAppointmentBetweenTwoDates(profileId,userId,startDay,startMonth,startYear,
+        endDay, endMonth, endYear);
+      resp = _.map(resp, _.partialRight(_.pick, ['title','start','end']));
+      resp = resp.map(data=>{
+        data.start = new Date(data.start);
+        data.end = new Date(data.end);
+        return data;
+      });
+      this.setState({events:resp});
+    } else {
+
+    }
   }
 
   onNavigate(date) {
@@ -53,7 +93,11 @@ export default class MLAppMyCalendar extends Component {
     }, function () {
       let profileId = this.state.profileId;
       if(profileId){
-        this.getProfileBasedAppointments(profileId);
+        let view = this.state.calendarView;
+        if(view === 'day' ||view === 'week' ){
+          this.onViewOrNagivationChange(view,new Date(date));
+        }else
+          this.getProfileBasedAppointments(profileId);
       } else {
         this.getAppointmentCounts()
       }
@@ -61,13 +105,8 @@ export default class MLAppMyCalendar extends Component {
   }
 
   onViewChange (view) {
-    let profileId = this.state.profileId;
-    if(profileId) {
-
-    } else {
-
-    }
-    console.log('view',view, profileId);
+    this.setState({calendarView:view});
+    this.onViewOrNagivationChange(view);
   }
 
   componentWillUpdate(nextProps, nextState){

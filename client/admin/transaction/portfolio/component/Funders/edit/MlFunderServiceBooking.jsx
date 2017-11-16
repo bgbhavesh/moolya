@@ -253,20 +253,26 @@ export default class FunderAboutView extends React.Component{
                     <tbody>
                     <tr>
                       <td>Actual Amount</td>
-                      <td>: {that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksAmount:0}</td>
+                      <td>: {that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksDerived:0}</td>
                     </tr>
                     <tr>
                       <td>Discount Amount</td>
-                      <td>: {that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksDiscount:0}</td>
+                      <td>: {
+                        that.props.serviceDetails.payment ?
+                          that.props.serviceDetails.payment.discountType == "amount" ?
+                            that.props.serviceDetails.payment.discountValue :
+                            (that.props.serviceDetails.payment.tasksDerived / 100 * that.props.serviceDetails.payment.discountValue).toFixed(4)
+                        : 0 }</td>
                     </tr>
-                    {/*<tr>*/}
-                      {/*<td>Tax</td>*/}
-                      {/*<td>: 200 INR</td>*/}
-                    {/*</tr>*/}
                     <tr>
                       <td>Facilitation charges</td>
                       <td>{ that.props.serviceDetails.finalAmount && that.props.serviceDetails.payment ?
-                        parseFloat(that.props.serviceDetails.finalAmount - that.props.serviceDetails.payment.tasksDerived).toFixed(4)
+                        parseFloat(that.props.serviceDetails.finalAmount -
+                          that.props.serviceDetails.payment.tasksDerived +
+                          (that.props.serviceDetails.payment.discountType == "amount" ?
+                            that.props.serviceDetails.payment.discountValue :
+                            that.props.serviceDetails.payment.tasksDerived / 100 * that.props.serviceDetails.payment.discountValue)
+                        ).toFixed(4)
                         : 0 }</td>
                     </tr>
                     <tr>

@@ -479,7 +479,7 @@ MlResolver.MlQueryResolver['validateAssignmentsDataContext'] = (obj, args, conte
           if(role){
             matchFound = true
           }
-        }else if(userRoles[i].clusterId && userRoles[i].chapterId && userRoles[i].subChapterId && !userRoles[i].communityId){
+        }else if(data[i].clusterId && data[i].chapterId && data[i].subChapterId && !data[i].communityId){
           var role = _lodash.find(userRoles, function (obj) {
             if((obj.clusterId == data[i].clusterId || obj.clusterId == "all") && (obj.chapterId == data[i].chapterId || obj.chapterId == "all") && (obj.subChapterId == data[i].subChapterId || obj.subChapterId == "all")){
               return obj

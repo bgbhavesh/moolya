@@ -286,6 +286,11 @@ export default class step1 extends React.Component{
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
           profession: this.state.profession,
+          source          :   this.state.source,
+          deviceName      :   this.state.deviceName,
+          deviceNumber    :   this.state.deviceNumber,
+          ipAddress       :   this.state.ipAddress,
+          ipLocation      :   this.state.ipLocation
           // transactionId:this.state.transactionId,
         }
       }

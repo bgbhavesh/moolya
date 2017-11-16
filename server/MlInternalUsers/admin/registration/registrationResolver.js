@@ -14,7 +14,7 @@ import MlNotificationController from '../../../mlNotifications/mlAppNotification
 import {getCommunityName} from '../../../commons/utils';
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
-
+import {userAgent} from '../../../commons/utils';
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
@@ -108,6 +108,8 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   //     firstName = (user.profile || {}).firstName || '';
   //     lastName = (user.profile || {}).lastName || '';
   // }
+  /*Assign UserAgent to registration object - Fix for Issue: MOOLYA-769*/
+  setUserAgentForRegistration(args.registration,userAgent(context.browser),context.ip);
 
   let createdBy = firstName + ' ' + lastName
   args.registration.createdBy = createdBy ? createdBy : user.username;
@@ -265,7 +267,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var sysAdmin = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
   var sysAdminProfile=sysAdmin&&sysAdmin.profile&&sysAdmin.profile.InternalUprofile&&sysAdmin.profile.InternalUprofile.moolyaProfile?sysAdmin.profile.InternalUprofile.moolyaProfile:{};
   context.userId = sysAdmin._id;
-  context.browser = 'Registration API'
+  //context.browser = 'Registration API'
   context.url = Meteor.absoluteUrl("");
  /**Validate if User is registered in moolya application (specific business requirement) */
   /**fix:MOOLYA-3391*/
@@ -340,6 +342,10 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["emails"] = emails;
     registrationRecord["status"] = "REG_EMAIL_P";
     registrationRecord["registrationDetails"] = {identityType: args.registration.identityType};
+
+    /*Assign UserAgent to registration object - Fix for Issue: MOOLYA-769*/
+    var {source,deviceName,deviceNumber,ipAddress,ipLocation}=setUserAgentForRegistration({},userAgent(context.browser),context.ip);
+    registrationRecord["registrationInfo.source"]=source;registrationRecord["registrationInfo.deviceName"]=deviceName;registrationRecord["registrationInfo.deviceNumber"]=deviceNumber;registrationRecord["registrationInfo.ipAddress"]=ipAddress;registrationRecord["registrationInfo.ipLocation"]=ipLocation;
 
     var updateCount=mlDBController.update('MlRegistration',{"registrationInfo.email":args.registration.email,status: {$nin: ['REG_ADM_REJ', 'REG_USER_REJ']}},registrationRecord,{$set: true,upsert:true,setOnInsert:true,setOnInsertObject:{transactionId:transactionId}}, context);
 
@@ -498,6 +504,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       details.subChapterId = subChapterDetails._id;
       details.createdBy = registrationInfo.createdBy;
 
+      /**Assign UserAgent for registration : fix for Issue: MOOLYA-769*/
+      let {source,ipAddress,ipLocation,deviceName,deviceNumber}=registrationInfo;
+      details=_.extend(details,{source:source,ipAddress:ipAddress,ipLocation:ipLocation,deviceName:deviceName,deviceNumber:deviceNumber});
 
       details.registrationDate = registerDetails && registerDetails.registrationDate ? registerDetails.registrationDate : new Date();
       // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
@@ -1976,3 +1985,14 @@ registrationUserApprovalResponse = (status) => {
     response = "Rejected user can not be approved";
   return response
 };
+
+var setUserAgentForRegistration = (regObj,userAgent,ip)=>{
+  if(regObj){
+    regObj.source=(userAgent||{}).osName;
+    regObj.deviceName=(userAgent||{}).deviceName;
+    regObj.deviceNumber=(userAgent||{}).deviceVersion;
+    regObj.ipAddress=ip;
+    regObj.ipLocation=null;
+  }
+  return regObj;
+}

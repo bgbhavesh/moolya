@@ -5,6 +5,7 @@ import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAc
 import DocumentActiveComponent from "./DocumentActiveComponent";
 import MandatoryProcessDocFormatter from "./MandatoryProcessDocFormatter"
 import _ from 'underscore'
+import moment from 'moment'
 export default class MlProcessDocMapping extends Component {
     constructor(props){
       super(props);
@@ -46,7 +47,7 @@ export default class MlProcessDocMapping extends Component {
           DocType:response[i].documentType,
           Formate: response[i].allowableFormat,
           MaxSize: response[i].allowableMaxSize,
-
+          Validity : response[i]&&response[i].validity?moment(response[i].validity).format('MM-DD-YYYY') : null
         }
         documentDetails.push(json);
       }
@@ -84,6 +85,7 @@ export default class MlProcessDocMapping extends Component {
             <TableHeaderColumn dataField="DocType">DocType</TableHeaderColumn>
             <TableHeaderColumn dataField="Formate">Format</TableHeaderColumn>
             <TableHeaderColumn dataField="MaxSize">MaxSize</TableHeaderColumn>
+            <TableHeaderColumn dataField="Validity">Validity</TableHeaderColumn>
             <TableHeaderColumn dataField="Mandatory" dataFormat={this.SwitchMandatoryBtn.bind(this)}>Mandatory</TableHeaderColumn>
             <TableHeaderColumn dataField="Active" dataFormat={this.SwitchBtn.bind(this)}>Action</TableHeaderColumn>
           </BootstrapTable>

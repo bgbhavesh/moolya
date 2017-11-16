@@ -119,7 +119,7 @@ class MlEditDocumentMapping extends React.Component{
 
       if(this.state.data&&this.state.data.validity){
         let existData = this.state.data;
-        existData.validity = moment(this.state.data&&this.state.data.validity).format('MM-DD-YYYY hh:mm:ss')
+        existData.validity = moment(this.state.data&&this.state.data.validity).format('MM-DD-YYYY')
         this.setState({loading: false,"data":existData});
       }
 
@@ -222,7 +222,7 @@ class MlEditDocumentMapping extends React.Component{
 
   onemploymentDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      let value = moment(event._d).format('MM-DD-YYYY 00:00:00');
       let existData = this.state.data;
       existData.validity = value
       this.setState({loading: false,"data":existData});

@@ -2425,3 +2425,19 @@ li.sameWorkTime:after {
 .active_block{
   border: $mlRed solid 2px;
 }
+.details-panel dd {
+  margin-left: 0;
+  /* float: left; */
+  margin-bottom: 10px;
+}
+.details-panel dt {
+  float: left;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.details-panel dt:after {
+  content: ':';
+}

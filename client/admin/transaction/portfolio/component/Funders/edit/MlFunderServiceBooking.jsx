@@ -264,10 +264,6 @@ export default class FunderAboutView extends React.Component{
                             (that.props.serviceDetails.payment.tasksDerived / 100 * that.props.serviceDetails.payment.discountValue).toFixed(4)
                         : 0 }</td>
                     </tr>
-                    {/*<tr>*/}
-                      {/*<td>Tax</td>*/}
-                      {/*<td>: 200 INR</td>*/}
-                    {/*</tr>*/}
                     <tr>
                       <td>Facilitation charges</td>
                       <td>{ that.props.serviceDetails.finalAmount && that.props.serviceDetails.payment ?

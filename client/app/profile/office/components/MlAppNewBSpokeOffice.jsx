@@ -16,10 +16,10 @@ import {findDefaultProfile} from '../../../commons/actions/fetchUserDetails'
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:"", user:{}, community: "OFB"};
+    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCluster:"", user:{}, community: "OFB"};
     this.handleBlur.bind(this)
     this.setDefaultValues.bind(this)
-    this.findUserDetails.bind(this)
+    // this.findUserDetails.bind(this)
     this.isSubmitDetails = false
     return this;
   }
@@ -60,7 +60,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       area: this.refs.area.value,
       city: this.refs.city.value,
       state: this.refs.state.value,
-      country: this.state.selectedCountry,
+      country: this.state.selectedCluster,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
       availableCommunities: community,
@@ -144,9 +144,10 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   async findUserDetails(){
-    var user = await findDefaultProfile();
+    const user = await findDefaultProfile();
     if(user){
-        this.setState({user:user, selectedCountry:user.countryId})
+        // this.setState({user:user, selectedCluster:user.countryId})
+      this.setState({selectedCluster: user.clusterId})
     }
   }
 
@@ -211,32 +212,34 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   setDefaultValues(selectedItem){
-    this.refs.officeLocation.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
-    this.refs.streetLocality.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
-    this.refs.landmark.value = selectedItem && selectedItem.addressLandmark ? selectedItem.addressLandmark : ""
-    this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : ""
-    this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity: ""
-    this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState: ""
-    // this.state.selectedCountry = selectedItem && selectedItem.addressCountry ? selectedItem.addressCountry : ""
+    this.refs.officeLocation.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : "";
+    this.refs.streetLocality.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : "";
+    this.refs.landmark.value = selectedItem && selectedItem.addressLandmark ? selectedItem.addressLandmark : "";
+    this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : "";
+    this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity: "";
+    this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState: "";
     this.refs.zipCode.value = selectedItem && selectedItem.addressPinCode ? selectedItem.addressPinCode : ""
   }
 
-  optionsBySelectCountry(index, selectedItem){
-    this.setState({selectedCountry: index})
-  }
+  // optionsBySelectCountry(index){
+  //   this.setState({selectedCluster: index})
+  // }
 
   render() {
     let query = gql`query {
         data: getOfficeType{label:displayName, value:code}
       }`
 
-    let countryQuery = gql`query{
-     data:fetchCountries {
-        value:_id
-        label:country
-        code: countryCode
-      }
-    }`
+    // let countryQuery = gql`query{
+    //  data:fetchCountries {
+    //     value:_id
+    //     label:country
+    //     code: countryCode
+    //   }
+    // }`
+    let clusterQuery=gql`  query{
+      data:fetchActiveClusters{label:countryName,value:_id}
+    }`;
 
     let addressQuery = gql`query{
      data:findBranchAddressInfo{
@@ -377,9 +380,9 @@ export default class MlAppNewSpokePerson extends React.Component {
 
                   <div className="form-group">
                     <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Country"
-                                  labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
-                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={true} mandatory={true}
-                                  selectedValue={that.state.selectedCountry} data-required={true} data-errMsg="Country is required"/>
+                                  labelKey={'label'} queryType={"graphql"} query={clusterQuery} isDynamic={true}
+                                  disabled={true} mandatory={true}
+                                  selectedValue={that.state.selectedCluster} data-required={true} data-errMsg="Country is required"/>
                   </div>
                   <div className="form-group mandatory">
                     <input type="number" placeholder="Zip Code" className="form-control float-label" min="0"

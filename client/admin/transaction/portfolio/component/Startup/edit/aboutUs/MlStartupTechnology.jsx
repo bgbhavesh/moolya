@@ -256,6 +256,10 @@ class MlStartupTechnology extends Component{
       this.setState({popoverOpen: false})
   }
   render(){
+    let technologyDescriptionActive =''
+    if(this.state.data.technologyDescription){
+      technologyDescriptionActive = 'active'
+    }
     let query=gql`query{
       data:fetchTechnologies {
         about : about
@@ -328,6 +332,7 @@ class MlStartupTechnology extends Component{
                     </div>
 
                     <div className="form-group">
+                      <span className={`placeHolder ${technologyDescriptionActive}`}>About</span>
                       <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur}/>
                       <FontAwesome id="isDescriptionPrivate" name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "technologyDescription", "isDescriptionPrivate")}/>
                     </div>

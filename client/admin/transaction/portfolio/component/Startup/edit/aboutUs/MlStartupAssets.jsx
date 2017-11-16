@@ -269,6 +269,13 @@ class MlStartupAssets extends Component{
     }else{
       displayUploadButton = false
     }
+    let  quantityActive = '',assetDescriptionActive = ''
+    if(this.state.data.quantity){
+      quantityActive = 'active'
+    }
+    if(this.state.data.assetDescription){
+      assetDescriptionActive = 'active'
+    }
     return(
       <div onClick={this.emptyClick.bind(this)}>
         <h2>Assets</h2>
@@ -323,6 +330,7 @@ class MlStartupAssets extends Component{
                                   selectedValue={this.state.selectedVal}
                                   data-required={true} data-errMsg="Asset Type is required"/>
                     <div className="form-group mandatory">
+                      <span className={`placeHolder ${quantityActive}`}>Enter Number of Quantity</span>
                       <input type="number" name="quantity" placeholder="Enter Number of Quantity" ref={"quantity"}
                              className="form-control float-label" defaultValue={this.state.data.quantity}
                              onBlur={this.handleBlur.bind(this)} data-required={true}
@@ -333,6 +341,7 @@ class MlStartupAssets extends Component{
                     </div>
 
                     <div className="form-group">
+                      <span className={`placeHolder ${assetDescriptionActive}`}>About</span>
                       <input type="text" name="assetDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.assetDescription} onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "assetDescription", "isDescriptionPrivate")}/>
                     </div>

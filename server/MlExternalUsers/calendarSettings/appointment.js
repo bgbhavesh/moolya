@@ -563,7 +563,6 @@ class MlAppointment {
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId});
 
-    console.log("Calendar Setting: ", calendarSetting);
 
     if(!calendarSetting){
       calendarSetting = JSON.parse(JSON.stringify(defaultCalenderSetting));

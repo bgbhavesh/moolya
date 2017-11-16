@@ -11,6 +11,7 @@ import SessionDetails from './sessionDetails'
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
+  fetchMyConnectionActionHandler,
   fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 
@@ -188,8 +189,10 @@ class MlAppServiceSelectTask extends Component{
       activity.teams = activity.teams ? activity.teams : [];
       let teams = activity.teams.map(async function (team) {
         let response;
-        if (team.resourceType == "office") {
+        if(team.resourceType == "office") {
           response = await getTeamUsersActionHandler(team.resourceId);
+        } else if (team.resourceType == "connections") {
+          response = await fetchMyConnectionActionHandler(team.resourceId);
         }
         return response;
       });
@@ -342,7 +345,7 @@ class MlAppServiceSelectTask extends Component{
       }
     }
     this.setState({
-      activities: activities
+      //activities: activities
     });
   }
 
@@ -360,6 +363,7 @@ class MlAppServiceSelectTask extends Component{
       return data.id == that.props.selectedTab;
     });
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
+    console.log('activities',activities);
     return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>

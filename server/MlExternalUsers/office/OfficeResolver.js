@@ -533,7 +533,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       let fromUserType = 'user';     //to userId is not available as user is not created till
       mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerInvitation', officeMember.officeId, ret, context.userId, fromUserType, context);
       // update ledger balance and journal
-      ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
+      //ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
       if(!ret)
         return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400);
     }
@@ -721,6 +721,7 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
            MlEmailNotification.officeBearerApprovedByAdmin(officeMember)
            let userId = officeMember&&officeMember.userId?officeMember.userId:""
            MlNotificationController.officeBearerApprovedByAdmin(userId)
+           mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(officeMember.officeId, officeMember, context)
          }
       }else {
         let code = 400;

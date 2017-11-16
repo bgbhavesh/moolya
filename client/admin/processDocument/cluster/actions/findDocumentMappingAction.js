@@ -24,6 +24,7 @@ export async function findDocumentMappingActionHandler(kycid,processid)
           subChapters
           kycCategory
           documentType
+          validity
           isActive
         }
       }

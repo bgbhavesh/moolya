@@ -1065,7 +1065,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending", isCancelled : { "$ne" : true } } },
       { $addFields: { appointmentWith: {
         $cond: [
           { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
@@ -1092,7 +1092,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted", isCancelled : { "$ne" : true } } },
       { $addFields: { appointmentWith: {
         $cond: [
           { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
@@ -1120,7 +1120,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed", isCancelled : { "$ne" : true } } },
       { $addFields: { appointmentWith: {
         $cond: [
           { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
@@ -1147,7 +1147,12 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId,
+        "$or" : [
+          {'members.status': "Rejected" },
+          { isCancelled : true }
+        ]
+      } },
       { $addFields: { appointmentWith: {
         $cond: [
           { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }

@@ -332,11 +332,14 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
         return index == self.indexOf(elem);
       })
       if(uniquedocId.length>=1){
+        let date = new Date();
+        date.setHours(0,0,0,0)
         for(let i=0;i<uniquedocId.length;i++){
           let Documentdata = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: clusterId},
             chapters: {$in: chapterId},
             subChapters:{$in: subChapterId},
-            validity : {"$gte": new Date()},
+            $or : [{validity : null},{validity : {"$gte": date}}],
+            //validity : {"$gte": new Date()},
             isActive:true}]}).fetch();
 
           if(Documentdata.length>=1){
@@ -348,10 +351,13 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
               data.push(Documentdata[j])
             }
           }else{
+            let date = new Date();
+            date.setHours(0,0,0,0)
             let DocumentdataDetails = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: ["all"]},
               chapters: {$in: ["all"]},
               subChapters:{$in: ["all"]},
-              validity : {"$gte": new Date()},
+              $or : [{validity : null},{validity : {"$gte": date}}],
+              //validity : {"$gte": new Date()},
               isActive:true}]}).fetch();
             DocumentdataDetails.map(function (doc,index) {
               doc.documentType=[];

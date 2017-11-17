@@ -194,7 +194,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     const problemImages = problemImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <FontAwesome name='unlock' className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"problemImage",m.fileUrl)}/>
+          <FontAwesome name="trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"problemImage",m.fileUrl)}/>
           <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
@@ -204,7 +204,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     const solutionImages = solutionImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <FontAwesome name='unlock' className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"solutionImage",m.fileUrl)}/>
+          <FontAwesome name="trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"solutionImage",m.fileUrl)}/>
           <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )

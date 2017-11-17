@@ -1652,4 +1652,5 @@ margin: 0px;
   top: 0px;
 }
 .wrap-show {display: none !important;}
+.upload_lock{position: absolute;left: -106px;top: 18px;z-index: 999;}
 

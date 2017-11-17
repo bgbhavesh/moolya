@@ -270,7 +270,7 @@ background-color: #ddd;
 }
 
 
-.progress-circle:before {     border-radius: 50%;     content: '';     position: absolute;     left: 50%;     top: 50%;     transform: translate(-50%, -50%);     width: 39px;     height: 39px;     background-position: center, center;     background-size: 100%;
+.progress-circle:before { border-radius: 50%; content: '';     position: absolute;     left: 50%;     top: 50%;     transform: translate(-50%, -50%);     width: 39px;     height: 39px;     background-position: center, center;     background-size: 100%;
 }
 
 

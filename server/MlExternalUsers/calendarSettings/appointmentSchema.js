@@ -119,6 +119,7 @@ let appointment = `
     appointmentWith: AppointmentWith
     startDate: Date
     endDate: Date
+    isCancelled: Boolean
   }
   
   type AttendeeDetails {
@@ -241,7 +242,7 @@ let appointment = `
      fetchProfileAppointmentCounts( profileId: String, month:Int, year: Int): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(userId: String, profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
-     fetchMyAppointmentBetweenTwoDates(userId: String, profileId: String!, startDay: Int, startMonth: Int, startYear: Int , endDay: Int, endMonth: Int, endYear: Int): [myAppointmentsBetweenTwoDatesResponse]
+     fetchMyAppointmentBetweenTwoDates(userId: String, profileId: String, startDay: Int, startMonth: Int, startYear: Int , endDay: Int, endMonth: Int, endYear: Int): [myAppointmentsBetweenTwoDatesResponse]
      fetchSelfTask(selfTaskId: String): selfTask
      fetchSlotDetails(appointmentId: [String]): [SlotInfo]
   }

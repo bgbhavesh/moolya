@@ -1084,7 +1084,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .moolya_admin .RRT__showmore-list--opened {display: block; }
 .moolya_admin .RRT__inkbar-wrapper {width: 100%; }
 .moolya_admin .RRT__inkbar {position: relative; bottom: 0; height: 2px; margin-top: -2px; background-color: deepskyblue; transition: left 800ms cubic-bezier(0.23, 1, 0.32, 1); z-index: 2; }
-
+.Select-menu-outer{ width:98% !important; }
 
 .moolya_admin .RRT__container .moolya_btn{display: inline-block;width: auto;display:inline-block;background: #fff;border:0px;padding: 2px 0px 4px 12px;line-height:25px;position: relative;text-decoration: none;font-size: 14px;height: 36px;cursor: pointer;}
 .moolya_admin .RRT__container .moolya_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #fff;top: 0px;}

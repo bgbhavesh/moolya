@@ -1786,3 +1786,24 @@ MlResolver.MlQueryResolver['checkDefaultRole'] = (obj, args, context, info) => {
   var  userInfo = mlDBController.findOne('users',{_id:args.userId},context) || {};
    return userInfo.profile.InternalUprofile.moolyaProfile.userProfiles;
 };
+
+MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => {
+  let clusterId = "";
+  var  userInfo = mlDBController.findOne('users',{_id:context.userId},context) || {};
+  let userType = userInfo.profile && userInfo.profile.InternalUprofile && userInfo.profile.InternalUprofile.moolyaProfile ? "admin" : "user"
+  if( userType === "admin") {
+    let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    clusterId = userProfile.defaultCluster;
+  } else {
+    let userProfiles = userInfo.profile.externalUserProfiles;
+    userProfiles.map((defaultProfile) => {
+      if (defaultProfile.isDefault) {
+        clusterId = defaultProfile.clusterId;
+        return false;
+      }
+    })
+  }
+    var  clusterInfo = MlClusters.findOne({_id:clusterId}, context)
+    var  currencyInfo = MlCurrencyType.findOne({countryName:clusterInfo.countryName}, context);
+    return currencyInfo;
+}

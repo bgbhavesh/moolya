@@ -65,7 +65,7 @@ export default class MlUsersAbout extends Component {
     const response = await deActivateUserProfileByContextHandler(userprofile)
     if (response && response.result && response.success)
       toastr.success(response.result)
-    else (response && response.result && !response.success)
+    else if (response && response.result && !response.success)
       toastr.error(response.result)
   }
 
@@ -78,9 +78,9 @@ export default class MlUsersAbout extends Component {
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     var userId = regInfo.userId
     const response = await deActivateUser(userId, status);
-    if (response && response.status)
+    if (response && response.success)
       toastr.success(response.result);
-    else if (response && !response.status)
+    else if (response && !response.success)
       toastr.error(response.result);
     return response
   }
@@ -90,9 +90,9 @@ export default class MlUsersAbout extends Component {
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     var userId = regInfo.userId
     const response = await showOnMapActionHandler(userId, status)
-    if (response && response.status)
+    if (response && response.success)
       toastr.success(response.result);
-    else if (response && !response.status)
+    else if (response && !response.success)
       toastr.error(response.result);
     return response
   }
@@ -179,7 +179,12 @@ export default class MlUsersAbout extends Component {
      }
      }
      `;
-    let that = this
+      let citiesquery = gql`query{
+            data:fetchCities {label:name,value:_id
+          }
+      }`;
+
+    let that = this;
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     let regDetail = this.state.data && this.state.data.registrationDetails ? this.state.data.registrationDetails : {}
     let alsoRegisterAs = this.state.data && this.state.data.externalUserProfiles && this.state.data.externalUserProfiles.length > 0 ? this.state.data.externalUserProfiles : ['0']
@@ -357,12 +362,10 @@ export default class MlUsersAbout extends Component {
                                       queryType={"graphql"} query={countryQuery} isDynamic={true} disabled={true}/>
                       </div>
 
-                      <div className="form-group">
-                        <input type="text" placeholder="Your City" className="form-control float-label"
-                               defaultValue={regInfo.cityId}
-                               disabled="disabled"/>
-                      </div>
-
+                      <Moolyaselect type="text" placeholder="Your City" className="form-control float-label"
+                                    valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={citiesquery}
+                                    selectedValue={regInfo.cityId}
+                                    isDynamic={true} disabled={true}/>
 
                       <div className="form-group">
                         <input type="text" placeholder="Email Id" defaultValue={regInfo.email}

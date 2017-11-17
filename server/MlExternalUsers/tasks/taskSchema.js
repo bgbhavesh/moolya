@@ -66,6 +66,8 @@
    type TaskSession{
        sessionId : String
        duration : Duration
+       startDate: Date
+       status: String
        activities: [TaskActivity]
    }
    
@@ -183,10 +185,10 @@
           fetchTask(taskId:String):Task
           fetchTaskDetails(name: String):Task
           fetchTaskDetailsAdmin(name: [String]): [Task]
-          fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[ServiceTask]
+          fetchTaskDetailsForServiceCard(profileId:String, serviceId: String, orderId: String):[ServiceTask]
           fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):[ServiceTask]
           fetchTasksInBooking(id: [String]): [Task]
-          fetchTaskForApointment(taskId: String): ServiceTask
+          fetchTaskForApointment(taskId: String, orderId: String): ServiceTask
           fetchActivitiesTeams(taskId: String, sessionId: String): [Activity]
    }
 

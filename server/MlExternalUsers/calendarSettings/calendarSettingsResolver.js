@@ -481,7 +481,11 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
       let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, { vacations: isAlreadyExist.vacations, updatedAt: new Date() }, { $set: true }, context);
       if (result) {
         let code = 200;
-        let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+        if(vacation.isAutoCancelAppointment){
+          cancelAppointmentsOnVacation(userId,startDate, endDate , obj, context, info );
+        }
+
+        let response = new MlRespPayload().successPayload('Vacation created successfully', code);
         return response;
       }
     }
@@ -499,6 +503,125 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
       return response;
     }
   }
+}
+
+let cancelAppointmentsOnVacation = (userId, startDate, endDate, obj, context, info)=>{
+  let pipeline = [
+    {
+      $match:{
+        $or:[{"status":"Pending"},{"status":"Accepted"}]
+      }
+    },
+    {
+      $lookup:{
+        from:'mlAppointments',
+        localField:'appointmentId',
+        foreignField:'appointmentId',
+        as:'appointment'
+      }
+    },
+    {
+      $unwind: "$appointment"
+    },
+    {
+      $match:{
+        $and:[
+          {"appointment.isCancelled":false},
+          {
+            $or:[
+              {
+                '$and':[
+                  {'appointment.startDate': { "$gte": startDate }},
+                  {'appointment.startDate': { "$lt": endDate }},
+                ]
+              },
+              {
+                '$and':[
+                  {'appointment.endDate': { "$gt": startDate }},
+                  {'appointment.endDate': { "$lte": endDate }},
+                ]
+              },
+              {
+                '$and':[
+                  {'appointment.startDate': { "$lte": startDate }},
+                  {'appointment.endDate': { "$gte": endDate }},
+                ]
+              },
+              {
+                '$and':[
+                  {'appointment.startDate': { "$gte": startDate }},
+                  {'appointment.endDate': { "$lte": endDate }},
+                ]
+              },
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "$project": {
+        appointmentId: 1,_id:0,"appointment.createdBy":1
+      }
+    }
+
+  ];
+
+  let res = mlDBController.aggregate('MlAppointmentMembers', pipeline, context);
+
+  let arrayOfId = res.map(obj => obj.appointmentId);
+  let uniqueArrayOfId = arrayOfId.filter((v, i, a) => a.indexOf(v) === i);
+
+  if(uniqueArrayOfId && uniqueArrayOfId.length){
+
+    let dbres1 = mlDBController.update('MlAppointmentMembers', {appointmentId: { $in : uniqueArrayOfId }},  {status:'Rejected'},
+      {$set:true,multi:true}, context);
+
+    let appointmentsByCreator = res.filter((v, i, a) => v.appointment.createdBy === userId)
+
+    // let dbres2 = mlDBController.update('MlAppointments',{
+    //     $and:[
+    //       {appointmentId: { $in : uniqueArrayOfId }},
+    //       {createdBy : userId}
+    //     ]
+    //   },  { isCancelled:true},
+    //   {$set:true,multi:true}, context);
+
+    appointmentsByCreator.map(obj=>{
+      cancelUSerServiceCardAppointment(obj.appointmentId, context);
+    });
+
+  }
+}
+
+let cancelUSerServiceCardAppointment=(appointmentId, context)=>{
+
+  let appointmentInfo = mlDBController.findOne('MlAppointments', {appointmentId: appointmentId}, context);
+  if(!appointmentInfo || !appointmentInfo.appointmentInfo || appointmentInfo.appointmentInfo.resourceType !== "ServiceCard" ) {
+    return;
+  }
+
+  let serviceId = appointmentInfo.appointmentInfo.serviceCardId;
+  let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+  if( !serviceInfo ) {
+    return;
+  }
+
+  if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isReschedulable ) {
+    return;
+  }
+
+  let noOfReschedule = serviceInfo.termsAndCondition.noOfReschedulable || 0;
+  let rescheduleTrails = appointmentInfo.rescheduleTrail ? rescheduleTrail.rescheduleTrail.length : 0;
+  if( noOfReschedule <= rescheduleTrails ) {
+    return;
+  }
+
+  let memberResponse = mlDBController.update('MlAppointmentMembers', {appointmentId: appointmentId}, { isCancelled: true }, {$set:true, multi: true}, context);
+  if(!memberResponse){
+    return;
+  }
+  let appointmentResponse = mlDBController.update('MlAppointments', {appointmentId: appointmentId}, { isCancelled: true }, {$set:true, multi: true}, context);
+  return;
 }
 
 MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args, context, info) => {
@@ -562,6 +685,11 @@ MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args
       });
       let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, { vacations: newVacationData, updatedAt: new Date() }, { $set: true }, context);
       if (result) {
+
+        if(vacation.isAutoCancelAppointment){
+          cancelAppointmentsOnVacation(userId, startDate, endDate,  obj, context, info);
+        }
+
         let code = 200;
         let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
         return response;

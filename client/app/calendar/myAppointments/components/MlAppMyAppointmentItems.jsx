@@ -56,7 +56,8 @@ export default class MlAppMyAppointmentItems extends Component{
       serviceName: appointment.appointmentInfo.serviceName,
       sessionId: appointment.appointmentInfo.sessionId,
       startDate: appointment.startDate,
-      endDate: appointment.endDate
+      endDate: appointment.endDate,
+      isCancelled: appointment.isCancelled,
     };
     FlowRouter.setQueryParams({appointment:data});
     // this.setState({

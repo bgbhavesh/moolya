@@ -507,6 +507,18 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
+    type CurrencyInfo {
+        countryName        : String
+        currencyName       : String
+        currencyCode       : String
+        isActive           : Boolean
+        symbol             : String
+        symbol_native      : String
+        decimal_digits     : Int
+        rounding           : Int
+        name_plural        : String
+    }
+    
     type Mutation{
         createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response           
         updateUser(userId:String!, user:userObject!, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response                                    
@@ -552,6 +564,7 @@ let BackEndUser = `
         findBranchAddressInfo: [AddressInfoSchema]
         fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): anchorUsers
         checkDefaultRole(userId: String): [UserProfiles]
+        fetchCurrencyType: CurrencyInfo
     }
 `
 
@@ -583,6 +596,7 @@ let supportedApi = [
     {api:'findExternalUserAddressBook',actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'fetchAnchorUsers',actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'checkDefaultRole',actionName:'READ', moduleName:"USERS", isWhiteList: true},
+    {api:'fetchCurrencyType',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

@@ -33,3 +33,27 @@ export async function fetchActivitiesActionHandler (profileId) {
   const activities = result.data.fetchActivities;
   return activities
 }
+
+export async function fetchCurrencyTypeActionHandler () {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchCurrencyType{
+       countryName        
+        currencyName       
+        currencyCode       
+        isActive           
+        symbol             
+        symbol_native      
+        decimal_digits     
+        rounding           
+        name_plural        
+      }
+    }
+    `,
+    forceFetch:true
+  });
+  const activities = result.data.fetchCurrencyType;
+  return activities
+}
+

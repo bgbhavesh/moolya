@@ -59,7 +59,7 @@ export default class MlAppIdeatorEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Ideator",
-        component: <MlIdeatorDetails key="1" isAdmin={false} client={appClient} tabName="ideatorAbout"
+        component: <MlIdeatorDetails key="1" isAdmin={false} client={appClient} tabName="portfolioIdeatorDetails"
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>
       },

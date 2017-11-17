@@ -102,9 +102,7 @@ export default class MlStartupViewBranches extends React.Component {
 
   render(){
     let that = this;
-    console.log(this.props)
-    // let branchesArray = that.state.startupBranchesList || [];
-    var branchesArray = that.props.branchesDetails || [];
+    const branchesArray = that.props.branchesDetails || [];
     return (
 
         <div id="annotatorContent">
@@ -117,7 +115,8 @@ export default class MlStartupViewBranches extends React.Component {
                 return(
                   <div className="col-lg-4 col-md-6 col-sm-6" key={idx}>
                     <div className="branch_block shadow_block">
-                      <img src={details.logo&&details.logo.fileUrl?generateAbsolutePath(details.logo.fileUrl):"/images/headquarters_img.png"}/>
+                      <img
+                        src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/headquarters_img.png"}/>
                       <h3>
                         {details.branchName} <br />
                       </h3>

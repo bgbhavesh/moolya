@@ -86,7 +86,7 @@ MlResolver.MlQueryResolver['fetchCompanyDetails'] = (obj, args, context, info) =
   var companyPortfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
   if (companyPortfolio && companyPortfolio.hasOwnProperty(key)) {
     var object = companyPortfolio[key];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
     companyPortfolio[key] = filteredObject
     return companyPortfolio;
   }
@@ -159,19 +159,19 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
 
     //private keys for service products
     var object = companyAboutUsArray["serviceProducts"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "serviceProducts")
     companyAboutUsArray["serviceProducts"] = filteredObject
 
     var aboutUsObject = companyAboutUsArray["aboutUs"];
-    var aboutUsFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, aboutUsObject, context)
+    var aboutUsFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, aboutUsObject, context, "aboutUs")
     companyAboutUsArray["aboutUs"] = aboutUsFilteredObject
 
     var infoObject = companyAboutUsArray["information"];
-    var infoFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, infoObject, context)
+    var infoFilteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, infoObject, context, "information");
     companyAboutUsArray["information"] = infoFilteredObject
 
     if(companyAboutUsArray && companyAboutUsArray.clients){
-      companyAboutUsArray.clients = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, companyAboutUsArray.clients, context)
+      companyAboutUsArray.clients = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, companyAboutUsArray.clients, context, "clients");
       companyAboutUsArray.clients.map(function(client,index) {
         let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
         if(companyAboutUsArray.clients[index]){

@@ -255,7 +255,7 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName :  details.employmentStatus
 
-      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context, "portfolioIdeatorDetails");
 
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
@@ -270,7 +270,7 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, 
     let idea = MlIdeas.findOne({"_id": args.ideaId})
     if(!idea)
       return {};
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, "ideas");
     return filteredObject;
   }
 
@@ -741,7 +741,7 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
   _.each(portfolios, function (portfolio) {
     let idea = MlIdeas.findOne({"portfolioId": portfolio._id})
     if (idea) {
-      idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
+      idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, "ideas");
       idea.createdAt = portfolio ? portfolio.createdAt : null;
       idea.updatedAt = portfolio ? portfolio.transactionUpdatedDate : null;
       ideas.push(idea);
@@ -764,7 +764,7 @@ MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) =
   var ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
   if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty(key)) {
     var object = ideatorPortfolio[key];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
     ideatorPortfolio[key] = filteredObject
     return ideatorPortfolio;
   }

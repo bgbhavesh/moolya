@@ -85,7 +85,9 @@ class MlStartupClients extends Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY};
+    if(fieldName === "logo")
+      privateKey["objectName"] = "logo";
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -334,6 +336,7 @@ class MlStartupClients extends Component{
                     </div>
                     {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
+                        <FontAwesome name='unlock' className="input_icon upload_lock" id="isLogoPrivate"  defaultValue={this.state.data.isLogoPrivate}  onClick={this.onLockChange.bind(this, "logo", "isLogoPrivate")}/>
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>

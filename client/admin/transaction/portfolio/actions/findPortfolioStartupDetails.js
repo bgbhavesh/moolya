@@ -105,6 +105,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   }
                   makePrivate
                   index
+                  privateFields{
+                      keyName
+                      booleanKey
+                      index
+                      tabName
+                  }
                 }
                 serviceProducts{
                   spDescription

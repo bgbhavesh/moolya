@@ -103,7 +103,7 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : details.employmentStatus;
 
-      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context, "funderAbout");
 
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
@@ -128,7 +128,7 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
 
         })
       }
-      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, portfolio['investments'], context)
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, portfolio['investments'], context, "investments");
       return filteredObject;
     }
   }
@@ -249,7 +249,7 @@ MlResolver.MlQueryResolver['fetchFunderDetails'] = (obj, args, context, info) =>
   var funderPortfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
   if (funderPortfolio && funderPortfolio.hasOwnProperty(key)) {
     var object = funderPortfolio[key];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
     funderPortfolio[key] = filteredObject
     return funderPortfolio;
   }

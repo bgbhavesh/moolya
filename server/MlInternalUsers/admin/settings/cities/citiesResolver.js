@@ -86,11 +86,13 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
         }
     }
 }
+  /**
+   * @module 1) ["users"] about left nav
+   * */
 MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) => {
-  // let result=MlCities.find().fetch()||[];
-  let result = mlDBController.find('MlCities', {}, context).fetch()||[];
+  const result = mlDBController.find('MlCities', {}, context).fetch() || [];
   return result;
-}
+};
 
 MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) => {
 

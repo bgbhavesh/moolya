@@ -36,7 +36,7 @@ export default class EmailVerification extends React.Component{
       headers: header,
       contentType: "application/json; charset=utf-8",
       success:function(response){
-        console.log(response);
+        // console.log(response);
         if(response.success){
           resp = JSON.parse(response.result);
           this.setState({loading:false,emailVerificationSuccess:resp.emailVerified,email:resp.email,mobileNumber:resp.mobileNumber});
@@ -141,12 +141,12 @@ export default class EmailVerification extends React.Component{
     return response;
   }*/
  componentDidMount(){
-     setTimeout(function(){
+     setTimeout(() => {
        this.setState({canResend:true})
-     }.bind(this),30000)
+     },30000)
 
      var timeleft = 30;
-     var downloadTimer = setInterval(function(){
+     var downloadTimer = setInterval(() => {
        timeleft--;
        document.getElementById("countdowntimer").textContent = timeleft;
        if(timeleft <= 0)

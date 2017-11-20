@@ -583,7 +583,7 @@ class MlAppMyProfile extends Component {
           <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
         </div>)}
       <div className="modal fade bs-example-modal-sm library-popup termsConditionsPop"
-           onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+           onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
            aria-labelledby="mySmallModalLabel">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -1431,7 +1431,7 @@ class MlAppMyProfile extends Component {
       </div>
 
       <div className="modal fade bs-example-modal-sm library-popup privacyPop"
-           onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+           onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
            aria-labelledby="mySmallModalLabel">
         <div className="modal-dialog" role="document">
           <div className="modal-content">

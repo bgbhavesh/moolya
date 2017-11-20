@@ -51,27 +51,47 @@ class MlUserContext{
       return user_Profile;
     }
 
-    getDefaultMenu(userId){
-        check(userId,String);
-        var  menu = ''
-        let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile && userProfile.communityDefCode){
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
-        }
-        else{
-          // commmunity type browser will not have any profile
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive:true}]});
-        }
-        if(menu)
-          return menu.menuName;
-        return menu;
+    /**
+     * @module [app left nav deciding]
+     * @cond 1) community code if not then user will be "BRW"
+     *       2) if hard registration not approved by admin then also menu will be "BRW"
+     *       3) else for all other cases the left nav will be decided by the user community code only
+     * */
+    getDefaultMenu(userId) {
+      check(userId, String);
+      var menu = '';
+      let userProfile = this.userProfileDetails(userId) || {};
+      if (userProfile && userProfile.communityDefCode) {
+        const registration = this.isUserRegistrationApproved(userProfile);
+        if (registration)
+          menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive: true}]});
+        else
+          menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive: true}]});
+      }
+      else {
+        // commmunity type browser will not have any profile
+        menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive: true}]});
+      }
+      if (menu)
+        return menu.menuName;
+      return menu;
     }
 
+  /**
+   * @module [app profile left nav deciding]
+   * @cond 1) community code if not then user will be "BRW"
+   *       2) if hard registration not approved by admin then also menu will be "BRW"
+   *       3) else for all other cases the left nav will be decided by the user community code only
+   * */
     getDefaultProfileMenu(userId){
         var  menu = ''
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile && userProfile.communityDefCode){
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
+          const registration = this.isUserRegistrationApproved(userProfile);
+          if(registration)
+            menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
+          else
+            menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: 'BRW'}, {isActive:true}]});
         }
         else{
           // commmunity type browser will not have any profile
@@ -97,6 +117,13 @@ class MlUserContext{
       }
       return 'mlCalendarMenu';
     }
+
+  isUserRegistrationApproved(userDefaultProfile) {
+    return mlDBController.findOne('MlRegistration', {
+      _id: userDefaultProfile.registrationId,
+      status: 'REG_KYC_A_APR'
+    })
+  }
 }
 
 

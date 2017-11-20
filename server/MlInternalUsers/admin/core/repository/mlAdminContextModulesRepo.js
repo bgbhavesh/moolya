@@ -754,7 +754,7 @@ let CoreModules = {
         });
       });
     });
-    var totalRecords = mlDBController.find('MlServiceCardDefinition', serverQuery, context, fieldsProj).count();
+    var totalRecords = mlDBController.find('MlServiceCardDefinition', resultantQuery, context, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
   MlHierarchyClusterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {

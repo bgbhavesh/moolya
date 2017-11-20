@@ -90,8 +90,9 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   rating,
                   isRatingPrivate,
                   privateFields{
-                      keyName,
-                      booleanKey
+                    keyName,
+                    booleanKey
+                    tabName
                   }
                 }
                 clients{
@@ -105,6 +106,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   }
                   makePrivate
                   index
+                  privateFields{
+                    keyName
+                    booleanKey
+                    index
+                    tabName
+                  }
                 }
                 serviceProducts{
                   spDescription
@@ -163,6 +170,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   index
+                  privateFields{
+                    keyName
+                    booleanKey
+                    index
+                    tabName
+                  }
                 }
                 technologies{
                   technologyName

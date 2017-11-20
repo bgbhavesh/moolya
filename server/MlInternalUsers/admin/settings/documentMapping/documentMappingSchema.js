@@ -54,6 +54,7 @@ let DocumentMapping = `
         kycCategory  : [String]
         docCategoryName: String
         documentType   : [String]
+        validity  : Date
         isActive : Boolean
       }
       input allowableFormat{
@@ -90,6 +91,7 @@ let DocumentMapping = `
         allowableMaxSize  : String,
         issuingAuthority  : String,
         isActive    : Boolean
+        validity  : Date
         createdBy       : String
         createdDate     : Date
         updatedBy       : String

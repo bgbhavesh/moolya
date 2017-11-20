@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
 import {findAddressBookActionHandler} from '../../actions/findUserAddressBookHandler'
 import {findCountryCode} from '../../actions/findUserAddressBookHandler'
-import MlLoader from '../../../../commons/components/loader/loader'
+// import MlLoader from '../../../../commons/components/loader/loader'
 
 export default class MlUserContactDetails extends React.Component {
   constructor(props) {
@@ -81,7 +81,7 @@ export default class MlUserContactDetails extends React.Component {
 
     return (
       <div className="panel-body">
-        {showLoader===true?(<MlLoader/>):(
+        {/*{showLoader===true?(<MlLoader/>):(*/}
         <div className="ml_tabs">
           <ul className="nav nav-pills">
             {details && (details.map(function (options, key) {
@@ -119,7 +119,8 @@ export default class MlUserContactDetails extends React.Component {
              }))}
 
           </div>
-        </div>)}
+        </div>
+        {/*)}*/}
       </div>
     )
   }

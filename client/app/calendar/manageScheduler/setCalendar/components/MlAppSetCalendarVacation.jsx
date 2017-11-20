@@ -62,7 +62,9 @@ class MlAppSetCalendarVacation extends Component {
     //   isAllowBooking: false,
     //   isAutoCancelAppointment: false
     // };
-    this.setState({vacations: newProps.vacations, selectedVacation: '', vacationData: vacationData});
+    this.setState({vacations: newProps.vacations, selectedVacation: ''
+      // , vacationData: vacationData
+    });
   }
 
   /**
@@ -216,10 +218,13 @@ class MlAppSetCalendarVacation extends Component {
       let response = '';
       let profileId = FlowRouter.getParam('profileId');
       if (this.state.selectedVacation) {
-        response = await updateCalendarVacationByIdActionHandler(profileId, this.validVacationData, this.state.selectedVacation);
+        response = await updateCalendarVacationByIdActionHandler(profileId, this.validVacationData, this.state.selectedVacation,
+          this.state.vacationData.isAutoCancelAppointment);
+        this.props.updateVacationList();
         this.showResponseMsg(response);
       } else {
-        response = await updateCalendarVacationActionHandler(profileId, this.validVacationData);
+        response = await updateCalendarVacationActionHandler(profileId, this.validVacationData,this.state.vacationData.isAutoCancelAppointment);
+        this.props.updateVacationList();
         this.showResponseMsg(response);
       }
     }
@@ -251,7 +256,7 @@ class MlAppSetCalendarVacation extends Component {
   onChangeCheckboxFields(event) {
     const vacationData = this.state.vacationData;
     const name = event.target.name;
-    const value = event.target.value;
+    const value = event.target.checked;
     vacationData[name] = value;
     this.setState({vacationData: vacationData});
   }

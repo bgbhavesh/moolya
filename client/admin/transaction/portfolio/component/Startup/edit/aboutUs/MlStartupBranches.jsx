@@ -86,8 +86,9 @@ class MlStartupBranches extends Component{
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : uiIndex, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
+    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
     setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
+      _.each(privateFieldAry, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
@@ -99,7 +100,9 @@ class MlStartupBranches extends Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY};
+    if (fieldName === "logo")
+      privateKey["objectName"] = "logo";
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -312,6 +315,25 @@ class MlStartupBranches extends Component{
     }else{
       displayUploadButton = false
     }
+    let branchNameActive ='',branchPhoneNumberActive ='',branchAddress1Active='',branchAddress2Active='',branchLandmarkActive='',branchAreaAcitve=''
+    if(this.state.data.branchName){
+      branchNameActive = 'active'
+    }
+    if(this.state.data.branchPhoneNumber){
+      branchPhoneNumberActive ='active'
+    }
+    if(this.state.data.branchAddress1){
+      branchAddress1Active = 'active'
+    }
+    if(this.state.data.branchAddress2){
+      branchAddress2Active ='active'
+    }
+    if(this.state.data.branchLandmark){
+      branchLandmarkActive = 'active'
+    }
+    if(this.state.data.branchArea){
+      branchAreaAcitve = 'active'
+    }
     return (
       <div onClick={this.emptyClick.bind(this)}>
         <h2>Branches</h2>
@@ -370,6 +392,7 @@ class MlStartupBranches extends Component{
                                         selectedValue={this.state.selectedVal}/>
                         </div>
                         <div className="form-group mandatory">
+                          <span className={`placeHolder ${branchNameActive}`}>Name</span>
                           <input type="text" name="branchName" placeholder="Name" className="form-control float-label" ref={"branchName"}
                                  defaultValue={this.state.data.branchName} onBlur={this.handleBlur.bind(this)}
                                  data-required={true} data-errMsg="Branch Name is required"/>
@@ -377,11 +400,13 @@ class MlStartupBranches extends Component{
                         </div>
 
                         <div className="form-group">
+                          <span className={`placeHolder ${branchPhoneNumberActive}`}>Phone Number</span>
                           <input type="number" name="branchPhoneNumber" placeholder="Phone Number" className="form-control float-label" defaultValue={this.state.data.branchPhoneNumber} onBlur={this.handleBlur.bind(this)} min={0}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isPhoneNumberPrivate" defaultValue={this.state.data.isPhoneNumberPrivate} onClick={this.onLockChange.bind(this, "branchPhoneNumber", "isPhoneNumberPrivate")}/>
                         </div>
 
                         <div className="form-group mandatory">
+                          <span className={`placeHolder ${branchAddress1Active}`}>Flat/House/Floor/Building</span>
                           <input type="text" name="branchAddress1" placeholder="Flat/House/Floor/Building"
                                  className="form-control float-label" ref={"branchAddress1"} data-required={true}
                                  data-errMsg="Flat/House/Floor/Building is required"
@@ -392,6 +417,7 @@ class MlStartupBranches extends Component{
 
 
                         <div className="form-group mandatory">
+                          <span className={`placeHolder ${branchAddress2Active}`}>Colony/Street/Locality</span>
                           <input type="text" name="branchAddress2" placeholder="Colony/Street/Locality"
                                  className="form-control float-label"
                                  defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}
@@ -400,11 +426,13 @@ class MlStartupBranches extends Component{
                         </div>
 
                         <div className="form-group">
+                          <span className={`placeHolder ${branchLandmarkActive}`}>Landmark</span>
                           <input type="text" name="branchLandmark" placeholder="Landmark" className="form-control float-label"  defaultValue={this.state.data.branchLandmark} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLandmarkPrivate" defaultValue={this.state.data.isLandmarkPrivate} onClick={this.onLockChange.bind(this, "branchLandmark", "isLandmarkPrivate")}/>
                         </div>
 
                         <div className="form-group">
+                          <span className={`placeHolder ${branchAreaAcitve}`}>Area</span>
                           <input type="text" name="branchArea" placeholder="Area" className="form-control float-label" defaultValue={this.state.data.branchArea} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAreaPrivate" defaultValue={this.state.data.isAreaPrivate} onClick={this.onLockChange.bind(this, "branchArea", "isAreaPrivate")}/>
                         </div>
@@ -431,6 +459,7 @@ class MlStartupBranches extends Component{
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
+                            <FontAwesome name='unlock' className="input_icon upload_lock" id="isLogoPrivate"  defaultValue={this.state.data.isLogoPrivate}  onClick={this.onLockChange.bind(this, "logo", "isLogoPrivate")}/>
                             <span>Upload Logo</span>
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>

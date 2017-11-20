@@ -66,7 +66,7 @@ export default class MlAppRegCompany extends React.Component {
   componentDidMount() {
     initalizeFloatLabel();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (210 + $('.app_header').outerHeight(true)));
   }
 
   optionsBySelectUserType(value) {

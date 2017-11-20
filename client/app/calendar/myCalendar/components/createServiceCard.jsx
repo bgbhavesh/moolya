@@ -62,6 +62,7 @@ class MlAppServiceManageSchedule extends Component {
     this.saveAction.bind(this);
     this.bookServiceCard.bind(this);
     this.getSessionNumber  = this.getSessionNumber.bind(this);
+    this.getTask = this.getTask.bind(this);
   }
 
   componentWillMount() {
@@ -132,7 +133,7 @@ class MlAppServiceManageSchedule extends Component {
           status: service.status,
           validTill: service.validTill,
           daysToExpire: remainingDate,
-          totalAmount: service.payment.tasksDerived
+          totalAmount: service.finalAmount
         };
 
         if (service.termsAndCondition) {
@@ -156,7 +157,8 @@ class MlAppServiceManageSchedule extends Component {
 
 
   async getTaskDetails() {
-    const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId);
+    let orderId = this.state.details && this.state.details.orderId ? this.state.details.orderId : '';
+    const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId, orderId);
     if(resp){
       let task = this.state.serviceTask.map(function (data) {
         let taskInfo = resp.find(function (respTask) {
@@ -190,6 +192,7 @@ class MlAppServiceManageSchedule extends Component {
           }
         });
       }
+      console.log('task',task);
       this.setState({
         TaskDetails: task,
         attachments: attachmentDetails,
@@ -203,8 +206,10 @@ class MlAppServiceManageSchedule extends Component {
     this.getTask(taskId)
   }
 
-  async getTask(taskId) {
-    const resp = await fetchTaskActionHandler(taskId)
+  getTask(taskId) {
+    console.log('taskId', taskId);
+    console.log(this.state.TaskDetails, 'TaskDetails');
+    const resp =  this.state.TaskDetails.find( (task) => task.id == taskId );  //await fetchTaskActionHandler(taskId)
     this.setState({task: resp, selectedTab: taskId})
   }
 

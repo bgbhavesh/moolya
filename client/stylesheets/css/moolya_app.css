@@ -258,3 +258,37 @@ h1{
   margin: 5px 20px 0 0;
   cursor: pointer;
 }
+ .progress-circle{ 
+background-color: #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  height: 44px;
+  position: fixed;
+  width: 44px;
+  right: 8px;
+  top: 6px;
+}
+
+
+.progress-circle:before { border-radius: 50%; content: '';     position: absolute;     left: 50%;     top: 50%;     transform: translate(-50%, -50%);     width: 39px;     height: 39px;     background-position: center, center;     background-size: 100%;
+}
+
+
+
+.progress-circle:after {     background-color: green;     border-radius: 50%;     content: '';     display: inline-block;     height: 44px;     width: 44px;
+}
+
+.progress-circle[data-progress="25"]:after {
+  background-image: -webkit-linear-gradient(left, #ddd 50%, transparent 50%, transparent), -webkit-linear-gradient(top, green 50%, #ddd 50%, #ddd);
+  background-image: linear-gradient(90deg, #ddd 50%, transparent 50%, transparent), linear-gradient(180deg, red 50%, #ddd 50%, #ddd);
+}
+
+.progress-circle[data-progress="50"]:after {
+  background-image: -webkit-linear-gradient(right, #08d403 50%, transparent 50%, transparent), -webkit-linear-gradient(right, #08d403 50%, #ddd 50%, #ddd);
+  background-image: linear-gradient(-90deg, #08d403 50%, transparent 50%, transparent), linear-gradient(270deg, #08d403 50%, #ddd 50%, #ddd);
+}
+
+.progress-circle[data-progress="100"]:after {
+  background-image: -webkit-linear-gradient(left, #08d403 50%, transparent 50%, transparent), -webkit-linear-gradient(right, #08d403 50%, #ddd 50%, #ddd);
+  background-image: linear-gradient(90deg, #08d403 50%, transparent 50%, transparent), linear-gradient(270deg, #08d403 50%, #ddd 50%, #ddd);
+}

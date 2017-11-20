@@ -11,8 +11,10 @@ import SessionDetails from './sessionDetails'
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
+  fetchMyConnectionActionHandler,
   fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
+import moment from "moment";
 
 // import custom method(s) and component(s)
 
@@ -78,7 +80,7 @@ class MlAppServiceSelectTask extends Component{
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log(newProps);
+    console.log('newProps', newProps);
     this.setState({task: newProps.task})
   }
 
@@ -188,8 +190,10 @@ class MlAppServiceSelectTask extends Component{
       activity.teams = activity.teams ? activity.teams : [];
       let teams = activity.teams.map(async function (team) {
         let response;
-        if (team.resourceType == "office") {
+        if(team.resourceType == "office") {
           response = await getTeamUsersActionHandler(team.resourceId);
+        } else if (team.resourceType == "connections") {
+          response = await fetchMyConnectionActionHandler(team.resourceId);
         }
         return response;
       });
@@ -241,6 +245,7 @@ class MlAppServiceSelectTask extends Component{
     console.log( session );
     if( session ) {
       const sessionsList = session ? session.map((data, index) => {
+        console.log('data Session',data);
         if(data) {
           return(
             <div onClick={() => this.setSession(index, data.sessionId, data.duration )}  className="panel panel-default" key={index}>
@@ -258,6 +263,20 @@ class MlAppServiceSelectTask extends Component{
                     </label>
                   </div>
                 </div>
+
+                <div className="col-md-4 col-lg-4 pull-right">
+                  <div  style={{'marginTop':'-4px'}}>
+                    <div className="input_types">
+                      <input id="slottime" type="checkbox" slottime="clone" value="1"
+                             checked={data.startDate ? true : false} />
+                      <label htmlFor="slottime"><span><span></span></span></label>
+                    </div>
+                    <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
+                      { data.startDate ? moment(data.startDate).format('DD-MM-YYYY hh:mm:ss') : 'Yet To Start' }
+                    </label>
+                  </div>
+                </div>
+
                 <div className="col-lg-offset-2 col-lg-3 col-md-offset-1 col-md-3">
                   <div  style={{'marginTop':'-4px'}}>
                     {/*<label>*/}
@@ -342,7 +361,7 @@ class MlAppServiceSelectTask extends Component{
       }
     }
     this.setState({
-      activities: activities
+      //activities: activities
     });
   }
 
@@ -360,6 +379,7 @@ class MlAppServiceSelectTask extends Component{
       return data.id == that.props.selectedTab;
     });
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
+    console.log('activities',activities);
     return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>

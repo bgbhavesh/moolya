@@ -249,16 +249,19 @@ class MlPortfolio extends React.Component {
       objectName = privateKey.objectName
     }
 
-    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    // var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName: keyName, index: index, tabName: tabName});
     if(keyIndex < 0 && index >= 0){
-      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+      // keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+      keyIndex = _.findIndex(this.state.privateKeys, {keyName: keyName, index: index, tabName: tabName});
     }
     var privateKeys = this.state.privateKeys;
     var removePrivateKeys = this.state.removePrivateKeys;
     if(isPrivate && keyIndex < 0){
-      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
+      // var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName: keyName, index: index, tabName: tabName});
       removePrivateKeys.splice(rIndex, 1);
-      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName});
       // this.setState({privateKeys:privateKeys})
     }else if(!isPrivate){
       if(keyIndex >= 0){
@@ -335,7 +338,14 @@ class MlPortfolio extends React.Component {
       showAction: true,
       actionName: 'cancel',
       handler: async(event) => {
-        FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
+        if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_approved")
+          FlowRouter.go("/admin/transactions/portfolio/approvedPortfolioList");
+        else if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_requested"){
+          FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+        }
+        else{
+          window.history.back();
+        }
       }
     });
     MlActionConfig.push({
@@ -415,7 +425,7 @@ class MlPortfolio extends React.Component {
                           <h6
                             className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>
                           {annotationDetails.roleName?<div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>:""}
-                          <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
+                          <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                         </div>
                         <div className="comment-content">
                           {annotationDetails.text}
@@ -447,7 +457,7 @@ class MlPortfolio extends React.Component {
                           <div className="comment-box">
                             <div className="comment-head">
                               <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
-                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
+                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                             </div>
                             <div className="comment-content">
                               {options.comment}

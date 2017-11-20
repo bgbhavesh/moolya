@@ -56,7 +56,8 @@ export default class MlAppMyAppointmentItems extends Component{
       serviceName: appointment.appointmentInfo.serviceName,
       sessionId: appointment.appointmentInfo.sessionId,
       startDate: appointment.startDate,
-      endDate: appointment.endDate
+      endDate: appointment.endDate,
+      isCancelled: appointment.isCancelled,
     };
     FlowRouter.setQueryParams({appointment:data});
     // this.setState({
@@ -177,7 +178,7 @@ export default class MlAppMyAppointmentItems extends Component{
                       <span className="date">{new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT </span>
                       }
                       {status === 'Rejected' &&
-                      <span className="date">CANCELLED</span>
+                      <span className="date">{`${new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT (${appointment.isCancelled?'Cancelled':'Rejected'})`}</span>
                       }
                       {(status !== 'Rejected' && status !== 'Completed') &&
                       <span className="date">{startMsg}</span>

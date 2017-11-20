@@ -87,7 +87,7 @@ MlResolver.MlQueryResolver['fetchServiceProviderDetails'] = (obj, args, context,
   var serviceProviderPortfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
   if (serviceProviderPortfolio && serviceProviderPortfolio.hasOwnProperty(key)) {
     var object = serviceProviderPortfolio[key];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
     serviceProviderPortfolio[key] = filteredObject
     return serviceProviderPortfolio;
   }

@@ -20,7 +20,7 @@ const curDate = dd+mm+yy;
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state={profilePic:""}
+    this.state={profilePic:"", profileProgress:0 }
     this.regStatus = false;
     this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
 
@@ -76,6 +76,7 @@ class MlAppProfileHeader extends Component {
 
   /**this is having issues*/
   async fetchUserDetails() {
+    let profileProgress = 0;
     let response = await fetchUserDetailsHandler()
     if (response){
       if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
@@ -83,7 +84,10 @@ class MlAppProfileHeader extends Component {
           isAllowRegisterAs:false
         });
       }
-      this.setState({data: response, loading:false, isCalendar: response.isCalendar})
+      if(response && response.status) {
+        profileProgress = response.status === "REG_USER_APR" || "REG_EMAIL_P" || "REG_EMAIL_V" || "REG_SOFT_APR" ? 25 : response.status === "REG_SOFT_APR" || "REG_KYC_U_KOFF" || "REG_KYC_U_PEND" || "REG_KYC_A_APR" || "REG_USER_APR"  ? 50 : response.status === "REG_KYC_U_KOFF" || "PORT_LIVE_NOW" ? 100 : 0;
+      }
+      this.setState({data: response, loading:false, isCalendar: response.isCalendar, profileProgress: profileProgress })
     }
   }
 
@@ -148,8 +152,9 @@ class MlAppProfileHeader extends Component {
 
 
           <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
-            <ol>
+          <div className="progress-circle" data-progress={this.state.profileProgress}></div>
+            <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
+          <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile" className={activeProfileArcClass('myprofile')}>
                   <span className="ml my-ml-blank_Profile_3"></span>

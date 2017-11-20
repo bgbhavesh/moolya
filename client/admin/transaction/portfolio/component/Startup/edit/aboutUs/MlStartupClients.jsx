@@ -64,16 +64,13 @@ class MlStartupClients extends Component{
 
   onTileSelect(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.startupClients);
-    //let details = cloneArray[index]
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
-    // if(details && details.logo){
-    //   delete details.logo['__typename'];
-    // }
-    this.curSelectLogo = details.logo
+    this.curSelectLogo = details.logo;
     this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
+    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
     setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
+      _.each(privateFieldAry, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
@@ -85,7 +82,9 @@ class MlStartupClients extends Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY};
+    if(fieldName === "logo")
+      privateKey["objectName"] = "logo";
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -261,6 +260,13 @@ class MlStartupClients extends Component{
   }
 
   render(){
+    let companyNameActive ='',clientDescriptionActive = ''
+    if(this.state.data.companyName){
+      companyNameActive = 'active'
+    }
+    if(this.state.data.clientDescription){
+      clientDescriptionActive = 'active'
+    }
     let that = this;
     const showLoader = that.state.loading;
     let clientsArray = that.state.startupClientsList || [];
@@ -312,6 +318,7 @@ class MlStartupClients extends Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group mandatory">
+                      <span className={`placeHolder ${companyNameActive}`}>Company Name</span>
                       <input type="text" name="companyName" placeholder="Company Name" ref={"companyName"}
                              className="form-control float-label" defaultValue={this.state.data.companyName}
                              onBlur={this.handleBlur.bind(this)}
@@ -320,11 +327,13 @@ class MlStartupClients extends Component{
                       <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                     </div>
                     <div className="form-group">
+                      <span className={`placeHolder ${clientDescriptionActive}`}>About</span>
                       <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "clientDescription", "isDescriptionPrivate")}/>
                     </div>
                     {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
+                        <FontAwesome name='unlock' className="input_icon upload_lock" id="isLogoPrivate"  defaultValue={this.state.data.isLogoPrivate}  onClick={this.onLockChange.bind(this, "logo", "isLogoPrivate")}/>
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>

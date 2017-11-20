@@ -147,7 +147,7 @@ class MlAddDocumentMapping extends React.Component{
 
   onemploymentDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      let value = moment(event._d).format('MM-DD-YYYY 00:00:00');
       this.setState({loading: false, validDate: value});
     }
   }

@@ -86,8 +86,9 @@ class MlStartupBranches extends Component{
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : uiIndex, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
+    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
     setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
+      _.each(privateFieldAry, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)

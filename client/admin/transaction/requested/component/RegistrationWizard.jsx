@@ -5,7 +5,7 @@ import Step1 from './step1';
 import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';
-import Step6 from './step6';
+import MlRegStep6 from './MlRegStep6';
 import Step7 from './step7';
 import _ from 'lodash';
 import {findRegistrationActionHandler,documentTypesActionHandler} from '../actions/findRegistration'
@@ -171,7 +171,7 @@ export default class RegistrationWizard extends React.Component{
      {name: 'Contact details','icon':<span className="ml ml-address-book"></span>, component: <Step3 getRegistrationContactDetails={this.getRegistrationContactDetails.bind(this)} registrationInfo={this.state.registrationDetails}  registrationId={registrationId} clusterId={this.state.registrationDetails&&this.state.registrationDetails.registrationInfo.clusterId}/>},
      {name: 'Social links','icon':<span className="ml ml-social-Links"></span>,  component: <Step4 getRegistrationSocialLinks={this.getRegistrationSocialLinks.bind(this)} registrationInfo={this.state.registrationDetails}  registrationId={registrationId} clusterId={this.state.registrationDetails&&this.state.registrationDetails.registrationInfo.clusterId} uploadedProfileImg={this.state.registrationDetails&&this.state.registrationDetails.registrationInfo.profileImage}/>},
      {name: 'KYC\'s Documents','icon':<span className="ml ml-kyc-document"></span>,  component: <Step5 getRegistrationKYCDetails={this.getRegistrationKYCDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
-     {name: 'Payment gateway','icon':<span className="ml ml-payments"></span>, component: <Step6 />},
+     {name: 'Payment gateway','icon':<span className="ml ml-payments"></span>, component: <MlRegStep6 />},
      {name: 'History','icon':<span className="ml ml-moolya-symbol"></span>, component: <Step7 />}
      ]*/
 

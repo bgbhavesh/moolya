@@ -1653,4 +1653,5 @@ margin: 0px;
 }
 .wrap-show {display: none !important;}
 .upload_lock{position: absolute;left: -106px;top: 18px;z-index: 999;}
+.reg_payment{position: absolute;text-align: center;top: 50%;left: 50%;transform: translate(-50%,-50%);}
 

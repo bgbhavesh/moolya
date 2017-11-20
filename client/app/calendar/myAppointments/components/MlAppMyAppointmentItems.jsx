@@ -178,7 +178,7 @@ export default class MlAppMyAppointmentItems extends Component{
                       <span className="date">{new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT </span>
                       }
                       {status === 'Rejected' &&
-                      <span className="date">CANCELLED</span>
+                      <span className="date">{`${new Moment(appointment.startDate).format('DD-MMM-YYYY HH:mm')} GMT (${appointment.isCancelled?'Cancelled':'Rejected'})`}</span>
                       }
                       {(status !== 'Rejected' && status !== 'Completed') &&
                       <span className="date">{startMsg}</span>

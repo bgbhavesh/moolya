@@ -184,10 +184,12 @@ let appointment = `
     id: String
     type: String
     name: String
+    status : String
+    isRescheduled: Boolean
   }
   
   type myAppointmentsResponse {
-    slot: String,
+    slot: String
     shift: String
     appointments: [myAppointmentData]
   }

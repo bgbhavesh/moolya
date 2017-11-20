@@ -357,11 +357,12 @@ query ($portfolioId: String) {
 }
 
 
-export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
+export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orderId) {
+  console.log('orderId', orderId)
   const result = await appClient.query({
     query: gql`
-      query($profileId: String, $serviceId: String) {
-        fetchTaskDetailsForServiceCard(profileId: $profileId, serviceId: $serviceId) {
+      query($profileId: String, $serviceId: String, $orderId: String) {
+        fetchTaskDetailsForServiceCard(profileId: $profileId, serviceId: $serviceId, orderId: $orderId) {
           id: _id
           name
           displayName
@@ -373,6 +374,8 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
           }
           session {
             sessionId
+            startDate
+            status
             duration {
               hours
               minutes
@@ -405,7 +408,8 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
     `,
     variables: {
       profileId,
-      serviceId
+      serviceId,
+      orderId
     },
     forceFetch: true
   });

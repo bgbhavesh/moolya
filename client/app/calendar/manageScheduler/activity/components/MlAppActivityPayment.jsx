@@ -1,5 +1,6 @@
 import React from "react";
 import ScrollArea from "react-scrollbar";
+import { fetchCurrencyTypeActionHandler } from '../actions/fetchActivities'
 
 export default class Step4 extends React.Component{
 
@@ -12,6 +13,7 @@ export default class Step4 extends React.Component{
     this.state={
       paymentData: props.data ? props.data : {isDiscount: false},
       isDataChanged:false,
+      currencySymbol:""
     };
   }
 
@@ -61,6 +63,13 @@ export default class Step4 extends React.Component{
   }
   componentWillMount() {
     this.props.activeComponent(1);
+    this.getCurrencyType();
+  }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler();
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
 
@@ -229,7 +238,7 @@ export default class Step4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Gross payable amount &nbsp;<label>Rs</label>&nbsp;
+                  Gross payable amount &nbsp;<label>{this.state.currencySymbol}</label>&nbsp;
                   <input type="Number" onChange={(e)=>this.payableAmount(e)}
                          value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
                          className="form-control inline_input medium_in"/>
@@ -273,7 +282,7 @@ export default class Step4 extends React.Component{
               </div>
               <div className="form-group">
                 <label>
-                  Net payable amount &nbsp;<label>Rs</label>&nbsp;
+                  Net payable amount &nbsp;<label>{this.state.currencySymbol}</label>&nbsp;
                   <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} disabled />
                 </label>
               </div>

@@ -182,7 +182,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
       case 'rejected':
         appActionConfig = [
           {
-            showAction: true,
+            showAction: this.props.isCancelled || false,
             actionName: 'accept',
             handler: async (event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
           }
@@ -217,7 +217,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
               </div>
             </div>
           </div>
-          {status !== 'completed' &&
+          {status !== 'completed' && !this.props.isCancelled &&
             <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
           }
         </div>

@@ -259,18 +259,18 @@ h1{
   cursor: pointer;
 }
  .progress-circle{ 
-  background-color: #ddd; 
-  border-radius: 50%; 
-  display: inline-block; 
-  height: 44px; 
-  position: relative; 
-  width: 44px; 
-  left: -22px; 
-  top: 6px;
+background-color: #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  height: 44px;
+  position: fixed;
+  width: 44px;
+  right: 8px;
+  top: 6px;
 }
 
 
-.progress-circle:before {     border-radius: 50%;     content: '';     position: absolute;     left: 50%;     top: 50%;     transform: translate(-50%, -50%);     width: 39px;     height: 39px;     background-position: center, center;     background-size: 100%;
+.progress-circle:before { border-radius: 50%; content: '';     position: absolute;     left: 50%;     top: 50%;     transform: translate(-50%, -50%);     width: 39px;     height: 39px;     background-position: center, center;     background-size: 100%;
 }
 
 

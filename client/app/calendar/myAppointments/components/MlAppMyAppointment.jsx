@@ -56,10 +56,10 @@ export default class MlAppMyAppointment extends React.Component {
     const {selectedAppointment} = this.state;
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':
-        return (<MlAppOngoingSelectedMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)
+        return (<MlAppOngoingSelectedMyAppointment isCancelled={this.state.selectedAppointment.isCancelled} resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)
         break;
       case 'INTERNAL-TASK':
-        return (<MlAppSelectedTaskMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)
+        return (<MlAppSelectedTaskMyAppointment isCancelled={this.state.selectedAppointment.isCancelled} resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)
         break;
       case 'SELF-TASK':
         return (<MlAppSelectedSelfTaskMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)

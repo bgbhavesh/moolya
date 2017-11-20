@@ -11,11 +11,11 @@ import {appClient} from '../../../../core/appConnection';
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationActionHandler(profileId, vacation) {
+export async function updateCalendarVacationActionHandler(profileId, vacation,isAutoCancelAppointment) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($profileId: String, $vacation: calendarSettingVacation) {
-      updateMyCalendarVacation(profileId: $profileId, vacation: $vacation) {
+    mutation($profileId: String, $vacation: calendarSettingVacation, $isAutoCancelAppointment: Boolean) {
+      updateMyCalendarVacation(profileId: $profileId, vacation: $vacation, isAutoCancelAppointment: $isAutoCancelAppointment) {
         success
         code
         result
@@ -36,11 +36,11 @@ export async function updateCalendarVacationActionHandler(profileId, vacation) {
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationByIdActionHandler(profileId, vacation, vacationId) {
+export async function updateCalendarVacationByIdActionHandler(profileId, vacation, vacationId,isAutoCancelAppointment) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($profileId:String, $vacation: calendarSettingVacation, $vacationId: String) {
-      updateCalendarVacationByVacationId(profileId: $profileId, vacation: $vacation, vacationId: $vacationId) {
+    mutation($profileId:String, $vacation: calendarSettingVacation, $vacationId: String, $isAutoCancelAppointment: Boolean) {
+      updateCalendarVacationByVacationId(profileId: $profileId, vacation: $vacation, vacationId: $vacationId, isAutoCancelAppointment: $isAutoCancelAppointment) {
         success
         code
         result

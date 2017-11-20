@@ -210,6 +210,7 @@ MlResolver.MlQueryResolver['fetchTasksInBooking'] = (obj, args, context, info) =
 
 MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
   let query;
+  let orderId = args.orderId;
   if(args.profileId) {
     query = {
       userId: context.userId,
@@ -224,6 +225,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
 
   if (args.serviceId) {
     let service = mlDBController.findOne('MlServiceCardDefinition', args.serviceId , context);
+    //console.log(service.tasks);
     let taskQuery = [];
     if (service.tasks && service.tasks.length > 0) {
       taskQuery = service.tasks.reduce(function(result, task) {
@@ -232,15 +234,32 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       taskQuery = _.uniq(taskQuery);
     }
     query["$or"] = [
-      {_id: {'$in': taskQuery}},
-      {isCurrentVersion: true}
+      {_id: {'$in': taskQuery}}
     ];
+    if(!orderId) {
+      query["$or"]['isCurrentVersion'] = true
+    }
   }
+  console.log('args',args);
   let result = mlDBController.find('MlTask', query, context).fetch();
+  //console.log(result);
   if (result && result.length > 0) {
     result.map((task, taskIndex) => {
       if (task.session && task.session.length > 0) {
         task.session.map((taskSession, sessionIndex) => {
+          if(orderId) {
+            let appointmentQuery = {
+              isCancelled: false,
+              'appointmentInfo.sessionId': taskSession.sessionId,
+              'appointmentInfo.serviceOrderId': orderId
+            };
+            let appointment = mlDBController.findOne('MlAppointments', appointmentQuery );
+            if(appointment){
+              result[taskIndex]['session'][sessionIndex]['startDate'] = appointment.startDate;
+              result[taskIndex]['session'][sessionIndex]['status'] = appointment.status;
+            }
+          }
+          console.log('sessionId', taskSession.sessionId );
           if (taskSession.activities && taskSession.activities.length > 0) {
             taskSession.activities.map((activityId, index) => {
               if (activityId) {
@@ -301,6 +320,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, 
 };
 
 MlResolver.MlQueryResolver['fetchTaskForApointment'] = (obj, args, context, info) => {
+  console.log(args);
   if (args.taskId) {
     let result = mlDBController.findOne('MlTask', args.taskId, context);
     if (result) {

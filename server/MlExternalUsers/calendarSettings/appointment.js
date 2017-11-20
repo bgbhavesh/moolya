@@ -733,6 +733,8 @@ class MlAppointment {
         return {
           id: appointment.appointmentId,
           type: appointment.appointmentType,
+          status : appointment.status,
+          isRescheduled: appointment.isRescheduled,
           name: name
         }
       });

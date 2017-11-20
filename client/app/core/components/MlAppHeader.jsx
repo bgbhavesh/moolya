@@ -152,9 +152,8 @@ class MlAppProfileHeader extends Component {
 
 
           <div className="ml_app_profile" role="navigation">
-          <div className="progress-circle" data-progress={this.state.profileProgress}>
+          <div className="progress-circle" data-progress={this.state.profileProgress}></div>
             <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
-          </div>
           <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile" className={activeProfileArcClass('myprofile')}>

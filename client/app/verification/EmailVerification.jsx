@@ -141,7 +141,6 @@ export default class EmailVerification extends React.Component{
     return response;
   }*/
  componentDidMount(){
-   if(this.state.emailVerificationSuccess){
      setTimeout(function(){
        this.setState({canResend:true})
      }.bind(this),30000)
@@ -153,7 +152,6 @@ export default class EmailVerification extends React.Component{
        if(timeleft <= 0)
          clearInterval(downloadTimer);
      },1000);
-   }
  }
 
   // async verifyMobileNumber(){

@@ -278,11 +278,12 @@ export default class MlTaskAppointmentSessions extends Component{
                 <div  style={{'marginTop':'-4px'}}>
                   <div className="input_types">
                     <input id="slottime" type="checkbox" slottime="clone" value="1"
-                           checked />
+                           checked={false} />
                     <label htmlFor="slottime"><span><span></span></span></label>
                   </div>
                   <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
-                    22nd May 2017 11:16:30
+                    Yet To Start
+                    {/*22nd May 2017 11:16:30*/}
                   </label>
                 </div>
               </div>

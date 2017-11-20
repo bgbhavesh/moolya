@@ -64,16 +64,13 @@ class MlStartupClients extends Component{
 
   onTileSelect(index,uiIndex, e){
     let cloneArray = _.cloneDeep(this.state.startupClients);
-    //let details = cloneArray[index]
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
-    // if(details && details.logo){
-    //   delete details.logo['__typename'];
-    // }
-    this.curSelectLogo = details.logo
+    this.curSelectLogo = details.logo;
     this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
+    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
     setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
+      _.each(privateFieldAry, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)

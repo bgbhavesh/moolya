@@ -38,7 +38,8 @@ export default class MlCreateRegistration extends React.Component{
       selectedAccountsType:" ",
       countryCode: '',
       passwordValidation:false
-    }
+    };
+    this.isSubmitDetails = false;
     this.createRegistration.bind(this);
     return this;
   }
@@ -66,9 +67,8 @@ export default class MlCreateRegistration extends React.Component{
       return toastr.error('Please enter a valid EmailId');
     }else if(this.state.pwdValidationMsg){
       return toastr.error("Password "+this.state.pwdValidationMsg);
-    } else{
+    } else {
       let Details = {
-
         firstName: this.refs.firstName.value,
         lastName: this.refs.lastName.value,
         countryId: this.state.country,
@@ -89,18 +89,21 @@ export default class MlCreateRegistration extends React.Component{
         subChapterId: this.state.subChapter,
         communityName: this.state.coummunityName
         //source          :  this.refs.source.value
-
-      }
-      const response = await createRegistrationInfo(Details);
-      if(response.success){
-        toastr.success("User created Successfully")
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      }else if(response.code==401&&!response.success){
-        toastr.error(response.result);
-        // toastr.success("User created Successfully")
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      }else{
-        toastr.error(response.result);
+      };
+      if (!this.isSubmitDetails) {
+        this.isSubmitDetails = true;
+        const response = await createRegistrationInfo(Details);
+        if (response.success) {
+          toastr.success("User created Successfully")
+          FlowRouter.go("/admin/transactions/registrationRequested");
+        } else if (response.code == 401 && !response.success) {
+          this.isSubmitDetails = false;
+          toastr.error(response.result);
+          FlowRouter.go("/admin/transactions/registrationRequested");
+        } else {
+          this.isSubmitDetails = false;
+          toastr.error(response.result);
+        }
       }
     }
   }

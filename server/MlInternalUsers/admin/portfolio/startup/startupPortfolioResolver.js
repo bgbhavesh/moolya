@@ -111,39 +111,39 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["assets"] = portfolio&& portfolio.assets?portfolio.assets:[];
 
     var object = startAboutUsArray["aboutUs"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "aboutUs");
     startAboutUsArray["aboutUs"] = filteredObject
 
     //private keys for service products
       var object = startAboutUsArray["serviceProducts"];
-      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "serviceProducts");
       startAboutUsArray["serviceProducts"] = filteredObject
 
     //private keys for service products
     var object = startAboutUsArray["legalIssue"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context,"legalIssue");
     startAboutUsArray["legalIssue"] = filteredObject
 
 
     //private keys for service products
     var object = startAboutUsArray["information"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "information");
     startAboutUsArray["information"] = filteredObject
 
     var object = startAboutUsArray["clients"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "clients");
     startAboutUsArray["clients"] = filteredObject
 
     var object = startAboutUsArray["branches"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "branches");
     startAboutUsArray["branches"] = filteredObject
 
     var object = startAboutUsArray["technologies"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "technologies");
     startAboutUsArray["technologies"] = filteredObject
 
     var object = startAboutUsArray["assets"];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, "assets");
     startAboutUsArray["assets"] = filteredObject
 
     if(startAboutUsArray && startAboutUsArray.assets){
@@ -303,7 +303,7 @@ MlResolver.MlQueryResolver['fetchStartupDetails'] = (obj, args, context, info) =
     var startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
     if (startupPortfolio && startupPortfolio.hasOwnProperty(key)) {
       var object = startupPortfolio[key];
-      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
       startupPortfolio[key] = filteredObject
       return startupPortfolio;
     }

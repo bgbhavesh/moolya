@@ -67,7 +67,7 @@ class MlServiceCardRepo{
               return response
             }
 
-            var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName'];
+            var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName', 'communityCode'];
             var serviceCard                 = service;
             serviceCard["createdAt"]        = new Date();
             serviceCard['userId']           =  context.userId;

@@ -140,7 +140,6 @@ class MlAppPortfolio extends Component{
     if(response){
       this.setState({portfolioDetails:response})
     }
-    console.log(response)
   }
 
   async fetchEditPortfolioTemplate(pId) {
@@ -249,14 +248,17 @@ class MlAppPortfolio extends Component{
       objectName = privateKey.objectName
     }
 
-    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    // var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index, tabName: tabName});
     if(keyIndex < 0 && index >= 0){
-      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+      // keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index, tabName: tabName});
     }
     var privateKeys = this.state.privateKeys;
     var removePrivateKeys = this.state.removePrivateKeys;
     if(isPrivate && keyIndex < 0){
-      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
+      // var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index, tabName: tabName});
       removePrivateKeys.splice(rIndex, 1);
       privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
       this.setState({privateKeys:privateKeys})
@@ -438,7 +440,7 @@ class MlAppPortfolio extends Component{
                           <div style={{paddingLeft:'50px'}} className="comment-head">
                             <h6 className="comment-name"> {annotationDetails.userName?annotationDetails.userName:""}</h6>
                             <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>
-                            <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                            <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:mm:ss')}</span>
                           </div>
                           <div className="comment-content">
                             {annotationDetails.text}
@@ -477,7 +479,7 @@ class MlAppPortfolio extends Component{
                             <div className="comment-box">
                               <div className="comment-head">
                                 <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
-                                <span>{moment(options.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                                <span>{moment(options.createdAt).format('DD MM YYYY,HH:mm:ss')}</span>
                               </div>
                               <div className="comment-content">
                                 {options.comment}

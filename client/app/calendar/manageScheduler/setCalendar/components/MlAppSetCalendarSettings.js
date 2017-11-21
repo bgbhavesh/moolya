@@ -59,11 +59,15 @@ export default class MlAppSetCalendarSettings extends React.Component {
     }
   }
 
+  updateVacationList(){
+    this.fetchCalendarSettings();
+  }
+
   render(){
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings fetchCalendarSettings={this.fetchCalendarSettings} hasAppointment={this.state.hasAppointment} primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
         {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings} />,icon:<span className="ml fa fa-plane"></span>},
+        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings} updateVacationList={this.updateVacationList.bind(this)}/>,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
       <div className="app_main_wrap">

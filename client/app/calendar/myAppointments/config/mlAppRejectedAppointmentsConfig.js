@@ -41,6 +41,7 @@ export const mlAppRejectedAppointmentConfig = new MlAppViewer({
                           }
                           startDate
                           endDate
+                          isCancelled
                         }
                       }
                   }

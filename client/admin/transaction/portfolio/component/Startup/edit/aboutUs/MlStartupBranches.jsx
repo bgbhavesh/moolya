@@ -86,8 +86,9 @@ class MlStartupBranches extends Component{
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
     this.setState({selectedIndex:index, data:details,selectedObject : uiIndex, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
+    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
     setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
+      _.each(privateFieldAry, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
@@ -99,7 +100,9 @@ class MlStartupBranches extends Component{
     if(className.indexOf("fa-lock") != -1){
       isPrivate = true
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY};
+    if (fieldName === "logo")
+      privateKey["objectName"] = "logo";
     this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
@@ -456,6 +459,7 @@ class MlStartupBranches extends Component{
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
+                            <FontAwesome name='unlock' className="input_icon upload_lock" id="isLogoPrivate"  defaultValue={this.state.data.isLogoPrivate}  onClick={this.onLockChange.bind(this, "logo", "isLogoPrivate")}/>
                             <span>Upload Logo</span>
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>

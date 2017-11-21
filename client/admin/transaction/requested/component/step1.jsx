@@ -420,8 +420,6 @@ export default class step1 extends React.Component{
     }
     var differences = diff(existingObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
-    console.log("///////////////////////////")
-    console.log(filteredObject);
     if(filteredObject && filteredObject.length>0){
       return false
     }else{

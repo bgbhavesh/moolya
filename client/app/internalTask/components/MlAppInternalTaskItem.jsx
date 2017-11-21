@@ -184,7 +184,7 @@ class MlAppInternalTaskItem extends React.Component {
                   <div className="panel panel-default">
                     <div className="panel-heading"> Date & Time: {task.createdAt&&moment(task.createdAt).format('DD-MM-YYYY hh:mm:ss')} </div>
                     <div className="panel-body">
-                      <p>Client: { task.client }</p>
+                      <p>Client: { this.props.client }</p>
                       <p>Community: {task.community.name}</p>
                     </div>
                   </div>

@@ -14,6 +14,7 @@ import {
   fetchMyConnectionActionHandler,
   fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
+import moment from "moment";
 
 // import custom method(s) and component(s)
 
@@ -79,7 +80,7 @@ class MlAppServiceSelectTask extends Component{
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log(newProps);
+    console.log('newProps', newProps);
     this.setState({task: newProps.task})
   }
 
@@ -244,6 +245,7 @@ class MlAppServiceSelectTask extends Component{
     console.log( session );
     if( session ) {
       const sessionsList = session ? session.map((data, index) => {
+        console.log('data Session',data);
         if(data) {
           return(
             <div onClick={() => this.setSession(index, data.sessionId, data.duration )}  className="panel panel-default" key={index}>
@@ -261,6 +263,20 @@ class MlAppServiceSelectTask extends Component{
                     </label>
                   </div>
                 </div>
+
+                <div className="col-md-4 col-lg-4 pull-right">
+                  <div  style={{'marginTop':'-4px'}}>
+                    <div className="input_types">
+                      <input id="slottime" type="checkbox" slottime="clone" value="1"
+                             checked={data.startDate ? true : false} />
+                      <label htmlFor="slottime"><span><span></span></span></label>
+                    </div>
+                    <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
+                      { data.startDate ? moment(data.startDate).format('DD-MM-YYYY hh:mm:ss') : 'Yet To Start' }
+                    </label>
+                  </div>
+                </div>
+
                 <div className="col-lg-offset-2 col-lg-3 col-md-offset-1 col-md-3">
                   <div  style={{'marginTop':'-4px'}}>
                     {/*<label>*/}

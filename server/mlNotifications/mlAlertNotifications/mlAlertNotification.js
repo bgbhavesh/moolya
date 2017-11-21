@@ -12,7 +12,7 @@ const MlAlertNotification= class MlAlertNotification {
       timeStamp : timeStamp,
       date      : date
     }
-    let alert = NotificationTemplateEngine.fetchTemplateContent("ALT_Password_Changed_Successfully","alert",regObj)
+    let alert = NotificationTemplateEngine.fetchTemplateContent("ALT_password_changed_successfully","alert",regObj)
     if(alert && alert.content ? alert :''){
       return alert.content
     }

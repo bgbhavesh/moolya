@@ -4,6 +4,7 @@
 import React from "react";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchTasksActionHandler} from "../actions/fetchTasks";
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
 
 
 export default class MlAppTaskList extends React.Component{
@@ -11,12 +12,13 @@ export default class MlAppTaskList extends React.Component{
     super(props);
     this.editTask.bind(this)
     this.state = {
-      tasks: []
+      tasks: [], currencySymbol:""
     }
     return this
   }
   componentDidMount() {
     this.fetchTasks();
+    this.getCurrencyType();
   }
   async fetchTasks(){
     let profileId = FlowRouter.getParam('profileId');
@@ -36,6 +38,12 @@ export default class MlAppTaskList extends React.Component{
   onClickAdd(){
     let profileId = FlowRouter.getParam('profileId');
     FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createTask');
+  }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(appClient, null);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
   render() {
@@ -63,7 +71,7 @@ export default class MlAppTaskList extends React.Component{
                     <div className={task.isActive ? 'active' : 'inactive'}></div>
                     <div className="clearfix"></div>
                     <div className="list_icon mart0">
-                      <span className="price">Rs. {(task.payment && task.payment.derivedAmount) ? task.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                      <span className="price">{task.payment && task.payment.currencyType ? task.payment.currencyType : that.state.currencySymbol} {(task.payment && task.payment.derivedAmount) ? task.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                       <span className="price pull-right">{(task.isExternal && !task.isInternal? 'EXT' : (task.isInternal && !task.isExternal ? 'INT' : (task.isExternal && task.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
                       <i className="c_image ml my-ml-task"></i>

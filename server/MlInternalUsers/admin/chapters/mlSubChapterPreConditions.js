@@ -1,7 +1,7 @@
 /**
  * Created by mohammed.mohasin on 19/8/17.
  */
-import _ from 'lodash';
+
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 class MlSubChapterPreConditions {
   constructor() {

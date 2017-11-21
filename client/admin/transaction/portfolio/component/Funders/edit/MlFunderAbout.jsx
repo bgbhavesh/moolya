@@ -12,6 +12,7 @@ import MlLoader from '../../../../../../commons/components/loader/loader';
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
+import { fetchCurrencyTypeActionHandler } from '../../../../../../commons/actions/mlCurrencySymbolHandler'
 
 const genderValues = [
   { value: 'male', label: 'Male' },
@@ -29,7 +30,7 @@ export default class MlFunderAbout extends React.Component {
       fileName:"",
       uploadingAvatar: false,
       privateKey: {},
-      showProfileModal: false
+      showProfileModal: false,currencySymbol:"USD"
     }
     this.tabName = this.props.tabName || ""
     this.onClick.bind(this);
@@ -44,6 +45,7 @@ export default class MlFunderAbout extends React.Component {
 
   componentWillMount() {
     const resp = this.fetchPortfolioDetails();
+    this.getCurrencyType()
     return resp
   }
 
@@ -328,6 +330,13 @@ export default class MlFunderAbout extends React.Component {
     });
   }
 
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, this.props.portfolioDetailsId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
+
+
   render() {
     let genderActive =''
     if(this.state.data.gender){
@@ -453,7 +462,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
                       <div className="clearfix"></div>
                       <div className="panel panel-default mart20">
-                        <div className="panel-heading"> Investment Budget Per Year (in USD): </div>
+                        <div className="panel-heading"> Investment Budget Per Year (in {this.state.currencySymbol}): </div>
 
                         <div className="panel-body">
                           <div className="form-group">

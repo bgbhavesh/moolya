@@ -127,7 +127,8 @@ class MlUserContext{
   isUserRegistrationApproved(userDefaultProfile) {
     var returnStatus = null;
     const isActiveProfile = userDefaultProfile && userDefaultProfile.isActive ? userDefaultProfile.isActive : false;
-    const statusToValidate = userDefaultProfile.communityDefCode == "OFB" ? "REG_USER_APR" : "REG_KYC_A_APR";
+    // const statusToValidate = userDefaultProfile.communityDefCode == "OFB" ? "REG_USER_APR" : "REG_KYC_A_APR";
+    const statusToValidate = "REG_USER_APR";
     if (isActiveProfile) {
       returnStatus = mlDBController.findOne('MlRegistration', {
         _id: userDefaultProfile.registrationId,

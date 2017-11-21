@@ -12,7 +12,8 @@ import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
   fetchMyConnectionActionHandler,
-  fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
+  fetchOfficeActionHandler,
+  getMoolyaAdminsActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 import moment from "moment";
 
@@ -118,7 +119,6 @@ class MlAppServiceSelectTask extends Component{
     activities[activityIdx].teams[teamIdx].users[userIdx].isAdded = true;
     let userId = activities[activityIdx].teams[teamIdx].users[userIdx].userId;
     let profileId = activities[activityIdx].teams[teamIdx].users[userIdx].profileId;
-    console.log(activities);
     let extraUser = activities[activityIdx].teams[teamIdx].users[userIdx];
     extraUser = {
       userId: extraUser.userId,
@@ -173,7 +173,7 @@ class MlAppServiceSelectTask extends Component{
   async setSession(index, sessionId, duration) {
     const {selectedTaskId} = this.state;
     this.props.getSessionNumber(index+1)
-    this.setState({sessionId: sessionId})
+    this.setState({sessionId: sessionId});
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
       await this.getUsers(resp, index, duration);
@@ -227,6 +227,7 @@ class MlAppServiceSelectTask extends Component{
       });
       that.setState({
         activities: activities,
+        fetchActivities: JSON.parse(JSON.stringify(activities)),
         index: index,
         duration: duration,
         sessionExpanded: true
@@ -339,11 +340,34 @@ class MlAppServiceSelectTask extends Component{
       activities[activityIdx].teams[teamIdx].resourceType="connections";
       delete activities[activityIdx].teams[teamIdx].resourceId;
       activities[activityIdx].teams[teamIdx].users = [];
-    } else if (evt.target.value == "moolyaAdmins") {
+
+      const resp = await fetchMyConnectionActionHandler();
+      if(resp){
+        activities[activityIdx].teams[teamIdx].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+      }
+    }else if (evt.target.value == "moolyaAdmins") {
       activities[activityIdx].teams[teamIdx].resourceType="moolyaAdmins";
       delete activities[activityIdx].teams[teamIdx].resourceId;
       activities[activityIdx].teams[teamIdx].users = [];
-    } else {
+
+      const resp = await getMoolyaAdminsActionHandler();
+      if(resp) {
+        activities[activityIdx].teams[teamIdx].users = resp.map(function (user) {
+          return {
+            name: user.displayName,
+            profileImage: user.profileImage?user.profileImage:'/images/def_profile.png',
+            userId: user._id
+          }
+        });
+      }
+    }else {
       let officeId = evt.target.value;
       activities[activityIdx].teams[teamIdx].resourceType="office";
       activities[activityIdx].teams[teamIdx].resourceId=evt.target.value;
@@ -361,7 +385,11 @@ class MlAppServiceSelectTask extends Component{
       }
     }
     this.setState({
-      //activities: activities
+      activities:activities,
+      // fetchedActivities:activities
+      // isDataChanged:true
+    }, () => {
+      // this.saveDetails()
     });
   }
 
@@ -379,7 +407,6 @@ class MlAppServiceSelectTask extends Component{
       return data.id == that.props.selectedTab;
     });
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
-    console.log('activities',activities);
     return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -456,6 +483,7 @@ class MlAppServiceSelectTask extends Component{
           </div>
         </ScrollArea>
       </div>:<SessionDetails  activities={activities}
+                              fetchActivities ={this.state.fetchActivities}
                               index={index}
                               isExternal={isExternal}
                               isInternal={isInternal}

@@ -152,4 +152,13 @@ MlResolver.MlQueryResolver['fetchKYCCategories'] = (obj, args, context, info) =>
   return result;
 };
 
+MlResolver.MlQueryResolver['findCategoryProcessDocuments'] = (obj, args, context, info) => {
+  if(args && args._id){
+    let kycCategoryExist = MlProcessMapping.find({processDocuments: {$elemMatch: {kycCategoryId:args._id,isActive:true}}}).fetch()
+    return kycCategoryExist
+  }
+
+
+};
+
 

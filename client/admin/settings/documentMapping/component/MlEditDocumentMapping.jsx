@@ -409,7 +409,7 @@ class MlEditDocumentMapping extends React.Component{
                                 data-required={true} data-errMsg="Unit is required"/>
                       </div>
                     </div>
-
+                    <div className="clearfix"></div>
                 <div className="form-group">
                   <input type="text"  ref="issuingAuthority" defaultValue={this.state.data&&this.state.data.issuingAuthority} placeholder="Issuing Authority" className="form-control float-label" id=""/>
                 </div>

@@ -12,6 +12,8 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
+import { fetchCurrencyTypeActionHandler } from '../../../../../../commons/actions/mlCurrencySymbolHandler';
+
 
 const KEY = 'investor'
 
@@ -48,8 +50,16 @@ export default class MlInstitutionEditInvestor extends React.Component{
   }
   componentWillMount(){
     const resp= this.fetchPortfolioDetails();
+    this.getCurrencyType();
     return resp;
   }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, this.props.portfolioDetailsId);
+    this.setState({currencySymbol: response.symbol, currencyName:response.currencyName})
+    return response;
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
@@ -336,7 +346,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
                                         selectedValue={this.state.selectedVal}/>
                         </div>
                         <div className="form-group">
-                          <input type="text" name="investmentAmount" placeholder="Investment Amount" className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="investmentAmount" placeholder={`Investment Amount in ${this.state.currencyName} (${this.state.currencySymbol})`} className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInvestmentAmountPrivate" defaultValue={this.state.data.isInvestmentAmountPrivate}  onClick={this.onLockChange.bind(this, "investmentAmount", "isInvestmentAmountPrivate")}/>
                         </div>
                         <div className="form-group">

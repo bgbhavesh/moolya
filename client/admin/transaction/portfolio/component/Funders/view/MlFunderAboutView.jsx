@@ -8,6 +8,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {fetchfunderPortfolioAbout} from '../../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+import { fetchCurrencyTypeActionHandler } from '../../../../../../commons/actions/mlCurrencySymbolHandler'
 
 
 const genderValues = [
@@ -28,6 +29,7 @@ export default class MlFunderAboutView extends React.Component{
 
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
+    this.getCurrencyType()
     return resp;
   }
 
@@ -71,6 +73,13 @@ export default class MlFunderAboutView extends React.Component{
       this.sendDataToParent();
     })
   }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, this.props.portfolioDetailsId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
+
   render(){
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
@@ -166,7 +175,7 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
                           <div className="clearfix"></div>
                           <div className="panel panel-default mart20">
-                            <div className="panel-heading"> Investment Budget Per Year (in USD):</div>
+                            <div className="panel-heading"> Investment Budget Per Year (in {this.state.currencySymbol}):</div>
 
                             <div className="panel-body">
                               <div className="form-group col-md-6 nomargin-bottom nopadding-left">

@@ -191,6 +191,7 @@ let appointment = `
   type myAppointmentsResponse {
     slot: String
     shift: String
+    isHoliday: Boolean
     appointments: [myAppointmentData]
   }
   

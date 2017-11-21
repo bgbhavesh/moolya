@@ -1122,6 +1122,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             doc.transactionId = data && data.transactionId ? data.transactionId : doc.transactionId;
             doc.status = status[data.status];
             break;
+          case 'onBoard':
+            let stage = mlDBController.findOne('MlStage', activityDocId);
+            doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : '';
+            break;
         }
       }
       return doc;

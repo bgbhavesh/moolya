@@ -237,12 +237,12 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       {_id: {'$in': taskQuery}}
     ];
     if(!orderId) {
-      query["$or"]['isCurrentVersion'] = true
+      query["$or"].push ({'isCurrentVersion': true});
     }
   }
-  console.log('args',args);
+  //console.log('args',args, query);
   let result = mlDBController.find('MlTask', query, context).fetch();
-  //console.log(result);
+  //console.log('result',result);
   if (result && result.length > 0) {
     result.map((task, taskIndex) => {
       if (task.session && task.session.length > 0) {

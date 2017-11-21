@@ -26,6 +26,7 @@ let AuditLogSchema = `
            fieldName:String
            docId:String
            clusterId:String
+           docRef:String
            chapterId:String
            subChapterId:String
            clusterName:String

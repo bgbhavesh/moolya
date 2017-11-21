@@ -76,11 +76,31 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
           }
         }
         if(defaultRole){
-          try{
-            hierarchy = mlHierarchyAssignment.findHierarchy(defaultRole.clusterId, defaultRole.departmentId, defaultRole.subDepartmentId ,defaultRole.roleId, defaultRole.subChapterId)
-          } catch (e){
-            canUpdateAllTransactions = false;
-            console.log('Not available in hierarchy')
+          if(defaultRole.hierarchyLevel == 0){
+            if(defaultRole.chapterId != trans.registrationInfo.chapterId || defaultRole.subChapterId != trans.registrationInfo.subChapterId || defaultRole.communityCode != trans.registrationInfo.communityDefCode){
+              canUpdateAllTransactions = false;
+            }
+
+          }
+          else if(defaultRole.hierarchyLevel == 1){
+            if(defaultRole.chapterId != trans.registrationInfo.chapterId || defaultRole.subChapterId != trans.registrationInfo.subChapterId){
+              canUpdateAllTransactions = false;
+            }
+          }
+          else if(defaultRole.hierarchyLevel == 2){
+            if(defaultRole.chapterId != trans.registrationInfo.chapterId){
+              canUpdateAllTransactions = false;
+            }
+          }
+          if(canUpdateAllTransactions){
+            try{
+              hierarchy = mlHierarchyAssignment.findHierarchy(trans.registrationInfo.clusterId, defaultRole.departmentId, defaultRole.subDepartmentId, defaultRole.roleId, trans.registrationInfo.subChapterId)
+              if(!hierarchy)
+                canUpdateAllTransactions = false;
+            } catch (e){
+              canUpdateAllTransactions = false;
+              console.log('Not available in hierarchy')
+            }
           }
         }
       }else{

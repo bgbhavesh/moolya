@@ -240,7 +240,6 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       query["$or"].push ({'isCurrentVersion': true});
     }
   }
-  //console.log('args',args, query);
   let result = mlDBController.find('MlTask', query, context).fetch();
   //console.log('result',result);
   if (result && result.length > 0) {

@@ -32,7 +32,7 @@ export default class AppActionButtons extends React.Component {
   }
 
   connectRequest(){
-    toastr.success("connect request");
+    toastr.success("Connect request");
   }
 
   render() {

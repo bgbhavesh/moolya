@@ -278,6 +278,101 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
         }
       }
 
+      /**
+       * @ if jusrisdication cluster is changed when updating Document Mapping
+       * @ Particular document  need to be dropped from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let clustersNewArray = args.document&&args.document.clusters?args.document.clusters:[]
+      let clustersExistingArray = existingDoc&&existingDoc.clusters?existingDoc.clusters:[]
+      var iscluster_same = clustersExistingArray.length == clustersNewArray.length && clustersExistingArray.every(function(element, index) {
+        return element === clustersNewArray[index];
+      });
+
+
+      if(!iscluster_same){
+
+
+        let updatedClustersTypes = mlDBController.update('MlProcessMapping', {
+          'processDocuments': {
+            $exists: true,
+            $elemMatch: {
+              'documentId': existingDoc._id&&existingDoc._id
+            }
+          }
+        }, {
+          'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
+        }, {$pull: true,multi:true}, context)
+
+         /* let updatedClustersTypes = mlDBController.update('MlProcessMapping', {
+            'processDocuments': {
+              $exists: true,
+              $elemMatch: {
+                'documentId': existingDoc._id&&existingDoc._id
+              }
+            }
+          },{$pull: true,multi:true}, context)*/
+
+      }
+
+      /**
+       * @ if jusrisdication cluster is changed when updating Document Mapping
+       * @ Particular document  need to be dropped from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let chaptersNewArray = args.document&&args.document.chapters?args.document.chapters:[]
+      let chaptersExistingArray = existingDoc&&existingDoc.chapters?existingDoc.chapters:[]
+      var ischapter_same = chaptersExistingArray.length == chaptersNewArray.length && chaptersExistingArray.every(function(element, index) {
+        return element === chaptersNewArray[index];
+      });
+
+
+      if(!ischapter_same){
+
+          let updatedChaptersTypes = mlDBController.update('MlProcessMapping', {
+            'processDocuments': {
+              $exists: true,
+              $elemMatch: {
+                'documentId': existingDoc._id&&existingDoc._id
+              }
+            }
+          }, {
+            'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
+          }, {$pull: true,multi:true}, context)
+
+      }
+
+      /**
+       * @ if jusrisdication sub chapter is changed when updating Document Mapping
+       * @ Particular document  need to be dropped from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let subChaptersNewArray = args.document&&args.document.subChapters?args.document.subChapters:[]
+      let subChaptersExistingArray = existingDoc&&existingDoc.subChapters?existingDoc.subChapters:[]
+      var issubchapter_same = subChaptersExistingArray.length == subChaptersNewArray.length && subChaptersExistingArray.every(function(element, index) {
+        return element === subChaptersNewArray[index];
+      });
+
+
+      if(!issubchapter_same){
+
+          let updatedSubChaptersTypes = mlDBController.update('MlProcessMapping', {
+            'processDocuments': {
+              $exists: true,
+              $elemMatch: {
+                'documentId': existingDoc._id&&existingDoc._id
+              }
+            }
+          }, {
+            'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
+          }, {$pull: true,multi:true}, context)
+
+
+      }
+
 
 
     }

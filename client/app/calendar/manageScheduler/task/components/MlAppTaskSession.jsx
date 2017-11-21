@@ -264,7 +264,7 @@ export default class MlAppTaskSession extends Component {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4 swiper-slide" key={index}>
                                 <div className="card_block"><h3>{activity.displayName}</h3>
-                                  <div className={activity.isActive ? 'active' : 'inactive'}></div>
+                                  <div className={activity.isActive ? 'active' : 'inactive'}><FontAwesome onClick={() => that.removeActivity(id, index)} name='minus' /></div>
                                   <div className="clearfix"></div>
                                   <div className="list_icon mart0">
                                     <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>

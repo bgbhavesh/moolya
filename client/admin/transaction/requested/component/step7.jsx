@@ -1,6 +1,4 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 
 export default class Step7 extends React.Component{
 componentDidMount()
@@ -11,11 +9,7 @@ componentDidMount()
   render(){
     return (
       <div className="step_form_wrap step5">
-
-
-    <h3>Coming Soon....</h3>
-
-
+        <h3>Coming Soon....</h3>
       </div>
     )
   }

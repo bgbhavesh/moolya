@@ -27,6 +27,12 @@ let KycCategoriesSchema = `
         isActive      : Boolean
     }
     
+    type processOutput{
+        _id         : String,
+        isActive    : Boolean
+    }
+    
+    
    type Mutation 
     {
         updateKycCategory(_id:String, docCategoryName:String, docCategoryDisplayName:String, about:String, isActive:Boolean , moduleName:String, actionName:String):response
@@ -35,6 +41,7 @@ let KycCategoriesSchema = `
     type Query{
         findKycCategory(_id:String): KycCategories
         fetchKYCCategories:[KycCategories]
+        findCategoryProcessDocuments(_id:String) : [processOutput]
     }
 `
 
@@ -43,7 +50,8 @@ let supportedApi = [
   {api:'findKycCategory', actionName:'READ', moduleName:"DOCUMENTS"},
   {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS",isWhiteList: true}, //made whitelist as per srinag word
   {api:'createKycCategory', actionName:'CREATE', moduleName:"DOCUMENTS"},
-  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"}
+  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"},
+  {api:'findCategoryProcessDocuments', actionName:'READ', moduleName:"DOCUMENTS",isWhiteList: true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

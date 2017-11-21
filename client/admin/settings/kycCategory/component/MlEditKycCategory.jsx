@@ -8,20 +8,24 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
-import MlLoader from '../../../../commons/components/loader/loader'
+import MlLoader from '../../../../commons/components/loader/loader';
+import {findCategoryProcessDocuments} from '../actions/findCategoryProcessDocuments'
 class MlEditKycCategory extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = {loading:true,data:{},kycCategoryActive : false};
     this.addEventHandler.bind(this);
     this.updateDocument.bind(this);
     this.findDocument.bind(this);
+    this.fetchProcessDocuments.bind(this)
     return this;
   }
   componentDidMount() {
     if(this.state.data.isAcive){
       $('#status').prop('checked', true);
     }
+    let resp = this.fetchProcessDocuments()
+    return resp;
   }
   componentDidUpdate() {
     OnToggleSwitch(true,true);
@@ -77,10 +81,29 @@ class MlEditKycCategory extends React.Component{
     if(e.currentTarget.checked){
       this.setState({"data":{"isActive":true}});
     }else{
-      this.setState({"data":{"isActive":false}});
+
+     let detailList  = this.state.kycCategoryActive
+      if(detailList){
+        this.setState({"data":{"isActive":true}});
+        toastr.error("Process Document with this KYC Category is active");
+      }else{
+        this.setState({"data":{"isActive":false}});
+      }
+
     }
   }
 
+
+  async fetchProcessDocuments() {
+    let id = FlowRouter.getParam('id');
+    const response = await findCategoryProcessDocuments(id);
+    if(response && response.length){
+      this.setState({"kycCategoryActive" : true})
+    }else{
+      this.setState({"kycCategoryActive" : false})
+    }
+
+  }
 
   render(){
     let MlActionConfig = [

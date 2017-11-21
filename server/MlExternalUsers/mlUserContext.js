@@ -16,11 +16,12 @@ class MlUserContext{
             let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
             if(!default_User_Profile ){
-              //todo: retrieve the first approved profile(Admin may block the profile)
-                let userActiveProfile = user_profiles.find((profile)=>{
-                  return profile.isActive;
-                })
-                default_User_Profile = userActiveProfile ||{};
+              // //todo: retrieve the first approved profile(Admin may block the profile)
+              //   let userActiveProfile = user_profiles.find((profile)=>{
+              //     return profile.isActive;
+              //   })
+              //   default_User_Profile = userActiveProfile ||{};
+              default_User_Profile = user_profiles[0] || {};
             }
           default_User_Profile.email = user.profile.email;
           default_User_Profile.mobileNumber = user.profile.mobileNumber;
@@ -84,7 +85,7 @@ class MlUserContext{
    *       3) else for all other cases the left nav will be decided by the user community code only
    * */
     getDefaultProfileMenu(userId){
-        var  menu = ''
+        var  menu = '';
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile && userProfile.communityDefCode){
           const registration = this.isUserRegistrationApproved(userProfile);
@@ -118,11 +119,23 @@ class MlUserContext{
       return 'mlCalendarMenu';
     }
 
+    /**@Note: 1) if user profile is "active" then only checking the registration status
+     *           else
+     *              making the user profile as "BRW".
+     */
+
   isUserRegistrationApproved(userDefaultProfile) {
-    return mlDBController.findOne('MlRegistration', {
-      _id: userDefaultProfile.registrationId,
-      status: 'REG_KYC_A_APR'
-    })
+    var returnStatus = null;
+    const isActiveProfile = userDefaultProfile && userDefaultProfile.isActive ? userDefaultProfile.isActive : false;
+    // const statusToValidate = userDefaultProfile.communityDefCode == "OFB" ? "REG_USER_APR" : "REG_KYC_A_APR";
+    const statusToValidate = "REG_USER_APR";
+    if (isActiveProfile) {
+      returnStatus = mlDBController.findOne('MlRegistration', {
+        _id: userDefaultProfile.registrationId,
+        status: statusToValidate
+      })
+    }
+    return returnStatus;
   }
 }
 

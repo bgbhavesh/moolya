@@ -35,7 +35,7 @@ export default class MlAppFunderViewTabs extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About", component:<MlFunderAboutView key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About", component:<MlFunderAboutView key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} client={appClient} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" ,  name:"Investments" ,component:<MlFunderInvestmentView key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Principals & Team" , name:"Principals And Team" ,component:<MlFunderPrincipalTeamView key="3" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" ,  name:"Engagement Methods" ,component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

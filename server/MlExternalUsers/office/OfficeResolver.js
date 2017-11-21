@@ -58,9 +58,16 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
  * */
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
+  var query = null;
   if (context.userId) {
-    var defaultProfile = new MlUserContext().userProfileDetails(context.userId)
-    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, profileId:defaultProfile.profileId, isActive:true}).fetch().map(function (data) {
+    var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
+    const isFetchOffice = getOfficeFetchPreCondition(defaultProfile);
+    if (isFetchOffice && isFetchOffice.isRemoveOFB){
+      query = {userId: context.userId, profileId:defaultProfile.profileId, isActive:true,  registrationId: { $ne: isFetchOffice.registrationId  }}
+    }else {
+      query = {userId: context.userId, profileId:defaultProfile.profileId, isActive:true};
+    }
+    let myOffices = mlDBController.find('MlOfficeMembers', query).fetch().map(function (data) {
       return data.officeId;
     });
     let officeQuery= {
@@ -1014,4 +1021,13 @@ MlResolver.MlMutationResolver['deActivateOffice'] = (obj, args, context, info) =
     response = new MlRespPayload().errorPayload('Office Id required', code);
   }
   return response
+};
+
+getOfficeFetchPreCondition = (userDefaultProfile) => {
+  var returnResponse = {isRemoveOFB: false};
+  const isActiveProfile = userDefaultProfile && userDefaultProfile.isActive ? userDefaultProfile.isActive : false;
+  const isOFBCommunity = userDefaultProfile.communityDefCode == "OFB" ? true : false;
+  if (isOFBCommunity && !isActiveProfile)
+    returnResponse = {isRemoveOFB: true, registrationId: userDefaultProfile.registrationId};
+  return returnResponse
 };

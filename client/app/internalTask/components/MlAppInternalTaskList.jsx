@@ -72,7 +72,8 @@ export default class MlAppInternalTaskList extends React.Component{
     console.log('task',task);
     this.setState({
       selectTask: task._id ? task._id : '',
-      selectedTaskType: task.type
+      selectedTaskType: task.type,
+      client:task.ownerName
     })
   }
   getTaskType(moduleName) {
@@ -152,7 +153,7 @@ export default class MlAppInternalTaskList extends React.Component{
                 {
                   (that.state.selectedTaskType === 'assign-task' || that.state.selectedTaskType === 'self-task')
                     ? <MlAppInternalAssignTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList}/>
-                    : <MlAppInternalTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList}/>
+                    : <MlAppInternalTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList} client={this.state.client}/>
                 }
               </div>
             </div>

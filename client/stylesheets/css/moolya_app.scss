@@ -2442,11 +2442,11 @@ li.sameWorkTime:after {
   content: ':';
 }
 .full_progress{
-  background: #000; width: 100%; height: 100%; position: fixed; text-align: center;
+  background: rgba(255, 255, 255, 0.8); width: 100%; height: 100%; position: fixed; text-align: center;z-index: 999;
   .progress{
-    width: 30%; margin: 20% 0 0 35%;height: 10px;
+    width: 30%; margin: 20% 0 0 35%;height: 10px;background: $mlBlack;
     span{
-      color: #FFF; position: absolute; margin-top: 10px;
+      color: $mlBlack; position: absolute; margin-top: 10px;
     }
   }
 }

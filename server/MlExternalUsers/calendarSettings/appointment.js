@@ -370,31 +370,51 @@ class MlAppointment {
     /**
      * Intersection service provider available slots with assignees available slots
      */
+
+    let isFullDayVacation = false;
+
     serviceProviderSlotsAvailability.forEach(function(serviceProviderSlotAvailabily){
       let serviceProviderSlotStartTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[0], date);
       let serviceProviderSlotEndTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[1], date);
       let isServiceProviderSlotStartTimeFind = false;
       let isServiceProviderSlotEndTimeFind = false;
-      teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
-        teamSlotsAvailability.slotsAvailability = teamSlotsAvailability.slotsAvailability ? teamSlotsAvailability.slotsAvailability : [];
-        teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
-          if(!serviceProviderSlotAvailabily.isAvailable){
-            serviceProviderSlotAvailabily.status = 2;
-            return;
-          }
-          let teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
-          let teamSlotEndTime = getTimeDate(slotAvailability.slotTime.split('-')[1], date);
-          if(teamSlotStartTime <= serviceProviderSlotStartTime && serviceProviderSlotStartTime < teamSlotEndTime) {
-            isServiceProviderSlotStartTimeFind = true;
-          }
-          if(isServiceProviderSlotStartTimeFind && !isServiceProviderSlotEndTimeFind){
-            serviceProviderSlotAvailabily.isAvailable = slotAvailability.isAvailable;
-          }
-          if(teamSlotStartTime < serviceProviderSlotEndTime && serviceProviderSlotEndTime <= teamSlotEndTime) {
-            isServiceProviderSlotEndTimeFind = true;
-          }
-        });
+
+      let isHoliday = false;
+
+      calendarSetting.vacations.forEach( (vacation) => {
+        let vacationStart = new Date(vacation.start);
+        let vacationEnd = new Date(vacation.end);
+        if( vacationStart.getTime() <= serviceProviderSlotStartTime.getTime() && vacationEnd.getTime() >= serviceProviderSlotEndTime.getTime()  ) {
+          isFullDayVacation = !vacation.isAllowBooking;
+          isHoliday = true;
+          serviceProviderSlotAvailabily.isAvailable= false;
+          serviceProviderSlotAvailabily.status = 2;
+        }
       });
+
+      if( !isHoliday ) {
+        teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
+          teamSlotsAvailability.slotsAvailability = teamSlotsAvailability.slotsAvailability ? teamSlotsAvailability.slotsAvailability : [];
+          teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
+            if(!serviceProviderSlotAvailabily.isAvailable){
+              serviceProviderSlotAvailabily.status = 2;
+              return;
+            }
+            let teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
+            let teamSlotEndTime = getTimeDate(slotAvailability.slotTime.split('-')[1], date);
+            if(teamSlotStartTime <= serviceProviderSlotStartTime && serviceProviderSlotStartTime < teamSlotEndTime) {
+              isServiceProviderSlotStartTimeFind = true;
+            }
+            if(isServiceProviderSlotStartTimeFind && !isServiceProviderSlotEndTimeFind){
+              serviceProviderSlotAvailabily.isAvailable = slotAvailability.isAvailable;
+            }
+            if(teamSlotStartTime < serviceProviderSlotEndTime && serviceProviderSlotEndTime <= teamSlotEndTime) {
+              isServiceProviderSlotEndTimeFind = true;
+            }
+          });
+        });
+      }
+
 
       let shift = TIMINIG.find((shift) => {
         let shiftStart = getTimeDate(shift.start, date);
@@ -405,6 +425,13 @@ class MlAppointment {
       serviceProviderSlotAvailabily.shift = shift ? shift.name : '';
 
     });
+    if(isFullDayVacation) {
+      serviceProviderSlotsAvailability = serviceProviderSlotsAvailability.map( (data) => {
+        data.status = 2;
+        data.isAvailable = false;
+        return data;
+      })
+    }
     return serviceProviderSlotsAvailability;
   }
 
@@ -708,9 +735,22 @@ class MlAppointment {
 
     let response= [];
 
+    let isFullDayVacation = false;
+
     userSlots.forEach(function(userSlots){
       let userSlotStart = getTimeDate(userSlots.split('-')[0], date);
       let userSlotEnd = getTimeDate(userSlots.split('-')[1], date);
+      let isHoliday = false;
+
+      calendarSetting.vacations.forEach( (vacation) => {
+        let vacationStart = new Date(vacation.start);
+        let vacationEnd = new Date(vacation.end);
+        if( vacationStart.getTime() <= userSlotStart.getTime() && vacationEnd.getTime() >= userSlotStart.getTime()  ) {
+          isFullDayVacation = !vacation.isAllowBooking;
+          isHoliday = true;
+        }
+      });
+
       let userAppointments = appointments.filter(function (appointment) {
         let appointmentStartDate = new Date(appointment.startDate);
         appointmentStartDate.setSeconds(0,0);
@@ -746,11 +786,18 @@ class MlAppointment {
       });
 
       response.push({
+        isHoliday: isHoliday,
         slot: userSlots,
         shift: shift ? shift.name : '',
         appointments: userAppointments
       });
     });
+    if(isFullDayVacation) {
+      response = response.map( (data) => {
+        data.isHoliday = true;
+        return data;
+      });
+    }
     return response;
   }
 

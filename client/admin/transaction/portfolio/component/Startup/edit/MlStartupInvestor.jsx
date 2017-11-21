@@ -13,6 +13,9 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import CropperModal from '../../../../../../commons/components/cropperModal';
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+import { fetchCurrencyTypeActionHandler } from '../../../../../../commons/actions/mlCurrencySymbolHandler';
+
+
 const KEY = 'investor'
 import Confirm from '../../../../../../commons/utils/confirm';
 export default class MlStartupInvestor extends Component{
@@ -29,7 +32,7 @@ export default class MlStartupInvestor extends Component{
       selectedVal:null,
       selectedObject:"default",
       showProfileModal: false,
-      uploadingAvatar: false
+      uploadingAvatar: false,currencySymbol:"",currencyName:""
     }
     this.tabName = this.props.tabName || "";
     this.curSelectLogo = {};
@@ -56,8 +59,16 @@ export default class MlStartupInvestor extends Component{
   }
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
+    this.getCurrencyType();
     return resp
   }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, this.props.portfolioDetailsId);
+    this.setState({currencySymbol: response.symbol, currencyName:response.currencyName})
+    return response;
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
@@ -398,7 +409,7 @@ export default class MlStartupInvestor extends Component{
                                     selectedValue={this.state.selectedVal} data-required={true}
                                     data-errMsg="Funding is required"/>
                       <div className="form-group">
-                        <input type="text" name="investmentAmount" placeholder="Investment Amount" className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur}/>
+                        <input type="text" name="investmentAmount" placeholder={`Investment Amount in ${this.state.currencyName} (${this.state.currencySymbol})`} className="form-control float-label" id="" defaultValue={this.state.data.investmentAmount}  onBlur={this.handleBlur}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInvestmentAmountPrivate" defaultValue={this.state.data.isInvestmentAmountPrivate}  onClick={this.onLockChange.bind(this, "investmentAmount", "isInvestmentAmountPrivate")}/>
                       </div>
                       <div className="form-group">

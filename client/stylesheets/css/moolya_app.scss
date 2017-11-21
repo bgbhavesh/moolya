@@ -2441,3 +2441,14 @@ li.sameWorkTime:after {
 .details-panel dt:after {
   content: ':';
 }
+.full_progress{
+  background: rgba(255, 255, 255, 0.8); width: 100%; height: 100%; position: fixed; text-align: center;z-index: 999;
+  .progress{
+    width: 30%; margin: 20% 0 0 35%;height: 10px;background: $mlBlack;
+    span{
+      color: $mlBlack; position: absolute; margin-top: 10px;
+    }
+  }
+}
+
+

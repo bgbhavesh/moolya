@@ -8,6 +8,10 @@ import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/m
 export default class SessionDetails extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      activities:[],
+    };
+    this.addTeam = this.addTeam.bind(this);
   }
 
   componentWillMount() {
@@ -16,6 +20,11 @@ export default class SessionDetails extends Component {
     details.sessionId =  sessionId;
     this.props.setSessionId(sessionId);
     this.props.saveAction(details);
+    this.setState({activities:this.props.activities});
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({activities:nextProps.activities});
   }
 
   componentDidMount() {
@@ -35,13 +44,13 @@ export default class SessionDetails extends Component {
             <div className="tooltiprefer">
               <span>{user.name}</span>
             </div>
-            <span className="member_status" onClick={() => that.props.addUser(activityIdx, teamIdx, userIndex)}>
+            <span className="member_status" onClick={() => that.props.fetchActivities[activityIdx].teams.length<=teamIdx && that.props.addUser(activityIdx, teamIdx, userIndex)}>
               { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
             </span>
           </a>
           <div className="input_types">
             <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id={"mandatory"+teamIdx+userIndex} disabled checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />
+            <input id={"mandatory"+teamIdx+userIndex} disabled checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=> that.updateIsMandatory(evt, index, userIndex)} />
             <label htmlFor={"mandatory"+teamIdx+userIndex}>
               <span><span></span></span>
               Mandatory
@@ -51,6 +60,17 @@ export default class SessionDetails extends Component {
       )
     }) : [];
     return userList;
+  }
+
+  addTeam(activityIndex){
+    let {activities} = this.state;
+    if(!activities[activityIndex].teams){
+      activities[activityIndex].teams = [{}];
+    }else{
+      activities[activityIndex].teams.push({});
+    }
+
+    this.setState({activities});
   }
 
   // saveDetails() {
@@ -68,7 +88,8 @@ export default class SessionDetails extends Component {
    * @return XML
    */
   render() {
-    const {activities, index, isExternal, isInternal, offices, duration} = this.props;
+    const {index, isExternal, isInternal, offices, duration,fetchActivities} = this.props;
+    const activities = this.state.activities;
     const that = this;
     return (
       <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -129,11 +150,24 @@ export default class SessionDetails extends Component {
                                defaultValue={activity.duration && activity.duration.minutes} /> Mins
                       </label>
                     </div>
-                    <br className="brclear" /><span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attendees<br className="brclear" /><br className="brclear" />
+                    {/*<br className="brclear" /><span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attendees<br className="brclear" /><br className="brclear" />*/}
                     {
                       activity.teams && activity.teams.map(function (team, indexAct) {
                         return (
                           <div className="col-md-12 pull-left" key={indexAct}>
+                            <div className="panel panel-default cal_view_task">
+                              <div className="panel-heading">Attendees
+                              { indexAct === activity.teams.length-1
+                                ?
+                                <span className="see-more pull-right">
+                                  <a href="" onClick={()=>that.addTeam(activityIndex)}>
+                                    <FontAwesome name='plus'/>
+                                  </a>
+                                 </span>
+                                :
+                                null
+                              }
+                            </div>
                             <div className="panel panel-default library-wrap">
                               <div className="panel-body nopadding">
                                 <br className="brclear" />
@@ -141,12 +175,14 @@ export default class SessionDetails extends Component {
                                   <br className="brclear" />
                                   <div className="form-group" >
                                     <span className="placeHolder active">Select team</span>
-                                    <select defaultValue="chooseTeam" disabled value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
+                                    <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.fetchActivities[activityIndex].teams.length<=indexAct && that.props.chooseTeamType(evt, activityIndex, indexAct)}>
                                       <option value="chooseTeam" disabled="disabled">Choose team Type</option>
                                       <option value="connections">My Connections</option>
-                                      <option hidden={!isExternal} disabled={!isExternal} value="moolyaAdmins">Moolya Admins</option>
+                                      <option value="moolyaAdmins">Moolya Admins</option>
                                       {offices.map(function (office , index) {
-                                        return <option key={index} hidden={!isInternal} disabled={!isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                                        return <option key={index}
+                                                       // hidden={!isInternal} disabled={!isInternal}
+                                                       value={office._id}>{ office.officeName + " - " + office.branchType }</option>
                                       })}
                                     </select>
                                   </div>
@@ -157,6 +193,7 @@ export default class SessionDetails extends Component {
                                   </ul>
                                 </div>
                               </div>
+                            </div>
                             </div>
                           </div>
                         )

@@ -36,7 +36,7 @@ class MlDBController{
             let oldValue  = collection.find(docId).fetch();
             let result    = collection.update(docId, {$set: payload});
             let newValue  = collection.find(docId).fetch();
-            let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+            let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
             return result;
           }else {
             let oldValue  = collection.find({_id:docId}).fetch();
@@ -60,7 +60,7 @@ class MlDBController{
           }
           //let result = collection.update(docId, {$set: payload}, {upsert:true});
           let newValue  = collection.find(docId).fetch()
-          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
           return result;
         }else {
           let oldValue  = collection.find({_id:docId}).fetch();
@@ -76,7 +76,7 @@ class MlDBController{
             let oldValue  = collection.find(docId).fetch();
             let result = collection.update(docId, {$set: payload}, {multi:true});
             let newValue  = collection.find(docId).fetch()
-            let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+            let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
             return result;
           }else {
             let oldValue  = collection.find({_id:docId}).fetch();
@@ -92,7 +92,7 @@ class MlDBController{
           let oldValue  = collection.find(docId).fetch();
           let result = collection.update(docId, {$push: payload});
           let newValue  = collection.find(docId).fetch()
-          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
           return result;
         }else {
           let oldValue  = collection.find({_id:docId}).fetch();
@@ -108,7 +108,7 @@ class MlDBController{
           let oldValue  = collection.find(docId).fetch();
           let result = collection.update(docId, {$pull: payload});
           let newValue  = collection.find(docId).fetch()
-          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
           return result;
         }else {
           let oldValue  = collection.find({_id:docId}).fetch();
@@ -124,7 +124,7 @@ class MlDBController{
           let oldValue  = collection.find(docId).fetch();
           let result = collection.update(docId, payload);
           let newValue  = collection.find(docId).fetch()
-          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: (oldValue||{})._id, oldValue: oldValue, newValue : newValue}, context)
           return result;
         }else {
           let oldValue  = collection.find({_id:docId}).fetch();

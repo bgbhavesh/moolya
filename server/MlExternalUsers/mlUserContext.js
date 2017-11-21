@@ -16,11 +16,12 @@ class MlUserContext{
             let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
             if(!default_User_Profile ){
-              //todo: retrieve the first approved profile(Admin may block the profile)
-                let userActiveProfile = user_profiles.find((profile)=>{
-                  return profile.isActive;
-                })
-                default_User_Profile = userActiveProfile ||{};
+              // //todo: retrieve the first approved profile(Admin may block the profile)
+              //   let userActiveProfile = user_profiles.find((profile)=>{
+              //     return profile.isActive;
+              //   })
+              //   default_User_Profile = userActiveProfile ||{};
+              default_User_Profile = user_profiles[0] || {};
             }
           default_User_Profile.email = user.profile.email;
           default_User_Profile.mobileNumber = user.profile.mobileNumber;
@@ -51,27 +52,47 @@ class MlUserContext{
       return user_Profile;
     }
 
-    getDefaultMenu(userId){
-        check(userId,String);
-        var  menu = ''
-        let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile && userProfile.communityDefCode){
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
-        }
-        else{
-          // commmunity type browser will not have any profile
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive:true}]});
-        }
-        if(menu)
-          return menu.menuName;
-        return menu;
+    /**
+     * @module [app left nav deciding]
+     * @cond 1) community code if not then user will be "BRW"
+     *       2) if hard registration not approved by admin then also menu will be "BRW"
+     *       3) else for all other cases the left nav will be decided by the user community code only
+     * */
+    getDefaultMenu(userId) {
+      check(userId, String);
+      var menu = '';
+      let userProfile = this.userProfileDetails(userId) || {};
+      if (userProfile && userProfile.communityDefCode) {
+        const registration = this.isUserRegistrationApproved(userProfile);
+        if (registration)
+          menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive: true}]});
+        else
+          menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive: true}]});
+      }
+      else {
+        // commmunity type browser will not have any profile
+        menu = MlAppMenuConfig.findOne({"$and": [{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive: true}]});
+      }
+      if (menu)
+        return menu.menuName;
+      return menu;
     }
 
+  /**
+   * @module [app profile left nav deciding]
+   * @cond 1) community code if not then user will be "BRW"
+   *       2) if hard registration not approved by admin then also menu will be "BRW"
+   *       3) else for all other cases the left nav will be decided by the user community code only
+   * */
     getDefaultProfileMenu(userId){
-        var  menu = ''
+        var  menu = '';
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile && userProfile.communityDefCode){
-          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
+          const registration = this.isUserRegistrationApproved(userProfile);
+          if(registration)
+            menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
+          else
+            menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: 'BRW'}, {isActive:true}]});
         }
         else{
           // commmunity type browser will not have any profile
@@ -97,6 +118,24 @@ class MlUserContext{
       }
       return 'mlCalendarMenu';
     }
+
+    /**@Note: 1) if user profile is "active" then only checking the registration status
+     *           else
+     *              making the user profile as "BRW".
+     */
+
+  isUserRegistrationApproved(userDefaultProfile) {
+    var returnStatus = null;
+    const isActiveProfile = userDefaultProfile && userDefaultProfile.isActive ? userDefaultProfile.isActive : false;
+    const statusToValidate = userDefaultProfile.communityDefCode == "OFB" ? "REG_USER_APR" : "REG_KYC_A_APR";
+    if (isActiveProfile) {
+      returnStatus = mlDBController.findOne('MlRegistration', {
+        _id: userDefaultProfile.registrationId,
+        status: statusToValidate
+      })
+    }
+    return returnStatus;
+  }
 }
 
 

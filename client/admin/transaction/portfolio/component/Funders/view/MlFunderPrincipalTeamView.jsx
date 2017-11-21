@@ -214,7 +214,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <div onClick={that.onSelectPrincipal.bind(that, idx)}>
                                 <div className="ideators_list_block two">
                                   <div>
-                                  <FontAwesome className='pull-left' name='trash-o'/>
+                                  {/*<FontAwesome className='pull-left' name='trash-o'/>*/}
                                   <FontAwesome className='pull-right' name='lock'/></div>
                                   <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} className="c_image"/>
                                   <div className="block_footer nopadding"><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
@@ -259,7 +259,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <div>
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
-                                        <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                        {/*<div className="cluster_status inactive_cl">*/}
+                                          {/*<FontAwesome name='trash-o'/>*/}
+                                        {/*</div>*/}
                                         <img src={selectedPrincipal.logo ? generateAbsolutePath(selectedPrincipal.logo.fileUrl) : "/images/def_profile.png"}/>
                                         <div><p>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</p><p
                                           className="small">{selectedPrincipal.designation}</p></div>
@@ -321,7 +323,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <div onClick={that.onSelectTeam.bind(that, idx)}>
                                 <div className="ideators_list_block one">
                                   <div>
-                                    <FontAwesome className='pull-left' name='trash-o'/>
+                                    {/*<FontAwesome className='pull-left' name='trash-o'/>*/}
                                     <FontAwesome className='pull-right' name='lock'/>
                                   </div>
                                   <img className="c_image" src={team.logo ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"}/>
@@ -363,7 +365,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <div>
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
-                                        <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                        {/*<div className="cluster_status inactive_cl">*/}
+                                          {/*<FontAwesome name='trash-o'/>*/}
+                                        {/*</div>*/}
                                         <img src={selectedTeam.logo ? generateAbsolutePath(selectedTeam.logo.fileUrl) : "/images/def_profile.png"}/>
                                         <div>
                                           <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>

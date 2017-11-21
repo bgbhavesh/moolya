@@ -17,6 +17,7 @@ export default class CreateRequestComponent extends Component {
       subChapter:null,
       community:null
     };
+    this.isSubmitDetails = false;
     return this;
   }
 
@@ -24,7 +25,6 @@ export default class CreateRequestComponent extends Component {
     this.setState({requestTypeId:value})
   }
   async createRequest(){
-
     let requests={
       requestTypeId:this.state.requestTypeId,
       requestDescription:this.refs.about.value,
@@ -42,27 +42,26 @@ export default class CreateRequestComponent extends Component {
       status:"Pending",
       transactionCreatedDate: new Date()
     }
-    const response = await createRequestsActionHandler(requests);
-    if(response.success){
-      this.setState({requestType:null})
-      toastr.success("Request is created successfully");
-      this.props.closePopOver(false)
-      FlowRouter.reload();
-      //FlowRouter.go("/admin/transactions/requestedList");
-    }else{
-      this.setState({requestType:null})
-      toastr.error(response.result);
-      this.setState({requestType:null})
-      this.props.closePopOver(false)
-      FlowRouter.reload();
-      //FlowRouter.go("/admin/transactions/requestedList");
+    if (!this.isSubmitDetails) {
+      this.isSubmitDetails = true;
+      const response = await createRequestsActionHandler(requests);
+      if (response.success) {
+        this.setState({requestType: null})
+        toastr.success("Request is created successfully");
+        this.props.closePopOver(false)
+        FlowRouter.reload();
+        //FlowRouter.go("/admin/transactions/requestedList");
+      } else {
+        this.isSubmitDetails = false;
+        this.setState({requestType: null})
+        toastr.error(response.result);
+        this.setState({requestType: null})
+        this.props.closePopOver(false)
+        FlowRouter.reload();
+        //FlowRouter.go("/admin/transactions/requestedList");
+      }
     }
-
   }
-  /*click(){
-    this.createRequest();
-    this.props.closePopOver();
-  }*/
 
   optionsBySelectCluster(index, selectedIndex){
     this.setState({cluster:index})

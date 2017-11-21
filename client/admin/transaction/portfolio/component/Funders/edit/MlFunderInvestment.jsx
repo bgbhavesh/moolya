@@ -11,6 +11,7 @@ import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
 import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import { fetchCurrencyTypeActionHandler } from '../../../../../../commons/actions/mlCurrencySymbolHandler';
 
 export default class MlFunderInvestment extends Component {
   constructor(props, context) {
@@ -24,7 +25,7 @@ export default class MlFunderInvestment extends Component {
       selectedIndex: -1,
       funderInvestmentList: [],
       selectedVal: null,
-      selectedObject: "default"
+      selectedObject: "default", currencySymbol:"", currencyName:""
     }
     this.tabName = this.props.tabName || ""
     this.handleBlur = this.handleBlur.bind(this);
@@ -47,7 +48,14 @@ export default class MlFunderInvestment extends Component {
 
   componentWillMount() {
     const resp = this.fetchPortfolioDetails();
+    this.getCurrencyType()
     return resp
+  }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, this.props.portfolioDetailsId);
+    this.setState({currencySymbol: response.symbol, currencyName:response.currencyName})
+    return response;
   }
 
   async fetchPortfolioDetails() {
@@ -307,7 +315,7 @@ export default class MlFunderInvestment extends Component {
                                              onClick={this.onLockChange.bind(this, "investmentcompanyName", "isCompanyNamePrivate")}/>
                               </div>
                               <div className="form-group mandatory">
-                                <input type="number" placeholder="Investment Amount" name="investmentAmount" ref="investmentAmount" min={0}
+                                <input type="number" placeholder={`Investment Amount in ${this.state.currencyName} (${this.state.currencySymbol})`} name="investmentAmount" ref="investmentAmount" min={0}
                                        defaultValue={this.state.data.investmentAmount}
                                        className="form-control float-label" onBlur={this.handleBlur} data-required={true}
                                        data-errMsg="Investment Amount is required"/>

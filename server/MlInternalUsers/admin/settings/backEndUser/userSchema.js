@@ -564,7 +564,7 @@ let BackEndUser = `
         findBranchAddressInfo: [AddressInfoSchema]
         fetchAnchorUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): anchorUsers
         checkDefaultRole(userId: String): [UserProfiles]
-        fetchCurrencyType: CurrencyInfo
+        fetchCurrencyType(userId: String, portfolioDetailsId: String): CurrencyInfo
     }
 `
 

@@ -73,6 +73,13 @@ export default class MlAppDayAppointmentInfo extends Component {
     let slots = that.state.slots.filter( (slot) => {
       return slot.shift === that.state.shift;
     });
+
+    const statusClasses = {
+      Pending :"my-ml-info",
+      Reject :"my-ml-cancel",
+      Accept :"my-ml-save"
+    };
+
     return (
       <div className="main_wrap_scroll">
         <ScrollArea
@@ -103,8 +110,9 @@ export default class MlAppDayAppointmentInfo extends Component {
             <div className="row day_tab_content">
               {
                 slots.map(function (data, index) {
-                  console.log("data:",data, that.props);
+                  console.log(data);
                   let date = new Date();
+                  let isHoliday = data.isHoliday;
                   if(data && data.slot){
                     date = new Date(that.props.appointmentDate);
                     let startDate =  data.slot.split('-')[0];
@@ -121,21 +129,22 @@ export default class MlAppDayAppointmentInfo extends Component {
                         <div className="app_list_head">
                           {data.slot}
                           <span className="pull-right">
-                            { canAdd && ( date.getTime() >(new Date).getTime() ) ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
+                            { canAdd && !isHoliday && ( date.getTime() >(new Date).getTime() ) ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
                             { appointments.length && canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>
                         <ul className="list-group" style={{height:'160', overflowY:'scroll'}}>
                           {
-                            appointments.map(function (appointments, aptIndex) {
-                              appointments = appointments ? appointments : {};
+                            appointments.map(function (appointment, aptIndex) {
+                              appointment = appointment ? appointment : {};
                               return (
                                 <li key={aptIndex} className="list-group-item">
                                   <span className="task_with">
                                     <span className="ml my-ml-Investors">
                                     </span>
-                                  </span> { appointments.name } <span className="task_status act_task">
-                                  <FontAwesome name='check'/>
+                                  </span> { appointment.name } <span className="task_status act_task">
+                                  { !appointment.isRescheduled && <span className='my-ml-history'/> }
+                                  <span className={statusClasses[appointment.status]}> </span>
                                 </span>
                                 </li>
                               )

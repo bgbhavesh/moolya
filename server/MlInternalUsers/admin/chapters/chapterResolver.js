@@ -377,7 +377,11 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
   }
 }
 
-
+/**
+ * @Note 1) if [update] of defaultSubChapter then update of that chapter also MOOLYA-2296
+ *       2) creation of related-subchapter wrt update of non-moolya subchapter
+ *       3) checking the access-permission for update of "key" moolyaSubChapterAccess {hierarchyLevel:4}
+ * */
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
   let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
   if (subChapter) {

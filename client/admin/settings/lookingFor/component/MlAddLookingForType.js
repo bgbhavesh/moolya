@@ -60,9 +60,9 @@ class MlAddLookingFor extends React.Component {
 
       const response = await addLookingForActionHandler(LookingForDetails)
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("'Looking For' already exists")
       } else if (response.success) {
-        toastr.success("Created Successfully");
+        toastr.success("New 'Looking For' added successfully");
         FlowRouter.go("/admin/settings/registration/lookingForList");
       }
       // toastr.success("Created Successfully");
@@ -113,7 +113,7 @@ class MlAddLookingFor extends React.Component {
                     <Moolyaselect multiSelect={false} ref="community" className="form-control float-label" mandatory={true} valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
                                   selectedValue={this.state.selectedCommunity}
-                                  query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Community Needed"/>
+                                  query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Community is required"/>
 
                   <div className="form-group mandatory">
                     <input type="text" ref="lookingForDisplayName" placeholder="Display Name"

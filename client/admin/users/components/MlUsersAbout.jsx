@@ -46,10 +46,10 @@ export default class MlUsersAbout extends Component {
   async changeUrl(registrationId) {
     const response = await findUserPortfolioActionHandler(registrationId);
     if (response && response.portfolioId) {
-      toastr.success('Portfolio Selected Successfully')
+      toastr.success('Portfolio selected successfully')
       FlowRouter.setParams({registrationId: registrationId, portfolioId: response.portfolioId})
     } else {
-      toastr.info('Portfolio Not available')
+      toastr.info('Portfolio not available')
     }
     return response
   }

@@ -32,7 +32,7 @@ const mlCountriesTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editCountry/"+data.id);
         } else{
-          toastr.error("Please select a Country to Edit");
+          toastr.error("Please select a country to edit");
         }
       }
     },

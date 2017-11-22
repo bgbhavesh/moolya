@@ -245,7 +245,7 @@ export default class Individual extends React.Component{
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
     }
     else{
-      toastr.error("Minimum Age for Registration is 18 years")
+      toastr.error("Minimum age for registration as 'Investor' is 18 years")
     }
   }
   onemploymentDateSelection(event) {

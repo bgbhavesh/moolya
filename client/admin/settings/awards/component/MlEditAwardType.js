@@ -69,7 +69,7 @@ class MlEditAwardType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateAwardTypeActionHandler(AwardType)
-      toastr.success("Edited Successfully");
+      toastr.success("'Award type' updated successfully");
       return response;
     }
   }

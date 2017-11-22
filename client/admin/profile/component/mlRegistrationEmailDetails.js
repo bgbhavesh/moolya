@@ -94,7 +94,7 @@ export default class EmailDetails extends React.Component{
           contactExist = _.contains(dbData,this.state.selectedEmailTypeValue );
         }
         if(contactExist){
-          toastr.error("Email Type Already Exists!!!!!");
+          toastr.error("'Email Type' already exists");
           this.findRegistration();
         }else{
           let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;

@@ -241,7 +241,6 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       query["$or"].push ({'isCurrentVersion': true});
     }
   }
-  //console.log('args',args, query);
   let result = mlDBController.find('MlTask', query, context).fetch();
   //console.log('result',result);
   if (result && result.length > 0) {
@@ -258,6 +257,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
             if(appointment){
               result[taskIndex]['session'][sessionIndex]['startDate'] = appointment.startDate;
               result[taskIndex]['session'][sessionIndex]['status'] = appointment.status;
+              result[taskIndex]['session'][sessionIndex]['isRescheduled'] = appointment.isRescheduled;
             }
           }
           console.log('sessionId', taskSession.sessionId );

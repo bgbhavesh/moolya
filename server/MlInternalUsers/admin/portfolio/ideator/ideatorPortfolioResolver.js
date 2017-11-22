@@ -604,18 +604,6 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 //   return libraryData;
 //   }
 //
-//   MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
-//   let currentProfile = context.url.split("/")
-//   let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [6]}, context)
-//   var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
-//   libraryData[args.detailsInput.index].portfolioReference.map(function(data){
-//     if(data.portfolioId === currentProfile[6]){
-//       data.isPrivate = args.detailsInput.element
-//     }
-//   })
-//     var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData[args.detailsInput.index]._id},libraryData[args.detailsInput.index], {$set: 1}, context)
-//     return updateTemplateCollection1;
-// }
 //
 //   MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {
 //   if(context.url.indexOf("transactions") > 0) {

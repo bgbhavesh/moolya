@@ -231,7 +231,7 @@ export default class MlAppRegCompany extends React.Component {
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
     if (response.success) {
-      toastr.success("Saved Successfully");
+      toastr.success("Registration details saved successfully");
       this.props.getRegistrationDetails();
     } else {
       toastr.error(response.result);

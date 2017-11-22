@@ -10,6 +10,7 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
           key
           count
           icon
+          context
       }
     }
     `,

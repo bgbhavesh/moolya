@@ -46,7 +46,7 @@ class MlEditDocumentFormat extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success){
-        toastr.success("Edited Successfully");
+        toastr.success("Document format updated successfully");
         FlowRouter.go("/admin/settings/documentProcess/documentFormatList");
       }else{
         toastr.error(response.result);

@@ -77,7 +77,11 @@ export default class MlAppDayAppointmentInfo extends Component {
     const statusClasses = {
       Pending :"my-ml-info",
       Reject :"my-ml-cancel",
-      Accept :"my-ml-save"
+      Rejected :"my-ml-cancel",
+      Accept :"my-ml-save",
+      Accepted :"my-ml-save",
+      Start :"ml-active",
+      Started :"ml-active"
     };
 
     return (
@@ -142,10 +146,17 @@ export default class MlAppDayAppointmentInfo extends Component {
                                   <span className="task_with">
                                     <span className="ml my-ml-Investors">
                                     </span>
-                                  </span> { appointment.name } <span className="task_status act_task">
-                                  { !appointment.isRescheduled && <span className='my-ml-history'/> }
-                                  <span className={statusClasses[appointment.status]}> </span>
-                                </span>
+                                  </span> { appointment.name }
+                                  {
+                                    appointment.isRescheduled ?
+                                    <span className="task_status act_task">
+                                      <span className='my-ml-history'/>
+                                    </span>
+                                    :''
+                                  }
+                                  <span className="task_status act_task">
+                                    <span className={statusClasses[appointment.status]}> </span>
+                                  </span>
                                 </li>
                               )
                             })

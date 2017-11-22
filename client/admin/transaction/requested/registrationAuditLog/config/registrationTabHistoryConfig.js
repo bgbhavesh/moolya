@@ -29,7 +29,7 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "timeStamp", title: "Date&Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "moduleName", title: "Module",dataSort:true},
-    {dataField: "docRef", title: "Transaction Code",dataSort:true},
+    {dataField: "docRef", title: "Module Id",dataSort:true},
     {dataField: "fieldName", title: "Field Name",dataSort:true},
     {dataField: "previousValue", title: "Previous Value",dataSort:true},
     {dataField: "currentValue", title: "Current Value",dataSort:true},

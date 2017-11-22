@@ -46,9 +46,9 @@ class MlAddCitizenship extends React.Component {
 
       const response = await addCitizenshipActionHandler(CitizenshipDetails)
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("Citizenship type already exists")
       } else if (response.success) {
-        toastr.success("CitizenShip Created Successfully");
+        toastr.success("'Citizenship type' added successfully");
         FlowRouter.go("/admin/settings/registration/citizenshipList");
       }
     }

@@ -76,6 +76,7 @@ class MlEditLookingForType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateLookingForTypeActionHandler(LookingForType)
+      toastr.success("'Looking For' updated successfully")
       return response;
 
     }

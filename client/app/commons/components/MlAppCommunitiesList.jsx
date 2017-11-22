@@ -90,7 +90,7 @@ export default class MlAppCommunitiesList extends Component {
     if(response.success){
       let registrtionId=response.result
      let registrtion= JSON.parse(registrtionId)
-      toastr.success("user registered successfully");
+      toastr.success("User registration successful");
       FlowRouter.go("/app/register/"+registrtion.registrationId);
     }else{
       this.toggle()

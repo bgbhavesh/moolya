@@ -396,7 +396,7 @@ export default class MlStartupManagement extends Component{
   }
   handleUploadAvatar(image,e) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onLogoFileUpload(image,e);
   }

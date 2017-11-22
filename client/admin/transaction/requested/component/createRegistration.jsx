@@ -58,7 +58,6 @@ export default class MlCreateRegistration extends React.Component{
     let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     var emailId=this.refs.email.value;
     const isValidEmail = validatedEmailId(emailId);
-    console.log(isValidEmail);
     if (ret) {
       toastr.error(ret);
     } else if (!isValidPhoneNumber) {
@@ -94,7 +93,7 @@ export default class MlCreateRegistration extends React.Component{
         this.isSubmitDetails = true;
         const response = await createRegistrationInfo(Details);
         if (response.success) {
-          toastr.success("User created Successfully")
+          toastr.success("User created successfully")
           FlowRouter.go("/admin/transactions/registrationRequested");
         } else if (response.code == 401 && !response.success) {
           this.isSubmitDetails = false;
@@ -104,18 +103,6 @@ export default class MlCreateRegistration extends React.Component{
           this.isSubmitDetails = false;
           toastr.error(response.result);
         }
-
-      }
-      const response = await createRegistrationInfo(Details);
-      if(response.success){
-        toastr.success("User created successfully")
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      }else if(response.code==401&&!response.success){
-        toastr.error(response.result);
-        // toastr.success("User created Successfully")
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      }else{
-        toastr.error(response.result);
       }
     }
   }

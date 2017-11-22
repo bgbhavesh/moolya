@@ -122,7 +122,7 @@ export default class AppContactDetails extends React.Component {
           this.refs.countryCode.value = "";
           this.refs["contactNumber"].value = "";
           this.setState({selectedNumberTypeValue: "", selectedNumberTypeLabel: ""});
-          toastr.success("Contact is created successfully");
+          toastr.success("Contact added successfully");
         }
 
       }
@@ -176,7 +176,7 @@ export default class AppContactDetails extends React.Component {
           if (!response.success) {
             toastr.error(response.result);
           } else {
-            toastr.success("Contact is updated successfully");
+            toastr.success("Contact updated successfully");
           }
           this.findRegistration();
           this.props.registrationDetails();

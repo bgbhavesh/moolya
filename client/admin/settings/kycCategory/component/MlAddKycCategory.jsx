@@ -51,9 +51,9 @@ class MlAddKycCategory extends React.Component{
       }
       const response = await addKycCategoryActionHandler(Details);
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("KYC category already exists")
       } else if(response.success) {
-        toastr.success("KYC Created Successfully");
+        toastr.success("'KYC category' added successfully");
         FlowRouter.go("/admin/settings/documentProcess/kycCategoryList");
       }
     }

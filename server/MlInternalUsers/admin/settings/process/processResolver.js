@@ -191,6 +191,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.documentId=documentMappingDef._id;
            processDocument.isMandatory=args.isMandatory;
            processDocument.isActive=args.isActive;
+           processDocument.validity=documentMappingDef&&documentMappingDef.validity?documentMappingDef.validity:null
 
         mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
         // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
@@ -460,12 +461,14 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query) {
     console.log(query)
+    let date = new Date();
+    date.setHours(0,0,0,0)
     let document = MlProcessMapping.find({
       $and: [query, {
         "identity": {$in: [args.identityType]},
         "industries": {$in: [args.industry]},
         "isActive": true
-      }]
+      }, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]}]
     }).fetch()
     if (document && document.length > 0) {
       let combinationBasedDoc=[],kycDoc=[]
@@ -519,7 +522,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function getCountryBasedDocuments(country) {
     let countryBasedDoc = [], kycDoc = []
-    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, {isActive: true}]}).fetch()
+    let date = new Date();
+    date.setHours(0,0,0,0)
+    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]},{isActive: true}]}).fetch()
     if (document && document.length > 0) {
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {

@@ -20,6 +20,16 @@ import moment from "moment";
 // import custom method(s) and component(s)
 
 
+const statusClasses = {
+  Pending :"my-ml-info",
+  Reject :"my-ml-cancel",
+  Rejected :"my-ml-cancel",
+  Accept :"my-ml-save",
+  Accepted :"my-ml-save",
+  Start :"ml-active",
+  Started :"ml-active"
+};
+
 class MlAppServiceSelectTask extends Component{
 
   constructor(props) {
@@ -268,9 +278,26 @@ class MlAppServiceSelectTask extends Component{
                 <div className="col-md-4 col-lg-4 pull-right">
                   <div  style={{'marginTop':'-4px'}}>
                     <div className="input_types">
-                      <input id="slottime" type="checkbox" slottime="clone" value="1"
-                             checked={data.startDate ? true : false} />
-                      <label htmlFor="slottime"><span><span></span></span></label>
+
+                      {
+                        data.isRescheduled ?
+                          <span className="task_status act_task">
+                            <span className='my-ml-history'/>
+                          </span>
+                        :''
+                      }
+                      { data.startDate
+                        ?
+                          <span className="task_status act_task">
+                            <span className={statusClasses[data.status]}> </span>
+                          </span>
+                        :
+                        <span>
+                          <input id="slottime" type="checkbox" slottime="clone" value="1"
+                               checked={false} />
+                          <label htmlFor="slottime"><span><span></span></span></label>
+                        </span>
+                      }
                     </div>
                     <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
                       { data.startDate ? moment(data.startDate).format('DD-MM-YYYY hh:mm:ss') : 'Yet To Start' }

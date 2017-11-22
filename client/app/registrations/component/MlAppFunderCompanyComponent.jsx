@@ -265,7 +265,7 @@ export default class MlAppFunderCompanyComponent extends React.Component {
     const response = await updateRegistrationActionHandler(Details);
     if (response.success) {
       this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      toastr.success("Registration details saved successfully");
     } else {
       toastr.error(response.result);
     }

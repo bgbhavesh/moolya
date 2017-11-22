@@ -139,7 +139,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       /* var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
        if(validate){*/
       let code = 409;
-      let message ="Registration Exist with the Email"
+      let message ="Registration exists with the Email-Id"
       let errResp = new MlRespPayload().errorPayload(message, code);
       return {'isValid':false,'validationResponse':errResp};
     }
@@ -149,7 +149,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     var validate = MlRegistration.findOne({"registrationInfo.contactNumber":registration.contactNumber,"status": {$nin: ['REG_ADM_REJ','REG_USER_REJ']}})
     if(validate){
       let code = 409;
-      let message ="Registration Exist with the Mobile Number"
+      let message ="Registration exists with the mobile number"
       let errResp = new MlRespPayload().errorPayload(message, code);
       return {'isValid':false,'validationResponse':errResp};
     }
@@ -160,7 +160,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     var userExist = mlDBController.findOne('users', {"profile.email":registration.email}, {}) || {};
     if(userExist._id){
       let code = 409;
-      let message ="Backend user registred with the same email"
+      let message ="Backend user registered with the same email"
       let errResp = new MlRespPayload().errorPayload(message, code);
       return {'isValid':false,'validationResponse':errResp};
     }
@@ -219,10 +219,10 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       if(emailVerified){
             return {'isValid':true};
       }
-      let response = new MlRespPayload().errorPayload("End user email verification not done", 556);
+      let response = new MlRespPayload().errorPayload("User has not yet verified his/her email-Id", 556);
       return {'isValid':false,'validationResponse':response};
     }else{/** if email does not exist,return response*/
-    let response = new MlRespPayload().errorPayload("Atleast one email is required for registration",556);
+    let response = new MlRespPayload().errorPayload("Atleast one email-Id is required for registration",556);
       return {'isValid':false,'validationResponse':response};
     }
   }
@@ -237,7 +237,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
        "status": {$nin: ['REG_ADM_REJ', 'REG_USER_REJ', 'REG_USER_APR']}
     })
     if (checkNumber) {
-      var response = new MlRespPayload().errorPayload("Contact Number already used", 409);
+      var response = new MlRespPayload().errorPayload("This contact number has already been used for a registration", 409);
       return {isValid: false, validationResponse: response}
     } else
       return {isValid: true};
@@ -263,7 +263,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     var user = mlDBController.findOne('users', {_id: context.userId})
     if (user && user.profile && !user.profile.isInternaluser) {
       if (regDetails.status === "REG_USER_APR" || regDetails.status ==="REG_ADM_REJ" || regDetails.status ==="REG_USER_REJ") {
-        var response = new MlRespPayload().errorPayload("Can not update registration contact admin", 409);
+        var response = new MlRespPayload().errorPayload("Registration details could not be updated. Please contact your moolya admin.", 409);
         return {isValid: false, validationResponse: response}
       } else {
         return {isValid: true};

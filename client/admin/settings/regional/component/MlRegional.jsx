@@ -93,7 +93,7 @@ class MlRegional extends React.Component{
 
   async handleSuccess(response) {
     if(response){
-      toastr.success('Successfully Saved');
+      toastr.success('Successfully saved');
       FlowRouter.go("/admin/settings/regionalsList");
     }
 
@@ -171,7 +171,7 @@ class MlRegional extends React.Component{
        if((this.refs.phoneNumberFormat.value.match('^[0-9]+$')) &&(this.refs.phoneNumberFormat.value >=5) && (this.refs.phoneNumberFormat.value <=15) ){
          return true;
        }else{
-           toastr.error("Please Enter a number in between 5-15 ")
+           toastr.error("Phone number is invalid. Please enter again.")
        }
    }
      // onStatusChange(e){

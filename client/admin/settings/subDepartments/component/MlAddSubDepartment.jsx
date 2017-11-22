@@ -39,7 +39,7 @@ class MlAddSubDepartment extends React.Component{
     if(response&&!response.success){
       toastr.error(response.result);
     }else{
-      toastr.success("SubDepartment Created Successfully");
+      toastr.success("Sub-Department added successfully");
       FlowRouter.go("/admin/settings/subDepartmentsList");
     }
   };

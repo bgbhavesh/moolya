@@ -120,7 +120,7 @@ class MlAddProcessMapping extends React.Component{
           documents: this.state.assignDocument
         }
         const response = await addProcessActionHandler(processDetails)
-        toastr.success("Created Successfully")
+        toastr.success("'Process mapping' added successfully")
         return response;
       }
     }

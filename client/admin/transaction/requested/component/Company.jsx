@@ -222,7 +222,7 @@ export default class Company extends React.Component{
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
-      toastr.success("Saved Successfully");
+      toastr.success("Registration details saved successfully");
       this.props.getRegistrationDetails();
     }else{
       toastr.error(response.result);
@@ -439,7 +439,7 @@ export default class Company extends React.Component{
                 <Moolyaselect multiSelect={false} placeholder="Select Stage Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedStageOfCompany} queryType={"graphql"} query={stageofcompquery} onSelect={that.optionsBySelectStageOfCompany.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
-                <Select name="form-field-name" placeholder="Select Subsidary Company" options={subsidary} value={this.state.selectedSubsidaryComapny} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
+                <Select name="form-field-name" placeholder="Select Subsidiary Company" options={subsidary} value={this.state.selectedSubsidaryComapny} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
               </div>
               {this.state.selectedSubsidaryComapny=='Yes'?
               <div className="form-group">

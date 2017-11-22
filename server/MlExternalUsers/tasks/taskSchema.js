@@ -21,6 +21,7 @@
      activitiesDiscount: Float
      activitiesAmount: Float
      derivedAmount :Float
+     currencyType: String
    }
 
    type FacilitationCharge {
@@ -148,6 +149,7 @@
        activitiesDiscount: Float
        activitiesAmount: Float
        derivedAmount :Float
+       currencyType: String
    }
    
    input facilitationCharge {

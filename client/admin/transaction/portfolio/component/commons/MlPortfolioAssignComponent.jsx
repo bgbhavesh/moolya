@@ -183,7 +183,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
         selectedRole: null,
         selectedUser: null
       })
-      toastr.success("Transaction assigned to user successfully");
+      toastr.success("Portfolio assigned to admin successfully");
       this.props.closePopOver(false)
       FlowRouter.reload();
     } else {
@@ -203,7 +203,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
     let transactionType=this.props.data.transactionType
     const response = await selfAssignUserForTransactionAction("Portfolio",transactionIds,"Portfolio","selfAssignTransaction");
     if(response.success){
-      toastr.success("Self Assignment successfull");
+      toastr.success("Self-assignment successful");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
@@ -223,7 +223,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
     })
     const response = await unAssignUserForTransactionAction("Portfolio",transactionIds,"Portfolio","unAssignTransaction");
     if(response.success){
-      toastr.success("UnAssignment successfull");
+      toastr.success("Un-assignment successful");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");

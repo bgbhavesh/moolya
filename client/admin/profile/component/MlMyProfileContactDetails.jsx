@@ -87,7 +87,7 @@ export default class ContactDetails extends React.Component{
       contactExist = _.contains(dbData,this.state.selectedNumberTypeValue );
     }
     if(contactExist){
-      toastr.error("Contact TypeAlready Exists!!!!!");
+      toastr.error("'Contact Type' already exists");
       this.findRegistration();
       this.props.registrationDetails();
     }else{

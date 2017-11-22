@@ -126,7 +126,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     if(isValid && isValid.success){                               /*attaching login admin user context to query*/
       let response = await updateProcessSetupActionHandler(data, isValid.result, this.loggedUserDetails);
       if(response && response.success){
-        toastr.success("Saved Successfully");
+        toastr.success("Saved successfully");
       }
       return response;
     }else{
@@ -144,7 +144,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
       }else
         return {success: false, result: 'Select atleast one stage'}
     } else
-      return {success: false, result: 'Please enter Details'}
+      return {success: false, result: 'Please enter all the required details'}
   }
   async findProcessSetupDetails() {
     let id = this.props.data._id
@@ -175,14 +175,14 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
       isGenerateLinkDisable:true
     })
     if(!this.state.cost){
-      toastr.error('Cost is required');
+      toastr.error("'Cost' field is required");
       this.setState({
         isGenerateLinkDisable:false
       })
       return false;
     }
     if(this.state.cost < 1){
-      toastr.error('Enter tha valid cost');
+      toastr.error('Enter a valid cost');
       this.setState({
         isGenerateLinkDisable:false
       })

@@ -97,7 +97,7 @@ class MlPortfolio extends React.Component {
     let portfolioId = this.props.config
     const response = await approvePortfolio(portfolioId, this.loggedUserDetails);
     if (response.success) {
-      toastr.success("Portfolio Approved Successfully")
+      toastr.success("Portfolio approved successfully")
       FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
     }else{
       toastr.error(response.result)
@@ -113,7 +113,7 @@ class MlPortfolio extends React.Component {
     const response = await rejectPortfolio(portfolioId);
     if (response) {
       // this.props.getRegistrationKYCDetails();
-      toastr.success("Portfolio Rejected Successfully")
+      toastr.success("Portfolio rejected successfully")
     }
   }
   rejectUser(){

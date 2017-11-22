@@ -248,7 +248,7 @@ class MlAppTaskLanding extends Component {
     if (response && response.success) {
       if (this.state.saveType == 'taskCreate')
         FlowRouter.setQueryParams({ id: response.result })
-      toastr.success("Saved Successfully move to next step");
+      toastr.success("Saved successfully. Please proceed to next step");
     } else if (response && !response.success) {
       toastr.error(response.result);
     }

@@ -58,7 +58,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/documentProcess/editDocumentFormat/"+data.id);
         } else{
-          toastr.error("Please select a Document Format");
+          toastr.error("Please select a document format");
         }
       }
     },

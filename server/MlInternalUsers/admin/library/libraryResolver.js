@@ -124,7 +124,10 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
   }
 }
 
-
+/**
+ * @Note: 1) need to remove sever url dependency ["to-do"]
+ *        2) case added to take users left nav data accuracy
+ * */
 MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if(context.url.indexOf("transactions") > 0) {
     let currentProfile = context.url.split("/")
@@ -153,14 +156,15 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
       if(context.url.split("/")[4] === 'explore'){
         portfolioId = context.url.split("/")[6];
       }else{
-        portfolioId = context.url.split("/")[5];
+        // portfolioId = context.url.split("/")[5];
+        portfolioId = args.userId ? args.userId : context.url.split("/")[5];
       }
       args.userId = portfolioDetails.userId;
       var query = {
         userId: args.userId,
         isActive: true,
         'portfolioReference.portfolioId': portfolioId,
-        'portfolioReference.isPrivate': false
+        // 'portfolioReference.isPrivate': false
       }
       var libraryDataOthers = mlDBController.find('MlLibrary', query, context).fetch();
       return libraryDataOthers;

@@ -193,7 +193,7 @@ investmentHandler = async (that, currentStage, currentStageName) => {
   }
   //await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
   if(response) {
-    toastr.success('Investment done successfully');
+    toastr.success('Startup added to your investment portfolio');
     that.props.fetchPortfolio();
   }
 };
@@ -202,7 +202,7 @@ investmentHandler = async (that, currentStage, currentStageName) => {
 async function changeStage(that, currentStage, currentStageName){
   console.log('--that--', that , '--currentStage--', currentStage, '--currentStageName--')
   if(!that.state.selected.resourceId){
-    toastr.error('Please select a portfolio');
+    toastr.error('Please select a Startup');
     return false;
   }
   if(currentStage.stageName == currentStageName){

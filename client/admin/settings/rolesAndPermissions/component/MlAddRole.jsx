@@ -71,20 +71,20 @@ class MlAddRole extends React.Component{
        var modules = _.cloneDeep(this.state.assignModulesToRoles);
       _.remove(modules, {moduleId: ""});
       if(modules && modules.length == 0){
-        toastr.error("Please Select One Module");
+        toastr.error("Please select atleast one module");
         return;
       }
 
       for(var i = 0; i < modules.length; i++){
         if(modules[i].actions.length == 0){
-          toastr.error("Please Select Action");
+          toastr.error("Please select atleast one action");
           return;
         }
       }
 
       let uniqModule = _.uniqBy(modules, 'moduleId');
       if (modules && uniqModule && uniqModule.length !== modules.length) {
-        toastr.error('Please select different module');
+        toastr.error('Please select a different module');
         return;
       }
 
@@ -111,10 +111,10 @@ class MlAddRole extends React.Component{
       if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
         const response = await addRoleActionHandler(roleDetails)
         if(!response.success){
-          toastr.error("Already Exists")
+          toastr.error("Role already exists")
         }
         else if(response.success){
-          toastr.success("Role Created Successfully");
+          toastr.success("Role created successfully");
           return response;
         }
       } else {

@@ -6,7 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addAccountActionHandler} from '../actions/addAccountTypeAction'
 let FontAwesome = require('react-fontawesome');
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddTemplate extends React.Component{
   constructor(props) {
     super(props);
@@ -39,22 +39,26 @@ class MlAddTemplate extends React.Component{
   };
 
   async  createAccount() {
-    let AccountDetails = {
-      accountName: this.refs.accountName.value,
-      accountDisplayName: this.refs.accountDisplayName.value,
-      accountDescription: this.refs.accountDescription.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    }else{
+      let AccountDetails = {
+        accountName: this.refs.accountName.value,
+        accountDisplayName: this.refs.accountDisplayName.value,
+        accountDescription: this.refs.accountDescription.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await addAccountActionHandler(AccountDetails)
+      if (!response.success) {
+        toastr.error("Account type already exists")
+      } else if (response.success) {
+        toastr.success("'Account type' added successfully");
+        FlowRouter.go("/admin/settings/accountTypeList");
+      }
+      // toastr.success("AccountType Created Successfully")
+      // return response;
     }
-    const response = await addAccountActionHandler(AccountDetails)
-    if (!response.success) {
-      toastr.error("Account type already exists")
-    } else if (response.success) {
-      toastr.success("Account type added successfully");
-      FlowRouter.go("/admin/settings/accountTypeList");
-    }
-    // toastr.success("AccountType Created Successfully")
-    // return response;
-
   }
   render(){
     let MlActionConfig = [
@@ -85,8 +89,8 @@ class MlAddTemplate extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="accountName" placeholder="Name" className="form-control float-label" id=""/>
+              <div className="form-group mandatory">
+                <input type="text" ref="accountName" placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg="Account Name is required"/>
               </div>
               <div className="form-group">
                 <textarea  ref="accountDescription" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -97,8 +101,8 @@ class MlAddTemplate extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="accountDisplayName" placeholder="Display Name" className="form-control float-label" id=""/>
+              <div className="form-group mandatory">
+                <input type="text" ref="accountDisplayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
               </div>
               <div className="form-group switch_wrap inline_switch">
                 <label>Status</label>

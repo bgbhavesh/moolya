@@ -234,7 +234,7 @@ class MlEditBackendUser extends React.Component{
       this.getGender();
     }else {
       window.history.back()
-      toastr.error('Not Authorised');
+      toastr.error('You are not authorised for this action. Please contact your admin, if required');
     }
   }
 
@@ -277,7 +277,7 @@ class MlEditBackendUser extends React.Component{
         userProfilesDetails[id]['isDefault'] = currentState;
         this.setState({userProfiles: userProfilesDetails})
       } else {
-        toastr.error("Make default is not possible as none of the roles are active")
+        toastr.error("'Make default' is not possible as none of the roles are active")
       }
     } else {
       userProfilesDetails.map((cluster)=> {
@@ -285,7 +285,7 @@ class MlEditBackendUser extends React.Component{
           userProfilesDetails[id]['isDefault'] = currentState;
           this.setState({userProfiles: userProfilesDetails})
         } else {
-          toastr.error("Please select one default profile")
+          toastr.error("Please select atleast one default profile")
         }
       })
     }

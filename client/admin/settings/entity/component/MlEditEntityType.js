@@ -67,7 +67,7 @@ class MlEditEntityType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateEntityTypeActionHandler(EntityType)
-      toastr.success("Edited Successfully");
+      toastr.success("'Entity type' updated successfully");
       return response;
 
     }

@@ -118,7 +118,7 @@ export default class MlAppRegStep4 extends React.Component {
       this.setState({loading: false, socialLinkArray: response.socialLinksInfo});
       this.props.getRegistrationSocialLinks();
       this.setState({activeTab: "active"});
-      toastr.success("SocialLink removed successfully");
+      toastr.success("'Social link' removed successfully");
     }
 
   }
@@ -183,7 +183,7 @@ export default class MlAppRegStep4 extends React.Component {
           this.props.getRegistrationSocialLinks();
           this.refs["socialLinkTypeUrl"].value = "";
           this.setState({selectedValue: "", selectedSocialLinkLabel: ""});
-          toastr.success("SocialLink created successfully");
+          toastr.success("'Social link' added successfully");
         }
 
 
@@ -243,7 +243,7 @@ export default class MlAppRegStep4 extends React.Component {
             if (!response.success) {
               toastr.error(response.result);
             } else {
-              toastr.success("SocialLink updated successfully");
+              toastr.success("'Social link' updated successfully");
             }
             this.props.getRegistrationSocialLinks();
 

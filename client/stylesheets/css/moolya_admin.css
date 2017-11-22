@@ -502,7 +502,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 
 
 
-.chapter_map_hover{position: absolute;z-index: 999;right: -144px;top:0px;}
+/*.chapter_map_hover{position: absolute;z-index: 999;right: -144px;top:0px;}
 .chapter_map_hover_content{border-radius: 0px 10px 10px 10px; background: #fff; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 144px; padding-bottom: 3px;}
 .chapter_map_hover_content h2{background: #ef4647; margin: 0px; border-radius: 10px 10px 0 0; padding: 2px 0px; color: #fff; text-shadow: none; text-align: center; font-size: 14px;}
 .chapter_map_hover_content ul{padding: 5px 0px 0px 10px}
@@ -519,7 +519,23 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .chapter_map_hover_content ul li:nth-of-type(3n+3){margin-right: 0px;}
 .chapter_map_hover_content ul li span.count{background: #ef4647;color: #fff;text-shadow: none;font-size: 10px;font-family: arial;position: absolute;top: -10px;right:-10px;min-width: 22px;height: 22px;border-radius: 50%;line-height: 21px;}
 .chapter_map_hover_content li img {width: 20px;}
-.chapter_map_hover_content li span.ml {font-size: 19px;line-height: 30px;}
+.chapter_map_hover_content li span.ml {font-size: 19px;line-height: 30px;}*/
+.chapter_map_hover_content li{float: left;text-align: center; text-shadow: none;margin: 0 10px 10px 0px;width: 100px;}
+.chapter_map_hover_content li .ml{font-size:30px;border-radius: 50%;background: #333;color: #FFF;padding: 8px;}
+.chapter_map_hover_content li .ml.my-ml-Ideator{background: #9A9C9E;}
+.chapter_map_hover_content li .ml.my-ml-Investors{background: #82D51D;}
+.chapter_map_hover_content li .ml.my-ml-Startups{background: #D83A53;}
+.chapter_map_hover_content li .ml.my-ml-Service-Providers{background: #367064;}
+.chapter_map_hover_content li .ml.my-ml-Company{background: #3A98FF;}
+.chapter_map_hover_content li .ml.my-ml-Institutions{background: #8E9FA9;}
+.chapter_map_hover_content li .title{display: block;margin-bottom: 10px; font-weight: bold;}
+.chapter_map_hover_content li .count{display: block;margin-top: 10px}
+
+.chapter_map_hover{position: absolute;z-index: 999;right: -350px;top:-22px;}
+.chapter_map_hover h2{border-radius:4px 4px 0 0; background: #FFF;font-size: 12px !important;border: #EF4647 solid 1px; border-bottom: 0px !important; width: 80%;text-align: center;color: #000 !important;margin: 0 auto !important;height: 25px;padding-top: 4px;}
+.chapter_map_hover h2 b{font-size: 14px;}
+.chapter_map_hover_content{border-radius:5px; background: #FFF; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 350px; padding-bottom: 3px;padding-left: 10px;padding-top: 10px;}
+.chapter_map_hover_content h2{background: #EF4647; margin: 0px; border-radius: 10px 10px 0 0; padding: 2px 0px; color: #FFF; text-shadow: none; text-align: center; font-size: 14px;}
 #information_div{display: block;}
 .hide_div{display: none;}
 .email_notify{position: absolute; right: 0; top: 3px;}

@@ -74,6 +74,7 @@ class MlEditAssets extends React.Component{
       }
 
       const response = await updateSelectedAssetActionHandler(this.props.config, assetDetails)
+      toastr.success("Asset updated successfully")
       return response;
     }
   }

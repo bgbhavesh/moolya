@@ -51,7 +51,8 @@ let communitySchema = `
     type MapData {
         key:String,
         count:Int,
-        icon :String
+        icon :String,
+        context:String
     }
     
     type Query{

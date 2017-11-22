@@ -67,7 +67,7 @@ class MlEditSpecificationType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateSpecificationTypeActionHandler(SpecificationType)
-      toastr.success("Edited Successfully");
+      toastr.success("'Specification type' updated successfully");
       return response;
 
     }

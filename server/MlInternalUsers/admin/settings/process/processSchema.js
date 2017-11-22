@@ -59,7 +59,8 @@ let Process = `
         allowableFormat:String,
         docMappingDef:String,
         docFiles:[docFilesInputSchema],
-        status: String
+        status: String,
+        validity:Date
     }
    
     type processOutput{
@@ -161,6 +162,7 @@ let Process = `
         allowableMaxSize:String,
         allowableFormat:String,
         docMappingDef:String,
+        validity:Date
     }
     input document{
         type      :  String,

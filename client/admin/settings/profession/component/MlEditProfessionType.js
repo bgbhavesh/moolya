@@ -76,7 +76,7 @@ class MlEditProfessionType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateProfessionTypeActionHandler(ProfessionType)
-      toastr.success("Edited Successfully");
+      toastr.success("Profession updated successfully");
       return response;
     }
   }

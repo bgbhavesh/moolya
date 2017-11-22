@@ -137,7 +137,7 @@ export default class AddressDetails extends React.Component{
           this.setState({selectedValue : "",selectedAddressLabel : ""});
 
           this.props.addressUpdated()
-          toastr.success("Saved Successfully")
+          toastr.success("Address updated successfully")
         }
       }
   }
@@ -154,7 +154,7 @@ export default class AddressDetails extends React.Component{
         contactExist = _.contains(dbData,this.state.selectedValue );
       }
       if(contactExist){
-        toastr.error("Address Type Already Exists!!!!!");
+        toastr.error("'Address Type' already exists");
         this.props.addressUpdated()
         // this.findRegistration();
         // this.props.registrationDetails();

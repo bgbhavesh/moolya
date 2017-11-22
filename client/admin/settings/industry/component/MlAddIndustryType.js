@@ -49,9 +49,9 @@ class MlAddIndustry extends React.Component{
       }
       const response = await addIndustryActionHandler(IndustryDetails)
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("Industry already exists")
       } else if(response.success) {
-        toastr.success("Industry Created Successfully");
+        toastr.success("'Industry' added successfully");
         FlowRouter.go("/admin/settings/documentProcess/industryList");
       }
     }

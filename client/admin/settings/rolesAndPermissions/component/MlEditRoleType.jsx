@@ -86,14 +86,14 @@
     var modules = _.cloneDeep(this.state.assignModulesToRoles);
     for(var i = 0; i < modules.length; i++){
       if(modules[i].actions.length == 0){
-        toastr.error("Please Select Action");
+        toastr.error("Please select an action");
         return;
       }
     }
 
     let uniqModule = _.uniqBy(modules, 'moduleId');
     if (modules && uniqModule && uniqModule.length !== modules.length) {
-      toastr.error('Please select different module');
+      toastr.error('Please select a different module');
       return;
     }
 
@@ -127,7 +127,7 @@
       }
       return response;
     } else {
-      toastr.error("Please fill all mandatory fields to proceed");
+      toastr.error("Please fill all mandatory fields to proceed. Mandatory fields are marked with a red dot.");
     }
   }
 

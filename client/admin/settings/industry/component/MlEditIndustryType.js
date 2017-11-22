@@ -69,7 +69,7 @@ class MlEditIndustryType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateIndustryTypeActionHandler(IndustryType)
-      toastr.success("Edited Successfully");
+      toastr.success("'Industry type' updated successfully");
       return response;
     }
   }

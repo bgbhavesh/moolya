@@ -93,7 +93,7 @@ export default class MlCreateRegistration extends React.Component{
         this.isSubmitDetails = true;
         const response = await createRegistrationInfo(Details);
         if (response.success) {
-          toastr.success("User created Successfully")
+          toastr.success("User created successfully")
           FlowRouter.go("/admin/transactions/registrationRequested");
         } else if (response.code == 401 && !response.success) {
           this.isSubmitDetails = false;

@@ -49,7 +49,7 @@ export default class DocumentViewer extends React.Component{
       let file=document.getElementById(docTypeId+documentId).files[0];
       this.props.onFileUpload(file,documentId,docTypeId);
     }else{
-      toastr.error("documents can not allowed to upload once approved!!!!")
+      toastr.error("You cannot upload documents once they are approved")
     }
 
   }

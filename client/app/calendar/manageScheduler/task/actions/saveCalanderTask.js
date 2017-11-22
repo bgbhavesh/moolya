@@ -82,6 +82,7 @@ export async function findTaskActionHandler(taskId) {
                 activitiesDiscount
                 activitiesAmount
                 derivedAmount
+                currencyType
               }
               isServiceCardEligible
               sessionFrequency

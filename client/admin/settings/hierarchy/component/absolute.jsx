@@ -217,7 +217,7 @@ export default class MlHierarchyDetails extends React.Component {
       FlowRouter.reload();
       toastr.success(response.result);
     }else{
-      toastr.error("Final Approval role is mandatory");
+      toastr.error("'Final Approval' role is mandatory");
     }
     //FlowRouter.go("/admin/settings/hierarchy/clusterhierarchy/"+this.props.clusterId+"/hierarchyDetails");
     return response;

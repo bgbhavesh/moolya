@@ -53,7 +53,7 @@ class MlAddAssets extends React.Component {
       }
 
       const response = await addAssets(assetInfo)
-      toastr.success("Asset Created Successfully")
+      toastr.success("Asset added successfully")
       return response;
     }
   }

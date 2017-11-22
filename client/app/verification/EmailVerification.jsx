@@ -61,7 +61,7 @@ export default class EmailVerification extends React.Component{
         contentType: "application/json; charset=utf-8",
         success: function (response) {
           if (response.success) {
-            toastr.success("OTP Sent Successfuly");
+            toastr.success("OTP sent successfuly");
             this.setState({canResend:false})
             setTimeout(function(){
               this.setState({canResend:true})
@@ -123,7 +123,7 @@ export default class EmailVerification extends React.Component{
       contentType: "application/json; charset=utf-8",
       success: function (response) {
         if (response.success) {
-          toastr.success("Please verify later you mobile number from 'My Profile'");
+          toastr.success("Please verify your mobile number mentioned in 'My Profile' option");
         }
       }.bind(this)
     });

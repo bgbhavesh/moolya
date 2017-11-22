@@ -5,19 +5,30 @@ import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchActivitiesActionHandler} from '../actions/activityActionHandler';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
+import {appClient} from '../../../../core/appConnection';
 
 export default class MlAppActivityList extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
-      activities:[]
+      activities:[],
+      currencySymbol:""
     }
   }
 
   componentWillMount(){
     this.fetchActivities();
+    this.getCurrencyType();
   }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(appClient, null);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
+
   async fetchActivities(){
     let profileId = FlowRouter.getParam('profileId');
     let response = await fetchActivitiesActionHandler(profileId);
@@ -68,7 +79,7 @@ export default class MlAppActivityList extends React.Component{
                     <div className={activity.isActive ? 'active' : 'inactive'}></div>
                     <div className="clearfix"></div>
                     <div className="list_icon mart0">
-                      <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                      <span className="price"> {activity.payment && activity.payment.currencyType ? activity.payment.currencyType : that.state.currencySymbol} {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                       <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
                       {activity.imageLink ?

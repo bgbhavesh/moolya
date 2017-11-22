@@ -13,6 +13,9 @@ import MlAppTaskSession from "./MlAppTaskSession";
 import MlAppTaskConditions from "./MlAppTaskConditions";
 import MlAppTaskPayment from "./MlAppTaskPayment";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
+import {appClient} from '../../../../core/appConnection';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
+
 import _ from "lodash";
 
 class MlAppTaskLanding extends Component {
@@ -20,14 +23,24 @@ class MlAppTaskLanding extends Component {
     super(props)
     this.state = {
       loading: false,
-      saved:false,
+      saved:false,currencySymbol:""
     }
     this.activeComponent = this.activeComponent.bind(this);
     return this;
   }
 
+  componentWillMount() {
+    this.getCurrencyType();
+  }
+
   resetSaved(){
     this.setState({saved:false});
+  }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(appClient, null);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
   async saveTaskDetails() {
@@ -121,7 +134,11 @@ class MlAppTaskLanding extends Component {
         return false;
       }
     }
+
+    sendData && sendData.payment ? sendData.payment.currencyType = this.state.currencySymbol : ""
+
     if (sendData && sendData.payment && sendData.payment.isDiscount) {
+
       if (!sendData.name) {
         this.errorMsg = 'Task Name is required';
         toastr.error(this.errorMsg);
@@ -332,7 +349,7 @@ class MlAppTaskLanding extends Component {
           name: 'Payment',
           component: <MlAppTaskPayment
             activeComponent={this.activeComponent}
-            getPaymentDetails={this.getPaymentDetails.bind(this)}
+            getPaymentDetails={this.getPaymentDetails.bind(this)} client={appClient}
             taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')} />,
           icon: <span className="ml ml-payments"></span>
         },

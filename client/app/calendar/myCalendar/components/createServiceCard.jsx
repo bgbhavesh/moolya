@@ -280,7 +280,7 @@ class MlAppServiceManageSchedule extends Component {
       case 'BasicInfo':
         let firstStep = this.state.details;
         if (firstStep && this.state.serviceId) {
-          toastr.success('Data saved')
+          toastr.success("'Service card' saved successfully")
         } else {
           toastr.error('Please select a service seeker');
         }
@@ -288,14 +288,14 @@ class MlAppServiceManageSchedule extends Component {
       case 'SessionDetails':
         if (this.state.selectedSessionId) {
           // this.bookServiceCard();
-          toastr.success('Data saved')
+          toastr.success("'Session details' saved successfully")
         } else {
           toastr.error('Please select a session');
         }
         break;
       case 'termAndCondition':
         if (this.state.selectedSessionId) {
-          toastr.success('Data saved')
+          toastr.success("'Terms and Conditions' saved successfully")
         } else {
           toastr.error('Please select a session');
         }

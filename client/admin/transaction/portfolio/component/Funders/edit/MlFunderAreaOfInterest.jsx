@@ -356,7 +356,7 @@ export default class MlFunderAreaOfInterest extends Component {
 
   handleUploadAvatar(image, file) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onLogoFileUpload(image, file);
   }

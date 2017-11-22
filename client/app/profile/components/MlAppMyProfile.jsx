@@ -292,7 +292,7 @@ class MlAppMyProfile extends Component {
   }
   handleUploadAvatar(image) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onImageFileUpload(image);
   }

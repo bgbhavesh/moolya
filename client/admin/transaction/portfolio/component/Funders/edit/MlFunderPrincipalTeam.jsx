@@ -523,7 +523,7 @@ export default class MlFunderPrincipalTeam extends Component {
 
   handleUploadAvatar(image, file) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
     this.onPrincipalLogoFileUpload(image, file);

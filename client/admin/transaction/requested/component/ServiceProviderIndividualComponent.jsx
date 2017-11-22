@@ -215,7 +215,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       //this.props.getRegistrationDetails();
       const response = await updateRegistrationActionHandler(Details);
       if(response.success){
-        toastr.success("Saved Successfully");
+        toastr.success("Saved successfully");
         this.props.getRegistrationDetails();
       }else{
         toastr.error(response.result);
@@ -247,7 +247,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
     }
     else{
-      toastr.error("Minimum Age for Registration is 18 years")
+      toastr.error("Minimum Age for registration as 'Service Provider' is 18 years")
     }
   }
   onemploymentDateSelection(event) {

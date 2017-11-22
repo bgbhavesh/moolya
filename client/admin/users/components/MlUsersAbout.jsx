@@ -33,7 +33,6 @@ export default class MlUsersAbout extends Component {
   async findRegistration() {
     let registrationId = this.props.config ? this.props.config.registrationId : '';
     const response = await findUserRegistrationActionHandler(registrationId);
-    console.log(response);
     this.setState({loading: false, data: response});
   }
 

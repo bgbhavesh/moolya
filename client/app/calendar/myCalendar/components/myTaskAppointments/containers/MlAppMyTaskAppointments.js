@@ -112,11 +112,11 @@ class MyTaskAppointments extends Component {
     if (!selectedTaskId && !isTermAndCond) {
       toastr.error('Please select a task');
     } else if (!isSessionStep && !isTermAndCond) {
-      toastr.success('Go to next step');
+      toastr.success('Please proceed to the next step');
     } else if ((!selectedSessionId && isSessionStep) || (!selectedSessionId && isTermAndCond)) {
       toastr.error('Please select a session');
     } else if ((selectedSessionId && selectedTaskId)) {
-      toastr.success('Data Saved');
+      toastr.success('Task saved successfully');
     }
   }
 
@@ -131,7 +131,7 @@ class MyTaskAppointments extends Component {
     if (!selectedTaskId && !isTermAndCond) {
       toastr.error('Please select a task');
     } else if (!isSessionStep && !isTermAndCond) {
-      toastr.success('Go to next step');
+      toastr.success('Please proceed to the next step');
     } else if ((!selectedSessionId && isSessionStep) || (!selectedSessionId && isTermAndCond)) {
       toastr.error('Please select a session');
     } else if ((selectedSessionId && selectedTaskId)) {

@@ -166,9 +166,14 @@ let CoreModules = {
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery,serverQuery), '$and');
 
-     data = MlAudit.find(resultantQuery,fieldsProj).fetch();
-     totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
-
+    //Fix for Issue: MOOLYA-2361
+    var result=CoreModules.MlAuditHistorySearchResult(requestParams.moduleName,resultantQuery,userFilterQuery,fieldsProj,context);
+    if(result.resultsFetched){
+         data=result.data||[];totalRecords=result.totalRecords||0;
+    }else{
+      data = MlAudit.find(resultantQuery,fieldsProj).fetch();
+      totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
+    }
     data.map(function (doc, index) {
       let userObj;
       if (doc && doc.userId) {
@@ -1051,6 +1056,36 @@ let CoreModules = {
     let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId":"appointment"} ).count();
 
     return {totalRecords: totalRecords, data: data};
+  },
+  //Returns the history records for modules by aggregation (lookup with related collections).
+  MlAuditHistorySearchResult:function(module,resultantQuery,userFilter,fieldsProj,context){
+    var result={resultsFetched:false,data:[],totalRecords:0};
+    var pipeline=[],foreignKeySearch=false;
+    var limitskipsort=[{'$sort':fieldsProj.sort},{'$skip':fieldsProj.skip||0},{'$limit':fieldsProj.limit}];
+    var searchQueryParam={foriegnKeys:['docRef'],
+                          lookupQuery:{'$lookup':{from:'mlRegistration',localField: 'docId',foreignField:'_id',as:'refRecord'}},
+                          unwindQuery:{'$unwind':{path:"$refRecord",preserveNullAndEmptyArrays:true }},
+                          projectQuery:{$project:{clusterId:1,chapterId:1,subChapterId:1,communityId:1,communityCode:1,moduleName:1,userAgent:1,userId:1,userName:1,docId:1,fieldName:1,field:1,currentValue:1,previousValue:1,timeStamp:1,docRef:'$refRecord.transactionId'}}};
+    switch(module){
+          case 'REGISTRATION':
+            result.resultsFetched=true;
+            break;
+          case 'PORTFOLIO,PORTFOLIOLIBRARY':
+            result.resultsFetched=true;searchQueryParam.lookupQuery={$lookup: {from:'mlPortfolioDetails',localField: 'docId',foreignField: '_id',as: 'refRecord'}};
+            break;
+        }
+        if(result.resultsFetched===true){
+          let counterQuery=[{$match:resultantQuery},{$count: "totalRecords"}];
+          var totalRecordsCount =mlDBController.aggregate('MlAudit',counterQuery,context);
+          result.totalRecords= totalRecordsCount && totalRecordsCount.length ? totalRecordsCount[0].totalRecords : 0;
+
+          pipeline=[{'$match':resultantQuery},searchQueryParam.lookupQuery,searchQueryParam.unwindQuery,searchQueryParam.projectQuery];
+          if(foreignKeySearch)pipeline.push({'$match':resultantQuery});
+          pipeline= pipeline.concat(limitskipsort);
+
+           result.data=mlDBController.aggregate('MlAudit',pipeline,context);
+        }
+        return result;
   }
 
 }

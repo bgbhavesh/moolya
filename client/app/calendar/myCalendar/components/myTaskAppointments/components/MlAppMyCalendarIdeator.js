@@ -184,7 +184,7 @@ export default class MlAppMyCalendarIdeator extends Component {
     if(!this.isError) {
       const resp = await createInternalAppointmentInfo(selfInternalAppointmentInfo);
       if (resp && resp.success) {
-        toastr.success('Created successfully');
+        toastr.success('Appointment created successfully');
         this.props.componentToLoad('calendar');
       }
     } else {

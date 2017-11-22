@@ -32,7 +32,7 @@ class MlAddDocumentFormat extends React.Component{
   async handleSuccess(response) {
     if (response) {
       if (response.success) {
-        toastr.success("Document format created");
+        toastr.success("Document format added successfully");
         FlowRouter.go("/admin/settings/documentProcess/documentFormatList");
       } else {
         toastr.error(response.result);

@@ -100,7 +100,7 @@ export default class MlCompanyPartners extends React.Component {
     if(decimalExperience) {
       experience = parseInt(decimalExperience);
       if(experience > 75){
-        toastr.error('Experience cannot be more than 75 years')
+        toastr.error('Years of Experience cannot be more than 75 years')
         return false;
       }
     }
@@ -108,10 +108,10 @@ export default class MlCompanyPartners extends React.Component {
       toastr.error('Blank spaces are not allowed')
       return false;
     } else if(experience > 75 ) {
-      toastr.error('Experience cannot be more than 75 years')
+      toastr.error("'Years of Experience' cannot be more than 75 years")
       return false;
     } else if (!experience) {
-      toastr.error('Experience not valid')
+      toastr.error("'Years of Experience' value is not valid")
       return false
     } else {return true}
   }
@@ -253,7 +253,7 @@ export default class MlCompanyPartners extends React.Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add the file to your library", 'Ok', 'Cancel',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file&&file.name?file.name:"",
@@ -270,7 +270,7 @@ export default class MlCompanyPartners extends React.Component {
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        toastr.success("Photo Updated Successfully");
+        toastr.success("Photo updated successfully");
         // this.setState({loading: true})
         // this.fetchOnlyImages();
       }
@@ -369,7 +369,7 @@ export default class MlCompanyPartners extends React.Component {
                           {this.state.selectedObject != "default"?
                             <div className="form-group">
                               <div className="fileUpload mlUpload_btn">
-                                <span>Upload Pic</span>
+                                <span>Upload Photo</span>
                                 <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
                               </div>
                               <div className="previewImg ProfileImg">

@@ -97,7 +97,7 @@ class MlAddDocumentMapping extends React.Component{
         isActive: this.refs.status.checked,
       }
       const response = await addDocumentMappingActionHandler(documentDetails)
-      toastr.success("Document Created Successfully");
+      toastr.success("Document mapping created successfully");
       return response;
     }
   }

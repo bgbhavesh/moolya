@@ -168,7 +168,7 @@ class MlAddSubChapter extends React.Component {
       const response = await addSubChapterActionHandler(this.props.clusterId, this.props.chapterId, data)
       return response;
     } else {
-      toastr.error('Sub-Chapter Name is required')
+      toastr.error('Sub-Chapter name is mandatory')
     }
   }
 

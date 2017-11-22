@@ -300,7 +300,9 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         isPrincipal: true,
         isActive: true
       };
+
       let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
+      mlOfficeInteractionService.createTransactionRequest(context.userId, 'principal', officeMemberData.officeId, ret, context.userId, 'user', context);
       // office Transaction record creation
       let details = {
         officeId: officeId,
@@ -577,6 +579,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     }
     if(args.officeMember.isRetire || args.officeMember.isFreeze){
       let memberInfo = mlDBController.findOne('MlOfficeMembers', args.memberId);
+      args.officeMember.isRetire ? mlOfficeInteractionService.createTransactionRequest(context.userId, 'retireOfficeBearer', args.officeId, memberInfo._id, context.userId, 'user', context) : "";
       if(!memberInfo.profileId){
         let code = 200;
         let response = new MlRespPayload().errorPayload("User not activated", code);
@@ -630,6 +633,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
 
       if(!userResponse.success){
         let code = 200;
+        mlOfficeInteractionService.createTransactionRequest(context.userId, 'deactivateOfficeBearer', args.officeId, args.memberId, context.userId, 'user', context);
         let response = new MlRespPayload().errorPayload("Unable to unfreeze, Please contact admin", code);
         return response;
       }
@@ -974,6 +978,7 @@ MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context
 
       let resp = mlDBController.update('MlOfficeMembers', memberId, {isIndependent : true}, {$set: true}, context);
       if(resp){
+        mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerGoIndependent', officeMember.officeId, memberId, context.userId, 'user', context);
         MlEmailNotification.goIndependentRequest(context.userId,registrationData)
       }
       // if(resp){
@@ -1010,6 +1015,7 @@ MlResolver.MlMutationResolver['deActivateOffice'] = (obj, args, context, info) =
   if(officeId){
     const respSC = mlDBController.update('MlOfficeSC', {officeId: officeId}, {isActive: false}, {$set: true}, context);
     const respOffice = mlDBController.update('MlOffice', {_id: officeId}, {isActive: false}, {$set: true}, context);
+    mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeDeactivate', officeId, officeId, context.userId, 'user', context);
     if(respSC && respOffice){
       code = 200;
       response = new MlRespPayload().successPayload('Office Deactivated successfully', code);

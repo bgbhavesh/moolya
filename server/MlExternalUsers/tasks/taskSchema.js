@@ -69,6 +69,8 @@
        duration : Duration
        startDate: Date
        status: String
+       isOffline: Boolean
+       isRescheduled: Boolean
        activities: [TaskActivity]
    }
    

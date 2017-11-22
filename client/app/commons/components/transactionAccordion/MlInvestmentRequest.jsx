@@ -47,11 +47,11 @@ export default class MlInvestmentRequest extends Component{
   async OnBoardHandler(transactionLogId, transactionType, status, that){
     var response=await updateStageForOnBoardActionHandler(transactionLogId, transactionType, status);
     if(response){
-      toastr.success(`onBoard request ${status}ed successfully`);
+      toastr.success(`On-board request ${status}ed successfully`);
       this.setState({showAcceptAndReject : false})
       await this.fetchConnectionDetails();
     }else{
-      toastr.error("Failed to accept the onBoard request");
+      toastr.error("Failed to accept the On-board request");
     }
   }
 

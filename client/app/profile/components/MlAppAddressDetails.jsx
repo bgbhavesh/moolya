@@ -149,7 +149,7 @@ export default class AppAddressDetails extends React.Component {
             countryId: "",
             stateId: ""
           });
-          toastr.success("Address created successfully");
+          toastr.success("Address added successfully");
 
         }
 

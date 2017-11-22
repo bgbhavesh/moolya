@@ -24,6 +24,7 @@ export default class MlAdminProcessDocTabVew extends Component {
 
   render() {
     let path = FlowRouter.current().route.name;
+    let link = FlowRouter.current().path;
     let params = FlowRouter.current().params;
     let queryParams = FlowRouter.current().queryParams;
     let menuConfig = this.props.tabOptions||[];
@@ -92,7 +93,7 @@ export default class MlAdminProcessDocTabVew extends Component {
     if(subProcessOPtion!=undefined){
       tabOptions = subProcessOPtion.map(function (option,index) {
         let activeClass="";
-        if(option.uniqueId===path){
+        if(option.link===link){
           activeClass = 'active_btn'
         }
 

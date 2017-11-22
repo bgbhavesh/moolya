@@ -154,6 +154,7 @@ export async function getActivityActionHandler(id) {
             discountType
             discountValue
             derivedAmount
+            currencyType
           } 
         }
       }

@@ -138,7 +138,7 @@ export default class step1 extends React.Component{
     let isVerifiedUser = _.find(this.props.emailDetails, {verified : true})
     if(isVerifiedUser&&isVerifiedUser.verified){
       this.setState({"emailVerified" : true})
-    }else if(!isVerifiedUser.verified){
+    }else{
       this.setState({"emailVerified" : false})
     }
 

@@ -559,6 +559,7 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
 MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
+  let moduleContext = "";
   var chapterCount=0
 
   let userId = context.userId;
@@ -586,6 +587,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
   switch(args.moduleName){
       case "cluster":
+          moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
           if(isDefaultSubChapter){
               let sub = mlDBController.find('MlSubChapters', {$or:[{clusterId:args.id, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{clusterId:args.id, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
               let subIds = _.map(sub, "_id");
@@ -600,6 +602,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           }
           break;
       case "chapter":
+          moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
           let chapter = mlDBController.findOne('MlChapters', {_id:args.id}, context);
           if(isDefaultSubChapter){
               let sub = mlDBController.find('MlSubChapters', {$or:[{chapterId:args.id, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{chapterId:args.id, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
@@ -619,10 +622,12 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           }
           break;
       case "subChapter":
+          moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
           let subChapter = mlDBController.findOne('MlSubChapters', {_id:args.id})
           query={"clusterId":subChapter.clusterId, "chapterId":subChapter.chapterId, "subChapterId":args.id, isActive:true};
           break;
       case "community":
+          moduleContext="Users"
           query={"communityDefId":args.id, isActive:true};
           break;
       default:
@@ -673,15 +678,16 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   let TU = _.map(response, 'count');
   let totalUsers = _.sum(TU);
 
-  // response.push({
-  //   key: '123',
-  //   count: totalUsers,
-  //   icon: "ml my-ml-browser_5"
-  // })
+  response.push({
+    key: 'totalUsers',
+    count: totalUsers,
+    icon: "ml my-ml-browser_5",
+    context:moduleContext
+  })
 
   if(args && args.moduleName!="subChapter" && chapterCount>=0){
     response.push({
-      key: '321',
+      key: args.moduleName?args.moduleName:'321',
       count: chapterCount,
       icon: "ml my-ml-chapter"
     })

@@ -59,6 +59,7 @@ class MlEditTransactionType extends React.Component{
       isActive: this.refs.isActive.checked
     }
     const response = await updateAccountTypeActionHandler(AccountType)
+    toastr.success("'Account type' updated successfully")
     return response;
 
   }

@@ -72,7 +72,7 @@ class MlEditKycCategory extends React.Component{
         isActive: this.refs.status.checked,
       }
       const response = await updateKycCategoryActionHandler(Details);
-      toastr.success("Edited Successfully");
+      toastr.success("KYC category updated successfully");
       return response;
     }
   }

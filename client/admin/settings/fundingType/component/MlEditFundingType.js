@@ -74,6 +74,7 @@ class MlEditFundingType extends React.Component{
       }
 
       const response = await updateFundingTypeActionHandler(this.props.config, assetDetails)
+      toastr.success("'Funding type' updated successfully")
       return response;
     }
   }

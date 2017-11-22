@@ -78,6 +78,7 @@ class MlAppProfileHeader extends Component {
   async fetchUserDetails() {
     let profileProgress = 0;
     let response = await fetchUserDetailsHandler()
+    let profileStatus = response.status;
     if (response){
       if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
         this.setState({
@@ -85,8 +86,9 @@ class MlAppProfileHeader extends Component {
         });
       }
       if(response && response.status) {
-        profileProgress = response.status === "REG_USER_APR" || "REG_EMAIL_P" || "REG_EMAIL_V" || "REG_SOFT_APR" ? 25 : response.status === "REG_SOFT_APR" || "REG_KYC_U_KOFF" || "REG_KYC_U_PEND" || "REG_KYC_A_APR" || "REG_USER_APR"  ? 50 : response.status === "REG_KYC_U_KOFF" || "PORT_LIVE_NOW" ? 100 : 0;
+        profileProgress = ((profileStatus ===  "REG_EMAIL_P") || (profileStatus === "REG_EMAIL_V") || (profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_ADM_REJ") )? 25 : ((profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_KYC_U_KOFF") || (profileStatus === "REG_KYC_U_PEND") || (profileStatus === "REG_KYC_A_APR") || (profileStatus === "REG_KYC_U_KOFF" ) || (profileStatus === "REG_USER_APR")  ) ? 50 : ( (profileStatus === "PORT_LIVE_NOW") )? 100 : 0;
       }
+      console.log('profileProgress', profileProgress)
       this.setState({data: response, loading:false, isCalendar: response.isCalendar, profileProgress: profileProgress })
     }
   }

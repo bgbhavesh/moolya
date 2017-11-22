@@ -83,6 +83,7 @@ class MlEditSubDomain extends React.Component{
       console.log(this.props)
 
       const response = await updateSelectedSubDomainActionHandler(this.props.config, subDomainDetails)
+      toastr.success("Sub-Domain updated successfully")
       return response;
     }
   }

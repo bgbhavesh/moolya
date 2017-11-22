@@ -48,7 +48,7 @@ class MlAddStageOfCompany extends React.Component {
       if (!response.success) {
         toastr.error("Already Exists")
       } else if (response.success) {
-        toastr.success("Created Successfully");
+        toastr.success("'Stage Of Company' created successfully");
         FlowRouter.go("/admin/settings/registration/stageOfCompanyList");
       }
       // toastr.success("Created Successfully")
@@ -87,7 +87,7 @@ class MlAddStageOfCompany extends React.Component {
         {/*{showLoader===true?( <div className="loader_wrap"></div>):(*/}
 
           <div className="admin_padding_wrap">
-          <h2>Create Stage Of Company</h2>
+          <h2>Create 'Stage Of Company'</h2>
           <div className="col-md-6 nopadding-left">
           <div className="form_bg">
           <form>

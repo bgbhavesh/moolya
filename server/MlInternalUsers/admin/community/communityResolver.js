@@ -7,20 +7,25 @@ import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
+  let moduleContext = "";
   var chapterCount=0
   switch(args.moduleName){
     case "cluster":
       query={"clusterId":args.id};
+      moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
       chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
       break;
     case "chapter":
       query={"chapterId":args.id};
+      moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
       chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count();
       break;
     case "subChapter":
       query={"subChapterId":args.id};
+      moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
       break;
     case "community":
+      moduleContext="Users"
       query={"communityDefId":args.id};
       break;
     default:
@@ -33,7 +38,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
 
   if(query){
     response.push({
-      key: '3212',
+      key: 'backendUsers',
       count: mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: query}}]}).count(),
       icon: "ml ml-moolya-symbol"
     })
@@ -54,13 +59,14 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     let TU = _.map(response, 'count');
     let totalUsers = _.sum(TU);
     response.push({
-      key: '123',
+      key: 'totalUsers',
       count: totalUsers,
-      icon: "ml my-ml-browser_5"
+      icon: "ml my-ml-browser_5",
+      context:moduleContext
     })
   if(chapterCount>=0){
     response.push({
-      key: '321',
+      key: args.moduleName?args.moduleName:'321',
       count: chapterCount,
       icon: "ml my-ml-chapter"
     })

@@ -158,7 +158,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
       //this.props.getRegistrationDetails();
       const response = await updateRegistrationActionHandler(Details);
       this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      toastr.success("Saved successfully");
       return response;
     }
   }

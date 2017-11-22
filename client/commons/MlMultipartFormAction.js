@@ -1,6 +1,8 @@
 /**
  * Created by venkatasrinag on 21/2/17.
  */
+
+import {progressbar,removeProgressbar} from '../commons/utils/progressbar';
 export async function multipartFormHandler(data, file, endPoint) {
     // if(!file)
     //     return  false;
@@ -74,8 +76,9 @@ export function multipartASyncFormHandler(data,file,endPoint,callback) {
         filexmlhttp.addEventListener("load", function () {
 
           if (filexmlhttp.status < 400) {
-            console.log(filexmlhttp.response);
-            callback(filexmlhttp.response);
+            removeProgressbar(()=>{
+              callback(filexmlhttp.response);
+            });
           }
           else {
             callback({success:false,code:500,result:"error"});
@@ -90,6 +93,17 @@ export function multipartASyncFormHandler(data,file,endPoint,callback) {
           callback({success:false,code:500,result:"error"});
         });
 
+
+
+        filexmlhttp.onloadstart = start_progress;
+        filexmlhttp.onprogress = update_progress;
+
+        // filexmlhttp.addEventListener("progress", function (evt) {
+        //   if (evt.lengthComputable) {
+        //     var progress = Math.ceil(((upload.loaded + evt.loaded) / upload.total) * 100);
+        //   }
+        // }, false);
+
         /*filexmlhttp.onreadystatechange = function() {
          if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {
          console.log(filexmlhttp.response);
@@ -102,3 +116,16 @@ export function multipartASyncFormHandler(data,file,endPoint,callback) {
 
     }
 }
+
+let update_progress=(e)=> {
+  if (e.lengthComputable) {
+    const percentage = Math.round((e.loaded/e.total)*100);
+    progressbar(percentage);
+  }
+  else
+    console.log("Unable to compute progress information since the total size is unknown");
+}
+
+let start_progress=(e)=>{
+  progressbar(0);
+};

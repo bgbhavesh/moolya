@@ -1802,10 +1802,13 @@ MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => 
     } else {
       let userProfiles = userInfo.profile.externalUserProfiles;
       userProfiles.map((defaultProfile) => {
-        if (defaultProfile.isDefault) {
-          clusterId = defaultProfile.clusterId;
-          return false;
+        if(userProfiles.length > 1) {
+          if (defaultProfile.isDefault) {
+            clusterId = defaultProfile.clusterId;
+            return false;
+          }
         }
+        else clusterId = defaultProfile.clusterId;
       })
     }
   }

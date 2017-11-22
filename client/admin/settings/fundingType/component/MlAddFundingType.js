@@ -48,7 +48,7 @@ class MlAddFundingType extends React.Component {
       }
 
       const response = await addFundingType(techInfo)
-      toastr.success("FundingType Created Successfully")
+      toastr.success("'Funding type' added successfully")
       return response;
     }
   }

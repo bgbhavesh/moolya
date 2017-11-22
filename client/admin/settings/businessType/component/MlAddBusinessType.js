@@ -46,9 +46,9 @@ class MlAddBusinessType extends React.Component {
 
       const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("'Business type' already exists")
       } else if (response.success) {
-        toastr.success("BusinessType Created Successfully");
+        toastr.success("'Business type' created successfully");
         FlowRouter.go("/admin/settings/registration/businessList");
       }
     }

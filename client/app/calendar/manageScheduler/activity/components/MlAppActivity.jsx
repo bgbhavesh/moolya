@@ -20,6 +20,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
+import {appClient} from '../../../../core/appConnection';
 
 class MlAppActivity extends Component {
 
@@ -137,7 +138,8 @@ class MlAppActivity extends Component {
           derivedAmount: paymentInfo.derivedAmount ? paymentInfo.derivedAmount : '',
           discountType: paymentInfo.discountType ? paymentInfo.discountType : '',
           discountValue: paymentInfo.discountValue ? paymentInfo.discountValue : '',
-          isDiscount: paymentInfo.isDiscount ? paymentInfo.isDiscount : false
+          isDiscount: paymentInfo.isDiscount ? paymentInfo.isDiscount : false,
+          currencyType : paymentInfo.currencyType ? paymentInfo.currencyType : ""
         };
 
         that.setState({
@@ -305,7 +307,7 @@ class MlAppActivity extends Component {
           setActivityDetails={that.setActivityDetails}
           activeComponent={this.activeComponent}
           resetSaved={this.resetSaved.bind(this)}
-          saved={this.state.saved}
+          saved={this.state.saved} client={appClient}
           data={this.state.paymentInfo} />,
         icon: <span className="ml ml-payments"></span>
       },

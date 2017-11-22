@@ -75,7 +75,7 @@ class MlAddTaxation extends React.Component{
       const response = await updateTaxationActionHandler(TaxationDetails)
       return response;
     }else{
-      toastr.error("Tax Name is mandatory");
+      toastr.error("'Tax Name' is mandatory");
       return false
     }
 

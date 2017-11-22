@@ -184,7 +184,7 @@ export default class MlCompanySectors extends React.Component{
   }
   handleUploadAvatar(image, e) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onLogoFileUpload(e, image);
   }

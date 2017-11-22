@@ -133,14 +133,15 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
         let finalActivitiesDerivedAmount = _.sum(activitiesDerivedAmount);
         let pick;
         if(args.taskDetails.payment)   //picking up the last details without amount
-          pick = _.pick(args.taskDetails.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
+          pick = _.pick(args.taskDetails.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount', 'currencyType'])
         else
           pick = _.pick(task.payment, ['isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
           activitiesAmount: finalActivitiesAmount,
           activitiesDiscount: parseFloat(finalActivitiesAmount - finalActivitiesDerivedAmount).round(2),
           activitiesDerived: finalActivitiesDerivedAmount,
-          amount: finalActivitiesDerivedAmount
+          amount: finalActivitiesDerivedAmount,
+          currencyType: args.taskDetails && args.taskDetails.payment && args.taskDetails.payment.currencyType ? args.taskDetails.payment.currencyType : ""
         };
         let newFinalAmount = finalActivitiesDerivedAmount;
         if (args.taskDetails.payment && args.taskDetails.payment.isDiscount && args.taskDetails.payment.discountValue > 0) {
@@ -237,12 +238,12 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       {_id: {'$in': taskQuery}}
     ];
     if(!orderId) {
-      query["$or"]['isCurrentVersion'] = true
+      query["$or"].push ({'isCurrentVersion': true});
     }
   }
-  console.log('args',args);
+  //console.log('args',args, query);
   let result = mlDBController.find('MlTask', query, context).fetch();
-  //console.log(result);
+  //console.log('result',result);
   if (result && result.length > 0) {
     result.map((task, taskIndex) => {
       if (task.session && task.session.length > 0) {

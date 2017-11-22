@@ -105,7 +105,7 @@ export default class MlAppRegEmailDetails extends React.Component {
           this.props.registrationDetails();
           this.refs["emailId"].value = "";
           this.setState({selectedEmailTypeValue: "", selectedEmailTypeLabel: ""});
-          toastr.success("Email created successfully");
+          toastr.success("Email-Id added successfully");
         }
 
       }
@@ -161,7 +161,7 @@ export default class MlAppRegEmailDetails extends React.Component {
             if (!response.success) {
               toastr.error(response.result);
             } else {
-              toastr.success("Email updated successfully");
+              toastr.success("Email-Id updated successfully");
             }
             this.findRegistration();
             this.props.registrationDetails();
@@ -211,7 +211,7 @@ export default class MlAppRegEmailDetails extends React.Component {
       this.setState({activeTab: "active"});
       this.findRegistration();
       this.props.registrationDetails();
-      toastr.success("Email removed successfully");
+      toastr.success("Email-Id removed successfully");
     }
 
   }

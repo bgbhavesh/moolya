@@ -93,7 +93,7 @@ class MlAddBackendUser extends React.Component {
   async  createBackendUser() {
     let ret = mlFieldValidations(this.refs)
     if (!this.refs.email.value || !validatedEmailId(this.refs.email.value)) {
-      return toastr.error('Please enter a valid email address');
+      return toastr.error('Please enter a valid email-Id');
     }
     if (ret) {
       toastr.error(ret);
@@ -103,15 +103,15 @@ class MlAddBackendUser extends React.Component {
       let departments = this.state.mlAssignDepartmentDetails[0].department;
       let subdepartments = this.state.mlAssignDepartmentDetails[0].subDepartment;
        if(!password){
-        toastr.error("Password is required");
+        toastr.error("Please enter your password");
       }
       else if (confirmPassword != password) {
-        toastr.error("Confirm Password does not match with Password")
+        toastr.error("'Confirm Password' value does not match with 'New Password'")
       } else if (!departments) {
-        toastr.error("Assign Department is required");
+        toastr.error("Please assign a department");
       }
       else if (!subdepartments) {
-        toastr.error("Sub Department is required");
+        toastr.error("Please assign sub-department");
       }
       else {
         let moolyaProfile = {
@@ -153,10 +153,10 @@ class MlAddBackendUser extends React.Component {
         let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
         const response = await addBackendUserActionHandler(userObject, loginUserDetails)
         if (!response.success) {
-          toastr.error("Email already exists")
+          toastr.error("Email-Id already exists")
         }
         else if(response.success){
-          toastr.success("Backend User Created Successfully")
+          toastr.success("Backend user account created successfully")
         }
         return response;
       }

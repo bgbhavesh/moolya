@@ -284,7 +284,7 @@ export default class AddressDetails extends React.Component{
     if (ret) {
         toastr.error(ret);
     }else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
-        toastr.error("Selected cluster and default address country should be same");
+        toastr.error("Please select the country chosen during your registration");
     }else if (countrycode && !isValidPhoneNumber) {
       toastr.error('Please enter a valid contact number');
     }else{
@@ -327,7 +327,7 @@ export default class AddressDetails extends React.Component{
               this.refs["addressPinCode"].value = "";
               this.refs["defaultAddress"].checked = false
               this.setState({selectedValue: "", selectedAddressLabel: "",countrySelectedValue:"",selectedStateValue:"",countryId:"",stateId:""});
-              toastr.success("Address created successfully");
+              toastr.success("Address has been added successfully");
               this.findRegistration();
               this.props.registrationDetails();
             }
@@ -356,7 +356,7 @@ export default class AddressDetails extends React.Component{
       let isDeafaultChecked = this.refs["defaultAddress"+index].checked;
 
       if (contactExist) {
-        toastr.error("Address Type Already Exists!!!!!");
+        toastr.error("Address type already exists. Please choose a different address type");
         this.findRegistration();
         this.props.registrationDetails();
       } else {
@@ -379,7 +379,7 @@ export default class AddressDetails extends React.Component{
         if (ret) {
           toastr.error(ret);
         }else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
-          toastr.error("Selected cluster and default address country should be same");
+          toastr.error("Please select the country chosen during your registration");
         }else if (countrycode && !isValidPhoneNumber) {
           toastr.error('Please enter a valid contact number');
         } else {

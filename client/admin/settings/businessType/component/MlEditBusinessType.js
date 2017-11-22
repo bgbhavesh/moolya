@@ -65,6 +65,7 @@ class MlEditBusinessType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateBusinessTypeActionHandler(BusinessType)
+      toastr.success("'Business Type' updated successfully")
       return response;
 
     }

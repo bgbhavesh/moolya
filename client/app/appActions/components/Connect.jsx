@@ -19,7 +19,7 @@ export default class Connect extends React.Component {
     if(response && response.success){
       toastr.success(response.result);
     }else{
-      toastr.error("Failed to send the connect request");
+      toastr.error("Failed to send the connection request");
     }
     this.props.toggle();
   }
@@ -27,9 +27,9 @@ export default class Connect extends React.Component {
   async acceptConnectionHandler(){
     var response=await acceptConnectionActionHandler({'connectionId':'yQqsrA5TaXptNJGEr'});
     if(response){
-      toastr.success("connection accepted");
+      toastr.success("username has accepted your connection request");
     }else{
-      toastr.error("Failed to accept the connect request");
+      toastr.error("Failed to accept the connection request");
     }
     this.props.toggle();
   }
@@ -37,7 +37,7 @@ export default class Connect extends React.Component {
   async rejectConnectionHandler(){
     var response=await rejectConnectionActionHandler({'connectionId':'yQqsrA5TaXptNJGEr'});
     if(response){
-      toastr.success("connection rejected");
+      toastr.success("username has rejected your connection request");
     }else{
       toastr.error("Failed to reject the connection");
     }

@@ -336,7 +336,7 @@ export default class MlServiceProviderAwards extends Component {
   }
   handleUploadAvatar(image,file) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
     this.onLogoFileUpload(image,file);

@@ -317,7 +317,7 @@ export default class MlFunderAbout extends React.Component {
 
   handleUploadAvatar(image, file) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
     this.onLogoFileUpload(image);

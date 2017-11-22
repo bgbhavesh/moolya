@@ -324,7 +324,7 @@ export default class MlAppRegAddressDetails extends React.Component {
             countryId: "",
             stateId: ""
           });
-          toastr.success("Address created successfully");
+          toastr.success("Address added successfully");
           this.findRegistration();
           this.props.registrationDetails();
         }

@@ -92,7 +92,7 @@ export default class EmailDetails extends React.Component{
     if (ret) {
       toastr.error(ret);
     }else if (emailId && !isValidEmail) {
-      toastr.error('Please enter a valid EmailId');
+      toastr.error('Please enter a valid email-Id');
     } else {
 
       let emailList = this.state.emailDetailsObject;
@@ -110,7 +110,7 @@ export default class EmailDetails extends React.Component{
           this.props.registrationDetails();
           this.refs["emailId"].value = "";
           this.setState({selectedEmailTypeValue: "", selectedEmailTypeLabel: ""});
-          toastr.success("Email created successfully");
+          toastr.success("Email-Id added successfully");
         }
 
       }
@@ -131,7 +131,7 @@ export default class EmailDetails extends React.Component{
         }
 
         if (contactExist) {
-          toastr.error("Email Type Already Exists!!!!!");
+          toastr.error("Email type already exists");
           this.findRegistration();
         } else {
           let refs = []
@@ -143,7 +143,7 @@ export default class EmailDetails extends React.Component{
           if (ret) {
             toastr.error(ret);
           }else if (updatedEmailId && !isValidEmail) {
-            toastr.error('Please enter a valid EmailId');
+            toastr.error('Please enter a valid email-Id');
           } else {
             let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
             let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;
@@ -165,7 +165,7 @@ export default class EmailDetails extends React.Component{
               if (!response.success) {
                 toastr.error(response.result);
               } else {
-                toastr.success("Email updated successfully");
+                toastr.success("Email-Id updated successfully");
               }
               this.findRegistration();
               this.props.registrationDetails();
@@ -209,7 +209,7 @@ export default class EmailDetails extends React.Component{
       this.setState({activeTab : "active"});
       this.findRegistration();
       this.props.registrationDetails();
-      toastr.success("Email removed successfully");
+      toastr.success("Email-Id removed successfully");
     }
 
   }

@@ -305,7 +305,7 @@ export default class step1 extends React.Component{
     if(response){
       if(response.success){
         this.props.refetchRegistrationAndTemplates();
-        toastr.success("Saved Successfully")
+        toastr.success("Saved successfully")
       }else{
         toastr.error(response.result);
       }
@@ -316,7 +316,7 @@ export default class step1 extends React.Component{
   async sendEmailVerification(){
     const response= await emailVerificationActionHandler(this.props.registrationId);
     if(response && response.success){
-      toastr.success("email verification link send successfully");
+      toastr.success("Email-Id verification link sent successfully");
     }else{
       // toastr.error(response.result);
     }
@@ -328,7 +328,7 @@ export default class step1 extends React.Component{
   async sendSmsVerification(){
     const response= await smsVerificationActionHandler(this.props.registrationId);
     if(response.success){
-      toastr.success("otp verification code send successfully");
+      toastr.success("OTP verification code sent successfully");
     }else{
       // toastr.error(response.result);
     }
@@ -346,7 +346,7 @@ export default class step1 extends React.Component{
         toastr.error(response.result)
       }
     }else {
-      toastr.error("Email already verified, can not reject the user")
+      toastr.error("User cannot be rejected since email-Id is already verified")
     }
 
   }

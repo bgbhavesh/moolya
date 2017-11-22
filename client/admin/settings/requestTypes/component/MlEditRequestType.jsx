@@ -80,6 +80,7 @@ class MlEditRequestType extends React.Component{
         transactionType: this.state.transactionType
       };
       const response = await updateRequestTypeActionHandler(RequestTypeDetails)
+      toastr.success("'Entity type' updated successfully")
       return response;
     }
   }

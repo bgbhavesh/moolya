@@ -235,6 +235,7 @@ let externalUser = `
         key:String,
         count:Int,
         icon :String
+        context:String
     }
     
     type Mutation{

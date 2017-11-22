@@ -86,7 +86,7 @@ export default class AppEmailDetails extends React.Component {
           this.props.registrationDetails();
           this.refs["emailId"].value = "";
           this.setState({selectedEmailTypeValue: "", selectedEmailTypeLabel: ""});
-          toastr.success("Email created successfully");
+          toastr.success("Email-Id added successfully");
         }
 
       }
@@ -143,7 +143,7 @@ export default class AppEmailDetails extends React.Component {
             if (!response.success) {
               toastr.error(response.result);
             } else {
-              toastr.success("Email updated successfully");
+              toastr.success("Email-Id updated successfully");
             }
             this.findRegistration();
             this.props.registrationDetails();
@@ -202,7 +202,7 @@ export default class AppEmailDetails extends React.Component {
       this.findRegistration();
       this.props.registrationDetails();
       this.setState({activeTab: "active"});
-      toastr.success("Email removed successfully");
+      toastr.success("Email-Id removed successfully");
     }
   }
 

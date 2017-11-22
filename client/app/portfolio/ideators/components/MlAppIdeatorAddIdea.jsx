@@ -129,7 +129,7 @@ class MlAppIdeatorAddIdea extends React.Component{
       if(result.success){
         this.setState({loading:false, ideaImage:{fileUrl:result.result}}, function () {
           setTimeout(function () {
-            toastr.success("Idea created successfully")
+            toastr.success("Idea added successfully")
             FlowRouter.go("/app/portfolio");
           }, 1000)
 

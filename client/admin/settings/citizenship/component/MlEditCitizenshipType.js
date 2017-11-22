@@ -68,6 +68,7 @@ class MlEditCitizenshipType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateCitizenshipTypeActionHandler(CitizenshipType)
+      toastr.success("'Citizenship type' updated successfully")
       return response;
     }
   }

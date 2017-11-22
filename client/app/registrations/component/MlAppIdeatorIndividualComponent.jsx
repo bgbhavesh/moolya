@@ -208,7 +208,7 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
       //this.props.getRegistrationDetails();
       const response = await updateRegistrationActionHandler(Details);
       this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      toastr.success("Registration details saved successfully");
       return response;
     }
   }

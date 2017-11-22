@@ -55,7 +55,7 @@ class MlAddRequestType extends React.Component{
         transactionId: this.state.transactionId
       };
       const response = await addRequestActionHandler(RequestTypeDetails);
-      toastr.success("Request Type Created Successfully")
+      toastr.success("'Request type' added successfully")
       return response;
     }
   }

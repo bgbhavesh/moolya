@@ -48,7 +48,7 @@ class MlAddSpecification extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await addSpecificationActionHandler(SpecificationDetails)
-      toastr.success("Specification created");
+      toastr.success("Specification added successfully");
       return response;
 
     }

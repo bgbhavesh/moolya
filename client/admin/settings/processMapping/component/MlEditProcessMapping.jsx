@@ -142,9 +142,9 @@ class MlEditProcessMapping extends React.Component{
       let type=this.state.assignDocument[0].type;
       let category=this.state.assignDocument[0].category;
       if(!type) {
-        toastr.error("Document type is required");
+        toastr.error("'Document type' is mandatory");
       }else if(!category){
-        toastr.error("Kyc category is required");
+        toastr.error("'KYC category' is mandatory");
       }else {
         let processDetails = {
           processId: this.state.processId,

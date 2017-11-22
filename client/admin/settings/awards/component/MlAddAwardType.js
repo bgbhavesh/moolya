@@ -48,7 +48,7 @@ class MlAddAward extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await addAwardActionHandler(AwardDetails)
-      toastr.success("New Award type added successfully");
+      toastr.success("New 'Award type' added successfully");
       return response;
     }
   }

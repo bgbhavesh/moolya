@@ -66,7 +66,7 @@ class MlEditStageOfCompanyType extends React.Component{
         isActive: this.refs.isActive.checked
       }
       const response = await updateStageOfCompanyTypeActionHandler(StageOfCompanyType)
-      toastr.success("Edited Successfully");
+      toastr.success("'Stage Of Company' updated successfully");
       return response;
 
     }
@@ -107,7 +107,7 @@ class MlEditStageOfCompanyType extends React.Component{
         {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
-              <h2>Edit Stage Of Company Type</h2>
+              <h2>Edit 'Stage Of Company Type'</h2>
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>

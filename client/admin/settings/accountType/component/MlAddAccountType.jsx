@@ -47,9 +47,9 @@ class MlAddTemplate extends React.Component{
     }
     const response = await addAccountActionHandler(AccountDetails)
     if (!response.success) {
-      toastr.error("Already Exists")
+      toastr.error("Account type already exists")
     } else if (response.success) {
-      toastr.success("AccountType Created Successfully");
+      toastr.success("Account type added successfully");
       FlowRouter.go("/admin/settings/accountTypeList");
     }
     // toastr.success("AccountType Created Successfully")

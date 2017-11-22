@@ -1522,7 +1522,7 @@ class Library extends React.Component {
 
   handleUploadAvatar(image, e) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.uploadImage(image, e);
   }

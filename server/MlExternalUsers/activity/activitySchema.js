@@ -41,6 +41,7 @@ _id: String
       discountType: String
       discountValue: Float
       derivedAmount: Float
+      currencyType: String
     }
     
     type UserProfileDetails{
@@ -105,6 +106,7 @@ _id: String
       discountType: String
       discountValue: Float
       derivedAmount: Float
+      currencyType: String
     }
     input userProfileDetails{
       userId: String

@@ -252,7 +252,7 @@ export default class MlIdeatorDetails extends Component{
   }
   handleUploadAvatar(image, file) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
     this.onFileUpload(image);

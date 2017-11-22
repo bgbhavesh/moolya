@@ -20,8 +20,8 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
   module:"audit",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "userName"],
-  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "userName"],
+  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "userName","docRef"],
+  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "userName","docRef"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -29,6 +29,7 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "timeStamp", title: "Date&Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "moduleName", title: "Module",dataSort:true},
+    {dataField: "docRef", title: "Transaction Code",dataSort:true},
     {dataField: "fieldName", title: "Field Name",dataSort:true},
     {dataField: "previousValue", title: "Previous Value",dataSort:true},
     {dataField: "currentValue", title: "Current Value",dataSort:true},
@@ -47,7 +48,8 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"REGISTRATION"}}
+    const registrationId = config && config.params && config.params.registrationId ? config.params.registrationId : null;
+    return {context: {moduleName: "REGISTRATION", registrationId: registrationId}}
     // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,
@@ -68,6 +70,7 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
                                  field
                                  fieldName
                                  docId
+                                 docRef
                                  timeStamp
                                  userAgent{
                                   ipAddress

@@ -203,7 +203,7 @@ export default class IdeatorIndividualComponent extends React.Component{
       //this.props.getRegistrationDetails();
       const response = await updateRegistrationActionHandler(Details);
       if(response.success){
-        toastr.success("Saved Successfully");
+        toastr.success("Saved successfully");
         this.props.getRegistrationDetails();
         }else{
         toastr.error(response.result);
@@ -235,7 +235,7 @@ export default class IdeatorIndividualComponent extends React.Component{
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>10)){
     }
     else{
-      toastr.error("Minimum Age for Registration is 10 years")
+      toastr.error("Minimum age for 'Ideator' registration is 10 years")
     }
   }
 

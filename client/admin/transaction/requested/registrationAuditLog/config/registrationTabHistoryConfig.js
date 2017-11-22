@@ -47,7 +47,8 @@ const mlRegistrationTabHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"REGISTRATION"}}
+    const registrationId = config && config.params && config.params.registrationId ? config.params.registrationId : null;
+    return {context: {moduleName: "REGISTRATION", registrationId: registrationId}}
     // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,

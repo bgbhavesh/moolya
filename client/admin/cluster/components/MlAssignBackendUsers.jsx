@@ -129,7 +129,7 @@ class MlAssignBackendUsers extends React.Component {
       let userProfile = {};
     if(this.state.mlroleDetails.length == 0)
     {
-      toastr.error('Please Select Role');
+      toastr.error('Please select a role');
       return;
     }
 

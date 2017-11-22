@@ -78,18 +78,18 @@ componentDidUpdate(){
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
-      toastr.success("Default Profile set successfully");
+      toastr.success("'Default Profile' set successfully");
       reloadPage();
     }else{
       //throw error
-      toastr.error("Failed to set the default profile");
+      toastr.error("'Default profile' could not be set");
     }
   }
 
   async switchProfile(){
     /*Fix for Issue: MOOLYA-2445*/
     let userProfilesCount=this.state.userProfiles&&this.state.userProfiles.length?this.state.userProfiles.length:0;
-    if(userProfilesCount<=1){toastr.success("You do not have any other profile to switch");return;}
+    if(userProfilesCount<=1){toastr.success("You do not have any other moolya profile to switch to. Use 'Register As' option to add new profile.");return;}
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
     const response = await switchProfileActionHandler(profileDetails.profileId);

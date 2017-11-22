@@ -164,7 +164,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       this.sendRolesToParent();
     }else{
       event.target.checked = false
-      toastr.error('Please Select Role');
+      toastr.error('Please select a role');
     }
 
   }

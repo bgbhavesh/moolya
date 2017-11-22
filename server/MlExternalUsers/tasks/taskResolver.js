@@ -257,6 +257,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
             if(appointment){
               result[taskIndex]['session'][sessionIndex]['startDate'] = appointment.startDate;
               result[taskIndex]['session'][sessionIndex]['status'] = appointment.status;
+              result[taskIndex]['session'][sessionIndex]['isRescheduled'] = appointment.isRescheduled;
             }
           }
           console.log('sessionId', taskSession.sessionId );

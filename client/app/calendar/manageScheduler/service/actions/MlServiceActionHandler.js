@@ -376,6 +376,8 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orde
             sessionId
             startDate
             status
+            isOffline
+            isRescheduled
             duration {
               hours
               minutes

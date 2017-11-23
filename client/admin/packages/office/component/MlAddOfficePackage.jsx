@@ -121,7 +121,7 @@ class MlAddOfficePackage extends Component{
     else if (response && !response.success) {
       toastr.error(response.result);
     } else {
-      toastr.error("Error In Creating Office Package");
+      toastr.error("Office package could not be created");
     }
   }
 

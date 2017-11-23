@@ -75,7 +75,7 @@ export default class MlAssignDocument extends React.Component {
     let assignDocuments=this.state.assignDocuments
     var assignedData = _.findWhere(assignDocuments, {"type": selectedIndex,"category":assignDocuments[index].category});
     if (assignedData && assignedData != undefined) {
-      toastr.error("Document Combination Exists");
+      toastr.error("Document combination exists");
     }else{
       assignDocuments[index]['type']=selectedIndex
       this.setState({assignDocuments:assignDocuments})
@@ -86,7 +86,7 @@ export default class MlAssignDocument extends React.Component {
     let assignDocuments=this.state.assignDocuments
     var assignedData = _.findWhere(assignDocuments, {"type": assignDocuments[index].type,"category":selectedIndex});
     if (assignedData && assignedData != undefined) {
-      toastr.error("Document Combination Exists");
+      toastr.error("Document combination exists");
     }else {
       assignDocuments[index]['category'] = selectedIndex
       this.setState({assignDocuments: assignDocuments})

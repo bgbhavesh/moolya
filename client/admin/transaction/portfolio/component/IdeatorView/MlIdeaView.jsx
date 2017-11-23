@@ -1,14 +1,12 @@
 import React from "react";
-import {render} from "react-dom";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {initalizeFloatLabel} from "../../../../utils/formElemUtil";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import {fetchIdeaActionHandler} from "../../../../../app/portfolio/ideators/actions/ideatorActionHandler";
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlIdeaView extends React.Component {
@@ -120,7 +118,11 @@ export default class MlIdeaView extends React.Component {
         if (idea._id == ideaId) {
           currentIdea = idea
         }
-      })
+      });
+      if (_.findIndex(currentIdea.privateFields, {booleanKey: 'isIdeaTitlePrivate'}) >= 0) {
+        currentIdea = _.omit(currentIdea, "title");
+        currentIdea = _.extend(currentIdea, {title: "No ideas are available to show"});
+      }
       this.setState({portfolioIdeatorInfo: currentIdea, loading:false})
       _.each(currentIdea.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -172,9 +174,8 @@ export default class MlIdeaView extends React.Component {
 <br /><br />
                     <p><b>Title: </b>{this.state.portfolioIdeatorInfo.title}</p>
                     <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                 id="isIdeaTitlePrivate"/><input
-                    type="checkbox" className="lock_input" id="makePrivate"
-                    checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>
+                                 id="isIdeaTitlePrivate"/>
+                {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>*/}
 
 
               </div>
@@ -185,7 +186,7 @@ export default class MlIdeaView extends React.Component {
                             readOnly="true"></textarea>*/}
                 <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                              id="isIdeaPrivate"/>
-                <input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>
+                {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>*/}
               </div>
             </div>
           </div>

@@ -177,9 +177,12 @@ MlResolver.MlQueryResolver['fetchInstitutePortfolioCharts'] = (obj, args, contex
   if (args.portfoliodetailsId) {
     let instituteChartsArray = {}
     let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    instituteChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
-    instituteChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
-    instituteChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    let employeesData = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    let profitRevenu = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    let reviewData = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    instituteChartsArray["employmentOfCompanyChart"] = _.sortBy( employeesData, function( item ) { if(item&&item.eofFromYear)return item.eofFromYear; } )
+    instituteChartsArray["profitRevenueLiabilityChart"] =  _.sortBy( profitRevenu, function( item ) { if(item&&item.prlFromYear)return item.prlFromYear; } )
+    instituteChartsArray["reviewOfCompanyChart"] = _.sortBy( reviewData, function( item ) { if(item&&item.rofYear)return item.rofYear; } )
     instituteChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
     if(instituteChartsArray && instituteChartsArray.employeeBreakupDepartmentChart){
       instituteChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {

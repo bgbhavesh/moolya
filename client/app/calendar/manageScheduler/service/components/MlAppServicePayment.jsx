@@ -8,11 +8,18 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
 
 // import custom method(s) and component(s)
 export default class MlAppServicePayment extends React.Component{
   constructor(props){
     super(props);
+    this.state={currencySymbol:""}
+  }
+
+  componentWillMount() {
+    let selectedProfileId = FlowRouter.getParam('profileId');
+    this.getCurrencyType(selectedProfileId);
   }
 
   componentDidMount() {
@@ -27,6 +34,13 @@ export default class MlAppServicePayment extends React.Component{
 
   bookService(){
     this.props.bookService(true)
+  }
+
+  async getCurrencyType(selectedProfileId) {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, null, selectedProfileId);
+    this.setState({currencySymbol: response.symbol})
+    this.props.currencyType(response.symbol)
+    return response;
   }
 
   render(){
@@ -47,19 +61,19 @@ export default class MlAppServicePayment extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks gross payable amount&nbsp;<label>Rs</label>&nbsp;
+                  Tasks gross payable amount&nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType :this.state.currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksAmount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount payable amount&nbsp;<label>Rs</label>&nbsp;
+                  Task discount payable amount&nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType :this.state.currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task net payable amount&nbsp;<label>Rs</label>&nbsp;
+                  Task net payable amount&nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : this.state.currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksDerived ? parseFloat(servicePayment.tasksDerived).toFixed(2):''}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
@@ -179,7 +193,7 @@ export default class MlAppServicePayment extends React.Component{
                 <br className="brclear"/>
               </div>
               <div className="form-group">
-                <label>Net payable amount&nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                <label>Net payable amount&nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType :this.state.currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                  value={this.props.finalAmount ? parseFloat(this.props.finalAmount).toFixed(2) : ''} disabled />
                 </label>
               </div>

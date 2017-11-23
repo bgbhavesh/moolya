@@ -114,6 +114,7 @@ export async function fetchServiceActionHandler (serviceId) {
           tasksDiscount
           tasksDerived
           isApprovalRequiredFromSeeker
+          currencyType
         }
         tasks {
           id

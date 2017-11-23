@@ -23,12 +23,6 @@ export default class MlAppActivityList extends React.Component{
     this.getCurrencyType();
   }
 
-  async getCurrencyType() {
-    const response = await fetchCurrencyTypeActionHandler(appClient, null);
-    this.setState({currencySymbol: response.symbol})
-    return response;
-  }
-
   async fetchActivities(){
     let profileId = FlowRouter.getParam('profileId');
     let response = await fetchActivitiesActionHandler(profileId);
@@ -50,6 +44,13 @@ export default class MlAppActivityList extends React.Component{
 
   fetchAllActivity() {
     this.fetchActivities();
+  }
+
+  async getCurrencyType() {
+    let profileId = FlowRouter.getParam('profileId') ;
+    const response = await fetchCurrencyTypeActionHandler(appClient, null, null, profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
   render(){

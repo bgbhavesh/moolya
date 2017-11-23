@@ -25,7 +25,7 @@ MlResolver.MlQueryResolver['findSocialLinksType'] = (obj, args, context, info) =
 MlResolver.MlMutationResolver['createSocialLinksType'] = (obj, args, context, info) =>{
   if(MlGlobalSettings.find({_id:args.socialLinksType._id}).count() > 0){
     let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+    return new MlRespPayload().errorPayload("'Social link type' already exists", code);
   }
   let id = MlGlobalSettings.insert({...args.socialLinksType});
   if(id){

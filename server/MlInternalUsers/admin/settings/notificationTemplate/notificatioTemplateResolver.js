@@ -31,11 +31,11 @@ MlResolver.MlMutationResolver['createNotificationTemplate'] = (obj, args, contex
       let ret =mlDBController.insert('MlNotificationTemplates',{...args.notificationTemplate},context);
       //let ret = MlNotificationTemplates.insert({...args.notificationTemplate});
       if(ret){
-        let response = new MlRespPayload().successPayload("Notification Template Created Successfully", 200);
+        let response = new MlRespPayload().successPayload("'Notification Template' added successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Creating Notification Template", 400);
+        let response = new MlRespPayload().errorPayload("'Notification Template' could not be added", 400);
         return response;
       }
     }
@@ -73,11 +73,11 @@ MlResolver.MlMutationResolver['updateNotificationTemplate'] = (obj, args, contex
      // let resp = MlNotificationTemplates.update({_id: args.notificationTemplateId}, {$set: args.notificationTemplate});
       let resp = mlDBController.update('MlNotificationTemplates',args.notificationTemplateId, args.notificationTemplate, {$set:true},context);
       if(resp){
-        let response = new MlRespPayload().successPayload("Notification Template Updated Successfully", 200);
+        let response = new MlRespPayload().successPayload("'Notification Template' updated successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Updating Notification Template", 400);
+        let response = new MlRespPayload().errorPayload("'Notification Template' could not be added", 400);
         return response;
       }
     }

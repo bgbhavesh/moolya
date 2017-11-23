@@ -188,7 +188,7 @@ class MlEditOfficePackage extends Component{
     else if (response && !response.success) {
       toastr.error(response.result);
     } else {
-      toastr.error("Error In Creating Office Package");
+      toastr.error("Office package could not be created");
     }
   }
 
@@ -198,19 +198,19 @@ class MlEditOfficePackage extends Component{
       let TUC = usersData.teamUserCount ? Number(usersData.teamUserCount) : 0
       let TC = usersData.totalCount ? Number(usersData.totalCount) : 0
       if ((PUC + TUC) != TC)
-        return {success: false, result: 'Total user count should be equal to principal and team'}
+        return {success: false, result: "'Total user count' should be equal to 'Principal count and Team count'"}
       else if (!_.isEmpty(usersData.availableCommunities)) {
         let communities = usersData.availableCommunities
         let arrayCount = _.map(communities, 'userCount')
         let addArray = _.sum(arrayCount)
         if (Number(addArray) != TUC)
-          return {success: false, result: 'Communities Users count should be equal to Team user count'}
+          return {success: false, result: "'Communities Users count' should be equal to 'Team user count'"}
         else
           return {success: true}
       } else
         return {success: false, result: 'Please select the available communities'}
     } else
-      return {success: false, result: 'Please enter users Data'}
+      return {success: false, result: "Please enter user's Data"}
   }
 
   async handleSuccess(response) {

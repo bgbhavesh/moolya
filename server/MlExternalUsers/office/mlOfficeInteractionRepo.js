@@ -57,21 +57,6 @@ class MlOfficeInteractionService {
             'fromUserType': fromUserType
           });
           break;
-        case 'officeBearerRetire':
-          new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'officeBearerRetire',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office Bearer Retire',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
-          });
-          break;
         case 'principal':
           new MlTransactionsHandler().recordTransaction({
             'fromUserId': fromUserId,
@@ -97,6 +82,36 @@ class MlOfficeInteractionService {
             'activityDocId': resourceId,
             'docId': officeId,
             'transactionDetails': 'office bearer go independent',
+            'context': context || {},
+            'transactionTypeId': "office",
+            'fromUserType': fromUserType
+          });
+          break;
+        case 'retireOfficeBearer':
+          new MlTransactionsHandler().recordTransaction({
+            'fromUserId': fromUserId,
+            'moduleName': 'office',
+            'activity': 'retire OfficeBearer',
+            'transactionType': 'office',
+            'userId': userId,
+            'activityDocId': resourceId,
+            'docId': officeId,
+            'transactionDetails': 'office bearer retired',
+            'context': context || {},
+            'transactionTypeId': "office",
+            'fromUserType': fromUserType
+          });
+          break;
+        case 'deactivateOfficeBearer':
+          new MlTransactionsHandler().recordTransaction({
+            'fromUserId': fromUserId,
+            'moduleName': 'office',
+            'activity': 'deactivate OfficeBearer',
+            'transactionType': 'office',
+            'userId': userId,
+            'activityDocId': resourceId,
+            'docId': officeId,
+            'transactionDetails': 'office bearer deactivated',
             'context': context || {},
             'transactionTypeId': "office",
             'fromUserType': fromUserType

@@ -65,7 +65,7 @@ MlResolver.MlMutationResolver['updateCompanyPortfolio'] = (obj, args, context, i
       }
       else{
         let code = 400;
-        let response = new MlRespPayload().errorPayload("Invalid Portfolio Request", code);
+        let response = new MlRespPayload().errorPayload("Invalid portfolio request", code);
         return response;
       }
     }

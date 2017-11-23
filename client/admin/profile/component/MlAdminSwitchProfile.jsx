@@ -81,7 +81,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     var response=null;
        response = await setAdminDefaultProfileActionHandler(profileDetails.clusterId);
     if(response){
-      toastr.success("Default Profile set successfully");
+      toastr.success("'Default Profile set successfully");
       reloadPage();
     }else{
       //throw error
@@ -95,11 +95,11 @@ export default class MlAdminSwitchProfile extends React.Component{
     var response=null;
       response = await switchProfileActionHandler(profileDetails.clusterId);
     if(response){
-      toastr.success("Profile switched successfully");
+      toastr.success("Profile switch successful");
       reloadPage();
     }else{
       //throw error
-      toastr.error("Failed to switch the profile");
+      toastr.error("Failed to switch profile");
     }
   }
 

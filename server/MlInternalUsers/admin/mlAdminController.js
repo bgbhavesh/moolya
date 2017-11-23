@@ -713,7 +713,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
                 res.send(response);
               } else {
                 let code = 401;
-                let result = {message: "invalid promo code applied"}
+                let result = {message: "Invalid promo code applied"}
                 let response = new MlRespPayload().errorPayload(result, code);
                 console.log(response);
                 res.send(response);

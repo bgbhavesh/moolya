@@ -28,7 +28,7 @@ MlResolver.MlMutationResolver['createLanguage'] = (obj, args, context, info) =>{
   // if(MlGlobalSettings.find({languageName:args.language.languageName}).count() > 0){
   if(mlDBController.find('MlGlobalSettings', {languageName:args.language.languageName}, context).count() > 0){
     let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+    return new MlRespPayload().errorPayload("'Language' already exists!", code);
   }
   // let id = MlGlobalSettings.insert({...args.language});
   let id = mlDBController.insert('MlGlobalSettings', args.language, context)

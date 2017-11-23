@@ -113,6 +113,7 @@ class Library extends React.Component {
    * componentWillMount
    * Desc :: data to be loaded on the mounting
    * @param props :: Object - Parents data
+   * todo:// pass view and edit mode through props @usage [*portfolio + users left nav]
    */
 
   componentWillMount() {
@@ -129,7 +130,7 @@ class Library extends React.Component {
       this.getLibraryDetails(userId);
     }
 
-    if (portfolioId !== "portfolio" || path.indexOf("view") > 0) {
+    if (portfolioId !== "portfolio" || path.indexOf("view") > 0 || portfolioId === "users_library") {
       this.setState({ explore: true, myPortfolio: true }, function () {
         if (!this.state.myPortfolio) {
           this.getLibraryDetails(userId);
@@ -700,11 +701,13 @@ class Library extends React.Component {
 
   async getLibraryDetails(userId) {
     let that = this;
-    const resp = await fetchLibrary(userId, this.props.client)
+    var resp = await fetchLibrary(userId, this.props.client)
     let images = [];
     let videos = [];
     let templates = [];
     let documents = [];
+    if (!resp)
+      resp = [];
     resp.map(function (data) {
       if (data.libraryType === "image") {
         images.push(data);
@@ -1623,7 +1626,7 @@ class Library extends React.Component {
           </ModalBody>
         </Modal>
         <div className="modal fade bs-example-modal-sm library-popup imagepop"
-          onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+          onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
           aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -1638,7 +1641,7 @@ class Library extends React.Component {
           </div>
         </div>
         <div className="modal fade bs-example-modal-sm library-popup templatepop"
-          onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+          onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
           aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -1653,7 +1656,7 @@ class Library extends React.Component {
           </div>
         </div>
         <div className="modal fade bs-example-modal-sm library-popup documentpop"
-          onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+          onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
           aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -1676,7 +1679,7 @@ class Library extends React.Component {
         </div>
         {that.state.isLibrary ? <MlConnectionHeader showLibrary={that.showLibrary.bind(that)} connectionManagement={that.connectionManagement.bind(that)} /> : ""}
         <div className="modal fade bs-example-modal-sm library-popup videopop"
-          onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+          onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
           aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">

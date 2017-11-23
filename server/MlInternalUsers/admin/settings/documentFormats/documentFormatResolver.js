@@ -41,7 +41,7 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
       var existingDocFormat = mlDBController.findOne('MlDocumentFormats', {_id:{$ne:args._id},docFormatName: args.docFormatName}, context)
       if (existingDocFormat) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        let response = new MlRespPayload().errorPayload("'Document Format' already exists!", code);
         return response;
       }
 
@@ -81,7 +81,7 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
   } else {
     if (MlDocumentFormats.find({docFormatName: args.documentFormat.docFormatName}).count() > 0) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exist", code);
+      let response = new MlRespPayload().errorPayload("'Document Format' already exists!", code);
       return response;
     }
     var firstName='';var lastName='';

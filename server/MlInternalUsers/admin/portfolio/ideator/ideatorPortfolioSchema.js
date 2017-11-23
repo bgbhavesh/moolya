@@ -406,7 +406,7 @@ let supportedApi = [
   {api:'fetchAnnotations', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'putDataIntoTheLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
@@ -425,7 +425,7 @@ let supportedApi = [
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  // {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 

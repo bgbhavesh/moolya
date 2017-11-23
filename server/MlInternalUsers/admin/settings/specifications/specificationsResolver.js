@@ -28,7 +28,7 @@ MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info
   let isFind = mlDBController.find('MlSpecifications', query, context).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'Specification' already exists!", code);
     return response;
   }
   var firstName='';var lastName='';
@@ -89,7 +89,7 @@ MlResolver.MlMutationResolver['UpdateSpecification'] = (obj, args, context, info
     let isFind = mlDBController.find('MlSpecifications', query, context).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Specification' already exists!", code);
       return response;
     }
     args=_.omit(args,'_id');

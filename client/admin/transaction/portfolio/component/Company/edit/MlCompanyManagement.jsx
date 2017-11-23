@@ -163,7 +163,7 @@ export default class MlCompanyManagement extends Component {
     if (decimalExperience) {
       experience = parseInt(decimalExperience);
       if (experience > 75) {
-        toastr.error('Experience cannot be more than 75 years')
+        toastr.error("'Years of Experience' cannot be more than 75 years")
         return false;
       }
     }
@@ -171,10 +171,10 @@ export default class MlCompanyManagement extends Component {
       toastr.error('Blank spaces are not allowed')
       return false;
     } else if (experience > 75) {
-      toastr.error('Experience cannot be more than 75 years')
+      toastr.error("'Years of Experience' cannot be more than 75 years")
       return false;
     } else if (!experience) {
-      toastr.error('Experience not valid')
+      toastr.error("Years of Experience' value is invalid")
       return false
     } else { return true }
   }

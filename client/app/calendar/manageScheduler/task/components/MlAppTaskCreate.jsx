@@ -110,7 +110,7 @@ export default class MlAppTaskCreate extends Component {
     let name = e.target.name;
     let value = e.target.value;
     if (name === "noOfSession" && value < 1) {
-      toastr.error('Number of session cannot be less than 1');
+      toastr.error("'Number of sessions' cannot be less than 1");
       return false;
     }
     if (e.target.value == 'true') {

@@ -143,16 +143,8 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
  * todo:// need to check with business for the moolya and non-moolya pre conditions before the register as
  * */
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
-  // var validationCheck = null;
   let updateRecord = {}
-  var response = null
-  // var date = new Date()
-  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  // if (!isValidAuth) {
-  //   let code = 401;
-  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-  //   return response;
-  // }
+  var response = null;
   if (!args.registrationId) {
     let code = 409;
     response = new MlRespPayload().errorPayload("'Registration Id' is mandatory!", code);
@@ -173,15 +165,21 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   }
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo = userInfo.registrationInfo;
-  let registrationInfo = args.registration
-  let clusterInfo = MlClusters.findOne({_id: registrationInfo.clusterId})
+  let registrationInfo = args.registration;
+
+  let clusterInfo = MlClusters.findOne({_id: registrationInfo.clusterId});
   let communityDef = mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType || null)}, context) || {};
   registrationInfo.communityName = communityDef.name;
-  registrationInfo.clusterName = clusterInfo.clusterName
-  registrationInfo.clusterId = clusterInfo._id
-  var regDetails = _lodash.pick(userRegisterInfo, ['countryId', 'cityId', 'password', 'accountType', 'institutionAssociation', 'companyname', 'companyUrl', 'remarks', 'referralType'])
-  registrationInfo = _lodash.extend(registrationInfo, regDetails)
-  registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName
+  registrationInfo.clusterName = clusterInfo.clusterName;
+  registrationInfo.clusterId = clusterInfo._id;
+
+  var regDetails = _lodash.pick(userRegisterInfo, ['countryId', 'cityId', 'password', 'accountType', 'institutionAssociation', 'companyname', 'companyUrl', 'remarks', 'referralType']);
+  registrationInfo = _lodash.extend(registrationInfo, regDetails);
+  registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName;
+
+  const regDetailsStep = _lodash.pick(userInfo.registrationDetails, ['dateOfBirth', 'firstName', 'middleName', 'lastName', 'displayName', 'gender']);
+
+
   if (registrationInfo.subChapterId) {
     let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, registrationInfo.subChapterId);
     if (!mlSubChapterAccessControl.hasAccess) {
@@ -193,16 +191,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.chapterName = subChapterDetails.chapterName
     registrationInfo.subChapterName = subChapterDetails.subChapterName
   }
-  // registrationInfo.countryId = userRegisterInfo.countryId
-  // registrationInfo.cityId = userRegisterInfo.cityId
-  // registrationInfo.password = userRegisterInfo.password
-  // registrationInfo.accountType = userRegisterInfo.accountType
-  // registrationInfo.institutionAssociation = userRegisterInfo.institutionAssociation
-  // registrationInfo.companyname = userRegisterInfo.companyname
-  // registrationInfo.companyUrl = userRegisterInfo.companyUrl
-  // registrationInfo.remarks = userRegisterInfo.remarks
-  // registrationInfo.referralType = userRegisterInfo.referralType
-  registrationInfo.registrationDate = new Date()
+  registrationInfo.registrationDate = new Date();
   validationCheck = MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
@@ -217,8 +206,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo: registrationInfo,
     status: "REG_EMAIL_V",
     emails: emails,
-    transactionId: registrationInfo.registrationId
-  }, context)
+    transactionId: registrationInfo.registrationId,
+    registrationDetails: regDetailsStep
+  }, context);
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)

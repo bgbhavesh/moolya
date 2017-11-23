@@ -5,7 +5,7 @@ import React from "react";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import {fetchTasksActionHandler} from "../actions/fetchTasks";
 import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
-
+import {appClient} from '../../../../core/appConnection';
 
 export default class MlAppTaskList extends React.Component{
   constructor(props){
@@ -41,7 +41,8 @@ export default class MlAppTaskList extends React.Component{
   }
 
   async getCurrencyType() {
-    const response = await fetchCurrencyTypeActionHandler(appClient, null);
+    let profileId = FlowRouter.getParam('profileId');
+    const response = await fetchCurrencyTypeActionHandler(appClient, null, null, profileId);
     this.setState({currencySymbol: response.symbol})
     return response;
   }

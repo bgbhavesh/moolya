@@ -10,6 +10,8 @@ import React, { Component } from 'react';
 // import custom method(s) and component(s)
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import { fetchServicesActionHandler } from '../actions/MlServiceActionHandler';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
+import {appClient} from '../../../../core/appConnection';
 
 export default class MlAppServiceList extends Component {
 
@@ -23,6 +25,7 @@ export default class MlAppServiceList extends Component {
   }
 
   componentDidMount(){
+    this.getCurrencyType();
     this.fetchServices();
   }
 
@@ -54,6 +57,12 @@ export default class MlAppServiceList extends Component {
   updateService(id, selectedProfileId) {
     this.profileId = this.profileId === "all" ? selectedProfileId : this.profileId;
     FlowRouter.go(`/app/calendar/manageSchedule/${this.profileId}/editService?id=${id}`);
+  }
+
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(appClient, null, null, this.profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
   /**
@@ -104,7 +113,7 @@ export default class MlAppServiceList extends Component {
                       </div>
                       <div className="clearfix"></div>
                       <div className="list_icon mart0">
-                        <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                        <span className="price">{service && service.payment && service.payment.currencyType ? service.payment.currencyType: this.state.currencySymbol} {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                         <span className="price pull-right">{service.status ? service.status.toUpperCase() : ''}</span>
                         <div className="clearfix"></div>
                         <i className="c_image ml my-ml-service"></i>

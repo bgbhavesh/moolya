@@ -10,7 +10,7 @@ import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
-// import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
+import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 import portfolioValidationRepo from '../../portfolio/portfolioValidation'
@@ -1801,19 +1801,21 @@ MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => 
     var userInfo = mlDBController.findOne('users', {_id: userId}, context) || {};
     let userType = userInfo.profile && userInfo.profile.InternalUprofile && userInfo.profile.InternalUprofile.moolyaProfile ? "admin" : "user"
     if (userType === "admin") {
-      let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+      let userProfile = new MlAdminUserContext().userProfileDetails(userId);
       clusterId = userProfile.defaultCluster;
     } else {
-      let userProfiles = userInfo.profile.externalUserProfiles;
-      userProfiles.map((defaultProfile) => {
-        if(userProfiles.length > 1) {
-          if (defaultProfile.isDefault) {
-            clusterId = defaultProfile.clusterId;
-            return false;
-          }
+        if(args.profileId){
+          let userProfiles = userInfo.profile.externalUserProfiles;
+          userProfiles.map((defaultProfile) => {
+              if (defaultProfile.profileId === args.profileId) {
+                clusterId = defaultProfile.clusterId;
+                return false;
+              }
+          })
+        } else{
+          let userProfiles = new MlUserContext(userId).userProfileDetails(userId);
+          clusterId = userProfiles.clusterId;
         }
-        else clusterId = defaultProfile.clusterId;
-      })
     }
   }
   var  clusterInfo = MlClusters.findOne({_id:clusterId}, context)

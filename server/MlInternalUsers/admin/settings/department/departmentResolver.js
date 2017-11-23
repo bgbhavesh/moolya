@@ -16,7 +16,7 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
     }
     if (departmentClusterLength.length < 1) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Cluster name is mandatory!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Cluster name' is mandatory!", code);
       return response;
     }
   }
@@ -36,7 +36,7 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
 
       if (departmentExist.length > 0) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        let response = new MlRespPayload().errorPayload("Department already exists!", code);
         return response;
       }
     }
@@ -102,7 +102,7 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     if (department) {
       if (department.isSystemDefined) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Cannot edit system defined department", code);
+        let response = new MlRespPayload().errorPayload("System defined departments cannot be edited ", code);
         return response;
       } else {
         // let resp = MlDepartments.update({_id: args.departmentId}, {$set: args.department}, {upsert: true})

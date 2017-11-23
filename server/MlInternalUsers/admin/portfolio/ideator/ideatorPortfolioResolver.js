@@ -96,7 +96,7 @@ MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) =
         }
         else{
             let code = 400;
-            let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+            let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
             return response;
         }
     }catch (e){
@@ -106,7 +106,7 @@ MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) =
     }
 
     let code = 200;
-    let response = new MlRespPayload().successPayload("Annotator Created Successfully", code);
+    let response = new MlRespPayload().successPayload("Annotator created successfully", code);
     return response;
 }
 
@@ -139,7 +139,7 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
         }
         else{
            let code = 400;
-           let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+           let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
            return response;
         }
     }catch (e){
@@ -149,7 +149,7 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     }
 
     let code = 200;
-    let response = new MlRespPayload().successPayload("Annotator Created Successfully", code);
+    let response = new MlRespPayload().successPayload("Annotator created successfully", code);
     return response;
 }
 
@@ -202,7 +202,7 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
         }
         else{
           let code = 400;
-          let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+          let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
           return response;
         }
       }catch (e){
@@ -228,7 +228,7 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
     }
     else {
       let code = 400;
-      let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+      let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
       return response;
     }
   } catch (e) {
@@ -363,14 +363,14 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
             let isCreatePortfolioRequest = true;
             if(!context.userId){
                 let code = 400;
-                let response = new MlRespPayload().errorPayload("Invalid User", code);
+                let response = new MlRespPayload().errorPayload("Invalid user", code);
                 return response;
             }
 
             let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
             if(!profile){
                 let code = 400;
-                let response = new MlRespPayload().errorPayload("No Profile Found", code);
+                let response = new MlRespPayload().errorPayload("No profile found", code);
                 return response;
             }
 
@@ -435,7 +435,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                   }
                 }else {
                   let code = 400;
-                  let response = new MlRespPayload().errorPayload('User is not approved from Hard registration', code);
+                  let response = new MlRespPayload().errorPayload('User is not been approved in hard registration', code);
                   return response;
                 }
             }
@@ -455,7 +455,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
         }
 
         let code = 200;
-        let response = new MlRespPayload().successPayload('Idea Created Successfully', code);
+        let response = new MlRespPayload().successPayload('Idea created successfully', code);
         return response;
     }
 }

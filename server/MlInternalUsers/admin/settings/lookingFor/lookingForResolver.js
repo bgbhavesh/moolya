@@ -26,7 +26,7 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
   let isFind = MlLookingFor.find(query).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'Looking for' already exists!", code);
     return response;
   }
 
@@ -92,7 +92,7 @@ MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) =
     let isFind = MlLookingFor.find(query).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Looking for' already exists!", code);
       return response;
     }
     args=_.omit(args,'_id');

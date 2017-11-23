@@ -99,7 +99,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
   let serviceId = SCOrderDetails.serviceId;
   if (!serviceId) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Service id is not attached in order", code);
+    let response = new MlRespPayload().errorPayload("'Service Id' is not attached in this order", code);
     return response;
   }
 
@@ -114,7 +114,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 
   if (!task) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Task id is not attached in order", code);
+    let response = new MlRespPayload().errorPayload("Task id is not attached in this order", code);
     return response;
   }
 
@@ -770,7 +770,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
     });
 
     let code = 200;
-    let response = new MlRespPayload().successPayload("Appointment book successfully", code);
+    let response = new MlRespPayload().successPayload("Appointment booked successfully", code);
     return response;
   }
 };
@@ -856,7 +856,7 @@ MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, c
 
 
     let code = 200;
-    let response = new MlRespPayload().successPayload("Appointment book successfully", code);
+    let response = new MlRespPayload().successPayload("Appointment booked successfully", code);
     return response;
   }
 };
@@ -1113,7 +1113,7 @@ MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context
       }
       if (updatedAppointmentMember) {
         let code = 200;
-        let response = new MlRespPayload().successPayload('Successfully Updated', code);
+        let response = new MlRespPayload().successPayload('Successfully updated', code);
         return response
       }
     } else {
@@ -1135,7 +1135,7 @@ MlResolver.MlQueryResolver['fetchSelfTask'] = (obj, args, context, info) => {
     return result;
   } else {
     let code = 404;
-    let response = new MlRespPayload().errorPayload('Appointment self task not found', code);
+    let response = new MlRespPayload().errorPayload('Appointment self-task not found', code);
     return response;
   }
 };
@@ -1421,7 +1421,7 @@ MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, 
   let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
   if( !serviceInfo ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    let response = new MlRespPayload().errorPayload("'Service-Id' not found", code);
     return response;
   }
 
@@ -1435,7 +1435,7 @@ MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, 
   let rescheduleTrails = appointmentInfo.rescheduleTrail ? rescheduleTrail.rescheduleTrail.length : 0;
   if( noOfReschedule <= rescheduleTrails ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule due to max no of reschedule already done', code);
+    let response = new MlRespPayload().errorPayload('Appointment could not be rescheduled since reschedule limit is reached', code);
     return response;
   }
 
@@ -1452,7 +1452,7 @@ MlResolver.MlMutationResolver["cancelUserServiceCardAppointment"] = (obj, args, 
     return response;
   }
 
-  let result = new MlRespPayload().successPayload('Appointment Cancel Successfully', 200);
+  let result = new MlRespPayload().successPayload('Appointment cancelled successfully', 200);
   return result;
 
 };
@@ -1471,13 +1471,13 @@ MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, ar
   let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
   if( !serviceInfo ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    let response = new MlRespPayload().errorPayload('Service-Id not found', code);
     return response;
   }
 
   if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isReschedulable ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule', code);
+    let response = new MlRespPayload().errorPayload('Appointment could not be rescheduled', code);
     return response;
   }
 
@@ -1485,7 +1485,7 @@ MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, ar
   let rescheduleTrails = appointmentInfo.rescheduleTrail ? rescheduleTrail.rescheduleTrail.length : 0;
   if( noOfReschedule <= rescheduleTrails ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Appointment not allow to reschedule due to max no of reschedule already done', code);
+    let response = new MlRespPayload().errorPayload('Appointment could not be rescheduled since reschedule limit is reached', code);
     return response;
   }
   let taskId = appointmentInfo.appointmentInfo.taskId;
@@ -1525,7 +1525,7 @@ MlResolver.MlMutationResolver["rescheduleUserServiceCardAppointment"] = (obj, ar
     return response;
   }
   let code = 400;
-  let response = new MlRespPayload().errorPayload('Appointment reschedule successfully', code);
+  let response = new MlRespPayload().errorPayload('Appointment rescheduled successfully', code);
   return response;
 };
 
@@ -1537,13 +1537,13 @@ MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, contex
   let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
   if( !serviceInfo ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('serviceId not found', code);
+    let response = new MlRespPayload().errorPayload('Service-Id not found', code);
     return response;
   }
 
   if( !serviceInfo.termsAndCondition || !serviceInfo.termsAndCondition.isCancelable || !serviceInfo.termsAndCondition.noOfDaysBeforeCancelation ) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Order not allow to cancel', code);
+    let response = new MlRespPayload().errorPayload('Order cannot be cancelled', code);
     return response;
   }
 
@@ -1552,14 +1552,14 @@ MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, contex
   orderCancelableDate.setDate( orderCancelableDate.getDate() + serviceInfo.termsAndCondition.noOfDaysBeforeCancelation );
   if(currentDate.getTime() > orderCancelableDate.getTime()) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Order not allow to cancel, Please contact admin', code);
+    let response = new MlRespPayload().errorPayload('Order cannot be cancelled. Please contact admin.', code);
     return response;
   }
   let findAppoinmtent = mlDBController.findOne('MlAppointments', { 'appointmentInfo.serviceOrderId': orderId }, context);
 
   if(findAppoinmtent){
     let code = 400;
-    let response = new MlRespPayload().errorPayload('Order not allow to cancel due, you already consume the service', code);
+    let response = new MlRespPayload().errorPayload('Order cannot be cancelled since you have already availed the service', code);
     return response;
   }
 
@@ -1570,7 +1570,7 @@ MlResolver.MlMutationResolver["cancelUserServiceCardOrder"] = (obj, args, contex
     return response;
   }
 
-  let result = new MlRespPayload().successPayload('Order Cancel Successfully', 200);
+  let result = new MlRespPayload().successPayload('Order cancelled successfully', 200);
   return result;
 
 };
@@ -1583,6 +1583,6 @@ MlResolver.MlMutationResolver["signOffUserServiceCardOrder"] = (obj, args, conte
     let response = new MlRespPayload().errorPayload('Unable to sign off', code);
     return response;
   }
-  let result = new MlRespPayload().successPayload('SignOff successfully', 200);
+  let result = new MlRespPayload().successPayload('Sign-Off successful', 200);
   return result;
 };

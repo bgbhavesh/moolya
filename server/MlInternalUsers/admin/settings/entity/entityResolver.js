@@ -90,7 +90,7 @@ MlResolver.MlMutationResolver['UpdateEntity'] = (obj, args, context, info) => {
     let isFind = MlEntity.find(query).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Entity type' already exists!", code);
       return response;
     }
     args=_.omit(args,'_id');

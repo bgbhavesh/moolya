@@ -19,7 +19,7 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
     // if(MlProcessMapping.find({processId:process.processId}).count() > 0){
       if(mlDBController.find('MlProcessMapping', {processId:process.processId}, context).count() > 0){
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        let response = new MlRespPayload().errorPayload("'Process mapping' already exists!", code);
         return response
     }
     // let id = MlProcessMapping.insert({...args.process});

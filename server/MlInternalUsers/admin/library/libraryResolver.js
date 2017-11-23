@@ -267,7 +267,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
       var libraryDataAdmin = mlDBController.insert('MlLibrary', args.files,  context);
       if (libraryDataAdmin) {
         let code = 200;
-        response = new MlRespPayload().successPayload('File moved to library', code);
+        response = new MlRespPayload().successPayload('File moved to your library', code);
       } else {
         let code = 404;
         response = new MlRespPayload().errorPayload('Error in uploading file', code);
@@ -298,7 +298,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
         if (args.portfoliodetailsId) {
           response = mlDBController.insert('MlLibrary', args.files, context)
           let code = 200;
-          response = new MlRespPayload().successPayload('File moved to library', code);
+          response = new MlRespPayload().successPayload('File moved to your library', code);
         }
       } else {
         let code = 404;

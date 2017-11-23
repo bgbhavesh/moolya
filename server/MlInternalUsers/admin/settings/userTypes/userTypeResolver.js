@@ -73,7 +73,7 @@ if(args.userType.communityCode) {
     //return response
   }
 }else{
-  let response = new MlRespPayload().errorPayload("Community Needed");
+  let response = new MlRespPayload().errorPayload("Please select atleast one community");
   return response;
 }
 }

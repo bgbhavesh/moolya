@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   let role = args.role;
   if (!role.roleName) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Role Name is required", code);
+    let response = new MlRespPayload().errorPayload("'Role Name' is mandatory", code);
     return response;
   }
   var roleCount = mlDBController.find('MlRoles', {roleName:{'$regex' : "^"+role.roleName+"$", "$options" : "i"}} && {displayName:{'$regex' : "^"+role.displayName+"$", "$options" : "i"}}, context).count()
@@ -40,15 +40,15 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
 
   if (roleCount > 0) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Role already exists", code);
+    let response = new MlRespPayload().errorPayload("'Role' already exists", code);
     return response;
   }else if(role && role.modules && role.modules.length == 0){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    let response = new MlRespPayload().errorPayload("Please select atleast one module", code);
     return response;
   }else if (role.modules && uniqModule && uniqModule.length !== role.modules.length) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Please select different module", code);
+    let response = new MlRespPayload().errorPayload("Please select a different module", code);
     return response;
   }else{
 
@@ -160,7 +160,7 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
 
   if (!args.role.roleName) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Role Name is required", code);
+    let response = new MlRespPayload().errorPayload("'Role Name' is mandatory", code);
     return response;
   }
 
@@ -170,7 +170,7 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
     if (role) {
       if (role.isSystemDefined) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Cannot edit system defined Role", code);
+        let response = new MlRespPayload().errorPayload("System defined cannot role edit", code);
         return response;
       } else {
         var id = args.roleId;
@@ -179,7 +179,7 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
         let uniqModule = _.uniqBy(args.role.modules, 'moduleId');
         if (_.isEmpty(args.role) || (args.role.modules && uniqModule && uniqModule.length !== args.role.modules.length)) {
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Please select different module", code);
+          let response = new MlRespPayload().errorPayload("Please select a different module", code);
           return response;
         }
 
@@ -195,7 +195,7 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
 
         if(!isDefaultAvailiable){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Default Modules Are Required", code);
+          let response = new MlRespPayload().errorPayload("Default modules are mandatory", code);
           return response;
         }
 

@@ -37,7 +37,7 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
       let isFind = mlDBController.find('MlDocumentCategories', query, context).fetch();
       if(isFind.length) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        let response = new MlRespPayload().errorPayload("'KYC category' already exists!", code);
         return response;
       }
       var firstName='';var lastName='';
@@ -108,7 +108,7 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
     let isFind = mlDBController.find('MlDocumentCategories', query, context).fetch();
     if(isFind.length){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'KYC category' already exists!", code);
       return response;
     }
     var firstName='';var lastName='';

@@ -105,7 +105,7 @@ MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context,
     let template = mlDBController.findOne('MlTemplateAssignment', {_id: args.id}, context)
     if (template.isSystemDefined) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Cannot edit system defined Template Assignment", code);
+      let response = new MlRespPayload().errorPayload("System defined template assignment cannot be edited", code);
       return response;
     }
     else if (template) {

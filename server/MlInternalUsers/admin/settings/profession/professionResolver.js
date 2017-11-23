@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
   let isFind = mlDBController.find('MlProfessions', query, context).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'Profession' already exists!", code);
     return response;
   }
 
@@ -98,7 +98,7 @@ MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) =
     let isFind = mlDBController.find('MlProfessions', query, context).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Profession' already exists!", code);
       return response;
     }
 

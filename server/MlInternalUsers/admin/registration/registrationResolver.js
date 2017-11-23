@@ -24,11 +24,11 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let updateRecord = {}
   if (!args.registration.registrationType) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
+    let response = new MlRespPayload().errorPayload("'Registration Type' is mandatory", code);
     return response;
   } else if (!args.registration.userName) {
     let code = 409;
-    let response = new MlRespPayload().errorPayload("username is mandatory!!!!", code);
+    let response = new MlRespPayload().errorPayload("Username is mandatory!", code);
     return response;
   }
   validationCheck = MlRegistrationPreCondition.validateEmail(args.registration);
@@ -143,28 +143,20 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
  * todo:// need to check with business for the moolya and non-moolya pre conditions before the register as
  * */
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
-  // var validationCheck = null;
   let updateRecord = {}
-  var response = null
-  // var date = new Date()
-  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  // if (!isValidAuth) {
-  //   let code = 401;
-  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-  //   return response;
-  // }
+  var response = null;
   if (!args.registrationId) {
     let code = 409;
-    response = new MlRespPayload().errorPayload("Registration Id  is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("'Registration Id' is mandatory!", code);
     return response;
   }
   if (!args.registration.registrationType) {
     let code = 409;
-    response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("'Registration Type' is mandatory!", code);
     return response;
   } else if (!args.registration.userName) {
     let code = 409;
-    response = new MlRespPayload().errorPayload("username is mandatory!!!!", code);
+    response = new MlRespPayload().errorPayload("'Username' is mandatory!", code);
     return response;
   }
   var validationCheck = MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
@@ -173,15 +165,21 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   }
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo = userInfo.registrationInfo;
-  let registrationInfo = args.registration
-  let clusterInfo = MlClusters.findOne({_id: registrationInfo.clusterId})
+  let registrationInfo = args.registration;
+
+  let clusterInfo = MlClusters.findOne({_id: registrationInfo.clusterId});
   let communityDef = mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType || null)}, context) || {};
   registrationInfo.communityName = communityDef.name;
-  registrationInfo.clusterName = clusterInfo.clusterName
-  registrationInfo.clusterId = clusterInfo._id
-  var regDetails = _lodash.pick(userRegisterInfo, ['countryId', 'cityId', 'password', 'accountType', 'institutionAssociation', 'companyname', 'companyUrl', 'remarks', 'referralType'])
-  registrationInfo = _lodash.extend(registrationInfo, regDetails)
-  registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName
+  registrationInfo.clusterName = clusterInfo.clusterName;
+  registrationInfo.clusterId = clusterInfo._id;
+
+  var regDetails = _lodash.pick(userRegisterInfo, ['countryId', 'cityId', 'password', 'accountType', 'institutionAssociation', 'companyname', 'companyUrl', 'remarks', 'referralType']);
+  registrationInfo = _lodash.extend(registrationInfo, regDetails);
+  registrationInfo.createdBy = userRegisterInfo.firstName + ' ' + userRegisterInfo.lastName;
+
+  const regDetailsStep = _lodash.pick(userInfo.registrationDetails, ['dateOfBirth', 'firstName', 'middleName', 'lastName', 'displayName', 'gender']);
+
+
   if (registrationInfo.subChapterId) {
     let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, registrationInfo.subChapterId);
     if (!mlSubChapterAccessControl.hasAccess) {
@@ -193,16 +191,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.chapterName = subChapterDetails.chapterName
     registrationInfo.subChapterName = subChapterDetails.subChapterName
   }
-  // registrationInfo.countryId = userRegisterInfo.countryId
-  // registrationInfo.cityId = userRegisterInfo.cityId
-  // registrationInfo.password = userRegisterInfo.password
-  // registrationInfo.accountType = userRegisterInfo.accountType
-  // registrationInfo.institutionAssociation = userRegisterInfo.institutionAssociation
-  // registrationInfo.companyname = userRegisterInfo.companyname
-  // registrationInfo.companyUrl = userRegisterInfo.companyUrl
-  // registrationInfo.remarks = userRegisterInfo.remarks
-  // registrationInfo.referralType = userRegisterInfo.referralType
-  registrationInfo.registrationDate = new Date()
+  registrationInfo.registrationDate = new Date();
   validationCheck = MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if (validationCheck && !validationCheck.isValid) {
     return validationCheck.validationResponse;
@@ -217,8 +206,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo: registrationInfo,
     status: "REG_EMAIL_V",
     emails: emails,
-    transactionId: registrationInfo.registrationId
-  }, context)
+    transactionId: registrationInfo.registrationId,
+    registrationDetails: regDetailsStep
+  }, context);
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_V');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
@@ -256,12 +246,12 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var communityType = args.registration && args.registration.registrationType ? args.registration.registrationType :null;
   /**Country is mandatory if subChapter is not specified*/
   if(!requestedSubChapterId&&!countryId){
-    response = new MlRespPayload().errorPayload({message:"country is required"},400);
+    response = new MlRespPayload().errorPayload({message:"Country is mandatory"},400);
     return response;
   }
   /**registration Type is mandatory*/
   if (!communityType) {
-   return new MlRespPayload().errorPayload("Community Type is mandatory", 400);
+   return new MlRespPayload().errorPayload("'Community Type' is mandatory", 400);
   }
   /**set context for systemadmin user*/
   var sysAdmin = mlDBController.findOne('users', {"profile.email": 'systemadmin@moolya.global'}, context) || {};
@@ -278,10 +268,10 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var userExist = mlDBController.findOne('users', {"profile.email": args.registration.email}, context) || {};
   if (registrationExist || userExist._id) {
     let code = 400;
-    let result = {message: "Registration Exist with same  email Id/mobile number"}
+    let result = {message: "There is an existing registration with the same email-Id/mobile number"}
     var isActiveOFB = MlRegistrationPreCondition.checkActiveOfficeBearer(args)
     if (isActiveOFB)
-      result = {message: "Sorry, your request will require Office admin attention. Please contact Office Admin"}
+      result = {message: "Sorry, your request requires Office admin attention. Please contact your Office Admin."}
     let errResp = new MlRespPayload().errorPayload(result, code);
     return errResp;
   }
@@ -358,11 +348,11 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
          MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: regRec._id}, context, info);
          // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
         let code = 200;
-        let result = {message: "you have successfully registered with moolya. please check your email for verification link", registrationId: args.registration.registrationId}
+        let result = {message: "You have successfully registered on moolya. Please check your email inbox for our email with the verification link", registrationId: args.registration.registrationId}
         let succResp = new MlRespPayload().successPayload(result, code);
         return succResp;
       }else{
-        return new MlRespPayload().errorPayload({message: "Registration Exists"},400);
+        return new MlRespPayload().errorPayload({message: "Registration already exists"},400);
       }
 
     }
@@ -461,6 +451,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     validationCheck = MlRegistrationPreCondition.isUserCanUpdate(registerDetails, context)
     if (validationCheck && !validationCheck.isValid) {
       return validationCheck.validationResponse;
+    }
+
+    if (args && args.registrationDetails && !args.registrationDetails.identityType) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Identity Type is required", code);
+      return response;
     }
 
     if (args.registrationDetails) {
@@ -798,7 +794,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
      */
     if (addressDetails && addressDetails.length < 1) {
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Default Address is mandatory", code);
+      let response = new MlRespPayload().errorPayload("'Default Address' is mandatory", code);
       return response;
     } else if (addressDetails && addressDetails.length > 0) {
       /**
@@ -814,7 +810,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
          * If default address not found throw an error
          */
         let code = 401;
-        let response = new MlRespPayload().errorPayload("Default Address is mandatory", code);
+        let response = new MlRespPayload().errorPayload("'Default Address' is mandatory", code);
         return response;
       } else if (found) {
         /**
@@ -888,7 +884,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         }
       } else {
         let code = 556;
-        let response = new MlRespPayload().errorPayload("Email verification not done", code);
+        let response = new MlRespPayload().errorPayload("Email verification not completed", code);
         return response;
       }
     }
@@ -978,7 +974,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       return response
     } else {
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Please validate the user", code);
+      let response = new MlRespPayload().errorPayload("Please validate the user details", code);
       return response;
     }
   }
@@ -1009,7 +1005,7 @@ MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, in
           let user = mlDBController.findOne('MlRegistration', {_id:args.registrationId}, context)
           MlEmailNotification.UserRejectionByAdmin(user);
         let code = 200;
-        let response = new MlRespPayload().successPayload("Registration Rejected Successfully", code);
+        let response = new MlRespPayload().successPayload("Registration rejected successfully", code);
         return response
       }
     }else {
@@ -1075,13 +1071,13 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
           }
         } else {
           let code = 409;
-          updatedResponse = new MlRespPayload().errorPayload("Please upload the documents!!!!");
+          updatedResponse = new MlRespPayload().errorPayload("Please upload the mandatory KYC documents!");
 
         }
       }
     } else {
       let code = 409;
-      updatedResponse = new MlRespPayload().errorPayload("Please select the kyc documents!!!!");
+      updatedResponse = new MlRespPayload().errorPayload("Please select the KYC documents!");
     }
     if(updatedResponse && updatedResponse.success){
       let user = MlRegistration.findOne({_id: args.registrationId}) || {}
@@ -1146,13 +1142,13 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
           }
         } else {
           let code = 409;
-          updatedResponse = new MlRespPayload().errorPayload("Please upload the documents!!!!");
+          updatedResponse = new MlRespPayload().errorPayload("Please upload the mandatory KYC documents!");
 
         }
       }
     } else {
       let code = 409;
-      updatedResponse = new MlRespPayload().errorPayload("Please select the kyc documents!!!!");
+      updatedResponse = new MlRespPayload().errorPayload("Please select the KYC documents!");
     }
 
     return updatedResponse;
@@ -1235,7 +1231,7 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
     }
     else {
       let code = 409;
-      updatedResponse = new MlRespPayload().errorPayload("documents can not allowed to remove once approved!!!!");
+      updatedResponse = new MlRespPayload().errorPayload("KYC Documents cannot be removed after approval");
     }
     //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
     // updatedResponse=MlRegistration.update({"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
@@ -1260,7 +1256,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
       if (contactExist) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Contact type already exist!!!!", code);
+        let response = new MlRespPayload().errorPayload("'Contact type' already exists!", code);
         return response;
       }
 
@@ -1286,7 +1282,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
       if (addressExist) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Address type already exist!!!!", code);
+        let response = new MlRespPayload().errorPayload("'Address type' already exists!", code);
         return response;
       }
       if (registrationDetails.addressInfo) {
@@ -1317,7 +1313,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               }
             }
           } catch (e) {
-            throw new Error("Error while updating address " + e);
+            throw new Error("Address updation failed " + e);
           }
 
         }), {key: Meteor.settings.private.googleApiKey});
@@ -1363,7 +1359,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
       if (addressExist) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Social Link type already exist!!!!", code);
+        let response = new MlRespPayload().errorPayload("'Social link' type already exists!", code);
         return response;
       }
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
@@ -1390,7 +1386,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
       if (emailTypeExist) {
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Email   type already exist!!!!", code);
+        let response = new MlRespPayload().errorPayload("'Email type' already exists!", code);
         return response;
       }
       if (registrationDetails.emailInfo) {
@@ -1615,7 +1611,7 @@ MlResolver.MlMutationResolver['verifyUserMobileNumber'] = (obj, args, context, i
       return new MlRespPayload().successPayload(succResp, 200);
     }
   } else {
-    return new MlRespPayload().errorPayload("Mobile Number/Otp is mandatory", 403);
+    return new MlRespPayload().errorPayload("Mobile Number and OTP are mandatory", 403);
   }
 }
 
@@ -1624,9 +1620,9 @@ MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, in
   if (args.mobileNumber) {
     var resp = MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
     if(resp && resp.otp){
-      return {mobileNumber:resp.mobileNumber, success: true,reason:"Successfully resend OTP", code:200};
+      return {mobileNumber:resp.mobileNumber, success: true,reason:"OTP resent successfully", code:200};
     }else{
-      return {mobileNumber:resp.mobileNumber, error: true,reason:"Resend OTP failed", code:403};
+      return {mobileNumber:resp.mobileNumber, error: true,reason:"OTP could not be resent. Please check the mobile number or try after 30 seconds.", code:403};
     }
   }
 }
@@ -1690,7 +1686,7 @@ MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info)
       return new MlRespPayload().successPayload(succResp, 200);
     }
   } else {
-    return new MlRespPayload().errorPayload("Mobile Number/Otp is mandatory", 403);
+    return new MlRespPayload().errorPayload("Mobile Number and OTP are mandatory", 403);
   }
 }
 
@@ -1811,7 +1807,7 @@ MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) => 
       return new MlRespPayload().successPayload(result.reason, 200);
     }
   } else {
-    return new MlRespPayload().errorPayload("Email is mandatory", 403);
+    return new MlRespPayload().errorPayload("Email-Id is mandatory", 403);
   }
 }
 
@@ -1825,7 +1821,7 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) => 
       return new MlRespPayload().successPayload(result.reason, 200);
     }
   } else {
-    return new MlRespPayload().errorPayload("Reset link Expired/Used", 403);
+    return new MlRespPayload().errorPayload("Password reset link has expired or has already been used", 403);
   }
 }
 
@@ -1848,7 +1844,7 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       return new MlRespPayload().successPayload(result, 200);
     }
   } else {
-    return new MlRespPayload().errorPayload("Reset link Expired/Used", 403);
+    return new MlRespPayload().errorPayload("Email-Id verification link has expired or has already been used", 403);
   }
 }
 
@@ -1899,7 +1895,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   let sameKYCEXist =  MlRegistration.findOne({"_id": args.registrationId,"kycDocuments.documentId" : kycDocumentObject.documentId });
 
   if(sameKYCEXist){
-    return new MlRespPayload().errorPayload("Document Already Exist", 403);
+    return new MlRespPayload().errorPayload("KYC document already exists", 403);
   }
   if (args.registrationId) {
     registrationDetails = MlRegistration.findOne({"_id": args.registrationId});
@@ -1924,9 +1920,9 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
     }, {'kycDocuments': kycDocumentObject}, {$push: true}, context)
   }
   if (id) {
-    return new MlRespPayload().successPayload("Document created successfully", 200);
+    return new MlRespPayload().successPayload("KYC document created successfully", 200);
   } else {
-    return new MlRespPayload().errorPayload("Kindly enter all manditory fields", 403);
+    return new MlRespPayload().errorPayload("Please enter all mandatory fields", 403);
   }
 }
 
@@ -1978,11 +1974,11 @@ headerCommunityDisplay = (registrationInfo, context) => {
 };
 
 registrationUserApprovalResponse = (status) => {
-  let response = "User already approved";
+  let response = "User is already approved by admin";
   if (status === "REG_USER_APR")
-    response = "User already approved";
+    response = "User is already approved by admin";
   else if (status === "REG_USER_REJ")
-    response = "Rejected user can not be approved";
+    response = "Rejected user cannot be approved";
   return response
 };
 

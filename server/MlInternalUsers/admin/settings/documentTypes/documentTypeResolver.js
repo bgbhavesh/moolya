@@ -51,7 +51,7 @@ MlResolver.MlMutationResolver['createDocumentType'] = (obj, args, context, info)
   } else {
     if(MlDocumentTypes.find({docTypeName:args.documentType.docTypeName}).count() > 0){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exist", code);
+      let response = new MlRespPayload().errorPayload("'Document type' already exists", code);
       return response;
     }
     let id = MlDocumentTypes.insert({...args.documentType});

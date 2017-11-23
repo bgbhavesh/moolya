@@ -288,7 +288,11 @@ export default class StepZilla extends Component {
             <Modal isOpen={this.state.maditoryModalOpen} onHide={this.onClose} className="warning_modal">
               <ModalHeader>Warning</ModalHeader>
               <ModalBody>
-                <div>Kindly enter all mandatory fields</div>
+                <div>Kindly enter all mandatory fields before proceeding to the next step.<br/>
+
+                  All mandatory fields are marked with a red dot.
+
+                </div>
               </ModalBody>
               <ModalFooter>
                {/* <Button color="primary" onClick={this.onManditoryConfirm.bind(this)}>Ok</Button>{' '}*/}

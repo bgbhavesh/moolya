@@ -54,7 +54,7 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
     // if(MlSubDepartments.find({subDepartmentName:args.subDepartment.subDepartmentName}).count() > 0){
     if(mlDBController.find('MlSubDepartments', {subDepartmentName:args.subDepartment.subDepartmentName}, context).count() > 0){
         let code = 409;
-        return new MlRespPayload().errorPayload("Already Exist", code);
+        return new MlRespPayload().errorPayload("Sub-department already exists!", code);
     }
   var firstName='';var lastName='';
   // let id = MlDepartments.insert({...args.department});
@@ -136,7 +136,7 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
     {
       if(subDepartment.isSystemDefined){
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Cannot edit system defined sub-department", code);
+        let response = new MlRespPayload().errorPayload("System defined sub-department cannot be edited", code);
         return response;
       }else {
         // let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})

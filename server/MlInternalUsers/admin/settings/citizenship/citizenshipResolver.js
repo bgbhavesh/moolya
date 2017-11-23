@@ -12,7 +12,7 @@ MlResolver.MlMutationResolver['CreateCitizenship'] = (obj, args, context, info) 
 
   if(!args.citizenshipTypeName){
     let code = 401;
-    let response = new MlRespPayload().errorPayload("Citizenship Name is Required", code);
+    let response = new MlRespPayload().errorPayload("'Citizenship Name' is Required", code);
     return response;
   }else {
     let query ={
@@ -31,7 +31,7 @@ MlResolver.MlMutationResolver['CreateCitizenship'] = (obj, args, context, info) 
     let isFind = MlCitizenship.find(query).fetch();
     if(isFind.length){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Citizenship type' already exists!", code);
       return response;
     }
     var firstName='';var lastName='';
@@ -97,7 +97,7 @@ MlResolver.MlMutationResolver['UpdateCitizenship'] = (obj, args, context, info) 
       let isFind = MlCitizenship.find(query).fetch();
       if(isFind.length){
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        let response = new MlRespPayload().errorPayload("'Citizenship type' already exists!", code);
         return response;
       }
       args=_.omit(args,'_id');

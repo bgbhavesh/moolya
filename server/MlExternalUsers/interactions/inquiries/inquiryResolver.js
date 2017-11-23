@@ -36,7 +36,7 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
           var toUser = resourceDetails.resourceOwner;
           if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
             let code = 400;
-            let response = new MlRespPayload().errorPayload('Invalid User', code);
+            let response = new MlRespPayload().errorPayload('Invalid user', code);
             return response;
           }
           let inquiry={resourceId:args.resourceId,resourceType:args.resourceType,subject:args.subject,

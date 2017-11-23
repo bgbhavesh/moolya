@@ -453,6 +453,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       return validationCheck.validationResponse;
     }
 
+    if (args && args.registrationDetails && !args.registrationDetails.identityType) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Identity Type is required", code);
+      return response;
+    }
+
     if (args.registrationDetails) {
       let details = args.registrationDetails || {};
       /**

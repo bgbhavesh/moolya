@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {getUserActiveProfileDetails} from "../../activity/actions/activityActionHandler";
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath'
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
+import {appClient} from '../../../../core/appConnection';
 
 
 export default class MlCalendarHeader extends Component {
@@ -31,7 +33,15 @@ export default class MlCalendarHeader extends Component {
     return resp
   }
 
-  changeProfile( profileId, isDisabled ) {
+  async getCurrencyType(userId, profileId) {
+    const response = await fetchCurrencyTypeActionHandler(appClient, userId, null , profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
+
+  changeProfile( profileId, isDisabled, userId ) {
+    this.setState({userId: userId, profileId: profileId})
+    this.getCurrencyType(userId, profileId, ()=> this.props.getUserIdOfProfile(this.state.currencySymbol));
     if( profileId && !isDisabled) {
       FlowRouter.go("/app/calendar/manageSchedule/"+profileId+"/activityList");
     }

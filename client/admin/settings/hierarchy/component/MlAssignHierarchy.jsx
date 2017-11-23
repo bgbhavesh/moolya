@@ -208,10 +208,10 @@ export default class MlAssignHierarchy extends React.Component {
       }
       return response;
     } else if (this.state.finalApproval && !this.state.finalApproval.isChecked) {
-      toastr.error("Please select Final approval");
+      toastr.error("Please select 'Final Approval'");
     }
      else if(!this.state.finalApproval.role) {
-      toastr.error(" Final approval role is mandatory")
+      toastr.error("'Final Approval' role is mandatory")
     }
   }
 
@@ -283,7 +283,7 @@ export default class MlAssignHierarchy extends React.Component {
       }
       this.setState({assignedRoles: roles})
     } else
-        toastr.error("Cannot change parent node, please unassign the role, to make changes");
+        toastr.error("Cannot change parent node. Please unassign the role first, to make changes");
 
     // else{
     //   roles.teamStructureAssignment[index].assignedLevel = value.value
@@ -300,7 +300,7 @@ export default class MlAssignHierarchy extends React.Component {
   }
   updateFinalApproval(){
     const resp=this.updateFinalApprovalRoles();
-    toastr.success("Update Successful");
+    toastr.success("Update successful");
     return resp;
   }
 

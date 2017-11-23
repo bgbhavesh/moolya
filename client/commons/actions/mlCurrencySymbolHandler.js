@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 
 
-export async function fetchCurrencyTypeActionHandler (connection, userId, portfolioDetailsId) {
+export async function fetchCurrencyTypeActionHandler (connection, userId, portfolioDetailsId, profileId) {
   const result = await connection.query({
     query: gql`
-    query($userId: String, $portfolioDetailsId: String){
-      fetchCurrencyType(userId: $userId, portfolioDetailsId:$portfolioDetailsId){
+    query($userId: String, $portfolioDetailsId: String, $profileId: String){
+      fetchCurrencyType(userId: $userId, portfolioDetailsId:$portfolioDetailsId, profileId:$profileId){
        countryName        
         currencyName       
         currencyCode       
@@ -20,7 +20,8 @@ export async function fetchCurrencyTypeActionHandler (connection, userId, portfo
     `,
     variables : {
       userId,
-      portfolioDetailsId
+      portfolioDetailsId,
+      profileId
     },
     forceFetch:true
   });

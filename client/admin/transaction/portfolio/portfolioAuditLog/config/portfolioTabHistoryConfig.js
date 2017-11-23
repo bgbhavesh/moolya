@@ -19,8 +19,8 @@ const mlPortfolioTabHistoryTableConfig=new MlViewer.View({
   module:"audit",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "userName"],
-  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "userName"],
+  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "userName","docRef"],
+  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "userName","docRef"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -28,6 +28,7 @@ const mlPortfolioTabHistoryTableConfig=new MlViewer.View({
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "timeStamp", title: "Date&Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "moduleName", title: "Module",dataSort:true},
+    {dataField: "docRef",title:"Module Id"},
     {dataField: "fieldName", title: "Field Name",dataSort:true},
     {dataField: "previousValue", title: "Previous Value",dataSort:true},
     {dataField: "currentValue", title: "Current Value",dataSort:true},
@@ -68,6 +69,7 @@ const mlPortfolioTabHistoryTableConfig=new MlViewer.View({
                                  field
                                  fieldName
                                  docId
+                                 docRef
                                  timeStamp
                                  userAgent{
                                   ipAddress

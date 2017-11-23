@@ -27,11 +27,11 @@ MlResolver.MlMutationResolver['createAssets'] = (obj, args, context, info) => {
         try{
             let ret = MlAssets.insert({...args.assetsMasterData})
             if(ret){
-                let response = new MlRespPayload().successPayload("Asset Created Successfully", 200);
+                let response = new MlRespPayload().successPayload("Asset added successfully", 200);
                 return response;
             }
             else{
-              let response = MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+              let response = MlRespPayload.errorPayload("Asset could not be added", 400);
               return response;
             }
         }
@@ -66,11 +66,11 @@ MlResolver.MlMutationResolver['updateSelectedAsset'] = (obj, args, context, info
         try{
             let resp = MlAssets.update({_id: args.assetId}, {$set: args.assetsMasterData}, {upsert: true})
             if(resp){
-                let response = new MlRespPayload().successPayload("Asset Created Successfully", 200);
+                let response = new MlRespPayload().successPayload("Asset updated successfully", 200);
                 return response;
             }
             else{
-                let response = new MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+                let response = new MlRespPayload.errorPayload("Asset could not be updated", 400);
                 return response;
             }
         }

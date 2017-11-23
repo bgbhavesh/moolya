@@ -3,13 +3,14 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import {findTaskActionHandler} from "../actions/saveCalanderTask";
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
 
 export default class MlAppTaskPayment extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
       loading: true,
-      data: {}
+      data: {}, currencySymbol:""
     }
     this.findTaskDetails.bind(this);
     this.handleBlurAmount.bind(this);
@@ -21,8 +22,16 @@ export default class MlAppTaskPayment extends Component {
   }
   componentWillMount() {
     const resp = this.findTaskDetails();
+    this.getCurrencyType();
     this.props.activeComponent(3);
     return resp;
+  }
+
+  async getCurrencyType() {
+    let profileId = FlowRouter.getParam('profileId');
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, null, profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
 
   async findTaskDetails() {
@@ -171,17 +180,17 @@ export default class MlAppTaskPayment extends Component {
             <div className="centered_form">
               <form>
                 <div className="form-group">
-                  <label>Activity gross payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                  <label>Activity gross payable amount &nbsp;<label>{data.payment && data.payment.currencyType ? data.payment.currencyType : this.state.currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={(data.payment && data.payment.activitiesAmount) ? parseFloat(data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Activity discount payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                  <label>Activity discount payable amount &nbsp;<label>{data.payment && data.payment.currencyType ? data.payment.currencyType : this.state.currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={(data.payment && data.payment.activitiesDiscount) ? parseFloat(data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Activity net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                  <label>Activity net payable amount &nbsp;<label>{data.payment && data.payment.currencyType ? data.payment.currencyType : this.state.currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={(data.payment && data.payment.activitiesDerived) ? parseFloat(data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
@@ -225,7 +234,7 @@ export default class MlAppTaskPayment extends Component {
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
-                  <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                  <label>Net payable amount &nbsp;<label>{data.payment && data.payment.currencyType ? data.payment.currencyType :this.state.currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
                                                    value={(data.payment && data.payment.derivedAmount) ? parseInt(data.payment.derivedAmount).toFixed(2) :''}
                                                    disabled />

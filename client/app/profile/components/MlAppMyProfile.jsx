@@ -124,7 +124,7 @@ class MlAppMyProfile extends Component {
     const dataresponse = await updateDataEntry(Details);
     console.log('--dataresponse--',dataresponse);
     if(dataresponse){
-      toastr.success("Update Successful")
+      toastr.success("Details updated successfully")
     }
   }
 
@@ -138,7 +138,7 @@ class MlAppMyProfile extends Component {
     if (response && response.success) {
       if (this.state.saveType == 'taskCreate')
         FlowRouter.setQueryParams({id: response.result})
-      toastr.success("Saved Successfully move to next step");
+      toastr.success("Saved successfully. Proceed to next step");
     } else if (response && !response.success) {
       toastr.error(response.result);
     }
@@ -175,7 +175,7 @@ class MlAppMyProfile extends Component {
             this.setState({PasswordReset: false, showChangePassword: true})
           }
         }else {
-          toastr.error("Enter proper Existing Password")
+          toastr.error("Enter correct Existing Password")
         }
       } else {
         this.setState({
@@ -197,7 +197,7 @@ class MlAppMyProfile extends Component {
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
     }
     else{
-      toastr.error("age limit exceeded")
+      toastr.error("Age limit exceeded")
     }
   }
 
@@ -272,7 +272,7 @@ class MlAppMyProfile extends Component {
       let result = JSON.parse(resp)
       if(result.success){
         this.setState({profileImage : result.result})
-        toastr.success("Photo Updated Successfully");
+        toastr.success("Photo updated successfully");
       }
     }
   }
@@ -292,7 +292,7 @@ class MlAppMyProfile extends Component {
   }
   handleUploadAvatar(image) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onImageFileUpload(image);
   }
@@ -307,7 +307,7 @@ class MlAppMyProfile extends Component {
           this.setState({canResend:true})
         }.bind(this),30000)
       }else {
-        toastr.error("Resend OTP failed");
+        toastr.error("OTP resend failed");
       }
       return resp
     }
@@ -338,7 +338,7 @@ class MlAppMyProfile extends Component {
       if(response.success){
         resp = JSON.parse(response.result);
         this.setState({mobileNumberVerified:resp.mobileNumberVerified});
-        toastr.success("Mobile Number Verified");
+        toastr.success("Mobile number verified successfully");
         this.setState({getOTPClicked:false});
         this.findUserDetails();
       }else{
@@ -347,7 +347,7 @@ class MlAppMyProfile extends Component {
       }
     }else{
       if(!otp){
-        toastr.error("Please enter OTP");
+        toastr.error("Please enter the OTP as received in your sms");
       }
       if(!isTermsChecked){
         toastr.error("Please agree to 'Terms and Conditions' and 'Privacy Policy'");

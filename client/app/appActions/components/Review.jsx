@@ -27,14 +27,14 @@ export default class Review extends React.Component {
                                             'rating':this.state.reviewRating||0 });
 
     if(response&&response.success){
-      toastr.success("review send successfully");
+      toastr.success("Your review has been sent successfully");
       this.setState({"viewType":"view","reviewRating":0});
       this.fetchReviews();
     }else{
       if(response&&!response.success&&response.code===401){
         toastr.error(response.result);
       }else{
-        toastr.error("Failed to send the review");
+        toastr.error("Your review could not be submitted");
       }
     }
     //this.props.toggle();

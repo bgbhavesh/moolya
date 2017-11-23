@@ -124,7 +124,10 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
   }
 }
 
-
+/**
+ * @Note: 1) need to remove sever url dependency ["to-do"]
+ *        2) case added to take users left nav data accuracy
+ * */
 MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if(context.url.indexOf("transactions") > 0) {
     let currentProfile = context.url.split("/")
@@ -153,14 +156,15 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
       if(context.url.split("/")[4] === 'explore'){
         portfolioId = context.url.split("/")[6];
       }else{
-        portfolioId = context.url.split("/")[5];
+        // portfolioId = context.url.split("/")[5];
+        portfolioId = args.userId ? args.userId : context.url.split("/")[5];
       }
       args.userId = portfolioDetails.userId;
       var query = {
         userId: args.userId,
         isActive: true,
         'portfolioReference.portfolioId': portfolioId,
-        'portfolioReference.isPrivate': false
+        // 'portfolioReference.isPrivate': false
       }
       var libraryDataOthers = mlDBController.find('MlLibrary', query, context).fetch();
       return libraryDataOthers;
@@ -263,7 +267,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
       var libraryDataAdmin = mlDBController.insert('MlLibrary', args.files,  context);
       if (libraryDataAdmin) {
         let code = 200;
-        response = new MlRespPayload().successPayload('File moved to library', code);
+        response = new MlRespPayload().successPayload('File moved to your library', code);
       } else {
         let code = 404;
         response = new MlRespPayload().errorPayload('Error in uploading file', code);
@@ -294,7 +298,7 @@ MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, in
         if (args.portfoliodetailsId) {
           response = mlDBController.insert('MlLibrary', args.files, context)
           let code = 200;
-          response = new MlRespPayload().successPayload('File moved to library', code);
+          response = new MlRespPayload().successPayload('File moved to your library', code);
         }
       } else {
         let code = 404;

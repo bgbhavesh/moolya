@@ -19,7 +19,7 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
     // if(MlProcessMapping.find({processId:process.processId}).count() > 0){
       if(mlDBController.find('MlProcessMapping', {processId:process.processId}, context).count() > 0){
         let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        let response = new MlRespPayload().errorPayload("'Process mapping' already exists!", code);
         return response
     }
     // let id = MlProcessMapping.insert({...args.process});
@@ -191,6 +191,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.documentId=documentMappingDef._id;
            processDocument.isMandatory=args.isMandatory;
            processDocument.isActive=args.isActive;
+           processDocument.validity=documentMappingDef&&documentMappingDef.validity?documentMappingDef.validity:null
 
         mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
         // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
@@ -460,12 +461,14 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query) {
     console.log(query)
+    let date = new Date();
+    date.setHours(0,0,0,0)
     let document = MlProcessMapping.find({
       $and: [query, {
         "identity": {$in: [args.identityType]},
         "industries": {$in: [args.industry]},
         "isActive": true
-      }]
+      }, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]}]
     }).fetch()
     if (document && document.length > 0) {
       let combinationBasedDoc=[],kycDoc=[]
@@ -485,6 +488,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               combinationBasedDoc.push(doc)
             }
           })
+        }else{
+          combinationBasedDoc = combinationBasedDoc
         }
       })
       /*if (combinationBasedDoc && combinationBasedDoc.length > 0) {
@@ -519,7 +524,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function getCountryBasedDocuments(country) {
     let countryBasedDoc = [], kycDoc = []
-    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, {isActive: true}]}).fetch()
+    let date = new Date();
+    date.setHours(0,0,0,0)
+    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]},{isActive: true}]}).fetch()
     if (document && document.length > 0) {
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
@@ -566,6 +573,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
             }
           })
+        }else{
+          countryBasedDoc = countryBasedDoc
         }
       })
       if (countryBasedDoc && countryBasedDoc.length > 0) {
@@ -574,6 +583,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           let docId = kyc&&kyc.documentId?kyc.documentId:""
           return docId;
         });
+        return kycDoc
+      }else{
         return kycDoc
       }
       return kycDoc
@@ -668,12 +679,13 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
 
   } else {
-   let userKYC=getTheUserKYC()
+
+   let  userKYC=getTheUserKYC()
     userKYC = _underscore.uniq(userKYC, function (kyc) {
       let docId = kyc&&kyc.documentId?kyc.documentId:""
       return docId;
     });
-    return userKYC
+    return userKYC&&userKYC.length?userKYC : []
   }
     function getTheUserKYC() {
     let countryBasedDoc=[]
@@ -729,7 +741,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               let docId = kyc&&kyc.documentId?kyc.documentId:""
               return docId;
             });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
             return finalKYC
           } else {
             let finalKYC=[]
@@ -746,7 +758,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
                 return kyc.documentId;
               });*/
-              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
               return finalKYC
             }else{
               return countryBasedDoc
@@ -768,7 +780,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
             /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               return kyc.documentId;
             });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
             return finalKYC
           }else{
             return countryBasedDoc

@@ -92,6 +92,7 @@ class MlEditSubDepartment extends React.Component{
       if (response) {
 
       }
+      toastr.success("Sub-Department updated successfully")
       return response;
 
     }

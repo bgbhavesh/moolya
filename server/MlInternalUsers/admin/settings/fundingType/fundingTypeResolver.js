@@ -27,11 +27,11 @@ MlResolver.MlMutationResolver['createFundingType'] = (obj, args, context, info) 
     try{
       let ret = MlFundingTypes.insert({...args.fundingType})
       if(ret){
-        let response = new MlRespPayload().successPayload("Funding Type Created Successfully", 200);
+        let response = new MlRespPayload().successPayload("'Funding Type' added successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Funding Type could not be added", 400);
         return response;
       }
     }
@@ -66,11 +66,11 @@ MlResolver.MlMutationResolver['updateFundingType'] = (obj, args, context, info) 
     try{
       let resp = MlFundingTypes.update({_id: args.fundingTypeId}, {$set: args.fundingType}, {upsert: true})
       if(resp){
-        let response = new MlRespPayload().successPayload("Asset Created Successfully", 200);
+        let response = new MlRespPayload().successPayload("'Funding Type' updated successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Funding Type could not be updated", 400);
         return response;
       }
     }

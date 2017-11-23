@@ -247,12 +247,12 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/favourites`;
       }
     },
-    // "users_wishlist": function (params, queryParams) {
-    //   let dynamicParams = params || {};
-    //   if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
-    //     return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/wishlist/ideator`;
-    //   }
-    // },
+    users_library: function (params, queryParams) {
+      const dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+          return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/view/library`;
+      }
+    },
     "users_transactions": function (params, queryParams) {
       let dynamicParams = params || {};
       if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {

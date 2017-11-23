@@ -33,7 +33,6 @@ export default class MlUsersAbout extends Component {
   async findRegistration() {
     let registrationId = this.props.config ? this.props.config.registrationId : '';
     const response = await findUserRegistrationActionHandler(registrationId);
-    console.log(response);
     this.setState({loading: false, data: response});
   }
 
@@ -46,10 +45,10 @@ export default class MlUsersAbout extends Component {
   async changeUrl(registrationId) {
     const response = await findUserPortfolioActionHandler(registrationId);
     if (response && response.portfolioId) {
-      toastr.success('Portfolio Selected Successfully')
+      toastr.success('Portfolio selected successfully')
       FlowRouter.setParams({registrationId: registrationId, portfolioId: response.portfolioId})
     } else {
-      toastr.info('Portfolio Not available')
+      toastr.info('Portfolio not available')
     }
     return response
   }

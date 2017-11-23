@@ -114,6 +114,7 @@ export async function fetchServiceActionHandler (serviceId) {
           tasksDiscount
           tasksDerived
           isApprovalRequiredFromSeeker
+          currencyType
         }
         tasks {
           id
@@ -376,6 +377,8 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orde
             sessionId
             startDate
             status
+            isOffline
+            isRescheduled
             duration {
               hours
               minutes

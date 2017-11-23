@@ -55,7 +55,7 @@ class MlAddNotificationTemplate extends React.Component {
       const response = await addNotificationTemplate(notificationTemplate);
       if(response&&response.success){
         //toastr.success("Notification Template Created Successfully");
-        toast.success("Notification Template Created Successfully");
+        toast.success("Notification Template created successfully");
       }
       return response;
     }

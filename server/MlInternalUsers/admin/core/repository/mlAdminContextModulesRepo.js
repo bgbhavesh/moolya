@@ -140,73 +140,53 @@ let CoreModules = {
     const totalRecords = mlDBController.find('MlMasterSettings', query, context, fieldsProj).count();
 
     return {totalRecords: totalRecords, data: data};
-
   },
-
-  MlAuditLogRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
+  /**
+   * @Note 1) sending registrationId from client need to update it as docId from the client.
+   *       2) if(1) changes to be made in users about transaction also, using registrationId there.
+   * */
+  MlAuditLogRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context,userSpecificSearch) => {
+    var data=[],totalRecords=0;
     if (!fieldsProj.sort) {
       fieldsProj.sort = {timeStamp: -1}
     }
-    let serverQuery = {};
-    let query = {};
-    let userContextQuery = {};
     requestParams = requestParams ? requestParams : null;
-    let reqArray = requestParams.moduleName.split(',');
-    serverQuery = {moduleName: {$in: reqArray}}
-    let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-
-
-
+    var reqArray = requestParams.moduleName.split(',');
+    var serverQuery = {moduleName: {$in: reqArray}};
+    if (requestParams && requestParams.registrationId)
+      serverQuery.docId = requestParams.registrationId;
     //construct context query with $in operator for each fields
-    let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
-
-    //resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
-
-
-    if (!fieldsProj.sort) {
-      fieldsProj.sort = {'createdDate': -1}
-    }
-
+    var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     _.each(resultantQuery, function (r) {
       if (_.isArray(r)) {
         r.push('all');
       }
     });
-
+    //FIX for Issue: MOOLYA=2361
+    var serverFilterQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(resultantQuery,serverQuery), '$and');
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery,serverQuery), '$and');
-/*    if (userProfile.hierarchyLevel == 4) {
-      userContextQuery = {}
-    } else if (userProfile.hierarchyLevel == 3) {
-      let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
-      userContextQuery = {clusterId: {$in: [clusterIds]}}
-    } else if (userProfile.hierarchyLevel == 2) {
-      let chapterIds = userProfile && userProfile.defaultChapters ? userProfile.defaultChapters : [];
-      userContextQuery = {chapterId: {$in: [chapterIds]}}
-    } else if (userProfile.hierarchyLevel == 1) {
-      let subChapterIds = userProfile && userProfile.defaultSubChapters ? userProfile.defaultSubChapters : [];
-      userContextQuery = {subChapterId: {$in: [subChapterIds]}}
-    }else if (userProfile.hierarchyLevel == 0) {
-      let communityIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
-      userContextQuery = {clusterId: {$in: [communityIds]}}
-    }
-    query = mergeQueries( userFilterQuery, serverQuery);
-    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(query, userContextQuery), '$and');*/
 
-    const data = MlAudit.find(resultantQuery,fieldsProj).fetch();
+    //Fix for Issue: MOOLYA-2361
+    var result=CoreModules.MlAuditHistorySearchResult(requestParams.moduleName,resultantQuery,serverFilterQuery,userFilterQuery,fieldsProj,context,userSpecificSearch);
+    if(result.resultsFetched){
+         data=result.data||[];totalRecords=result.totalRecords||0;
+    }else{
+      data = MlAudit.find(resultantQuery,fieldsProj).fetch();
+      totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
+    }
     data.map(function (doc, index) {
       let userObj;
       if (doc && doc.userId) {
         userObj = Meteor.users.findOne({_id: doc.userId}) || {};
       }
-
-      let firstName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.firstName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.firstName : "";
-      let lastName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName : "";
+      // let firstName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.firstName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.firstName : "";
+      // let lastName = userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName ? userObj && userObj.profile && userObj.profile.InternalUprofile && userObj.profile.InternalUprofile.moolyaProfile && userObj.profile.InternalUprofile.moolyaProfile.lastName : "";
+      let firstName = userObj && userObj.profile && userObj.profile.firstName ? userObj.profile.firstName : '';
+      let lastName = userObj && userObj.profile && userObj.profile.lastName ? userObj.profile.lastName : '';
       data[index].userName = firstName && lastName ? firstName + " " + lastName : doc.userName
     })
-    const totalRecords = mlDBController.find('MlAudit', resultantQuery, context, fieldsProj).count();
-
     return {totalRecords: totalRecords, data: data};
   },
 
@@ -1078,6 +1058,49 @@ let CoreModules = {
     let totalRecords = mlDBController.find('MlTransactionsLog', {"transactionTypeId":"appointment"} ).count();
 
     return {totalRecords: totalRecords, data: data};
+  },
+  /**
+   * Returns the history records for modules by aggregation (lookup with related collections).
+   * @param module(eg:REGISTRATION)
+   * @param resultantQuery  complete query of serverQuery and userFilter
+   * @param serverQuery  server query with context
+   * @param userFilter  user filter query
+   * @param userSpecificSearch true if user has searched/filtered the records.
+   * returns result Object containing history records for modules by aggregation (lookup with related collections).
+   */
+  MlAuditHistorySearchResult:function(module,resultantQuery,serverQuery,userFilter,fieldsProj,context,userSpecificSearch){
+    var result={resultsFetched:false,data:[],totalRecords:0};
+    var pipeline=[],foreignKeySearch=userSpecificSearch||false;
+    var limitskipsort=[{'$sort':fieldsProj.sort},{'$skip':fieldsProj.skip||0},{'$limit':fieldsProj.limit}];
+    var searchQueryParam={foriegnKeys:['docRef'],
+                          lookupQuery:{'$lookup':{from:'mlRegistration',localField: 'docId',foreignField:'_id',as:'refRecord'}},
+                          unwindQuery:{'$unwind':{path:"$refRecord",preserveNullAndEmptyArrays:true }},
+                          projectQuery:{$project:{clusterId:1,chapterId:1,subChapterId:1,communityId:1,communityCode:1,moduleName:1,userAgent:1,userId:1,userName:1,docId:1,fieldName:1,field:1,currentValue:1,previousValue:1,timeStamp:1,docRef:'$refRecord.transactionId'}}};
+    switch(module){
+          case 'REGISTRATION':
+            result.resultsFetched=true;
+            break;
+          case 'PORTFOLIO,PORTFOLIOLIBRARY':
+            result.resultsFetched=true;searchQueryParam.lookupQuery={$lookup: {from:'mlPortfolioDetails',localField: 'docId',foreignField: '_id',as: 'refRecord'}};
+            break;
+        }
+        if(result.resultsFetched===true){
+          pipeline=[{'$match':serverQuery},searchQueryParam.lookupQuery,searchQueryParam.unwindQuery,searchQueryParam.projectQuery];
+          if(foreignKeySearch)pipeline.push({'$match':resultantQuery});
+
+          if(!foreignKeySearch){//check if user has enabled(filter/search)
+            result.totalRecords = mlDBController.find('MlAudit',resultantQuery, context, fieldsProj).count();
+          }else{
+            var counterQuery = _.clone(pipeline);counterQuery.push({$count: "totalRecords"})
+               var totalRecordsCount =mlDBController.aggregate('MlAudit',counterQuery,context);
+              result.totalRecords= totalRecordsCount && totalRecordsCount.length ? totalRecordsCount[0].totalRecords : 0;
+          }
+
+          pipeline= pipeline.concat(limitskipsort);
+
+           result.data=mlDBController.aggregate('MlAudit',pipeline,context);
+        }
+        return result;
   }
 
 }

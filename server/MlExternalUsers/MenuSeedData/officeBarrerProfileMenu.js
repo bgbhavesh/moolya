@@ -18,7 +18,7 @@ if(Meteor.isServer){
         "link": "/app/addressBook",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Address Book",
+        "name" : "My Contact Details",
         "uniqueId" : "addressBook"
       },
       {

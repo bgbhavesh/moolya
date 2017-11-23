@@ -154,7 +154,7 @@ export default class MlAnchorInfoView extends React.Component {
     if (this.isAllowRegisterAs)
       this.toggle()
     else
-      toastr.error('complete pending registration')
+      toastr.error('Please complete your pending registration')
   }
 
   optionsBySelectIdentity(val) {
@@ -169,7 +169,7 @@ export default class MlAnchorInfoView extends React.Component {
     const response = await registerAsInfo(finalRegData, registrationId);
     if (response && response.success) {
       let reg = JSON.parse(response.result)
-      toastr.success("user registered successfully");
+      toastr.success("User registered successfully");
       FlowRouter.go("/app/register/" + reg.registrationId);
     } else if (response && !response.success)
       toastr.error(response.result);

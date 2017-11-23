@@ -64,7 +64,7 @@ class MlEditCompanyType extends React.Component{
       isActive: this.refs.isActive.checked
     }
     const response = await updateCompanyTypeActionHandler(CmpType)
-    toastr.success("Update Successful")
+    toastr.success("Company type updated successfully")
     return response;
 
   }

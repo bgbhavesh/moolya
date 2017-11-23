@@ -20,6 +20,8 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
+import {appClient} from '../../../../core/appConnection';
 
 class MlAppActivity extends Component {
 
@@ -137,7 +139,8 @@ class MlAppActivity extends Component {
           derivedAmount: paymentInfo.derivedAmount ? paymentInfo.derivedAmount : '',
           discountType: paymentInfo.discountType ? paymentInfo.discountType : '',
           discountValue: paymentInfo.discountValue ? paymentInfo.discountValue : '',
-          isDiscount: paymentInfo.isDiscount ? paymentInfo.isDiscount : false
+          isDiscount: paymentInfo.isDiscount ? paymentInfo.isDiscount : false,
+          currencyType : paymentInfo.currencyType ? paymentInfo.currencyType : ""
         };
 
         that.setState({
@@ -178,13 +181,13 @@ class MlAppActivity extends Component {
     let id = FlowRouter.getQueryParam('id');
     let activityDetails = this.activityDetails;
     if (!this.profileId) {
-      toastr.error("Please a profile");
+      toastr.error("Please select a profile");
       return false;
     }
 
     if (this.state.currentComponent === 0) {
       if (!activityDetails) {
-        this.toastError('Activity Name');
+        this.toastError("Please enter or select an 'Activity Name'");
         return false;
       }
       let duration = activityDetails.duration;
@@ -209,19 +212,19 @@ class MlAppActivity extends Component {
       }
 
       if (!(activityDetails.conversation && activityDetails.conversation.length) && activityDetails.mode === 'online') {
-        this.toastError('Conservation Type');
+        this.toastError("'Conversation Type' is mandatory");
         return false;
       } else if (!(activityDetails.deliverable && activityDetails.deliverable.length && activityDetails.deliverable[0])) {
-        this.toastError('Deliverable field');
+        this.toastError("'Deliverable' field is mandatory");
         return false;
       } else if (!activityDetails.displayName) {
-        this.toastError('Display Name');
+        this.toastError("'Display Name' is mandatory");
         return false;
       } else if (!activityDetails.name) {
-        this.toastError('Activity Name');
+        this.toastError("'Activity Name' is mandatory");
         return false;
       } else if (!(activityDetails.isExternal || activityDetails.isInternal)) {
-        this.toastError('Activity Type');
+        this.toastError("'Activity Type' is mandatory");
         return false;
       }
 
@@ -233,7 +236,7 @@ class MlAppActivity extends Component {
     }
     else if (this.state.currentComponent === 1) {
       if (!activityDetails.payment || !(activityDetails.payment.amount)) {
-        this.toastError('Gross Payble Amount');
+        this.toastError("'Gross Payable Amount' is mandatory");
         return false;
       }
     }
@@ -305,7 +308,7 @@ class MlAppActivity extends Component {
           setActivityDetails={that.setActivityDetails}
           activeComponent={this.activeComponent}
           resetSaved={this.resetSaved.bind(this)}
-          saved={this.state.saved}
+          saved={this.state.saved} client={appClient}
           data={this.state.paymentInfo} />,
         icon: <span className="ml ml-payments"></span>
       },
@@ -317,6 +320,11 @@ class MlAppActivity extends Component {
       }
     ];
     return steps;
+  }
+  async getCurrencyType(userId) {
+    const response = await fetchCurrencyTypeActionHandler(appClient, userId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
   /**
    * Render

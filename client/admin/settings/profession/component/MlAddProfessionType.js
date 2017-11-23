@@ -59,7 +59,7 @@ class MlAddProfession extends React.Component {
       }
 
       const response = await addProfessionActionHandler(ProfessionDetails)
-      toastr.success("Profession created");
+      toastr.success("'Profession' added successfully");
       return response;
     }
   }

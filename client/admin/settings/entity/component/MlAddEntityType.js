@@ -46,9 +46,9 @@ class MlAddEntity extends React.Component {
 
       const response = await addEntityActionHandler(EntityDetails)
       if (!response.success) {
-        toastr.error("Already Exists")
+        toastr.error("'Entity type' already exists")
       } else if (response.success) {
-        toastr.success("Entity Created");
+        toastr.success("'Entity type' added successfully");
         FlowRouter.go("/admin/settings/registration/entityList");
       }
       // toastr.success("Entity Created");

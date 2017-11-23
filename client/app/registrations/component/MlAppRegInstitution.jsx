@@ -10,6 +10,7 @@ import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
+import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -151,7 +152,7 @@ export default class MlAppRegInstitution extends Component {
     const response = await updateRegistrationActionHandler(Details);
     if (response.success) {
       this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      toastr.success("Registration details saved successfully");
     } else {
       toastr.error(response.result);
     }

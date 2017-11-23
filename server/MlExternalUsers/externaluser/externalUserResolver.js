@@ -156,7 +156,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(contactExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Contact type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Contact type' already exist!", code);
           return response;
         }
 
@@ -176,7 +176,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(addressExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Address type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Address type' already exists!", code);
           return response;
         }
         if(infoDetails.addressInfo){
@@ -257,7 +257,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(emailTypeExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Email   type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Email type' already exists!", code);
           return response;
         }
         if(infoDetails.emailInfo){
@@ -463,11 +463,11 @@ MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, co
         "profile.externalUserProfiles.$.isActive": args.userProfiles.isActive
       }, {$set: true}, context);
     if (result)
-      response = new MlRespPayload().successPayload('User profile successfully updated', 200);
+      response = new MlRespPayload().successPayload('User profile updated successfully ', 200);
     else
       response = new MlRespPayload().errorPayload('Unable to update profile', 409);
   } else {
-    response = new MlRespPayload().errorPayload('User profile required', 409);
+    response = new MlRespPayload().errorPayload('User profile is required', 409);
   }
   return response;
 }
@@ -481,7 +481,7 @@ MlResolver.MlMutationResolver['updateUserShowOnMap'] = (obj, args, context, info
   if (user) {
     resp = mlDBController.update('users', args.userId, {"profile.isShowOnMap": args.isShowOnMap}, {$set: true}, context)
     if (resp) {
-      resp = new MlRespPayload().successPayload("User Updated Successfully", 200);
+      resp = new MlRespPayload().successPayload("User details updated successfully", 200);
       return resp
     } else {
       resp = new MlRespPayload().errorPayload("Error in update", 400);
@@ -559,6 +559,7 @@ MlResolver.MlQueryResolver['fetchMoolyaAdmins'] = (obj, args, context, info) => 
 MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
+  let moduleContext = "";
   var chapterCount=0
 
   let userId = context.userId;
@@ -586,6 +587,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
 
   switch(args.moduleName){
       case "cluster":
+          moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
           if(isDefaultSubChapter){
               let sub = mlDBController.find('MlSubChapters', {$or:[{clusterId:args.id, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{clusterId:args.id, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
               let subIds = _.map(sub, "_id");
@@ -600,6 +602,7 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           }
           break;
       case "chapter":
+          moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
           let chapter = mlDBController.findOne('MlChapters', {_id:args.id}, context);
           if(isDefaultSubChapter){
               let sub = mlDBController.find('MlSubChapters', {$or:[{chapterId:args.id, isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{chapterId:args.id, isActive:true, isDefaultSubChapter:true}]}, context).fetch()
@@ -619,10 +622,12 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
           }
           break;
       case "subChapter":
+          moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
           let subChapter = mlDBController.findOne('MlSubChapters', {_id:args.id})
           query={"clusterId":subChapter.clusterId, "chapterId":subChapter.chapterId, "subChapterId":args.id, isActive:true};
           break;
       case "community":
+          moduleContext="Users"
           query={"communityDefId":args.id, isActive:true};
           break;
       default:
@@ -673,15 +678,16 @@ MlResolver.MlQueryResolver['fetchAppMapData'] = (obj, args, context, info) => {
   let TU = _.map(response, 'count');
   let totalUsers = _.sum(TU);
 
-  // response.push({
-  //   key: '123',
-  //   count: totalUsers,
-  //   icon: "ml my-ml-browser_5"
-  // })
+  response.push({
+    key: 'totalUsers',
+    count: totalUsers,
+    icon: "ml my-ml-browser_5",
+    context:moduleContext
+  })
 
   if(args && args.moduleName!="subChapter" && chapterCount>=0){
     response.push({
-      key: '321',
+      key: args.moduleName?args.moduleName:'321',
       count: chapterCount,
       icon: "ml my-ml-chapter"
     })

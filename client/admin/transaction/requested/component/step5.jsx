@@ -86,7 +86,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
-      toastr.success("Selected Documents Approved Successfully")
+      toastr.success("Selected documents approved successfully")
     }
     else{
       this.setState({selectedFiles: []})
@@ -130,7 +130,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
     }else{
-      toastr.error("please select kyc documents")
+      toastr.error("Please select the KYC documents")
     }
 
   }
@@ -155,7 +155,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
-      toastr.success("Selected Documents Rejected Successfully")
+      toastr.success("Selected KYC documents rejected successfully")
     }else{
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
@@ -181,7 +181,7 @@ export default class Step5 extends React.Component {
     }*/
     if (response.success) {
       this.props.getRegistrationKYCDetails();
-      toastr.success("User Approved Successfully")
+      toastr.success("User approved successfully")
     }else{
       this.props.getRegistrationKYCDetails();
       toastr.error(response.result)
@@ -196,7 +196,7 @@ export default class Step5 extends React.Component {
     const response = await rejectStatusForUser(registrationId,'1');
     if (response) {
       this.props.getRegistrationKYCDetails();
-      toastr.success("User Rejected Successfully")
+      toastr.success("User rejected successfully")
     }
   }
   rejectUser(){
@@ -219,7 +219,9 @@ export default class Step5 extends React.Component {
       const response = await  findProcessDocumentForRegistrationActionHandler(countryId,clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry,email);
       if (response) {
         let processDoc=response
+        processDoc = _underscore.without(processDoc,null);
         if (processDoc&&processDoc.length>0) {
+
           var ActiveResults = _underscore.where(processDoc, {isActive: true});
           var result = _.map(ActiveResults, function (currentObject){
 
@@ -251,6 +253,8 @@ export default class Step5 extends React.Component {
           this.props.getRegistrationKYCDetails();
 
           }
+        }else{
+          this.setState({loading:false,registrationDocuments:kycDocuments})
         }
       }
     }
@@ -298,7 +302,7 @@ export default class Step5 extends React.Component {
           this.props.getRegistrationKYCDetails();
         }
     }else{
-      toastr.error("please provide allowable formate documents")
+      toastr.error("Please upload documents only in the permitted file formats")
     }
 
 
@@ -384,7 +388,7 @@ export default class Step5 extends React.Component {
         this.props.getRegistrationKYCDetails();
         this.setState({[key]: !(this.state[key])})
       } else {
-        toastr.error("Unable to create document,enter all manditory fields");
+        toastr.error("Please enter all mandatory fields (marked with a red dot)");
       }
     }
   }

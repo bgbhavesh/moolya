@@ -26,7 +26,7 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
   let isFind = MlDocumentMapping.find(query).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'DocumentMapping' already exists!", code);
     return response;
   }
   var firstName='';var lastName='';
@@ -86,7 +86,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
     let isFind = MlDocumentMapping.find(query).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'DocumentMapping' already exists!", code);
       return response;
     }
     args=_.omit(args,'_id');
@@ -290,34 +290,8 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
         return element === clustersNewArray[index];
       });
 
-
-      if(!iscluster_same){
-
-
-        let updatedClustersTypes = mlDBController.update('MlProcessMapping', {
-          'processDocuments': {
-            $exists: true,
-            $elemMatch: {
-              'documentId': existingDoc._id&&existingDoc._id
-            }
-          }
-        }, {
-          'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
-        }, {$pull: true,multi:true}, context)
-
-         /* let updatedClustersTypes = mlDBController.update('MlProcessMapping', {
-            'processDocuments': {
-              $exists: true,
-              $elemMatch: {
-                'documentId': existingDoc._id&&existingDoc._id
-              }
-            }
-          },{$pull: true,multi:true}, context)*/
-
-      }
-
       /**
-       * @ if jusrisdication cluster is changed when updating Document Mapping
+       * @ if jusrisdication chapter is changed when updating Document Mapping
        * @ Particular document  need to be dropped from process documents with reference to document id
        * @ DocumentId-Primary key
        * @ Model-ProcessMapping
@@ -327,22 +301,6 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       var ischapter_same = chaptersExistingArray.length == chaptersNewArray.length && chaptersExistingArray.every(function(element, index) {
         return element === chaptersNewArray[index];
       });
-
-
-      if(!ischapter_same){
-
-          let updatedChaptersTypes = mlDBController.update('MlProcessMapping', {
-            'processDocuments': {
-              $exists: true,
-              $elemMatch: {
-                'documentId': existingDoc._id&&existingDoc._id
-              }
-            }
-          }, {
-            'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
-          }, {$pull: true,multi:true}, context)
-
-      }
 
       /**
        * @ if jusrisdication sub chapter is changed when updating Document Mapping
@@ -356,10 +314,8 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
         return element === subChaptersNewArray[index];
       });
 
-
-      if(!issubchapter_same){
-
-          let updatedSubChaptersTypes = mlDBController.update('MlProcessMapping', {
+      if(!iscluster_same || !ischapter_same || !issubchapter_same){
+          let updatedClustersTypes = mlDBController.update('MlProcessMapping', {
             'processDocuments': {
               $exists: true,
               $elemMatch: {
@@ -369,16 +325,34 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           }, {
             'processDocuments': {'documentId': existingDoc._id&&existingDoc._id}
           }, {$pull: true,multi:true}, context)
-
-
       }
 
+      /**
+       * @ if validity is changed when updating Document Mapping
+       * @ Particular document  need to be updated from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let validityNewValue = args.document&&args.document.validity?args.document.validity:null
+      let validityExistingValue = existingDoc&&existingDoc.validity?existingDoc.validity:[]
+      if( (new Date(validityNewValue).getTime() != new Date(validityExistingValue).getTime()))
+      {
+
+        MlProcessMapping.find().forEach( function(doc) {
+
+          MlProcessMapping.update({_id: doc._id,
+              processDocuments:{$elemMatch:{documentId:existingDoc._id,
+                 }}},
+              {$set:{"processDocuments.$.validity":validityNewValue}});
+
+        })
+      }
 
 
     }
     if(error || manditioryStatusError){
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+      let response = new MlRespPayload().errorPayload("Cannot update as existing process documents are mandatory", code);
       return response;
     }else{
       let code = 200;

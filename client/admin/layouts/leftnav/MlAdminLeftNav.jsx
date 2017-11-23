@@ -1,37 +1,34 @@
 import React, {Component, PropTypes} from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
+// import {Meteor} from 'meteor/meteor';
+// import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import $ from 'jquery'
 import _ from 'lodash'
 
-class MlAdminLeftNavScroll extends Component {
-
-  constructor(props){
-    super(props);
-    // console.log('Props',props);
-  }
-
-  componentDidMount(){
-    if(this.context && this.context.scrollArea) {
-      setTimeout( function(){
-        let scrollTo = this.props.scrollTo;
-        $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
-        this.context.scrollArea.refresh();
-        this.context.scrollArea.scrollYTo(scrollTo);
-      }.bind(this), 500);
-    }
-    // console.log('MlAdminLeftNavScroll', this);
-  }
-
-  render() {
-    return null;
-  }
-}
-
-MlAdminLeftNavScroll.contextTypes = {
-  scrollArea: React.PropTypes.object
-};
+// class MlAdminLeftNavScroll extends Component {
+//   constructor(props){
+//     super(props);
+//     // console.log('Props',props);
+//   }
+//   componentDidMount(){
+//     if(this.context && this.context.scrollArea) {
+//       setTimeout( function(){
+//         let scrollTo = this.props.scrollTo;
+//         $(".admin_menu .scrollarea-content").css({"margin-top": -scrollTo+"px"});
+//         this.context.scrollArea.refresh();
+//         this.context.scrollArea.scrollYTo(scrollTo);
+//       }.bind(this), 500);
+//     }
+//     // console.log('MlAdminLeftNavScroll', this);
+//   }
+//
+//   render() {
+//     return null;
+//   }
+// }
+// MlAdminLeftNavScroll.contextTypes = {
+//   scrollArea: React.PropTypes.object
+// };
 
 export default class MlAdminLeftNav extends Component {
   constructor(props) {
@@ -54,13 +51,39 @@ export default class MlAdminLeftNav extends Component {
       $(this).toggleClass('show_act');
     });*/
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+
+    let topscroll = localStorage.getItem('top');
+    if(topscroll) {
+      let margin = parseFloat(topscroll.split('px')[0])
+
+      localStorage.setItem('top','');
+      setTimeout(function () {
+        $(".admin_menu .scrollarea-content").css({"margin-top": margin});
+        // $(".admin_menu .scrollarea-content").refresh();
+        $(".admin_menu .scrollarea-content").animate({ scrollTop: -margin });
+
+      }, 500);
+    }
+
+
     $(document).on('click', '.menu_in a', function(e){
       //e.preventDefault();
       $(this).parents('li').addClass('active_menu');
       $('.admin_menu ul li').not($(this).parents('li')).removeClass('active_menu');
       return false;
     });
+
+    $(document).ready(()=>{
+      $('.menu_item a').click(function(event) {
+        console.log('called');
+        // Do the async thing
+        let margin = $(".admin_menu .scrollarea-content").css("margin-top");
+        localStorage.setItem('top',margin);
+      });
+    });
   }
+
+
 
   render() {
     let path = FlowRouter.current().route.name;
@@ -88,9 +111,9 @@ export default class MlAdminLeftNav extends Component {
       }
     }
 
-    let testFunction =  function (that) {
-      // console.log(this ,that);
-    };
+    // let testFunction =  function (that) {
+    //   // console.log(this ,that);
+    // };
 
     let activeIndex = 0;
 
@@ -114,7 +137,7 @@ export default class MlAdminLeftNav extends Component {
       )
     });
 
-    let scrollTo = activeIndex*108;
+    // let scrollTo = activeIndex*108;
     // console.log(scrollTo, activeIndex);
 
     return (
@@ -124,14 +147,14 @@ export default class MlAdminLeftNav extends Component {
           className="admin_menu"
           smoothScrolling={true}
         >
-          {testFunction(this)}
+          {/*{testFunction(this)}*/}
           <ul>
             {navOptions }
             <li className="menu_item">
               <div className="menu_item menu_item_in"></div>
             </li>
           </ul>
-          <MlAdminLeftNavScroll scrollTo={scrollTo} />
+          {/*<MlAdminLeftNavScroll scrollTo={scrollTo} />*/}
         </ScrollArea>
       </div>
     )
@@ -140,7 +163,8 @@ export default class MlAdminLeftNav extends Component {
 }
 
 MlAdminLeftNav.contextTypes = {
-  menu: React.PropTypes.object
+  menu: React.PropTypes.object,
+  scrollArea: React.PropTypes.object
 };
 
 

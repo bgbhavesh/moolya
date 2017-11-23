@@ -19,6 +19,7 @@ export async function fetchTasksActionHandler (profileId) {
         }
         payment{
           derivedAmount
+          currencyType
         }
         isActive
         isServiceCardEligible

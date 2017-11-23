@@ -33,7 +33,7 @@ const mlSocialLinksTypeTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editSocialLinkType/"+data._id);
         } else{
-          toastr.error("Please select a Social Link Type");
+          toastr.error("Please select a Social Link type");
         }
       }
     },

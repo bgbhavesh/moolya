@@ -13,7 +13,7 @@ export default class MlAppMyTransaction extends Component {
       if(status.toLowerCase() == "canceled"){
         toastr.error("payment canceled");
       }else if(status.toLowerCase() == "success"){
-        toastr.success("payment successful!!");
+        toastr.success("Payment processed successfully");
       }
     }
   }

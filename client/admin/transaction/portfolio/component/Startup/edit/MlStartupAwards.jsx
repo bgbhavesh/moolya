@@ -318,7 +318,7 @@ export default class MlStartupAwards extends Component{
   }
   handleUploadAvatar(image,e) {
     this.setState({
-      uploadingAvatar: true,
+      //uploadingAvatar: true,,
     });
     this.onLogoFileUpload(e,image);
   }

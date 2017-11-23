@@ -135,14 +135,14 @@ export default class MlOfficeItem extends React.Component {
       isGenerateLinkDisable:true
     })
     if(!this.state.cost){
-      toastr.error('Cost is required');
+      toastr.error("'Cost' field is mandatory");
       this.setState({
         isGenerateLinkDisable:false
       })
       return false;
     }
     if(this.state.cost < 1){
-      toastr.error('Enter tha valid cost');
+      toastr.error('Enter a valid cost');
       this.setState({
         isGenerateLinkDisable:false
       })

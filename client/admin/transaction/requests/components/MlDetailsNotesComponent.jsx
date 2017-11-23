@@ -42,7 +42,7 @@ export default class MlDetailsNotesComponent extends React.Component {
    let requestId=this.props.id
    let response = await updateStusForTransactionActionHandler(requestId,status);
     if(response){
-      toastr.success("transaction status changed successfully")
+      toastr.success("'Transaction status' updated successfully")
       if(status=="Approved"){
         FlowRouter.go("/admin/transactions/approvedList");
       }

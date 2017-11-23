@@ -19,7 +19,7 @@ export default class Connect extends React.Component {
     if(response && response.success){
       toastr.success(response.result);
     }else{
-      toastr.error("Failed to send the connect request");
+      toastr.error("Failed to send the connection request");
     }
     this.props.toggle();
   }

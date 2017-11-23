@@ -77,7 +77,7 @@ MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context,
         ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
       }else{
         let code = 400;
-        let response = new MlRespPayload().errorPayload('Process setup already present', code);
+        let response = new MlRespPayload().errorPayload('Process setup already exists', code);
         return response;
       }
     } catch (e) {

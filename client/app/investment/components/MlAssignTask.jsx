@@ -29,11 +29,11 @@ export default class MlAssignTask extends React.Component {
 
   async submit(){
     if( !this.props.data.state.selected || !this.props.data.state.selected.resourceId ){
-      toastr.error("Select a portfolio");
+      toastr.error("Please select atleast one portfolio");
       return false;
     }
     if(!this.state.selectedUser.length){
-      toastr.error("Select at least one user");
+      toastr.error("Select atleast one user");
       return false;
     }
     let members = this.state.members;
@@ -60,7 +60,7 @@ export default class MlAssignTask extends React.Component {
     };
     let response = await createInternalTaskActionHandler(dataToInsert);
     if(response.success) {
-      toastr.success('Internal Task Created');
+      toastr.success('Internal task created successful');
       this.props.toggle();
     } else {
       toastr.error(response.result);
@@ -120,7 +120,7 @@ export default class MlAssignTask extends React.Component {
     let data = {moduleName: "PROFILE", actionName: "UPDATE"}
     let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file.name));
     }else{
-      toastr.error("Please select a Document Format")
+      toastr.error("Please select a document format")
     }
   }
 

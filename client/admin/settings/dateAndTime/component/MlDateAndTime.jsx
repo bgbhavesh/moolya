@@ -115,7 +115,7 @@ class MlAddDateAndTime extends React.Component{
       timeZone:this.state.timeZone
     }
     const response = await upsertDateAndTimeActionHandler(Details);
-    toastr.success("Saved Successfully")
+    toastr.success("Date and Time updated successfully")
     return response;
 
   }

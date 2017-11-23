@@ -201,7 +201,7 @@ export default class MlAppStep1ExternalUser extends Component {
   async sendEmailVerification() {
     const response = await emailVerificationActionHandler(this.props.registrationId);
     if (response.success) {
-      toastr.success("email verification link send successfully");
+      toastr.success("Email-Id verification link sent successfully");
     } else {
       // toastr.error(response.result);
     }
@@ -213,7 +213,7 @@ export default class MlAppStep1ExternalUser extends Component {
   async sendSmsVerification() {
     const response = await smsVerificationActionHandler(this.props.registrationId);
     if (response.success) {
-      toastr.success("otp verification code send successfully");
+      toastr.success("OTP verification code sent successfully");
     } else {
       // toastr.error(response.result);
     }

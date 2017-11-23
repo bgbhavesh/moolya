@@ -21,6 +21,14 @@ export default class MlTabView extends Component {
       slidesPerView:'auto',
       mousewheelControl:true
     });
+
+    let transaction =localStorage.getItem('transaction');
+    if(transaction) {
+      localStorage.setItem('transaction','');
+      setTimeout(function () {
+        $('.swiping_filters').css("transform",transaction);
+      }, 500);
+    }
   }
 
   render() {

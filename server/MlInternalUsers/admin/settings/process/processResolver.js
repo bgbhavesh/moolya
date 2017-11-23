@@ -488,6 +488,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               combinationBasedDoc.push(doc)
             }
           })
+        }else{
+          combinationBasedDoc = combinationBasedDoc
         }
       })
       /*if (combinationBasedDoc && combinationBasedDoc.length > 0) {
@@ -571,6 +573,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
             }
           })
+        }else{
+          countryBasedDoc = countryBasedDoc
         }
       })
       if (countryBasedDoc && countryBasedDoc.length > 0) {
@@ -579,6 +583,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           let docId = kyc&&kyc.documentId?kyc.documentId:""
           return docId;
         });
+        return kycDoc
+      }else{
         return kycDoc
       }
       return kycDoc
@@ -673,12 +679,13 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
 
   } else {
-   let userKYC=getTheUserKYC()
+
+   let  userKYC=getTheUserKYC()
     userKYC = _underscore.uniq(userKYC, function (kyc) {
       let docId = kyc&&kyc.documentId?kyc.documentId:""
       return docId;
     });
-    return userKYC
+    return userKYC&&userKYC.length?userKYC : []
   }
     function getTheUserKYC() {
     let countryBasedDoc=[]
@@ -734,7 +741,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               let docId = kyc&&kyc.documentId?kyc.documentId:""
               return docId;
             });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
             return finalKYC
           } else {
             let finalKYC=[]
@@ -751,7 +758,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
                 return kyc.documentId;
               });*/
-              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
               return finalKYC
             }else{
               return countryBasedDoc
@@ -773,7 +780,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
             /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               return kyc.documentId;
             });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
             return finalKYC
           }else{
             return countryBasedDoc

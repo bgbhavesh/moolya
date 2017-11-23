@@ -18,6 +18,14 @@ export default class MlAdminProcessDocHeader extends Component {
     const resp=this.findProcess();
     return resp;
   }
+  componentDidMount(){
+    $(document).ready(()=>{
+      $('.header_bottom').click(function(event) {
+        let transaction = $('.swiping_filters').css('-webkit-transform');
+        localStorage.setItem('transaction',transaction);
+      });
+    });
+  }
   async findProcess() {
     let documentsList=[]
     let pid = this.props.processMapConfig

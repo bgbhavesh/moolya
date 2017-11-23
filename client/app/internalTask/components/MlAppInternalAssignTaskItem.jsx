@@ -74,7 +74,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
     };
     let response = await updateInternalTaskInfo(taskId, dataToUpdata);
     if(response.success){
-      toastr.success('Successfully moved '+ status);
+      toastr.success('Task successfully moved to'+ status);
       //toastr.success('Task Updated Successfully');
       this.props.fetchTaskList();
     }

@@ -156,7 +156,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(contactExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Contact type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Contact type' already exist!", code);
           return response;
         }
 
@@ -176,7 +176,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(addressExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Address type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Address type' already exists!", code);
           return response;
         }
         if(infoDetails.addressInfo){
@@ -257,7 +257,7 @@ MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, in
 
         if(emailTypeExist){
           let code = 409;
-          let response = new MlRespPayload().errorPayload("Email   type already exist!!!!", code);
+          let response = new MlRespPayload().errorPayload("'Email type' already exists!", code);
           return response;
         }
         if(infoDetails.emailInfo){
@@ -463,11 +463,11 @@ MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, co
         "profile.externalUserProfiles.$.isActive": args.userProfiles.isActive
       }, {$set: true}, context);
     if (result)
-      response = new MlRespPayload().successPayload('User profile successfully updated', 200);
+      response = new MlRespPayload().successPayload('User profile updated successfully ', 200);
     else
       response = new MlRespPayload().errorPayload('Unable to update profile', 409);
   } else {
-    response = new MlRespPayload().errorPayload('User profile required', 409);
+    response = new MlRespPayload().errorPayload('User profile is required', 409);
   }
   return response;
 }
@@ -481,7 +481,7 @@ MlResolver.MlMutationResolver['updateUserShowOnMap'] = (obj, args, context, info
   if (user) {
     resp = mlDBController.update('users', args.userId, {"profile.isShowOnMap": args.isShowOnMap}, {$set: true}, context)
     if (resp) {
-      resp = new MlRespPayload().successPayload("User Updated Successfully", 200);
+      resp = new MlRespPayload().successPayload("User details updated successfully", 200);
       return resp
     } else {
       resp = new MlRespPayload().errorPayload("Error in update", 400);

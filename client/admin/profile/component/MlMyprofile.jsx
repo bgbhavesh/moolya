@@ -190,7 +190,7 @@ export default class MlMyProfile extends React.Component {
     const dataresponse = await updateDataEntry(Details);
     console.log('--dataresponse--',dataresponse);
     if(dataresponse){
-      toastr.success("Update Successful")
+      toastr.success("Updated successfully")
     }
     return dataresponse;
   }
@@ -284,7 +284,7 @@ export default class MlMyProfile extends React.Component {
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
     }
     else{
-      toastr.error("age limit exceeded")
+      toastr.error("Age limit exceeded")
     }
   }
 
@@ -304,16 +304,16 @@ export default class MlMyProfile extends React.Component {
       if (this.state.passwordState === 'Passwords match!') {
         this.onCheckPassword();
         if (this.state.pwdErrorMsg)
-          toastr.error("Confirm Password does not match with  New Password");
+          toastr.error("'Confirm Password' does not match with 'New Password'");
         else if(this.state.newpwdErrorMsg){
-          toastr.error("The new password cannot be same as your previous 3 passwords. Please select a new password.");
+          toastr.error("The 'New password' cannot be same as your previous 3 passwords. Please select a 'New Password'.");
         }else{
           const response = await resetPasswordActionHandler(userDetails);
           // this.refs.id.value='';
           this.refs.confirmPassword.value = '';
           this.refs.password.value = '';
-          this.setState({"pwdErrorMsg": 'Password reset complete'});
-          this.setState({"newpwdErrorMsg": 'Password reset complete'})
+          this.setState({"pwdErrorMsg": 'Password set successfully'});
+          this.setState({"newpwdErrorMsg": 'Password set successfully'})
           toastr.success(response.result);
           $('#password').val("");
           this.setState({PasswordReset: false, showChangePassword: true})
@@ -364,12 +364,12 @@ export default class MlMyProfile extends React.Component {
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
     if (confirmPassword != password) {
-      this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
+      this.setState({"pwdErrorMsg": "'Confirm Password' does not match with 'New Password'"})
     } else {
       this.setState({"pwdErrorMsg": ''})
     }
     if(existingPassword===password||existingPassword===confirmPassword){
-      this.setState({"newpwdErrorMsg": 'Existing password and New Password should not match'})
+      this.setState({"newpwdErrorMsg": "'Existing password' and 'New Password cannot be same"})
     }else{
       this.setState({"newpwdErrorMsg": ''})
     }

@@ -235,6 +235,48 @@ class MlAdminUserContext
     })
     return users;
   }
+
+  getRelatedSubChaptersForNonMoolya(userId){
+    var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
+
+    // Default Profile. Expecting user default profile changes on profile change.
+    var userSubChapterId = userProfile.defaultSubChapters[0];
+    if(userSubChapterId == 'all') {
+      return {}
+    }
+    var userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+    var clusterId = userSubChapter.clusterId
+    var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+    var relatedSubChapterIds = [];
+    var relatedChapterId = [];
+    if(!isDefaultSubChapter){
+      var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+      if(relatedSubChapters&&relatedSubChapters.length>0){
+        _.each(relatedSubChapters, function(obj){
+          let ids = _.map(obj.subChapters, "subChapterId");
+          relatedSubChapterIds = _.concat(relatedSubChapterIds, ids)
+        })
+        relatedSubChapterIds = _.uniq(relatedSubChapterIds);
+
+        var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}, clusterId:clusterId}).fetch()
+        var relatedChapterId = _.map(relatedSC, "chapterId");
+        relatedChapterId = _.uniq(relatedChapterId);
+      }
+
+    }else{
+      let sc = mlDBController.find('MlSubChapters', {$or:[{isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{isActive:true, isDefaultSubChapter:true}]}).fetch()
+      let scIds = _.map(sc, "_id");
+      relatedSubChapterIds = scIds;
+    }
+    return{
+      userSubChapter:userSubChapter,
+      isDefaultSubChapter:isDefaultSubChapter,
+      relatedSubChapterIds:relatedSubChapterIds,
+      relatedChapterIds:relatedChapterId,
+      clusterId:clusterId
+    }
+  }
+
 }
 
 module.exports = MlAdminUserContext

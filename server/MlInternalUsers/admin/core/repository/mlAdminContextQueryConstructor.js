@@ -160,11 +160,28 @@ class MlAdminContextQueryConstructor
           }
 
           else if(this.module == 'chapter'){
-              query["_id"]=userProfile.defaultChapters;
+              if(userProfile.hierarchyLevel == 1){
+                var related = new MlAdminUserContext().getRelatedSubChaptersForNonMoolya(this.userId);
+                var relatedChapterIds = related.relatedChapterIds;
+                relatedChapterIds = _.concat(userProfile.defaultChapters,relatedChapterIds);
+                relatedChapterIds = _.uniq(relatedChapterIds)
+                query["_id"]=relatedChapterIds;
+              }else{
+                query["_id"]=userProfile.defaultChapters;
+              }
           }
 
           else if(this.module == 'subChapter'){
-              query["_id" ]=userProfile.defaultSubChapters;
+              if(userProfile.hierarchyLevel == 1){
+                var related = new MlAdminUserContext().getRelatedSubChaptersForNonMoolya(this.userId);
+                var relatedSubChapterIds = related.relatedSubChapterIds;
+                relatedSubChapterIds = _.concat(userProfile.defaultSubChapters,relatedSubChapterIds);
+                relatedSubChapterIds = _.uniq(relatedSubChapterIds)
+                query["_id"]=relatedSubChapterIds;
+              }else{
+                query["_id" ]=userProfile.defaultSubChapters;
+              }
+
           }
 
           else{

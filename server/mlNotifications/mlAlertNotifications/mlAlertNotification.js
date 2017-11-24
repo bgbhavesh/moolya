@@ -18,17 +18,58 @@ const MlAlertNotification= class MlAlertNotification {
     }
   }
 static onConnectionRequestSent(details){
- var details =  mlDBController.findOne('users',{_id: details})
-  let  toUserFirstName = details&&details.profile&&details.profile.firstName?details.profile.firstName:"";
-  let toUserLastName = details&&details.profile&&details.profile.lastName?details.profile.lastName:"";
-  let regObj = {
-    userName:toUserFirstName + " " + toUserLastName
-  }
-  let connectRequest = NotificationTemplateEngine.fetchTemplateContent("ALT_new_connection_request_sent","alert",regObj)
-  if(connectRequest && connectRequest.content ? connectRequest :''){
-    return connectRequest.content
-  }
+    if(details){
+      var details =  mlDBController.findOne('users',{_id: details})
+      let  toUserFirstName = details&&details.profile&&details.profile.firstName?details.profile.firstName:"";
+      let toUserLastName = details&&details.profile&&details.profile.lastName?details.profile.lastName:"";
+      let regObj = {
+        userName:toUserFirstName + " " + toUserLastName
+      }
+      let connectRequest = NotificationTemplateEngine.fetchTemplateContent("ALT_new_connection_request_sent","alert",regObj)
+      if(connectRequest && connectRequest.content ? connectRequest :''){
+        return connectRequest.content
+      }
+    }
+    else{
+      return ""
+    }
 }
+  static onConnectionSenderDeclined(fromUserId){
+  if(fromUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+    let regObj = {
+      userName : fromUserFirstName+" "+fromUserLastName,
+    }
+    let connectRequest = NotificationTemplateEngine.fetchTemplateContent("ALT_new_connection_request_declined_message_sender_side","alert",regObj)
+    if(connectRequest && connectRequest.content ? connectRequest :''){
+      return connectRequest.content
+    }
+  }
+  else{
+    return ""
+  }
+  }
+  static onConnectionSenderAccept(fromUserId){
+    if(fromUserId){
+      fromUserId  = fromUserId?fromUserId:"";
+      var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+      let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+      let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+      let regObj = {
+        userName : fromUserFirstName+" "+fromUserLastName,
+      }
+      let connectRequest = NotificationTemplateEngine.fetchTemplateContent("ALT_new_connection_request_accept_message_sender_side","alert",regObj)
+      if(connectRequest && connectRequest.content ? connectRequest :''){
+        return connectRequest.content
+      }
+    }
+    else{
+      return ""
+    }
+  }
 static onEnquireRequestSent(toUserDetails){
   let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
   let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
@@ -40,6 +81,40 @@ static onEnquireRequestSent(toUserDetails){
     return enquire.content
   }
 }
+  static onFollowRequestMsg(details){
+  if(details){
+    var details =  mlDBController.findOne('users',{_id: details})
+    let  toUserFirstName = details&&details.profile&&details.profile.firstName?details.profile.firstName:"";
+    let toUserLastName = details&&details.profile&&details.profile.lastName?details.profile.lastName:"";
+    let regObj = {
+      userName : toUserFirstName+" "+toUserLastName,
+    }
+    let follow = NotificationTemplateEngine.fetchTemplateContent("ALT_follow_message_sender_side","alert",regObj)
+    if(follow && follow.content ? follow :''){
+      return follow.content
+    }
+  }
+  else{
+    return ""
+  }
+  }
+  static onFavouriteRequestMsg(details){
+    if(details){
+      var details =  mlDBController.findOne('users',{_id: details})
+      let  toUserFirstName = details&&details.profile&&details.profile.firstName?details.profile.firstName:"";
+      let toUserLastName = details&&details.profile&&details.profile.lastName?details.profile.lastName:"";
+      let regObj = {
+        userName : toUserFirstName+" "+toUserLastName,
+      }
+      let favourite = NotificationTemplateEngine.fetchTemplateContent("ALT_favourite_request_message_sender_side","alert",regObj)
+      if(favourite && favourite.content ? favourite :''){
+        return favourite.content
+      }
+    }
+   else{
+      return ""
+    }
+  }
 static onKycUpload(args){
   var details =   mlDBController.findOne('MlRegistration', {_id: args.registrationId})
   let  document = details&&details.kycDocuments&&details.kycDocuments.documentName?details.kycDocuments.documentName:"";

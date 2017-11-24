@@ -15,6 +15,7 @@ import MlServiceCardStep1 from './MlServiceCardStep1';
 import MlServiceCardStep2 from './MlserviceCardStep2';
 import MlServiceCardStep3 from './MlServiceCardStep3';
 import MlServiceCardStep4 from './MlServiceCardStep4';
+import {client} from '../../../core/apolloConnection';
 import {updateServiceActionHandler} from '../actions/mlFindService';
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 
@@ -49,7 +50,6 @@ export default class MlServiceManageSchedule extends Component {
       selectedTaskId: taskId
     };
     this.optionsBySelectService(taskId);
-    console.log('nextProps',nextProps);
   }
 
 
@@ -296,8 +296,8 @@ export default class MlServiceManageSchedule extends Component {
         component: <MlServiceCardStep4 data={this.state.data}
                                        isView={this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.state.data.service.status) >= 0 ? true : false }
                                        checkChargeStatus={this.checkChargeStatus}
-                                       calculateCharges={this.calculateCharges}
-                                       saveServicePaymentDetails={this.saveServicePaymentDetails} />,
+                                       calculateCharges={this.calculateCharges} client={client} userId={this.props.userId}
+                                       saveServicePaymentDetails={this.saveServicePaymentDetails} profileId={this.props.profileId} />,
         icon: <span className="ml ml-payments"></span>
       }
     ];

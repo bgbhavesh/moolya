@@ -13,14 +13,6 @@ export default class MlAdminHierarchyHeader extends Component {
     return this;
   }
 
-  componentDidMount(){
-    $(document).ready(()=>{
-      $('.header_bottom').click(function(event) {
-        let transaction = $('.swiping_filters').css('-webkit-transform');
-        localStorage.setItem('transaction',transaction);
-      });
-    });
-  }
   componentWillMount(){
     const resp=this.findProcess();
     return resp;

@@ -21,12 +21,27 @@ export default class MlAdminProfileTabView extends Component {
       slidesPerView:'auto',
     });
 
+    $(document).ready(()=>{
+      $('.moolya_btn_in').click(function(e){
+        let transaction = $('.swiping_filters').css('transform');
+        if($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]){
+          transaction = JSON.stringify({transaction:transaction,name:$('.swiping_filters')[0].childNodes[0].innerText});
+          localStorage.setItem('transaction',transaction);
+        }
+      });
+    });
+
     let transaction =localStorage.getItem('transaction');
     if(transaction) {
+      transaction = JSON.parse(transaction);
       localStorage.setItem('transaction','');
-      setTimeout(function () {
-        $('.swiping_filters').css("transform",transaction);
-      }, 500);
+
+      if(transaction.name === $('.swiping_filters')[0].childNodes[0].innerText){
+        setTimeout(function () {
+          $('.swiping_filters').css("transform",transaction.transaction);
+        }, 500);
+      }
+
     }
   }
 

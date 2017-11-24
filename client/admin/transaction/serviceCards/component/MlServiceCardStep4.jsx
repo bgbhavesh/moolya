@@ -12,6 +12,7 @@ import React from 'react';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 import {MoolyaToggleSwitch} from '../../../../admin/utils/formElemUtil'
+import { fetchCurrencyTypeActionHandler } from '../../../../commons/actions/mlCurrencySymbolHandler'
 
 export default class MlServiceCardStep4 extends React.Component{
 
@@ -22,7 +23,7 @@ export default class MlServiceCardStep4 extends React.Component{
 
   constructor(props){
     super(props);
-    console.log('props',props);
+    this.state={currencySymbol:""}
   }
 
   /**
@@ -32,6 +33,7 @@ export default class MlServiceCardStep4 extends React.Component{
 
   componentDidMount() {
     $('.float-label').jvFloat();
+    this.getCurrencyType();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
@@ -45,6 +47,11 @@ export default class MlServiceCardStep4 extends React.Component{
     MoolyaToggleSwitch(true, true);
   }
 
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, this.props.userId, null, this.props.profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
   /**
    * Render
    * Desc   :: Render the HTML for this component
@@ -57,6 +64,7 @@ export default class MlServiceCardStep4 extends React.Component{
       facilitationCharge,
       taxStatus,
       finalAmount } = this.props.data;
+    const {currencySymbol} = this.state;
     const {checkChargeStatus, calculateCharges, saveServicePaymentDetails} = this.props;
     let isView = this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.props.data.service.status) >= 0 ? true : false ;
     console.log('isView:',isView, this.props.data.service.status, this.props.data);
@@ -67,19 +75,19 @@ export default class MlServiceCardStep4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks gross payable amount &nbsp;<label>Rs</label>&nbsp;
+                  Tasks gross payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount payable amount &nbsp;<label>Rs</label>&nbsp;
+                  Task discount payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task net payable amount &nbsp;<label>Rs</label>&nbsp;
+                  Task net payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
                   <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
@@ -177,7 +185,7 @@ export default class MlServiceCardStep4 extends React.Component{
                 </div>
               </div>
               <div className="form-group">
-                <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                <label>Net payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
                                                  value={finalAmount} disabled />
                 </label>
               </div>

@@ -178,7 +178,7 @@ export default class MlAppActionComponent extends React.Component {
       },
       {
         actionName: 'valuation',
-        displayName:'Valuation',
+        displayName:'Valuate',
         iconClass: 'ml my-ml-Valuation'
       },
       {

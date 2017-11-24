@@ -44,6 +44,8 @@ MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info)
         if (processSetup.processSteps[index]) {
           let stageData = MlProcessStages.findOne({"_id": steps.stageId}) || {};
           processSetup.processSteps[index].stageName = stageData.displayName || "";
+          processSetup.processSteps[index].stage = stageData.name || "";
+
           if(processSetup.processSteps[index].stageActions && processSetup.processSteps[index].stageActions.length ){
             processSetup.processSteps[index].stageActions = processSetup.processSteps[index].stageActions.map(function (action) {
               let isFind = Actions.find(function (mlAction) {

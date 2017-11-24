@@ -1124,7 +1124,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
             break;
           case 'onBoard':
             let stage = mlDBController.findOne('MlStage', activityDocId);
-            doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : '';
+            doc.status = stage.onBoardStatus ? stage.onBoardStatus.slice(0,1).toUpperCase() + stage.onBoardStatus.slice(1) : 'Pending';
             break;
         }
       }

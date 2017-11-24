@@ -1445,7 +1445,11 @@ MlResolver.MlQueryResolver['fetchInternalUserProfiles'] = (obj, args, context, i
   if(user){
     var internalUserProfile = user&&user.profile&&user.profile.isInternaluser?user.profile.InternalUprofile:{};
     let moolyaProfile = internalUserProfile&&internalUserProfile.moolyaProfile?internalUserProfile.moolyaProfile:{}
-    let userProfiles = moolyaProfile&&moolyaProfile.isActive&&moolyaProfile.userProfiles?moolyaProfile.userProfiles:[]
+    let userProfiles = moolyaProfile&&moolyaProfile.isActive&&moolyaProfile.userProfiles?moolyaProfile.userProfiles:[];
+    userProfiles = _.filter(userProfiles,  function (userData) {
+      const isActiveRole = _.findIndex(userData.userRoles || [], {isActive: true});
+      if (isActiveRole!=-1){ return true};
+    });
    /* for (var k = 0; k < userProfiles.length; k++) {
 
       let cName = "";

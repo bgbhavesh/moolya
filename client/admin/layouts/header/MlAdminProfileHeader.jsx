@@ -17,14 +17,6 @@ export default class MlAdminProfileHeader extends Component {
     return resp;
   }
 
-  componentDidMount(){
-    $(document).ready(()=>{
-      $('.header_bottom').click(function(event) {
-        let transaction = $('.swiping_filters').css('-webkit-transform');
-        localStorage.setItem('transaction',transaction);
-      });
-    });
-  }
   async findProcess() {
     let documentsList=[]
       let response = [{"tabName":"personalInfo","tabCode":"Personal Info"},{"tabName":"AddressBook","tabCode":"Address Book"},{"tabName":"Settings","tabCode":"Settings"}]

@@ -32,7 +32,7 @@ MlResolver.MlMutationResolver['CreateAccount'] = (obj, args, context, info) => {
     return response;
   }if(MlAccountTypes.find({accountName:args.accountName}).count() > 0){
     let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+    return new MlRespPayload().errorPayload("'Account type' already exists", code);
   }
   else {
     let id = MlAccountTypes.insert({...args});

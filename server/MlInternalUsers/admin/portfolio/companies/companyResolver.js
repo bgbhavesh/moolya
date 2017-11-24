@@ -65,7 +65,7 @@ MlResolver.MlMutationResolver['updateCompanyPortfolio'] = (obj, args, context, i
       }
       else{
         let code = 400;
-        let response = new MlRespPayload().errorPayload("Invalid Portfolio Request", code);
+        let response = new MlRespPayload().errorPayload("Invalid portfolio request", code);
         return response;
       }
     }
@@ -128,9 +128,12 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioCharts'] = (obj, args, context,
   if (args.portfoliodetailsId) {
     let companyChartsArray = {}
     let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    companyChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
-    companyChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
-    companyChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    let employeesData = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    let profitRevenu = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    let reviewData = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    companyChartsArray["employmentOfCompanyChart"] = _.sortBy( employeesData, function( item ) { if(item&&item.eofFromYear)return item.eofFromYear; } )
+    companyChartsArray["profitRevenueLiabilityChart"] = _.sortBy( profitRevenu, function( item ) { if(item&&item.prlFromYear)return item.prlFromYear; } )
+    companyChartsArray["reviewOfCompanyChart"] = _.sortBy( reviewData, function( item ) { if(item&&item.rofYear)return item.rofYear; } )
     companyChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
     if(companyChartsArray && companyChartsArray.employeeBreakupDepartmentChart){
       companyChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {

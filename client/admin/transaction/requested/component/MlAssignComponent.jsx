@@ -90,7 +90,7 @@ export default class MlAssignComponent extends React.Component {
     let userId = user
     const response = await validateAssignmentsDataContext(selectedData,userId);
     if(response && !response.success){
-      toastr.error("Selected transactions not availble in user context");
+      toastr.error("Selected transactions not available in user context");
       this.props.closePopOver(false)
       //FlowRouter.reload();
     }
@@ -129,11 +129,11 @@ export default class MlAssignComponent extends React.Component {
           selectedRole: null,
           selectedUser: null
         })
-        toastr.success("Transaction assigned to user successfully");
+        toastr.success("Registration request assigned to admin successfully");
         this.props.closePopOver(false)
         FlowRouter.reload();
       } else {
-        toastr.error("Wrong Hierarchy");
+        toastr.error("Cannot assign due to wrong hierarchy");
         this.props.closePopOver(false)
         FlowRouter.reload();
       }
@@ -152,12 +152,12 @@ export default class MlAssignComponent extends React.Component {
     let transactionType=this.props.data.transactionType
     const response = await selfAssignUserForTransactionAction("Registration",transactionIds,"Registration","selfAssignTransaction");
     if(response.success){
-      toastr.success("Self Assignment successfull");
+      toastr.success("Self-assignment successful");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Cannot assign due to wrong hierarchy");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
@@ -172,7 +172,7 @@ export default class MlAssignComponent extends React.Component {
     })
     const response = await unAssignUserForTransactionAction("Registration",transactionIds,"Registration","unAssignTransaction");
     if(response.success){
-      toastr.success("UnAssignment successfull");
+      toastr.success("Un-assignment successful");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");

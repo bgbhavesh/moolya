@@ -26,7 +26,7 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
   let isFind = MlDocumentMapping.find(query).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'DocumentMapping' already exists!", code);
     return response;
   }
   var firstName='';var lastName='';
@@ -86,7 +86,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
     let isFind = MlDocumentMapping.find(query).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'DocumentMapping' already exists!", code);
       return response;
     }
     args=_.omit(args,'_id');
@@ -352,7 +352,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
     }
     if(error || manditioryStatusError){
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+      let response = new MlRespPayload().errorPayload("Cannot update as existing process documents are mandatory", code);
       return response;
     }else{
       let code = 200;

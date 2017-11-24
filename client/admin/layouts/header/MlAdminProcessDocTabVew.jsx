@@ -20,6 +20,14 @@ export default class MlAdminProcessDocTabVew extends Component {
       spaceBetween:30,
       slidesPerView:'auto',
     });
+
+    let transaction =localStorage.getItem('transaction');
+    if(transaction) {
+      localStorage.setItem('transaction','');
+      setTimeout(function () {
+        $('.swiping_filters').css("transform",transaction);
+      }, 500);
+    }
   }
 
   render() {

@@ -16,7 +16,7 @@ class MlOfficeRepo{
     validateOfficeActions(userId, resourceName, userAction, payload){
       var defaultProfile = new MlUserContext().userProfileDetails(userId);
       if(!defaultProfile)
-        return {success:false, msg:"Invalid User Details"};
+        return {success:false, msg:"Invalid user details"};
 
       switch (userAction){
         case 'CREATEOFFICE':{
@@ -88,7 +88,7 @@ class MlOfficeRepo{
 
       var ret = reconcileSCLedgerBalance(officeId,context)
       if(!ret)
-        throw new Error('Failed in updating the office');
+        throw new Error('Failed in updating the office details');
 
       let officeSC = mlDBController.findOne('MlOfficeSC', {officeId:officeId, isActive:true})
       if(!officeSC)
@@ -273,7 +273,7 @@ class MlOfficeRepo{
 
         var isExist = MlOfficeMembers.findOne({officeId:myOffice._id , emailId:payload.officeMember.emailId})
         if(isExist)
-          return {success:false, msg:'User Already Exist'}
+          return {success:false, msg:'User already exists'}
 
         if(ledgerBalance.totalusercount  == 0){
           return {success:false, msg:'Limit Exceeded'}

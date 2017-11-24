@@ -19,6 +19,16 @@ export default class MlAdminHeader extends Component {
     };
     return this;
   }
+
+  componentDidMount(){
+    $(document).ready(()=>{
+      $('.header_bottom').click(function(event) {
+        let transaction = $('.swiping_filters').css('-webkit-transform');
+        localStorage.setItem('transaction',transaction);
+      });
+    });
+  }
+
   render(){
     let subMenu = this.context.menu.menu||[];
     let tabsubMenu;

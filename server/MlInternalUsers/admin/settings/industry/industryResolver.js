@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => 
   let isFind = mlDBController.find('MlIndustries', query, context).fetch();
   if(isFind.length){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    let response = new MlRespPayload().errorPayload("'Industry type' already exists!", code);
     return response;
   }
   var firstName='';var lastName='';
@@ -86,7 +86,7 @@ MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => 
     let isFind = mlDBController.find('MlIndustries', query, context).fetch();
     if(isFind.length) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      let response = new MlRespPayload().errorPayload("'Industry type' already exists!", code);
       return response;
     }
     mlDBController.update('MlProfessions', {industryId:id}, {industryName : args.industryName}, {$set:true, multi:true}, context)

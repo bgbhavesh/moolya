@@ -28,11 +28,11 @@ MlResolver.MlMutationResolver['createSubDomain'] = (obj, args, context, info) =>
     try{
       let ret = MlSubDomain.insert({...args.SubDomainMasterData})
       if(ret){
-        let response = new MlRespPayload().successPayload("Sub Domain Created Successfully", 200);
+        let response = new MlRespPayload().successPayload("Sub Domain added successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Creating Sub Domain", 400);
+        let response = new MlRespPayload().errorPayload("Sub-Domain could not be added", 400);
         return response;
       }
     }
@@ -67,11 +67,11 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
     // try{
       let resp = MlSubDomain.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true})
       if(resp){
-        let response = new MlRespPayload().successPayload("Sub Domain Created Successfully", 200);
+        let response = new MlRespPayload().successPayload("Sub-Domain updated successfully", 200);
         return response;
       }
       else{
-        let response = new MlRespPayload().errorPayload("Error in Creating Sub Domain", 400);
+        let response = new MlRespPayload().errorPayload("Sub-Domain could not be updated", 400);
         return response;
       }
     // }

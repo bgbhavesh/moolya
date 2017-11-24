@@ -100,7 +100,6 @@ export default class MlFunderEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Library",
         component: <PortfolioLibrary key="8" client={client} tabName="Library" isAdmin={true}
-                                     getFunderLibrary={this.getFunderLibrary.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
@@ -218,20 +217,6 @@ export default class MlFunderEditTemplate extends Component {
   /**
    * check need and remove it
    * */
-  getFunderLibrary(details) {
-    let data = this.state.funderPortfolio;
-    if (details.memberships) {
-      data['memberships'] = details.memberships;
-    }
-    if (details.compliances) {
-      data['compliances'] = details.compliances;
-    }
-    if (details.licenses) {
-      data['licenses'] = details.licenses;
-    }
-    this.setState({funderPortfolio: data})
-    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, []);
-  }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
     let obj = {

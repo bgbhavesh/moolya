@@ -28,7 +28,7 @@ MlResolver.MlMutationResolver['createAddressType'] = (obj, args, context, info) 
   // if(MlGlobalSettings.find({_id:args.addressType._id}).count() > 0){
   if(mlDBController.find('MlGlobalSettings', {_id:args.addressType._id}, context).count() > 0){
     let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+    return new MlRespPayload().errorPayload("'Address type' already exists", code);
   }
   // let id = MlGlobalSettings.insert({...args.addressType});
   let id = mlDBController.insert('MlGlobalSettings', args.addressType, context)

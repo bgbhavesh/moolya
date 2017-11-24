@@ -48,7 +48,7 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
     return officeSC
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 }
@@ -106,7 +106,7 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
     }
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 }
@@ -118,7 +118,7 @@ MlResolver.MlQueryResolver['fetchOfficeById'] = (obj, args, context, info) => {
     return myOffice
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 };
@@ -130,7 +130,7 @@ MlResolver.MlQueryResolver['fetchOfficeSCById'] = (obj, args, context, info) => 
     return myOffice
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 };
@@ -280,7 +280,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
       if (!officeId) {
         let code = 400;
-        let response = new MlRespPayload().errorPayload("Failed To Create Office", code);
+        let response = new MlRespPayload().errorPayload("Failed to create office", code);
         return response;
       }
 
@@ -325,12 +325,12 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId, frequencyType)
     }else {
       let code = 200;
-      let response = new MlRespPayload().errorPayload("Not Allowed to create Office", code);
+      let response = new MlRespPayload().errorPayload("Your don't have permission to  create office", code);
       return response;
     }
   }catch (e){
     let code = 400;
-    return new MlRespPayload().errorPayload("Failed To Create Office", code);
+    return new MlRespPayload().errorPayload("Failed to create office", code);
   }
   let code = 200;
   let officeRequest = MlAlertNotification.onOfficeRequestSent()
@@ -462,7 +462,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       // let isAlreadyInSameOffice = mlDBController.find('MlOfficeMembers', {emailId: args.officeMember.emailId}).fetch();
       if(memberAssicatedWithSameInvester.length  == 0 || isUserRegExist.status == "REG_EMAIL_P" || isUserRegExist.status == "REG_EMAIL_V" ) {
         let code = 400;
-        let response = new MlRespPayload().errorPayload("User is not allowed to be associated to this office. Please contact administrator", code);
+        let response = new MlRespPayload().errorPayload("User cannot be associated with this office. Please contact your office admin.", code);
         return response;
       }
       // Send an invite to the Existing User
@@ -544,7 +544,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       // update ledger balance and journal
       //ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
       if(!ret)
-        return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400);
+        return new MlRespPayload().errorPayload("Error in updating ledger balance", 400);
     }
   } catch (e) {
     let code = 400;
@@ -553,7 +553,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   }
 
     let code = 200;
-    let response = new MlRespPayload().successPayload("Member Added Successfully", code);
+    let response = new MlRespPayload().successPayload("Member added successfully", code);
     return response;
 }
 
@@ -607,7 +607,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
       }
       let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set: true}, context);
       let code = 200;
-      let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+      let response = new MlRespPayload().successPayload("Member updated successfully", code);
       return response;
 
     } else if (args.officeMember.isFreeze == false) {
@@ -644,7 +644,7 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     } else {
       let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set: true}, context);
       let code = 200;
-      let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+      let response = new MlRespPayload().successPayload("Member updated successfully", code);
       return response;
     }
   } catch (e){
@@ -740,7 +740,7 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
         return response;
       }
       let code = 400;
-      let response = new MlRespPayload().successPayload("Successfully Updated user", code);
+      let response = new MlRespPayload().successPayload("User details updated successfully", code);
       return response;
     }
   }catch(e){
@@ -990,19 +990,19 @@ MlResolver.MlMutationResolver['officeMemberGoIndependent'] = (obj, args, context
       //   }
       // }
       let code = 200;
-      let response = new MlRespPayload().successPayload('Go independent requested successfully', code);
+      let response = new MlRespPayload().successPayload("'Go-Independent' requested successfully", code);
       return response;
 
     } else {
       let code = 400;
-      let response = new MlRespPayload().errorPayload('Your is already Independent', code);
+      let response = new MlRespPayload().errorPayload("Profile already marked 'Go-Independent'", code);
       return response;
     }
 
   } else {
 
     let code = 400;
-    let response = new MlRespPayload().errorPayload('MemberId and Community Code are required', code);
+    let response = new MlRespPayload().errorPayload('MemberId and Community Code are mandatory', code);
     return response;
 
   }
@@ -1018,13 +1018,13 @@ MlResolver.MlMutationResolver['deActivateOffice'] = (obj, args, context, info) =
     mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeDeactivate', officeId, officeId, context.userId, 'user', context);
     if(respSC && respOffice){
       code = 200;
-      response = new MlRespPayload().successPayload('Office Deactivated successfully', code);
+      response = new MlRespPayload().successPayload('Office deactivated successfully', code);
     }else {
       code = 400;
       response = new MlRespPayload().errorPayload('Cannot update office', code);
     }
   }else {
-    response = new MlRespPayload().errorPayload('Office Id required', code);
+    response = new MlRespPayload().errorPayload("'Office Id' mandatory", code);
   }
   return response
 };

@@ -21,6 +21,7 @@ import MlAppActionComponent from "../../../../commons/components/MlAppActionComp
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
+import {appClient} from '../../../../core/appConnection';
 import {
   createServiceActionHandler,
   fetchServiceActionHandler,
@@ -63,11 +64,12 @@ class MlAppServiceManageSchedule extends Component {
       serviceTermAndCondition: {},
       attachments: [],
       servicePayment: {},
+      currencySymbol:"",
       isRedirect: false,
       facilitationCharge: {},
       tasks: [],
       taxStatus: 'taxexclusive',
-      clusterData: {}
+      clusterData: {},userId:"", profileId:""
     };
     this.options = [
       { value: 'Onetime', label: 'One Time' },
@@ -216,9 +218,9 @@ class MlAppServiceManageSchedule extends Component {
       {
         name: 'Payment',
         component: <MlAppServicePayment servicePayment={servicePayment}
-          taxStatus={taxStatus}
-          finalAmount={finalAmount}
-          prevFinalAmount={prevFinalAmount}
+          taxStatus={taxStatus} currencySymbol={this.state.currencySymbol}
+          finalAmount={finalAmount} currencyType={this.currencyType.bind(this)}
+          prevFinalAmount={prevFinalAmount} client={appClient}
           viewMode={this.props.viewMode || (this.state.serviceBasicInfo && (this.state.serviceBasicInfo.isLive  || this.state.serviceBasicInfo.isReview ))}
           activateComponent={this.activateComponent}
           getRedirectServiceList={this.getRedirectServiceList}
@@ -773,6 +775,7 @@ class MlAppServiceManageSchedule extends Component {
         }
       }
     }
+    servicePayment.currencyType = servicePayment.currencyType ? servicePayment.currencyType : this.state.currencySymbol;
     services.payment = servicePayment;
     services.finalAmount = finalAmount || servicePayment.tasksDerived;
     services.facilitationCharge = facilitationCharge;
@@ -821,6 +824,9 @@ class MlAppServiceManageSchedule extends Component {
       servicePayment: servicePayment,
       finalAmount: finalAmount
     });
+  }
+  currencyType( currencySymbol) {
+    this.setState({currencySymbol:currencySymbol})
   }
 
   /**

@@ -91,7 +91,7 @@ class MlAuthorization
           }
 
           let variables = _.cloneDeep(req.body.variables)
-          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, variables, isContextSpecSearch);
+          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, variables, isContextSpecSearch, context);
           return isValidAuth
     }
 
@@ -115,7 +115,7 @@ class MlAuthorization
   }
 
 
-    validteAuthorization(userId, moduleName, actionName, variables, isContextSpecSearch)
+    validteAuthorization(userId, moduleName, actionName, variables, isContextSpecSearch, context)
     {
         check(userId, String)
         check(moduleName, String)
@@ -137,6 +137,10 @@ class MlAuthorization
         var user = mlDBController.findOne('users', {_id: userId})
         if(user && user.profile && user.profile.isInternaluser == true)
         {
+          const isUrlValidate = this.isCanAccessUrl(context, true);
+          if (!isUrlValidate){
+            return false;
+          }
             let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
             var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
 
@@ -170,8 +174,8 @@ class MlAuthorization
                 return ret;
             }
         }
-        else if(user && user.profile && user.profile.isExternaluser == true){
-            return true
+        else if (user && user.profile && user.profile.isExternaluser == true) {
+          return this.isCanAccessUrl(context, false);
         }
         return ret;
     }
@@ -424,6 +428,20 @@ class MlAuthorization
           return {}
         return {clusterId:request.cluster, chapterId:request.chapter, subChapterId:request.subChapter, communityId:request.community};
       }
+
+  /**
+   * @Note: function used to check the url coming from the app or admin
+   *        1) if user try to access admin url ['Not authorised'] page will be displayed.
+   * */
+  isCanAccessUrl(context, isInternalUserCheck) {
+    let res = true;
+    const urlPath = context.url ? context.url : null;
+    const pathCheck = isInternalUserCheck ? urlPath.indexOf('app') : urlPath.indexOf('admin');
+    if (pathCheck != -1)
+      res = false;
+    return res
+  }
+
 }
 
 module.exports = MlAuthorization

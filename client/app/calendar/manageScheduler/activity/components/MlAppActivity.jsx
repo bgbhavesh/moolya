@@ -20,6 +20,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
+import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
 import {appClient} from '../../../../core/appConnection';
 
 class MlAppActivity extends Component {
@@ -319,6 +320,11 @@ class MlAppActivity extends Component {
       }
     ];
     return steps;
+  }
+  async getCurrencyType(userId) {
+    const response = await fetchCurrencyTypeActionHandler(appClient, userId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
   }
   /**
    * Render

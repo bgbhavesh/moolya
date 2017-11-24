@@ -144,7 +144,7 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
       hierarchyAssignment.finalApproval = hierarchy.finalApproval
       mlDBController.update('MlHierarchyAssignments', id, hierarchyAssignment, {$set: true}, context)
       let code = 200;
-      response = new MlRespPayload().successPayload('Updated Successfully', code);
+      response = new MlRespPayload().successPayload("'Hierarchy assignment' updated successfully", code);
       return response
 
     } else if(!_.isEqual(hierarchy.finalApproval, hierarchyAssignment.finalApproval)){
@@ -152,7 +152,7 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
         hierarchyAssignment.finalApproval = hierarchy.finalApproval
         mlDBController.update('MlHierarchyAssignments', id, hierarchyAssignment, {$set: true}, context)
         let code = 200;
-        response = new MlRespPayload().successPayload('Updated Successfully', code);
+        response = new MlRespPayload().successPayload("'Hierarchy assignment' updated successfully", code);
         return response
 
     }else {
@@ -176,7 +176,7 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
     if (id) {
       let code = 200;
       let result = {appovalId: id}
-      let response = new MlRespPayload().successPayload('Created Successfully', code);
+      let response = new MlRespPayload().successPayload('Hierarchy added successfully', code);
       return response
     }
   }

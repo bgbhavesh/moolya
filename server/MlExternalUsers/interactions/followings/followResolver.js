@@ -6,7 +6,9 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
+  let followRequest;
     if(args && context && context.userId){
       var resp=null;
       //follow flag checks for true/false. if its true:
@@ -55,14 +57,14 @@ MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
           let followData = mlDBController.findOne('MlFollowings',{followedBy:fromuser._id,followerId:toUser._id}, context);
           let fromUserType = 'user';
           mlInteractionService.createTransactionRequest(toUser._id,'follow', args.resourceId, followData._id, fromuser._id, fromUserType , context);
-
+           followRequest = MlAlertNotification.onFollowRequestMsg(toUser&&toUser._id?toUser._id:"");
         }catch (e){
             let code = 400;
             let response = new MlRespPayload().errorPayload(e.message, code);
             return response;
         }
         let code = 200;
-        let response = new MlRespPayload().successPayload(resp, code);
+        let response = new MlRespPayload().successPayload(followRequest, code);
         return response;
     }
 }

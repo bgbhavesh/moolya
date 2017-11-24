@@ -175,6 +175,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
  */
 MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) => {
   try {
+    let users
     var connectionId = args.connectionId;
     var connection = mlDBController.findOne('MlConnections',{'_id':connectionId,"users.userId": context.userId},context)||{};
     var contextUser =  mlInteractionService.getUserDetails(context.userId);
@@ -186,7 +187,11 @@ MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) =>
       {$set:true},context);
 
     if(result===0){ return new MlRespPayload().errorPayload('Failed to accept the connection request', 400);}
-    return new MlRespPayload().successPayload('Connection Request Accepted', 200);
+    if(result){
+      let fromUser = connection&&connection.users&&connection.users.length>0&&connection.users[0]&&connection.users[0].userId?connection.users[0].userId:""
+      users =  MlAlertNotification.onConnectionSenderAccept(fromUser);
+    }
+    return new MlRespPayload().successPayload(users, 200);
   } catch (e) {
     let code = 400;
     let response = new MlRespPayload().errorPayload(e.message, code);
@@ -196,6 +201,7 @@ MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) =>
 
 MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) => {
   try {
+    let userdata;
     var connectionId = args.connectionId;
     var connection = mlDBController.findOne('MlConnections',{'_id':connectionId,"users.userId": context.userId},context)||{};
     var contextUser =  mlInteractionService.getUserDetails(context.userId);
@@ -210,8 +216,9 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
       let fromUser = connection&&connection.users&&connection.users.length>0&&connection.users[0]&&connection.users[0].userId?connection.users[0].userId:""
       let toUser = connection&&connection.users&&connection.users.length>0&&connection.users[1]&&connection.users[1].userId?connection.users[1].userId:""
       MlEmailNotification.portfolioConnectRequestDecline(fromUser,toUser);
+      userdata =  MlAlertNotification.onConnectionSenderDeclined(fromUser);
     }
-    return new MlRespPayload().successPayload('Connection Rejected', 200);
+    return new MlRespPayload().successPayload(userdata, 200);
   }catch (e) {
     let code = 400;
     let response = new MlRespPayload().errorPayload(e.message, code);

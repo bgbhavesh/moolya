@@ -28,6 +28,7 @@ let service=`
      isTaxInclusive: Boolean
      isPromoCodeApplicable: Boolean
      isApprovalRequiredFromSeeker: Boolean
+     currencyType: String
   }
   type TermsAndCondition {
      isCancelable: Boolean
@@ -252,6 +253,7 @@ let service=`
        isTaxInclusive: Boolean
        isPromoCodeApplicable: Boolean
        isApprovalRequiredFromSeeker: Boolean
+       currencyType: String
    }
 
    input termsAndCondition {

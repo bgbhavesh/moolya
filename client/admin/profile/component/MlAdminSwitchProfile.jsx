@@ -7,6 +7,7 @@ import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActio
 import {fetchClusterDetails} from '../actions/switchProfileActions'
 import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import _ from 'underscore';
 
 export default class MlAdminSwitchProfile extends React.Component{
@@ -157,7 +158,7 @@ export default class MlAdminSwitchProfile extends React.Component{
                     {that.state.userProfiles.map(function (prf, idx) {
                       return(
                         <div className="swiper-slide profile_accounts" key={idx} name={idx} onClick={that.onChange.bind(that)}>
-                          <img src={prf.clusterFlag?prf.clusterFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
+                          <img src={prf.clusterFlag?generateAbsolutePath(prf.clusterFlag):""}/><br />{prf.clusterName?prf.clusterName:""}
                           <h2>{prf.clusterName?prf.clusterName:""}</h2>
                         </div>
                       )

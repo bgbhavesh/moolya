@@ -1192,7 +1192,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       attendeeProfileId: profileId,
       isSelfAssigned: false,
       status: { '$in': ["pending"] }
-    };F
+    };
 
     let pipeline = [
       { "$match": query },

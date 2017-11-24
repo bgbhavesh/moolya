@@ -1791,34 +1791,22 @@ MlResolver.MlQueryResolver['checkDefaultRole'] = (obj, args, context, info) => {
    return userInfo.profile.InternalUprofile.moolyaProfile.userProfiles;
 };
 
-MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => { // need to add portfolioId and get clusterID
-  let clusterId = "";
-  if(args.portfolioDetailsId) {
-  var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context);
-  clusterId = portfolioDetailsTransactions.clusterId;
-} else {
+MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => {
+  let clusterId = null;
+
+  if(args.portfolioDetailsId) clusterId = mlDBController.findOne('MlPortfolioDetails', args.portfolioDetailsId, context).clusterId;
+
+  else {
     let userId = args.userId ? args.userId : context.userId;
-    var userInfo = mlDBController.findOne('users', {_id: userId}, context) || {};
+    var userInfo = mlDBController.findOne('users', userId, context) || {};
+    let userDetails = {userInfo: userInfo, userId: userId, profileId: args.profileId}
     let userType = userInfo.profile && userInfo.profile.InternalUprofile && userInfo.profile.InternalUprofile.moolyaProfile ? "admin" : "user"
-    if (userType === "admin") {
-      let userProfile = new MlAdminUserContext().userProfileDetails(userId);
-      clusterId = userProfile.defaultCluster;
-    } else {
-        if(args.profileId){
-          let userProfiles = userInfo.profile.externalUserProfiles;
-          userProfiles.map((defaultProfile) => {
-              if (defaultProfile.profileId === args.profileId) {
-                clusterId = defaultProfile.clusterId;
-                return false;
-              }
-          })
-        } else{
-          let userProfiles = new MlUserContext(userId).userProfileDetails(userId);
-          clusterId = userProfiles.clusterId;
-        }
-    }
+    if (userType === "admin") clusterId = new MlAdminUserContext().userProfileDetails(userId).clusterId;
+    else clusterId = new MlUserContext(userId).currencyTypeForEndUsers(userDetails);
   }
-  var  clusterInfo = MlClusters.findOne({_id:clusterId}, context)
+
+  var  clusterInfo = MlClusters.findOne(clusterId, context)
   var  currencyInfo = MlCurrencyType.findOne({countryName:clusterInfo.countryName}, context);
   return currencyInfo;
+
   }

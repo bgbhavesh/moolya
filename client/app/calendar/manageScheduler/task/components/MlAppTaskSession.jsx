@@ -267,7 +267,7 @@ export default class MlAppTaskSession extends Component {
                                   <div className={activity.isActive ? 'active' : 'inactive'}><FontAwesome onClick={() => that.removeActivity(id, index)} name='minus' /></div>
                                   <div className="clearfix"></div>
                                   <div className="list_icon mart0">
-                                    <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                                    <span className="price">{activity.payment && activity.payment.currencyType ? activity.payment.currencyType :"Rs." } {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                                     <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                                     <div className="clearfix"></div>
                                     {activity.imageLink ?

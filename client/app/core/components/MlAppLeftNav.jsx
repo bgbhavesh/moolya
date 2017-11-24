@@ -32,8 +32,28 @@ export default class MlAppLeftNav extends Component {
         if(WinWidth > 768){
             $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
         }
-        let routeName = FlowRouter.getRouteName();
-        $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );
+        // let routeName = FlowRouter.getRouteName();
+        // $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );
+
+      $(document).ready(()=>{
+        $('.menu_item a').click(function(event) {
+          // Do the async thing
+          let margin = $(".mCSB_container").css("top");
+          localStorage.setItem('top',margin);
+        });
+      });
+
+      let topscroll = localStorage.getItem('top');
+      if(topscroll) {
+        localStorage.setItem('top','');
+
+        setTimeout(function () {
+          $(".mCSB_container").css({"top": topscroll});
+          // $(".admin_menu .scrollarea-content").refresh();
+          // $("#mCSB_1_container").animate({ scrollTop: -margin });
+
+        }, 500);
+      }
     }
 
     render(){

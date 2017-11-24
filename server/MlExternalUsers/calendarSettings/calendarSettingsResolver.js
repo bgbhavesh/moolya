@@ -240,7 +240,7 @@ MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, 
       mlDBController.update('MlAppointments', cancelAppointmentQuery, { isCancelled: true }, { $set: true, multi: true }, context);
       // To do for handle Appointment members collections
       let code = 200;
-      let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+      let response = new MlRespPayload().successPayload('Calendar settings updated successfully', code);
       return response;
     }
   } else {
@@ -251,7 +251,7 @@ MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, 
     const result2 = mlDBController.update('MlCalendarSettings', { userId }, { isOverlappingSchedule: args.calendarSetting.isOverlappingSchedule }, { $set: true, multi: true }, context);
     if (result) {
       let code = 200;
-      let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+      let response = new MlRespPayload().successPayload('Calendar settings updated successfully', code);
       return response;
     }
   }
@@ -346,7 +346,7 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, conte
       });
     }
     if (overlappingSlots) {
-      return new MlRespPayload().errorPayload('Overlapping of slots are not allowed', 400);
+      return new MlRespPayload().errorPayload('Overlapping of slots is not allowed', 400);
     } else {
       let existingSettings = userSettingsInfo[currentProfileIndex];
       existingSettings.workingDays = existingSettings.workingDays ? existingSettings.workingDays : [];
@@ -400,7 +400,7 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, conte
       let result = mlDBController.update('MlCalendarSettings', existingSettings._id, { workingDays: existingSettings.workingDays, updatedAt: new Date() }, { $set: true }, context);
       if (result) {
         let code = 200;
-        let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+        let response = new MlRespPayload().successPayload('Calendar settings updated successfully', code);
         return response;
       }
     }
@@ -413,7 +413,7 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, conte
     };
     const result = mlDBController.insert('MlCalendarSettings', dataToInsert, context);
     if (result) {
-      return new MlRespPayload().successPayload('Calendar Setting updated successfully', 200);
+      return new MlRespPayload().successPayload('Calendar settings updated successfully', 200);
     }
   }
 }
@@ -473,7 +473,7 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
     });
     if (isAlreadyOnVacation) {
       let code = 400;
-      let response = new MlRespPayload().errorPayload('Vacation Overlapping', code);
+      let response = new MlRespPayload().errorPayload('Vacation dates are overlapping', code);
       return response;
     } else {
       orderNumberGenService.createVactionId(vacation);
@@ -485,7 +485,7 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
           cancelAppointmentsOnVacation(userId,startDate, endDate , obj, context, info );
         }
 
-        let response = new MlRespPayload().successPayload('Vacation created successfully', code);
+        let response = new MlRespPayload().successPayload('Vacation added successfully', code);
         return response;
       }
     }
@@ -499,7 +499,7 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
     let result = mlDBController.insert('MlCalendarSettings', dataToInsert, context);
     if (result) {
       let code = 200;
-      let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+      let response = new MlRespPayload().successPayload('Calendar settings updated successfully', code);
       return response;
     }
   }
@@ -672,7 +672,7 @@ MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args
     });
     if (isAlreadyOnVacation) {
       let code = 400;
-      let response = new MlRespPayload().errorPayload('Vacation Overlapping', code);
+      let response = new MlRespPayload().errorPayload('Vacation dates are overlapping', code);
       return response;
     } else {
       //isAlreadyExist.vacations.push(vacation);
@@ -691,7 +691,7 @@ MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args
         }
 
         let code = 200;
-        let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+        let response = new MlRespPayload().successPayload('Calendar settings updated successfully', code);
         return response;
       }
     }

@@ -219,7 +219,9 @@ export default class Step5 extends React.Component {
       const response = await  findProcessDocumentForRegistrationActionHandler(countryId,clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry,email);
       if (response) {
         let processDoc=response
+        processDoc = _underscore.without(processDoc,null);
         if (processDoc&&processDoc.length>0) {
+
           var ActiveResults = _underscore.where(processDoc, {isActive: true});
           var result = _.map(ActiveResults, function (currentObject){
 
@@ -251,6 +253,8 @@ export default class Step5 extends React.Component {
           this.props.getRegistrationKYCDetails();
 
           }
+        }else{
+          this.setState({loading:false,registrationDocuments:kycDocuments})
         }
       }
     }

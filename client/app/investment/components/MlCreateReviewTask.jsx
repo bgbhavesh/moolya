@@ -30,7 +30,7 @@ export default class MlAssignTask extends React.Component {
       return false;
     }
     if(!this.state.selectedUser.length){
-      toastr.error("Select at least one user");
+      toastr.error("Select atleast one user");
       return false;
     }
     let members = this.state.members;
@@ -57,7 +57,7 @@ export default class MlAssignTask extends React.Component {
     };
     let response = await createInternalTaskActionHandler(dataToInsert);
     if(response.success) {
-      toastr.success('Internal Task Created');
+      toastr.success('Internal task created successfully');
       this.props.toggle();
     } else {
       toastr.error(response.result);

@@ -25,7 +25,7 @@ MlResolver.MlQueryResolver['findNumericalFormat'] = (obj, args, context, info) =
 MlResolver.MlMutationResolver['createNumericalFormat'] = (obj, args, context, info) =>{
   if(MlGlobalSettings.find({_id:args.numericalFormat._id}).count() > 0){
     let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+    return new MlRespPayload().errorPayload("'Numerical format' already exists!", code);
   }
   let id = MlGlobalSettings.insert({...args.numericalFormat});
   if(id){

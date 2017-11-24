@@ -34,9 +34,9 @@ export default class MlAppPayOfficeSubscription extends Component {
     });
     let status = FlowRouter.getQueryParam('status');
     if(status.toLowerCase() == "canceled"){
-      toastr.error("payment canceled");
+      toastr.error("Payment was cancelled");
     }else if(status.toLowerCase() == "success"){
-      toastr.success("payment successful!!");
+      toastr.success("Payment was processed successfully");
     }
     //this.payClick();
   }
@@ -110,7 +110,7 @@ export default class MlAppPayOfficeSubscription extends Component {
     if(!this.state.paymentError){
        $("#paymentForm").trigger("submit");
     }else{
-      toastr.error('Unable to proceed payment.');
+      toastr.error('Unable to process payment');
     }
 
 

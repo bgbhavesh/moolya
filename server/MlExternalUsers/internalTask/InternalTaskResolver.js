@@ -12,7 +12,7 @@ MlResolver.MlQueryResolver['fetchInternalTask'] = (obj, args, context, info) => 
     return internalTask
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 };
@@ -93,7 +93,7 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
     return internalTask;
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 };
@@ -149,7 +149,7 @@ MlResolver.MlQueryResolver['fetchSelfCreatedInternalTask'] = (obj, args, context
     return internalTask;
   } else {
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    let response = new MlRespPayload().errorPayload("Not a valid user", code);
     return response;
   }
 };

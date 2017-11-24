@@ -90,7 +90,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     let requestId=this.props.data.requestId
     let response = await updateStusForTransactionActionHandler(requestId,status);
     if(response.success){
-      toastr.success("transaction status changed successfully")
+      toastr.success("Internal request status updated successfully")
       if(status=="Approved"){
         FlowRouter.go("/admin/transactions/approvedList");
       }
@@ -99,7 +99,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
         //FlowRouter.go("/admin/transactions/requestedList");
       }
     }else{
-      toastr.error("User doesn't have privileges to act on this request")
+      toastr.error("You don't have permission to act on this request")
       FlowRouter.reload();
     }
   }

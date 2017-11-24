@@ -149,7 +149,7 @@ export default class institution extends React.Component{
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
       this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      toastr.success("Saved successfully");
     }else{
       toastr.error(response.result);
     }

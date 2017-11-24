@@ -375,12 +375,12 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         return response
       } else {
         let code = 401;
-        let response = new MlRespPayload().errorPayload("Please validate the user", code);
+        let response = new MlRespPayload().errorPayload("Please validate the user details", code);
         return response;
       }
     } else {
       let code = 401;
-      let response = new MlRespPayload().errorPayload("Portfolio not requested for go live", code);
+      let response = new MlRespPayload().errorPayload("Portfolio not requested for 'go live'", code);
       return response;
     }
   }

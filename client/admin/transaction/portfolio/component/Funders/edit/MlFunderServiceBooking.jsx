@@ -95,7 +95,7 @@ export default class FunderAboutView extends React.Component{
   async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
     if(response){
-      toastr.success('Payment Done Successfully')
+      toastr.success('Payment processed successfully')
       this.setState({payment: true})
       return response
     }

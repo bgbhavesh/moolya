@@ -76,7 +76,7 @@ class MlChapterCommunityDetails extends React.Component {
       toastr.error("Not Authorised");
       window.history.back()
     } else if (response && !response.unAuthorized) {
-      toastr.success("Saved Successfully");
+      toastr.success("Saved successfully");
       window.history.back()
     }
   };

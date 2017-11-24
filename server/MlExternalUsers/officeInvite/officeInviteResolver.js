@@ -59,7 +59,7 @@ MlResolver.MlMutationResolver['updateOfficeInvite'] = (obj, args, context, info)
       resp = mlDBController.update('MlOfficeInvite', args.inviteId, invite, {$set:true}, context)
       if(!resp){
         let code = 400;
-        let response = new MlRespPayload().errorPayload('error in update', code);
+        let response = new MlRespPayload().errorPayload('Update failed', code);
         return response
       }else {
         let code = 200;
@@ -69,7 +69,7 @@ MlResolver.MlMutationResolver['updateOfficeInvite'] = (obj, args, context, info)
       }
     }else {
       let code = 400;
-      let response = new MlRespPayload().errorPayload('Invite does not found', code);
+      let response = new MlRespPayload().errorPayload('Invite was not found', code);
       return response
     }
   }catch(e){

@@ -20,6 +20,7 @@ import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
 import CropperModal from '../../../../commons/components/cropperModal';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
+import {validatedURL} from "../../../../commons/validations/mlfieldValidation";
 
 
 export default class Step4 extends React.Component{
@@ -133,10 +134,13 @@ export default class Step4 extends React.Component{
     let refs = []
     refs.push(this.refs["socialLinkType"])
     refs.push(this.refs["socialLinkTypeUrl"])
+    let socialLinkURL = this.refs["socialLinkTypeUrl"].value
     let ret = mlFieldValidations(refs)
-
+    let isValidURL = validatedURL(socialLinkURL);
     if (ret) {
       toastr.error(ret);
+    }else if(socialLinkURL && !isValidURL){
+      toastr.error("Enter valid 'Social link'");
     }else{
       let socialLinkList = this.state.socialLinkObject;
       socialLinkList.socialLinkType = this.state.selectedValue,
@@ -189,10 +193,13 @@ export default class Step4 extends React.Component{
           refs.push(this.refs["socialLinkType" + index])
           refs.push(this.refs["socialLinkTypeUrl" + index])
           let ret = mlFieldValidations(refs)
-
+          let socialLinkURL = this.refs["socialLinkTypeUrl" + index]&&this.refs["socialLinkTypeUrl" + index].value?this.refs["socialLinkTypeUrl" + index].value:""
+          let isValidURL = validatedURL(socialLinkURL);
           if (ret) {
             toastr.error(ret);
-          } else {
+          }else if(socialLinkURL && !isValidURL){
+            toastr.error("Enter valid 'Social link'");
+          }else {
             let labelValue = this.state.selectedSocialLinkLabel ? this.state.selectedSocialLinkLabel : this.state.socialLinkArray[index].socialLinkTypeName;
             let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.socialLinkArray[index].socialLinkType;
             let updatedComment = update(this.state.socialLinkArray[index], {

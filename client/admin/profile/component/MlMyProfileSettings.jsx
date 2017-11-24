@@ -128,7 +128,7 @@ export default class MyProfileSettings extends React.Component{
     }
     const dataresponse = await updateSettings(Details);
     console.log(dataresponse);
-    toastr.success("Update Successful")
+    toastr.success("Update successful")
     return dataresponse;
   }
 

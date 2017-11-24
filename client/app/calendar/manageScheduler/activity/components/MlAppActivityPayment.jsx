@@ -67,7 +67,8 @@ export default class Step4 extends React.Component{
   }
 
   async getCurrencyType() {
-    const response = await fetchCurrencyTypeActionHandler(this.props.client, null);
+    let profileId = FlowRouter.getParam('profileId');
+    const response = await fetchCurrencyTypeActionHandler(this.props.client, null, null, profileId);
     this.setState({currencySymbol: response.symbol})
     return response;
   }

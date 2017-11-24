@@ -207,6 +207,10 @@ MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
   return null;
 }
 
+/**
+ * @Note: this resolver seems to have no use need to remove it.
+ * @ref: registrationResolver
+ * */
 MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
   let transaction={};
   let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};

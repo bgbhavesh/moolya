@@ -56,7 +56,7 @@ export default class MlAppRequestedMyAppointment extends React.Component {
       !(this.state.showDetails) ?<div>
         {config.loading === true ? ( <MlLoader/>) : (
       <div>
-        {appointments && !appointments.length ? (<NoDataList moduleName="Requested Appointments"/>) : (
+        {appointments && !appointments.length ? (<NoDataList appointment={true} moduleName="Requested Appointments"/>) : (
           <div className="tab_wrap_scroll ideators_list">
             {appointments.map(function (appointment, index) {
               return (

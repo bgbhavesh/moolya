@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateStusForTransactionActionHandler(requestsInfo,statusInfo) {
-  let status = statusInfo
-    let requestsId=requestsInfo
+export async function updateStusForTransactionActionHandler(requestsInfo, statusInfo) {
+  const status = statusInfo
+  const requestsId = requestsInfo
 
   const result = await client.mutate({
     mutation: gql`

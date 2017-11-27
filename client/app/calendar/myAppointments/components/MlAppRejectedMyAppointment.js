@@ -5,11 +5,11 @@
  */
 
 // import NPM module(s)
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MlAppMyAppointmentCommon from './MlAppMyAppointmentCommon';
 
-export default class MlAppRejectedMyAppointment extends Component{
+export default class MlAppRejectedMyAppointment extends Component {
   render() {
     return (<MlAppMyAppointmentCommon status="Rejected" />);
   }
-};
+}

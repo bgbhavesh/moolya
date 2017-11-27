@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function rejectedStausForDocuments(document,doctype,registration) {
-  let documentId=document;
-  let docTypeId=doctype
-  let registrationId=registration;
+export async function rejectedStausForDocuments(document, doctype, registration) {
+  const documentId = document;
+  const docTypeId = doctype
+  const registrationId = registration;
   const result = await client.mutate({
     mutation: gql`
      mutation($documentId:[String],$docTypeId:[String],$moduleName:String!,$actionName:String!,$registrationId:String!){
@@ -16,11 +16,11 @@ export async function rejectedStausForDocuments(document,doctype,registration) {
       }
     `,
     variables: {
-      documentId:documentId,
-      docTypeId:docTypeId,
-      moduleName:"REGISTRATION",
-      actionName:"UPDATE",
-      registrationId:registrationId
+      documentId,
+      docTypeId,
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE',
+      registrationId
     }
   })
 

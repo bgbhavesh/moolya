@@ -6,21 +6,19 @@ import moment from 'moment';
  * @param this:Object eg:{returnValueOnNull:'All'} custom value to be returned
  * returns resultant formatted value
  */
-export function stringTitleFormatter(data){
-  let formatterData=data&&isArray(data)&&data.length>0?data:null;
-  if(formatterData){
-       return `${formatterData.join()}`;
-  }else{
-    return data;
-  };
-}
-export function stringTitleAllFormatter(data){
-  let formatterData=data&&isArray(data)&&data.length>0?data:null;
-  if(formatterData){
+export function stringTitleFormatter(data) {
+  const formatterData = data && isArray(data) && data.length > 0 ? data : null;
+  if (formatterData) {
     return `${formatterData.join()}`;
-  }else{
-    return 'All';
-  };
+  }
+  return data;
+}
+export function stringTitleAllFormatter(data) {
+  const formatterData = data && isArray(data) && data.length > 0 ? data : null;
+  if (formatterData) {
+    return `${formatterData.join()}`;
+  }
+  return 'All';
 }
 
 /**
@@ -28,11 +26,10 @@ export function stringTitleAllFormatter(data){
  * @param data:Date
  * returns resultant formatted value
  */
-export function dateTitleFormatter(data){
-  if(data){
+export function dateTitleFormatter(data) {
+  if (data) {
     return moment(data).format('DD-MM-YYYY HH:MM:SS');
-  }else{
-    return data;
-  };
+  }
+  return data;
 }
 

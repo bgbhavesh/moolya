@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlBusinessTypeTableConfig} from "../config/MlBusinessTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlBusinessTypeTableConfig } from '../config/MlBusinessTypeConfig';
 export default class MlBusinessTypeList extends Component {
-
   componentDidMount() {
   }
 

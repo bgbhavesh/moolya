@@ -1,8 +1,8 @@
 /**
  * Created by Birendra on 18/08/17.
  */
-import gql from "graphql-tag";
-import { client } from "../../../../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../../../../core/apolloConnection';
 
 export async function updateAppointmentActionHandler(appointmentId, status) {
   const result = await client.mutate({

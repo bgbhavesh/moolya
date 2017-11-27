@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addFundingType(fundingTypeObj)
-{
+export async function addFundingType(fundingTypeObj) {
   const result = await client.mutate({
     mutation: gql`
             mutation($fundingType:fundingTypeInput){
@@ -14,9 +13,9 @@ export async function addFundingType(fundingTypeObj)
             }
         `,
     variables: {
-      fundingType:fundingTypeObj,
-      moduleName: "FUNDINGTYPE",
-      actionName: "CREATE"
+      fundingType: fundingTypeObj,
+      moduleName: 'FUNDINGTYPE',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.createFundingType;

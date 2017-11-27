@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlLookingForTableConfig} from "../config/MlLookingForTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlLookingForTableConfig } from '../config/MlLookingForTypeConfig';
 export default class MlLookingForList extends Component {
-
   componentDidMount() {
   }
 

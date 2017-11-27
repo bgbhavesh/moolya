@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findDeptRolesActionHandler(department,subDepartmentId,cluster, subChapterId, isDefaultSubChapter) {
+export async function findDeptRolesActionHandler(department, subDepartmentId, cluster, subChapterId, isDefaultSubChapter) {
   const result = await client.query({
     query: gql`
        query  ($departmentId: String,$subDepartmentId: String,$clusterId:String, $subChapterId:String, $isDefaultSubChapter: Boolean){
@@ -25,13 +25,13 @@ export async function findDeptRolesActionHandler(department,subDepartmentId,clus
         }
     `,
     variables: {
-      departmentId:department,
-      subDepartmentId:subDepartmentId,
-      clusterId:cluster,
-      subChapterId:subChapterId,
-      isDefaultSubChapter:isDefaultSubChapter
+      departmentId: department,
+      subDepartmentId,
+      clusterId: cluster,
+      subChapterId,
+      isDefaultSubChapter
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result && result.data && result.data.fetchRolesForDepartment;
   return id

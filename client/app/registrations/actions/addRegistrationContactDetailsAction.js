@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 /**
  * @Note: This seems to have no use need to remove it
@@ -7,7 +7,7 @@ import {appClient} from "../../core/appConnection";
 export async function addRegistrationContactDetails(contactDetails) {
   let contactInfo = {}
   contactInfo = contactDetails;
-  let registrationObject = {
+  const registrationObject = {
     contactInfo: [contactDetails]
   }
 
@@ -27,8 +27,8 @@ export async function addRegistrationContactDetails(contactDetails) {
     `,
     variables: {
       registrationObject,
-      moduleName: "REGISTRATION",
-      actionName: "CREATE"
+      moduleName: 'REGISTRATION',
+      actionName: 'CREATE'
     }
   })
 

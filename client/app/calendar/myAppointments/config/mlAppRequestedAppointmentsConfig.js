@@ -1,19 +1,19 @@
-import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
-import MlAppRequestedMyAppointment from "../components/MlAppRequestedMyAppointment";
-import React from "react";
-import gql from "graphql-tag";
+import { MlAppViewer } from '../../../../commons/core/MlAppViewer';
+import MlAppRequestedMyAppointment from '../components/MlAppRequestedMyAppointment';
+import React from 'react';
+import gql from 'graphql-tag';
 
 export const mlAppMyRequestedBespokeServiceConfig = new MlAppViewer({
-  name: "My Appointment List",
-  moduleName: "myRequestedBespokeService",
+  name: 'My Appointment List',
+  moduleName: 'myRequestedBespokeService',
   sort: true,
   perPageLimit: 20,
   viewComponent: <MlAppRequestedMyAppointment/>,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: true,
     search: true,
-    searchFields: ["displayName"]
+    searchFields: ['displayName']
   },
   graphQlQuery: gql`query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                   data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {
@@ -26,6 +26,6 @@ export const mlAppMyRequestedBespokeServiceConfig = new MlAppViewer({
                       }
                   }
                 }
-            `,
+            `
 
 });

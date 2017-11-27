@@ -1,20 +1,18 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function updateSubChapterActionHandler(ClusterId, ChapterId, subChapterDetails) {
-  let clusterId = ClusterId;
-  let chapterId = ChapterId;
-  let subChapterId = subChapterDetails.subChapterId;
-  let subChapter = _.omit(subChapterDetails, 'subChapterId');
-  subChapter.objective = subChapter.objective && subChapter.objective.map(({ description, status }) => {
-    return {
-      description, status
-    }
-  });
-  subChapter.contactDetails = subChapter.contactDetails && subChapter.contactDetails.map((det) => _.omit(det, '__typename'))
+  const clusterId = ClusterId;
+  const chapterId = ChapterId;
+  const subChapterId = subChapterDetails.subChapterId;
+  const subChapter = _.omit(subChapterDetails, 'subChapterId');
+  subChapter.objective = subChapter.objective && subChapter.objective.map(({ description, status }) => ({
+    description, status
+  }));
+  subChapter.contactDetails = subChapter.contactDetails && subChapter.contactDetails.map(det => _.omit(det, '__typename'))
 
-  subChapter.moolyaSubChapterAccess = _.omit(subChapter.moolyaSubChapterAccess,'__typename');
-  subChapter.moolyaSubChapterAccess.externalUser=_.omit(subChapter.moolyaSubChapterAccess.externalUser,'__typename');
+  subChapter.moolyaSubChapterAccess = _.omit(subChapter.moolyaSubChapterAccess, '__typename');
+  subChapter.moolyaSubChapterAccess.externalUser = _.omit(subChapter.moolyaSubChapterAccess.externalUser, '__typename');
 
   const result = await client.mutate({
     mutation: gql`
@@ -34,12 +32,12 @@ export async function updateSubChapterActionHandler(ClusterId, ChapterId, subCha
       }
     `,
     variables: {
-      clusterId:clusterId,
-      chapterId:chapterId,
-      subChapterId:subChapterId,
-      subChapterDetails:subChapter,
-      moduleName:"SUBCHAPTER",
-      actionName:"UPDATE"
+      clusterId,
+      chapterId,
+      subChapterId,
+      subChapterDetails: subChapter,
+      moduleName: 'SUBCHAPTER',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.updateSubChapter;

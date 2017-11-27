@@ -1,42 +1,36 @@
-var Select = require('react-select');
+const Select = require('react-select');
 // import {isValidNumber, format} from 'libphonenumber-js';
-var PhoneNumber = require( 'awesome-phonenumber' );
+const PhoneNumber = require('awesome-phonenumber');
 
-//import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
+// import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
-  for (var  key in  elements) {
-    let element = elements[key];
+  for (const key in elements) {
+    const element = elements[key];
     if (element instanceof Select) {
       {
         var selectObj = element;
-        let isRequired = selectObj.props['data-required'];
-        let value = selectObj.props['value']
+        const isRequired = selectObj.props['data-required'];
+        const value = selectObj.props.value
         if (isRequired && !value) {
           return selectObj.props['data-errMsg']
         }
-
       }
-    }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
+    } else if (element instanceof Object && element.props instanceof Object && element.props !== undefined) {
       var selectObj = element;
-      var isRequired = selectObj.props['data-required'];
-       var value = selectObj.props['selectedValue']?selectObj.props['selectedValue']:selectObj.props['value'];
-      if (!value)
-        value = selectObj.props['defaultValue'] ? selectObj.props['defaultValue'] : null                                /**case for the date-time required field*/
-      var  multi= selectObj.props['multiSelect']
+      const isRequired = selectObj.props['data-required'];
+      let value = selectObj.props.selectedValue ? selectObj.props.selectedValue : selectObj.props.value;
+      if (!value) { value = selectObj.props.defaultValue ? selectObj.props.defaultValue : null } /** case for the date-time required field */
+      const multi = selectObj.props.multiSelect
 
-        if (isRequired && multi&&value.length==0) {
-          return selectObj.props['data-errMsg']
-        }else if (isRequired && !value) {
-          return selectObj.props['data-errMsg']
-        }
-
-
-    }
-    else if (element && element.getAttribute('data-required') && !element.value) {
-        return element.getAttribute('data-errMsg');
+      if (isRequired && multi && value.length == 0) {
+        return selectObj.props['data-errMsg']
+      } else if (isRequired && !value) {
+        return selectObj.props['data-errMsg']
       }
+    } else if (element && element.getAttribute('data-required') && !element.value) {
+      return element.getAttribute('data-errMsg');
+    }
   }
-
 }
 
 /**
@@ -45,26 +39,26 @@ export function mlFieldValidations(elements) {
  * @param contactNumber
  * @return {boolean}
  */
-export function validatedPhoneNumber(countryCode, contactNumber){
+export function validatedPhoneNumber(countryCode, contactNumber) {
   let isValidPhoneNumber = true;
   if (contactNumber) {
     // isValidPhoneNumber = isValidNumber(format({country: countryCode, phone: contactNumber }, 'International'));
-    //var pn = new PhoneNumber( `0${contactNumber}`, countryCode);
-    var cCode = PhoneNumber.getCountryCodeForRegionCode(countryCode);
-    var regionCode = PhoneNumber.getRegionCodeForCountryCode(cCode);
-    var pn = new PhoneNumber(contactNumber, regionCode );
-    isValidPhoneNumber = pn.isValid( );
+    // var pn = new PhoneNumber( `0${contactNumber}`, countryCode);
+    const cCode = PhoneNumber.getCountryCodeForRegionCode(countryCode);
+    const regionCode = PhoneNumber.getRegionCodeForCountryCode(cCode);
+    const pn = new PhoneNumber(contactNumber, regionCode);
+    isValidPhoneNumber = pn.isValid();
   }
   return isValidPhoneNumber;
 }
 
 export function validatedEmailId(email) {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
-export function validatedURL(value){
-  //var url = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-  var url = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
+export function validatedURL(value) {
+  // var url = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+  const url = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/
   return url.test(value);
 }

@@ -1,8 +1,6 @@
 
-const backendUserRoute={
-  backendUserDetailRoute:(backendUserId, route)=> {
-    return `/admin/settings/editBackendUser/${backendUserId}`;
-  },
+const backendUserRoute = {
+  backendUserDetailRoute: (backendUserId, route) => `/admin/settings/editBackendUser/${backendUserId}`
 
 }
 

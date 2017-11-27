@@ -5,13 +5,13 @@
 /**
  * import of the libs and routes
  * */
-import React, {Component} from "react";
-import {fetchPendingRegistration} from "../../registrations/actions/findRegistration";
-import MlLoader from "../../../commons/components/loader/loader";
+import React, { Component } from 'react';
+import { fetchPendingRegistration } from '../../registrations/actions/findRegistration';
+import MlLoader from '../../../commons/components/loader/loader';
 export default class MlAppContextHandler extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {lodaing: true}
+    this.state = { lodaing: true }
     return this;
   }
 
@@ -30,10 +30,9 @@ export default class MlAppContextHandler extends Component {
     if (this.props.isFirst) {
       const response = await fetchPendingRegistration();
       if (response && response.length > 0) {
-        FlowRouter.go('/app/register/' + response[0].registrationId)
-      }
-      else if (response && response.length == 0) {
-        this.setState({loading: false})
+        FlowRouter.go(`/app/register/${response[0].registrationId}`)
+      } else if (response && response.length == 0) {
+        this.setState({ loading: false })
       }
     }
   }
@@ -42,8 +41,8 @@ export default class MlAppContextHandler extends Component {
    * render element to display the passing header if no pending registration
    * */
   render() {
-    var data = this.props;
-    var showLoader = this.state.loading;
+    const data = this.props;
+    const showLoader = this.state.loading;
     return (<div>{showLoader === true ? <MlLoader/> : data.context}</div>)
   }
 }

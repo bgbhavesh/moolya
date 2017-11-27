@@ -8,7 +8,6 @@ import '../../../stylesheets/css/cropper.css';
 
 
 export default class CropperModal extends React.PureComponent {
-
   constructor() {
     super();
     this.state = { };
@@ -33,7 +32,7 @@ export default class CropperModal extends React.PureComponent {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    return new Blob([ia], { type:mimeString });
+    return new Blob([ia], { type: mimeString });
   }
 
   onImageUpload() {
@@ -59,14 +58,16 @@ export default class CropperModal extends React.PureComponent {
       this.setState({
         imageSrc: reader.result,
         imageEvt: evt,
-        file: files[0],
+        file: files[0]
       });
     };
     reader.readAsDataURL(files[0]);
   }
 
   render() {
-    const { show, toggleShow, uploadingImage, imageSrc, cropperStyle } = this.props;
+    const {
+      show, toggleShow, uploadingImage, imageSrc, cropperStyle
+    } = this.props;
     const CModal = (
       <Modal show={show}>
         <Modal.Header>
@@ -111,7 +112,7 @@ export default class CropperModal extends React.PureComponent {
     );
     if (cropperStyle === 'circle') {
       return (
-        <div className={cropperStyle === 'circle' ? 'circle-cropper': ''}>
+        <div className={cropperStyle === 'circle' ? 'circle-cropper' : ''}>
           {CModal}
         </div>
       );
@@ -127,5 +128,5 @@ CropperModal.propTypes = {
   uploadingImage: React.PropTypes.bool.isRequired,
   cropperStyle: React.PropTypes.oneOf(['circle', 'square', 'any']).isRequired,
   imageSrc: React.PropTypes.string,
-  submitText: React.PropTypes.string,
+  submitText: React.PropTypes.string
 };

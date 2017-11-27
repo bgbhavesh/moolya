@@ -2,7 +2,7 @@
  * Created by viswadeep on 2/5/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function findAddressBookActionHandler() {
   const result = await appClient.query({
@@ -50,7 +50,7 @@ export async function findAddressBookActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findAddressBook;
   return id
@@ -138,7 +138,7 @@ export async function fetchUserDetails() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchExternalUserDetails;
   return id

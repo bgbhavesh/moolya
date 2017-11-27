@@ -1,48 +1,66 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import { MlViewer, MlViewerTypes } from '../../../../../lib/common/mlViewer/mlViewer';
 import React from 'react';
 import gql from 'graphql-tag'
 import MlInteractionDetailsComponent from '../component/MlInteractionDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-const mlInteractionsLogTableConfig=new MlViewer.View({
-  name:"TransactionsLogTable",
-  module:"InteractionsLog",//Module name for filter.
-  viewType:MlViewerTypes.TABLE,
-  extraFields:[],
-  fields:["createdAt","activity","transactionTypeName", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
-  searchFields:["createdAt","activity" ,"transactionTypeName" ,"userName", "clusterName", "chapterName", "subChapterName", "communityId"],
-  throttleRefresh:false,
-  pagination:true,//To display pagination
-  filter:true,
+const mlInteractionsLogTableConfig = new MlViewer.View({
+  name: 'TransactionsLogTable',
+  module: 'InteractionsLog', // Module name for filter.
+  viewType: MlViewerTypes.TABLE,
+  extraFields: [],
+  fields: ['createdAt', 'activity', 'transactionTypeName', 'userName', 'clusterName', 'chapterName', 'subChapterName', 'communityId'],
+  searchFields: ['createdAt', 'activity', 'transactionTypeName', 'userName', 'clusterName', 'chapterName', 'subChapterName', 'communityId'],
+  throttleRefresh: false,
+  pagination: true, // To display pagination
+  filter: true,
   filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" client={client} />,
-  columns:[
-    {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
-    {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
-    {dataField: "activity", title: "Activity",dataSort:true,selectRow:true},
-    {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "transactionTypeName", title: "TransactionTypeName",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
-    {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
-    {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true},{dataField: "transactionTypeId",isHidden:true}
+  columns: [
+    {
+      dataField: '_id', title: 'Id', isKey: true, isHidden: true, selectRow: true
+    },
+    {
+      dataField: 'createdAt', title: 'Created At', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'userName', title: 'User Name', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'activity', title: 'Activity', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'transactionDetails', title: 'Details', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'transactionTypeName', title: 'TransactionTypeName', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'clusterName', title: 'Cluster', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'chapterName', title: 'Chapter', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'subChapterName', title: 'Sub Chapter', dataSort: true, selectRow: true
+    },
+    {
+      dataField: 'communityName', title: 'Community', dataSort: true, selectRow: true
+    },
+    { dataField: 'userAgent', isHidden: true }, { dataField: 'userId', isHidden: true }, { dataField: 'emailId', isHidden: true }, { dataField: 'transactionTypeId', isHidden: true }
 
   ],
-  tableHeaderClass:'react_table_head',
-  isExpandableRow:(row)=>{return true;},
-  expandComponent:MlInteractionDetailsComponent,
-  showActionComponent:false,
+  tableHeaderClass: 'react_table_head',
+  isExpandableRow: row => true,
+  expandComponent: MlInteractionDetailsComponent,
+  showActionComponent: false,
   // expandableRow:_id,
-  actionConfiguration:[],
-  queryOptions:true,
+  actionConfiguration: [],
+  queryOptions: true,
   // buildQueryOptions:()=>{
   //   return {userId:"wJyiTdQandDyhcmKY"}
   // },
-  buildQueryOptions:(config)=>{
-    return {context:{transactionTypeName:"interactions"}}
-  },
+  buildQueryOptions: config => ({ context: { transactionTypeName: 'interactions' } }),
   graphQlQuery:
   gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"InteractionsLog", context:$context, offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
@@ -74,5 +92,5 @@ const mlInteractionsLogTableConfig=new MlViewer.View({
               }`
 });
 
-export {mlInteractionsLogTableConfig};
+export { mlInteractionsLogTableConfig };
 

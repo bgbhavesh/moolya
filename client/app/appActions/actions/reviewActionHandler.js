@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function reviewActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,19 +17,18 @@ export async function reviewActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType,
-      message:details.message,
-      rating:details.rating
+      message: details.message,
+      rating: details.rating
     }
   })
-  var resp = result.data.createReview;
-  /*if (resp.success) {
+  const resp = result.data.createReview;
+  /* if (resp.success) {
    return resp;
-  }*/
+  } */
   return resp;
 }
-
 
 
 export async function fetchReviewsActionHandler(details) {
@@ -50,13 +49,13 @@ export async function fetchReviewsActionHandler(details) {
       }
       }`,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType,
-      cursor:details.cursor
+      cursor: details.cursor
     },
-    forceFetch:true
+    forceFetch: true
   })
-  var resp = result.data.fetchReviews||[];
+  const resp = result.data.fetchReviews || [];
   if (resp) {
     return resp;
   }

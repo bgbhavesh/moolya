@@ -3,13 +3,13 @@
  */
 import gql from 'graphql-tag'
 
-export async function fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId, subChapterName,connection) {
+export async function fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId, subChapterName, connection) {
   let clusterid = clusterId,
-  chapterid = chapterId,
-  subChapterid = subChapterId,
-  communityid = communityId,
-  scName = subChapterName;
-  var connection=connection||{};
+    chapterid = chapterId,
+    subChapterid = subChapterId,
+    communityid = communityId,
+    scName = subChapterName;
+  var connection = connection || {};
   const result = await connection.query({
     query: gql`
        query ($clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String, $subChapterName:String) {
@@ -25,13 +25,13 @@ export async function fetchAssignUsersActionHandler(clusterId, chapterId, subCha
       }
     `,
     variables: {
-      clusterId:clusterid,
-      chapterId:chapterid,
-      subChapterId:subChapterid,
-      communityId:communityid,
-      subChapterName:scName
+      clusterId: clusterid,
+      chapterId: chapterid,
+      subChapterId: subChapterid,
+      communityId: communityid,
+      subChapterName: scName
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.data;
   return id

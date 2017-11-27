@@ -1,19 +1,18 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function upsertRegionalActionHandler(regionalDetails)
-{
-let regionalInfo=regionalDetails
+export async function upsertRegionalActionHandler(regionalDetails) {
+  const regionalInfo = regionalDetails
   const result = await client.mutate({
-   mutation: gql`
+    mutation: gql`
    mutation($regionalInfo:RegionalInfoRequest){
      updateGlobalSetting(type:REGIONAL,settingsData:{regionalInfo:$regionalInfo})
    }
    `,
-   variables: {
-   regionalInfo
-   }
-   })
+    variables: {
+      regionalInfo
+    }
+  })
   const id = result.data.updateGlobalSetting;
   return id
 }

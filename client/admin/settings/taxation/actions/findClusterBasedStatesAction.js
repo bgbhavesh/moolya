@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findClusterBasedStatesDeatilsActionHandler() {
   const result = await client.query({
@@ -11,7 +11,7 @@ export async function findClusterBasedStatesDeatilsActionHandler() {
           }
         }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.FetchActiveStates;
   return id

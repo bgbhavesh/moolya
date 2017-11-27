@@ -3,7 +3,7 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
 /**
  * updateCalendarWorkingDayActionHandler() --> construct the query to save in db
@@ -22,8 +22,8 @@ export async function updateCalendarWorkingDayActionHandler(profileId, workingDa
     }
     `,
     variables: {
-      profileId: profileId,
-      workingDay: workingDay,
+      profileId,
+      workingDay
     }
   });
   const response = result.data.updateMyCalendarWorkingDay;
@@ -47,8 +47,8 @@ export async function updateCalendarWorkingDaysActionHandler(profileId, workingD
     }
     `,
     variables: {
-      profileId : profileId,
-      workingDays: workingDays
+      profileId,
+      workingDays
     }
   });
   const response = result.data.updateMyCalendarWorkingDays;

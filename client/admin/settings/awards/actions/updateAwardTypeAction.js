@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateAwardTypeActionHandler(AwardType) {
-  let _id=AwardType.id;
-  let awardName = AwardType.awardName;
-  let awardDisplayName = AwardType.awardDisplayName;
-  let about = AwardType.about;
-  let isActive = AwardType.isActive
+  const _id = AwardType.id;
+  const awardName = AwardType.awardName;
+  const awardDisplayName = AwardType.awardDisplayName;
+  const about = AwardType.about;
+  const isActive = AwardType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$awardName: String, $awardDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateAwardTypeActionHandler(AwardType) {
       awardDisplayName,
       about,
       isActive,
-      moduleName: "AWARDS",
-      actionName: "UPDATE"
+      moduleName: 'AWARDS',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateAward;

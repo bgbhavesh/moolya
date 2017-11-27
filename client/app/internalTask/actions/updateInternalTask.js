@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 21/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function updateInternalTaskInfo(taskId, task) {
   const result = await appClient.mutate({
@@ -14,7 +14,7 @@ export async function updateInternalTaskInfo(taskId, task) {
         }
       }
     `,
-    variables:{
+    variables: {
       internalTaskId: taskId,
       internalTask: task
     },

@@ -1,19 +1,19 @@
-import {MlAppViewer} from "../../../commons/core/MlAppViewer";
-import MlAppInternalTaskList from "../components/MlAppInternalTaskList";
-import React from "react";
-import gql from "graphql-tag";
+import { MlAppViewer } from '../../../commons/core/MlAppViewer';
+import MlAppInternalTaskList from '../components/MlAppInternalTaskList';
+import React from 'react';
+import gql from 'graphql-tag';
 
 export const mlMyAppCurrentInternalTaskConfig = new MlAppViewer({
-  name: "My Internal Task List",
-  moduleName: "myCurrentInternalTask",
+  name: 'My Internal Task List',
+  moduleName: 'myCurrentInternalTask',
   sort: true,
   perPageLimit: 20,
   viewComponent: <MlAppInternalTaskList/>,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: true,
     search: true,
-    searchFields: ["community.name", "name", "type", "status", "attendeeName", "communityName", "clusterName", "ownerName", "portfolioTitle"]
+    searchFields: ['community.name', 'name', 'type', 'status', 'attendeeName', 'communityName', 'clusterName', 'ownerName', 'portfolioTitle']
   },
   graphQlQuery: gql`query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                   data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {
@@ -37,6 +37,6 @@ export const mlMyAppCurrentInternalTaskConfig = new MlAppViewer({
                       }
                   }
                 }
-            `,
+            `
 
 });

@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function addReqgistrationRequestInfo(requestDetails) {
-  let transaction = {}
+  const transaction = {}
   requests = requestDetails;
   const result = await appClient.mutate({
     mutation: gql`

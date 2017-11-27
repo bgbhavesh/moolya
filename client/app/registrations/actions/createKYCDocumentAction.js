@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 
 export async function createKYCDocument(registrationId, documentID, kycDocID, docTypeID) {
@@ -14,10 +14,10 @@ export async function createKYCDocument(registrationId, documentID, kycDocID, do
   }
     `,
     variables: {
-      registrationId: registrationId,
-      documentID: documentID,
-      kycDocID: kycDocID,
-      docTypeID: docTypeID
+      registrationId,
+      documentID,
+      kycDocID,
+      docTypeID
     }
   })
   const id = result.data.createKYCDocument;

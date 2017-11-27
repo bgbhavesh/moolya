@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addAwardActionHandler(AwardDetails) {
-  let awardName = AwardDetails.awardName;
-  let awardDisplayName = AwardDetails.awardDisplayName;
-  let about = AwardDetails.about;
-  let isActive = AwardDetails.isActive;
+  const awardName = AwardDetails.awardName;
+  const awardDisplayName = AwardDetails.awardDisplayName;
+  const about = AwardDetails.about;
+  const isActive = AwardDetails.isActive;
   const result = await client.mutate({
     mutation: gql`
     mutation  ($awardName: String, $awardDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -28,8 +28,8 @@ export async function addAwardActionHandler(AwardDetails) {
       awardDisplayName,
       about,
       isActive,
-      moduleName: "AWARDS",
-      actionName: "CREATE"
+      moduleName: 'AWARDS',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.CreateAward;

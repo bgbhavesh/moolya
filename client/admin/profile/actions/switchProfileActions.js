@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 
 export async function findUserActionHandler() {
@@ -36,7 +36,7 @@ export async function findUserActionHandler() {
             }
           }
     `,
-    forceFetch:true
+    forceFetch: true
   })
 
   const id = result.data.fetchInternalUserProfiles;
@@ -44,7 +44,6 @@ export async function findUserActionHandler() {
 }
 
 export async function setAdminDefaultProfileActionHandler(clusterId) {
-
   const result = await client.mutate({
     mutation: gql`
           mutation($clusterId:String!){
@@ -56,7 +55,7 @@ export async function setAdminDefaultProfileActionHandler(clusterId) {
           }
       `,
     variables: {
-      clusterId:clusterId
+      clusterId
     }
   })
   const id = result.data.setAdminDefaultProfile;
@@ -64,7 +63,6 @@ export async function setAdminDefaultProfileActionHandler(clusterId) {
 }
 
 export async function switchProfileActionHandler(clusterId) {
-
   const result = await client.mutate({
     mutation: gql`
           mutation($clusterId:String!){
@@ -76,7 +74,7 @@ export async function switchProfileActionHandler(clusterId) {
           }
       `,
     variables: {
-      clusterId:clusterId
+      clusterId
     }
   })
   const id = result.data.switchProfile;
@@ -84,7 +82,6 @@ export async function switchProfileActionHandler(clusterId) {
 }
 
 export async function deActivateAdminProfileActionHandler(clusterId) {
-
   const result = await client.mutate({
     mutation: gql`
           mutation($clusterId: String){
@@ -96,7 +93,7 @@ export async function deActivateAdminProfileActionHandler(clusterId) {
           }
       `,
     variables: {
-      clusterId:clusterId
+      clusterId
     }
   })
   const id = result.data.deActivateAdminUserProfile;
@@ -104,8 +101,6 @@ export async function deActivateAdminProfileActionHandler(clusterId) {
 }
 
 export async function fetchClusterDetails(clusterId) {
-
-
   const result = await client.query({
     query: gql`
             query($clusterId: String){  
@@ -133,17 +128,15 @@ export async function fetchClusterDetails(clusterId) {
                 }
             }`,
     variables: {
-      clusterId: clusterId
+      clusterId
     },
     forceFetch: true
   });
   const id = result.data.fetchUserRoleDetails;
   return id;
-
 }
 
-export function reloadPage(){
+export function reloadPage() {
   location.reload();
 }
-
 

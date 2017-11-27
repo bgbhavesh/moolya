@@ -9,23 +9,21 @@ const contentStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   height: '100px',
-  backgroundColor: '#fff',
+  backgroundColor: '#fff'
 };
 
 export default class MlVerticalTabComponent extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.callback.bind(this)
-    this.state = {tabs:props.tabs};
+    this.state = { tabs: props.tabs };
   }
 
-  callback (key){
+  callback(key) {
   }
 
 
-
-
-  render(){
+  render() {
     const makeTabPane = key => (
       <TabPane tab={key} key={key}>
         <div style={contentStyle}>
@@ -55,21 +53,22 @@ export default class MlVerticalTabComponent extends React.Component {
       //   }
       //   return result;
       // };
-      return(
-        <Tabs
-          defaultActiveKey="2"
-          onChange={this.callback.bind(this)}
-          tabBarPosition="left"
-          renderTabBar={()=><ScrollableInkTabBar styles={{
+    return (
+      <Tabs
+        defaultActiveKey="2"
+        onChange={this.callback.bind(this)}
+        tabBarPosition="left"
+        renderTabBar={() => <ScrollableInkTabBar
+          styles={{
             inkBar: {
               width: '20px',
-              backgroundColor: 'red',
-            },
+              backgroundColor: 'red'
+            }
           }}/>}
-          renderTabContent={()=><TabContent />}
-        >
-          {makeMultiTabPane(11)}
-        </Tabs>
-      )
+        renderTabContent={() => <TabContent />}
+      >
+        {makeMultiTabPane(11)}
+      </Tabs>
+    )
   }
 }

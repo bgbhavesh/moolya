@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addAssets(assetsMasterData)
-{
-    const result = await client.mutate({
-        mutation: gql`
+export async function addAssets(assetsMasterData) {
+  const result = await client.mutate({
+    mutation: gql`
             mutation($assetsMasterData:assetsMasterData){
                 createAssets(assetsMasterData:$assetsMasterData){
                     result,
@@ -13,11 +12,11 @@ export async function addAssets(assetsMasterData)
                 }    
             }
         `,
-        variables: {
-          assetsMasterData,
-          moduleName: "ASSETS",
-          actionName: "CREATE"
-        }
+    variables: {
+      assetsMasterData,
+      moduleName: 'ASSETS',
+      actionName: 'CREATE'
+    }
   })
   const id = result.data.createAssets;
   return id

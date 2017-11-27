@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateAccountTypeActionHandler(AccountType) {
-  let _id=AccountType.id;
-  let accountName = AccountType.accountName;
-  let accountDisplayName = AccountType.accountDisplayName;
-  let accountDescription = AccountType.accountDescription;
-  let isActive = AccountType.isActive
+  const _id = AccountType.id;
+  const accountName = AccountType.accountName;
+  const accountDisplayName = AccountType.accountDisplayName;
+  const accountDescription = AccountType.accountDescription;
+  const isActive = AccountType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$accountName: String, $accountDisplayName: String, $accountDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateAccountTypeActionHandler(AccountType) {
       accountDisplayName,
       accountDescription,
       isActive,
-      moduleName:"TEMPLATE",
-      actionName:"UPDATE"
+      moduleName: 'TEMPLATE',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateAccount;

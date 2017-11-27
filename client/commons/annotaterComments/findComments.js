@@ -4,8 +4,8 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 
 
-export async function findComments(annotationId,client) {
-  var connection=client||{};
+export async function findComments(annotationId, client) {
+  const connection = client || {};
   const result = await connection.query({
     query: gql`
           query ($annotationId: String!) {
@@ -25,18 +25,13 @@ export async function findComments(annotationId,client) {
   
       `,
     variables: {
-      annotationId: annotationId
+      annotationId
     },
     forceFetch: true
   })
   const data = result.data.fetchComments;
   let commitsArray = []
-  commitsArray  = _.map(data, function (row) {
-    return _.omit(row, ['__typename']);
-  });
+  commitsArray = _.map(data, row => _.omit(row, ['__typename']));
   return commitsArray;
 }
-
-
-
 

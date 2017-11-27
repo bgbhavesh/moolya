@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import {client} from '../../../../../client/admin/core/apolloConnection'
+import { client } from '../../../../../client/admin/core/apolloConnection'
 import _ from 'lodash'
 
 export async function fetchSelectedFilterDataActionHandler(id) {
@@ -33,23 +33,19 @@ export async function fetchSelectedFilterDataActionHandler(id) {
 
     `,
     variables: {
-      id: id,
+      id
     },
     forceFetch: true
   })
   const data = result.data.fetchSelectedFilterData;
-  let resultData = _.omit(data,'__typename');
+  const resultData = _.omit(data, '__typename');
 
 
   let fieldsArray = [];
 
-  fieldsArray=_.map(resultData.filterFields, function (row) {
-                      return _.omit(row, ['__typename'])
-
-                    });
+  fieldsArray = _.map(resultData.filterFields, row => _.omit(row, ['__typename']));
 
 
-
-  resultData["filterFields"] = fieldsArray
+  resultData.filterFields = fieldsArray
   return resultData
 }

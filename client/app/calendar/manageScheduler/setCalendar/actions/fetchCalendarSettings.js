@@ -2,9 +2,9 @@
  * Created by pankaj on 28/6/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function fetchCalendarSettingsActionHandler (profileId) {
+export async function fetchCalendarSettingsActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId:String) {
@@ -46,7 +46,7 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
     }
     `,
     variables: {
-      profileId:profileId
+      profileId
     },
     forceFetch: true
   });

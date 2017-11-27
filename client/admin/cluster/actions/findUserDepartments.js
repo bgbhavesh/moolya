@@ -2,12 +2,12 @@
  * Created by venkatasrinag on 20/2/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 
 export async function findUserDepartmentypeActionHandler(userId, clusterId) {
-  let did=userId;
-  let clusterid = clusterId;
+  const did = userId;
+  const clusterid = clusterId;
   const result = await client.query({
     query: gql`
       query ($id: String, $clusterId:String) {
@@ -22,10 +22,10 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
       }
     `,
     variables: {
-      id:did,
-      clusterId:clusterid
+      id: did,
+      clusterId: clusterid
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.data;
   return id
@@ -51,7 +51,7 @@ export async function checkDefaultRole(userId) {
     variables: {
       userId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.checkDefaultRole;
   return id

@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findDocumentTypeActionHandler(documentTypeId)
-{
-  let did=documentTypeId
+export async function findDocumentTypeActionHandler(documentTypeId) {
+  const did = documentTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -17,9 +16,9 @@ export async function findDocumentTypeActionHandler(documentTypeId)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findDocumentType;
   return id

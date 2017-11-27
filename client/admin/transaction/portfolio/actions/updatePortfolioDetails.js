@@ -1,15 +1,15 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import _ from 'lodash'
 
 export async function updatePortfolioActionHandler(details) {
-  let portfoliodetailsId  = details.portfolioId;
-  let portfolio = details.portfolio;
-  let privateKeys = details.privateKeys
-  let removeKeys = details.removeKeys
+  const portfoliodetailsId = details.portfolioId;
+  const portfolio = details.portfolio;
+  const privateKeys = details.privateKeys
+  const removeKeys = details.removeKeys
 
   const result = await client.mutate({
-      mutation: gql`
+    mutation: gql`
           mutation($portfoliodetailsId: String, $portfolio:portfolio, $privateKeys:[privateKeys], $removeKeys:[privateKeys]){
               updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio, privateFields:$privateKeys, removeKeys:$removeKeys){
                   success,
@@ -19,10 +19,10 @@ export async function updatePortfolioActionHandler(details) {
           }
       `,
     variables: {
-        portfoliodetailsId,
-        portfolio,
-        privateKeys,
-        removeKeys
+      portfoliodetailsId,
+      portfolio,
+      privateKeys,
+      removeKeys
     }
   })
   const id = result.data.updatePortfolio;
@@ -30,10 +30,12 @@ export async function updatePortfolioActionHandler(details) {
 }
 
 export async function updateIdeatorIdeaActionHandler(details, loginUserDetails) {
-  let ideaId  = details._id;
+  const ideaId = details._id;
   let idea = _.omit(details, '_id');
   idea = _.omit(idea, 'portfolioId');
-  const {clusterId, chapterId, subChapterId, communityId} = loginUserDetails ? loginUserDetails : {}
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loginUserDetails || {}
   const result = await client.mutate({
     mutation: gql`
           mutation  ($ideaId: String, $idea:idea, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
@@ -45,8 +47,8 @@ export async function updateIdeatorIdeaActionHandler(details, loginUserDetails) 
           }
       `,
     variables: {
-      ideaId:ideaId,
-      idea:idea,
+      ideaId,
+      idea,
       clusterId,
       chapterId,
       subChapterId,
@@ -59,9 +61,9 @@ export async function updateIdeatorIdeaActionHandler(details, loginUserDetails) 
 
 
 export async function createAnnotationActionHandler(details) {
-  let portfoliodetailsId  = details.portfolioId;
-  let quote = details.quote
-  let docId = details.docId
+  const portfoliodetailsId = details.portfolioId;
+  const quote = details.quote
+  const docId = details.docId
   const result = await client.mutate({
     mutation: gql`
           mutation  ($portfoliodetailsId: String, $docId:String, $quote:String){
@@ -83,7 +85,9 @@ export async function createAnnotationActionHandler(details) {
 }
 
 export async function approvePortfolio(portfolioId, loggedUserDetails) {
-  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loggedUserDetails;
   const result = await client.mutate({
     mutation: gql`
      mutation($portfoliodetailsId:String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
@@ -100,7 +104,7 @@ export async function approvePortfolio(portfolioId, loggedUserDetails) {
       }
     `,
     variables: {
-      portfoliodetailsId:portfolioId,
+      portfoliodetailsId: portfolioId,
       clusterId,
       chapterId,
       subChapterId,
@@ -124,7 +128,7 @@ export async function rejectPortfolio(portfolioId) {
       }
     `,
     variables: {
-      portfoliodetailsId:portfolioId
+      portfoliodetailsId: portfolioId
     }
   })
 

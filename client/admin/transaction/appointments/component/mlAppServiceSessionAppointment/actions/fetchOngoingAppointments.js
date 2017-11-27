@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 24/7/17.
  */
-import gql from "graphql-tag";
-import { client } from "../../../../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../../../../core/apolloConnection';
 
 export async function ongoingAppointmentActionHandler(status) {
   const result = await client.query({
@@ -109,41 +109,39 @@ export async function fetchServiceByServiceId(serviceId, sessionId) {
     },
     forceFetch: true
   });
-  var response = result.data.findService;
-  let service = _.omit(response, '__typename');
+  const response = result.data.findService;
+  const service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');
   service.facilitationCharge = _.omit(service.facilitationCharge, '__typename');
-  let stateArray = [];
+  const stateArray = [];
   _.each(service.state, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     stateArray.push(value);
   });
   service.state = stateArray;
-  let cityArray = [];
+  const cityArray = [];
   _.each(service.city, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     cityArray.push(value)
   });
   service.city = cityArray;
-  let communityArray = [];
+  const communityArray = [];
   _.each(service.community, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     communityArray.push(value)
   });
   service.community = communityArray;
-  let taskArray = [];
+  const taskArray = [];
   _.each(service.tasks, (item, say) => {
-    let value = _.omit(item, '__typename');
+    const value = _.omit(item, '__typename');
     taskArray.push(value)
   });
   service.tasks = taskArray;
   if (service.tasks && service.tasks.length > 0) {
-    let filterTask = service.tasks.find(function (data) {
+    const filterTask = service.tasks.find((data) => {
       data.sessions = data.sessions ? data.sessions : [];
-      return data.sessions.some(function (session) {
-        return session.id == sessionId;
-      });
+      return data.sessions.some(session => session.id == sessionId);
     });
     service.tasks = filterTask;
   }
@@ -205,24 +203,24 @@ export async function findTaskActionHandler(taskId) {
           }
       `,
     variables: {
-      taskId: taskId
+      taskId
     },
     forceFetch: true
   })
-  var resp = result.data.fetchTaskForApointment;
-  let data = _.omit(resp, '__typename')
+  const resp = result.data.fetchTaskForApointment;
+  const data = _.omit(resp, '__typename')
   data.duration = _.omit(data.duration, '__typename')
   data.payment = _.omit(data.payment, '__typename')
-  let sessionArray = []
-  _.each(data.session, function (item, say) {
-    let value = _.omit(item, '__typename')
+  const sessionArray = []
+  _.each(data.session, (item, say) => {
+    const value = _.omit(item, '__typename')
     value.duration = _.omit(value.duration, '__typename')
     sessionArray.push(value)
   })
   data.session = sessionArray
-  let attachmentArray = []
-  _.each(data.attachments, function (item, say) {
-    let value = _.omit(item, '__typename')
+  const attachmentArray = []
+  _.each(data.attachments, (item, say) => {
+    const value = _.omit(item, '__typename')
     attachmentArray.push(value)
   })
   data.attachments = attachmentArray
@@ -256,6 +254,6 @@ export async function fetchSelfTaskById(selfTaskId) {
     },
     forceFetch: true
   });
-  var response = result.data.fetchSelfTask;
+  const response = result.data.fetchSelfTask;
   return response;
 }

@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addSubDepartmentActionHandler(SubDepartmentDetails)
-{
-  let subDepartment=SubDepartmentDetails;
-  let availableSubDepts=subDepartment["subDepatmentAvailable"]||[];
-  subDepartment["subDepatmentAvailable"] = _.map(availableSubDepts, function(o) { return _.omit(o, '__typename'); })||[];
-    const result = await client.mutate({
-        mutation: gql`
+export async function addSubDepartmentActionHandler(SubDepartmentDetails) {
+  const subDepartment = SubDepartmentDetails;
+  const availableSubDepts = subDepartment.subDepatmentAvailable || [];
+  subDepartment.subDepatmentAvailable = _.map(availableSubDepts, o => _.omit(o, '__typename')) || [];
+  const result = await client.mutate({
+    mutation: gql`
         mutation ($subDepartment:subDepartmentObject,$moduleName:String, $actionName:String){
             createSubDepartment(
                 subDepartment: $subDepartment,
@@ -20,13 +19,13 @@ export async function addSubDepartmentActionHandler(SubDepartmentDetails)
             } 
          }
         `,
-        variables: {
-            subDepartment,
-            moduleName:"SUBDEPARTMENT",
-            actionName:"CREATE"
-        }
-    })
+    variables: {
+      subDepartment,
+      moduleName: 'SUBDEPARTMENT',
+      actionName: 'CREATE'
+    }
+  })
 
-    const id = result.data.createSubDepartment;
-    return id
+  const id = result.data.createSubDepartment;
+  return id
 }

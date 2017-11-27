@@ -2,7 +2,7 @@
  * Created by vishwadeep on 14/6/17.
  */
 
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
 import MlAppRegistrationWizard from '../../../registrations/component/MlAppRegistrationWizard'
 import MlConnectionRequest from './MlConnectionRequest';
@@ -11,7 +11,7 @@ import MlShareCalendar from './MlShareCalendar';
 import MlAppointmentsDetailsComponent from '../../../myTransaction/component/appointments/component/MlAppointmentsDetailsComponent';
 
 export default function MlGenericTransactionAccordion(props) {
-  let data = props.data || {}
+  const data = props.data || {}
   switch (data.transactionType) {
     case 'officeRequest': {
       // return <MlOffice config={data}/>
@@ -95,11 +95,11 @@ export class MlOffice extends Component {
 export class MlEmptyView extends Component {
   render() {
     let { data } = this.props;
-    data = data ? data : {};
+    data = data || {};
     console.log(data);
     return (<div>
-      {data.transactionType} {data.status ? '- ' + data.status : ''}
-      {/*UI Not available*/}
+      {data.transactionType} {data.status ? `- ${data.status}` : ''}
+      {/* UI Not available */}
     </div>)
   }
 }

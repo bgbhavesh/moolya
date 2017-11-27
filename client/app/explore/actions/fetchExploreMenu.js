@@ -4,7 +4,7 @@
 import gql from 'graphql-tag'
 import _ from 'lodash'
 
-export async function fetchExploreMenuHandler(connector){
+export async function fetchExploreMenuHandler(connector) {
   const result = await connector.query({
     query: gql`
       fragment subMenu on Menu{
@@ -40,7 +40,7 @@ export async function fetchExploreMenuHandler(connector){
                     }
       }
     `,
-    variables: {name:'mlExploreMenu'},
+    variables: { name: 'mlExploreMenu' },
     forceFetch: true
   })
 

@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findRegionalActionHandler()
-{
+export async function findRegionalActionHandler() {
   const result = await client.query({
     query: gql`
            query{
@@ -32,7 +31,7 @@ export async function findRegionalActionHandler()
           
         }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchGlobalSettings;
   return id

@@ -1,10 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function upsertDateAndTimeActionHandler(Details)
-{
-
-  let dateAndTimeInfo=Details
+export async function upsertDateAndTimeActionHandler(Details) {
+  const dateAndTimeInfo = Details
 
   const result = await client.mutate({
     mutation: gql`

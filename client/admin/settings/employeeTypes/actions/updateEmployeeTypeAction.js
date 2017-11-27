@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateEmployeeTypeActionHandler(EmpType) {
-  let _id=EmpType.id;
-  let employmentName = EmpType.employmentName;
-  let employmentDisplayName = EmpType.employmentDisplayName;
-  let aboutEmployment = EmpType.aboutEmployment;
-  let isActive = EmpType.isActive;
-  let employmentTypeInfo={employmentName,employmentDisplayName,aboutEmployment};
+  const _id = EmpType.id;
+  const employmentName = EmpType.employmentName;
+  const employmentDisplayName = EmpType.employmentDisplayName;
+  const aboutEmployment = EmpType.aboutEmployment;
+  const isActive = EmpType.isActive;
+  const employmentTypeInfo = { employmentName, employmentDisplayName, aboutEmployment };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -15,7 +15,7 @@ export async function updateEmployeeTypeActionHandler(EmpType) {
       }
     `,
     variables: {
-      masterData:{"employmentTypeInfo":employmentTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { employmentTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

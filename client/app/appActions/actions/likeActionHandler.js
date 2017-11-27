@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function likeActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,7 +17,7 @@ export async function likeActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType
     }
   })
@@ -29,11 +29,8 @@ export async function likeActionHandler(details) {
   return null;
 }
 
-export default async function handleLikeAction(details){
-
-    var resp = await likeActionHandler(details);
-    return resp;
+export default async function handleLikeAction(details) {
+  const resp = await likeActionHandler(details);
+  return resp;
 }
-
-
 

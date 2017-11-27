@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function createUserTypeActionHandler(userType) {
   const result = await client.mutate({
@@ -17,9 +17,9 @@ export async function createUserTypeActionHandler(userType) {
        }
     `,
     variables: {
-      userType: userType,
-      moduleName:"USERTYPE",
-      actionName:"CREATE"
+      userType,
+      moduleName: 'USERTYPE',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.createUserType;

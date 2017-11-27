@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findProfessionActionHandler(ProfessionTypeId) {
-  let did=ProfessionTypeId
+  const did = ProfessionTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -18,9 +18,9 @@ export async function findProfessionActionHandler(ProfessionTypeId) {
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.FindProfession;
   return id

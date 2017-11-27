@@ -5,7 +5,7 @@ import { fetchPortfolioImageHandler } from '../../portfolio/ideators/actions/ide
 export default class DynamicBreadcrum extends Component {
   constructor(props) {
     super(props);
-    this.state = { breadCrumList: [], toggle: 1};
+    this.state = { breadCrumList: [], toggle: 1 };
     this.getHierarchyDetails.bind(this);
     this.setBreadCrumHierarchyCallback.bind(this);
     return this;
@@ -26,17 +26,17 @@ export default class DynamicBreadcrum extends Component {
     this._isMounted = false;
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.fetchNameToDisplay();
   }
 
   async fetchNameToDisplay() {
     if (FlowRouter.getParam('portfolioId')) {
-      var response = await fetchPortfolioImageHandler(FlowRouter.getParam('portfolioId'));
+      const response = await fetchPortfolioImageHandler(FlowRouter.getParam('portfolioId'));
       if (response) {
-        this.setState({portfolioId:response.portfolioUserName});
-      }else{
-        this.setState({portfolioId:'User'});
+        this.setState({ portfolioId: response.portfolioUserName });
+      } else {
+        this.setState({ portfolioId: 'User' });
       }
     }
   }
@@ -53,12 +53,12 @@ export default class DynamicBreadcrum extends Component {
 
   getHierarchyDetails() {
     const params = FlowRouter.current().params;
-    getBreadCrumListBasedOnhierarchy( params,this.state.portfolioId, this.setBreadCrumHierarchyCallback.bind(this));
+    getBreadCrumListBasedOnhierarchy(params, this.state.portfolioId, this.setBreadCrumHierarchyCallback.bind(this));
   }
 
   render() {
     let counter = 0;
-    let that =this;
+    const that = this;
     const linksLength = this.state.breadCrumList.length;
     const list = this.state.breadCrumList.map((prop, id) => {
       ++counter;
@@ -67,8 +67,8 @@ export default class DynamicBreadcrum extends Component {
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
-      var name = prop.linkName;
-      if(name === 'User') name = that.state.portfolioId;
+      let name = prop.linkName;
+      if (name === 'User') name = that.state.portfolioId;
       return (<li key={id} className={lastLinkClass}>
         <a href={linkUrl}>{name}</a></li>);
     });
@@ -109,21 +109,21 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
         list[list.length - 1].linkUrl = link;
         list.push({
           linkName: `Edit ${list[list.length - 1].linkName}`,
-          linkUrl: '',
+          linkUrl: ''
         });
       } else if (each.startsWith('add')) {
         const link = `${path.split('add')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
         list.push({
           linkName: `Add ${list[list.length - 1].linkName}`,
-          linkUrl: '',
+          linkUrl: ''
         });
       } else if (each.startsWith('create')) {
         const link = `${path.split('create')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
         list.push({
           linkName: `Create ${list[list.length - 1].linkName}`,
-          linkUrl: '',
+          linkUrl: ''
         });
       }
     }
@@ -134,5 +134,5 @@ function StaticBreadCrumListHandler(list, breadCrum, menu) {
 
 DynamicBreadcrum.contextTypes = {
   menu: React.PropTypes.object,
-  breadCrum: PropTypes.object,
+  breadCrum: PropTypes.object
 };

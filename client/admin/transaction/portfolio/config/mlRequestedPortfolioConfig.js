@@ -1,68 +1,72 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import { MlViewer, MlViewerTypes } from '../../../../../lib/common/mlViewer/mlViewer';
 import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import MlPortfolioAssignComponent from '../component/commons/MlPortfolioAssignComponent'
-import {validateTransaction} from '../actions/assignUserforTransactionAction'
-import moment from "moment";
-import {client} from '../../../core/apolloConnection';
+import { validateTransaction } from '../actions/assignUserforTransactionAction'
+import moment from 'moment';
+import { client } from '../../../core/apolloConnection';
 
-function dateFormatter (cell,data){
-  let createdDateTime=data&&data.createdAt?data.createdAt:null;
-  let dateVal=createdDateTime?moment(createdDateTime).format(Meteor.settings.public.dateFormat):'';
+function dateFormatter(cell, data) {
+  const createdDateTime = data && data.createdAt ? data.createdAt : null;
+  const dateVal = createdDateTime ? moment(createdDateTime).format(Meteor.settings.public.dateFormat) : '';
   return dateVal;
 }
 
-const mlRequestedPortfolioTableConfig=new MlViewer.View({
-  name:"portfolioInfoTable",
-  module:"portfolioDetails",//Module name for filter.
-  viewType:MlViewerTypes.TABLE,
-  extraFields:[],
-  fields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName','subChapterName', 'accountType', 'source', 'createdBy', 'status'],
-  searchFields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName','subChapterName', 'accountType', 'source', 'createdBy', 'status'],
-  throttleRefresh:false,
-  pagination:true,//To display pagination
-  selectRow:true,  //Enable checkbox/radio button to select the row.
-  filter:true,
-  multiSelect:true,
+const mlRequestedPortfolioTableConfig = new MlViewer.View({
+  name: 'portfolioInfoTable',
+  module: 'portfolioDetails', // Module name for filter.
+  viewType: MlViewerTypes.TABLE,
+  extraFields: [],
+  fields: ['portfolioId', 'transactionType', 'portfolioUserName', 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'subChapterName', 'accountType', 'source', 'createdBy', 'status'],
+  searchFields: ['portfolioId', 'transactionType', 'portfolioUserName', 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'subChapterName', 'accountType', 'source', 'createdBy', 'status'],
+  throttleRefresh: false,
+  pagination: true, // To display pagination
+  selectRow: true, // Enable checkbox/radio button to select the row.
+  filter: true,
+  multiSelect: true,
   filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" client={client} />,
-  columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "portfolioId", title: "Requested Id",dataSort:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,useCustomComponent:true,customComponent:dateFormatter},
-    {dataField: "transactionType", title: "Transaction Type",dataSort:true},
-    {dataField: "portfolioUserName", title: "Name",dataSort:true},
-    {dataField: "contactNumber", title: "Contact No",dataSort:true},
-    {dataField: "communityType", title: "Community",dataSort:true},
-    {dataField: "clusterName", title: "Cluster",dataSort:true},
-    {dataField: "chapterName", title: "Chapter",dataSort:true},
-    {dataField: "subChapterName", title: "SubChapter",dataSort:true},
-    {dataField: "accountType", title: "Account Type",dataSort:true},
-    {dataField: "source", title: "Source",dataSort:true},
-    {dataField: "createdBy", title: "Created By",dataSort:true},
-    {dataField: "status", title: "Status",dataSort:true},
-    {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
-    {dataField: "assignedUser", title: "Assign",dataSort:true},
+  columns: [
+    {
+      dataField: 'id', title: 'Id', isKey: true, isHidden: true
+    },
+    { dataField: 'portfolioId', title: 'Requested Id', dataSort: true },
+    {
+      dataField: 'createdAt', title: 'Date & Time', dataSort: true, useCustomComponent: true, customComponent: dateFormatter
+    },
+    { dataField: 'transactionType', title: 'Transaction Type', dataSort: true },
+    { dataField: 'portfolioUserName', title: 'Name', dataSort: true },
+    { dataField: 'contactNumber', title: 'Contact No', dataSort: true },
+    { dataField: 'communityType', title: 'Community', dataSort: true },
+    { dataField: 'clusterName', title: 'Cluster', dataSort: true },
+    { dataField: 'chapterName', title: 'Chapter', dataSort: true },
+    { dataField: 'subChapterName', title: 'SubChapter', dataSort: true },
+    { dataField: 'accountType', title: 'Account Type', dataSort: true },
+    { dataField: 'source', title: 'Source', dataSort: true },
+    { dataField: 'createdBy', title: 'Created By', dataSort: true },
+    { dataField: 'status', title: 'Status', dataSort: true },
+    { dataField: 'allocationStatus', title: 'Allocation Status', dataSort: true },
+    { dataField: 'assignedUser', title: 'Assign', dataSort: true }
   ],
-  tableHeaderClass:'react_table_head',
-  showActionComponent:true,
+  tableHeaderClass: 'react_table_head',
+  showActionComponent: true,
 
-  actionConfiguration:[
+  actionConfiguration: [
     {
       actionName: 'edit',
       showAction: true,
-      handler: async(data)=>{
-        let list = data
-        if(!list || list.length==0 ){
-          toastr.error("Please Select a record");
-        } else if(list && list.length>1){
-          toastr.error("Multiple records cannot be edited, Please select a record");
-        } else{
-          let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
-          if(response.success === true ){
-            FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data[0].id+"/"+data[0].communityType);
-          }else{
-            toastr.error("User does not have access to edit record");
+      handler: async (data) => {
+        const list = data
+        if (!list || list.length == 0) {
+          toastr.error('Please Select a record');
+        } else if (list && list.length > 1) {
+          toastr.error('Multiple records cannot be edited, Please select a record');
+        } else {
+          const response = await validateTransaction(data.transactionId, 'MlPortfolioDetails', data[0].assignedUserId);
+          if (response.success === true) {
+            FlowRouter.go(`/admin/transactions/portfolio/editRequests/${data[0].id}/${data[0].communityType}`);
+          } else {
+            toastr.error('User does not have access to edit record');
           }
         }
       }
@@ -70,13 +74,13 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'assign',
-      hasPopOver:true,
-      popOverTitle:'Assign Portfolio',
-      placement:'top',
-      target:'portfolioAssign',
-      popOverComponent:<MlPortfolioAssignComponent />,
-      actionComponent:function(props){
-        return  <div className={props.activeClass} id={props.actionName}>
+      hasPopOver: true,
+      popOverTitle: 'Assign Portfolio',
+      placement: 'top',
+      target: 'portfolioAssign',
+      popOverComponent: <MlPortfolioAssignComponent />,
+      actionComponent(props) {
+        return <div className={props.activeClass} id={props.actionName}>
           <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
             <span className={props.iconClass} id={props.target}></span>
           </div></div>;
@@ -85,21 +89,20 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'view',
-      handler: async(data)=>{
-        let list = data
-        if(!list || list.length==0 ){
-          toastr.error("Please Select a record");
-        } else if(list && list.length>1){
-          toastr.error("Multiple records cannot be viewd, Please select a record");
-        } else{
-          let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
-          if(response.success === true ){
-            FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data[0].id+"/"+data[0].communityType);
-          }else{
-            toastr.error("User does not have access to view record");
+      handler: async (data) => {
+        const list = data
+        if (!list || list.length == 0) {
+          toastr.error('Please Select a record');
+        } else if (list && list.length > 1) {
+          toastr.error('Multiple records cannot be viewd, Please select a record');
+        } else {
+          const response = await validateTransaction(data.transactionId, 'MlPortfolioDetails', data[0].assignedUserId);
+          if (response.success === true) {
+            FlowRouter.go(`/admin/transactions/portfolio/viewPortfolio/${data[0].id}/${data[0].communityType}`);
+          } else {
+            toastr.error('User does not have access to view record');
           }
         }
-
       }
     },
     {
@@ -107,12 +110,12 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'rejectUser',
       handler: (data) => {
         if (data && data[0].id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data[0].id+"/"+data[0].communityType);
+          FlowRouter.go(`/admin/transactions/portfolio/viewPortfolio/${data[0].id}/${data[0].communityType}`);
         } else {
-          toastr.error("Please select a record");
+          toastr.error('Please select a record');
         }
       }
-    },
+    }
   ],
   graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
@@ -149,4 +152,4 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
               }`
 });
 
-export {mlRequestedPortfolioTableConfig};
+export { mlRequestedPortfolioTableConfig };

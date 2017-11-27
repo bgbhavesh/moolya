@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
-export async function fetchCommunityUsersHandler(clusterId,chapterId,subChapterId,userType) {
+export async function fetchCommunityUsersHandler(clusterId, chapterId, subChapterId, userType) {
   // let did = subChapterId
   const result = await client.query({
     query: gql`
@@ -23,10 +23,10 @@ export async function fetchCommunityUsersHandler(clusterId,chapterId,subChapterI
       }
     `,
     variables: {
-      clusterId:clusterId,
-      chapterId:chapterId,
-      subChapterId:subChapterId,
-      userType: userType
+      clusterId,
+      chapterId,
+      subChapterId,
+      userType
     },
     forceFetch: true
   })

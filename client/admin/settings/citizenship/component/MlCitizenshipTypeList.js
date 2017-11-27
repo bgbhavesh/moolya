@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlCitizenshipTableConfig} from "../config/MlCitizenshipTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlCitizenshipTableConfig } from '../config/MlCitizenshipTypeConfig';
 export default class MlCitizenshipList extends Component {
-
   componentDidMount() {
   }
 

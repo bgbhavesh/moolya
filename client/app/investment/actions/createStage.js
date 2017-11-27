@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 18/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function createStageActionHandler(stage) {
   const result = await appClient.mutate({
@@ -15,7 +15,7 @@ export async function createStageActionHandler(stage) {
       }
     `,
     variables: {
-      stage: stage
+      stage
     },
     forceFetch: true
   })

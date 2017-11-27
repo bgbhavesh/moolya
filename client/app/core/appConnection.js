@@ -5,12 +5,12 @@ import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
-import {ApolloClient,createNetworkInterface, createBatchingNetworkInterface} from 'apollo-client';
+import { ApolloClient, createNetworkInterface, createBatchingNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 const defaultNetworkInterfaceConfig = {
   uri: Meteor.absoluteUrl('moolya'),
-  opts: {credentials: 'same-origin'},
+  opts: { credentials: 'same-origin' },
   useMeteorAccounts: true,
   batchingInterface: false
 };
@@ -18,13 +18,13 @@ const defaultNetworkInterfaceConfig = {
 const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
   const config = {
     ...defaultNetworkInterfaceConfig,
-    ...customNetworkInterfaceConfig,
+    ...customNetworkInterfaceConfig
   };
   const useBatchingInterface = config.batchingInterface && typeof config.batchInterval === 'number';
   const interfaceToUse = useBatchingInterface ? createBatchingNetworkInterface : createNetworkInterface;
   const interfaceArgument = {
     uri: config.uri,
-    opts: config.opts,
+    opts: config.opts
   }
   const networkInterface = interfaceToUse(interfaceArgument);
   if (config.useMeteorAccounts) {
@@ -44,7 +44,7 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
             request.options.headers = new Headers();
           }
           request.options.headers['meteor-login-token'] = currentUserToken;
-          request.options.headers['cookie'] = document.cookie;
+          request.options.headers.cookie = document.cookie;
           next();
         }
       }]);
@@ -57,8 +57,8 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
 
           const clonedResponse = response.clone();
 
-          clonedResponse.json().then(data => {
-              next();
+          clonedResponse.json().then((data) => {
+            next();
           });
         }
       }]);
@@ -70,11 +70,11 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
 const defaultClientConfig =
   {
     networkInterface: createMeteorNetworkInterface(),
-    //ssrMode: Meteor.isServer,
-    dataIdFromObject: r =>r.id
+    // ssrMode: Meteor.isServer,
+    dataIdFromObject: r => r.id
   };
 
 const networkInterface = defaultClientConfig.networkInterface;
 const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
-export const appClient = new ApolloClient({networkInterface, dataIdFromObject});
+export const appClient = new ApolloClient({ networkInterface, dataIdFromObject });

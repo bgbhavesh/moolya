@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { client } from "../../../../../core/apolloConnection";
+import { client } from '../../../../../core/apolloConnection';
 export async function fetchSlotAppointmentsDetailsActionHandler(appointmentId) {
   const result = await client.query({
     query: gql`

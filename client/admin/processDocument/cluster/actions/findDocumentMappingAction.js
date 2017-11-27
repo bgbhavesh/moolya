@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findDocumentMappingActionHandler(kycid,processid)
-{
-  let kycId=kycid
-  let processId=processid
+export async function findDocumentMappingActionHandler(kycid, processid) {
+  const kycId = kycid
+  const processId = processid
   const result = await client.query({
     query: gql`
     query  ($kycId: String,$processId: String){
@@ -33,7 +32,7 @@ export async function findDocumentMappingActionHandler(kycid,processid)
       kycId,
       processId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findProcessDocuments;
   return id

@@ -27,31 +27,28 @@ Meteor.startup(function () {
  * Mobile related changes
  */
 
-var FastClick = require('fastclick');
-Meteor.startup(function (){
-  const checkAndAskForAccessOfStorage = function (){
-    if(cordova.plugins.diagnostic.isExternalStorageAuthorized){
-      cordova.plugins.diagnostic.isExternalStorageAuthorized(function(authorized){
-        console.log("App is " + (authorized ? "authorized" : "denied") + " access to the external storage");
-        cordova.plugins.diagnostic.requestExternalStorageAuthorization(function (){
-          console.log("done");
-        }, function (error){
-          console.log("not done",error);
+const FastClick = require('fastclick');
+Meteor.startup(() => {
+  const checkAndAskForAccessOfStorage = function () {
+    if (cordova.plugins.diagnostic.isExternalStorageAuthorized) {
+      cordova.plugins.diagnostic.isExternalStorageAuthorized((authorized) => {
+        console.log(`App is ${authorized ? 'authorized' : 'denied'} access to the external storage`);
+        cordova.plugins.diagnostic.requestExternalStorageAuthorization(() => {
+          console.log('done');
+        }, (error) => {
+          console.log('not done', error);
         });
-      }, function(error){
-        console.error("The following error occurred: "+error);
+      }, (error) => {
+        console.error(`The following error occurred: ${error}`);
       });
     }
-
   };
 
 
-  if(Meteor.isCordova){
+  if (Meteor.isCordova) {
     checkAndAskForAccessOfStorage();
-    /*document.addEventListener("deviceready", function (){
+    /* document.addEventListener("deviceready", function (){
       FastClick.attach(document.body);
-    }, false);*/
+    }, false); */
   }
-
-
 })

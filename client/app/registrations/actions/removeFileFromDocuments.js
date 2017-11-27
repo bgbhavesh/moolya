@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function removeFileFromDocumentsActionHandler(fileId, docTypeId, documentId, registrationId) {
   const result = await appClient.mutate({
@@ -17,8 +17,8 @@ export async function removeFileFromDocumentsActionHandler(fileId, docTypeId, do
       docTypeId,
       documentId,
       registrationId,
-      moduleName: "REGISTRATION",
-      actionName: "UPDATE",
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE'
     },
     forceFetch: true
   })

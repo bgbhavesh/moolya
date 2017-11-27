@@ -3,7 +3,7 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../admin/core/apolloConnection';
+import { client } from '../../admin/core/apolloConnection';
 
 export async function forgotPasswordActionHandler(email) {
   console.log(email);
@@ -19,7 +19,7 @@ export async function forgotPasswordActionHandler(email) {
     }
     `,
     variables: {
-      email:email,
+      email
       // moduleName:"REGISTRATION",
       // actionName:"READ"
     }

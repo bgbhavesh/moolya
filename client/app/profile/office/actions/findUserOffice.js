@@ -1,8 +1,8 @@
 /**
  * Created by vishwadeep on 6/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../../../app/core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../../../app/core/appConnection';
 
 export async function findUserOfficeActionHandler() {
   const result = await appClient.query({
@@ -19,7 +19,7 @@ export async function findUserOfficeActionHandler() {
               }  
           }
       `,
-      forceFetch: true
+    forceFetch: true
   })
   const id = result.data.fetchOfficeSC;
   return id

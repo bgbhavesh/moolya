@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findDeptAndsubDeptActionHandler(clusterId) {
-  let cid=clusterId
+  const cid = clusterId
   const result = await client.query({
     query: gql`
        query  ($clusterId: String){
@@ -17,16 +17,16 @@ export async function findDeptAndsubDeptActionHandler(clusterId) {
         }
     `,
     variables: {
-      clusterId:cid
+      clusterId: cid
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchMoolyaBasedDepartmentAndSubDepartment;
   return id
 }
 
-export async function findNonMoolyaDeptAndsubDeptActionHandler(clusterId,subChapterId) {
-  let cid=clusterId
+export async function findNonMoolyaDeptAndsubDeptActionHandler(clusterId, subChapterId) {
+  const cid = clusterId
   const result = await client.query({
     query: gql`
        query  ($clusterId: String,$subChapterId:String){
@@ -41,10 +41,10 @@ export async function findNonMoolyaDeptAndsubDeptActionHandler(clusterId,subChap
         }
     `,
     variables: {
-      clusterId:cid,
-      subChapterId:subChapterId
+      clusterId: cid,
+      subChapterId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchNonMoolyaBasedDepartmentAndSubDepartments;
   return id

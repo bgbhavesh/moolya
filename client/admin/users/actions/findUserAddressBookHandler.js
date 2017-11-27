@@ -2,7 +2,7 @@
  * Created by Rajat
  */
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findAddressBookActionHandler(registrationId) {
   const result = await client.query({
@@ -44,9 +44,9 @@ export async function findAddressBookActionHandler(registrationId) {
     }
     `,
     variables: {
-      registrationId: registrationId
+      registrationId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findExternalUserAddressBook;
   return id
@@ -129,7 +129,7 @@ export async function fetchUserDetails() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchExternalUserDetails;
   return id
@@ -154,11 +154,10 @@ export async function findCountryCode(clusterId) {
             }
         }`,
     variables: {
-      clusterId: clusterId
+      clusterId
     },
     forceFetch: true
   });
   const id = result.data.fetchCountryCode;
   return id
-
 }

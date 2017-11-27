@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addTitleActionHandler(TitleDetails) {
-  let titleName = TitleDetails.titleName||null;
-  let titleDisplayName = TitleDetails.titleDisplayName||null;
-  let aboutTitle = TitleDetails.aboutTitle||null;
-  let isActive = TitleDetails.isActive;
-  let titleInfo={titleName,titleDisplayName,aboutTitle};
+  const titleName = TitleDetails.titleName || null;
+  const titleDisplayName = TitleDetails.titleDisplayName || null;
+  const aboutTitle = TitleDetails.aboutTitle || null;
+  const isActive = TitleDetails.isActive;
+  const titleInfo = { titleName, titleDisplayName, aboutTitle };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -14,7 +14,7 @@ export async function addTitleActionHandler(TitleDetails) {
       }
     `,
     variables: {
-      masterData:{"titleInfo":titleInfo,"isActive":isActive},
+      masterData: { titleInfo, isActive }
     }
   })
   const id = result.data.createMasterSetting;

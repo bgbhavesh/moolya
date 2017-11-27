@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
-export async function findCommunityDefActionHandler(Id)
-{
-  let did=Id;
+export async function findCommunityDefActionHandler(Id) {
+  const did = Id;
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -22,9 +21,9 @@ export async function findCommunityDefActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.data;
   return id

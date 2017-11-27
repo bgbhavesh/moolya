@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addDepartmentActionHandler(DepartmentDetails) {
-  let departmentName = DepartmentDetails.departmentName;
-  let displayName = DepartmentDetails.displayName;
-  let departmentDesc = DepartmentDetails.aboutDepartment;
-  let isActive = DepartmentDetails.departmentStatus;
-  let isMoolya = DepartmentDetails.isMoolya;
-  let departmentAvailable = DepartmentDetails.departmentAvailablity;
+  const departmentName = DepartmentDetails.departmentName;
+  const displayName = DepartmentDetails.displayName;
+  const departmentDesc = DepartmentDetails.aboutDepartment;
+  const isActive = DepartmentDetails.departmentStatus;
+  const isMoolya = DepartmentDetails.isMoolya;
+  const departmentAvailable = DepartmentDetails.departmentAvailablity;
   const result = await client.mutate({
     mutation: gql`
     mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $departmentAvailable: [DepatmentAvailable],$isActive: Boolean, $moduleName:String!, $actionName:String!){
@@ -36,8 +36,8 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
       isMoolya,
       departmentAvailable,
       isActive,
-      moduleName:"DEPARTMENT",
-      actionName:"CREATE"
+      moduleName: 'DEPARTMENT',
+      actionName: 'CREATE'
     }
   })
 

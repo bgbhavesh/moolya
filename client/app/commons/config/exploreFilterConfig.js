@@ -1,10 +1,10 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export default filterData = [
   {
-    type: "SELECT",
-    field: "clusterId",
-    displayName: "Country",
+    type: 'SELECT',
+    field: 'clusterId',
+    displayName: 'Country',
     isGraphql: true,
     graphQLQuery: gql`{
                     data:fetchActiveClusters
@@ -14,12 +14,12 @@ export default filterData = [
                       }
                     }
                   `,
-    graphQLOption:{},
+    graphQLOption: {}
   },
   {
-    type: "SELECT",
-    field: "chapterId",
-    displayName: "City",
+    type: 'SELECT',
+    field: 'chapterId',
+    displayName: 'City',
     isGraphql: true,
     graphQLQuery: gql`query($id: String) {
                   data:fetchChaptersWithoutAll(id: $id) {
@@ -31,10 +31,10 @@ export default filterData = [
     graphQLOption: {
       options: {
         variables: {
-          id: "$$clusterId"
+          id: '$$clusterId'
         }
       }
-    },
+    }
   },
   // {
   //   type: "SELECT",
@@ -51,9 +51,9 @@ export default filterData = [
   //   graphQLOption: {},
   // },
   {
-    type: "SELECT",
-    field: "industryId",
-    displayName: "Industry",
+    type: 'SELECT',
+    field: 'industryId',
+    displayName: 'Industry',
     isGraphql: true,
     graphQLQuery: gql`{
                   data:fetchIndustries {
@@ -62,6 +62,6 @@ export default filterData = [
                     }
                   }
                 `,
-    graphQLOption: {},
+    graphQLOption: {}
   }
 ]

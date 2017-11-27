@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findSocialLinksTypeActionHandler(Id)
-{
-  let did=Id
+export async function findSocialLinksTypeActionHandler(Id) {
+  const did = Id
 
   const result = await client.query({
     query: gql`
@@ -21,14 +20,18 @@ export async function findSocialLinksTypeActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {socialName,aboutSocial,socialDisplayName,socialUploadIcon}=masterSetting.socialLinksInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,socialName,aboutSocial,socialDisplayName,socialUploadIcon};
+  const masterSetting = result.data.findMasterSetting || {};
+  const {
+    socialName, aboutSocial, socialDisplayName, socialUploadIcon
+  } = masterSetting.socialLinksInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, socialName, aboutSocial, socialDisplayName, socialUploadIcon
+    };
   }
   return {};
 }

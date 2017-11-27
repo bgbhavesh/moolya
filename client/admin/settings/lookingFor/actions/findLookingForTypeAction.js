@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findLookingForActionHandler(LookingForTypeId) {
-  let did=LookingForTypeId
+  const did = LookingForTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -18,9 +18,9 @@ export async function findLookingForActionHandler(LookingForTypeId) {
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.FindLookingFor;
   return id

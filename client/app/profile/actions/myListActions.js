@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 export async function fetchMyConnectionsActionHandler() {
   const result = await appClient.query({
     query: gql`
@@ -19,9 +19,9 @@ export async function fetchMyConnectionsActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.fetchConnections?result.data.fetchConnections:[];
+  const data = result.data.fetchConnections ? result.data.fetchConnections : [];
   return data;
 }
 
@@ -44,9 +44,9 @@ export async function fetchMyFavouritesActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.fetchFavourites?result.data.fetchFavourites:[];
+  const data = result.data.fetchFavourites ? result.data.fetchFavourites : [];
   return data;
 }
 
@@ -69,9 +69,9 @@ export async function fetchMyFollowersActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.followersList?result.data.followersList:[];
+  const data = result.data.followersList ? result.data.followersList : [];
   return data;
 }
 
@@ -94,8 +94,8 @@ export async function fetchMyFollowingsActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.followingsList?result.data.followingsList:[];
+  const data = result.data.followingsList ? result.data.followingsList : [];
   return data;
 }

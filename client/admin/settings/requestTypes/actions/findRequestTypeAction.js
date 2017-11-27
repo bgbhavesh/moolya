@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findRequestTypeActionHandler(requestTypeId) {
- let did=requestTypeId
+  const did = requestTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -17,7 +17,7 @@ export async function findRequestTypeActionHandler(requestTypeId) {
       }
     `,
     variables: {
-      id:did
+      id: did
     },
     forceFetch: true
   })

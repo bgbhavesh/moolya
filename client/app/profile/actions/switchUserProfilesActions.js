@@ -2,7 +2,7 @@
  * Created by mohammed.mohasin on 2/5/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function fetchExternalUserProfilesActionHandler() {
   const result = await appClient.query({
@@ -41,14 +41,13 @@ export async function fetchExternalUserProfilesActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   })
-  const data = result.data&&result.data.fetchUserProfiles?result.data.fetchUserProfiles:[];
+  const data = result.data && result.data.fetchUserProfiles ? result.data.fetchUserProfiles : [];
   return data;
 }
 
 export async function setDefaultProfileActionHandler(profileId) {
-
   const result = await appClient.mutate({
     mutation: gql`
           mutation($profileId:String!){
@@ -60,7 +59,7 @@ export async function setDefaultProfileActionHandler(profileId) {
           }
       `,
     variables: {
-      profileId:profileId
+      profileId
     }
   })
   const id = result.data.setDefaultProfile;
@@ -68,7 +67,6 @@ export async function setDefaultProfileActionHandler(profileId) {
 }
 
 export async function switchProfileActionHandler(profileId) {
-
   const result = await appClient.mutate({
     mutation: gql`
           mutation($profileId:String!){
@@ -80,7 +78,7 @@ export async function switchProfileActionHandler(profileId) {
           }
       `,
     variables: {
-      profileId:profileId
+      profileId
     }
   })
   const id = result.data.switchExternalProfile;
@@ -89,7 +87,6 @@ export async function switchProfileActionHandler(profileId) {
 
 
 export async function deActivateProfileProfileActionHandler(profileId) {
-
   const result = await appClient.mutate({
     mutation: gql`
           mutation($profileId: String!){
@@ -101,7 +98,7 @@ export async function deActivateProfileProfileActionHandler(profileId) {
           }
       `,
     variables: {
-      profileId:profileId
+      profileId
     }
   })
   const id = result.data.deActivateUserProfile;
@@ -109,7 +106,6 @@ export async function deActivateProfileProfileActionHandler(profileId) {
 }
 
 export async function blockProfileActionHandler(profileId) {
-
   const result = await appClient.mutate({
     mutation: gql`
           mutation($profileId: String!){
@@ -121,13 +117,13 @@ export async function blockProfileActionHandler(profileId) {
           }
       `,
     variables: {
-      profileId:profileId
+      profileId
     }
   })
   const id = result.data.blockUserProfile;
   return id;
 }
 
-export function reloadPage(){
+export function reloadPage() {
   location.reload();
 }

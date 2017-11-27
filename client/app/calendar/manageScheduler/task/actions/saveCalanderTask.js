@@ -1,9 +1,9 @@
 /**
  * Created by vishwadeep on 19/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../../../core/appConnection";
-import _ from "lodash";
+import gql from 'graphql-tag';
+import { appClient } from '../../../../core/appConnection';
+import _ from 'lodash';
 
 export async function createTaskActionHandler(details) {
   const result = await appClient.mutate({
@@ -36,7 +36,7 @@ export async function updateTaskActionHandler(taskId, details) {
           }
       `,
     variables: {
-      taskId: taskId,
+      taskId,
       taskDetails: details
     }
   })
@@ -91,24 +91,24 @@ export async function findTaskActionHandler(taskId) {
           }
       `,
     variables: {
-      taskId: taskId
+      taskId
     },
     forceFetch: true
   })
-  var resp = result.data.fetchTask;
-  let data = _.omit(resp, '__typename')
+  const resp = result.data.fetchTask;
+  const data = _.omit(resp, '__typename')
   data.duration = _.omit(data.duration, '__typename')
   data.payment = _.omit(data.payment, '__typename')
-  let sessionArray = []
-  _.each(data.session,function (item,say) {
-    let value = _.omit(item, '__typename')
+  const sessionArray = []
+  _.each(data.session, (item, say) => {
+    const value = _.omit(item, '__typename')
     value.duration = _.omit(value.duration, '__typename')
     sessionArray.push(value)
   })
   data.session = sessionArray
-  let attachmentArray = []
-  _.each(data.attachments,function (item,say) {
-    let value = _.omit(item, '__typename')
+  const attachmentArray = []
+  _.each(data.attachments, (item, say) => {
+    const value = _.omit(item, '__typename')
     attachmentArray.push(value)
   })
   data.attachments = attachmentArray

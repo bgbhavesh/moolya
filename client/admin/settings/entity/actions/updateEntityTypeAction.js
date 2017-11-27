@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateEntityTypeActionHandler(EntityType) {
-  let _id=EntityType.id;
-  let entityName = EntityType.entityName;
-  let entityDisplayName = EntityType.entityDisplayName;
-  let about = EntityType.about;
-  let isActive = EntityType.isActive
+  const _id = EntityType.id;
+  const entityName = EntityType.entityName;
+  const entityDisplayName = EntityType.entityDisplayName;
+  const about = EntityType.about;
+  const isActive = EntityType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$entityName: String, $entityDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateEntityTypeActionHandler(EntityType) {
       entityDisplayName,
       about,
       isActive,
-      moduleName: "ENTITY",
-      actionName: "UPDATE"
+      moduleName: 'ENTITY',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateEntity;

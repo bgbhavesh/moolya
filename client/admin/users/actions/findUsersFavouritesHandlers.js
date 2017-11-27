@@ -4,12 +4,12 @@
 /**
  * import of libs
  * */
-import gql from "graphql-tag";
-import {client} from "../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../core/apolloConnection';
 
 export async function fetchFavouritesHandler(registrationId, communityCode) {
   const result = await client.query({
-    query: gql `
+    query: gql`
             query($registrationId:String, $communityCode: String){
                 fetchFavouritesByReg(registrationId:$registrationId, communityCode:$communityCode) {
                     userName

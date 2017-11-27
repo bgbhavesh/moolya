@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findNumericalFormatActionHandler()
-{
+export async function findNumericalFormatActionHandler() {
   const result = await client.query({
-      query: gql`
+    query: gql`
        query{
               fetchGlobalSettings(type:NUMERICAL){
                 numericalInfo{
@@ -19,7 +18,7 @@ export async function findNumericalFormatActionHandler()
               
             }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchGlobalSettings;
   return id

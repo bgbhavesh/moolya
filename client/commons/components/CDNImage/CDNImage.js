@@ -1,17 +1,16 @@
-import React,{Component,PropTypes} from "react";
+import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 
-export default class CDNImage extends Component{
-
-  constructor(props){
+export default class CDNImage extends Component {
+  constructor(props) {
     super(props);
     this.getCDNUrl = this.getCDNUrl.bind(this)
   }
 
-  getCDNUrl(){
+  getCDNUrl() {
     const CDNUrl = Meteor.settings.public.CDNUrl;
-    const {src} = this.props;
-    if(CDNUrl){
+    const { src } = this.props;
+    if (CDNUrl) {
       return CDNUrl + src;
     }
 
@@ -19,9 +18,9 @@ export default class CDNImage extends Component{
   }
 
 
-  render(){
-    const {alt} = this.props;
-    var getProps = Object.assign({},this.props);
+  render() {
+    const { alt } = this.props;
+    const getProps = Object.assign({}, this.props);
     delete getProps.src;
     return (
       <img src={this.getCDNUrl()} {...getProps} />
@@ -30,5 +29,5 @@ export default class CDNImage extends Component{
 }
 
 CDNImage.propTypes = {
-  src: React.PropTypes.string,
+  src: React.PropTypes.string
 }

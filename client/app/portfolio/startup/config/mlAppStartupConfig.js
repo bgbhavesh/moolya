@@ -1,36 +1,36 @@
 // import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
-import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
-import MlAppStartupListView from "../components/MlAppStartupListView";
-import React from "react";
-import gql from "graphql-tag";
-import MlAppFilterContainer from "../../../commons/filter/MlAppFilterContainer";
+import { MlAppViewer } from '../../../../commons/core/MlAppViewer';
+import MlAppStartupListView from '../components/MlAppStartupListView';
+import React from 'react';
+import gql from 'graphql-tag';
+import MlAppFilterContainer from '../../../commons/filter/MlAppFilterContainer';
 import filterData from '../../../commons/config/exploreFilterConfig';
 
 // export const mlAppStartupConfig = new MlViewer.View({
 export const mlAppStartupConfig = new MlAppViewer({
-  name: "Startup List",
+  name: 'Startup List',
   // viewType:MlViewerTypes.LIST,
   extraFields: [],
-  fields: ["firstName", "lastName", "category", "investmentBudget"],
-  searchFields: ["firstName", "lastName", "category", "investmentBudget"],
+  fields: ['firstName', 'lastName', 'category', 'investmentBudget'],
+  searchFields: ['firstName', 'lastName', 'category', 'investmentBudget'],
   throttleRefresh: true,
   pagination: true,
-  moduleName: "startupPortfolioDetails",
+  moduleName: 'startupPortfolioDetails',
   sort: true,
   perPageLimit: 20,
   viewComponent: <MlAppStartupListView />,
   showActionComponent: true,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: true,
     filterComponent: <MlAppFilterContainer />,
-    filterData: filterData,
+    filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "aboutUs.startupDescription",
+    alphabeticSearchField: 'aboutUs.startupDescription',
     search: true,
-    searchFields: ["aboutUs.startupDescription","chapterName","accountType","communityType","firstName","lastName"]
+    searchFields: ['aboutUs.startupDescription', 'chapterName', 'accountType', 'communityType', 'firstName', 'lastName']
   },
-  /**need to bring with the repo service and passing the context of the community type from the client*/
+  /** need to bring with the repo service and passing the context of the community type from the client */
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {

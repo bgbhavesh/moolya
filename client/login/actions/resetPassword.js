@@ -3,7 +3,7 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../admin/core/apolloConnection';
+import { client } from '../../admin/core/apolloConnection';
 
 export async function resetPasswordActionHandler(token, password) {
   const result = await client.mutate({
@@ -17,8 +17,8 @@ export async function resetPasswordActionHandler(token, password) {
     }
     `,
     variables: {
-      token:token,
-      password:password
+      token,
+      password
       // moduleName:"REGISTRATION",
       // actionName:"READ"
     }

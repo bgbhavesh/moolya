@@ -1,10 +1,10 @@
 /**
  * Created by pankaj on 18/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
-export async function updateStageActionHandler(stageId,stage) {
+export async function updateStageActionHandler(stageId, stage) {
   const result = await appClient.mutate({
     mutation: gql`
       mutation($stageId:String,$stage:stage){
@@ -15,8 +15,8 @@ export async function updateStageActionHandler(stageId,stage) {
       }
     `,
     variables: {
-      stageId:stageId,
-      stage: stage
+      stageId,
+      stage
     },
     forceFetch: true
   })
@@ -25,7 +25,7 @@ export async function updateStageActionHandler(stageId,stage) {
 }
 
 
-export async function updateStageForOnBoardActionHandler(transactionLogId,transactionType, status) {
+export async function updateStageForOnBoardActionHandler(transactionLogId, transactionType, status) {
   const result = await appClient.mutate({
     mutation: gql`
       mutation($transactionLogId:String,$transactionType:String,$status:String){

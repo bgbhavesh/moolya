@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function approvedStatusForUser(registration) {
-  let registrationId = registration;
+  const registrationId = registration;
   const result = await appClient.mutate({
     mutation: gql`
      mutation($moduleName:String!,$actionName:String!,$registrationId:String!){
@@ -14,9 +14,9 @@ export async function approvedStatusForUser(registration) {
       }
     `,
     variables: {
-      moduleName: "REGISTRATION",
-      actionName: "UPDATE",
-      registrationId: registrationId
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE',
+      registrationId
     }
   })
 

@@ -9,9 +9,9 @@
  * Import libs and components
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
-export async function fetchOfficeActionHandler (Details) {
+export async function fetchOfficeActionHandler(Details) {
   const result = await appClient.query({
     query: gql`
     query{
@@ -44,9 +44,9 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      officeId:officeId
+      officeId
     }
   });
   const teamMembers = result.data.getTeamUsers;

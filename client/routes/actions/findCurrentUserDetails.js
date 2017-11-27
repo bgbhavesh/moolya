@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../client/admin/core/apolloConnection';
+import { client } from '../../../client/admin/core/apolloConnection';
 
 export async function findUserActionHandler(token) {
-  let LoginToken=token
+  const LoginToken = token
   const result = await client.query({
     query: gql`
     query  ($token: String){
@@ -14,9 +14,9 @@ export async function findUserActionHandler(token) {
       }
     `,
     variables: {
-      token:LoginToken
+      token: LoginToken
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findUserOnToken;
   return id

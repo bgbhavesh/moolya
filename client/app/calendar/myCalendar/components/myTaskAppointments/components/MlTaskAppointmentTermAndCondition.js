@@ -23,37 +23,33 @@ export default class MlTaskAppointmentTermAndCondition extends Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (310 + $('.app_header').outerHeight(true)));
   }
 
   getDeliverableList() {
     const { selectedTask } = this.props;
-    let deliverables = [];
-    selectedTask.session.forEach(session => {
+    const deliverables = [];
+    selectedTask.session.forEach((session) => {
       const { activities } = session;
       console.log(activities);
       const activityDetails = activities && activities.length > 0 ?
-        activities.map((activity, index) => {
-          return (
-            <div key={index}>
-              <h4>{activity.name}</h4>
-              <br className="brclear" />
-              <label>Deliverables</label>
-              <br className="brclear" />
-              {
-                activity.deliverable.map((data, index) => {
-                  return (
-                    <div key={index}>
-                      <textarea className="form-control" defaultValue={data} disabled></textarea>
-                      <br className="brclear" />
-                    </div>
-                  )
-                })
-              }
-            </div>
-          )
-        }) : [];
+        activities.map((activity, index) => (
+          <div key={index}>
+            <h4>{activity.name}</h4>
+            <br className="brclear" />
+            <label>Deliverables</label>
+            <br className="brclear" />
+            {
+              activity.deliverable.map((data, index) => (
+                <div key={index}>
+                  <textarea className="form-control" defaultValue={data} disabled></textarea>
+                  <br className="brclear" />
+                </div>
+              ))
+            }
+          </div>
+        )) : [];
       deliverables.push(activityDetails);
     })
     return deliverables;
@@ -65,37 +61,37 @@ export default class MlTaskAppointmentTermAndCondition extends Component {
    * @return {XML}
    */
   getAttachmentsList() {
-    let attachments = this.props.selectedTask && this.props.selectedTask.attachments;
+    const attachments = this.props.selectedTask && this.props.selectedTask.attachments;
 
     const attachmentDetails = (attachments && attachments.length > 0) ?
-      attachments.map(function (value, index) {
-        return (
-          <div className="col-md-6 nopadding-left" key={index}>
-            <div className="panel panel-default">
-              <div className="panel-heading">
+      attachments.map((value, index) => (
+        <div className="col-md-6 nopadding-left" key={index}>
+          <div className="panel panel-default">
+            <div className="panel-heading">
                 Attachment {index + 1}
-              </div>
-              <div className="panel-body">
-                <form>
-                  <div className="form-group">
-                    <input placeholder="Document name" className="form-control float-label" value={value.name}
-                      disabled />
-                  </div>
-                  <div className="form-group">
-                    <textarea className="form-control float-label" placeholder="Info" value={value.info}
-                      disabled></textarea>
-                  </div>
-                  <div className="input_types">
-                    <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory} disabled /><label
-                      htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
-                  </div>
-                  <br className="brclear" />
-                </form>
-              </div>
+            </div>
+            <div className="panel-body">
+              <form>
+                <div className="form-group">
+                  <input
+                    placeholder="Document name" className="form-control float-label" value={value.name}
+                    disabled />
+                </div>
+                <div className="form-group">
+                  <textarea
+                    className="form-control float-label" placeholder="Info" value={value.info}
+                    disabled></textarea>
+                </div>
+                <div className="input_types">
+                  <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory} disabled /><label
+                    htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
+                </div>
+                <br className="brclear" />
+              </form>
             </div>
           </div>
-        )
-      }) : [];
+        </div>
+      )) : [];
     return attachmentDetails;
   }
 
@@ -120,4 +116,4 @@ export default class MlTaskAppointmentTermAndCondition extends Component {
       </div>
     )
   }
-};
+}

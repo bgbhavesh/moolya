@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateCityActionHandler(CityDetails) {
-  let cityId = CityDetails.id;
+  const cityId = CityDetails.id;
 
   const result = await client.mutate({
     mutation: gql`
@@ -20,10 +20,10 @@ export async function updateCityActionHandler(CityDetails) {
       }
     `,
     variables: {
-      cityId:cityId,
-      city:CityDetails,
-      moduleName:"CITIES",
-      actionName:"UPDATE"
+      cityId,
+      city: CityDetails,
+      moduleName: 'CITIES',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.updateCity;

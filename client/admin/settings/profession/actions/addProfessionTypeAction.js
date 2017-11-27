@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addProfessionActionHandler(ProfessionDetails) {
-  let professionName = ProfessionDetails.professionName;
-  let professionDisplayName = ProfessionDetails.professionDisplayName;
-  let industryId = ProfessionDetails.industryId;
-  let industryName = ProfessionDetails.industryName;
-  let about = ProfessionDetails.about;
-  let isActive = ProfessionDetails.isActive;
+  const professionName = ProfessionDetails.professionName;
+  const professionDisplayName = ProfessionDetails.professionDisplayName;
+  const industryId = ProfessionDetails.industryId;
+  const industryName = ProfessionDetails.industryName;
+  const about = ProfessionDetails.about;
+  const isActive = ProfessionDetails.isActive;
 
   const result = await client.mutate({
     mutation: gql`
@@ -35,8 +35,8 @@ export async function addProfessionActionHandler(ProfessionDetails) {
       industryName,
       about,
       isActive,
-      moduleName:"PROFESSION",
-      actionName:"CREATE"
+      moduleName: 'PROFESSION',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.CreateProfession;

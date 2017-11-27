@@ -1,15 +1,15 @@
 export default class Menu {
-    constructor(menu) {
-        this.menu = menu
-        this.subscriptions = []
-    }
+  constructor(menu) {
+    this.menu = menu
+    this.subscriptions = []
+  }
 
-    setMenu(menu) {
-        this.menu = menu
-        this.subscriptions.forEach(f => f())
-    }
+  setMenu(menu) {
+    this.menu = menu
+    this.subscriptions.forEach(f => f())
+  }
 
-    subscribe(f) {
-        this.subscriptions.push(f)
-    }
+  subscribe(f) {
+    this.subscriptions.push(f)
+  }
 }

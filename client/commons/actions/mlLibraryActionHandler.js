@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {appClient} from "../../app/core/appConnection";
+import { appClient } from '../../app/core/appConnection';
 
 export async function createLibrary(portfolioDetailsId, detailsInput, connection) {
   const result = await connection.mutate({
@@ -12,7 +12,7 @@ export async function createLibrary(portfolioDetailsId, detailsInput, connection
   }
 }
 `,
-    variables:{
+    variables: {
       detailsInput,
       portfolioDetailsId
     }
@@ -21,7 +21,7 @@ export async function createLibrary(portfolioDetailsId, detailsInput, connection
   return id
 }
 
-export async function updateLibrary(id,files, connection) {
+export async function updateLibrary(id, files, connection) {
   const result = await connection.mutate({
     mutation: gql`
    mutation ($files:libraryInput, $id: String) {
@@ -32,7 +32,7 @@ export async function updateLibrary(id,files, connection) {
   }
 }
 `,
-    variables:{
+    variables: {
       id,
       files
     }
@@ -60,10 +60,10 @@ export async function fetchLibrary(userId, connection) {
       }
   }
 }`,
-    variables:{
+    variables: {
       userId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchLibrary;
   return id
@@ -89,17 +89,17 @@ export async function fetchLibraryBasedOnPortfolioIdHandler(portfolioId, connect
       }
   }
 }`,
-    variables:{
+    variables: {
       portfolioId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchLibraryBasedOnPortfolioId;
   return id
 }
 
 
-export async function getUserPermissionDetailsHandler(portfolioDetailsId,connection) {
+export async function getUserPermissionDetailsHandler(portfolioDetailsId, connection) {
   const result = await connection.query({
     query: gql`
     query($portfolioDetailsId: String){
@@ -107,8 +107,9 @@ export async function getUserPermissionDetailsHandler(portfolioDetailsId,connect
       isExploring
       action
   }
-}`, forceFetch:true,
-    variables : {
+}`,
+    forceFetch: true,
+    variables: {
       portfolioDetailsId
     }
   })
@@ -135,7 +136,8 @@ export async function fetchDataFromCentralLibrary(connection) {
         isPrivate
       }
   }
-}`, forceFetch:true
+}`,
+    forceFetch: true
   })
   const id = result.data.fetchDataFromCentralLibrary;
   return id
@@ -152,7 +154,7 @@ export async function updateLibraryData(files, connection) {
   }
 }
 `,
-    variables:{
+    variables: {
       files
     }
   })
@@ -231,7 +233,7 @@ export async function fetchConnections() {
         profileImage
       }
     }`,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchConnections;
   return id
@@ -248,7 +250,7 @@ export async function getSharedConnectionsActionHandler() {
         profilePic
     }
   }`,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.getMySharedConnections;
   return id
@@ -271,14 +273,15 @@ export async function fetchSharedLibraryHandler(userId) {
 }`,
     variables: {
       userId
-    }, forceFetch: true
+    },
+    forceFetch: true
   });
   const id = result.data.fetchSharedLibrary;
   return id
 }
 
 
-export async function removePortfolioFileUrl(portfolioDetailsId, fileUrl,tabName,typeOfData) {
+export async function removePortfolioFileUrl(portfolioDetailsId, fileUrl, tabName, typeOfData) {
   const result = await appClient.mutate({
     mutation: gql`
       mutation($portfolioDetailsId: String, $fileUrl:String, $tabName:String, $typeOfData:String){
@@ -312,11 +315,10 @@ export async function fetchShareMembersInfo(connection) {
       fileType
       profileImage
   }
-}`, forceFetch:true
+}`,
+    forceFetch: true
   })
   const id = result.data.fetchShareMembersInfo;
   return id
 }
-
-
 

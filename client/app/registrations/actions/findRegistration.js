@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function findRegistrationActionHandler(registrationId) {
-  let regId = registrationId
+  const regId = registrationId
   const result = await appClient.query({
     query: gql`
    query($registrationId: String){  
@@ -199,8 +199,7 @@ export async function fetchIdentityTypes() {
   });
 
   return result && result.data ? result.data.data : [];
-
-};
+}
 
 export async function findCountryCode(clusterId) {
   const result = await appClient.query({
@@ -221,17 +220,15 @@ export async function findCountryCode(clusterId) {
             }
         }`,
     variables: {
-      clusterId: clusterId
+      clusterId
     },
     forceFetch: true
   });
   const id = result.data.fetchCountryCode;
   return id
-
 }
 
 export async function documentTypesActionHandler() {
-
   const result = await appClient.query({
     query: gql`query{  
       fetchDocumentsType{
@@ -245,7 +242,6 @@ export async function documentTypesActionHandler() {
   });
   const id = result.data.fetchDocumentsType;
   return id
-
 }
 
 export async function fetchPendingRegistration() {
@@ -269,7 +265,7 @@ export async function fetchPendingRegistration() {
 }
 
 export async function fetchSubChapterDetails(id) {
-  let subChapterId = id
+  const subChapterId = id
   const result = await appClient.query({
     query: gql`query($id: String){  
       isSubChapterMoolyaNonMoolya(id:$id){

@@ -1,28 +1,28 @@
 
 // import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
-import {MlAppViewer} from '../../../../commons/core/MlAppViewer';
+import { MlAppViewer } from '../../../../commons/core/MlAppViewer';
 import MlAppFunderListView from '../components/MlAppFunderListView';
-import MlAppFilterContainer from "../../../commons/filter/MlAppFilterContainer";
+import MlAppFilterContainer from '../../../commons/filter/MlAppFilterContainer';
 import filterData from '../../../commons/config/exploreFilterConfig';
 import React from 'react';
 import gql from 'graphql-tag'
 
-export const mlAppFunderConfig2=new MlAppViewer({
-  name:"FundersList",
-  moduleName:"FunderPortfolio",
+export const mlAppFunderConfig2 = new MlAppViewer({
+  name: 'FundersList',
+  moduleName: 'FunderPortfolio',
   perPageLimit: 20,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: true,
     filterComponent: <MlAppFilterContainer />,
-    filterData: filterData,
+    filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "funderAbout.firstName",
+    alphabeticSearchField: 'funderAbout.firstName',
     search: true,
-    searchFields: ["funderAbout.firstName", "firstName", "lastName", "chapterName", "accountType", "communityType"]
+    searchFields: ['funderAbout.firstName', 'firstName', 'lastName', 'chapterName', 'accountType', 'communityType']
   },
-  viewComponent:<MlAppFunderListView />,
-  graphQlQuery:gql`
+  viewComponent: <MlAppFunderListView />,
+  graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count

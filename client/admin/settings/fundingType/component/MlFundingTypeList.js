@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlFundingTypeTableConfig} from "../config/MlFundingTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlFundingTypeTableConfig } from '../config/MlFundingTypeConfig';
 export default class MlFundingTypeList extends Component {
-
   componentDidMount() {
   }
 

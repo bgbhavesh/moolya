@@ -4,8 +4,8 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
-export async function fetchAllOfficeMemberCalendarActionHandler ( month, year) {
+import { appClient } from '../../../core/appConnection';
+export async function fetchAllOfficeMemberCalendarActionHandler(month, year) {
   const result = await appClient.query({
     query: gql`
     query($month:Int, $year: Int) { 
@@ -18,10 +18,10 @@ export async function fetchAllOfficeMemberCalendarActionHandler ( month, year) {
     }
     `,
     variables: {
-      month: month,
-      year: year
+      month,
+      year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const allOfficeMemberCalendar = result.data.fetchAllOfficeMemberAppointmentCounts;
   return allOfficeMemberCalendar;

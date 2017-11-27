@@ -2,9 +2,9 @@
  * Created by Mukhil on 19/6/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function createActivityActionHandler (Details) {
+export async function createActivityActionHandler(Details) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Details: activity){
@@ -24,7 +24,7 @@ export async function createActivityActionHandler (Details) {
 }
 
 
-export async function updateActivityActionHandler(activityId,Details) {
+export async function updateActivityActionHandler(activityId, Details) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($activityId:String, $Details:activity){
@@ -59,9 +59,9 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      officeId:officeId
+      officeId
     }
   });
   const teamMembers = result.data.getTeamUsers;
@@ -80,7 +80,7 @@ export async function getUserProfileActionHandler() {
         }
       }
     `,
-    forceFetch:true
+    forceFetch: true
   });
   const users = result.data.getUserProfiles;
   return users
@@ -104,7 +104,7 @@ export async function getUserActiveProfileDetails() {
         }
       }
     `,
-    forceFetch:true
+    forceFetch: true
   });
   const users = result.data.getUserActiveProfileDetails;
   return users
@@ -162,13 +162,13 @@ export async function getActivityActionHandler(id) {
     variables: {
       activityId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const users = result.data.fetchActivity;
   return users
 }
 
-export async function fetchActivitiesActionHandler (profileId) {
+export async function fetchActivitiesActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId:String) {
@@ -201,15 +201,15 @@ export async function fetchActivitiesActionHandler (profileId) {
     }
     `,
     variables: {
-      profileId:profileId
+      profileId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const activities = result.data.fetchActivities;
   return activities
 }
 
-export async function fetchActivitiesForTaskActionHandler(taskId){
+export async function fetchActivitiesForTaskActionHandler(taskId) {
   const result = await appClient.query({
     query: gql`
     query($taskId:String) {
@@ -240,9 +240,9 @@ export async function fetchActivitiesForTaskActionHandler(taskId){
     }
     `,
     variables: {
-      taskId:taskId
+      taskId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const activities = result.data.fetchActivitiesForTask;
   return activities

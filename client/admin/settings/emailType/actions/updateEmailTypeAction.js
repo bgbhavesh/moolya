@@ -1,10 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateEmailTypeActionHandler(Details)
-{
-
- /* const result = await client.mutate({
+export async function updateEmailTypeActionHandler(Details) {
+  /* const result = await client.mutate({
     mutation: gql`
         mutation ($_id:String, $emailType: emailTypeObject){
             updateEmailType(
@@ -20,14 +18,16 @@ export async function updateEmailTypeActionHandler(Details)
   })
   console.log(result)
   const id = result.data.updateEmailType;
-  return id*/
-  let _id=Details._id;
-  let emailName = Details.emailName;
-  let emailDisplayName = Details.emailDisplayName;
-  let aboutEmail = Details.aboutEmail;
-  let emailUploadIcon = Details.emailUploadIcon;
-  let isActive = Details.isActive;
-  let emailTypeInfo={emailName,emailDisplayName,aboutEmail,emailUploadIcon};
+  return id */
+  const _id = Details._id;
+  const emailName = Details.emailName;
+  const emailDisplayName = Details.emailDisplayName;
+  const aboutEmail = Details.aboutEmail;
+  const emailUploadIcon = Details.emailUploadIcon;
+  const isActive = Details.isActive;
+  const emailTypeInfo = {
+    emailName, emailDisplayName, aboutEmail, emailUploadIcon
+  };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -35,7 +35,7 @@ export async function updateEmailTypeActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"emailTypeInfo":emailTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { emailTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

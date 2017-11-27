@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../../../app/core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../../../app/core/appConnection';
 
 export async function getSharedConnectionsActionHandler() {
   const result = await appClient.query({
@@ -11,14 +11,14 @@ export async function getSharedConnectionsActionHandler() {
         profilePic
     }
   }`,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.getMySharedCalendarConnections;
   return id
 }
 
 
-export async function getSharedCalendarHandler (userId,month, year, date) {
+export async function getSharedCalendarHandler(userId, month, year, date) {
   const result = await appClient.query({
     query: gql`
     query($userId: String, $month:Int, $year: Int, $date: Int){ 
@@ -31,13 +31,13 @@ export async function getSharedCalendarHandler (userId,month, year, date) {
       }
     }
     `,
-    forceFetch:true,
-    variables:{
-      userId: userId,
-      month:month,
-      year: year,
-      date: date
-    },
+    forceFetch: true,
+    variables: {
+      userId,
+      month,
+      year,
+      date
+    }
   });
   const sharedCalendar = result.data.getSharedCalendar;
   return sharedCalendar;
@@ -54,7 +54,7 @@ export async function fetchConnections() {
         profileImage
       }
     }`,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchConnections;
   return id

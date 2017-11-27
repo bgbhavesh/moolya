@@ -4,9 +4,8 @@ import CDNImage from '../CDNImage/CDNImage';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAnchorUserGrid extends PureComponent {
-
   render() {
-    const {selectedUserId} = this.props
+    const { selectedUserId } = this.props
     return (
       <div>
         {
@@ -21,8 +20,8 @@ export default class MlAnchorUserGrid extends PureComponent {
         }
         {
           this.props.users.map((user, index) => (
-            <div className={this.props.classNames || "col-md-6 col-sm-6"} key={index}>
-              <div className={`list_block provider_block ${selectedUserId == user.userId ? "active_block" : null}`} onClick={() => this.props.clickHandler(user.userId)}>
+            <div className={this.props.classNames || 'col-md-6 col-sm-6'} key={index}>
+              <div className={`list_block provider_block ${selectedUserId == user.userId ? 'active_block' : null}`} onClick={() => this.props.clickHandler(user.userId)}>
                 <div className="provider_mask">
                   <CDNImage className="user_pic" src={user.profileImage ? generateAbsolutePath(user.profileImage) : '/images/def_profile.png'} />
                 </div>
@@ -39,5 +38,5 @@ export default class MlAnchorUserGrid extends PureComponent {
 MlAnchorUserGrid.propTypes = {
   users: React.PropTypes.array.isRequired,
   clickHandler: React.PropTypes.func,
-  classnames: React.PropTypes.string,
+  classnames: React.PropTypes.string
 };

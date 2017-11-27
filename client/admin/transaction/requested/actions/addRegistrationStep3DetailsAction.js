@@ -1,34 +1,31 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addRegistrationStep3Details(details,type,registrationId) {
+export async function addRegistrationStep3Details(details, type, registrationId) {
   let registration = {}
-  /*let detailsList = details.splice(-1,1)*/
-  if(type == "CONTACTTYPE"){
+  /* let detailsList = details.splice(-1,1) */
+  if (type == 'CONTACTTYPE') {
     registration = {
-      contactInfo : details
+      contactInfo: details
     }
-  }else if(type == "ADDRESSTYPE"){
+  } else if (type == 'ADDRESSTYPE') {
+    registration = {
+      addressInfo: details
+    }
+  } else if (type == 'SOCIALLINKS') {
+    registration = {
+      socialLinksInfo: details
+    }
+  } else if (type == 'EMAILTYPE') {
+    registration = {
+      emailInfo: details
+    }
+  } else if (type == 'KYCDOCUMENT') {
+    registration = {
+      kycDocuments: details
+    }
+  }
 
-    registration = {
-      addressInfo : details
-    }
-  }else if(type == "SOCIALLINKS")
-  {
-    registration = {
-      socialLinksInfo : details
-    }
-  }else if(type == "EMAILTYPE"){
-    registration = {
-      emailInfo : details
-    }
-  }
-  else if(type=="KYCDOCUMENT"){
-    registration = {
-      kycDocuments : details
-    }
-  }
-  ;
 
   const result = await client.mutate({
     mutation: gql`
@@ -48,16 +45,16 @@ export async function addRegistrationStep3Details(details,type,registrationId) {
     `,
     variables: {
       registration,
-      moduleName:"REGISTRATION",
-      actionName:"CREATE",
-      registrationId:registrationId,
-      type:type
+      moduleName: 'REGISTRATION',
+      actionName: 'CREATE',
+      registrationId,
+      type
     }
   })
 
   const id = result.data.createGeneralInfoInRegistration;
   /*  console.log("//////////////////////////");
-   console.log(result.data.createStep3InRegistration);*/
+   console.log(result.data.createStep3InRegistration); */
 
   return id
 }

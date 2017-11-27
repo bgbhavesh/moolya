@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function updateCommunityActionHandler(communityId, communityDetails) {
-  let did = communityId;
+  const did = communityId;
   const result = await client.mutate({
     mutation: gql`
     mutation ($_id:String $communityDef:communityDefInput){
@@ -13,8 +13,8 @@ export async function updateCommunityActionHandler(communityId, communityDetails
          }
     `,
     variables: {
-      _id : did,
-      communityDef : communityDetails
+      _id: did,
+      communityDef: communityDetails
     }
   })
   const id = result.data.updateCommunityDef;

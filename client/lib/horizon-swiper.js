@@ -6,11 +6,8 @@
  * Licensed under MIT ( https://github.com/sebsauer90/horizon-swiper/blob/master/LICENSE )
  */
 
-'use strict';
 
 (function (factory) {
-  'use strict';
-
   /**
    * Register plugin
    */
@@ -21,14 +18,12 @@
   } else {
     factory(jQuery);
   }
-})(function ($) {
-  'use strict';
-
+}(($) => {
   /**
    * Global variables
    */
-  var pluginName = 'horizonSwiper';
-  var settings = {
+  const pluginName = 'horizonSwiper';
+  const settings = {
 
     // Default settings
     item: '.horizon-item',
@@ -50,7 +45,7 @@
     onDragEnd: function onDragEnd() {}
   };
 
-  var defaults = {
+  const defaults = {
     $window: $(window),
     $document: $(document),
 
@@ -70,13 +65,12 @@
   /**
    * Plugin class
    */
-  var HorizonSwiper = (function () {
-
+  const HorizonSwiper = (function () {
     /**
      * Constructor
      */
     function Plugin(element, options) {
-      var that = this;
+      const that = this;
       that.settings = $.extend({}, settings, options);
 
       that.$element = $(element);
@@ -95,35 +89,35 @@
 
       // Initialize if the document is ready and window is loaded
 
-      var windowLoadFunction = function windowLoadFunction() {
+      const windowLoadFunction = function windowLoadFunction() {
         if (that.initialized) {
           that._setSizes();
         } else {
-          setTimeout(function () {
+          setTimeout(() => {
             windowLoadFunction();
           }, 1000);
         }
       };
 
-      defaults.$document.ready(function () {
+      defaults.$document.ready(() => {
         that.init();
       });
 
 
-      defaults.$window.on('load', function () {
+      defaults.$window.on('load', () => {
         windowLoadFunction();
       });
 
-      /*defaults.$window.load(function () {
+      /* defaults.$window.load(function () {
         windowLoadFunction();
-      });*/
+      }); */
     }
 
     /**
      * Initialize
      */
     Plugin.prototype.init = function () {
-      var that = this;
+      const that = this;
 
       that._setWrapper();
       that._addArrows();
@@ -142,14 +136,14 @@
      * @private
      */
     Plugin.prototype._setSizes = function () {
-      var that = this;
+      const that = this;
       that.maxHeight = 0;
       that.innerContainerWidth = 0;
 
-      for (var i = 0; i < that.$items.length; ++i) {
-        var $item = $(that.$items[i]);
-        var height = $item.outerHeight(true);
-        var width = $item.outerWidth(true);
+      for (let i = 0; i < that.$items.length; ++i) {
+        const $item = $(that.$items[i]);
+        const height = $item.outerHeight(true);
+        const width = $item.outerWidth(true);
 
         if (height > that.maxHeight) {
           that.maxHeight = height;
@@ -159,7 +153,7 @@
       }
 
       that.viewportSize = that.$inner.width();
-      that.$outer.css({ 'max-height': that.maxHeight + 'px' });
+      that.$outer.css({ 'max-height': `${that.maxHeight}px` });
 
       if (that.viewportSize < that.innerContainerWidth) {
         that.$element.addClass(defaults.initializedClass);
@@ -183,17 +177,17 @@
      * @private
      */
     Plugin.prototype._resize = function () {
-      var that = this;
-      var resizeTimeout = null;
+      const that = this;
+      const resizeTimeout = null;
 
-      var resizeFunction = function resizeFunction() {
+      const resizeFunction = function resizeFunction() {
         that._setSizes();
         that._checkPosition();
       };
 
-      defaults.$window.resize(function () {
+      defaults.$window.resize(() => {
         clearTimeout(resizeTimeout);
-        setTimeout(function () {
+        setTimeout(() => {
           resizeFunction();
         }, 250);
       });
@@ -205,20 +199,20 @@
      * @private
      */
     Plugin.prototype._setWrapper = function () {
-      var that = this;
-      var itemWidth = 0;
+      const that = this;
+      let itemWidth = 0;
 
-      that.$items.wrapAll('<div class="' + defaults.outerClass + '">');
-      that.$items.wrapAll('<div class="' + defaults.innerClass + '">');
-      that.$inner = that.$element.find('.' + defaults.innerClass);
-      that.$outer = that.$element.find('.' + defaults.outerClass);
+      that.$items.wrapAll(`<div class="${defaults.outerClass}">`);
+      that.$items.wrapAll(`<div class="${defaults.innerClass}">`);
+      that.$inner = that.$element.find(`.${defaults.innerClass}`);
+      that.$outer = that.$element.find(`.${defaults.outerClass}`);
 
       if (that.settings.showItems !== 'auto' && that.settings.showItems === parseInt(that.settings.showItems, 10)) {
         itemWidth = 100 / that.settings.showItems;
-        that.$items.css({ width: itemWidth + '%' });
+        that.$items.css({ width: `${itemWidth}%` });
       }
 
-      for (var i = 0; i < that.$items.length; ++i) {
+      for (let i = 0; i < that.$items.length; ++i) {
         $(that.$items[i]).attr('data-horizon-index', i);
       }
     };
@@ -229,14 +223,14 @@
      * @private
      */
     Plugin.prototype._addDots = function () {
-      var that = this;
+      const that = this;
 
       if (that.settings.dots) {
         that.$dots = $(defaults.dotContainer);
 
-        for (var i = 0; i < that.$items.length; ++i) {
-          var dotName = that.settings.numberedDots ? i : '';
-          var $newDot = $('<button class="horizon-dot" data-horizon-target="' + i + '">' + dotName + '</button>');
+        for (let i = 0; i < that.$items.length; ++i) {
+          const dotName = that.settings.numberedDots ? i : '';
+          const $newDot = $(`<button class="horizon-dot" data-horizon-target="${i}">${dotName}</button>`);
           that.$dots.append($newDot);
         }
 
@@ -244,7 +238,7 @@
 
         that.$dots.find('button').on('click', function (e) {
           e.preventDefault();
-          var horizonTarget = $(this).attr('data-horizon-target');
+          const horizonTarget = $(this).attr('data-horizon-target');
           that._dotScroll(horizonTarget);
         });
       }
@@ -257,15 +251,15 @@
      * @private
      */
     Plugin.prototype._dotScroll = function (horizonTarget) {
-      var that = this;
-      var $target = that.$dots.find('[data-horizon-index="' + horizonTarget + '"]');
-      var targetWidth = $target.outerWidth(true);
-      var leftOffset = 0;
+      const that = this;
+      const $target = that.$dots.find(`[data-horizon-index="${horizonTarget}"]`);
+      const targetWidth = $target.outerWidth(true);
+      let leftOffset = 0;
 
       that.isAnimate = true;
       that.settings.onSlideStart();
 
-      for (var i = 0; i < that.$items.length; ++i) {
+      for (let i = 0; i < that.$items.length; ++i) {
         if (i < horizonTarget) {
           leftOffset += $(that.$items[i]).outerWidth(true);
         }
@@ -273,7 +267,7 @@
 
       that.$inner.animate({
         scrollLeft: leftOffset
-      }, that.settings.animationSpeed, function () {
+      }, that.settings.animationSpeed, () => {
         that._checkPosition();
         that.settings.onSlideEnd();
 
@@ -293,7 +287,7 @@
      * @private
      */
     Plugin.prototype._addArrows = function () {
-      var that = this;
+      const that = this;
 
       if (that.settings.arrows === true) {
         that.$arrowPrev = $(defaults.arrowPrev[0] + that.settings.arrowPrevText + defaults.arrowPrev[1]);
@@ -304,14 +298,14 @@
         that.$element.addClass(defaults.firstItemClass);
         that.$arrowPrev.attr('disabled', 'disabled');
 
-        that.$arrowPrev.on('click', function (e) {
+        that.$arrowPrev.on('click', (e) => {
           e.preventDefault();
           if (!that.isAnimate) {
             that._scrollTo('previous');
           }
         });
 
-        that.$arrowNext.on('click', function (e) {
+        that.$arrowNext.on('click', (e) => {
           e.preventDefault();
           if (!that.isAnimate) {
             that._scrollTo('next');
@@ -327,8 +321,8 @@
      * @private
      */
     Plugin.prototype._scrollTo = function (direction) {
-      var that = this;
-      var offset = that._getOffset(direction);
+      const that = this;
+      const offset = that._getOffset(direction);
       that.isAnimate = true;
 
       if (offset === 'end' || offset === 'start') {
@@ -340,7 +334,7 @@
 
       that.$inner.animate({
         scrollLeft: offset[0]
-      }, that.settings.animationSpeed, function () {
+      }, that.settings.animationSpeed, () => {
         if (offset[1] === 'end') {
           that.settings.onEnd();
         } else if (offset[1] === 'start') {
@@ -361,10 +355,10 @@
      * @private
      */
     Plugin.prototype._getOffset = function (direction) {
-      var that = this;
-      var offsetState = that.$inner.scrollLeft();
-      var calcActiveItem = 0;
-      var viewWidth = offsetState + that.viewportSize;
+      const that = this;
+      const offsetState = that.$inner.scrollLeft();
+      let calcActiveItem = 0;
+      const viewWidth = offsetState + that.viewportSize;
 
       if (direction === 'next' && offsetState + that.viewportSize === that.innerContainerWidth) {
         return 'end';
@@ -372,9 +366,9 @@
         return 'start';
       }
 
-      for (var i = 0; i < that.$items.length; ++i) {
-        var width = $(that.$items[i]).outerWidth(true);
-        var state = '';
+      for (let i = 0; i < that.$items.length; ++i) {
+        const width = $(that.$items[i]).outerWidth(true);
+        let state = '';
 
         calcActiveItem += width;
 
@@ -398,18 +392,18 @@
      * @private
      */
     Plugin.prototype._mouseDrag = function () {
-      var that = this;
-      var isTouchDevice = false;
-      var isClicked = false;
-      var mouseXposition = 0;
-      var innerXposition = 0;
-      var outerXposition = that.$inner.offset().left;
-      var newPosition = 0;
-      var isTouching = false;
-      var isScrolling = false;
-      var scrollTimer = null;
+      const that = this;
+      let isTouchDevice = false;
+      let isClicked = false;
+      let mouseXposition = 0;
+      let innerXposition = 0;
+      const outerXposition = that.$inner.offset().left;
+      let newPosition = 0;
+      let isTouching = false;
+      let isScrolling = false;
+      let scrollTimer = null;
 
-      var updatePosition = function updatePosition(e) {
+      const updatePosition = function updatePosition(e) {
         if (!isTouchDevice) {
           newPosition = innerXposition + (mouseXposition - e.pageX);
           that.$inner.scrollLeft(newPosition);
@@ -419,7 +413,7 @@
       // Touch events
 
       that.$element.on({
-        'touchstart': function touchstart(e) {
+        touchstart: function touchstart(e) {
           isTouchDevice = true;
           isTouching = true;
           isScrolling = true;
@@ -428,7 +422,7 @@
       });
 
       defaults.$document.on({
-        'touchend': function touchend(e) {
+        touchend: function touchend(e) {
           if (isTouching) {
             that._checkPosition();
             that.settings.onDragEnd();
@@ -437,9 +431,9 @@
         }
       });
 
-      that.$inner.scroll(function () {
+      that.$inner.scroll(() => {
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(function () {
+        scrollTimer = setTimeout(() => {
           if (isScrolling) {
             that._checkPosition();
             that.settings.onDragEnd();
@@ -454,7 +448,7 @@
         that.$element.addClass(defaults.mouseDragClass);
 
         that.$element.on({
-          'mousedown': function mousedown(e) {
+          mousedown: function mousedown(e) {
             isClicked = true;
             mouseXposition = e.pageX;
             innerXposition = that.$inner.scrollLeft();
@@ -466,10 +460,10 @@
         });
 
         defaults.$document.on({
-          'mousemove': function mousemove(e) {
+          mousemove: function mousemove(e) {
             isClicked && updatePosition(e);
           },
-          'mouseup': function mouseup(e) {
+          mouseup: function mouseup(e) {
             if (isClicked) {
               if (e.target.tagName.toLowerCase() !== 'button') {
                 that._checkPosition();
@@ -488,8 +482,8 @@
      * @private
      */
     Plugin.prototype._checkPosition = function () {
-      var that = this;
-      var innerOffset = that.$inner.scrollLeft();
+      const that = this;
+      const innerOffset = that.$inner.scrollLeft();
 
       that.settings.arrows && that._checkArrowState(innerOffset);
       that.settings.dots && that._checkActiveDots(innerOffset);
@@ -502,21 +496,21 @@
      * @private
      */
     Plugin.prototype._checkActiveDots = function (innerOffset) {
-      var that = this;
-      var itemStart = 0;
-      var itemEnd = 0;
-      var range = [innerOffset, innerOffset + that.viewportSize];
+      const that = this;
+      let itemStart = 0;
+      let itemEnd = 0;
+      const range = [innerOffset, innerOffset + that.viewportSize];
 
-      for (var i = 0; i < that.$items.length; ++i) {
-        var $item = $(that.$items[i]);
-        var itemWidth = $item.outerWidth(true);
+      for (let i = 0; i < that.$items.length; ++i) {
+        const $item = $(that.$items[i]);
+        const itemWidth = $item.outerWidth(true);
 
         itemEnd += itemWidth;
 
         if (itemStart + itemWidth / 2 >= range[0] && itemEnd - itemWidth / 2 <= range[1]) {
-          that.$dots.find('[data-horizon-target="' + i + '"]').addClass('active');
+          that.$dots.find(`[data-horizon-target="${i}"]`).addClass('active');
         } else {
-          that.$dots.find('[data-horizon-target="' + i + '"]').removeClass('active');
+          that.$dots.find(`[data-horizon-target="${i}"]`).removeClass('active');
         }
 
         itemStart += itemWidth;
@@ -530,7 +524,7 @@
      * @private
      */
     Plugin.prototype._checkArrowState = function (innerOffset) {
-      var that = this;
+      const that = this;
 
       if (innerOffset + that.viewportSize >= that.innerContainerWidth - 1) {
         that.$element.addClass(defaults.lastItemClass);
@@ -553,7 +547,7 @@
      *  Returns the class
      */
     return Plugin;
-  })();
+  }());
 
   $.fn[pluginName] = function (options) {
     this.each(function () {
@@ -564,4 +558,4 @@
 
     return this;
   };
-});
+}));

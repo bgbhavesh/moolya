@@ -2,13 +2,13 @@
  * Created by venkatasrinag on 6/4/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import _ from 'lodash'
 
-//todo://all the keys passing to server for fetching through props
+// todo://all the keys passing to server for fetching through props
 export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
   const result = await client.query({
-      query: gql`
+    query: gql`
           query ($portfoliodetailsId: String!) {
             fetchIdeatorPortfolioDetails(portfoliodetailsId: $portfoliodetailsId) {
               firstName
@@ -55,13 +55,13 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
           }
 
       `,
-      variables: {
-        portfoliodetailsId: portfoliodetailsId
-      },
-      forceFetch: true
+    variables: {
+      portfoliodetailsId
+    },
+    forceFetch: true
   })
   const id = result.data.fetchIdeatorPortfolioDetails;
-  let data = _.omit(id,'__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 export async function findIdeatorIdeasActionHandler(ideaId) {
@@ -90,18 +90,18 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
 
       `,
     variables: {
-      ideaId: ideaId
+      ideaId
     },
     forceFetch: true
   })
   const id = result.data.fetchIdeatorPortfolioIdeas;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
 export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodetailsId) {
   const result = await client.query({
-      query: gql`
+    query: gql`
           query ($portfoliodetailsId: String!) {
               data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"problemSolution") {
                   problemSolution{
@@ -128,12 +128,12 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
   
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.problemSolution;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
@@ -162,17 +162,16 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.audience;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   console.log(data)
   return data
 }
 export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -185,7 +184,7 @@ export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -194,7 +193,6 @@ export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
   return id
 }
 export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -214,12 +212,12 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.strategyAndPlanning;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
@@ -245,7 +243,7 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -263,7 +261,6 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
 //   }
 // }
 export async function findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -282,18 +279,17 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.intellectualPlanning;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
 
 export async function validateUserForAnnotation(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -302,7 +298,7 @@ export async function validateUserForAnnotation(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })

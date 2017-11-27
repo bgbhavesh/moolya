@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import $ from "jquery";
+import React, { Component } from 'react';
+import $ from 'jquery';
 
 export default class Days extends Component {
   constructor(props) {
     super(props);
-    var days = [];
+    const days = [];
     this.state = {
       startDate: props.startDate,
-      days: days,
-      selectedDate: ""
+      days,
+      selectedDate: ''
     }
 
-    for (var i = -3; i < 4; i++) {
-      var day = this.getDate(props.startDate, i)
+    for (let i = -3; i < 4; i++) {
+      const day = this.getDate(props.startDate, i)
       days.push(this.getDateBlock(day));
     }
 
@@ -22,13 +22,13 @@ export default class Days extends Component {
   }
 
   getDate(referenceDate, index) {
-    var day = new Date(referenceDate);
+    const day = new Date(referenceDate);
     day.setDate(day.getDate() + index)
     return day;
   }
 
   handleScroll() {
-    var componentInstance = this;
+    const componentInstance = this;
     $('#calendar').on('scroll', function () {
       if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
         var days = componentInstance.state.days;
@@ -40,12 +40,12 @@ export default class Days extends Component {
         if (days.length > 100) {
           days = days.slice(days.length - 100, 100);
         }
-        componentInstance.setState({ days: days });
+        componentInstance.setState({ days });
       }
       if ($(this).scrollTop() === 0) {
         var days = componentInstance.state.days;
         var refDate = days[0].key;
-        $(this).scrollTop($(".date").height());
+        $(this).scrollTop($('.date').height());
         for (var i = -1; i >= -7; i--) {
           var day = componentInstance.getDate(refDate, i);
           days.unshift(componentInstance.getDateBlock(day));
@@ -53,13 +53,13 @@ export default class Days extends Component {
         if (days.length > 100) {
           days = days.slice(0, 100);
         }
-        componentInstance.setState({ days: days });
+        componentInstance.setState({ days });
       }
     });
   }
 
   componentDidMount() {
-    $("#calendar").scrollTop($(".date").height());
+    $('#calendar').scrollTop($('.date').height());
     $(document).click((event) => {
       $('.date').removeClass('selected');
       $(event.target).addClass('selected');

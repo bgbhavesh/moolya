@@ -1,9 +1,9 @@
-import {loginActionHandler} from '../../../../login/actions/loginActions';
+import { loginActionHandler } from '../../../../login/actions/loginActions';
 
 
 export function logout() {
-  loginActionHandler.onLogout(function(){
+  loginActionHandler.onLogout(() => {
     // FlowRouter.go("/login");
-    FlowRouter.go("/logout");
+    FlowRouter.go('/logout');
   });
 }

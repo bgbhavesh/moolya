@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function upsertNumericalFormatActionHandler(regionalDetails)
-{
-  let numericalInfo=regionalDetails
+export async function upsertNumericalFormatActionHandler(regionalDetails) {
+  const numericalInfo = regionalDetails
   const result = await client.mutate({
     mutation: gql`
   mutation($numericalInfo:NumericalInfoRequest){

@@ -2,10 +2,10 @@
  * Created by vishwadeep on 13/9/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findAnchorUserActionHandler(paramContext) {
-  const {clusterId, chapterId, subChapterId} = paramContext
+  const { clusterId, chapterId, subChapterId } = paramContext
   const result = await client.query({
     query: gql`
     query($clusterId: String,$chapterId: String,$subChapterId: String){
@@ -24,8 +24,8 @@ export async function findAnchorUserActionHandler(paramContext) {
         }
       } 
     }`,
-    forceFetch:true,
-    variables:{
+    forceFetch: true,
+    variables: {
       clusterId,
       chapterId,
       subChapterId

@@ -2,9 +2,9 @@
  * Created by pankaj on 19/6/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function fetchActivitiesActionHandler (profileId) {
+export async function fetchActivitiesActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId:String) {
@@ -26,15 +26,15 @@ export async function fetchActivitiesActionHandler (profileId) {
     }
     `,
     variables: {
-      profileId:profileId
+      profileId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const activities = result.data.fetchActivities;
   return activities
 }
 
-export async function fetchCurrencyTypeActionHandler () {
+export async function fetchCurrencyTypeActionHandler() {
   const result = await appClient.query({
     query: gql`
     query{
@@ -51,7 +51,7 @@ export async function fetchCurrencyTypeActionHandler () {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
   const activities = result.data.fetchCurrencyType;
   return activities

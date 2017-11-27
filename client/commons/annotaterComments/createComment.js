@@ -2,8 +2,8 @@
 import gql from 'graphql-tag'
 
 
-export async function createCommentActionHandler(details,client) {
-  var connection=client||{};
+export async function createCommentActionHandler(details, client) {
+  const connection = client || {};
   const result = await connection.mutate({
     mutation: gql`
           mutation  ($annotatorId: String, $portfolioId:String, $comment:String){
@@ -15,17 +15,17 @@ export async function createCommentActionHandler(details,client) {
           }
       `,
     variables: {
-      annotatorId : details.annotatorId,
-      portfolioId : details.portfolioId,
-      comment : details.comment
+      annotatorId: details.annotatorId,
+      portfolioId: details.portfolioId,
+      comment: details.comment
     }
   })
   const id = result.data.createComment;
   return id
 }
 
-export async function resolveCommentActionHandler(commentId,client) {
-  var connection=client||{};
+export async function resolveCommentActionHandler(commentId, client) {
+  const connection = client || {};
   const result = await connection.mutate({
     mutation: gql`
           mutation  ($commentId:String){
@@ -37,15 +37,15 @@ export async function resolveCommentActionHandler(commentId,client) {
           }
       `,
     variables: {
-      commentId : commentId
+      commentId
     }
   })
   const id = result.data.resolveComment;
   return id
 }
 
-export async function reopenCommentActionHandler(commentId,client) {
-  var connection=client||{};
+export async function reopenCommentActionHandler(commentId, client) {
+  const connection = client || {};
   const result = await connection.mutate({
     mutation: gql`
           mutation  ($commentId:String){
@@ -57,12 +57,10 @@ export async function reopenCommentActionHandler(commentId,client) {
           }
       `,
     variables: {
-      commentId : commentId
+      commentId
     }
   })
   const id = result.data.reopenComment;
   return id
 }
-
-
 

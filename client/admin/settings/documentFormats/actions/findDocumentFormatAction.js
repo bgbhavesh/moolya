@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findDocumentFormatActionHandler(Id)
-{
-  let did=Id
+export async function findDocumentFormatActionHandler(Id) {
+  const did = Id
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -17,11 +16,11 @@ export async function findDocumentFormatActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findDocumentFormat;
-  console.log("DAta "+id);
+  console.log(`DAta ${id}`);
   return id
 }

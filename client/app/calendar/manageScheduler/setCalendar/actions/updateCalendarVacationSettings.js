@@ -4,14 +4,14 @@
 
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
 /**
  * updateCalendarVacationActionHandler() --> construct the query to save in db
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationActionHandler(profileId, vacation,isAutoCancelAppointment) {
+export async function updateCalendarVacationActionHandler(profileId, vacation, isAutoCancelAppointment) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($profileId: String, $vacation: calendarSettingVacation, $isAutoCancelAppointment: Boolean) {
@@ -36,7 +36,7 @@ export async function updateCalendarVacationActionHandler(profileId, vacation,is
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationByIdActionHandler(profileId, vacation, vacationId,isAutoCancelAppointment) {
+export async function updateCalendarVacationByIdActionHandler(profileId, vacation, vacationId, isAutoCancelAppointment) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($profileId:String, $vacation: calendarSettingVacation, $vacationId: String, $isAutoCancelAppointment: Boolean) {

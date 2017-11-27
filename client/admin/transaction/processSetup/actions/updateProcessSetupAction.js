@@ -1,17 +1,18 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import _ from 'lodash'
 
-export async function updateProcessSetupActionHandler(data, details, loggedUserDetails)
-{
-  let tId = data._id;
-  let process = {
-    userId:data.userId,
-    username:data.username,
-    processTransactionId:data._id,
-    processSteps:details
+export async function updateProcessSetupActionHandler(data, details, loggedUserDetails) {
+  const tId = data._id;
+  const process = {
+    userId: data.userId,
+    username: data.username,
+    processTransactionId: data._id,
+    processSteps: details
   }
-  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;                     /*attaching default user role context*/
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loggedUserDetails; /* attaching default user role context */
   const result = await client.mutate({
     mutation: gql`
     mutation ($processTransactionId:String, $processSetup:processSetup, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
@@ -26,8 +27,8 @@ export async function updateProcessSetupActionHandler(data, details, loggedUserD
       }
     `,
     variables: {
-      processTransactionId:tId,
-      processSetup:process,
+      processTransactionId: tId,
+      processSetup: process,
       clusterId,
       chapterId,
       subChapterId,
@@ -39,7 +40,6 @@ export async function updateProcessSetupActionHandler(data, details, loggedUserD
 }
 
 export async function updateProcessTransaction(transId, data) {
-
   const result = await client.mutate({
     mutation: gql`
         mutation ($processTransactionId:String, $processTransactions: processTransactions) {
@@ -52,9 +52,9 @@ export async function updateProcessTransaction(transId, data) {
     `,
     variables: {
       processTransactionId: transId,
-      processTransactions:data
+      processTransactions: data
     },
-    forceFetch:true
+    forceFetch: true
   });
   console.log(result);
   const id = result.data.updateProcessTransaction;

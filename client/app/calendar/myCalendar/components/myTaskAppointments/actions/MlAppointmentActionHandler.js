@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import _ from 'lodash';
-import {appClient} from '../../../../../core/appConnection';
+import { appClient } from '../../../../../core/appConnection';
 
 export async function fetchAllTaskActionHandler(profileId) {
   const result = await appClient.query({
@@ -89,20 +89,20 @@ export async function fetchTaskActionHandler(taskId) {
     },
     forceFetch: true
   })
-  var resp = result.data.fetchTaskForApointment;
-  let data = _.omit(resp, '__typename')
+  const resp = result.data.fetchTaskForApointment;
+  const data = _.omit(resp, '__typename')
   data.duration = _.omit(data.duration, '__typename')
   data.payment = _.omit(data.payment, '__typename')
-  let sessionArray = []
-  _.each(data.session,function (item,say) {
-    let value = _.omit(item, '__typename')
+  const sessionArray = []
+  _.each(data.session, (item, say) => {
+    const value = _.omit(item, '__typename')
     value.duration = _.omit(value.duration, '__typename')
     sessionArray.push(value)
   })
   data.session = sessionArray
-  let attachmentArray = []
-  _.each(data.attachments,function (item,say) {
-    let value = _.omit(item, '__typename')
+  const attachmentArray = []
+  _.each(data.attachments, (item, say) => {
+    const value = _.omit(item, '__typename')
     attachmentArray.push(value);
   });
   data.attachments = attachmentArray
@@ -138,18 +138,18 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
     forceFetch: true
   });
   const resp = result.data.fetchActivitiesTeams;
-  let data = _.omit(resp, '__typename')
-  let activities = [];
-  _.each(data,(activity) => {
-    let activityData = _.omit(activity, '__typename');
-    let teamsArray = [];
+  const data = _.omit(resp, '__typename')
+  const activities = [];
+  _.each(data, (activity) => {
+    const activityData = _.omit(activity, '__typename');
+    const teamsArray = [];
     if (activity.teams && activity.teams.length > 0) {
-      _.each(activity.teams,function (item,say) {
-        let value = _.omit(item, '__typename');
-        let userArray = [];
+      _.each(activity.teams, (item, say) => {
+        const value = _.omit(item, '__typename');
+        const userArray = [];
         if (item.users && item.users.length > 0) {
-          _.each(item.users,function (user,say) {
-            let value = _.omit(user, '__typename')
+          _.each(item.users, (user, say) => {
+            const value = _.omit(user, '__typename')
             userArray.push(value)
           });
         }
@@ -176,16 +176,16 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      officeId:officeId
+      officeId
     }
   });
   const teamMembers = result.data.getTeamUsers;
   return teamMembers
 }
 
-export async function fetchOfficeActionHandler (Details) {
+export async function fetchOfficeActionHandler(Details) {
   const result = await appClient.query({
     query: gql`
     query{
@@ -268,10 +268,10 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      userId: userId,
-      profileId: profileId
+      userId,
+      profileId
     }
   });
   const teamMembers = result.data.fetchMoolyaAdmins;

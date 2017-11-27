@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findSubDomainActionHandler(SubDomainId) {
-  let did = SubDomainId
+  const did = SubDomainId
   const result = await client.query({
     query: gql`
           query  ($SubDomainId: String){
@@ -16,9 +16,9 @@ export async function findSubDomainActionHandler(SubDomainId) {
           }
       `,
     variables: {
-      SubDomainId:did
+      SubDomainId: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findSubDomain;
   return id

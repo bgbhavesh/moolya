@@ -2,9 +2,9 @@
  * Created by pankaj on 28/6/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function updateCalendarSettingActionHandler (profileId,calendarSetting) {
+export async function updateCalendarSettingActionHandler(profileId, calendarSetting) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($profileId:String, $calendarSetting: calendarSetting) {
@@ -16,8 +16,8 @@ export async function updateCalendarSettingActionHandler (profileId,calendarSett
     }
     `,
     variables: {
-      calendarSetting:calendarSetting,
-      profileId: profileId
+      calendarSetting,
+      profileId
     }
   });
   const response = result.data.updateMyCalendarSetting;

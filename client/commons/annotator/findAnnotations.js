@@ -1,11 +1,11 @@
 
 import gql from 'graphql-tag'
 
-import {client} from '../../../client/admin/core/apolloConnection'
+import { client } from '../../../client/admin/core/apolloConnection'
 import _ from 'lodash'
 
 export async function findAnnotations(portfoliodetailsId, docId) {
-  var connection=client||{};
+  const connection = client || {};
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!, $docId:String!) {
@@ -16,16 +16,12 @@ export async function findAnnotations(portfoliodetailsId, docId) {
   
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId,
-      docId:docId
+      portfoliodetailsId,
+      docId
     },
     forceFetch: true
   })
   const data = result.data.fetchAnnotations;
   return data
 }
-
-
-
-
 

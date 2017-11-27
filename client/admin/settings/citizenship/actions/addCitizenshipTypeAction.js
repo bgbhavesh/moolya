@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addCitizenshipActionHandler(CitizenshipDetails) {
-  let citizenshipTypeName = CitizenshipDetails.citizenshipTypeName;
-  let citizenshipTypeDisplayName = CitizenshipDetails.citizenshipTypeDisplayName;
-  let about = CitizenshipDetails.about;
-  let isActive = CitizenshipDetails.isActive;
+  const citizenshipTypeName = CitizenshipDetails.citizenshipTypeName;
+  const citizenshipTypeDisplayName = CitizenshipDetails.citizenshipTypeDisplayName;
+  const about = CitizenshipDetails.about;
+  const isActive = CitizenshipDetails.isActive;
 
   const result = await client.mutate({
     mutation: gql`
@@ -29,8 +29,8 @@ export async function addCitizenshipActionHandler(CitizenshipDetails) {
       citizenshipTypeDisplayName,
       about,
       isActive,
-      moduleName:"CITIZENSHIP",
-      actionName:"CREATE"
+      moduleName: 'CITIZENSHIP',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.CreateCitizenship;

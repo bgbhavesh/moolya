@@ -3,10 +3,9 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlNotificationTemplateTableConfig} from "../config/MlNotificationTemplateConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlNotificationTemplateTableConfig } from '../config/MlNotificationTemplateConfig';
 export default class MlNotificationTemplateList extends Component {
-
   componentDidMount() {
   }
 

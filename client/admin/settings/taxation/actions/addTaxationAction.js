@@ -1,11 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
-import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import { client } from '../../../core/apolloConnection';
+import { getAdminUserContext } from '../../../../commons/getAdminUserContext';
 
-export async function addTaxationActionHandler(TaxationDetails)
-{
-  let taxation=TaxationDetails
-  let clusterId = getAdminUserContext().clusterId;
+export async function addTaxationActionHandler(TaxationDetails) {
+  const taxation = TaxationDetails
+  const clusterId = getAdminUserContext().clusterId;
   const result = await client.mutate({
     mutation: gql`
         mutation ($clusterId:String, $taxation:taxationInput){

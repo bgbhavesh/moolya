@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlAssetsTableConfig} from "../config/MlAssetsConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlAssetsTableConfig } from '../config/MlAssetsConfig';
 export default class MlAssetsList extends Component {
-
   componentDidMount() {
   }
 

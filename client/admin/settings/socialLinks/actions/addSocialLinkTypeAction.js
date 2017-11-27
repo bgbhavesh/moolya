@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addSocialLinkTypeActionHandler(Details)
-{
+export async function addSocialLinkTypeActionHandler(Details) {
 /*  const result = await client.mutate({
     mutation: gql`
         mutation ($socialLinksType:socialLinksTypeObject){
@@ -17,14 +16,16 @@ export async function addSocialLinkTypeActionHandler(Details)
   })
   console.log(result)
   const id = result.data.createSocialLinksType;
-  return id*/
+  return id */
 
-  let socialName = Details.socialName;
-  let socialDisplayName = Details.socialDisplayName;
-  let aboutSocial = Details.aboutSocial;
-  let socialUploadIcon = Details.socialUploadIcon;
-  let isActive = Details.isActive;
-  let socialLinksInfo={socialName,socialDisplayName,aboutSocial,socialUploadIcon};
+  const socialName = Details.socialName;
+  const socialDisplayName = Details.socialDisplayName;
+  const aboutSocial = Details.aboutSocial;
+  const socialUploadIcon = Details.socialUploadIcon;
+  const isActive = Details.isActive;
+  const socialLinksInfo = {
+    socialName, socialDisplayName, aboutSocial, socialUploadIcon
+  };
   const result = await client.mutate({
     mutation: gql`
     mutation  ($masterData:MasterSettingsRequest){
@@ -37,7 +38,7 @@ export async function addSocialLinkTypeActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"socialLinksInfo":socialLinksInfo,"isActive":isActive},
+      masterData: { socialLinksInfo, isActive }
     }
   })
   const id = result.data.createMasterSetting;

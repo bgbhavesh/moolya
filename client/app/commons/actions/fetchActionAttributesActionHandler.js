@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function fetchInteractionActionAttributesHandler(details) {
   const result = await appClient.query({
@@ -13,12 +13,12 @@ export async function fetchInteractionActionAttributesHandler(details) {
     }
     `,
     variables: {
-      actionNames:details.actionNames,
-      resourceId : details.resourceId,
+      actionNames: details.actionNames,
+      resourceId: details.resourceId,
       resourceType: details.resourceType
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.fetchInteractionActionAttributes?result.data.fetchInteractionActionAttributes:[];
+  const data = result.data.fetchInteractionActionAttributes ? result.data.fetchInteractionActionAttributes : [];
   return data;
 }

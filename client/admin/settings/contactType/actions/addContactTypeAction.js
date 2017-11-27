@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addContactTypeActionHandler(Details)
-{
-  /*const result = await client.mutate({
+export async function addContactTypeActionHandler(Details) {
+  /* const result = await client.mutate({
     mutation: gql`
         mutation ($contactType:contactTypeObject){
             createContactType(
@@ -14,14 +13,16 @@ export async function addContactTypeActionHandler(Details)
     variables: {
       contactType: Details
     }
-  })*/
+  }) */
 
-  let contactName = Details.contactName;
-  let contactDisplayName = Details.contactDisplayName;
-  let aboutContact = Details.aboutContact;
-  let contactUploadIcon = Details.contactUploadIcon;
-  let isActive = Details.isActive;
-  let contactTypeInfo={contactName,contactDisplayName,aboutContact,contactUploadIcon};
+  const contactName = Details.contactName;
+  const contactDisplayName = Details.contactDisplayName;
+  const aboutContact = Details.aboutContact;
+  const contactUploadIcon = Details.contactUploadIcon;
+  const isActive = Details.isActive;
+  const contactTypeInfo = {
+    contactName, contactDisplayName, aboutContact, contactUploadIcon
+  };
 
   const result = await client.mutate({
     mutation: gql`
@@ -35,7 +36,7 @@ export async function addContactTypeActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"contactTypeInfo":contactTypeInfo,"isActive":isActive},
+      masterData: { contactTypeInfo, isActive }
     }
   })
   const id = result.data.createMasterSetting;

@@ -9,9 +9,9 @@
  * Import libs and components
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function fetchOfficeActionHandler (profileId) {
+export async function fetchOfficeActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId: String ) {
@@ -22,7 +22,7 @@ export async function fetchOfficeActionHandler (profileId) {
       }
     }`,
     variables: {
-      profileId: profileId
+      profileId
     },
     forceFetch: true
   });
@@ -58,10 +58,10 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      userId: userId,
-      profileId: profileId
+      userId,
+      profileId
     }
   });
   const teamMembers = result.data.fetchMoolyaAdmins;

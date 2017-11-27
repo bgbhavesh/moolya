@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function removePortfolioProfilePic(portfoliodetailsId) {
-
   const result = await client.mutate({
     mutation: gql`
      mutation($portfoliodetailsId: String){

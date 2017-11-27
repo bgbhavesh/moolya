@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findContactTypeActionHandler(Id)
-{
+export async function findContactTypeActionHandler(Id) {
 /*  let did=Id;
   const result = await client.query({
     query: gql`
@@ -22,8 +21,8 @@ export async function findContactTypeActionHandler(Id)
     forceFetch:true
   })
   const id = result.data.findContactType;
-  return id*/
-  let did=Id;
+  return id */
+  const did = Id;
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -39,14 +38,16 @@ export async function findContactTypeActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {contactName,aboutContact,contactDisplayName}=masterSetting.contactTypeInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,contactName,aboutContact,contactDisplayName};
+  const masterSetting = result.data.findMasterSetting || {};
+  const { contactName, aboutContact, contactDisplayName } = masterSetting.contactTypeInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, contactName, aboutContact, contactDisplayName
+    };
   }
   return {};
 }

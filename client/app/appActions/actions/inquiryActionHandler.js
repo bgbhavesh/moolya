@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function inquiryActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,18 +17,16 @@ export async function inquiryActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType,
-      subject : details.subject,
-      message:details.message
+      subject: details.subject,
+      message: details.message
     }
   })
-  var resp = result.data.createInquiry;
+  const resp = result.data.createInquiry;
   if (resp.success) {
-   return resp;
+    return resp;
   }
   return null;
 }
-
-
 

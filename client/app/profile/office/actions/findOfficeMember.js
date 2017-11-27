@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 8/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../../../app/core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../../../app/core/appConnection';
 
 export async function fetchOfficeMember(memberId) {
   const result = await appClient.query({
@@ -28,7 +28,7 @@ export async function fetchOfficeMember(memberId) {
           }
       `,
     variables: {
-      memberId: memberId
+      memberId
     },
     forceFetch: true
   });

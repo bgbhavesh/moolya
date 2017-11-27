@@ -2,10 +2,12 @@
  * Created by pankaj on 6/6/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findOfficeTransactionHandler(TransId, loggedUserDetails) {  /*sending user context to server for auth*/
-  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
+export async function findOfficeTransactionHandler(TransId, loggedUserDetails) { /* sending user context to server for auth */
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loggedUserDetails;
   const result = await client.query({
     query: gql`
         query ($id: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {

@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateDocumentTypeActionHandler(DocTypeDetails)
-{
-  let _id=DocTypeDetails.id;
-  let docTypeName = DocTypeDetails.docTypeName;
-  let docTypeDisplayName = DocTypeDetails.docTypeDisplayName;
-  let about = DocTypeDetails.about;
-  let isActive = DocTypeDetails.isActive;
+export async function updateDocumentTypeActionHandler(DocTypeDetails) {
+  const _id = DocTypeDetails.id;
+  const docTypeName = DocTypeDetails.docTypeName;
+  const docTypeDisplayName = DocTypeDetails.docTypeDisplayName;
+  const about = DocTypeDetails.about;
+  const isActive = DocTypeDetails.isActive;
 
   const result = await client.mutate({
     mutation: gql`
@@ -33,8 +32,8 @@ export async function updateDocumentTypeActionHandler(DocTypeDetails)
       docTypeDisplayName,
       about,
       isActive,
-      moduleName:"DOCUMENTTYPE",
-      actionName:"UPDATE"
+      moduleName: 'DOCUMENTTYPE',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.updateDocumentType;

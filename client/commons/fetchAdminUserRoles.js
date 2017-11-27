@@ -1,7 +1,7 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
-export async function fetchAdminUserRoles(userId,connection) {
-  var connection = connection ||{};
+export async function fetchAdminUserRoles(userId, connection) {
+  var connection = connection || {};
   const result = await connection.query({
     query: gql`
     query ($userId: String) {
@@ -26,7 +26,7 @@ export async function fetchAdminUserRoles(userId,connection) {
       }
     `,
     variables: {
-      userId: userId
+      userId
     },
     forceFetch: true
   })

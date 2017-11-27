@@ -3,7 +3,7 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findRolessActionHandler(departmentId, subDepartmentId) {
   const result = await client.query({
@@ -19,7 +19,7 @@ export async function findRolessActionHandler(departmentId, subDepartmentId) {
       department: departmentId,
       subDepartment: subDepartmentId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const id = result.data.data;
   return id

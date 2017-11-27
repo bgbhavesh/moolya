@@ -1,32 +1,29 @@
 import gql from 'graphql-tag';
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
-export async function updateContactDetails(addressDetails,type) {
+export async function updateContactDetails(addressDetails, type) {
   let addressBook = {};
 
   let addressBookArray = []
   addressBookArray = addressDetails;
 
- /* addressBookArray  = _.map(addressDetails, function (row) {
+  /* addressBookArray  = _.map(addressDetails, function (row) {
     return _.omit(row, ['__typename']);
-  });*/
-  if(type == "CONTACTTYPE"){
+  }); */
+  if (type == 'CONTACTTYPE') {
     addressBook = {
-      contactInfo : addressBookArray
+      contactInfo: addressBookArray
     }
-  }else if(type == "ADDRESSTYPE"){
+  } else if (type == 'ADDRESSTYPE') {
+    addressBook = {
+      addressInfo: addressBookArray
+    }
+  } else if (type == 'EMAILTYPE') {
+    addressBook = {
+      emailInfo: addressBookArray
+    }
+  }
 
-    addressBook = {
-      addressInfo : addressBookArray
-    }
-  }
-  else if(type == "EMAILTYPE")
-  {
-    addressBook = {
-      emailInfo : addressBookArray
-    }
-  }
-  ;
 
   const result = await client.mutate({
     mutation: gql`
@@ -44,10 +41,10 @@ export async function updateContactDetails(addressDetails,type) {
       }
     `,
     variables: {
-      addressBook:addressBook,
-      moduleName:"PROFILE",
-      actionName:"UPDATE",
-      type:type
+      addressBook,
+      moduleName: 'PROFILE',
+      actionName: 'UPDATE',
+      type
     }
   })
 
@@ -57,11 +54,9 @@ export async function updateContactDetails(addressDetails,type) {
 }
 
 
-//===============================================================================
+//= ==============================================================================
 
 /*
-
-
 
 
 export async function getContactDetails(type,registrationId) {

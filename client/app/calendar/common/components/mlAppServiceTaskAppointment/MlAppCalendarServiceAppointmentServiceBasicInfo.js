@@ -7,15 +7,14 @@
 // import NPM module(s)
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import Moment from "moment";
+import Datetime from 'react-datetime';
+import Moment from 'moment';
 import ScrollArea from 'react-scrollbar';
 import { cloneDeep } from 'lodash';
-import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
+import { findTaskActionHandler } from '../../actions/fetchOngoingAppointments';
 
 
 export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Component {
-
   constructor(props) {
     super(props);
     this.getTask = this.getTask.bind(this);
@@ -26,8 +25,8 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
   }
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (290 + $('.app_header').outerHeight(true)));
   }
 
   async getTask() {
@@ -38,8 +37,8 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
    * Desc :: Showing html page
    * @returns {XML}
    */
-  render(){
-    const {service, daysRemaining} = this.props;
+  render() {
+    const { service, daysRemaining } = this.props;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -47,45 +46,51 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text"
-                         placeholder="Service Name"
-                         className="form-control float-label"
-                         id="name"
-                         value={service.name}
-                         disabled />
+                  <input
+                    type="text"
+                    placeholder="Service Name"
+                    className="form-control float-label"
+                    id="name"
+                    value={service.name}
+                    disabled />
                 </div>
                 <div className="form-group">
                   <label>
                     Total number of Sessions
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled
-                           value={service.noOfSession} />
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled
+                      value={service.noOfSession} />
                   </label>
-                  {/*<input type="number" className="form-control "/>*/}
+                  {/* <input type="number" className="form-control "/> */}
                 </div>
                 <div className="form-group">
                   <label>Duration: &nbsp;
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled={true}
-                           value={service.duration && service.duration.hours}  /> Hours
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled={true}
-                           value={service.duration && service.duration.minutes}  /> Mins
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled={true}
+                      value={service.duration && service.duration.hours} /> Hours
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled={true}
+                      value={service.duration && service.duration.minutes} /> Mins
                   </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY"
-                            timeFormat={false}
-                            inputProps={{placeholder: "Valid Till",readOnly:true}}
-                            closeOnSelect={true}
-                            value={service.validTill? new Moment(service.validTill).format('DD-MM-YY') : null}
-                            disabled />
-                  <FontAwesome name="calendar"
-                               className="password_icon"
-                               disabled />
+                  <Datetime
+                    dateFormat="DD-MM-YYYY"
+                    timeFormat={false}
+                    inputProps={{ placeholder: 'Valid Till', readOnly: true }}
+                    closeOnSelect={true}
+                    value={service.validTill ? new Moment(service.validTill).format('DD-MM-YY') : null}
+                    disabled />
+                  <FontAwesome
+                    name="calendar"
+                    className="password_icon"
+                    disabled />
                 </div>
               </form>
             </div>
@@ -94,29 +99,32 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text"
-                         placeholder="Note"
-                         className="form-control float-label"
-                         id="note"
-                         value={service.note}
-                         disabled />
+                  <input
+                    type="text"
+                    placeholder="Note"
+                    className="form-control float-label"
+                    id="note"
+                    value={service.note}
+                    disabled />
                 </div>
                 <span className="placeHolder active">Frequency</span>
                 <div className="form-group">
-                  <input type="text"
-                         placeholder="Frequency"
-                         className="form-control float-label"
-                         id="frequency"
-                         value={service.sessionFrequency}
-                         disabled />
+                  <input
+                    type="text"
+                    placeholder="Frequency"
+                    className="form-control float-label"
+                    id="frequency"
+                    value={service.sessionFrequency}
+                    disabled />
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
                   <label>
                     Task expires &nbsp;
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled value={daysRemaining}  />
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled value={daysRemaining} />
                     days from the date of purchase
                   </label>
                 </div>
@@ -127,4 +135,4 @@ export default class MlAppCalendarServiceAppointmentServiceBasicInfo extends Com
       </div>
     )
   }
-};
+}

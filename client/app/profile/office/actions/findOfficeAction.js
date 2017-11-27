@@ -1,8 +1,8 @@
 /**
  * Created by vishwadeep on 7/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../../../app/core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../../../app/core/appConnection';
 
 export async function findOfficeAction(officeId) {
   const result = await appClient.query({
@@ -16,7 +16,7 @@ export async function findOfficeAction(officeId) {
           }
       `,
     variables: {
-      officeId: officeId
+      officeId
     },
     forceFetch: true
   })
@@ -26,7 +26,7 @@ export async function findOfficeAction(officeId) {
 
 export async function fetchOfficePackages() {
   const result = await appClient.query({
-    query: gql `
+    query: gql`
       query{
             fetchOfficePackages{
               serviceCardName,
@@ -65,7 +65,7 @@ export async function fetchOfficePackages() {
             }
           }
           `,
-    forceFetch:true
+    forceFetch: true
   })
   const data = result.data.fetchOfficePackages
   return data

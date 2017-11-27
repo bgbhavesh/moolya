@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateIndustryTypeActionHandler(IndustryType) {
-  let _id=IndustryType.id;
-  let industryName = IndustryType.industryName;
-  let industryDisplayName = IndustryType.industryDisplayName;
-  let about = IndustryType.about;
-  let isActive = IndustryType.isActive
+  const _id = IndustryType.id;
+  const industryName = IndustryType.industryName;
+  const industryDisplayName = IndustryType.industryDisplayName;
+  const about = IndustryType.about;
+  const isActive = IndustryType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$industryName: String, $industryDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateIndustryTypeActionHandler(IndustryType) {
       industryDisplayName,
       about,
       isActive,
-      moduleName: "INDUSTRY",
-      actionName: "UPDATE"
+      moduleName: 'INDUSTRY',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateIndustry;

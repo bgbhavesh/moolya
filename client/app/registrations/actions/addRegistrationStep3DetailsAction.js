@@ -1,32 +1,30 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function addRegistrationStep3Details(details, type, registrationId) {
   let registration = {}
-  if (type == "CONTACTTYPE") {
+  if (type == 'CONTACTTYPE') {
     registration = {
       contactInfo: details
     }
-  } else if (type == "ADDRESSTYPE") {
-
+  } else if (type == 'ADDRESSTYPE') {
     registration = {
       addressInfo: details
     }
-  } else if (type == "SOCIALLINKS") {
+  } else if (type == 'SOCIALLINKS') {
     registration = {
       socialLinksInfo: details
     }
-  } else if (type == "EMAILTYPE") {
+  } else if (type == 'EMAILTYPE') {
     registration = {
       emailInfo: details
     }
-  }
-  else if (type == "KYCDOCUMENT") {
+  } else if (type == 'KYCDOCUMENT') {
     registration = {
       kycDocuments: details
     }
   }
-  ;
+
 
   const result = await appClient.mutate({
     mutation: gql`
@@ -46,10 +44,10 @@ export async function addRegistrationStep3Details(details, type, registrationId)
     `,
     variables: {
       registration,
-      moduleName: "REGISTRATION",
-      actionName: "CREATE",
-      registrationId: registrationId,
-      type: type
+      moduleName: 'REGISTRATION',
+      actionName: 'CREATE',
+      registrationId,
+      type
     }
   })
 

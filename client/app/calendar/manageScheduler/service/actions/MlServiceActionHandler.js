@@ -2,9 +2,9 @@
  * Created by Mukhil on 19/6/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../../core/appConnection';
+import { appClient } from '../../../../core/appConnection';
 
-export async function createBeSpokeServiceActionHandler (Services, portfolioId) {
+export async function createBeSpokeServiceActionHandler(Services, portfolioId) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Services: service, $portfolioId: String){
@@ -24,7 +24,7 @@ export async function createBeSpokeServiceActionHandler (Services, portfolioId) 
   return services
 }
 
-export async function updateBeSpokeServiceActionHandler (Services, portfolioId) {
+export async function updateBeSpokeServiceActionHandler(Services, portfolioId) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Services: service, $portfolioId: String){
@@ -45,7 +45,7 @@ export async function updateBeSpokeServiceActionHandler (Services, portfolioId) 
 }
 
 
-export async function createServiceActionHandler (Services) {
+export async function createServiceActionHandler(Services) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Services: service){
@@ -65,9 +65,7 @@ export async function createServiceActionHandler (Services) {
 }
 
 
-
-
-export async function fetchServiceActionHandler (serviceId) {
+export async function fetchServiceActionHandler(serviceId) {
   const result = await appClient.query({
     query: gql`
     query($serviceId:String){       
@@ -148,34 +146,34 @@ export async function fetchServiceActionHandler (serviceId) {
     variables: {
       serviceId
     },
-    forceFetch:true
+    forceFetch: true
   });
-  var response = result.data.findService;
-  let service = _.omit(response, '__typename');
+  const response = result.data.findService;
+  const service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');
   service.facilitationCharge = _.omit(service.facilitationCharge, '__typename');
-  let stateArray = [];
+  const stateArray = [];
   _.each(service.state, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     stateArray.push(value);
   });
   service.state = stateArray;
-  let cityArray = [];
+  const cityArray = [];
   _.each(service.city, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     cityArray.push(value)
   });
   service.city = cityArray;
-  let communityArray = [];
+  const communityArray = [];
   _.each(service.community, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     communityArray.push(value)
   });
   service.community = communityArray;
-  let taskArray = [];
+  const taskArray = [];
   _.each(service.tasks, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     taskArray.push(value)
   });
   service.tasks = taskArray;
@@ -183,7 +181,7 @@ export async function fetchServiceActionHandler (serviceId) {
 }
 
 
-export async function updateServiceActionHandler(serviceId,Services) {
+export async function updateServiceActionHandler(serviceId, Services) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($serviceId:String, $Services:service){
@@ -223,7 +221,7 @@ export async function cloneServiceCardActionHandler(serviceId) {
 }
 
 
-export async function fetchServicesActionHandler (profileId) {
+export async function fetchServicesActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId:String) {
@@ -245,16 +243,16 @@ export async function fetchServicesActionHandler (profileId) {
       }
     }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      profileId:profileId
+      profileId
     }
   });
   const services = result.data.fetchUserServices;
   return services;
 }
 
-export async function fetchBeSpokeServicesActionHandler (portfolioId) {
+export async function fetchBeSpokeServicesActionHandler(portfolioId) {
   const result = await appClient.query({
     query: gql`
     query($portfolioId:String) {
@@ -283,9 +281,9 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
       }
     }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      portfolioId:portfolioId
+      portfolioId
     }
   });
   const response = result.data.fetchBeSpokeServices;
@@ -301,7 +299,7 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
 }
 
 
-export async function fetchProfileActionHandler (profileId) {
+export async function fetchProfileActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
     query ($profileId: String) {
@@ -312,7 +310,7 @@ export async function fetchProfileActionHandler (profileId) {
   }
 }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
       profileId
     }
@@ -321,7 +319,7 @@ export async function fetchProfileActionHandler (profileId) {
   return profile;
 }
 
-export async function fetchTasksAmountActionHandler (profileId) {
+export async function fetchTasksAmountActionHandler(profileId) {
   const result = await appClient.query({
     query: gql`
 query ($profileId: String) {
@@ -330,16 +328,16 @@ query ($profileId: String) {
   }
 }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
-      profileId:profileId
+      profileId
     }
   });
   const services = result.data.fetchTasksAmount;
   return services;
 }
 
-export async function getProfileBasedOnPortfolio (portfolioId) {
+export async function getProfileBasedOnPortfolio(portfolioId) {
   const result = await appClient.query({
     query: gql`
 query ($portfolioId: String) {
@@ -348,7 +346,7 @@ query ($portfolioId: String) {
   }
 }
     `,
-    forceFetch:true,
+    forceFetch: true,
     variables: {
       portfolioId
     }
@@ -358,7 +356,7 @@ query ($portfolioId: String) {
 }
 
 
-export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orderId) {
+export async function fetchTaskDetailsForServiceCard(profileId, serviceId, orderId) {
   console.log('orderId', orderId)
   const result = await appClient.query({
     query: gql`
@@ -416,14 +414,14 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orde
     },
     forceFetch: true
   });
-  var taskDetails = result.data.fetchTaskDetailsForServiceCard;
+  const taskDetails = result.data.fetchTaskDetailsForServiceCard;
   let tasks = [];
-  let taskArray = [];
+  const taskArray = [];
   _.each(taskDetails, (task, say) => {
-    let sessionArray = [];
-    let taskInfo =  _.omit(task, '__typename');
+    const sessionArray = [];
+    const taskInfo = _.omit(task, '__typename');
     _.each(taskInfo.session, (item, say) => {
-      let value = _.omit(item, '__typename');
+      const value = _.omit(item, '__typename');
       sessionArray.push(value)
     });
     taskInfo.session = sessionArray;
@@ -472,7 +470,7 @@ export async function userServiceCardPaymentActionHandler(userServiceCardPayment
   return teamMembers;
 }
 
-export async function updateGoLiveServiceActionHandler (serviceId) {
+export async function updateGoLiveServiceActionHandler(serviceId) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($serviceId: String!){
@@ -491,7 +489,7 @@ export async function updateGoLiveServiceActionHandler (serviceId) {
   return services
 }
 
-export async function updateReviewServiceActionHandler (serviceId) {
+export async function updateReviewServiceActionHandler(serviceId) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($serviceId: String!){
@@ -522,7 +520,7 @@ export async function checkServiceSubChapterAccessControl(serviceId) {
       }
     `,
     variables: {
-      serviceId:serviceId
+      serviceId
     }
   });
   const data = result.data.checkServiceSubChapterAccessControl;

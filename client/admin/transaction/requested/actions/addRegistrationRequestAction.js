@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addReqgistrationRequestInfo(requestDetails) {
-  let transaction = {}
+  const transaction = {}
   requests = requestDetails;
   const result = await client.mutate({
     mutation: gql`

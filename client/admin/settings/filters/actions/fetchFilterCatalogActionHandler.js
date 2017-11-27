@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
 
-import {client} from '../../../../../client/admin/core/apolloConnection'
+import { client } from '../../../../../client/admin/core/apolloConnection'
 import _ from 'lodash'
 
 export async function fetchFilterCatalogActionHandler(moduleName) {
-
   const result = await client.query({
     query: gql`
           query ($moduleName: String!) {
@@ -22,18 +21,16 @@ export async function fetchFilterCatalogActionHandler(moduleName) {
   
       `,
     variables: {
-      moduleName: moduleName,
+      moduleName
     },
     forceFetch: true
   })
   const response = result.data.findFilterCatalog;
 
-  let data = _.omit(response,'__typename');
+  const data = _.omit(response, '__typename');
   let fieldsObject = {}
-  fieldsObject=_.map(data.fields, function (row) {return _.omit(row, ['__typename'])});
+  fieldsObject = _.map(data.fields, row => _.omit(row, ['__typename']));
 
   return fieldsObject
 }
-
-
 

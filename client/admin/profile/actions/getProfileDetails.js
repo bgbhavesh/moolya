@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findMyProfileActionHandler(userTypeId) {
-  let did=userTypeId
+  const did = userTypeId
   const result = await client.query({
     query: gql`
     
@@ -80,9 +80,9 @@ export async function findMyProfileActionHandler(userTypeId) {
           }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchMyProfile;
   return id

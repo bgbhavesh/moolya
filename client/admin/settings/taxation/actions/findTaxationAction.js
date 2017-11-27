@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
-import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import { client } from '../../../core/apolloConnection';
+import { getAdminUserContext } from '../../../../commons/getAdminUserContext';
 
 export async function findTaxationActionHandler(TaxationId) {
-  let did=TaxationId
-  let clusterId = getAdminUserContext().clusterId;
+  const did = TaxationId
+  const clusterId = getAdminUserContext().clusterId;
   const result = await client.query({
     query: gql`
     query  ($id: String, $clusterId:String){
@@ -32,10 +32,10 @@ export async function findTaxationActionHandler(TaxationId) {
       }
     `,
     variables: {
-      clusterId:clusterId,
-      id:did
+      clusterId,
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchTaxation;
   return id

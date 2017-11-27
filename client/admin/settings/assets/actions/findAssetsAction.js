@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findAssetActionHandler(assetId) {
-  let did = assetId
+  const did = assetId
   const result = await client.query({
-      query: gql`
+    query: gql`
           query  ($assetId: String){
               findAsset(assetId:$assetId){
                   assetName,
@@ -16,9 +16,9 @@ export async function findAssetActionHandler(assetId) {
           }
       `,
     variables: {
-        assetId:did
+      assetId: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findAsset;
   return id

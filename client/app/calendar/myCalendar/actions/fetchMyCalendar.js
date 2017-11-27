@@ -3,9 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
+import { appClient } from '../../../core/appConnection';
 
-export async function fetchMyCalendarActionHandler (month, year) {
+export async function fetchMyCalendarActionHandler(month, year) {
   const result = await appClient.query({
     query: gql`
     query($month:Int, $year: Int) { 
@@ -18,16 +18,16 @@ export async function fetchMyCalendarActionHandler (month, year) {
     }
     `,
     variables: {
-      month: month,
-      year: year
+      month,
+      year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const myCalendar = result.data.getMyCalendar;
   return myCalendar;
 }
 
-export async function fetchServiceCalendarActionHandler (portfolioId,month, year) {
+export async function fetchServiceCalendarActionHandler(portfolioId, month, year) {
   const result = await appClient.query({
     query: gql`
     query($portfolioId: String, $month:Int, $year: Int) { 
@@ -40,17 +40,17 @@ export async function fetchServiceCalendarActionHandler (portfolioId,month, year
     }
     `,
     variables: {
-      portfolioId: portfolioId,
-      month: month?month:0,
-      year: year?year:0
+      portfolioId,
+      month: month || 0,
+      year: year || 0
     },
-    forceFetch:true
+    forceFetch: true
   });
   const myCalendar = result.data.getServiceProviderCalendar;
   return myCalendar;
 }
 
-export async function fetchSessionDayActionHandler (orderId,sessionId, day, month, year ) {
+export async function fetchSessionDayActionHandler(orderId, sessionId, day, month, year) {
   const result = await appClient.query({
     query: gql`
     query($orderId:String!, $sessionId: String!, $day: Int, $month: Int, $year: Int) { 
@@ -69,14 +69,14 @@ export async function fetchSessionDayActionHandler (orderId,sessionId, day, mont
       month,
       year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const myCalendar = result.data.getSessionDayAvailable;
   return myCalendar;
 }
 
 
-export async function bookUserServiceCardAppointmentActionHandler (userServiceCardAppointmentInfo) {
+export async function bookUserServiceCardAppointmentActionHandler(userServiceCardAppointmentInfo) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!) { 

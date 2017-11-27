@@ -1,12 +1,12 @@
-import gql from "graphql-tag";
-import {client} from "../../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../../core/apolloConnection';
 
-export async function addBackendUserActionHandler(userObjectDetails, loginUserDetails) {   /*adding user context for others admins*/
-let user=userObjectDetails
-  let clusterId = loginUserDetails.clusterId
-  let chapterId = loginUserDetails.chapterId
-  let subChapterId = loginUserDetails.subChapterId
-  let communityId = loginUserDetails.communityId
+export async function addBackendUserActionHandler(userObjectDetails, loginUserDetails) { /* adding user context for others admins */
+  const user = userObjectDetails
+  const clusterId = loginUserDetails.clusterId
+  const chapterId = loginUserDetails.chapterId
+  const subChapterId = loginUserDetails.subChapterId
+  const communityId = loginUserDetails.communityId
   const result = await client.mutate({
     mutation: gql`
        mutation  ($user: userObject!,$clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
@@ -25,10 +25,10 @@ let user=userObjectDetails
     `,
     variables: {
       user,
-      clusterId: clusterId,
-      chapterId: chapterId,
-      subChapterId: subChapterId,
-      communityId: communityId
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     }
   });
   const id = result.data.createUser;

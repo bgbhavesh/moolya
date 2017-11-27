@@ -3,72 +3,70 @@
  */
 
 import React from 'react';
-import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
-import {fetchCalendarSettingsActionHandler} from '../actions/fetchCalendarSettings';
-import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
+import MlAppScheduleHead from '../../commons/components/MlAppScheduleHead';
+import { fetchCalendarSettingsActionHandler } from '../actions/fetchCalendarSettings';
+import StepZilla from '../../../../../commons/components/stepzilla/StepZilla';
 import MlAppSetCalendarPrimarySettings from './MlAppSetCalendarPrimarySettings';
 import MlAppSetCalendarTimmingSettings from './MlAppSetCalendarTimmingSettings';
 import MlAppSetCalendarVacation from './MlAppSetCalendarVacation';
 
 export default class MlAppSetCalendarSettings extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      primarySettings:{
-        duration:{}
+      primarySettings: {
+        duration: {}
       },
-      timingInfo : {
-        lunch:[],
-        slots:[]
+      timingInfo: {
+        lunch: [],
+        slots: []
       },
-      vacations:[]
+      vacations: []
     }
     this.fetchCalendarSettings = this.fetchCalendarSettings.bind(this);
   }
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (290 + $('.admin_header').outerHeight(true)));
     this.fetchCalendarSettings();
   }
 
   async fetchCalendarSettings() {
-    let profileId = FlowRouter.getParam('profileId');
-    let response = await fetchCalendarSettingsActionHandler(profileId);
-    console.log('response: ',response);
-    if(response){
+    const profileId = FlowRouter.getParam('profileId');
+    const response = await fetchCalendarSettingsActionHandler(profileId);
+    console.log('response: ', response);
+    if (response) {
       response.workingDays = response.workingDays ? response.workingDays : [];
-      let primarySettings = {
+      const primarySettings = {
         slotDuration: response.slotDuration,
         appointmentCountPerSlots: response.appointmentCountPerSlots,
         slotBreakTime: response.slotBreakTime,
         isOverlappingSchedule: response.isOverlappingSchedule
       };
-      let timingInfo = response.workingDays;
-      let vacations = response.vacations ? response.vacations : [];
+      const timingInfo = response.workingDays;
+      const vacations = response.vacations ? response.vacations : [];
       console.log(vacations);
       this.setState({
-        primarySettings : primarySettings,
-        timingInfo      : timingInfo,
-        vacations       : vacations,
-        hasAppointment  : response.hasAppointment
+        primarySettings,
+        timingInfo,
+        vacations,
+        hasAppointment: response.hasAppointment
       });
-
     }
   }
 
-  updateVacationList(){
+  updateVacationList() {
     this.fetchCalendarSettings();
   }
 
-  render(){
+  render() {
     const steps = [
-        {name: 'Primary', component: <MlAppSetCalendarPrimarySettings fetchCalendarSettings={this.fetchCalendarSettings} hasAppointment={this.state.hasAppointment} primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
-        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings} updateVacationList={this.updateVacationList.bind(this)}/>,icon:<span className="ml fa fa-plane"></span>},
-      ]
+      { name: 'Primary', component: <MlAppSetCalendarPrimarySettings fetchCalendarSettings={this.fetchCalendarSettings} hasAppointment={this.state.hasAppointment} primarySettings={this.state.primarySettings} />, icon: <span className="ml fa fa-file-text-o "></span> },
+      { name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings}/>, icon: <span className="ml fa fa-calendar-plus-o"></span> },
+      { name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} hasAppointment={this.state.hasAppointment} fetchCalendarSettings={this.fetchCalendarSettings} updateVacationList={this.updateVacationList.bind(this)}/>, icon: <span className="ml fa fa-plane"></span> }
+    ]
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findDepartmentActionHandler(DepartmentId) {
   console.log(DepartmentId)
- let did=DepartmentId
+  const did = DepartmentId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -26,9 +26,9 @@ export async function findDepartmentActionHandler(DepartmentId) {
 
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findDepartment;
   return id

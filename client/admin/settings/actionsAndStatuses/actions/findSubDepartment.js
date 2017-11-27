@@ -3,10 +3,10 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findSubDepartmentActionHandler(SubDepartmentId) {
-  let did = SubDepartmentId;
+  const did = SubDepartmentId;
 
   const result = await client.query({
     query: gql`
@@ -21,9 +21,9 @@ export async function findSubDepartmentActionHandler(SubDepartmentId) {
       }
     }`,
     variables: {
-      _id:did
+      _id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findSubDepartment;
   return id

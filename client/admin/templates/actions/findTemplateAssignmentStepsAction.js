@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findTemplateStepsActionHandler(subProcessId) {
   console.log(subProcessId)
@@ -17,9 +17,9 @@ export async function findTemplateStepsActionHandler(subProcessId) {
 }
     `,
     variables: {
-      id:subProcessId
+      id: subProcessId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findTemplateSteps;
   return id

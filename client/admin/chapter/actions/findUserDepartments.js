@@ -1,13 +1,13 @@
 
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 
 export async function findUserDepartmentypeActionHandler(userId, ClusterId, ChapterId, subChapterId) {
-  let clusterId = ClusterId;
-  let chapterId = ChapterId;
-  let did=userId;
-  let scid = subChapterId;
+  const clusterId = ClusterId;
+  const chapterId = ChapterId;
+  const did = userId;
+  const scid = subChapterId;
   const result = await client.query({
     query: gql`
       query ($id: String, $subChapterId:String, $clusterId:String, $chapterId:String) {
@@ -22,12 +22,12 @@ export async function findUserDepartmentypeActionHandler(userId, ClusterId, Chap
       }
     `,
     variables: {
-      clusterId:clusterId,
-      chapterId:chapterId,
-      id:did,
-      subChapterId:scid
+      clusterId,
+      chapterId,
+      id: did,
+      subChapterId: scid
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.data;
   return id

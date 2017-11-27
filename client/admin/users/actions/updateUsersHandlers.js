@@ -2,12 +2,12 @@
  * Created by viswadeep on 18/8/17.
  */
 
-import gql from "graphql-tag";
-import {client} from "../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../core/apolloConnection';
 
 export async function deActivateUser(userId, isActive) {
   const result = await client.mutate({
-    mutation: gql `
+    mutation: gql`
           mutation($userId: String, $isActive: Boolean){
               deActivateUser(userId:$userId, isActive: $isActive){
                   success,
@@ -26,9 +26,11 @@ export async function deActivateUser(userId, isActive) {
 }
 
 export async function deActivateUserProfileByContextHandler(userProfiles) {
-  const {clusterId, chapterId ,subChapterId, communityId} = userProfiles
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = userProfiles
   const result = await client.mutate({
-    mutation: gql `
+    mutation: gql`
           mutation($userProfiles: userProfiles, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
               deActivateUserProfileByContext(userProfiles:$userProfiles, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId: $communityId){
                   success,
@@ -51,7 +53,7 @@ export async function deActivateUserProfileByContextHandler(userProfiles) {
 
 export async function showOnMapActionHandler(userId, isShowOnMap) {
   const result = await client.mutate({
-    mutation:gql`
+    mutation: gql`
       mutation($userId: String, $isShowOnMap: Boolean){
         updateUserShowOnMap(userId: $userId, isShowOnMap:$isShowOnMap){
           success
@@ -60,7 +62,7 @@ export async function showOnMapActionHandler(userId, isShowOnMap) {
         }
       }
     `,
-    variables:{
+    variables: {
       userId,
       isShowOnMap
     }

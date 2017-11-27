@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findTechnologyActionHandler(technologyId) {
-  let did = technologyId
+  const did = technologyId
   const result = await client.query({
-      query: gql`
+    query: gql`
           query  ($technologyId: String){
               findTechnology(technologyId:$technologyId){
                   technologyName,
@@ -16,9 +16,9 @@ export async function findTechnologyActionHandler(technologyId) {
           }
       `,
     variables: {
-      technologyId:did
+      technologyId: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findTechnology;
   return id

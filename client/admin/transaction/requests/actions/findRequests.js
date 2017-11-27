@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findRequestssActionHandler() {
-  let status=["WIP","Pending"]
+  const status = ['WIP', 'Pending']
   const result = await client.query({
     query: gql`
  query ($userId: String, $status: [String]) {
@@ -24,7 +24,7 @@ export async function findRequestssActionHandler() {
 
     `,
     variables: {
-  status
+      status
     },
     forceFetch: true
   })

@@ -2,10 +2,9 @@
  * Created by mohammed.mohasin on 22/07/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addNotificationTemplate(notificationTemplate)
-{
+export async function addNotificationTemplate(notificationTemplate) {
   const result = await client.mutate({
     mutation: gql`
             mutation($notificationTemplate:notificationTemplateInput){
@@ -17,9 +16,9 @@ export async function addNotificationTemplate(notificationTemplate)
             }
         `,
     variables: {
-      notificationTemplate:notificationTemplate,
-      moduleName: "NOTIFICATIONTEMPLATE",
-      actionName: "CREATE"
+      notificationTemplate,
+      moduleName: 'NOTIFICATIONTEMPLATE',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.createNotificationTemplate;

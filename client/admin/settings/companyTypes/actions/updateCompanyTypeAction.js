@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateCompanyTypeActionHandler(CmpType) {
-  let _id=CmpType.id;
-  let companyName = CmpType.companyName;
-  let companyDisplayName = CmpType.companyDisplayName;
-  let aboutCompany = CmpType.aboutCompany;
-  let isActive = CmpType.isActive;
-  let companyTypeInfo={companyName,companyDisplayName,aboutCompany};
+  const _id = CmpType.id;
+  const companyName = CmpType.companyName;
+  const companyDisplayName = CmpType.companyDisplayName;
+  const aboutCompany = CmpType.aboutCompany;
+  const isActive = CmpType.isActive;
+  const companyTypeInfo = { companyName, companyDisplayName, aboutCompany };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -15,7 +15,7 @@ export async function updateCompanyTypeActionHandler(CmpType) {
       }
     `,
     variables: {
-      masterData:{"companyTypeInfo":companyTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { companyTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

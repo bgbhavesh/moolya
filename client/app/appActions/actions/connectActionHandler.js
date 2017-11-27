@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function connectActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,13 +17,13 @@ export async function connectActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType
     }
   })
-  var resp = result.data.connectionRequest;
+  const resp = result.data.connectionRequest;
   if (resp.success) {
-   return resp;
+    return resp;
   }
   return null;
 }
@@ -40,10 +40,10 @@ export async function acceptConnectionActionHandler(details) {
           }
       `,
     variables: {
-      connectionId : details.connectionId
+      connectionId: details.connectionId
     }
   })
-  var resp = result.data.acceptConnection;
+  const resp = result.data.acceptConnection;
   if (resp.success) {
     return resp;
   }
@@ -62,10 +62,10 @@ export async function rejectConnectionActionHandler(details) {
           }
       `,
     variables: {
-      connectionId : details.connectionId
+      connectionId: details.connectionId
     }
   })
-  var resp = result.data.rejectConnection;
+  const resp = result.data.rejectConnection;
   if (resp.success) {
     return resp;
   }
@@ -92,13 +92,11 @@ export async function fetchConnectionRequestHandler(transactionId) {
     }
     `,
     variables: {
-      transactionId:transactionId
+      transactionId
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const data = result.data.fetchConnectionByTransaction?result.data.fetchConnectionByTransaction:null;
+  const data = result.data.fetchConnectionByTransaction ? result.data.fetchConnectionByTransaction : null;
   return data;
 }
-
-
 

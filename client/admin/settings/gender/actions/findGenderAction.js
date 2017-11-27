@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findGenderActionHandler(Id)
-{
-  let did=Id;
+export async function findGenderActionHandler(Id) {
+  const did = Id;
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -20,14 +19,18 @@ export async function findGenderActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {genderName,aboutGender,genderDisplayName,genderUploadIcon}=masterSetting.genderInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,genderName,aboutGender,genderDisplayName,genderUploadIcon,_id:masterSetting._id};
+  const masterSetting = result.data.findMasterSetting || {};
+  const {
+    genderName, aboutGender, genderDisplayName, genderUploadIcon
+  } = masterSetting.genderInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, genderName, aboutGender, genderDisplayName, genderUploadIcon, _id: masterSetting._id
+    };
   }
   return {};
 }

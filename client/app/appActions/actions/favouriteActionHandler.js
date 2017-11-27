@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function favouriteActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,9 +17,9 @@ export async function favouriteActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType,
-      isFavourite:details.isFavourite
+      isFavourite: details.isFavourite
     }
   })
   const resp = result.data.markFavourite;
@@ -30,11 +30,8 @@ export async function favouriteActionHandler(details) {
   return null;
 }
 
-export default async function handleFavouriteAction(details){
-
-    var resp = await favouriteActionHandler(details);
-    return resp;
+export default async function handleFavouriteAction(details) {
+  const resp = await favouriteActionHandler(details);
+  return resp;
 }
-
-
 

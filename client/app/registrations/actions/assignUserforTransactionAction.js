@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function assignUserForTransactionAction(module, params, transactionId, transactionType, operation) {
   const result = await appClient.mutate({
@@ -13,10 +13,10 @@ export async function assignUserForTransactionAction(module, params, transaction
   }
     `,
     variables: {
-      module: module,
-      params: {assignmentParams: params},
-      operation: operation,
-      transactionType: transactionType,
+      module,
+      params: { assignmentParams: params },
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -37,10 +37,10 @@ export async function unAssignUserForTransactionAction(module, transactionId, tr
   }
     `,
     variables: {
-      module: module,
+      module,
       params: null,
-      operation: operation,
-      transactionType: transactionType,
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -60,10 +60,10 @@ export async function selfAssignUserForTransactionAction(module, transactionId, 
   }
     `,
     variables: {
-      module: module,
+      module,
       params: null,
-      operation: operation,
-      transactionType: transactionType,
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -83,9 +83,9 @@ export async function validateTransaction(transactionId, collection, assignedUse
   }
     `,
     variables: {
-      transactionId: transactionId,
-      collection: collection,
-      assignedUserId: assignedUserId
+      transactionId,
+      collection,
+      assignedUserId
     }
   })
   const id = result.data.validateTransaction;

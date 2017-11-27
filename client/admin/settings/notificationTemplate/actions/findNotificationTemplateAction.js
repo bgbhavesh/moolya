@@ -2,10 +2,10 @@
  * Created by mohammed.mohasin on 22/07/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findNotificationTemplateActionHandler(fid) {
-  let did = fid
+  const did = fid
   const result = await client.query({
     query: gql`
           query  ($notificationTemplateId: String!){
@@ -22,9 +22,9 @@ export async function findNotificationTemplateActionHandler(fid) {
           }
       `,
     variables: {
-      notificationTemplateId:did
+      notificationTemplateId: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchNotificationTemplate;
   return id

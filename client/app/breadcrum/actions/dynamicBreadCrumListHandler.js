@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { client } from '../../../admin/core/apolloConnection';
 import _ from 'lodash';
-export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,callback) {
+export default function getBreadCrumListBasedOnhierarchy(params, portfolioName, callback) {
   params = params || {};
   const requ = _.pick(params, ['clusterId', 'chapterId', 'subChapterId', 'communityId']);
   const breadCrumHierarchyPromise = client.query({
@@ -16,9 +16,9 @@ export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,ca
       }
     `,
     variables: {
-      hierarchyContext: requ,
+      hierarchyContext: requ
     },
-    forceFetch: true,
+    forceFetch: true
   });
 
   breadCrumHierarchyPromise.then((data) => {
@@ -34,7 +34,7 @@ export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,ca
         list.push({
           // linkId: detail.hierarchyRefId,
           linkUrl: generateLinkForDashboardUrl(path, detail.hierarchyRefId, detail.moduleFieldRef, detail.hierarchyRefName),
-          linkName: detail.hierarchyRefName,
+          linkName: detail.hierarchyRefName
           // seq: detail.hierarchyLevel,
         });
       });
@@ -43,7 +43,7 @@ export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,ca
         list.push({
           // linkId: detail.hierarchyRefId,
           linkUrl: generateLink(path, detail.hierarchyRefId, detail.moduleFieldRef, detail.hierarchyRefName),
-          linkName: detail.hierarchyRefName,
+          linkName: detail.hierarchyRefName
           // seq: detail.hierarchyLevel,
         });
       });
@@ -59,28 +59,28 @@ export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,ca
     else if (name === 'INS') name = 'Institute';
     else if (name === 'SPS') name = 'Service Provider';
     else if (name === 'assignusers') name = 'Assign Users';
-    if(FlowRouter.getParam('portfolioId') && FlowRouter.getParam('portfolioId')===name){
+    if (FlowRouter.getParam('portfolioId') && FlowRouter.getParam('portfolioId') === name) {
       list.push({
         linkUrl: path,
-        linkName: properName(portfolioName) ||'User',
+        linkName: properName(portfolioName) || 'User'
       });
-    }else if (name !== 'chapters' && name !== 'subChapters' && name !== 'communities' && name!== 'true') {
+    } else if (name !== 'chapters' && name !== 'subChapters' && name !== 'communities' && name !== 'true') {
       list.push({
         linkUrl: path,
-        linkName: properName(name),
+        linkName: properName(name)
       });
     }
 
-    if(FlowRouter.getQueryParam('tab')){
+    if (FlowRouter.getQueryParam('tab')) {
       list.push({
-        linkUrl: path.split('?')[0] + '?tab='+FlowRouter.getQueryParam('tab'),
-        linkName: properName(FlowRouter.getQueryParam('tab')),
+        linkUrl: `${path.split('?')[0]}?tab=${FlowRouter.getQueryParam('tab')}`,
+        linkName: properName(FlowRouter.getQueryParam('tab'))
       })
     }
-    if(FlowRouter.getQueryParam('subtab')){
+    if (FlowRouter.getQueryParam('subtab')) {
       list.push({
         linkUrl: '',
-        linkName: properName(FlowRouter.getQueryParam('subtab')),
+        linkName: properName(FlowRouter.getQueryParam('subtab'))
       })
     }
 
@@ -107,10 +107,10 @@ function generateLink(path, RefID, moduleType, name) {
 
 function generateLinkForDashboardUrl(path, RefID, moduleType, index) {
   let postfix = '/';
-  let viewMode = FlowRouter.getQueryParam('viewMode') || 'true';
-  if (moduleType === 'clusterId') postfix += 'chapters?viewMode='+viewMode;
-  else if (moduleType === 'chapterId') postfix += 'subChapters?viewMode='+viewMode;
-  else if (moduleType === 'subChapterId') postfix += 'communities?viewMode='+viewMode;
+  const viewMode = FlowRouter.getQueryParam('viewMode') || 'true';
+  if (moduleType === 'clusterId') postfix += `chapters?viewMode=${viewMode}`;
+  else if (moduleType === 'chapterId') postfix += `subChapters?viewMode=${viewMode}`;
+  else if (moduleType === 'subChapterId') postfix += `communities?viewMode=${viewMode}`;
 
   if (path.includes(RefID)) {
     const url = path.split(RefID)[0];

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateSelectedTechnologyActionHandler(technologyId, techDetails) {
-  let technologyMasterData =  techDetails;
+  const technologyMasterData = techDetails;
   const result = await client.mutate({
     mutation: gql`
       mutation($technologyId:String, $technologyMasterData:technologyMasterData){
@@ -14,8 +14,8 @@ export async function updateSelectedTechnologyActionHandler(technologyId, techDe
       }
     `,
     variables: {
-        technologyId,
-        technologyMasterData
+      technologyId,
+      technologyMasterData
     }
   })
   const id = result.data.updateSelectedTechnology;

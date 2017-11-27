@@ -1,17 +1,17 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findProcessDocumentForRegistrationActionHandler(countryIdInfo,clusterIdInfo,chapterInfo,subchapterInfo,communityTypeInfo,userTypeInfo,identityTypeInfo,professionInfo,industryInfo,emailInfo) {
-  let countryId = countryIdInfo
-  let clusterId = clusterIdInfo
-  let userType =userTypeInfo
-  let communityType=communityTypeInfo
-  let chapterId=chapterInfo
-  let subChapterId=subchapterInfo
-  let identityType=identityTypeInfo
-  let profession=professionInfo
-  let industry=industryInfo
-  let email=emailInfo
+export async function findProcessDocumentForRegistrationActionHandler(countryIdInfo, clusterIdInfo, chapterInfo, subchapterInfo, communityTypeInfo, userTypeInfo, identityTypeInfo, professionInfo, industryInfo, emailInfo) {
+  const countryId = countryIdInfo
+  const clusterId = clusterIdInfo
+  const userType = userTypeInfo
+  const communityType = communityTypeInfo
+  const chapterId = chapterInfo
+  const subChapterId = subchapterInfo
+  const identityType = identityTypeInfo
+  const profession = professionInfo
+  const industry = industryInfo
+  const email = emailInfo
   const result = await client.query({
     query: gql`
      query($countryId: String,$clusterId: String,$chapterId:String,$subChapterId:String, $userType: String, $communityType: String,$identityType: String,$profession:String,$industry:String, $email:String ){

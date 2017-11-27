@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findFundingTypeActionHandler(fid) {
-  let did = fid
+  const did = fid
   const result = await client.query({
     query: gql`
           query  ($fundingTypeId: String){
@@ -16,9 +16,9 @@ export async function findFundingTypeActionHandler(fid) {
           }
       `,
     variables: {
-      fundingTypeId:did
+      fundingTypeId: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchFundingType;
   return id

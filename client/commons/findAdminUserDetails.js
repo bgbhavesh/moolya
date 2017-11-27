@@ -2,9 +2,9 @@
 import gql from 'graphql-tag'
 
 
-export async function findAdminUserDetails(userId,connection) {
-  let id=userId
-  var connection=connection||{};
+export async function findAdminUserDetails(userId, connection) {
+  const id = userId
+  var connection = connection || {};
   const result = await connection.query({
     query: gql`
         query($id: String){
@@ -21,7 +21,7 @@ export async function findAdminUserDetails(userId,connection) {
     variables: {
       id
     },
-    forceFetch:true
+    forceFetch: true
   })
   const did = result.data.data;
   return did

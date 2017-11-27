@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function selfAssignTransactionAction(transactionId) {
   const result = await appClient.mutate({

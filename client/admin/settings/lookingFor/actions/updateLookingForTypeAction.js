@@ -1,14 +1,14 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateLookingForTypeActionHandler(LookingForType) {
-  let _id=LookingForType.id;
-  let lookingForName = LookingForType.lookingForName;
-  let lookingForDisplayName = LookingForType.lookingForDisplayName;
-  let communityCode = LookingForType.communityCode;
-  let communityName = LookingForType.communityName;
-  let about = LookingForType.about;
-  let isActive = LookingForType.isActive
+  const _id = LookingForType.id;
+  const lookingForName = LookingForType.lookingForName;
+  const lookingForDisplayName = LookingForType.lookingForDisplayName;
+  const communityCode = LookingForType.communityCode;
+  const communityName = LookingForType.communityName;
+  const about = LookingForType.about;
+  const isActive = LookingForType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$lookingForName: String, $lookingForDisplayName: String, $communityCode:String, $communityName:String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -37,8 +37,8 @@ export async function updateLookingForTypeActionHandler(LookingForType) {
       communityName,
       about,
       isActive,
-      moduleName: "LOOKINGFOR",
-      actionName: "UPDATE"
+      moduleName: 'LOOKINGFOR',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateLookingFor;

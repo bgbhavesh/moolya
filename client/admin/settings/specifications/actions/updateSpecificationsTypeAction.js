@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateSpecificationTypeActionHandler(SpecificationType) {
-  let _id=SpecificationType.id;
-  let specificationName = SpecificationType.specificationName;
-  let specificationDisplayName = SpecificationType.specificationDisplayName;
-  let about = SpecificationType.about;
-  let isActive = SpecificationType.isActive
+  const _id = SpecificationType.id;
+  const specificationName = SpecificationType.specificationName;
+  const specificationDisplayName = SpecificationType.specificationDisplayName;
+  const about = SpecificationType.about;
+  const isActive = SpecificationType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$specificationName: String, $specificationDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateSpecificationTypeActionHandler(SpecificationType) {
       specificationDisplayName,
       about,
       isActive,
-      moduleName: "SPECIFICATION",
-      actionName: "UPDATE"
+      moduleName: 'SPECIFICATION',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateSpecification;

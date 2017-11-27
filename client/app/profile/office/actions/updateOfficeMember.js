@@ -3,10 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../../app/core/appConnection';
+import { appClient } from '../../../../app/core/appConnection';
 
-export async function updateOfficeMemberActionHandler(officeId, memberId,officeMembers) {
-
+export async function updateOfficeMemberActionHandler(officeId, memberId, officeMembers) {
   const result = await appClient.mutate({
     mutation: gql`
           mutation($officeId:String, $memberId:String, $officeMembers:officeMembers){
@@ -18,18 +17,18 @@ export async function updateOfficeMemberActionHandler(officeId, memberId,officeM
           }
       `,
     variables: {
-      officeId: officeId,
-      memberId: memberId,
-      officeMembers:officeMembers
+      officeId,
+      memberId,
+      officeMembers
     }
   })
   const id = result.data.updateOfficeMember;
   return id
 }
 
-export async function deActivateOfficeActionHandler(officeId){
+export async function deActivateOfficeActionHandler(officeId) {
   const result = await appClient.mutate({
-    mutation:gql`
+    mutation: gql`
       mutation($officeId:String){
         deActivateOffice(officeId:$officeId){
           success
@@ -38,11 +37,10 @@ export async function deActivateOfficeActionHandler(officeId){
         }
       }
     `,
-    variables:{
+    variables: {
       officeId
     }
   });
   const resp = result.data.deActivateOffice;
   return resp
-
 }

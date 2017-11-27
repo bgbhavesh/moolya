@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-/*import {client} from '../../../client/admin/core/apolloConnection';*/
+/* import {client} from '../../../client/admin/core/apolloConnection'; */
 
-export async function findModuleCustomFilterActionHandler(moduleName,connObj){
-    var connection=connObj||{};
-    const result = await connection.query({
+export async function findModuleCustomFilterActionHandler(moduleName, connObj) {
+  const connection = connObj || {};
+  const result = await connection.query({
     query: gql`
     query  ($moduleName: String){
         fetchModuleFilters(moduleName:$moduleName){
@@ -30,28 +30,21 @@ export async function findModuleCustomFilterActionHandler(moduleName,connObj){
       }
     `,
     variables: {
-      moduleName:moduleName
+      moduleName
     },
-    forceFetch:true
+    forceFetch: true
   });
 
   const data = result.data.fetchModuleFilters;
-  let resultData = _.omit(data,'__typename');
+  const resultData = _.omit(data, '__typename');
 
 
   let fieldsArray = [];
 
-  fieldsArray=_.map(resultData.filterFields, function (row) {
-    return _.omit(row, ['__typename'])
-
-  });
+  fieldsArray = _.map(resultData.filterFields, row => _.omit(row, ['__typename']));
 
 
-
-  resultData["filterFields"] = fieldsArray
+  resultData.filterFields = fieldsArray
 
   return resultData
-
-
-
 }

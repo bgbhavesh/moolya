@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlAwardTypeTableConfig} from "../config/MlAwardTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlAwardTypeTableConfig } from '../config/MlAwardTypeConfig';
 export default class MlAwardTypeList extends Component {
-
   componentDidMount() {
   }
 

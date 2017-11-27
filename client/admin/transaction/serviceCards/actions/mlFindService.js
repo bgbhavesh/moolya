@@ -10,10 +10,12 @@
  * Imports libs and components
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function getServiceBasedOnServiceId (serviceId, loggedUserDetails) {
-  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
+export async function getServiceBasedOnServiceId(serviceId, loggedUserDetails) {
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loggedUserDetails;
   const result = await client.query({
     query: gql`
 query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
@@ -93,34 +95,34 @@ query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId
       subChapterId,
       communityId
     },
-    forceFetch:true
+    forceFetch: true
   });
-  var response = result.data.getServiceBasedOnServiceId;
-  let service = _.omit(response, '__typename');
+  const response = result.data.getServiceBasedOnServiceId;
+  const service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');
   service.facilitationCharge = _.omit(service.facilitationCharge, '__typename');
-  let stateArray = [];
+  const stateArray = [];
   _.each(service.state, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     stateArray.push(value);
   });
   service.state = stateArray;
-  let cityArray = [];
+  const cityArray = [];
   _.each(service.city, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     cityArray.push(value)
   });
   service.city = cityArray;
-  let communityArray = [];
+  const communityArray = [];
   _.each(service.community, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     communityArray.push(value)
   });
   service.community = communityArray;
-  let taskArray = [];
+  const taskArray = [];
   _.each(service.tasks, (item, say) => {
-    let value = _.omit(item, '__typename')
+    const value = _.omit(item, '__typename')
     taskArray.push(value)
   });
   service.tasks = taskArray;
@@ -133,10 +135,10 @@ query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId
  * Description :: This function is called to get the details of a task based on the selected tasks
  * @params :: name : type :: String
  * returns ::  taskDetails : type :: Array
- **/
+ * */
 
 
-  export async function fetchTaskDetails (name) {
+export async function fetchTaskDetails(name) {
   const result = await client.query({
     query: gql`
 query ($name: String) {
@@ -175,9 +177,9 @@ query ($name: String) {
  * Description :: This function is called on multiple instances to get Service details based in serviceId
  * @params :: serviceId : type :: String
  * returns ::  taskDetails : type :: Array
- **/
+ * */
 
-export async function getTaskFromService (serviceId) {
+export async function getTaskFromService(serviceId) {
   console.log(serviceId)
   const result = await client.query({
     query: gql`
@@ -261,9 +263,9 @@ export async function getTaskFromService (serviceId) {
  * @params :: serviceId : type :: String
  * @params :: Services  : type :: Object
  * returns ::  response : type :: Object
- **/
+ * */
 
-export async function updateServiceActionHandler(serviceId,Services) {
+export async function updateServiceActionHandler(serviceId, Services) {
   const result = await client.mutate({
     mutation: gql`
     mutation($serviceId:String, $Services:service){
@@ -289,10 +291,12 @@ export async function updateServiceActionHandler(serviceId,Services) {
  * @params :: serviceId : type :: String
  * @params :: profileId  : type :: String
  * returns ::  response : type :: Object
- **/
+ * */
 
-export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId, loggedUserDetails) {
-  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
+export async function fetchTaskDetailsForAdminServiceCard(profileId, serviceId, loggedUserDetails) {
+  const {
+    clusterId, chapterId, subChapterId, communityId
+  } = loggedUserDetails;
   const result = await client.query({
     query: gql`
       query($profileId: String, $serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
@@ -352,14 +356,14 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId,
     },
     forceFetch: true
   });
-  var taskDetails = result.data.fetchTaskDetailsForAdminServiceCard;
+  const taskDetails = result.data.fetchTaskDetailsForAdminServiceCard;
   let tasks = [];
-  let taskArray = [];
+  const taskArray = [];
   _.each(taskDetails, (task, say) => {
-    let sessionArray = [];
-    let taskInfo =  _.omit(task, '__typename');
+    const sessionArray = [];
+    const taskInfo = _.omit(task, '__typename');
     _.each(taskInfo.session, (item, say) => {
-      let value = _.omit(item, '__typename');
+      const value = _.omit(item, '__typename');
       sessionArray.push(value)
     });
     taskInfo.session = sessionArray;

@@ -3,10 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addActionAndStatusActionHandler(dataToInsert) {
-
   const result = await client.mutate({
     mutation: gql`
     mutation($actionsAndStatuses: actionAndStatus!){
@@ -17,9 +16,9 @@ export async function addActionAndStatusActionHandler(dataToInsert) {
       }
     }`,
     variables: {
-      actionsAndStatuses:dataToInsert,
-      moduleName:"DEPARTMENT",
-      actionName:"CREATE"
+      actionsAndStatuses: dataToInsert,
+      moduleName: 'DEPARTMENT',
+      actionName: 'CREATE'
     }
   });
 

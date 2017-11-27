@@ -2,7 +2,7 @@
  * Created by kanwarjeet on 9/16/17.
  */
 
-import {appClient} from '../../../app/core/appConnection'
+import { appClient } from '../../../app/core/appConnection'
 import gql from 'graphql-tag'
 
 export async function fetchMicroSiteUrl() {

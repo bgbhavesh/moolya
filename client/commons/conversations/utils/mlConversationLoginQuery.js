@@ -20,7 +20,7 @@ import gql from 'graphql-tag'
 // }
 
 export function loginHandler(endPoint, cb) {
-  new Promise(function (resolve, reject) {
+  new Promise(((resolve, reject) => {
     // Make ajax call
     let xmlhttp;
     if (window.XMLHttpRequest) {
@@ -28,28 +28,25 @@ export function loginHandler(endPoint, cb) {
       xmlhttp = new XMLHttpRequest();
     } else {
       // code for IE6, IE5
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
     }
 
-    if(xmlhttp) {
+    if (xmlhttp) {
       const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
-      let serverEndPoint=Meteor.absoluteUrl(endPoint);
+      const serverEndPoint = Meteor.absoluteUrl(endPoint);
       xmlhttp.open('POST', serverEndPoint, true);
-      xmlhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
       xmlhttp.setRequestHeader('meteor-login-token', localStorageLoginToken);
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-          var response = JSON.parse(xmlhttp.response)
-          if(response.success)
-            resolve(xmlhttp.response);
-          else
-            reject(xmlhttp.response);
+          const response = JSON.parse(xmlhttp.response)
+          if (response.success) { resolve(xmlhttp.response); } else { reject(xmlhttp.response); }
         }
       };
       xmlhttp.send()
     }
-  }).then(result=>{
-    if(cb) {
+  })).then((result) => {
+    if (cb) {
       cb(JSON.parse(result));
     }
   });

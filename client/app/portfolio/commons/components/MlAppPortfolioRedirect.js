@@ -1,7 +1,7 @@
 /**
  * Created by vishwadeep on 11/7/17.
  */
-import React from "react";
+import React from 'react';
 // import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import 'react-responsive-tabs/styles.css'
@@ -9,12 +9,12 @@ import 'react-responsive-tabs/styles.css'
 export default class MlAppPortfolioRedirect extends React.Component {
   constructor(props, context) {
     super(props);
-    this.state = {initialSlide: 0}
+    this.state = { initialSlide: 0 }
     return this;
   }
 
   componentDidMount() {
-    let swiper = new Swiper('.ideas_swiper', {
+    const swiper = new Swiper('.ideas_swiper', {
       pagination: '.swiper-pagination',
       effect: 'coverflow',
       grabCursor: true,
@@ -32,26 +32,26 @@ export default class MlAppPortfolioRedirect extends React.Component {
     $('.idea_details .ideas_block').click(function () {
       GetIdeaId = $(this).attr('name');
       $('.idea_details .portfolio-main-wrap .panel').slideUp();
-      $('#' + GetIdeaId).slideDown();
+      $(`#${GetIdeaId}`).slideDown();
     });
-    $('#' + this.state.initialSlide).slideDown();
+    $(`#${this.state.initialSlide}`).slideDown();
   }
 
   viewPortfolio(e) {
-    let portfolioId = this.props.data.portfolioId;
-    let community = this.props.data.communityType;
-    FlowRouter.go("/app/portfolio/view/" + portfolioId + "/" + community);
+    const portfolioId = this.props.data.portfolioId;
+    const community = this.props.data.communityType;
+    FlowRouter.go(`/app/portfolio/view/${portfolioId}/${community}`);
   }
 
   editPortfolio(e) {
-    let portfolioId = this.props.data.portfolioId
-    let community = this.props.data.communityType
-    FlowRouter.go("/app/portfolio/edit/" + portfolioId + "/" + community);
+    const portfolioId = this.props.data.portfolioId
+    const community = this.props.data.communityType
+    FlowRouter.go(`/app/portfolio/edit/${portfolioId}/${community}`);
   }
 
   render() {
-    let that = this
-    var data = [this.props.data]
+    const that = this
+    const data = [this.props.data]
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -67,11 +67,12 @@ export default class MlAppPortfolioRedirect extends React.Component {
               <div className="col-md-8">
                 <div className="swiper-container ideas_swiper">
                   <div className="swiper-wrapper">
-                    {data.map(function (pf, idx) {
-                      let url = pf && pf.portfolioImage ? pf.portfolioImage : '/images/no_image.png';
+                    {data.map((pf, idx) => {
+                      const url = pf && pf.portfolioImage ? pf.portfolioImage : '/images/no_image.png';
                       return (
-                        <div className="swiper-slide ideas_block" name={idx}
-                             style={{'backgroundImage': 'url(' + url + ')'}} key={idx}>
+                        <div
+                          className="swiper-slide ideas_block" name={idx}
+                          style={{ backgroundImage: `url(${url})` }} key={idx}>
                           <h3
                             className="rating_xs"> {pf && pf.portfolioUserName ? pf.portfolioUserName : ''}<br/>
                           </h3>
@@ -85,28 +86,29 @@ export default class MlAppPortfolioRedirect extends React.Component {
               <div className="col-md-2"></div>
               <br/>
               <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
-                {data.map(function (pf, idx) {
-                  return (
-                    <div className="panel panel-default panel-form-view" id={idx} style={{'display': 'none'}}
-                         key={idx}>
-                      <div className="panel-heading">
-                        <div className="row">
-                          <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
-                          <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
-                          <hr />
-                          <div className="col-md-6"><b>Community Type&nbsp; : &nbsp;</b> {pf.communityType}</div>
-                          <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
-                        </div>
-                      </div>
-                      <div className="panel-body">
-                        <a className="mlUpload_btn pull-left"
-                           onClick={that.viewPortfolio.bind(that)}>View</a>
-                        <a className="mlUpload_btn pull-left"
-                           onClick={that.editPortfolio.bind(that)}>Edit</a>
+                {data.map((pf, idx) => (
+                  <div
+                    className="panel panel-default panel-form-view" id={idx} style={{ display: 'none' }}
+                    key={idx}>
+                    <div className="panel-heading">
+                      <div className="row">
+                        <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
+                        <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
+                        <hr />
+                        <div className="col-md-6"><b>Community Type&nbsp; : &nbsp;</b> {pf.communityType}</div>
+                        <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
                       </div>
                     </div>
-                  )
-                })}
+                    <div className="panel-body">
+                      <a
+                        className="mlUpload_btn pull-left"
+                        onClick={that.viewPortfolio.bind(that)}>View</a>
+                      <a
+                        className="mlUpload_btn pull-left"
+                        onClick={that.editPortfolio.bind(that)}>Edit</a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </ScrollArea>
           </div>

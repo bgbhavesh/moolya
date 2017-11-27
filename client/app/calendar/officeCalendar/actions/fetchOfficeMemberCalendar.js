@@ -3,8 +3,8 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
-export async function fetchOfficeMemberCalendarActionHandler (userId, profileId, month, year) {
+import { appClient } from '../../../core/appConnection';
+export async function fetchOfficeMemberCalendarActionHandler(userId, profileId, month, year) {
   const result = await appClient.query({
     query: gql`
     query($userId:String!, $profileId:String!, $month:Int, $year: Int) { 
@@ -25,12 +25,12 @@ export async function fetchOfficeMemberCalendarActionHandler (userId, profileId,
     }
     `,
     variables: {
-      userId: userId,
-      profileId: profileId,
-      month: month,
-      year: year
+      userId,
+      profileId,
+      month,
+      year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const officeMemberCalendar = result.data.fetchOfficeMemberAppointmentCounts;
   return officeMemberCalendar;

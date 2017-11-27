@@ -3,18 +3,18 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findTechnologyActionHandler} from '../actions/findTechnologyAction'
-import {updateSelectedTechnologyActionHandler} from '../actions/updateTechnologyAction'
+import { findTechnologyActionHandler } from '../actions/findTechnologyAction'
+import { updateSelectedTechnologyActionHandler } from '../actions/updateTechnologyAction'
 import MlLoader from '../../../../commons/components/loader/loader'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
-class MlEditTechnology extends React.Component{
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
+import { mlFieldValidations } from '../../../../commons/validations/mlfieldValidation';
+class MlEditTechnology extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = { loading: true, data: {} };
     this.updateSelectedTechnology.bind(this)
     this.findTechnology.bind(this);
     this.onStatusChange.bind(this);
@@ -22,51 +22,47 @@ class MlEditTechnology extends React.Component{
   }
 
   componentWillMount() {
-    const resp=this.findTechnology();
+    const resp = this.findTechnology();
     return resp;
   }
-  componentDidMount(){
+  componentDidMount() {
   }
-  componentDidUpdate()
-  {
-    OnToggleSwitch(true,true);
+  componentDidUpdate() {
+    OnToggleSwitch(true, true);
     initalizeFloatLabel();
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
+  onStatusChange(e) {
+    const data = this.state.data;
+    if (e.currentTarget.checked) {
+      this.setState({ data: { isActive: true } });
+    } else {
+      this.setState({ data: { isActive: false } });
     }
   }
 
   async handleSuccess(response) {
-      if (response){
-          if(response.success)
-              FlowRouter.go("/admin/settings/technologiesList");
-          else
-              toastr.error(response.result);
-      }
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/technologiesList'); } else { toastr.error(response.result); }
+    }
   }
 
-  async findTechnology(){
-      let assetId = this.props.config
-      const response = await findTechnologyActionHandler(assetId);
-      this.setState({loading:false,data:response});
+  async findTechnology() {
+    const assetId = this.props.config
+    const response = await findTechnologyActionHandler(assetId);
+    this.setState({ loading: false, data: response });
   }
 
-  async  updateSelectedTechnology() {
-    let ret = mlFieldValidations(this.refs)
+  async updateSelectedTechnology() {
+    const ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
     } else {
-      let assetDetails = {
+      const assetDetails = {
         technologyName: this.refs.name.value,
         displayName: this.refs.displayName.value,
         about: this.refs.about.value,
@@ -77,28 +73,28 @@ class MlEditTechnology extends React.Component{
       return response;
     }
   }
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateSelectedTechnology.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.updateSelectedTechnology.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
 
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/technologiesList")
+        handler: async (event) => {
+          this.props.handler(' ');
+          FlowRouter.go('/admin/settings/technologiesList')
         }
       }
     ];
 
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?(<MlLoader/>):(
+        {showLoader === true ? (<MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Update Technology</h2>
@@ -106,7 +102,7 @@ class MlEditTechnology extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group mandatory">
-                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
+                    <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
                     <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.technologyName} data-required={true} data-errMsg="Technology Name is required"/>
                   </div>
                   <div className="form-group">
@@ -141,12 +137,13 @@ class MlEditTechnology extends React.Component{
                 </form>
               </div>
             </div>
-            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+            <MlActionComponent
+              ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
           </div>)}
       </div>
     )
   }
-};
+}
 
 export default MlEditTechnology = formHandler()(MlEditTechnology);

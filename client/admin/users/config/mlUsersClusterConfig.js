@@ -4,22 +4,22 @@
 /**
  * import of all the routes and libs
  * */
-import {MlViewer, MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
-import MlUsersCluster from "../components/MlUsersCluster";
-import React from "react";
-import gql from "graphql-tag";
+import { MlViewer, MlViewerTypes } from '../../../../lib/common/mlViewer/mlViewer';
+import MlUsersCluster from '../components/MlUsersCluster';
+import React from 'react';
+import gql from 'graphql-tag';
 import MlCustomFilter from '../../../commons/customFilters/customFilter';
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 /**
  * export of config file
  * */
 const mlUsersClusterListConfig = new MlViewer.View({
-  name: "usersList",
+  name: 'usersList',
   viewType: MlViewerTypes.LIST,
   extraFields: [],
-  fields: ["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName", "registrationInfo.userName"],
-  searchFields:["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName", "registrationInfo.userName"],
+  fields: ['registrationInfo.firstName', 'registrationInfo.lastName', 'registrationInfo.chapterName', 'registrationInfo.userName'],
+  searchFields: ['registrationInfo.firstName', 'registrationInfo.lastName', 'registrationInfo.chapterName', 'registrationInfo.userName'],
   throttleRefresh: true,
   pagination: true,
   sort: true,
@@ -28,12 +28,12 @@ const mlUsersClusterListConfig = new MlViewer.View({
     {
       showAction: true,
       actionName: 'logout',
-      handler: (data)=> {
+      handler: (data) => {
         console.log(data);
       }
     }
   ],
-  filter:true,
+  filter: true,
   filterComponent: <MlCustomFilter module="users" moduleName="users" client={client}/>,
   viewComponent: <MlUsersCluster />,
   graphQlQuery: gql`
@@ -59,4 +59,4 @@ const mlUsersClusterListConfig = new MlViewer.View({
 });
 
 
-export {mlUsersClusterListConfig};
+export { mlUsersClusterListConfig };

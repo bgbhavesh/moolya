@@ -1,31 +1,31 @@
-import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
-import MlAppCompanyListView from "../components/MlAppCompaniesListView";
-import React from "react";
-import gql from "graphql-tag";
-import MlAppFilterContainer from "../../../commons/filter/MlAppFilterContainer";
+import { MlAppViewer } from '../../../../commons/core/MlAppViewer';
+import MlAppCompanyListView from '../components/MlAppCompaniesListView';
+import React from 'react';
+import gql from 'graphql-tag';
+import MlAppFilterContainer from '../../../commons/filter/MlAppFilterContainer';
 import filterData from '../../../commons/config/exploreFilterConfig';
 
 export const mlAppCompanyConfig = new MlAppViewer({
-  name: "Company List",
+  name: 'Company List',
   extraFields: [],
-  fields: ["firstName", "lastName", "category", "investmentBudget"],
-  searchFields: ["firstName", "lastName", "category", "investmentBudget"],
+  fields: ['firstName', 'lastName', 'category', 'investmentBudget'],
+  searchFields: ['firstName', 'lastName', 'category', 'investmentBudget'],
   throttleRefresh: true,
   pagination: true,
-  moduleName: "companyPortfolioDetails",
+  moduleName: 'companyPortfolioDetails',
   sort: true,
   perPageLimit: 20,
   viewComponent: <MlAppCompanyListView />,
   showActionComponent: true,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: true,
     filterComponent: <MlAppFilterContainer />,
-    filterData: filterData,
+    filterData,
     alphabeticSearch: true,
-    alphabeticSearchField: "aboutUs.companyDescription",
+    alphabeticSearchField: 'aboutUs.companyDescription',
     search: true,
-    searchFields: ["aboutUs.companyDescription", "firstName", "lastName", "chapterName", "accountType", "communityType"]
+    searchFields: ['aboutUs.companyDescription', 'firstName', 'lastName', 'chapterName', 'accountType', 'communityType']
   },
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {

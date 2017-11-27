@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findEmailTypeActionHandler(Id)
-{
-  let did=Id;
- /* const result = await client.query({
+export async function findEmailTypeActionHandler(Id) {
+  const did = Id;
+  /* const result = await client.query({
     query: gql`
     query  ($id: String){
         findEmailType(_id:$id){
@@ -22,7 +21,7 @@ export async function findEmailTypeActionHandler(Id)
     forceFetch:true
   })
   const id = result.data.findEmailType;
-  return id*/
+  return id */
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -38,14 +37,16 @@ export async function findEmailTypeActionHandler(Id)
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {emailName,aboutEmail,emailDisplayName}=masterSetting.emailTypeInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,emailName,aboutEmail,emailDisplayName};
+  const masterSetting = result.data.findMasterSetting || {};
+  const { emailName, aboutEmail, emailDisplayName } = masterSetting.emailTypeInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, emailName, aboutEmail, emailDisplayName
+    };
   }
   return {};
 }

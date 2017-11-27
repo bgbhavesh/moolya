@@ -2,12 +2,12 @@
  * Created by venkatsrinag on 3/5/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
+import { appClient } from '../../../core/appConnection';
 
 export async function createIdeaActionHandler(ideaDetails) {
-    let idea = ideaDetails
-    const result = await appClient.mutate({
-        mutation: gql`
+  const idea = ideaDetails
+  const result = await appClient.mutate({
+    mutation: gql`
             mutation ($idea: idea) {
                 createIdea(idea: $idea) {
                     success,
@@ -16,19 +16,19 @@ export async function createIdeaActionHandler(ideaDetails) {
                 }
             }
         `,
-      forceFetch:true,
-      variables:{
-          idea
-      }
-    })
-    const id = result.data.createIdea;
-    return id
+    forceFetch: true,
+    variables: {
+      idea
+    }
+  })
+  const id = result.data.createIdea;
+  return id
 }
 
 
 export async function fetchIdeaActionHandler(portfolioId) {
-    const result = await appClient.query({
-        query: gql`
+  const result = await appClient.query({
+    query: gql`
             query($portfolioId:String){
                 fetchIdeas(portfolioId:$portfolioId) {
                     _id
@@ -54,13 +54,13 @@ export async function fetchIdeaActionHandler(portfolioId) {
                 }
             }
         `,
-      variables:{
-        portfolioId:  portfolioId
-      },
-        forceFetch:true
-    })
-    const ideas = result.data.fetchIdeas;
-    return ideas
+    variables: {
+      portfolioId
+    },
+    forceFetch: true
+  })
+  const ideas = result.data.fetchIdeas;
+  return ideas
 }
 export async function fetchIdeators() {
   const result = await appClient.query({
@@ -87,7 +87,7 @@ export async function fetchIdeators() {
                 }
             }
         `,
-    forceFetch:true
+    forceFetch: true
   })
   const ideas = result.data.fetchIdeators;
   return ideas
@@ -112,10 +112,10 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
                 }
             }
         `,
-    variables:{
-      portfolioId:portfolioId
+    variables: {
+      portfolioId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const ideas = result.data.fetchIdeaByPortfolioId;
   return ideas
@@ -138,7 +138,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })

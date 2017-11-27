@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function fetchAdminServiceAppointment(orderId) {
   const result = await client.mutate({
@@ -13,7 +13,7 @@ export async function fetchAdminServiceAppointment(orderId) {
       }
     `,
     variables: {
-      orderId:orderId
+      orderId
     }
   });
   const id = result.data.fetchAdminServiceAppointment;

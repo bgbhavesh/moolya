@@ -1,7 +1,7 @@
 // import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
-import {MlAppViewer} from "../../../commons/core/MlAppViewer";
+import { MlAppViewer } from '../../../commons/core/MlAppViewer';
 // import MapDetails from "../../../../client/commons/components/map/mapDetails"
-import maphandler from "../actions/fetchDashboardDetails"
+import maphandler from '../actions/fetchDashboardDetails'
 import React from 'react';
 import gql from 'graphql-tag'
 // import MlMapFooter from '../../../admin/dashboard/component/MlMapFooter';
@@ -10,44 +10,44 @@ import MlDashboardListView from '../components/MlAppDashboardListView'
 import MlAppMapMarker from '../components/MlAppMapMarker'
 // import {getExternalUserContext} from '../../../commons/getExternalUserContext';
 
-export const mlDashboardMapConfig=new MlAppViewer({
-  name:"Dashboard Map",
-  moduleName:"externalUsers",
-  module:"externalUsers",
+export const mlDashboardMapConfig = new MlAppViewer({
+  name: 'Dashboard Map',
+  moduleName: 'externalUsers',
+  module: 'externalUsers',
   // viewType:MlViewerTypes.MAP,
-  extraFields:[],
-  throttleRefresh:true,
-  pagination:false,
-  sort:false,
-  fetchCenter:true,
-  queryOptions:true,
-  buildQueryOptions:(config)=>{
-      let queryObj = {
-        clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
-        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        userType:config.params&&config.params.userType?config.params.userType:"All"
-      };
+  extraFields: [],
+  throttleRefresh: true,
+  pagination: false,
+  sort: false,
+  fetchCenter: true,
+  queryOptions: true,
+  buildQueryOptions: (config) => {
+    const queryObj = {
+      clusterId: config.params && config.params.clusterId ? config.params.clusterId : null,
+      chapterId: config.params && config.params.chapterId ? config.params.chapterId : null,
+      subChapterId: config.params && config.params.subChapterId ? config.params.subChapterId : null,
+      userType: config.params && config.params.userType ? config.params.userType : 'All'
+    };
 
-      let queryString = JSON.stringify(queryObj);
-      return {
-        queryProperty:{query:queryString}
-      }
+    const queryString = JSON.stringify(queryObj);
+    return {
+      queryProperty: { query: queryString }
+    }
   },
-  fetchCenterHandler:async function(reqParams){
-    let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.chapterId?reqParams.params.chapterId:null};
-    let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
+  async fetchCenterHandler(reqParams) {
+    const mapDetailsQuery = { moduleName: reqParams.module, id: reqParams && reqParams.params && reqParams.params.chapterId ? reqParams.params.chapterId : null };
+    const center = await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
-  fetchZoom:true,
-  fetchZoomHandler:async function(reqParams){
-    var zoom=10;
+  fetchZoom: true,
+  async fetchZoomHandler(reqParams) {
+    const zoom = 10;
     return zoom;
   },
-  viewComponent:<MlDashboardMapView params={this.params}/>,
-    mapMarkerComponent:<MlAppMapMarker/>,
+  viewComponent: <MlDashboardMapView params={this.params}/>,
+  mapMarkerComponent: <MlAppMapMarker/>,
 
-  actionConfiguration:[
+  actionConfiguration: [
   //   {
   //     actionName: 'onMouseEnter',
   //     hoverComponent: <MapDetails />,
@@ -75,13 +75,12 @@ export const mlDashboardMapConfig=new MlAppViewer({
     {
       actionName: 'onMarkerClick',
       // hoverComponent:<MapDetails />,
-      handler:  (data)=>{
-        if(data.module == "externalUsers")
-          FlowRouter.go('/app/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.params.subChapterId+'/'+data.desc+'/'+data.isActive);
+      handler: (data) => {
+        if (data.module == 'externalUsers') { FlowRouter.go(`/app/dashboard/${data.params.clusterId}/${data.params.chapterId}/${data.params.subChapterId}/${data.desc}/${data.isActive}`); }
       }
     }
   ],
-  graphQlQuery:gql`
+  graphQlQuery: gql`
     query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count
@@ -100,34 +99,34 @@ export const mlDashboardMapConfig=new MlAppViewer({
               }`
 });
 
-export const mlDashboardListConfig=new MlAppViewer({
-  name:"Dashboard List",
-  moduleName:"externalUsers",
-  module:"externalUsers",
+export const mlDashboardListConfig = new MlAppViewer({
+  name: 'Dashboard List',
+  moduleName: 'externalUsers',
+  module: 'externalUsers',
   // viewType:MlViewerTypes.LIST,
-  extraFields:[],
-  fields:["username",'profile.firstName'],
-  searchFields:["username", 'profile.firstName'],
-  throttleRefresh:true,
+  extraFields: [],
+  fields: ['username', 'profile.firstName'],
+  searchFields: ['username', 'profile.firstName'],
+  throttleRefresh: true,
   perPageLimit: 20,
   // pagination:false,
   // sort:true,
-  queryOptions:true,
-  buildQueryOptions:(config)=>{
-      let queryObj = {
-        clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
-        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        userType:config.params&&config.params.userType?config.params.userType:"All"
-      };
+  queryOptions: true,
+  buildQueryOptions: (config) => {
+    const queryObj = {
+      clusterId: config.params && config.params.clusterId ? config.params.clusterId : null,
+      chapterId: config.params && config.params.chapterId ? config.params.chapterId : null,
+      subChapterId: config.params && config.params.subChapterId ? config.params.subChapterId : null,
+      userType: config.params && config.params.userType ? config.params.userType : 'All'
+    };
 
-      let queryString = JSON.stringify(queryObj);
-      return {
-        queryProperty:{query:queryString}
-      }
+    const queryString = JSON.stringify(queryObj);
+    return {
+      queryProperty: { query: queryString }
+    }
   },
-  viewComponent:<MlDashboardListView params={this.params}/>,
-  graphQlQuery:gql`
+  viewComponent: <MlDashboardListView params={this.params}/>,
+  graphQlQuery: gql`
       query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count
@@ -150,5 +149,4 @@ export const mlDashboardListConfig=new MlAppViewer({
                 }
               }`
 });
-
 

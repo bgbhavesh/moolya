@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../admin/core/apolloConnection';
+import { client } from '../../admin/core/apolloConnection';
 
 export async function updateTransactionLogActionHandler(transactionparams, action) {
   // var userId = transactionparams._id
@@ -21,15 +21,15 @@ export async function updateTransactionLogActionHandler(transactionparams, actio
 
    `,
     variables: {
-    transactions:{
-      userId:transactionparams._id,
-      userName:transactionparams.profile.InternalUprofile.moolyaProfile.firstName,
-      emailId:transactionparams.username,
-      action:action,
-      createdAt:new Date(),
-      transactionDetails:`User ${transactionparams.profile.InternalUprofile.moolyaProfile.firstName} performed ${action} action at ${new Date()}`
+      transactions: {
+        userId: transactionparams._id,
+        userName: transactionparams.profile.InternalUprofile.moolyaProfile.firstName,
+        emailId: transactionparams.username,
+        action,
+        createdAt: new Date(),
+        transactionDetails: `User ${transactionparams.profile.InternalUprofile.moolyaProfile.firstName} performed ${action} action at ${new Date()}`
 
-    }
+      }
     }
   })
   const id = result.data.createTransactionLog;

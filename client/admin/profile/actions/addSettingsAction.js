@@ -1,6 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
-
+import { client } from '../../core/apolloConnection';
 
 
 export async function updateSettings(Details) {
@@ -15,15 +14,16 @@ export async function updateSettings(Details) {
 }
 `,
     variables: {
-      "moduleName": "PROFILE",
-      "actionName": "UPDATE",
-      "settingsAttributes": {
-        "currencyTypes": Details.currencySymbol,
-        "numericalFormat": Details.measurementSystem,
-        "languages": Details.languages,
-        "timeZone": Details.timeZone
+      moduleName: 'PROFILE',
+      actionName: 'UPDATE',
+      settingsAttributes: {
+        currencyTypes: Details.currencySymbol,
+        numericalFormat: Details.measurementSystem,
+        languages: Details.languages,
+        timeZone: Details.timeZone
+      }
     }
-  }});
+  });
   const id = result.data.updateSettings;
   return id;
 }

@@ -1,11 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function approvedStausForDocuments(document,doctype,registration) {
-
-    let documentId=document;
-    let docTypeId=doctype
-   let registrationId=registration;
+export async function approvedStausForDocuments(document, doctype, registration) {
+  const documentId = document;
+  const docTypeId = doctype
+  const registrationId = registration;
   const result = await client.mutate({
     mutation: gql`
      mutation($documentId:[String],$docTypeId:[String],$moduleName:String!,$actionName:String!,$registrationId:String!){
@@ -17,17 +16,17 @@ export async function approvedStausForDocuments(document,doctype,registration) {
       }
     `,
     variables: {
-      documentId:documentId,
-      docTypeId:docTypeId,
-      moduleName:"REGISTRATION",
-      actionName:"UPDATE",
-      registrationId:registrationId
+      documentId,
+      docTypeId,
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE',
+      registrationId
     }
   })
 
   const id = result.data.ApprovedStatusOfDocuments;
   /*  console.log("//////////////////////////");
-   console.log(result.data.createStep3InRegistration);*/
+   console.log(result.data.createStep3InRegistration); */
 
   return id
 }

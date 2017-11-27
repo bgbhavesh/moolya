@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addTechnology(technologyMasterData)
-{
-    const result = await client.mutate({
-        mutation: gql`
+export async function addTechnology(technologyMasterData) {
+  const result = await client.mutate({
+    mutation: gql`
             mutation($technologyMasterData:technologyMasterData){
                 createTechnology(technologyMasterData:$technologyMasterData){
                     result,
@@ -13,11 +12,11 @@ export async function addTechnology(technologyMasterData)
                 }    
             }
         `,
-        variables: {
-          technologyMasterData,
-          moduleName: "TECHNOLOGIES",
-          actionName: "CREATE"
-        }
+    variables: {
+      technologyMasterData,
+      moduleName: 'TECHNOLOGIES',
+      actionName: 'CREATE'
+    }
   })
   const id = result.data.createTechnology;
   return id

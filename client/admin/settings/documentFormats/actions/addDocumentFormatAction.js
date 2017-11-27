@@ -1,12 +1,11 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addDocumentFormatActionHandler(DocFormatDetails)
-{
-  let docFormatName = DocFormatDetails.docFormatName;
-  let docFormatDisplayName = DocFormatDetails.docFormatDisplayName;
-  let about = DocFormatDetails.about;
-  let isActive = DocFormatDetails.isActive;
+export async function addDocumentFormatActionHandler(DocFormatDetails) {
+  const docFormatName = DocFormatDetails.docFormatName;
+  const docFormatDisplayName = DocFormatDetails.docFormatDisplayName;
+  const about = DocFormatDetails.about;
+  const isActive = DocFormatDetails.isActive;
 
   const result = await client.mutate({
     mutation: gql`
@@ -24,8 +23,8 @@ export async function addDocumentFormatActionHandler(DocFormatDetails)
         `,
     variables: {
       documentFormat: DocFormatDetails,
-      moduleName:"DOCUMENTFORMAT",
-      actionName:"CREATE"
+      moduleName: 'DOCUMENTFORMAT',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.createDocumentFormat;

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
+import { appClient } from '../../../core/appConnection';
 
 
-export async function fetchAllProfileAppointmentCountsHandler (month, year) {
+export async function fetchAllProfileAppointmentCountsHandler(month, year) {
   const result = await appClient.query({
     query: gql`
     query($month:Int, $year: Int){ 
@@ -22,18 +22,18 @@ export async function fetchAllProfileAppointmentCountsHandler (month, year) {
       }
     }
     `,
-    forceFetch:true,
-    variables:{
-      month:month,
-      year: year
-    },
+    forceFetch: true,
+    variables: {
+      month,
+      year
+    }
   });
   const appointmentCounts = result.data.fetchAllProfileAppointmentCounts;
   return appointmentCounts;
 }
 
 
-export async function fetchProfileAppointmentCountsHandler (profileId, month, year) {
+export async function fetchProfileAppointmentCountsHandler(profileId, month, year) {
   const result = await appClient.query({
     query: gql`
     query($profileId: String, $month:Int, $year: Int){ 
@@ -53,18 +53,18 @@ export async function fetchProfileAppointmentCountsHandler (profileId, month, ye
       }
     }
     `,
-    variables:{
-      profileId: profileId,
-      month:month,
-      year: year
+    variables: {
+      profileId,
+      month,
+      year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const profileAppointmentCounts = result.data.fetchProfileAppointmentCounts;
   return profileAppointmentCounts;
 }
 
-export async function fetchMyAppointmentBetweenTwoDates (profileId,userId,startDay,startMonth,startYear,endDay,endMonth,endYear) {
+export async function fetchMyAppointmentBetweenTwoDates(profileId, userId, startDay, startMonth, startYear, endDay, endMonth, endYear) {
   const result = await appClient.query({
     query: gql`
     query fetchMyAppointmentBetweenTwoDates($profileId: String,$userId : String, $startDay: Int, $startMonth: Int, $startYear: Int , $endDay: Int, $endMonth: Int, $endYear: Int){ 
@@ -76,23 +76,23 @@ export async function fetchMyAppointmentBetweenTwoDates (profileId,userId,startD
       }
     }
     `,
-    variables:{
-      profileId: profileId,
-      userId: userId,
-      startDay:startDay,
-      startMonth:startMonth,
-      startYear:startYear,
-      endDay:endDay,
-      endMonth:endMonth,
-      endYear:endYear,
+    variables: {
+      profileId,
+      userId,
+      startDay,
+      startMonth,
+      startYear,
+      endDay,
+      endMonth,
+      endYear
     },
-    forceFetch:true
+    forceFetch: true
   });
   const fetchMyAppointmentBetweenTwoDates = result.data.fetchMyAppointmentBetweenTwoDates;
   return fetchMyAppointmentBetweenTwoDates;
 }
 
-export async function fetchServiceSeekerHandler (profileId, day, month) {
+export async function fetchServiceSeekerHandler(profileId, day, month) {
   const result = await appClient.query({
     query: gql`
     query($profileId: String!, $serviceId: String){ 
@@ -106,18 +106,18 @@ export async function fetchServiceSeekerHandler (profileId, day, month) {
       }
     }
     `,
-    variables:{
+    variables: {
       profileId,
       day,
       month
     },
-    forceFetch:true
+    forceFetch: true
   });
   const serviceSeekers = result.data.fetchServiceSeekerList;
   return serviceSeekers;
 }
 
-export async function fetchSlotDetailsHandler (appointmentId) {
+export async function fetchSlotDetailsHandler(appointmentId) {
   const result = await appClient.query({
     query: gql`
     query($appointmentId: [String]){ 
@@ -141,20 +141,12 @@ export async function fetchSlotDetailsHandler (appointmentId) {
       }
     }
     `,
-    variables:{
+    variables: {
       appointmentId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const slotDetails = result.data.fetchSlotDetails;
   return slotDetails;
 }
-
-
-
-
-
-
-
-
 

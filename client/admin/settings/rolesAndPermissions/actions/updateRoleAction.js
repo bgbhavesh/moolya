@@ -1,10 +1,10 @@
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateRoleActionHandler(roleDetails) {
-  let id=roleDetails.id;
-  let role=roleDetails.roleObject
+  const id = roleDetails.id;
+  const role = roleDetails.roleObject
   const result = await client.mutate({
     mutation: gql`
    mutation  ($id:String!, $role: roleObject!, $moduleName:String, $actionName:String){
@@ -23,8 +23,8 @@ export async function updateRoleActionHandler(roleDetails) {
     variables: {
       id,
       role,
-      moduleName:"ROLES",
-      actionName:"UPDATE"
+      moduleName: 'ROLES',
+      actionName: 'UPDATE'
     }
   })
   const res = result.data.updateRole;

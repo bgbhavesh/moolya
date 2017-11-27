@@ -2,7 +2,7 @@
  * Created by pankaj on 7/6/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateSubcriptionDetail(transId, subcriptionData) {
   const result = await client.mutate({
@@ -17,9 +17,9 @@ export async function updateSubcriptionDetail(transId, subcriptionData) {
     `,
     variables: {
       id: transId,
-      orderSubscriptionDetail:subcriptionData
+      orderSubscriptionDetail: subcriptionData
     },
-    forceFetch:true
+    forceFetch: true
   });
   console.log(result);
   const id = result.data.updateOfficeTransactionOrderSubscriptionDetail;

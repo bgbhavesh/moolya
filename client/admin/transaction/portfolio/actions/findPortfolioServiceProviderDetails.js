@@ -1,6 +1,6 @@
-import gql from "graphql-tag";
-import {client} from "../../../core/apolloConnection";
-import _ from "underscore";
+import gql from 'graphql-tag';
+import { client } from '../../../core/apolloConnection';
+import _ from 'underscore';
 
 /**
  * Service providers all action handler
@@ -36,7 +36,7 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -73,7 +73,7 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -106,7 +106,7 @@ export async function fetchServiceProviderPortfolioAbout(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -222,37 +222,28 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
 
   const data = result.data.fetchStartupPortfolioAboutUs;
-  /*let data = _.omit(id,'__typename');*/
-  let aboutUsArray = {}
-  aboutUsArray["aboutUs"] = _.omit(data.aboutUs, '__typename');
-  aboutUsArray["clients"] = _.map(data.clients, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["serviceProducts"] = _.omit(data.serviceProducts, '__typename');
-  aboutUsArray["information"] = _.omit(data.information, '__typename');
-  aboutUsArray["branches"] = _.map(data.branches, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["technologies"] = _.map(data.technologies, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["legalIssue"] = _.omit(data.legalIssue, '__typename');
-  aboutUsArray["assets"] = _.map(data.assets, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["rating"] = _.omit(data.rating, '__typename');
+  /* let data = _.omit(id,'__typename'); */
+  const aboutUsArray = {}
+  aboutUsArray.aboutUs = _.omit(data.aboutUs, '__typename');
+  aboutUsArray.clients = _.map(data.clients, row => _.omit(row, ['__typename']));
+  aboutUsArray.serviceProducts = _.omit(data.serviceProducts, '__typename');
+  aboutUsArray.information = _.omit(data.information, '__typename');
+  aboutUsArray.branches = _.map(data.branches, row => _.omit(row, ['__typename']));
+  aboutUsArray.technologies = _.map(data.technologies, row => _.omit(row, ['__typename']));
+  aboutUsArray.legalIssue = _.omit(data.legalIssue, '__typename');
+  aboutUsArray.assets = _.map(data.assets, row => _.omit(row, ['__typename']));
+  aboutUsArray.rating = _.omit(data.rating, '__typename');
 
   return aboutUsArray
 }
 
 export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -275,7 +266,7 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -300,12 +291,12 @@ export async function fetchServiceProviderMemberships(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.memberships;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
@@ -327,12 +318,12 @@ export async function fetchServiceProviderCompliances(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.compliances;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 export async function fetchServiceProviderLicenses(portfoliodetailsId) {
@@ -353,12 +344,12 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.licenses;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
@@ -381,12 +372,12 @@ export async function findServiceProviderServicesActionHandler(portfoliodetailsI
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.services;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
@@ -418,7 +409,7 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -449,12 +440,12 @@ export async function findServiceProviderAboutActionHandler(portfoliodetailsId) 
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data.about;
-  let data = _.omit(id, '__typename')
+  const data = _.omit(id, '__typename')
   return data
 }
 
@@ -481,7 +472,7 @@ export async function findServiceProviderLookingForActionHandler(portfoliodetail
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -491,7 +482,6 @@ export async function findServiceProviderLookingForActionHandler(portfoliodetail
 }
 
 export async function validateUserForAnnotation(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -500,7 +490,7 @@ export async function validateUserForAnnotation(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findClusterTypeActionHandler(clusterId) {
-  let did = clusterId
+  const did = clusterId
   const result = await client.query({
     query: gql`
         query  ($clusterId: String!, $moduleName:String!, $actionName:String!){
@@ -21,8 +21,8 @@ export async function findClusterTypeActionHandler(clusterId) {
     `,
     variables: {
       clusterId: did,
-      moduleName:"CLUSTER",
-      actionName:"READ"
+      moduleName: 'CLUSTER',
+      actionName: 'READ'
     },
     forceFetch: true
   })

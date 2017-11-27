@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addProcessActionHandler(ProcessInput) {
   const result = await client.mutate({
@@ -17,8 +17,8 @@ export async function addProcessActionHandler(ProcessInput) {
       } `,
     variables: {
       ProcessInput,
-      moduleName:"PROCESSMAPPING",
-      actionName:"CREATE"
+      moduleName: 'PROCESSMAPPING',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.createProcess;

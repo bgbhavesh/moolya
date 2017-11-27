@@ -2,8 +2,8 @@
  * Created by pankaj on 29/8/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
-export async function fetchSlotAppointmentsDetailsActionHandler (appointmentId) {
+import { appClient } from '../../../core/appConnection';
+export async function fetchSlotAppointmentsDetailsActionHandler(appointmentId) {
   const result = await appClient.query({
     query: gql`
     query($appointmentId: [String]){ 
@@ -42,10 +42,10 @@ export async function fetchSlotAppointmentsDetailsActionHandler (appointmentId) 
       }
     }
     `,
-    variables:{
+    variables: {
       appointmentId
     },
-    forceFetch:true
+    forceFetch: true
   });
   const slotDetails = result.data.fetchSlotDetails;
   return slotDetails;

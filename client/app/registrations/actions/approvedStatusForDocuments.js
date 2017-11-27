@@ -1,11 +1,10 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function approvedStausForDocuments(document, doctype, registration) {
-
-  let documentId = document;
-  let docTypeId = doctype
-  let registrationId = registration;
+  const documentId = document;
+  const docTypeId = doctype
+  const registrationId = registration;
   const result = await appClient.mutate({
     mutation: gql`
      mutation($documentId:[String],$docTypeId:[String],$moduleName:String!,$actionName:String!,$registrationId:String!){
@@ -17,11 +16,11 @@ export async function approvedStausForDocuments(document, doctype, registration)
       }
     `,
     variables: {
-      documentId: documentId,
-      docTypeId: docTypeId,
-      moduleName: "REGISTRATION",
-      actionName: "UPDATE",
-      registrationId: registrationId
+      documentId,
+      docTypeId,
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE',
+      registrationId
     }
   })
 

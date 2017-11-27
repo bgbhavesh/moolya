@@ -1,14 +1,11 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addRegistrationContactDetails(contactDetails) {
-
-
-
   let contactInfo = {}
   contactInfo = contactDetails;
-  let registrationObject = {
-    contactInfo : [contactDetails]
+  const registrationObject = {
+    contactInfo: [contactDetails]
   }
 
 
@@ -42,13 +39,13 @@ export async function addRegistrationContactDetails(contactDetails) {
     `,
     variables: {
       registrationObject,
-      moduleName:"REGISTRATION",
-      actionName:"CREATE"
+      moduleName: 'REGISTRATION',
+      actionName: 'CREATE'
     }
   })
 
   const id = result.data.createRegistration;
   console.log(result.data.createRegistration);
-  console.log("//////////////////////////");
+  console.log('//////////////////////////');
   return id
 }

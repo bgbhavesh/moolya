@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findProcessDocActionHandler(processId) {
-
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -44,9 +43,9 @@ export async function findProcessDocActionHandler(processId) {
 }
     `,
     variables: {
-      id:processId
+      id: processId
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findProcess;
   return id

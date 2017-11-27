@@ -3,10 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import _ from 'lodash'
-export async function fetchfunderPortfolioAbout(portfoliodetailsId)
-{
+export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -59,13 +58,13 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId)
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.data && result.data.data;
-  let data = _.omit(id,'__typename')
-  data.investmentBudget =_.omit(data.investmentBudget,'__typename')
+  const data = _.omit(id, '__typename')
+  data.investmentBudget = _.omit(data.investmentBudget, '__typename')
   return data
   // return id
 }
@@ -117,7 +116,7 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -172,7 +171,7 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -208,7 +207,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -249,7 +248,7 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -286,7 +285,7 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -322,7 +321,7 @@ export async function fetchfunderPortfolioService(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
@@ -353,7 +352,7 @@ export async function findFunderLookingForActionHandler(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })

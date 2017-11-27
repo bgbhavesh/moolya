@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateStateActionHandler(StateDetails) {
-  let stateId = StateDetails.id;
+  const stateId = StateDetails.id;
 
   const result = await client.mutate({
     mutation: gql`
@@ -20,10 +20,10 @@ export async function updateStateActionHandler(StateDetails) {
       }
     `,
     variables: {
-      stateId:stateId,
-      state:StateDetails,
-      moduleName:"STATES",
-      actionName:"UPDATE"
+      stateId,
+      state: StateDetails,
+      moduleName: 'STATES',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.updateState;

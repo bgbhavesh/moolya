@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
-import  _ from 'lodash'
+import { client } from '../../../core/apolloConnection';
+import _ from 'lodash'
 
-export async function findFinalApprovalRoleActionHandler(department,subDepartment,cluster, subChapterId, isDefaultSubChapter) {
+export async function findFinalApprovalRoleActionHandler(department, subDepartment, cluster, subChapterId, isDefaultSubChapter) {
   const result = await client.query({
     query: gql`
       query  ($departmentId: String,$subDepartmentId:String,$clusterId:String, $subChapterId:String, $isDefaultSubChapter: Boolean){
@@ -18,16 +18,16 @@ export async function findFinalApprovalRoleActionHandler(department,subDepartmen
         }
     `,
     variables: {
-      departmentId:department,
-      subDepartmentId:subDepartment,
-      clusterId:cluster,
-      subChapterId:subChapterId,
-      isDefaultSubChapter:isDefaultSubChapter
+      departmentId: department,
+      subDepartmentId: subDepartment,
+      clusterId: cluster,
+      subChapterId,
+      isDefaultSubChapter
     },
-    forceFetch:true
+    forceFetch: true
   })
-  var id = result.data.fetchFinalApprovalRole;
-  var data = _.omit(id, '__typename')
+  const id = result.data.fetchFinalApprovalRole;
+  const data = _.omit(id, '__typename')
   data.finalApproval = _.omit(data.finalApproval, '__typename')
   return data
 }

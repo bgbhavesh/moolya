@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function rejectStatusForUser(registration,regTyp) {
-  let registrationId=registration;
-  let regType=regTyp;
+export async function rejectStatusForUser(registration, regTyp) {
+  const registrationId = registration;
+  const regType = regTyp;
   const result = await client.mutate({
     mutation: gql`
      mutation($moduleName:String!,$actionName:String!,$registrationId:String!,$regType:String){
@@ -15,10 +15,10 @@ export async function rejectStatusForUser(registration,regTyp) {
       }
     `,
     variables: {
-      moduleName:"REGISTRATION",
-      actionName:"UPDATE",
-      regType:regType,
-      registrationId:registrationId
+      moduleName: 'REGISTRATION',
+      actionName: 'UPDATE',
+      regType,
+      registrationId
     }
   })
 

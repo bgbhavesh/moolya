@@ -3,18 +3,20 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findSubDomainActionHandler} from '../actions/findSubDomainAction'
-import {updateSelectedSubDomainActionHandler} from '../actions/updateSubDomainAction'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import { findSubDomainActionHandler } from '../actions/findSubDomainAction'
+import { updateSelectedSubDomainActionHandler } from '../actions/updateSubDomainAction'
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
+import { mlFieldValidations } from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
-class MlEditSubDomain extends React.Component{
+class MlEditSubDomain extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}, industryId:" ", industry:"  "};
+    this.state = {
+      loading: true, data: {}, industryId: ' ', industry: '  '
+    };
     this.updateSelectedSubDomain.bind(this)
     this.findSubDomain.bind(this);
     this.onStatusChange.bind(this);
@@ -23,57 +25,53 @@ class MlEditSubDomain extends React.Component{
   }
 
   componentWillMount() {
-    const resp=this.findSubDomain();
+    const resp = this.findSubDomain();
     return resp;
   }
-  componentDidMount(){
+  componentDidMount() {
   }
-  componentDidUpdate()
-  {
-    OnToggleSwitch(true,true);
+  componentDidUpdate() {
+    OnToggleSwitch(true, true);
     initalizeFloatLabel();
   }
 
-  optionsBySelectTypeOfIndustry(value){
-    this.setState({industryId:value})
+  optionsBySelectTypeOfIndustry(value) {
+    this.setState({ industryId: value })
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
+  onStatusChange(e) {
+    const data = this.state.data;
+    if (e.currentTarget.checked) {
+      this.setState({ data: { isActive: true } });
+    } else {
+      this.setState({ data: { isActive: false } });
     }
   }
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/documentProcess/subDomainList");
-      else
-        toastr.error(response.result);
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/documentProcess/subDomainList'); } else { toastr.error(response.result); }
     }
   }
 
-  async findSubDomain(){
-    let subDomainId = this.props.config
+  async findSubDomain() {
+    const subDomainId = this.props.config
     const response = await findSubDomainActionHandler(subDomainId);
-    this.setState({loading:false,data:response, industryId:response.industryId});
+    this.setState({ loading: false, data: response, industryId: response.industryId });
     // const industryDetails = await findIndustryActionHandler(industryId)
     // this.setState({industry:industryDetails.industryName})
   }
 
-  async  updateSelectedSubDomain() {
-    let ret = mlFieldValidations(this.refs)
+  async updateSelectedSubDomain() {
+    const ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
     } else {
-      let subDomainDetails = {
+      const subDomainDetails = {
         name: this.refs.name.value,
         displayName: this.refs.displayName.value,
         about: this.refs.about.value,
@@ -83,36 +81,36 @@ class MlEditSubDomain extends React.Component{
       console.log(this.props)
 
       const response = await updateSelectedSubDomainActionHandler(this.props.config, subDomainDetails)
-      toastr.success("Sub-Domain updated successfully")
+      toastr.success('Sub-Domain updated successfully')
       return response;
     }
   }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateSelectedSubDomain.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.updateSelectedSubDomain.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
 
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/documentProcess/subDomainList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/documentProcess/subDomainList')
         }
       }
     ];
-    let industriesquery=gql` query{
+    const industriesquery = gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }`;
 
 
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <MlLoader/>):(
+        {showLoader === true ? (<MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Edit Sub Domain</h2>
@@ -120,7 +118,7 @@ class MlEditSubDomain extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group mandatory">
-                    {/*<input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>*/}
+                    {/* <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/> */}
                     <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name} data-required={true} data-errMsg="Name is required"/>
                   </div>
                   <br className="clearfix"/>
@@ -136,11 +134,12 @@ class MlEditSubDomain extends React.Component{
                 <form>
 
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} ref="indutryType" placeholder="Select Industry" mandatory={true}
-                                  className="form-control float-label" selectedValue = {this.state.industryId}
-                                  valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={industriesquery}
-                                  onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} defaultValue={this.state.industry}
-                                  isDynamic={true} data-required={true} data-errMsg="Industry Type is required"/>
+                    <Moolyaselect
+                      multiSelect={false} ref="indutryType" placeholder="Select Industry" mandatory={true}
+                      className="form-control float-label" selectedValue = {this.state.industryId}
+                      valueKey={'value'} labelKey={'label'} queryType={'graphql'} query={industriesquery}
+                      onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} defaultValue={this.state.industry}
+                      isDynamic={true} data-required={true} data-errMsg="Industry Type is required"/>
                     {console.log(this.state.data)}
                   </div>
                   <div className="form-group">
@@ -158,12 +157,13 @@ class MlEditSubDomain extends React.Component{
                 </form>
               </div>
             </div>
-            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+            <MlActionComponent
+              ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
           </div>)}
       </div>
     )
   }
-};
+}
 
 export default MlEditSubDomain = formHandler()(MlEditSubDomain);

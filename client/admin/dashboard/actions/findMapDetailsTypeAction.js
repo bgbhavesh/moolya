@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
-  let did=ModuleTypeDetails
+  const did = ModuleTypeDetails
   const result = await client.query({
     query: gql`
         query ($moduleName: String, $id: String) {
@@ -15,17 +15,17 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
     }
     `,
     variables: {
-      id:did.id,
-      moduleName:did.moduleName
+      id: did.id,
+      moduleName: did.moduleName
     },
-    forceFetch:true
+    forceFetch: true
   })
   const totalResult = result.data.data;
   return totalResult
 }
 
 export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
-  let did=ModuleTypeDetails
+  const did = ModuleTypeDetails
   let result = await client.query({
     query: gql`
         query($module: String, $id: String){
@@ -36,17 +36,16 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
     }
     `,
     variables: {
-      id:did.id,
-      module:did.moduleName
+      id: did.id,
+      module: did.moduleName
     },
-    forceFetch:true
+    forceFetch: true
   });
-  result=result&&result.data&&result.data.data?result.data.data:null;
+  result = result && result.data && result.data.data ? result.data.data : null;
   return result;
 }
 
 export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
-
   const result = await client.query({
     query: gql`
       query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String, $offset: Int, $limit: Int, $fieldsData:[GenericFilter]){
@@ -68,12 +67,12 @@ export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
       }
     `,
     variables: {
-      clusterId:clusterId,
-      chapterId:chapterId,
-      subChapterId:subChapterId,
-      userType:userType
+      clusterId,
+      chapterId,
+      subChapterId,
+      userType
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.data.data;
   return id

@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateRequestTypeActionHandler(RequestTypeDetails) {
-  let _id=RequestTypeDetails.id;
-  let requestName = RequestTypeDetails.requestName;
-  let displayName = RequestTypeDetails.displayName;
-  let requestDesc = RequestTypeDetails.requestDesc;
-  let isActive = RequestTypeDetails.isActive;
-  let transactionType = RequestTypeDetails.transactionType;
+  const _id = RequestTypeDetails.id;
+  const requestName = RequestTypeDetails.requestName;
+  const displayName = RequestTypeDetails.displayName;
+  const requestDesc = RequestTypeDetails.requestDesc;
+  const isActive = RequestTypeDetails.isActive;
+  const transactionType = RequestTypeDetails.transactionType;
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$requestName: String, $displayName: String, $requestDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -33,8 +33,8 @@ export async function updateRequestTypeActionHandler(RequestTypeDetails) {
       requestDesc,
       isActive,
       transactionType,
-      moduleName:"REQUEST",
-      actionName:"UPDATE"
+      moduleName: 'REQUEST',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateRequestType;

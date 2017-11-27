@@ -1,8 +1,10 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateTemplateActionHandler(templateid,templateCodeValue,status) {
-let id=templateid,templateCode=templateCodeValue,isActive=status;
+export async function updateTemplateActionHandler(templateid, templateCodeValue, status) {
+  let id = templateid,
+    templateCode = templateCodeValue,
+    isActive = status;
 
   const result = await client.mutate({
     mutation: gql`
@@ -16,11 +18,11 @@ let id=templateid,templateCode=templateCodeValue,isActive=status;
       }
     `,
     variables: {
-        id,
+      id,
       templateCode,
       isActive
     }
   })
-  let Id = result.data.updateStepAssignedTemplate;
+  const Id = result.data.updateStepAssignedTemplate;
   return Id
 }

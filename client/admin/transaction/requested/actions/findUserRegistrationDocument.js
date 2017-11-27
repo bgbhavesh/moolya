@@ -1,10 +1,10 @@
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 
 export async function findUserRegistartionActionHandler(registrationId) {
-  let did=registrationId;
+  const did = registrationId;
 
   const result = await client.query({
     query: gql`
@@ -21,9 +21,9 @@ export async function findUserRegistartionActionHandler(registrationId) {
 
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.findRegistration;
   return id

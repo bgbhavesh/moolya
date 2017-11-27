@@ -1,15 +1,15 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
-import {omit, each, map} from 'lodash'
+import { client } from '../../core/apolloConnection';
+import { omit, each, map } from 'lodash'
 
 /**
  * @Note: "communityId" added for the communityAdmin auth errors
  * */
 
 export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapterId, communityId) {
-  let clusterId = ClusterId
-  let chapterId = ChapterId
-  let did = subChapterId
+  const clusterId = ClusterId
+  const chapterId = ChapterId
+  const did = subChapterId
   const result = await client.query({
     query: gql`
     query  ($clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
@@ -81,26 +81,24 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
     }
     `,
     variables: {
-      clusterId: clusterId,
-      chapterId: chapterId,
+      clusterId,
+      chapterId,
       subChapterId: did,
       communityId
     },
     forceFetch: true
   })
-  var id = result.data.fetchSubChapter;
-  var data = omit(id, '__typename')
-  if(!data.isDefaultSubChapter){
-    let objAry = []
-    each(data.associatedObj,function (item,say) {
-      let value = omit(item, '__typename')
-      value.type= "backendUser"
+  const id = result.data.fetchSubChapter;
+  const data = omit(id, '__typename')
+  if (!data.isDefaultSubChapter) {
+    const objAry = []
+    each(data.associatedObj, (item, say) => {
+      const value = omit(item, '__typename')
+      value.type = 'backendUser'
       value.disabled = true
       value.backendUser = omit(value.backendUser, '__typename')
       value.externalUser = omit(value.externalUser, '__typename')
-      value.subChapters = map(value.subChapters, function (row) {
-        return omit(row,'__typename')
-      })
+      value.subChapters = map(value.subChapters, row => omit(row, '__typename'))
       objAry.push(value)
     })
     data.associatedObj = objAry

@@ -3,10 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateGenericActionAndStatusActionHandler(Id, dataToUpdate) {
-
   const result = await client.mutate({
     mutation: gql`
     mutation ($actionsAndStatusId: String, $departmentInfo: departmentInfo!) {
@@ -17,10 +16,10 @@ export async function updateGenericActionAndStatusActionHandler(Id, dataToUpdate
       }
     }`,
     variables: {
-      actionsAndStatusId : Id,
-      departmentInfo:dataToUpdate,
-      moduleName:"DEPARTMENT",
-      actionName:"CREATE"
+      actionsAndStatusId: Id,
+      departmentInfo: dataToUpdate,
+      moduleName: 'DEPARTMENT',
+      actionName: 'CREATE'
     }
   });
 

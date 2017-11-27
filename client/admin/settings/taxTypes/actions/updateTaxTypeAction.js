@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateTaxTypeActionHandler(TaxType) {
-  let _id=TaxType.id;
-  let taxName = TaxType.taxName;
-  let taxDisplayName = TaxType.taxDisplayName;
-  let aboutTax = TaxType.aboutTax;
-  let isActive = TaxType.isActive
-  let taxTypeInfo={taxName,taxDisplayName,aboutTax};
+  const _id = TaxType.id;
+  const taxName = TaxType.taxName;
+  const taxDisplayName = TaxType.taxDisplayName;
+  const aboutTax = TaxType.aboutTax;
+  const isActive = TaxType.isActive
+  const taxTypeInfo = { taxName, taxDisplayName, aboutTax };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -15,7 +15,7 @@ export async function updateTaxTypeActionHandler(TaxType) {
       }
     `,
     variables: {
-      masterData:{"taxTypeInfo":taxTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { taxTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

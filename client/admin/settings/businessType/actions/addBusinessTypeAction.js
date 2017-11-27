@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addBusinessTypeActionHandler(BusinessTypeDetails) {
-  let businessTypeName = BusinessTypeDetails.businessTypeName;
-  let businessTypeDisplayName = BusinessTypeDetails.businessTypeDisplayName;
-  let about = BusinessTypeDetails.about;
-  let isActive = BusinessTypeDetails.isActive;
+  const businessTypeName = BusinessTypeDetails.businessTypeName;
+  const businessTypeDisplayName = BusinessTypeDetails.businessTypeDisplayName;
+  const about = BusinessTypeDetails.about;
+  const isActive = BusinessTypeDetails.isActive;
 
   const result = await client.mutate({
     mutation: gql`
@@ -29,8 +29,8 @@ export async function addBusinessTypeActionHandler(BusinessTypeDetails) {
       businessTypeDisplayName,
       about,
       isActive,
-      moduleName: "BUSINESSTYPE",
-      actionName: "CREATE"
+      moduleName: 'BUSINESSTYPE',
+      actionName: 'CREATE'
     }
   })
   const id = result.data.CreateBusinessType;

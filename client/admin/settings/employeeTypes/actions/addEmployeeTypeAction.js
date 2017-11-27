@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
-  let employmentName = EmpTypeDetails.employmentName;
-  let employmentDisplayName = EmpTypeDetails.employmentDisplayName;
-  let aboutEmployment = EmpTypeDetails.aboutEmployment;
-  let isActive = EmpTypeDetails.isActive;
-  let employmentTypeInfo={employmentName,employmentDisplayName,aboutEmployment};
- /* const result = await client.mutate({
+  const employmentName = EmpTypeDetails.employmentName;
+  const employmentDisplayName = EmpTypeDetails.employmentDisplayName;
+  const aboutEmployment = EmpTypeDetails.aboutEmployment;
+  const isActive = EmpTypeDetails.isActive;
+  const employmentTypeInfo = { employmentName, employmentDisplayName, aboutEmployment };
+  /* const result = await client.mutate({
     mutation: gql`
     mutation  ($employmentName: String, $employmentDisplayName: String, $aboutEmployment: String,$isActive: Boolean){
         CreateEmployeeType(
@@ -24,7 +24,7 @@ export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
       aboutEmployment,
       isActive
     }
-  })*/
+  }) */
   const result = await client.mutate({
     mutation: gql`
     mutation  ($masterData:MasterSettingsRequest){
@@ -37,7 +37,7 @@ export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
       }
     `,
     variables: {
-      masterData:{"employmentTypeInfo":employmentTypeInfo,"isActive":isActive},
+      masterData: { employmentTypeInfo, isActive }
     }
   })
   const id = result.data.createMasterSetting;

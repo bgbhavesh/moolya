@@ -3,9 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
+import { appClient } from '../../../core/appConnection';
 
-export async function fetchOfficeMemberActionHandler () {
+export async function fetchOfficeMemberActionHandler() {
   const result = await appClient.query({
     query: gql`
     query { 
@@ -18,7 +18,7 @@ export async function fetchOfficeMemberActionHandler () {
       }
     }
     `,
-    forceFetch:true
+    forceFetch: true
   });
   const officeMember = result.data.fetchAllOfficeMembersWithUserId;
   return officeMember;

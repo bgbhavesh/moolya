@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {appClient} from '../../../../app/core/appConnection';
+import { appClient } from '../../../../app/core/appConnection';
 
 export async function getOfficeTransactionPaymentLinkActionHandler(transactionId) {
-
   const result = await appClient.mutate({
     mutation: gql`
           mutation($transactionId: String!) {
@@ -14,7 +13,7 @@ export async function getOfficeTransactionPaymentLinkActionHandler(transactionId
           }
       `,
     variables: {
-      transactionId: transactionId
+      transactionId
     }
   })
   const id = result.data.getOfficeTransactionPaymentLink;

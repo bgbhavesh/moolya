@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function assignUserForTransactionAction(module,params,transactionId,transactionType,operation) {
+export async function assignUserForTransactionAction(module, params, transactionId, transactionType, operation) {
   const result = await client.mutate({
     mutation: gql`
      mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
@@ -13,10 +13,10 @@ export async function assignUserForTransactionAction(module,params,transactionId
   }
     `,
     variables: {
-      module:module,
-      params:{assignmentParams:params},
-      operation:operation,
-      transactionType:transactionType,
+      module,
+      params: { assignmentParams: params },
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -25,7 +25,7 @@ export async function assignUserForTransactionAction(module,params,transactionId
 }
 
 
-export async function unAssignUserForTransactionAction(module,transactionId,transactionType,operation) {
+export async function unAssignUserForTransactionAction(module, transactionId, transactionType, operation) {
   const result = await client.mutate({
     mutation: gql`
      mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
@@ -37,10 +37,10 @@ export async function unAssignUserForTransactionAction(module,transactionId,tran
   }
     `,
     variables: {
-      module:module,
-      params:null,
-      operation:operation,
-      transactionType:transactionType,
+      module,
+      params: null,
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -48,7 +48,7 @@ export async function unAssignUserForTransactionAction(module,transactionId,tran
   return id
 }
 
-export async function selfAssignUserForTransactionAction(module,transactionId,transactionType,operation) {
+export async function selfAssignUserForTransactionAction(module, transactionId, transactionType, operation) {
   const result = await client.mutate({
     mutation: gql`
      mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
@@ -60,10 +60,10 @@ export async function selfAssignUserForTransactionAction(module,transactionId,tr
   }
     `,
     variables: {
-      module:module,
-      params:null,
-      operation:operation,
-      transactionType:transactionType,
+      module,
+      params: null,
+      operation,
+      transactionType,
       transactionId
     }
   })
@@ -71,7 +71,7 @@ export async function selfAssignUserForTransactionAction(module,transactionId,tr
   return id
 }
 
-export async function validateTransaction(transactionId,collection,assignedUserId) {
+export async function validateTransaction(transactionId, collection, assignedUserId) {
   const result = await client.mutate({
     mutation: gql`
      query($transactionId:String,$collection:String,$assignedUserId:String){
@@ -83,16 +83,16 @@ export async function validateTransaction(transactionId,collection,assignedUserI
   }
     `,
     variables: {
-      transactionId:transactionId,
-      collection:collection,
-      assignedUserId:assignedUserId
+      transactionId,
+      collection,
+      assignedUserId
     }
   })
   const id = result.data.validateTransaction;
   return id
 }
 
-export async function validateAssignmentsDataContext(data,userId) {
+export async function validateAssignmentsDataContext(data, userId) {
   const result = await client.mutate({
     mutation: gql`
      query($data:[transactionData],$userId:String){

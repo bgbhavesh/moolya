@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function createRequestsActionHandler(requestDetails) {
-  let transaction = {}
+  const transaction = {}
   requests = requestDetails;
   const result = await client.mutate({
     mutation: gql`
@@ -17,10 +17,10 @@ export async function createRequestsActionHandler(requestDetails) {
     `,
     variables: {
       requests,
-      clusterId:requests.cluster,
-      chapterId:requests.chapter,
-      subChapterId:requests.subChapter,
-      communityId:requests.community
+      clusterId: requests.cluster,
+      chapterId: requests.chapter,
+      subChapterId: requests.subChapter,
+      communityId: requests.community
     }
   })
   const id = result.data.createRequestss;

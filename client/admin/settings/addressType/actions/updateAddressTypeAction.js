@@ -1,14 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateAddressTypeActionHandler(Details)
-{
-  let _id=Details.id;
-  let addressName = Details.addressName||null;
-  let aboutAddress = Details.aboutAddress||null;
-  let addressDisplayName = Details.addressDisplayName||null;
-  let isActive = Details.isActive;
-  let addressTypeInfo={addressName,aboutAddress,addressDisplayName};
+export async function updateAddressTypeActionHandler(Details) {
+  const _id = Details.id;
+  const addressName = Details.addressName || null;
+  const aboutAddress = Details.aboutAddress || null;
+  const addressDisplayName = Details.addressDisplayName || null;
+  const isActive = Details.isActive;
+  const addressTypeInfo = { addressName, aboutAddress, addressDisplayName };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -16,7 +15,7 @@ export async function updateAddressTypeActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"addressTypeInfo":addressTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { addressTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

@@ -1,24 +1,24 @@
-import {MlAppViewer} from "../../../commons/core/MlAppViewer";
+import { MlAppViewer } from '../../../commons/core/MlAppViewer';
 import ProfileTileComponent from './../components/myList/ProfileTileComponent';
-import React from "react";
-import gql from "graphql-tag";
+import React from 'react';
+import gql from 'graphql-tag';
 
 export const mlAppMyFavouritesConfig = new MlAppViewer({
-  name: "My Favourite List",
+  name: 'My Favourite List',
   throttleRefresh: true,
   pagination: true,
-  moduleName: "myFavourites",
+  moduleName: 'myFavourites',
   sort: true,
   perPageLimit: 20,
   viewComponent: <ProfileTileComponent />,
   showActionComponent: true,
   header: true,
-  headerComponents:{
+  headerComponents: {
     filter: false,
     search: true,
-    searchFields: ["userName","firstName","lastName","displayName","profileId","countryName","communityCode", "communityName"]
+    searchFields: ['userName', 'firstName', 'lastName', 'displayName', 'profileId', 'countryName', 'communityCode', 'communityName']
   },
-  /**need to bring with the repo service and passing the context of the community type from the client*/
+  /** need to bring with the repo service and passing the context of the community type from the client */
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {

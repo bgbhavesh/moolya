@@ -1,14 +1,15 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function addGenderActionHandler(Details)
-{
-  let genderName = Details.genderName||null;
-  let genderDisplayName = Details.genderDisplayName||null;
-  let aboutGender = Details.aboutGender||null;
-  let isActive = Details.isActive;
-  let genderUploadIcon=Details.genderUploadIcon||null;
-  let genderInfo={genderName,genderDisplayName,aboutGender,genderUploadIcon};
+export async function addGenderActionHandler(Details) {
+  const genderName = Details.genderName || null;
+  const genderDisplayName = Details.genderDisplayName || null;
+  const aboutGender = Details.aboutGender || null;
+  const isActive = Details.isActive;
+  const genderUploadIcon = Details.genderUploadIcon || null;
+  const genderInfo = {
+    genderName, genderDisplayName, aboutGender, genderUploadIcon
+  };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -16,7 +17,7 @@ export async function addGenderActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"genderInfo":genderInfo,"isActive":isActive},
+      masterData: { genderInfo, isActive }
     }
   })
   const id = result.data.createMasterSetting;

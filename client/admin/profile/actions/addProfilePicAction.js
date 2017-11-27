@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 
 export async function updateDataEntry(Details) {
@@ -14,16 +14,16 @@ export async function updateDataEntry(Details) {
 }
 `,
     variables: {
-    "moduleName": "PROFILE",
-    "actionName": "UPDATE",
-    "attributes": {
-      "profileImage": Details.profileImage,
-      "firstName": Details.firstName,
-      "middleName": Details.middleName,
-      "lastName":  Details.lastName,
-      "userName": Details.userName,
-      "genderType":Details.genderType,
-      "dateOfBirth": Details.dateOfBirth
+      moduleName: 'PROFILE',
+      actionName: 'UPDATE',
+      attributes: {
+        profileImage: Details.profileImage,
+        firstName: Details.firstName,
+        middleName: Details.middleName,
+        lastName: Details.lastName,
+        userName: Details.userName,
+        genderType: Details.genderType,
+        dateOfBirth: Details.dateOfBirth
       }
     }
   })
@@ -41,8 +41,9 @@ export async function passwordVerification(digest) {
     result
   }
 }
-`,variables:{
-      Details:digest
+`,
+    variables: {
+      Details: digest
     }
 
   })

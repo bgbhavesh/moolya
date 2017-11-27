@@ -1,14 +1,13 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateLanguageActionHandler(LanguageDetails)
-{
-  let _id=LanguageDetails.id;
-  let languageName = LanguageDetails.languageName||null;
-  let languageDisplayName = LanguageDetails.languageDisplayName||null;
-  let aboutLanguage = LanguageDetails.aboutLanguage||null;
-  let isActive = LanguageDetails.isActive;
-  let languageInfo={languageName,languageDisplayName,aboutLanguage};
+export async function updateLanguageActionHandler(LanguageDetails) {
+  const _id = LanguageDetails.id;
+  const languageName = LanguageDetails.languageName || null;
+  const languageDisplayName = LanguageDetails.languageDisplayName || null;
+  const aboutLanguage = LanguageDetails.aboutLanguage || null;
+  const isActive = LanguageDetails.isActive;
+  const languageInfo = { languageName, languageDisplayName, aboutLanguage };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -16,7 +15,7 @@ export async function updateLanguageActionHandler(LanguageDetails)
       }
     `,
     variables: {
-      masterData:{"languageInfo":languageInfo,"isActive":isActive,_id:_id}
+      masterData: { languageInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findTransactionApprovalActionHandler(transactionTypeDetails) {
-  let transactionType = transactionTypeDetails
-  let status=["Approved"]
+  const transactionType = transactionTypeDetails
+  const status = ['Approved']
   const result = await client.query({
     query: gql`
      query ($transactionType: String) {

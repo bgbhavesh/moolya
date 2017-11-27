@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlProfessionTableConfig} from "../config/MlProfessionTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlProfessionTableConfig } from '../config/MlProfessionTypeConfig';
 export default class MlProfessionList extends Component {
-
   componentDidMount() {
   }
 

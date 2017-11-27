@@ -18,13 +18,12 @@ export default class SessionTable extends Component {
   }
 
   render() {
-    let slots = [];
+    const slots = [];
     let slotIndex = -1;
     this.props.availableSlots.forEach((slot, index) => {
       if (index % 4 === 0) {
         slotIndex++;
-        if (!slots[slotIndex])
-          slots[slotIndex] = [];
+        if (!slots[slotIndex]) { slots[slotIndex] = []; }
       }
       slots[slotIndex].push(slot);
     });
@@ -44,22 +43,18 @@ export default class SessionTable extends Component {
               <table className="table table-bordered">
                 <tbody>
                   {
-                    slots.map((list, index) => {
-                      return (
-                        <tr key={index}>
-                          {
-                            list.map((slot, i) => {
-                              return (
-                                <td key={i} onClick={() => { this.showAlert(slot) }}>
-                                  {currentDateString} <br />
-                                  {slot.slotTime}
-                                </td>
-                              );
-                            })
-                          }
-                        </tr>
-                      );
-                    })
+                    slots.map((list, index) => (
+                      <tr key={index}>
+                        {
+                          list.map((slot, i) => (
+                            <td key={i} onClick={() => { this.showAlert(slot) }}>
+                              {currentDateString} <br />
+                              {slot.slotTime}
+                            </td>
+                          ))
+                        }
+                      </tr>
+                    ))
                   }
                 </tbody>
               </table>

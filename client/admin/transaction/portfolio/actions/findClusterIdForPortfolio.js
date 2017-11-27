@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 
 export async function fetchPortfolioActionHandler(portfoliodetailsId) {
@@ -14,7 +14,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })

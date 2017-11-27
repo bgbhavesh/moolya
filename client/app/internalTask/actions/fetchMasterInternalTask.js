@@ -5,8 +5,8 @@
  * JavaScript XML file fetchMasterInternalTask.js
  * *************************************************************** */
 
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function fetchMasterTasks() {
   const result = await appClient.query({

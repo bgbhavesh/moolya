@@ -2,9 +2,9 @@
  * Created by venkatsrinag on 1/5/17.
  */
 import gql from 'graphql-tag'
-import {appClient} from '../../../app/core/appConnection';
+import { appClient } from '../../../app/core/appConnection';
 
-//todo://this may be of no use have to remove it
+// todo://this may be of no use have to remove it
 /**
  * used this code two times removed onces
  * */
@@ -44,7 +44,7 @@ export async function fetchOfficeUserTypes() {
             }
           }
         `,
-    forceFetch:true
+    forceFetch: true
   })
 
   const communities = result.data.data;
@@ -69,7 +69,7 @@ export async function fetchCommunitiesHandlerReg() {
             }
           }
         `,
-    forceFetch:true
+    forceFetch: true
   })
 
   const communities = result.data.data;

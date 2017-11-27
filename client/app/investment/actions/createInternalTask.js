@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 19/6/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function createInternalTaskActionHandler(internalTask) {
   const result = await appClient.mutate({
@@ -15,7 +15,7 @@ export async function createInternalTaskActionHandler(internalTask) {
       }
     `,
     variables: {
-      internalTask: internalTask
+      internalTask
     },
     forceFetch: true
   });

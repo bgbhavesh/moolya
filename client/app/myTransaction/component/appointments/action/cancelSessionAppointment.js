@@ -13,7 +13,7 @@ export async function cancelUserServiceCardAppointment(appointmentId) {
       }
     `,
     variables: {
-      appointmentId      
+      appointmentId
     }
   });
   const id = result.data.cancelUserServiceCardAppointment;

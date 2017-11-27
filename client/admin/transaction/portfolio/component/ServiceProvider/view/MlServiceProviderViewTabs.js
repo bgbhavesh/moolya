@@ -5,31 +5,31 @@
 /**
  * Import of all the usable components
  * */
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import MlServiceProviderViewAwards from "../view/MlServiceProviderViewAwards";
-import MlServiceProviderViewAbout from "../view/MlServiceProviderViewAbout";
-import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
-import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
-import MlServiceProviderViewClients from "../view/MlServiceProviderViewClients";
-import MlServiceProviderViewLookingFor from "../view/MlServiceProviderViewLookingFor";
-import PortfolioLibrary from "../../../../../../commons/components/portfolioLibrary/PortfolioLibrary";
-import {client} from "../../../../../core/apolloConnection";
-//todo:import the View components//
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTabComponent from '../../../../../../commons/components/tabcomponent/MlTabComponent';
+import MlServiceProviderViewAwards from '../view/MlServiceProviderViewAwards';
+import MlServiceProviderViewAbout from '../view/MlServiceProviderViewAbout';
+import MlServiceProviderViewMCL from '../view/MlServiceProviderViewMCL';
+import MlServiceProviderViewServices from '../view/MlServiceProviderViewServices';
+import MlServiceProviderViewClients from '../view/MlServiceProviderViewClients';
+import MlServiceProviderViewLookingFor from '../view/MlServiceProviderViewLookingFor';
+import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary';
+import { client } from '../../../../../core/apolloConnection';
+// todo:import the View components//
 
 export default class MlServiceProviderViewTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, serviceProviderPortfolio: {}};
+    this.state = { tabs: [], aboutUs: {}, serviceProviderPortfolio: {} };
   }
 
   componentDidMount() {
-    setTimeout(function () {
+    setTimeout(() => {
       $('div[role="tab"]').each(function (index) {
-        var test = $(this).text();
+        const test = $(this).text();
         $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+        $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
@@ -41,37 +41,41 @@ export default class MlServiceProviderViewTabs extends Component {
    * Display of all tabs of service provider and passing the portfolioId
    * */
   getTabComponents() {
-    let tabs = [
+    const tabs = [
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "About",
-        component: <MlServiceProviderViewAbout key="1"
-                                           portfolioDetailsId={this.props.portfolioDetailsId}
-                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'About',
+        component: <MlServiceProviderViewAbout
+          key="1"
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Awards and Rewards",
-        component: <MlServiceProviderViewAwards key="2"
-                                                portfolioDetailsId={this.props.portfolioDetailsId}
-                                                getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'Awards and Rewards',
+        component: <MlServiceProviderViewAwards
+          key="2"
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Library",
-        component: <PortfolioLibrary isAdmin={true} client={client} key="3"
-                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Library',
+        component: <PortfolioLibrary
+          isAdmin={true} client={client} key="3"
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "MCL",
-        component: <MlServiceProviderViewMCL key="4"
-                                             portfolioDetailsId={this.props.portfolioDetailsId}
-                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'MCL',
+        component: <MlServiceProviderViewMCL
+          key="4"
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       // {
       //   tabClassName: 'tab',
@@ -84,26 +88,29 @@ export default class MlServiceProviderViewTabs extends Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Clients",
-        component: <MlServiceProviderViewClients key="5" isAdmin={true}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}
-                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'Clients',
+        component: <MlServiceProviderViewClients
+          key="5" isAdmin={true}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Looking For",
-        component: <MlServiceProviderViewLookingFor key="6" tabName="Looking For"
-                                                 portfolioDetailsId={this.props.portfolioDetailsId}
-                                                 getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'Looking For',
+        component: <MlServiceProviderViewLookingFor
+          key="6" tabName="Looking For"
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Services",
-        component: <MlServiceProviderViewServices key="7"
-                                                  portfolioDetailsId={this.props.portfolioDetailsId}
-                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+        title: 'Services',
+        component: <MlServiceProviderViewServices
+          key="7"
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;
@@ -113,7 +120,7 @@ export default class MlServiceProviderViewTabs extends Component {
    * tab mounting component
    * */
   componentWillMount() {
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
 
     function getTabs() {
       return tabs.map(tab => ({
@@ -124,11 +131,11 @@ export default class MlServiceProviderViewTabs extends Component {
       }));
     }
 
-    this.setState({tabs: getTabs() || []});
+    this.setState({ tabs: getTabs() || [] });
   }
 
   render() {
-    let tabs = this.state.tabs;
+    const tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
   }
 }

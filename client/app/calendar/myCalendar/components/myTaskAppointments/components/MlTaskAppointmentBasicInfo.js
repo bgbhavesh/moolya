@@ -7,21 +7,20 @@
 // import NPM module(s)
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import Moment from "moment";
+import Datetime from 'react-datetime';
+import Moment from 'moment';
 import ScrollArea from 'react-scrollbar';
 import Select from 'react-select';
 import { cloneDeep } from 'lodash';
 
 export default class MlTaskAppointmentBasicInfo extends Component {
-
   constructor(props) {
     super(props);
     // this.getTask = this.getTask.bind(this);
     this.options = [
-      {value: 'weekly', label: 'Weekly'},
-      {value: 'daily', label: 'Daily'},
-      {value: 'monthly', label: 'Monthly'}
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'daily', label: 'Daily' },
+      { value: 'monthly', label: 'Monthly' }
     ];
     this.loadTaskOptions = this.loadTaskOptions.bind(this);
   }
@@ -32,8 +31,8 @@ export default class MlTaskAppointmentBasicInfo extends Component {
 
   componentDidMount() {
     // $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.app_header').outerHeight(true)));
   }
   /**
    * Method :: loadTaskOptions
@@ -41,11 +40,11 @@ export default class MlTaskAppointmentBasicInfo extends Component {
    * @return {Array} :: Tasks array object
    */
   loadTaskOptions() {
-    const {tasks, selectedTaskId} = this.props;
-    let options = [];
+    const { tasks, selectedTaskId } = this.props;
+    const options = [];
     if (tasks && tasks.length > 0) {
       tasks.map((task) => {
-        task.isActive ? options.push({value: task.taskId, label: task.displayName}) : '';
+        task.isActive ? options.push({ value: task.taskId, label: task.displayName }) : '';
       });
     }
     return options;
@@ -55,13 +54,14 @@ export default class MlTaskAppointmentBasicInfo extends Component {
    * Desc :: Showing html page
    * @returns {XML}
    */
-  render(){
+  render() {
     const {
       selectedTaskId,
       isTaskComponent,
       onChangeTask,
       onChangeType,
-      selectedTask } = this.props;
+      selectedTask
+    } = this.props;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -71,52 +71,57 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                 <div className="form-group switch_wrap switch_names">
                   <span className={isTaskComponent ? 'state_label' : 'state_label acLabel'}>Service Card</span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox"
-                           value="1"
-                           checked={isTaskComponent}
-                           onChange={() => onChangeType()} />
+                    <input
+                      type="checkbox"
+                      value="1"
+                      checked={isTaskComponent}
+                      onChange={() => onChangeType()} />
                     <div className="slider"></div>
                   </label>
                   <span className={isTaskComponent ? 'state_label acLabel' : 'state_label'}>Task</span>
                 </div><br className="brclear"/>
                 <div className="form-group">
-                  <Select name="form-field-name"
-                          options={this.loadTaskOptions()}
-                          value={selectedTaskId}
-                          placeholder="Choose Task"
-                          onChange={onChangeTask}/>
+                  <Select
+                    name="form-field-name"
+                    options={this.loadTaskOptions()}
+                    value={selectedTaskId}
+                    placeholder="Choose Task"
+                    onChange={onChangeTask}/>
                 </div>
                 <label>Task Type</label><br/>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="isInternal" type="checkbox"
-                           value={selectedTask.isInternal}
-                           name="isInternal"
-                           checked={selectedTask.isInternal} disabled /><label
-                    htmlFor="isInternal"><span><span></span></span>Internal</label>
+                    <input
+                      id="isInternal" type="checkbox"
+                      value={selectedTask.isInternal}
+                      name="isInternal"
+                      checked={selectedTask.isInternal} disabled /><label
+                      htmlFor="isInternal"><span><span></span></span>Internal</label>
                   </div>
                   <div className="input_types">
-                    <input id="isExternal" type="checkbox"
-                           name="isExternal"
-                           value={selectedTask.isExternal}
-                           checked={selectedTask.isExternal} disabled /><label
-                    htmlFor="isExternal"><span><span></span></span>External</label>
+                    <input
+                      id="isExternal" type="checkbox"
+                      name="isExternal"
+                      value={selectedTask.isExternal}
+                      checked={selectedTask.isExternal} disabled /><label
+                      htmlFor="isExternal"><span><span></span></span>External</label>
                   </div>
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
                   <label>
                     Total number of Sessions
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled
-                           value={selectedTask.noOfSession} />
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled
+                      value={selectedTask.noOfSession} />
                   </label>
-                  {/*<input type="number" className="form-control "/>*/}
+                  {/* <input type="number" className="form-control "/> */}
                 </div>
               </form>
-                {/* Mapping for slot*/}
-                {/*<div className="row funders_list">
+              {/* Mapping for slot */}
+              {/* <div className="row funders_list">
                   <div className="col-md-6 col-sm-6 col-lg-5" >
                     <a href="">
                       <div className="funders_list_block" onClick={''}>
@@ -128,27 +133,30 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                       </div>
                     </a>
                   </div>
-                </div>*/}
-                <form>
+                </div> */}
+              <form>
                 <div className="form-group">
                   <label>Duration: &nbsp;
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled={true}
-                           value={selectedTask.duration && selectedTask.duration.hours}  /> Hours
-                    <input type="text"
-                           className="form-control inline_input"
-                           disabled={true}
-                           value={selectedTask.duration && selectedTask.duration.minutes}  /> Mins
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled={true}
+                      value={selectedTask.duration && selectedTask.duration.hours} /> Hours
+                    <input
+                      type="text"
+                      className="form-control inline_input"
+                      disabled={true}
+                      value={selectedTask.duration && selectedTask.duration.minutes} /> Mins
                   </label>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox"
-                           checked={selectedTask.isActive}
-                           id="isActive"
-                           value="isActive" disabled />
+                    <input
+                      type="checkbox"
+                      checked={selectedTask.isActive}
+                      id="isActive"
+                      value="isActive" disabled />
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -161,28 +169,31 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                 <div className="form-group switch_wrap switch_names">
                   <span className={isTaskComponent ? 'state_label' : 'state_label acLabel'}>New</span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox"
-                           value="1"
-                           checked={isTaskComponent}
-                           onChange={() => onChangeSteps()} />
+                    <input
+                      type="checkbox"
+                      value="1"
+                      checked={isTaskComponent}
+                      onChange={() => onChangeSteps()} />
                     <div className="slider"></div>
                   </label>
                   <span className={isTaskComponent ? 'state_label acLabel' : 'state_label'}>Ongoing</span>
                 </div><br className="brclear"/><br className="brclear"/><br className="brclear"/><br className="brclear"/>
                 <div className="form-group">
-                  <textarea placeholder="Notes"
-                            disabled
-                            defaultValue={selectedTask.note}
-                            className="form-control float-label" id="">
+                  <textarea
+                    placeholder="Notes"
+                    disabled
+                    defaultValue={selectedTask.note}
+                    className="form-control float-label" id="">
                   </textarea>
                 </div>
                 <span className="placeHolder active">Frequency</span>
                 <div className="form-group">
-                  <Select name="form-field-name"
-                          options={this.options}
-                          value={selectedTask.sessionFrequency}
-                          placeholder='Frequency Type'
-                          disabled />
+                  <Select
+                    name="form-field-name"
+                    options={this.options}
+                    value={selectedTask.sessionFrequency}
+                    placeholder='Frequency Type'
+                    disabled />
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
@@ -205,4 +216,4 @@ export default class MlTaskAppointmentBasicInfo extends Component {
       </div>
     )
   }
-};
+}

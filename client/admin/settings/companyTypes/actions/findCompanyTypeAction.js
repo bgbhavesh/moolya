@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findCompanyTypeActionHandler(CompanyTypeId) {
-  let did=CompanyTypeId
+  const did = CompanyTypeId
 
   const result = await client.query({
     query: gql`
@@ -19,14 +19,16 @@ export async function findCompanyTypeActionHandler(CompanyTypeId) {
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {companyName,aboutCompany,companyDisplayName}=masterSetting.companyTypeInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,companyName,aboutCompany,companyDisplayName};
+  const masterSetting = result.data.findMasterSetting || {};
+  const { companyName, aboutCompany, companyDisplayName } = masterSetting.companyTypeInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, companyName, aboutCompany, companyDisplayName
+    };
   }
   return {};
 }

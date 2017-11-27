@@ -3,7 +3,7 @@
  */
 import gql from 'graphql-tag'
 
-import {appClient} from '../../core/appConnection';
+import { appClient } from '../../core/appConnection';
 
 export async function followActionHandler(details) {
   const result = await appClient.mutate({
@@ -17,9 +17,9 @@ export async function followActionHandler(details) {
           }
       `,
     variables: {
-      resourceId : details.resourceId,
+      resourceId: details.resourceId,
       resourceType: details.resourceType,
-      follow:details.follow
+      follow: details.follow
     }
   })
   const resp = result.data.followUser;
@@ -30,11 +30,8 @@ export async function followActionHandler(details) {
   return null;
 }
 
-export default async function handleFollowAction(details){
-
-    var resp = await followActionHandler(details);
-    return resp;
+export default async function handleFollowAction(details) {
+  const resp = await followActionHandler(details);
+  return resp;
 }
-
-
 

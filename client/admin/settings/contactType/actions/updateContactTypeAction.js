@@ -1,10 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function updateContactTypeActionHandler(Details)
-{
-
- /* const result = await client.mutate({
+export async function updateContactTypeActionHandler(Details) {
+  /* const result = await client.mutate({
     mutation: gql`
         mutation ($_id:String, $contactType: contactTypeObject){
             updateContactType(
@@ -17,14 +15,16 @@ export async function updateContactTypeActionHandler(Details)
       _id:Details._id,
       contactType: Details
     }
-  })*/
-  let _id=Details._id;
-  let contactName = Details.contactName;
-  let contactDisplayName = Details.contactDisplayName;
-  let aboutContact = Details.aboutContact;
-  let contactUploadIcon = Details.contactUploadIcon;
-  let isActive = Details.isActive;
-  let contactTypeInfo={contactName,contactDisplayName,aboutContact,contactUploadIcon};
+  }) */
+  const _id = Details._id;
+  const contactName = Details.contactName;
+  const contactDisplayName = Details.contactDisplayName;
+  const aboutContact = Details.aboutContact;
+  const contactUploadIcon = Details.contactUploadIcon;
+  const isActive = Details.isActive;
+  const contactTypeInfo = {
+    contactName, contactDisplayName, aboutContact, contactUploadIcon
+  };
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
@@ -32,7 +32,7 @@ export async function updateContactTypeActionHandler(Details)
       }
     `,
     variables: {
-      masterData:{"contactTypeInfo":contactTypeInfo,"isActive":isActive,_id:_id}
+      masterData: { contactTypeInfo, isActive, _id }
     }
   })
   const id = result.data.updateMasterSetting;

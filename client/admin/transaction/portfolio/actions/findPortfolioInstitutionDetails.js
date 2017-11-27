@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
-import _ from "underscore";
-
+import { client } from '../../../core/apolloConnection';
+import _ from 'underscore';
 
 
 export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
@@ -327,13 +326,13 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
           }
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId,
-      key: key
+      portfoliodetailsId,
+      key
     },
     forceFetch: true
   })
 
-  var response = result.data.fetchInstitutionDetails;
+  const response = result.data.fetchInstitutionDetails;
   return response;
 }
 
@@ -449,27 +448,24 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
 
   const data = result.data.fetchInstitutionPortfolioAboutUs;
-  /*let data = _.omit(id,'__typename');*/
-  let aboutUsArray = {}
-  aboutUsArray["aboutUs"] = _.omit(data.aboutUs, '__typename');
-  aboutUsArray["clients"] = _.map(data.clients, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["serviceProducts"] = _.omit(data.serviceProducts, '__typename');
-  aboutUsArray["information"] = _.omit(data.information, '__typename');
-  aboutUsArray["rating"] = _.omit(data.rating, '__typename');
+  /* let data = _.omit(id,'__typename'); */
+  const aboutUsArray = {}
+  aboutUsArray.aboutUs = _.omit(data.aboutUs, '__typename');
+  aboutUsArray.clients = _.map(data.clients, row => _.omit(row, ['__typename']));
+  aboutUsArray.serviceProducts = _.omit(data.serviceProducts, '__typename');
+  aboutUsArray.information = _.omit(data.information, '__typename');
+  aboutUsArray.rating = _.omit(data.rating, '__typename');
 
   return aboutUsArray
 }
 
 export async function fetchInstitutionPortfolioData(portfoliodetailsId, connection) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -519,51 +515,30 @@ export async function fetchInstitutionPortfolioData(portfoliodetailsId, connecti
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.fetchInstitutionPortfolioData;
-  let reportsArray = {}
-  reportsArray["balanceSheet"] = _.map(id.balanceSheet, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["profitAndLoss"] = _.map(id.profitAndLoss, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["quaterlyReport"] = _.map(id.quaterlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["yearlyReport"] = _.map(id.yearlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["halfYearlyReport"] = _.map(id.halfYearlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["annualReport"] = _.map(id.annualReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["cashFlow"] = _.map(id.cashFlow, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["shareHoldings"] = _.map(id.shareHoldings, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["ratio"] = _.map(id.ratio, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["capitalStructure"] = _.map(id.capitalStructure, function (row) {
-    return _.omit(row, ['__typename'])
-  });
+  const reportsArray = {}
+  reportsArray.balanceSheet = _.map(id.balanceSheet, row => _.omit(row, ['__typename']));
+  reportsArray.profitAndLoss = _.map(id.profitAndLoss, row => _.omit(row, ['__typename']));
+  reportsArray.quaterlyReport = _.map(id.quaterlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.yearlyReport = _.map(id.yearlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.halfYearlyReport = _.map(id.halfYearlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.annualReport = _.map(id.annualReport, row => _.omit(row, ['__typename']));
+  reportsArray.cashFlow = _.map(id.cashFlow, row => _.omit(row, ['__typename']));
+  reportsArray.shareHoldings = _.map(id.shareHoldings, row => _.omit(row, ['__typename']));
+  reportsArray.ratio = _.map(id.ratio, row => _.omit(row, ['__typename']));
+  reportsArray.capitalStructure = _.map(id.capitalStructure, row => _.omit(row, ['__typename']));
 
-  /*return chartsArray
-   let data = _.omit(id, '__typename')*/
+  /* return chartsArray
+   let data = _.omit(id, '__typename') */
   return reportsArray
   // return id
 }
 
 export async function fetchInstitutionPortfolioReports(portfoliodetailsId, connection) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -613,45 +588,25 @@ export async function fetchInstitutionPortfolioReports(portfoliodetailsId, conne
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
   const id = result.data.fetchInstitutionPortfolioCSRReports;
-  let reportsArray = {}
-  reportsArray["balanceSheet"] = _.map(id.balanceSheet, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["profitAndLoss"] = _.map(id.profitAndLoss, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["quaterlyReport"] = _.map(id.quaterlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["yearlyReport"] = _.map(id.yearlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["halfYearlyReport"] = _.map(id.halfYearlyReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["annualReport"] = _.map(id.annualReport, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["cashFlow"] = _.map(id.cashFlow, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["shareHoldings"] = _.map(id.shareHoldings, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["ratio"] = _.map(id.ratio, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  reportsArray["capitalStructure"] = _.map(id.capitalStructure, function (row) {
-    return _.omit(row, ['__typename'])
-  });
+  const reportsArray = {}
+  reportsArray.balanceSheet = _.map(id.balanceSheet, row => _.omit(row, ['__typename']));
+  reportsArray.profitAndLoss = _.map(id.profitAndLoss, row => _.omit(row, ['__typename']));
+  reportsArray.quaterlyReport = _.map(id.quaterlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.yearlyReport = _.map(id.yearlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.halfYearlyReport = _.map(id.halfYearlyReport, row => _.omit(row, ['__typename']));
+  reportsArray.annualReport = _.map(id.annualReport, row => _.omit(row, ['__typename']));
+  reportsArray.cashFlow = _.map(id.cashFlow, row => _.omit(row, ['__typename']));
+  reportsArray.shareHoldings = _.map(id.shareHoldings, row => _.omit(row, ['__typename']));
+  reportsArray.ratio = _.map(id.ratio, row => _.omit(row, ['__typename']));
+  reportsArray.capitalStructure = _.map(id.capitalStructure, row => _.omit(row, ['__typename']));
 
-  /*return chartsArray
-  let data = _.omit(id, '__typename')*/
+  /* return chartsArray
+  let data = _.omit(id, '__typename') */
   return reportsArray
   // return id
 }
@@ -705,26 +660,18 @@ export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetail
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      portfoliodetailsId
     },
     forceFetch: true
   })
 
   const data = result.data.fetchInstitutePortfolioCharts;
-  /*let data = _.omit(id,'__typename');*/
-  let chartsArray = {}
-  chartsArray["employmentOfCompanyChart"] = _.map(data.employmentOfCompanyChart, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  chartsArray["profitRevenueLiabilityChart"] = _.map(data.profitRevenueLiabilityChart, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  chartsArray["reviewOfCompanyChart"] = _.map(data.reviewOfCompanyChart, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  chartsArray["employeeBreakupDepartmentChart"] = _.map(data.employeeBreakupDepartmentChart, function (row) {
-    return _.omit(row, ['__typename'])
-  });
+  /* let data = _.omit(id,'__typename'); */
+  const chartsArray = {}
+  chartsArray.employmentOfCompanyChart = _.map(data.employmentOfCompanyChart, row => _.omit(row, ['__typename']));
+  chartsArray.profitRevenueLiabilityChart = _.map(data.profitRevenueLiabilityChart, row => _.omit(row, ['__typename']));
+  chartsArray.reviewOfCompanyChart = _.map(data.reviewOfCompanyChart, row => _.omit(row, ['__typename']));
+  chartsArray.employeeBreakupDepartmentChart = _.map(data.employeeBreakupDepartmentChart, row => _.omit(row, ['__typename']));
 
   return chartsArray
 }

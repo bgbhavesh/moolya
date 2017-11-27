@@ -14,19 +14,19 @@ const MlAppViewer = class {
     // if (!options.columns) throw new Error('MlViewer.View options must specify columns');
 
     this.name = options.name;
-    this.module=options.module;
-    this.moduleName=options.moduleName;
-    this.showImage=options.showImage;
+    this.module = options.module;
+    this.moduleName = options.moduleName;
+    this.showImage = options.showImage;
     this.buildQueryOptions = options.buildQueryOptions;
     this.fetchCenter = options.fetchCenter;
     this.fetchCenterHandler = options.fetchCenterHandler;
     this.mapMarkerComponent = options.mapMarkerComponent;
-    this.fetchZoom=options.fetchZoom;
-    this.fetchZoomHandler=options.fetchZoomHandler;
+    this.fetchZoom = options.fetchZoom;
+    this.fetchZoomHandler = options.fetchZoomHandler;
     this.actionConfiguration = options.actionConfiguration;
     this.viewComponent = options.viewComponent;
     this.graphQlQuery = options.graphQlQuery;
-    this.queryOptions=options.queryOptions;
+    this.queryOptions = options.queryOptions;
     this.header = options.header;
     this.headerComponents = options.headerComponents;
     this.perPageLimit = options.perPageLimit;
@@ -35,5 +35,5 @@ const MlAppViewer = class {
 };
 
 
-export {MlAppViewer};
+export { MlAppViewer };
 

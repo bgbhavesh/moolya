@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function findDateAndTimeActionHandler(Id)
-{
-  let did=Id;
+export async function findDateAndTimeActionHandler(Id) {
+  const did = Id;
   const result = await client.query({
     query: gql`
            query{
@@ -23,7 +22,7 @@ export async function findDateAndTimeActionHandler(Id)
           
         }
     `,
-    forceFetch:true
+    forceFetch: true
   })
   const id = result.data.fetchGlobalSettings;
   return id

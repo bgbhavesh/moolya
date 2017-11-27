@@ -5,20 +5,20 @@
  */
 
 // import NPM module(s)
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 // import custom method(s) and component(s)
 import ScrollArea from 'react-scrollbar';
 
 
-export default class MlAppCalendarTaskAppointmentTermAndCondition extends Component{
+export default class MlAppCalendarTaskAppointmentTermAndCondition extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (290 + $('.app_header').outerHeight(true)));
   }
 
@@ -28,37 +28,37 @@ export default class MlAppCalendarTaskAppointmentTermAndCondition extends Compon
    * @return {XML}
    */
   getAttachmentsList() {
-    let attachments = this.props.task && this.props.task.attachments;
+    const attachments = this.props.task && this.props.task.attachments;
 
     const attachmentDetails = (attachments && attachments.length > 0) ?
-      attachments.map(function (value, index) {
-        return (
-          <div className="col-md-6 nopadding-left" key={index}>
-            <div className="panel panel-default">
-              <div className="panel-heading">
+      attachments.map((value, index) => (
+        <div className="col-md-6 nopadding-left" key={index}>
+          <div className="panel panel-default">
+            <div className="panel-heading">
                 Attachment {index + 1}
-              </div>
-              <div className="panel-body">
-                <form>
-                  <div className="form-group">
-                    <input placeholder="Document name" className="form-control float-label" value={value.name}
-                           disabled/>
-                  </div>
-                  <div className="form-group">
-                    <textarea className="form-control float-label" placeholder="Info" value={value.info}
-                              disabled></textarea>
-                  </div>
-                  <div className="input_types">
-                    <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory} disabled/><label
+            </div>
+            <div className="panel-body">
+              <form>
+                <div className="form-group">
+                  <input
+                    placeholder="Document name" className="form-control float-label" value={value.name}
+                    disabled/>
+                </div>
+                <div className="form-group">
+                  <textarea
+                    className="form-control float-label" placeholder="Info" value={value.info}
+                    disabled></textarea>
+                </div>
+                <div className="input_types">
+                  <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory} disabled/><label
                     htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
-                  </div>
-                  <br className="brclear"/>
-                </form>
-              </div>
+                </div>
+                <br className="brclear"/>
+              </form>
             </div>
           </div>
-        )
-      }) : [];
+        </div>
+      )) : [];
     return attachmentDetails;
   }
 
@@ -81,4 +81,4 @@ export default class MlAppCalendarTaskAppointmentTermAndCondition extends Compon
       </div>
     )
   }
-};
+}

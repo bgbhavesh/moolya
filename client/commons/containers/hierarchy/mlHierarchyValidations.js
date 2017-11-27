@@ -4,19 +4,18 @@
  */
 
 import _ from 'lodash';
-import {getAdminUserContext} from '../../../../client/commons/getAdminUserContext'
+import { getAdminUserContext } from '../../../../client/commons/getAdminUserContext'
 
-class MlHierarchyValidations{
-
-  constructor(){
-    if(! MlHierarchyValidations.instance){
+class MlHierarchyValidations {
+  constructor() {
+    if (!MlHierarchyValidations.instance) {
       MlHierarchyValidations.instance = this;
-     // this.validateEditAction.bind(this);
+      // this.validateEditAction.bind(this);
       this.validateAssignAction.bind(this);
     }
     return MlHierarchyValidations.instance;
   }
-/*
+  /*
 
   validateEditAction(assignedUserId){
     let userProfile = getAdminUserContext()
@@ -32,14 +31,12 @@ class MlHierarchyValidations{
   }
 */
 
-  validateAssignAction(recordClusterId,selectedClusterId){
-   if(recordClusterId == selectedClusterId){
+  validateAssignAction(recordClusterId, selectedClusterId) {
+    if (recordClusterId == selectedClusterId) {
       return true;
-    }else{
-      return false;
     }
+    return false;
   }
-
 }
 
 const mlHierarchyValidations = new MlHierarchyValidations();

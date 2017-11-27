@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function getContactDetails() {
   const result = await client.query({
@@ -36,10 +36,10 @@ export async function getContactDetails() {
   }
 }`,
     variables: {
-      moduleName:"PROFILE",
-      actionName:"GET"
+      moduleName: 'PROFILE',
+      actionName: 'GET'
     },
-    forceFetch:true
+    forceFetch: true
   })
 
   const id = result.data.fetchAddressBookInfo;

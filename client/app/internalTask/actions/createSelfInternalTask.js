@@ -5,8 +5,8 @@
  * JavaScript XML file createSelfInternalTask.js
  * *************************************************************** */
 
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function createSelfInternalTask(selfInternalTask) {
   const result = await appClient.mutate({
@@ -20,7 +20,7 @@ export async function createSelfInternalTask(selfInternalTask) {
       }
     `,
     variables: {
-      selfInternalTask:selfInternalTask
+      selfInternalTask
     },
     forceFetch: true
   });

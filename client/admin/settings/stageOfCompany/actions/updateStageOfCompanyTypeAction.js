@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function updateStageOfCompanyTypeActionHandler(StageOfCompanyType) {
-  let _id=StageOfCompanyType.id;
-  let stageOfCompanyName = StageOfCompanyType.stageOfCompanyName;
-  let stageOfCompanyDisplayName = StageOfCompanyType.stageOfCompanyDisplayName;
-  let about = StageOfCompanyType.about;
-  let isActive = StageOfCompanyType.isActive
+  const _id = StageOfCompanyType.id;
+  const stageOfCompanyName = StageOfCompanyType.stageOfCompanyName;
+  const stageOfCompanyDisplayName = StageOfCompanyType.stageOfCompanyDisplayName;
+  const about = StageOfCompanyType.about;
+  const isActive = StageOfCompanyType.isActive
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$stageOfCompanyName: String, $stageOfCompanyDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,8 +31,8 @@ export async function updateStageOfCompanyTypeActionHandler(StageOfCompanyType) 
       stageOfCompanyDisplayName,
       about,
       isActive,
-      moduleName:"STAGEOFCOMPANY",
-      actionName:"UPDATE"
+      moduleName: 'STAGEOFCOMPANY',
+      actionName: 'UPDATE'
     }
   })
   const id = result.data.UpdateStageOfCompany;

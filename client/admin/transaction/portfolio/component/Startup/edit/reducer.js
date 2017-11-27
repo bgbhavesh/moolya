@@ -1,5 +1,5 @@
 const initialState = {
-  privateKeys: [],
+  privateKeys: []
 };
 
 function mlStartupEditTemplateReducer(state = initialState, action) {

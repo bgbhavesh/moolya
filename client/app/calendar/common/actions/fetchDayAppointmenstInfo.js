@@ -3,9 +3,9 @@
  */
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../core/appConnection';
+import { appClient } from '../../../core/appConnection';
 
-export async function fetctOfficeDayAppointmentActionHandler (userId, profile, day, month, year) {
+export async function fetctOfficeDayAppointmentActionHandler(userId, profile, day, month, year) {
   const result = await appClient.query({
     query: gql`
     query($userId: String, $profileId: String!, $day: Int, $month: Int, $year: Int) { 
@@ -24,13 +24,13 @@ export async function fetctOfficeDayAppointmentActionHandler (userId, profile, d
     }
     `,
     variables: {
-      userId: userId,
+      userId,
       profileId: profile,
-      day: day,
-      month: month,
-      year: year
+      day,
+      month,
+      year
     },
-    forceFetch:true
+    forceFetch: true
   });
   const myCalendar = result.data.fetchMyAppointment;
   return myCalendar;

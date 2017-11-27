@@ -4,15 +4,15 @@
 /**
  * import of libs
  * */
-import gql from "graphql-tag";
-import {client} from "../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../core/apolloConnection';
 
 /**
  * @export of getting registration data with external user profile from users
  * this can be merged with the export of [registration action handler]
  * */
 export async function findUserRegistrationActionHandler(registrationId) {
-  let regId = registrationId
+  const regId = registrationId
   const result = await client.query({
     query: gql`
    query($registrationId: String){  
@@ -204,7 +204,7 @@ export async function findUserPortfolioActionHandler(registrationId) {
 
 export async function fetchIdeaActionHandler(portfolioId) {
   const result = await client.query({
-    query: gql `
+    query: gql`
             query($portfolioId:String){
                 fetchIdeas(portfolioId:$portfolioId) {
                     _id
@@ -219,7 +219,7 @@ export async function fetchIdeaActionHandler(portfolioId) {
             }
         `,
     variables: {
-      portfolioId: portfolioId
+      portfolioId
     },
     forceFetch: true
   })

@@ -1,6 +1,6 @@
 
 import gql from 'graphql-tag'
-import {appClient} from '../../../app/core/appConnection';
+import { appClient } from '../../../app/core/appConnection';
 import mlConversationUtils from '../../../commons/conversations/utils/mlconversationUtils'
 
 export async function fetchUserDetailsHandler() {
@@ -29,7 +29,7 @@ export async function fetchUserDetailsHandler() {
         }
       }
         `,
-    forceFetch:true
+    forceFetch: true
   })
 
   const user = result.data.findRegistrationInfoForUser;
@@ -52,7 +52,7 @@ export async function fetchPortfolioDetails() {
         }
       }
         `,
-    forceFetch:true
+    forceFetch: true
   })
 
   const user = result.data.fetchPortfolioDetailsByUserId;
@@ -60,7 +60,7 @@ export async function fetchPortfolioDetails() {
 }
 
 export async function requestPortfolioForGoLive(resId) {
-  let portfoliodetailsId  = resId
+  const portfoliodetailsId = resId
   const result = await appClient.mutate({
     mutation: gql`
             mutation  ($portfoliodetailsId: String, ){
@@ -107,10 +107,9 @@ export async function findDefaultProfile() {
 export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)
   mlConversationUtils.getNotifications(cb)
-  //mlConversationUtils.ackNotification(payload, cb)
+  // mlConversationUtils.ackNotification(payload, cb)
 }
 
 export function getNotificationsCounter(cb) {
   mlConversationUtils.getNotificationsCounter(cb)
-
 }

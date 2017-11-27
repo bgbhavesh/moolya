@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
-export async function fetchSharedCalendarDetails (sharedId) {
+export async function fetchSharedCalendarDetails(sharedId) {
   const result = await client.query({
     query: gql`
 query ($sharedId: String) {

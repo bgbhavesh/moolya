@@ -2,7 +2,7 @@
  * Created by venkatsrinag on 28/7/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import omitDeep from 'omit-deep-lodash';
 
 // export async function fetchCommunitiesHandler() {
@@ -30,7 +30,7 @@ import omitDeep from 'omit-deep-lodash';
 
 export async function createOfficePackageHandler(officePackage) {
   const result = await client.mutate({
-    mutation : gql`
+    mutation: gql`
        mutation($package:officePackage)  {
           data: createOfficePackage(package:$package) {
             success,
@@ -39,8 +39,8 @@ export async function createOfficePackageHandler(officePackage) {
           }
        }
     `,
-    variables:{
-      package:officePackage
+    variables: {
+      package: officePackage
     }
   })
 
@@ -50,7 +50,7 @@ export async function createOfficePackageHandler(officePackage) {
 
 export async function updateOfficePackageHandler(officePackageId, officePackage) {
   const result = await client.mutate({
-    mutation : gql`
+    mutation: gql`
        mutation($package:officePackage, $packageId:String)  {
           data: updateOfficePackage(package:$package, packageId:$packageId) {
             success,
@@ -59,9 +59,9 @@ export async function updateOfficePackageHandler(officePackageId, officePackage)
           }
        }
     `,
-    variables:{
-      packageId:officePackageId,
-      package:officePackage
+    variables: {
+      packageId: officePackageId,
+      package: officePackage
     }
   })
 
@@ -72,7 +72,7 @@ export async function updateOfficePackageHandler(officePackageId, officePackage)
 
 export async function fetchOfficePackageHandler(officeId) {
   const result = await client.query({
-    query : gql`
+    query: gql`
        query($officePackageId:String){
           fetchOfficePackageById(officePackageId:$officePackageId){
               serviceCardName,
@@ -110,13 +110,13 @@ export async function fetchOfficePackageHandler(officeId) {
           }
        }
     `,
-    variables:{
-      officePackageId:officeId
+    variables: {
+      officePackageId: officeId
     },
-    forceFetch:true
+    forceFetch: true
   })
 
-  var communities = result.data.fetchOfficePackageById;
+  let communities = result.data.fetchOfficePackageById;
   communities = omitDeep(communities, '__typename')
   return communities;
 }

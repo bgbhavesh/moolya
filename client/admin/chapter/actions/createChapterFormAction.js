@@ -1,16 +1,16 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import { client } from '../../core/apolloConnection';
 
 export async function createChapterActionHandler(chapterDetails) {
-  let clusterId = chapterDetails.clusterName;
-  let chapterName = chapterDetails.chapterName;
-  let diplayName = chapterDetails.displayName;
-  let about = chapterDetails.about;
-  let link = chapterDetails.chapterImage;
-  let state = chapterDetails.state;
-  let email = chapterDetails.email;
-  let showOnMap = chapterDetails.ismapShow;
-  let isActive = chapterDetails.status
+  const clusterId = chapterDetails.clusterName;
+  const chapterName = chapterDetails.chapterName;
+  const diplayName = chapterDetails.displayName;
+  const about = chapterDetails.about;
+  const link = chapterDetails.chapterImage;
+  const state = chapterDetails.state;
+  const email = chapterDetails.email;
+  const showOnMap = chapterDetails.ismapShow;
+  const isActive = chapterDetails.status
   const result = await client.mutate({
     mutation: gql`
     mutation createChapter ($clusterId:String,$chapterName:String,$diplayName:String,$about:String,$link:String,$state: String,$email:String,$showOnMap:Boolean,$isActive:Boolean) {

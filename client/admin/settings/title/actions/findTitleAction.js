@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findTitleActionHandler(TitleId) {
-  let did=TitleId
+  const did = TitleId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -18,14 +18,16 @@ export async function findTitleActionHandler(TitleId) {
       }
     `,
     variables: {
-      id:did
+      id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
-  const masterSetting= result.data.findMasterSetting||{};
-  const {titleName,aboutTitle,titleDisplayName}=masterSetting.titleInfo||{};
-  if(result){
-    return {isActive:masterSetting.isActive,titleName,aboutTitle,titleDisplayName};
+  const masterSetting = result.data.findMasterSetting || {};
+  const { titleName, aboutTitle, titleDisplayName } = masterSetting.titleInfo || {};
+  if (result) {
+    return {
+      isActive: masterSetting.isActive, titleName, aboutTitle, titleDisplayName
+    };
   }
   return {};
 }

@@ -13,7 +13,7 @@ export async function fetchAppAppointmentByTransactionId(transactionId) {
       }
     `,
     variables: {
-      transactionId: transactionId
+      transactionId
     }
   });
   const id = result.data.fetchAppAppointmentByTransactionId;

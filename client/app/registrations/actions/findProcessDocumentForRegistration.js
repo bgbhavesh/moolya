@@ -1,17 +1,17 @@
-import gql from "graphql-tag";
-import {appClient} from "../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export async function findProcessDocumentForRegistrationActionHandler(countryIdInfo, clusterIdInfo, chapterInfo, subchapterInfo, communityTypeInfo, userTypeInfo, identityTypeInfo, professionInfo, industryInfo, emailInfo) {
-  let countryId = countryIdInfo
-  let clusterId = clusterIdInfo
-  let userType = userTypeInfo
-  let communityType = communityTypeInfo
-  let chapterId = chapterInfo
-  let subChapterId = subchapterInfo
-  let identityType = identityTypeInfo
-  let profession = professionInfo
-  let industry = industryInfo
-  let email = emailInfo
+  const countryId = countryIdInfo
+  const clusterId = clusterIdInfo
+  const userType = userTypeInfo
+  const communityType = communityTypeInfo
+  const chapterId = chapterInfo
+  const subChapterId = subchapterInfo
+  const identityType = identityTypeInfo
+  const profession = professionInfo
+  const industry = industryInfo
+  const email = emailInfo
   const result = await appClient.query({
     query: gql`
      query($countryId: String,$clusterId: String,$chapterId:String,$subChapterId:String, $userType: String, $communityType: String,$identityType: String,$profession:String,$industry:String, $email:String ){

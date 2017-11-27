@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 import _ from 'lodash'
 
 export async function fetchProcessSetupHandler(processTransactionId) {
@@ -21,22 +21,22 @@ export async function fetchProcessSetupHandler(processTransactionId) {
           }
       `,
     variables: {
-      processTransactionId: processTransactionId
+      processTransactionId
     },
     forceFetch: true
   })
-  var stages = result.data.fetchProcessSetup;
-  var ary = [];
-  _.each(stages.processSteps, function (item, say) {
-    let value = _.omit(item, '__typename')
-    let minAry = []
-    _.each(value.stageActions, function (valueThis, key) {
-      let actionRm = _.omit(valueThis, '__typename')
+  const stages = result.data.fetchProcessSetup;
+  const ary = [];
+  _.each(stages.processSteps, (item, say) => {
+    const value = _.omit(item, '__typename')
+    const minAry = []
+    _.each(value.stageActions, (valueThis, key) => {
+      const actionRm = _.omit(valueThis, '__typename')
       minAry.push(actionRm)
     })
-    value.stageActions= minAry
+    value.stageActions = minAry
     ary.push(value)
   })
-  var data = {processSteps:ary}
+  const data = { processSteps: ary }
   return data
 }

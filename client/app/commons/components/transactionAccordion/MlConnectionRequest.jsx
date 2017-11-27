@@ -34,7 +34,7 @@ export default class MlConnectionRequest extends Component{
   async acceptConnectionHandler(){
     var response=await acceptConnectionActionHandler({'connectionId':this.state.connectionId});
     if(response){
-      toastr.success("connection accepted");
+      toastr.success(response.result);
       await this.fetchConnectionDetails();
     }else{
       toastr.error("Failed to accept the connect request");
@@ -44,7 +44,7 @@ export default class MlConnectionRequest extends Component{
   async rejectConnectionHandler(){
     var response=await rejectConnectionActionHandler({'connectionId':this.state.connectionId});
     if(response){
-      toastr.success("connection rejected");
+      toastr.success(response.result);
       await this.fetchConnectionDetails();
     }else{
       toastr.error("Failed to reject the connection");

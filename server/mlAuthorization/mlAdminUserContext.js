@@ -248,7 +248,7 @@ class MlAdminUserContext
     var clusterId = userSubChapter.clusterId
     var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
     var relatedSubChapterIds = [];
-    var relatedChapterId = [];
+    var relatedChapterIds = [];
     if(!isDefaultSubChapter){
       var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
       if(relatedSubChapters&&relatedSubChapters.length>0){
@@ -258,21 +258,22 @@ class MlAdminUserContext
         })
         relatedSubChapterIds = _.uniq(relatedSubChapterIds);
 
-        var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}, clusterId:clusterId}).fetch()
-        var relatedChapterId = _.map(relatedSC, "chapterId");
-        relatedChapterId = _.uniq(relatedChapterId);
+        var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}, clusterId:clusterId, isActive:true}).fetch()
+        relatedSubChapterIds = _.map(relatedSC, "_id");
+        var relatedChapterIds = _.map(relatedSC, "chapterId");
+        var relatedC = mlDBController.find('MlChapters', {_id:{$in:relatedChapterIds}, isActive:true}).fetch()
+        relatedChapterIds = _.map(relatedC, "_id");
       }
 
     }else{
-      let sc = mlDBController.find('MlSubChapters', {$or:[{isActive:true, "moolyaSubChapterAccess.externalUser.canSearch":true},{isActive:true, isDefaultSubChapter:true}]}).fetch()
-      let scIds = _.map(sc, "_id");
-      relatedSubChapterIds = scIds;
+      relatedSubChapterIds = [userSubChapterId];
+      relatedChapterIds = [userSubChapter.chapterId];
     }
     return{
       userSubChapter:userSubChapter,
       isDefaultSubChapter:isDefaultSubChapter,
       relatedSubChapterIds:relatedSubChapterIds,
-      relatedChapterIds:relatedChapterId,
+      relatedChapterIds:relatedChapterIds,
       clusterId:clusterId
     }
   }

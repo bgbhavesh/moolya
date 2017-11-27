@@ -9,7 +9,9 @@ import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+import { fetchCurrencyTypeActionHandler } from '../../../../commons/actions/mlCurrencySymbolHandler'
 var Select = require('react-select');
+import {client} from '../../../core/apolloConnection';
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -28,7 +30,7 @@ export default class MlOfficeItem extends React.Component {
       tax:false,
       about:'',
       isGenerateLinkDisable: false,
-      duration : ' '
+      duration : ' ', currencySymbol:""
     }
     this.getTransaction.bind(this);
     this.initializeSwiper.bind(this);
@@ -58,6 +60,12 @@ export default class MlOfficeItem extends React.Component {
     this.initializeSwiper();
   }
 
+  async getCurrencyType() {
+    const response = await fetchCurrencyTypeActionHandler(client, this.props.data.userId, null, this.props.data.profileId);
+    this.setState({currencySymbol: response.symbol})
+    return response;
+  }
+
   initializeSwiper(){
     const transId = this.state.transId;
       setTimeout(function () {
@@ -72,6 +80,7 @@ export default class MlOfficeItem extends React.Component {
   };
 
   async componentWillMount() {
+    this.getCurrencyType();
     this.loggedUserDetails = getAdminUserContext();                                      /*getting user context*/
     await this.getTransaction(this.state.transId);
   }
@@ -363,7 +372,7 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" defaultValue="Rs 25,000" className="form-control float-label" />
+                  <input type="text" placeholder="Total amount paid" defaultValue={`${this.state.currencySymbol} 25,000`}  value={`${this.state.currencySymbol} 25,000`} className="form-control float-label" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" />

@@ -74,7 +74,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
-    this.getServiceDetails();    
+    this.getServiceDetails();
   }
 
   /**
@@ -293,8 +293,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
           <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
             <div className="panel panel-default">
               <MlServiceManageSchedule data={this.state.data}
-                                       profileId={this.profileId}
-                                       serviceId={this.serviceId} />
+                                       profileId={this.profileId} userId={this.props.data.userId}
+                                       serviceId={this.serviceId}/>
             </div>
           </div>
           <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>

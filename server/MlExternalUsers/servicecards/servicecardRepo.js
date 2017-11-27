@@ -79,7 +79,11 @@ class MlServiceCardRepo{
             var userExternalProfile = new MlUserContext().userProfileDetailsByProfileId(service.profileId);
             if (userExternalProfile) {
               userDetails.forEach((field) => {
-                serviceCard[field] = userExternalProfile[field] || null;
+                if( field == 'communityCode' ){
+                  serviceCard[field] = userExternalProfile.communityDefCode || null;
+                } else {
+                  serviceCard[field] = userExternalProfile[field] || null;
+                }
               });
             }
             result = mlDBController.insert('MlServiceCardDefinition' , serviceCard, context)

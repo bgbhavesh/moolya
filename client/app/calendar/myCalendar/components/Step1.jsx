@@ -375,7 +375,7 @@ this.bookDetails(data)
                 {/*</div>*/}
                 <div className="pull-right">
                   <div className="ml_btn large_btn">
-                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
+                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount {this.props.serviceBasicInfo.payment && this.props.serviceBasicInfo.payment.currencyType ? this.props.serviceBasicInfo.payment.currencyType: "Rs."}{this.props.serviceBasicInfo.totalAmount}/-</a>
                   </div>
                 </div>
                 <br className="brclear"/><br className="brclear"/>

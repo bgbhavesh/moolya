@@ -424,6 +424,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                   registrationData.emailId = regRecord.registrationInfo.userName;
                   registrationData.industry = regRecord.registrationInfo.industry;
                   registrationData.profession = regRecord.registrationInfo.profession;
+                  registrationData.profileImage = regRecord.registrationInfo.profileImage;
                   let resp = MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
                   if(!resp.success){
                     return resp;

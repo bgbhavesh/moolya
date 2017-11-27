@@ -692,7 +692,7 @@ class MlAppServiceManageSchedule extends Component {
             isError = true;
             return false;
           }
-          sessions.push({ id: session.sessionId, sequence: (session.sequence || seqData) })
+          sessions.push({ id: session.sessionId, sequence: (session.sequence || seqData), isOffline: session.isOffline || false })
         });
         if (isError) {
           toastr.error('Session sequence is required');

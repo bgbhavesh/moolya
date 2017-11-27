@@ -72,6 +72,7 @@ let service=`
   type ServiceTaskSessions {
     id : String
     sequence: String 
+    isOffline: Boolean
   }
   
   type ServiceTask {
@@ -295,6 +296,7 @@ let service=`
   input serviceTaskSessions {
     id : String
     sequence: String 
+    isOffline: Boolean
   }
   
   input serviceTask {

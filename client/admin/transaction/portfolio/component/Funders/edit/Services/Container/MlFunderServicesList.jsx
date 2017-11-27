@@ -35,6 +35,7 @@ export default class  MlFunderServicesList extends Component {
 
   async getServiceDetails(){
     const response  =  await fetchServicesActionHandler(this.props.portfolioDetailsId)
+    console.log('serviceDetails',response)
     this.setState({services:response})
     return response
   }

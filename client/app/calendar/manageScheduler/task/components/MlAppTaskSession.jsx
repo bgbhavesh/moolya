@@ -38,7 +38,7 @@ export default class MlAppTaskSession extends Component {
     var response = await findTaskActionHandler(taskId);
     if (response) {
       let userSession = _.range(response ? response.noOfSession : 0);
-      console.log(userSession);
+      console.log(userSession, response);
       let sessionData = [];
       _.each(userSession, function (item, value) {
         sessionData.push({
@@ -57,7 +57,7 @@ export default class MlAppTaskSession extends Component {
           let sessionEditData = _.cloneDeep(response.session);
           sessionEditData.forEach((session, index) => {
             if (session.activities && session.activities.length) {
-              sessionEditData[index].isOffline = this.isOfflineSession(session.activities);
+              sessionEditData[index].isOffline =  sessionEditData[index].isOffline ? sessionEditData[index].isOffline : false; //this.isOfflineSession(session.activities);
             } else {
               sessionEditData[index].isOffline = false;
             }

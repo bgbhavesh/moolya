@@ -21,10 +21,7 @@ export default class MlAudienceView extends Component{
       loading: true,
       data:{},
       privateKey:{}
-    }
-    // this.onClick.bind(this);
-    // this.handleBlur.bind(this);
-    // this.onAudienceImageFileUpload.bind(this)
+    };
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
     this.initalizeAnnotaor.bind(this);

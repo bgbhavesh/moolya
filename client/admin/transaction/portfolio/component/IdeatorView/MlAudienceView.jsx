@@ -1,21 +1,20 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+import _ from 'lodash'
+import RichTextEditor from 'react-rte';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import _ from 'lodash'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
+var FontAwesome = require('react-fontawesome');
+// import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 
 
-export default class MlIdeatorAudience extends React.Component{
+export default class MlAudienceView extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -23,9 +22,9 @@ export default class MlIdeatorAudience extends React.Component{
       data:{},
       privateKey:{}
     }
-    this.onClick.bind(this);
-    this.handleBlur.bind(this);
-    this.onAudienceImageFileUpload.bind(this)
+    // this.onClick.bind(this);
+    // this.handleBlur.bind(this);
+    // this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -44,11 +43,6 @@ export default class MlIdeatorAudience extends React.Component{
     // OnLockSwitch();
     // dataVisibilityHandler();
     initalizeFloatLabel();
-  }
-
-  componentDidMount(){
-    // OnLockSwitch();
-    // dataVisibilityHandler();
   }
 
   initalizeAnnotaor() {
@@ -124,73 +118,75 @@ export default class MlIdeatorAudience extends React.Component{
     }
   }
 
-  onClick(fieldName, field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    var isPrivate = false;
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
-      isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
-    }
+  // onClick(fieldName, field, e){
+  //   let details = this.state.data||{};
+  //   let key = e.target.id;
+  //   details=_.omit(details,[key]);
+  //   var isPrivate = false;
+  //   let className = e.target.className;
+  //   if(className.indexOf("fa-lock") != -1){
+  //     details=_.extend(details,{[key]:true});
+  //     isPrivate = true;
+  //   }else{
+  //     details=_.extend(details,{[key]:false});
+  //   }
+  //
+  //   var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+  //   this.setState({privateKey:privateKey})
+  //   this.setState({data:details}, function () {
+  //     this.sendDataToParent()
+  //   })
+  // }
+  // handleBlur(e){
+  //   let details =this.state.data;
+  //   let name  = e.target.name;
+  //   details=_.omit(details,[name]);
+  //   details=_.extend(details,{[name]:e.target.value});
+  //   this.setState({data:details}, function () {
+  //     this.sendDataToParent()
+  //   })
+  // }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })
-  }
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })
-  }
-
-  sendDataToParent(){
-    let data = this.state.data;
-    data = _.omit(data, 'audienceImages')
-    for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
-        delete data[propName];
-      }
-    }
-    data=_.omit(data,["privateFields"]);
-
-    this.props.getAudience(data, this.state.privateKey)
-  }
+  // sendDataToParent(){
+  //   let data = this.state.data;
+  //   data = _.omit(data, 'audienceImages')
+  //   for (var propName in data) {
+  //     if (data[propName] === null || data[propName] === undefined) {
+  //       delete data[propName];
+  //     }
+  //   }
+  //   data=_.omit(data,["privateFields"]);
+  //
+  //   this.props.getAudience(data, this.state.privateKey)
+  // }
   async fetchPortfolioInfo() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
-    if(empty){
-      const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
-      if (response) {
-        this.setState({loading: false, data: response});
-          _.each(response.privateFields, function (pf) {
-              $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-          })
-      }
-    }else{
-      this.fetchOnlyImages();
-      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
+    let portfoliodetailsId = that.props.portfolioDetailsId;
+    const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
+    if (response) {
+      const editorValue = this._createValueFromString(response.audienceDescription);
+      this.setState({loading: false, data: response, editorValue: editorValue});
+      _.each(response.privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }
   }
-  onAudienceImageFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+
+  _createValueFromString(string) {
+    if (string)
+      return RichTextEditor.createValueFromString(string, 'html');
+    else
+      return RichTextEditor.createEmptyValue();
   }
+  // onAudienceImageFileUpload(e){
+  //   if(e.target.files[0].length ==  0)
+  //     return;
+  //   let file = e.target.files[0];
+  //   let name = e.target.name;
+  //   let fileName = e.target.files[0].name;
+  //   let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
+  //   let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  // }
 
   async fetchOnlyImages(){
     const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
@@ -201,14 +197,14 @@ export default class MlIdeatorAudience extends React.Component{
     }
   }
 
-  onFileUploadCallBack(name,fileName, resp){
-    if(resp){
-      let result = JSON.parse(resp)
-      if(result.success){
-        this.fetchOnlyImages();
-      }
-    }
-  }
+  // onFileUploadCallBack(name,fileName, resp){
+  //   if(resp){
+  //     let result = JSON.parse(resp)
+  //     if(result.success){
+  //       this.fetchOnlyImages();
+  //     }
+  //   }
+  // }
 
   render(){
     const showLoader = this.state.loading;
@@ -236,7 +232,14 @@ export default class MlIdeatorAudience extends React.Component{
                                     <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" />
                                 </div>
                                 <div className="panel-body">
-                                  {loading === true ? ( <MlLoader/>) : (<p>{description?description:(<NoData tabName={this.props.tabName}/>)}</p>)}
+                                  {/*{loading === true ? ( <MlLoader/>) : (<div>{description?description:(<NoData tabName={this.props.tabName}/>)}</div>)}*/}
+                                  {loading === true ? ( <MlLoader/>) : (<div>{description ? <RichTextEditor
+                                    value={this.state.editorValue}
+                                    // onChange={this.handleBlur}
+                                    autoFocus={true}
+                                    readOnly={true}
+                                    placeholder="Describe..."
+                                  /> : (<NoData tabName={this.props.tabName}/>)}</div>)}
                                 </div>
                             </div>
                         </div>
@@ -246,9 +249,6 @@ export default class MlIdeatorAudience extends React.Component{
       </div>
     )
   }
-};
-MlIdeatorAudience.contextTypes = {
-  ideatorPortfolio: PropTypes.object,
 };
 
 

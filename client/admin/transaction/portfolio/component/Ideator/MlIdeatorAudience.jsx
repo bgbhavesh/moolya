@@ -1,27 +1,44 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash';
+import RichTextEditor from 'react-rte';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import Confirm from '../../../../../commons/utils/confirm';
 
-export default class MlIdeatorAudience extends React.Component{
+const toolbarConfig = {
+  display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+  INLINE_STYLE_BUTTONS: [
+    {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+    {label: 'Italic', style: 'ITALIC'},
+    {label: 'Underline', style: 'UNDERLINE'}
+  ],
+  BLOCK_TYPE_DROPDOWN: [
+    {label: 'Normal', style: 'unstyled'},
+    {label: 'Heading Large', style: 'header-one'}
+  ],
+  BLOCK_TYPE_BUTTONS: [
+    {label: 'UL', style: 'unordered-list-item'},
+    {label: 'OL', style: 'ordered-list-item'}
+  ]
+};
+
+export default class MlIdeatorAudience extends Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: true,
       data:{},
       privateKey:{},
-      privateValues:[]
+      privateValues:[],
+      editorValue:RichTextEditor.createEmptyValue()
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
@@ -62,12 +79,16 @@ export default class MlIdeatorAudience extends React.Component{
     })
 
   }
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
+  handleBlur(value){
+    let details = this.state.data;
+    // let name  = e.target.name;
+    let name  = "audienceDescription";
     details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    details = _.extend(details, {[name]: value.toString('html')});
+    // this.setState({richValue, htmlValue: richValue.toString('html')}, () => {
+    //   this.props.onChange(this.state.htmlValue);
+    // });
+    this.setState({data:details, editorValue:value}, function () {
       this.sendDataToParent()
     })
   }
@@ -80,23 +101,25 @@ export default class MlIdeatorAudience extends React.Component{
         delete data[propName];
       }
     }
-
     data=_.omit(data,["privateFields"]);
     this.props.getAudience(data, this.state.privateKey)
   }
+
   async fetchPortfolioInfo() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
     if(empty && response){
-        this.setState({loading: false, data: response});
+      const editorValue = this._createValueFromString(response.audienceDescription);
+      this.setState({loading: false, data: response, editorValue: editorValue});
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }else{
       this.fetchOnlyImages();
-      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
+      const editorValue = this._createValueFromString(that.context.ideatorPortfolio.audience.audienceDescription);
+      this.setState({loading: true, data: that.context.ideatorPortfolio.audience, editorValue: editorValue});
     }
   }
 
@@ -156,6 +179,13 @@ export default class MlIdeatorAudience extends React.Component{
     }
   }
 
+  _createValueFromString(string) {
+    if (string)
+      return RichTextEditor.createValueFromString(string, 'html');
+    else
+      return RichTextEditor.createEmptyValue();
+  }
+
   async libraryAction(file) {
     console.log(this.props.client)
     let portfolioDetailsId = this.props.portfolioDetailsId;
@@ -187,7 +217,7 @@ export default class MlIdeatorAudience extends React.Component{
         </div>
       )
     });
-    let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
+    let description = this.state.data.audienceDescription ? this.state.data.audienceDescription : this.state.editorValue;
     let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
       <div>
@@ -203,7 +233,15 @@ export default class MlIdeatorAudience extends React.Component{
               </div>
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>                </div>
+                  <RichTextEditor
+                    value={this.state.editorValue}
+                    onChange={this.handleBlur}
+                    autoFocus={true}
+                    placeholder="Describe..."
+                    toolbarConfig={toolbarConfig}
+                  />
+                  {/*<textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>*/}
+                </div>
               </div>
             </div>
             <div className="panel panel-default">

@@ -6,7 +6,10 @@ import StarRatings from '../../../commons/components/StarRatings';
 import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../../commons/components/loader/loader'
 
-
+/**
+ * Note: This file seems to be used no where
+ * need to check the dependency and remmove it
+* */
 export default class MlCustomActionButtons extends React.Component {
 
   constructor(props) {

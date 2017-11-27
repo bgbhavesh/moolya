@@ -82,8 +82,15 @@ export default class FunderAboutView extends React.Component{
       paymentMethod:"",
       currencyCode:""
     }
-    this.paymentDetails(paymentDetails)
-    this.getServiceProviderDetails()
+    this.paymentDetails(paymentDetails);
+    let tasks = this.props.serviceDetails.tasks ? _.cloneDeep(this.props.serviceDetails.tasks) : [];
+    let task = tasks && tasks.length ? tasks.sort( ( a, b) => { return a.sequence-b.sequence } )[0] : null ;
+    let session = task && task.sessions && task.sessions.length ? task.sessions.sort( (a, b) => { return a.sequence-b.sequence })[0] : null ;
+    if( task && session && session.isOffline !== true ) {
+      this.getServiceProviderDetails()
+    } else {
+      this.props.componentToView('landingPage');
+    }
   }
   async getServiceProviderDetails(){
     let portfolioId = FlowRouter.getParam('portfolioId');
@@ -181,6 +188,7 @@ export default class FunderAboutView extends React.Component{
   render(){
     let tasks = this.state.tasks || []
     let that = this;
+    console.log('serviceDetails',that.props.serviceDetails);
     let totalTasks = tasks.map(function(task, id){
       return(
         <div>

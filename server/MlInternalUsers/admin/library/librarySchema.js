@@ -79,7 +79,7 @@ let librarySchema = `
       updateLibraryData(files: privateData): response
       putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
       updateLibrary(id: String,files:libraryInput): response
-      createLibrary(detailsInput:libraryInput):response
+      createLibrary(detailsInput:libraryInput, portfolioDetailsId: String):response
       updatePrivacyDetails(privateInput:privacyInfo): response
  }
 

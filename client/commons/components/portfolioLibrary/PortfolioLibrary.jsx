@@ -686,7 +686,8 @@ class Library extends React.Component {
       libraryType: dataType,
       inCentralLibrary: addToCentralLibrary,
     }
-    const resp = await createLibrary(Details, this.props.client)
+    let portfolioDetailsId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : null;
+    const resp = await createLibrary(portfolioDetailsId, Details, this.props.client)
     this.refetchData();
     this.getCentralLibrary();
     return resp;

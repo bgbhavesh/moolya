@@ -12,6 +12,7 @@ export async function findProcessSetupActionHandler() {
         processTransactionId
           processSteps{
             stageId
+            stage
             stageName
             stageActions{
               actionId

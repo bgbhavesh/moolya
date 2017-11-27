@@ -96,11 +96,12 @@ class MlAppServiceSelectTask extends Component{
     let { session } = this.props.serviceTask.selectedTaskDetails;
     const { updateSessionSequence } = this.props;
     const sessionsList = session ? session.map((data, index) => {
+      console.log('sessionsList', data);
       if(data) {
         return(
           <div className="panel panel-info" key={index}>
             <div className="panel-heading">
-              <div className="col-md-2 nopadding-left">Session {index+1}</div>
+              <div className="col-md-2 nopadding-left">Session {index+1} {data.isOffline ? '(Offline)' : ''}</div>
               <div className="col-md-4">
                 <div  style={{'marginTop':'-4px'}}>
                   <label>Duration: &nbsp;

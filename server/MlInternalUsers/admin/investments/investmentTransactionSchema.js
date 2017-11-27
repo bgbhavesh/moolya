@@ -134,6 +134,7 @@ let investments = `
     type ProcessSteps{
         stageId:String,
         stageName : String
+        stage : String
         stageActions:[StageActions]
         isActive:Boolean
     }

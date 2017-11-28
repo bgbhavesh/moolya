@@ -81,6 +81,7 @@ let transactionsSchema = `
       subChapterName            : String
       communityName             : String
       docId                     : String
+      transactionId             : String
     }
     
     input userAgentInput{

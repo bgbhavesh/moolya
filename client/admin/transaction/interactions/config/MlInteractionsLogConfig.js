@@ -68,6 +68,7 @@ const mlInteractionsLogTableConfig=new MlViewer.View({
                         communityId  
                         communityName
                         transactionTypeId
+                        transactionId
                       }
                     }
               }

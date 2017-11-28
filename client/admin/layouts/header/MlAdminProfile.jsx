@@ -62,6 +62,8 @@ class  MlAdminProfileApp extends Component {
   }
   handleClick(){
     const userDefaultObj = getAdminUserContext();
+    localStorage.setItem('top','');
+    localStorage.setItem('transaction','');
     if (userDefaultObj.hierarchyCode == 'PLATFORM')
       FlowRouter.go('/admin/dashboard/clusters');
     else

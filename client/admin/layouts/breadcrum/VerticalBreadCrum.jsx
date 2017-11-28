@@ -8,14 +8,27 @@ import { findStepTemplatesAssignmentActionHandler } from '../../templates/action
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
-    this.state = { breadCrumList: [] };
+    this.state = { breadCrumList: [] ,
+      toggle: 1,};
     this.getHierarchyDetails = this.getHierarchyDetails.bind(this);
     this.setBreadCrumHierarchyCallback.bind(this);
     return this;
   }
 
+  renderBreadcrumb() {
+    this.setState({ toggle: !this.state.toggle });
+    this.getHierarchyDetails();
+  }
+
+  onLinkClicked() {
+    this.props.breadcrumbClicked();
+  }
+
   componentDidMount() {
     this._isMounted = true;
+
+    this.context.breadCrum.subscribe(this.renderBreadcrumb.bind(this));
+
     let porfolioId = FlowRouter.getParam('registrationId');
     let backendUserId= FlowRouter.getParam('backendUserId');
     let processId =FlowRouter.getParam('id');
@@ -124,15 +137,27 @@ export default class VerticalBreadCrum extends Component {
             { linkName: properName(breadCrum.module), linkId: breadCrum.type , linkUrl:path.split('portfolio')[0]+'portfolio/requestedPortfolioList'}
           ];
 
-          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
+          let tab = FlowRouter.getQueryParam('tab');
+          let subtab = FlowRouter.getQueryParam('subtab');
+
+          if(!tab && FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
             breadCrumObject.push({
               linkName: properName((FlowRouter._current.oldRoute.path.split('portfolio/')[1]).split('PortfolioList')[0]),linkUrl :FlowRouter._current.oldRoute.path
             });
           }
 
           breadCrumObject.push({
-            linkName:properName(breadCrum.subModule)
+            linkName:properName(breadCrum.subModule),
+            linkUrl:(tab)? path.split('?')[0]:'',
           });
+
+
+          if(tab){
+            breadCrumObject.push({linkName:tab,linkUrl:(subtab)?path.split('&')[0]:''});
+            if(subtab){
+              breadCrumObject.push({linkName:subtab,linkUrl:''});
+            }
+          }
 
           this.setBreadCrumHierarchyCallback(
             breadCrumObject
@@ -227,7 +252,7 @@ export default class VerticalBreadCrum extends Component {
       if (counter === linksLength) {
         lastLinkClass = 'current';
       }
-      return (<li key={id} className={lastLinkClass}><a href={linkUrl}>{name}</a></li>);
+      return (<li key={id} className={lastLinkClass} onClick={ this.onLinkClicked.bind(this)}><a href={linkUrl}>{name}</a></li>);
     });
     if (linksLength > 0) { list.push(<li key={'last'} className='timelineLast'></li>); }
 
@@ -372,4 +397,5 @@ function fixName(name) {
 
 VerticalBreadCrum.contextTypes = {
   menu: React.PropTypes.object,
+  breadCrum: PropTypes.object,
 };

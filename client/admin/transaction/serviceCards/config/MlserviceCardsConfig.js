@@ -42,18 +42,19 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   module:"processSetup",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["createdAt","userId","profileId", "chapterName", "communityId", "status"],
-  searchFields:["createdAt","userId" ,"profileId" , "chapterName", "communityId", "status"],
+  fields:["createdAt","userId","profileId", "chapterName", "communityId", "status","transactionId"],
+  searchFields:["createdAt","userId" ,"profileId" , "chapterName", "communityId", "status","transactionId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
   filterComponent: <MlCustomFilter module="serviceCards" moduleName="serviceCards" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
+    {dataField: "transactionId",title:"Transaction Id",dataSort:true,selectRow:true},
     {dataField: "updatedAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},
     {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "profileId", title: "Profile Id",dataSort:true,selectRow:true},
-    {dataField: "service", title: "Transaction Type",dataSort:true,selectRow:true},
+    //{dataField: "service", title: "Transaction Type",dataSort:true,selectRow:true},
     {dataField: "userDetails.clusterName", title: "Cluster",dataSort:true,selectRow:true,customComponent:function(data){ return <div>{data.data.userDetails.clusterName}</div>}},
     {dataField: "userDetails.chapterName", title: "Scope",dataSort:true,selectRow:true,customComponent:function(data){ return <div>{data.data.userDetails.chapterName}</div>}},
     {dataField: "userDetails.subChapterName", title: "SubChapter",dataSort:true,selectRow:true,customComponent:function(data){ return <div>{data.data.userDetails.subChapterName}</div>}},

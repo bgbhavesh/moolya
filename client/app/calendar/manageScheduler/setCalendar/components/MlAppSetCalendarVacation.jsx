@@ -49,6 +49,9 @@ class MlAppSetCalendarVacation extends Component {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
   }
+  componentWillUpdate() {
+    $('.float-label').jvFloat();
+  }
 
   componentWillReceiveProps(newProps) {
     // console.log('props', newProps);
@@ -309,7 +312,7 @@ class MlAppSetCalendarVacation extends Component {
                 <Datetime dateFormat={false} timeFormat={'HH:mm:ss'}
                           value={vacationData.startTime}
                           onChange={(event) => this.selectTime(event, true)}
-                          inputProps={{ placeholder: 'Start time', className:"form-control float-label",readOnly:true}}/>
+                          inputProps={{ placeholder: 'Start time in HH:mm:ss', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <div className="input_types">
@@ -342,7 +345,7 @@ class MlAppSetCalendarVacation extends Component {
                 <Datetime dateFormat={false} timeFormat={'HH:mm:ss'}
                           value={vacationData.endTime}
                           onChange={(event) => this.selectTime(event, false)}
-                          inputProps={{ placeholder: 'end time', className:"form-control float-label",readOnly:true}}/>
+                          inputProps={{ placeholder: 'end time in HH:mm:ss', className:"form-control float-label",readOnly:true}}/>
               </div>
               <div className="form-group">
                 <div className="input_types">

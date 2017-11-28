@@ -723,7 +723,7 @@ export default class MlFunderPrincipalTeam extends Component {
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Duration" name="duration"
+                            <input type="text" placeholder="Duration in years" name="duration"
                                    defaultValue={this.state.data.duration}
                                    className="form-control float-label" onBlur={this.handleBlur} />
                             <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
@@ -877,7 +877,7 @@ export default class MlFunderPrincipalTeam extends Component {
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Duration" name="duration"
+                            <input type="text" placeholder="Duration in years" name="duration"
                                    defaultValue={this.state.data.duration}
                                    className="form-control float-label" onBlur={this.handleBlur} />
                             <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"

@@ -113,6 +113,8 @@ export const appSection = FlowRouter.group({
 appSection.route('/', {
     triggersEnter: [function(context, redirect) {
         console.log('running /app trigger');
+        localStorage.setItem('top','');
+        localStorage.setItem('transaction','');
         redirect("/app/dashboard/"+ true);
     }]
 })
@@ -129,6 +131,8 @@ appSection.route('/dashboard/:isFirst', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
+    localStorage.setItem('top','');
+    localStorage.setItem('transaction','');
     mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlAppClusterDashboardMapConfig} listConfig={mlAppClusterDashboardListConfig}/>})
     // mount(AppLayout,{appContent:<MlAppDashboard/>})
   }

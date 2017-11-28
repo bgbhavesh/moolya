@@ -95,6 +95,8 @@ export const adminSection = FlowRouter.group({
 adminSection.route('/', {
   triggersEnter: [function(context, redirect) {
     console.log('running /admin trigger');
+    localStorage.setItem('top','');
+    localStorage.setItem('transaction','');
     //todo: route based on context-Internal User or External User
     redirect("/admin/dashboard");
   }]

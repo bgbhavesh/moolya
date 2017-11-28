@@ -32,15 +32,21 @@ export default class MlAdminTemplatesTabView extends Component {
     });
 
     let transaction =localStorage.getItem('transaction');
+    try{
+      if(transaction)
+        transaction = JSON.parse(transaction);
+    }catch(e){
+      transaction = '';
+    }
     if(transaction) {
-      transaction = JSON.parse(transaction);
-      localStorage.setItem('transaction','');
 
-      if(transaction.name === $('.swiping_filters')[0].childNodes[0].innerText){
+      if($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]
+        && $('.swiping_filters')[0].childNodes[0].innerText && transaction.name === $('.swiping_filters')[0].childNodes[0].innerText){
         setTimeout(function () {
           $('.swiping_filters').css("transform",transaction.transaction);
         }, 500);
-      }
+      }else
+        localStorage.setItem('transaction','');
 
     }
   }

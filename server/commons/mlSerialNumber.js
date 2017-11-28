@@ -76,6 +76,36 @@ if (!paymentNumber) {
   MlSerialNumbers.insert({_id: "paymentNumber", seq: 0});
 }
 
+var connectionRequestNumber=MlSerialNumbers.findOne({_id: "connectionRequestNumber"});
+if (!connectionRequestNumber) {
+  MlSerialNumbers.insert({_id: "connectionRequestNumber", seq: 0});
+}
+
+var likesNumber=MlSerialNumbers.findOne({_id: "likesNumber"});
+if (!likesNumber) {
+  MlSerialNumbers.insert({_id: "likesNumber", seq: 0});
+}
+
+var reviewsNumber=MlSerialNumbers.findOne({_id: "reviewsNumber"});
+if (!reviewsNumber) {
+  MlSerialNumbers.insert({_id: "reviewsNumber", seq: 0});
+}
+
+var systemTransactionNumber=MlSerialNumbers.findOne({_id: "systemTransactionNumber"});
+if (!systemTransactionNumber) {
+  MlSerialNumbers.insert({_id: "systemTransactionNumber", seq: 0});
+}
+
+var onBoardTransactionNumber=MlSerialNumbers.findOne({_id: "onBoardTransactionNumber"});
+if (!onBoardTransactionNumber) {
+  MlSerialNumbers.insert({_id: "onBoardTransactionNumber", seq: 0});
+}
+
+var shareLibraryNumber=MlSerialNumbers.findOne({_id: "shareLibraryNumber"});
+if (!shareLibraryNumber) {
+  MlSerialNumbers.insert({_id: "shareLibraryNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -155,6 +185,36 @@ orderNumberGenService = (function(){
     },
     createPaymentId: function (data) {
       data.paymentId = "PY"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"),10);
+    },
+    createConnectionInteractionId: function (data) {
+      var transactionId= "CR"+ FormatUtil.leadingZeros(getNextSequence("connectionRequestNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createLikeInteractionId: function (data) {
+      var transactionId= "LK"+ FormatUtil.leadingZeros(getNextSequence("likesNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createReviewInteractionId: function (data) {
+      var transactionId="RV"+ FormatUtil.leadingZeros(getNextSequence("reviewsNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createSystemTransactionId: function (data) {
+      var transactionId= "SY"+ FormatUtil.leadingZeros(getNextSequence("systemTransactionNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createOnBoardTransactionId: function (data) {
+      var transactionId= "OB"+ FormatUtil.leadingZeros(getNextSequence("onBoardTransactionNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createShareLibraryId:function(data){
+      var transactionId= "SD"+ FormatUtil.leadingZeros(getNextSequence("shareLibraryNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

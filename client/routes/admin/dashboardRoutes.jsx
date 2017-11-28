@@ -29,6 +29,8 @@ import MlPortfolio from '../../admin/transaction/portfolio/component/commons/MlP
 adminSection.route('/dashboard', {
   triggersEnter: [function (context, redirect) {
     const userDefaultObj = getAdminUserContext();
+    localStorage.setItem('top','');
+    localStorage.setItem('transaction','');
     if (userDefaultObj.hierarchyCode == 'PLATFORM')
       redirect('/admin/dashboard/clusters');
     else

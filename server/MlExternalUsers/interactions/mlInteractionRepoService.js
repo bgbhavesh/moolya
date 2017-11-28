@@ -167,7 +167,8 @@ class MlInteractionService{
               'transactionDetails': 'connection request',
               'context': context || {},
               'transactionTypeId': "connectionRequest",
-              'fromUserType': fromUserType
+              'fromUserType': fromUserType,
+              'transactionId':orderNumberGenService.createConnectionInteractionId()
             });
             break;
           case 'like':
@@ -182,7 +183,8 @@ class MlInteractionService{
               'transactionDetails': 'like portfolio',
               'context': context || {},
               'transactionTypeId': "interaction",
-              'fromUserType': fromUserType
+              'fromUserType': fromUserType,
+              'transactionId':orderNumberGenService.createLikeInteractionId()
             });
             break;
           case 'favorite':
@@ -242,7 +244,8 @@ class MlInteractionService{
               'transactionDetails': 'review portfolio',
               'context': context || {},
               'transactionTypeId': "interaction",
-              'fromUserType': fromUserType
+              'fromUserType': fromUserType,
+              'transactionId':orderNumberGenService.createReviewInteractionId()
             });
             break;
           case 'view':

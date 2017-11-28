@@ -135,7 +135,8 @@ class MlTransactionsHandler {
         fromUserId: fromUserContextData.userId || null,
         fromUserName: fromUserContextData.userName || null,
         fromProfileId: fromUserContextData.profileId || null,
-        fromUserType: transactionsParams.fromUserType || 'system'
+        fromUserType: transactionsParams.fromUserType || 'system',
+        transactionId:transactionsParams.transactionId
       }
     //orderNumberGenService.assignTransationRequest(transactionRecord),
       transactionRecord=_.extend(transactionRecord,contextData);

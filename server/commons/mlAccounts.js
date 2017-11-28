@@ -836,7 +836,8 @@ if(details.type =="password") {
     'userId': userId,
     'transactionDetails': transactionDetails,
     'context': context,
-    'transactionTypeId': "system"
+    'transactionTypeId': "system",
+    'transactionId':orderNumberGenService.createSystemTransactionId()
   });
 }else{
 
@@ -848,7 +849,7 @@ Accounts.onLogout(function (details) {
   let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url:details.connection.httpHeaders.host};
   let transactionDetails=`User logged out of application at ${new Date()} `;
   if(details&&details.user){
-    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','transactionTypeId': "system",'userId':userId,'transactionDetails':transactionDetails,'context':context});
+    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','transactionTypeId': "system",'userId':userId,'transactionDetails':transactionDetails,'context':context,'transactionId':orderNumberGenService.createSystemTransactionId()});
   }
 });
 

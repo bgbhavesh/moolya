@@ -52,7 +52,7 @@ const mlCommunityListConfig=new MlViewer.View({
   pagination:true,
   sort:true,
   search:false,
-  viewComponent:<MlCommunityList />,
+  viewComponent:<MlCommunityList userhierarchy={getAdminUserContext().hierarchyLevel}/>,
   queryOptions:true,
   buildQueryOptions:(config)=>
   {

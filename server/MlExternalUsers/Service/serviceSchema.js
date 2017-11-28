@@ -72,6 +72,7 @@ let service=`
   type ServiceTaskSessions {
     id : String
     sequence: String 
+    isOffline: Boolean
   }
   
   type ServiceTask {
@@ -229,6 +230,14 @@ let service=`
     isApproved: Boolean
     userDetails: UserDetails
     finalAmount:Float
+    deviceDetails: deviceInfo
+  }
+  
+  type deviceInfo {
+    deviceName: String
+    ipAddress: String
+    deviceId: String
+    location: String
   }
 
    input serviceFacilitationCharge {
@@ -295,6 +304,7 @@ let service=`
   input serviceTaskSessions {
     id : String
     sequence: String 
+    isOffline: Boolean
   }
   
   input serviceTask {

@@ -16,7 +16,7 @@ class MlOnBoard {
   }
 
 
-  createTransactionRequest(userId, transType, portfolioId, resourceId, fromUserId, fromUserType, context) {
+  createTransactionRequest(userId, transType, portfolioId, resourceId, fromUserId, fromUserType, context,transactionId) {
     try {
       var transactionType = transType;
       switch (transactionType) {
@@ -32,7 +32,8 @@ class MlOnBoard {
             'transactionDetails': 'investments',
             'context': context || {},
             'transactionTypeId': "investments",
-            'fromUserType': fromUserType
+            'fromUserType': fromUserType,
+            'transactionId':transactionId
           });
           break;
 

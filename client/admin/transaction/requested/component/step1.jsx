@@ -376,7 +376,7 @@ export default class step1 extends React.Component{
       //cityId: existingObject.cityId?existingObject.cityId:null,
       registrationType: existingObject.registrationType?existingObject.registrationType:null,
       userName: existingObject.userName?existingObject.userName:null,
-      password: existingObject.password?existingObject.password:null,
+      //password: existingObject.password?existingObject.password:null,
       //accountType: this.state.selectedAccountsType?this.state.selectedAccountsType:"",
       //institutionAssociation: existingObject.institutionAssociation?existingObject.institutionAssociation:null,
       companyname: existingObject.companyname?existingObject.companyname:"",
@@ -402,7 +402,7 @@ export default class step1 extends React.Component{
       //cityId: this.state.selectedCity?this.state.selectedCity:null,
       registrationType: this.state.registrationType?this.state.registrationType:null,
       userName: this.refs.userName.value?this.refs.userName.value:null,
-      password: this.refs.password.value?this.refs.password.value:null,
+      //password: this.refs.password.value?this.refs.password.value:null,
       //accountType: this.state.selectedAccountsType?this.state.selectedAccountsType:"",
       //institutionAssociation: this.state.institutionAssociation?this.state.institutionAssociation:null,
       companyname: this.refs.companyName.value?this.refs.companyName.value: "",
@@ -720,7 +720,7 @@ export default class step1 extends React.Component{
                       <input type="text" placeholder="User Name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
+                      <input type="Password" placeholder="Password" ref="password" defaultValue={"passwordUnSeen"} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       {/*<span className="placeHolder active">Account Type</span>*/}

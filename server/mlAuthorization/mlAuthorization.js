@@ -77,6 +77,9 @@ class MlAuthorization
                       if(moduleName == 'HIERARCHYDEPARTMENTS'){
                         moduleName = 'HIERARCHY';
                       }
+                      if(moduleName == 'INTERACTIONSLOG'){
+                       // moduleName = 'INTERACTION';
+                      }
                       if(moduleName == 'AUDIT_LOG' ||moduleName == "BUG_REPORT")
                           return true
                       isContextSpecSearch = true;
@@ -435,7 +438,7 @@ class MlAuthorization
    * */
   isCanAccessUrl(context, isInternalUserCheck) {
     let res = true;
-    const urlPath = context.url ? context.url : null;
+    const urlPath = context && context.url ? context.url : '';
     const pathCheck = isInternalUserCheck ? urlPath.indexOf('app') : urlPath.indexOf('admin');
     if (pathCheck != -1)
       res = false;

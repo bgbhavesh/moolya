@@ -627,7 +627,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           //matching the documents in both latestkyc and alredy approved kyc
           for (var i = 0; i < kycDoc.length; i++) {
             for (var j = 0; j < latestKyc.length; j++) {
-              if ((kycDoc[i].documentId == latestKyc[j].documentId) && (kycDoc[i].docTypeId == latestKyc[j].docTypeId)) {
+              if ((kycDoc[i]&&kycDoc[i].documentId?kycDoc[i].documentId:"" == latestKyc[j]&&latestKyc[j].documentId?latestKyc[j].documentId:"") && (kycDoc[i]&&kycDoc[i].docTypeId?kycDoc[i].docTypeId:"" == latestKyc[j]&&latestKyc[j].docTypeId?latestKyc[j].docTypeId:"")) {
                 console.log(kycDoc[i])
                 MatchingDocuments.push(kycDoc[i])
               }

@@ -127,9 +127,9 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
     }
 
     let AllTabs =getTabs() ||[];
-    if(admin){
-      AllTabs.forEach(function(v){ delete v.key });
-    }
+    // if(admin){
+    //   AllTabs.forEach(function(v){ delete v.key });
+    // }
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
       this.setState({activeTab,tabs:AllTabs,admin});
@@ -144,14 +144,14 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    if(this.state.admin){
-      if(this.props.activeTab){
-        let index = tabs.findIndex(i => i.name === this.props.activeTab);
-        return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getState}/>
-      }else
-      return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
-    }
-    else{
+    // if(this.state.admin){
+    //   if(this.props.activeTab){
+    //     let index = tabs.findIndex(i => i.name === this.props.activeTab);
+    //     return <MlTabComponent tabs={tabs}   selectedTabKey={index||0} backClickHandler={this.props.getState}/>
+    //   }else
+    //   return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    // }
+    // else{
       let activeTab =  this.props.activeTab || this.state.activeTab;
       return <MlTabComponent tabs={tabs}
                              selectedTabKey={activeTab}
@@ -159,7 +159,7 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
                              backClickHandler={this.props.getState}
                              type="subtab" mkey="title"
       />
-    }
+    // }
   }
 }
 

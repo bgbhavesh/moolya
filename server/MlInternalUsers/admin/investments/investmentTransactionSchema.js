@@ -180,7 +180,15 @@ let investments = `
         username:String,
         name:String
         profileId       : String
+        deviceDetails:  deviceInfo
     }
+    
+    type deviceInfo {
+    deviceName: String
+    ipAddress: String
+    deviceId: String
+    location: String
+  }
     
     
     

@@ -18,6 +18,7 @@ const mlSystemsLogTableConfig=new MlViewer.View({
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
+    {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
     {dataField: "activity", title: "Activity",dataSort:true,selectRow:true},
     {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
@@ -68,6 +69,7 @@ const mlSystemsLogTableConfig=new MlViewer.View({
                         communityId  
                         communityName
                         transactionTypeId
+                        transactionId
                       }
                     }
               }

@@ -1,20 +1,16 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+ import React from 'react';
 var FontAwesome = require('react-fontawesome');
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
 import MlPortfolioIdeatorBasicDetailsView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioIdeatorBasicDetailsView'
 import MlPortfolioIdeatorProblemsAndSolutionsView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlProblemsAndSolutionsView'
-import MlPortfolioIdeatorAudienceView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlAudienceView'
+import MlAudienceView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlAudienceView'
 import MlPortfolioIdeatorStrategyPlansView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlIdeatorLookingForView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlIdeatorLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-import InteractionsCounter from '../../../commons/components/InteractionsCounter'
 import MlIdeaView from '../../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
-import MlCustomActionButtons from './MlCustomActionButtons'
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import {appClient} from '../../../core/appConnection'
-
+ import {appClient} from '../../../core/appConnection'
+ // import MlCustomActionButtons from './MlCustomActionButtons'
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
 
 import 'react-responsive-tabs/styles.css'
@@ -53,27 +49,19 @@ componentDidMount(){
   //   $('.horizon-swiper').horizonSwiper();
   // },300);
 }
-  //
-  // (selAnnotation){
-  //   if(!this.state.popoverOpen){
-  //     this.toggle();
-  //     $('.comment-input-box').slideToggle();
-  //   }
-  //   if(selAnnotation){
-  //     this.setState({annotationData : selAnnotation},function(){
-  //       this.fetchComments(selAnnotation.id);
-  //     })
-  //   }
-  //
-  //
-  // }
 
 getTabComponents(){
   let tabs = [
     {tabClassName: 'tab', panelClassName: 'panel', title:"The Idea" , component:<MlIdeaView key="0"  portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+    {
+      tabClassName: 'tab',
+      panelClassName: 'panel',
+      title: "Audience",
+      component: <MlAudienceView key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+                                                 getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+    },
     {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary isAdmin={false} client={appClient} key="4"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="5"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Property And Trademarks" , component:<MlPortfolioIdeatorPlanningTrademarkView key="6"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

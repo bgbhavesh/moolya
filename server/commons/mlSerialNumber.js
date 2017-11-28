@@ -76,6 +76,26 @@ if (!paymentNumber) {
   MlSerialNumbers.insert({_id: "paymentNumber", seq: 0});
 }
 
+var connectionRequestNumber=MlSerialNumbers.findOne({_id: "connectionRequestNumber"});
+if (!connectionRequestNumber) {
+  MlSerialNumbers.insert({_id: "connectionRequestNumber", seq: 0});
+}
+
+var likesNumber=MlSerialNumbers.findOne({_id: "likesNumber"});
+if (!likesNumber) {
+  MlSerialNumbers.insert({_id: "likesNumber", seq: 0});
+}
+
+var reviewsNumber=MlSerialNumbers.findOne({_id: "reviewsNumber"});
+if (!reviewsNumber) {
+  MlSerialNumbers.insert({_id: "reviewsNumber", seq: 0});
+}
+
+var systemTransactionNumber=MlSerialNumbers.findOne({_id: "systemTransactionNumber"});
+if (!systemTransactionNumber) {
+  MlSerialNumbers.insert({_id: "systemTransactionNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -155,6 +175,18 @@ orderNumberGenService = (function(){
     },
     createPaymentId: function (data) {
       data.paymentId = "PY"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"),10);
+    },
+    createConnectionInteractionId: function (data) {
+      data.transactionId = "CR"+ FormatUtil.leadingZeros(getNextSequence("connectionRequestNumber"),10);
+    },
+    createLikeInteractionId: function (data) {
+      data.transactionId = "LK"+ FormatUtil.leadingZeros(getNextSequence("likesNumber"),10);
+    },
+    createReviewInteractionId: function (data) {
+      data.transactionId = "RV"+ FormatUtil.leadingZeros(getNextSequence("reviewsNumber"),10);
+    },
+    createSystemTransactionId: function (data) {
+      data.transactionId = "SY"+ FormatUtil.leadingZeros(getNextSequence("systemTransactionNumber"),10);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

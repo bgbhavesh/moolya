@@ -101,6 +101,11 @@ if (!onBoardTransactionNumber) {
   MlSerialNumbers.insert({_id: "onBoardTransactionNumber", seq: 0});
 }
 
+var shareLibraryNumber=MlSerialNumbers.findOne({_id: "shareLibraryNumber"});
+if (!shareLibraryNumber) {
+  MlSerialNumbers.insert({_id: "shareLibraryNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -203,6 +208,11 @@ orderNumberGenService = (function(){
     },
     createOnBoardTransactionId: function (data) {
       var transactionId= "OB"+ FormatUtil.leadingZeros(getNextSequence("onBoardTransactionNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createShareLibraryId:function(data){
+      var transactionId= "SD"+ FormatUtil.leadingZeros(getNextSequence("shareLibraryNumber"),10);
       if(data){data.transactionId = transactionId; return data;};
       return transactionId;
     },

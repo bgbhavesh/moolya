@@ -76,6 +76,26 @@ if (!paymentNumber) {
   MlSerialNumbers.insert({_id: "paymentNumber", seq: 0});
 }
 
+var connectionRequestNumber=MlSerialNumbers.findOne({_id: "connectionRequestNumber"});
+if (!connectionRequestNumber) {
+  MlSerialNumbers.insert({_id: "connectionRequestNumber", seq: 0});
+}
+
+var likesNumber=MlSerialNumbers.findOne({_id: "likesNumber"});
+if (!likesNumber) {
+  MlSerialNumbers.insert({_id: "likesNumber", seq: 0});
+}
+
+var reviewsNumber=MlSerialNumbers.findOne({_id: "reviewsNumber"});
+if (!reviewsNumber) {
+  MlSerialNumbers.insert({_id: "reviewsNumber", seq: 0});
+}
+
+var systemTransactionNumber=MlSerialNumbers.findOne({_id: "systemTransactionNumber"});
+if (!systemTransactionNumber) {
+  MlSerialNumbers.insert({_id: "systemTransactionNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -94,67 +114,79 @@ orderNumberGenService = (function(){
 
   return {
     assignRegistrationId:function(registration){
-      registration.registrationId="MLRE"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
+      registration.registrationId="RE"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),10);
     },
     assignPortfolioId:function(portfolio){
-      let portfolioId = "MLPF"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
+      let portfolioId = "PF"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),10);
       portfolio.portfolioId=portfolioId
       portfolio.transactionId= portfolioId
     },
     assignTransationRequest:function(transaction){
-      transaction.transactionTypeId="MLTR"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
+      transaction.transactionTypeId="MLTR"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),10);
     },
     assignRequests:function(requests){
-      requests.requestId="MLREQ"+FormatUtil.leadingZeros(getNextSequence("requestsNumber"),8);
+      requests.requestId="IR"+FormatUtil.leadingZeros(getNextSequence("requestsNumber"),10);
     },
     assignOfficeTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "MLOF" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+      officeTransaction.transactionId = "OF" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"),10);
     },
     assignProcessSetupTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "MLPS" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+      officeTransaction.transactionId = "PS" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"),10);
     },
     createUserProfileId: function (userProfile) {
-      userProfile.profileId = "MLPRO" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
+      userProfile.profileId = "PL" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 10);
     },
     createinternalTaskId: function (taskObj) {
-      taskObj.internalTaskId = "MLITK" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
+      taskObj.internalTaskId = "IK" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"),10);
     },
     createInteractionSCcode: function (scDef) {
-      scDef.code = "MLINT"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+      scDef.code = "IS"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"),10);
     },
     createBspokeOfficeSCcode: function (scDef) {
-      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
+      scDef.code = "OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"),10);
     },
     createOfficeSCcode: function (scDef) {
-      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("office"), 8);
+      scDef.code = "OFF-"+ FormatUtil.leadingZeros(getNextSequence("office"),10);
     },
 
     createActivityId: function (userActivity) {
-      userActivity.transactionId = "MLACT"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"), 8);
+      userActivity.transactionId = "AC"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"),10);
     },
     createTaskId: function (userTask) {
-      userTask.transactionId = "MLTSK"+ FormatUtil.leadingZeros(getNextSequence("taskNumber"), 8);
+      userTask.transactionId = "TK"+ FormatUtil.leadingZeros(getNextSequence("taskNumber"),10);
     },
     createSessionId: function (userTask) {
-      userTask.sessionId = "MLSES"+ FormatUtil.leadingZeros(getNextSequence("sessionNumber"), 8);
+      userTask.sessionId = "SE"+ FormatUtil.leadingZeros(getNextSequence("sessionNumber"),10);
     },
     createServiceId: function (userService) {
-      userService.transactionId = "MLSER"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"), 8);
+      userService.transactionId = "SC"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"),10);
     },
     createUserServiceOrderId: function (data) {
-      data.orderId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
+      data.orderId = "SO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"),10);
     },
     createAppointmentId: function (appointmentData) {
-      appointmentData.appointmentId = "MLAPT"+ FormatUtil.leadingZeros(getNextSequence("appointmentNumber"), 8);
+      appointmentData.appointmentId = "AP"+ FormatUtil.leadingZeros(getNextSequence("appointmentNumber"),10);
     },
     createVactionId: function (vactionData) {
-      vactionData.vacationId = "MLHLD"+ FormatUtil.leadingZeros(getNextSequence("vactionNumber"), 8);
+      vactionData.vacationId = "HL"+ FormatUtil.leadingZeros(getNextSequence("vactionNumber"),10);
     },
     createShareId: function (data) {
-      data.sharedId = "MLSHR"+ FormatUtil.leadingZeros(getNextSequence("shareNumber"), 8);
+      data.sharedId = "SH"+ FormatUtil.leadingZeros(getNextSequence("shareNumber"),10);
     },
     createPaymentId: function (data) {
-      data.paymentId = "MLPYM"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"), 8);
+      data.paymentId = "PY"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"),10);
+    },
+    createConnectionInteractionId: function (data) {
+      data.transactionId = "CR"+ FormatUtil.leadingZeros(getNextSequence("connectionRequestNumber"),10);
+    },
+    createLikeInteractionId: function (data) {
+      data.transactionId = "LK"+ FormatUtil.leadingZeros(getNextSequence("likesNumber"),10);
+    },
+    createReviewInteractionId: function (data) {
+      data.transactionId = "RV"+ FormatUtil.leadingZeros(getNextSequence("reviewsNumber"),10);
+    },
+    createSystemTransactionId: function (data) {
+      data.transactionId = "SY"+ FormatUtil.leadingZeros(getNextSequence("systemTransactionNumber"),10);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){
@@ -178,6 +210,6 @@ FormatUtil = {
 };
 
 function pad(num, size) {
-  var s = "000000000" + num;
+  var s = "00000000000" + num;
   return s.substr(s.length-size);
 }

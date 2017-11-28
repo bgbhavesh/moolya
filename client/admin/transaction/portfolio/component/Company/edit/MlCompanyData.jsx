@@ -66,6 +66,18 @@ export default class MlCompanyData extends React.Component{
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
+    $(".information").unbind("click").click(function () {
+      if ($(this).hasClass('ml-information')) {
+        $(this).removeClass('ml-information').addClass('ml-delete');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'hidden' });
+
+      } else {
+        $(this).removeClass('ml-delete').addClass('ml-information');
+        $(this).parents('.panel').find('.panel-body').css({ 'overflow': 'auto' });
+      }
+      $(this).parents('.panel').find(".show-information").toggle(200);
+    });
+
   }
 
   documentUpload(type, e) {
@@ -281,9 +293,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'balanceSheet' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('balanceSheet')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -293,9 +309,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'quaterlyReport' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('quaterlyReport')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -305,9 +325,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'yearlyReport' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('yearlyReport')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -317,9 +341,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'halfYearlyReport' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('halfYearlyReport')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -329,9 +357,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'annualReport' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('annualReport')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
             </div>
@@ -343,9 +375,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'profitAndLoss' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" >
                   {this.loopingTheUploadedData('profitAndLoss')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -355,9 +391,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'cashFlow' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('cashFlow')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -367,9 +407,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'shareHoldings' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('shareHoldings')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -379,9 +423,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'capitalStructure' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('capitalStructure')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -391,9 +439,13 @@ export default class MlCompanyData extends React.Component{
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'ratio' )} /></span></a>
                   </div>:""}
+                  <div className="pull-right block_action">
+                    <span className="single_icon ml ml-information information"></span>
+                  </div>
                 </div>
                 <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                   {this.loopingTheUploadedData('ratio')}
+                  <p className="show-information" style={{ 'display': 'none', 'color':'black' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
                 </div>
               </div>
             </div>

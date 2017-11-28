@@ -130,7 +130,7 @@ export default class MlAppMyAppointmentItems extends Component{
          <div>
         {(selectedAppointment && isSelectedAppointment) ?
           <div>{this.getAppointmentComponentToLoad()}</div>
-          :(<div>{appointments && !appointments.length?(<NoDataList moduleName={this.getAppointmentType(config.moduleName)}/>):(
+          :(<div>{appointments && !appointments.length?(<NoDataList appointment={true} moduleName={this.getAppointmentType(config.moduleName)}/>):(
           <div className="tab_wrap_scroll ideators_list">
             {appointments.map(function (appointment, index) {
               let startDate, currenDate, days, startMsg, hours, minutes;

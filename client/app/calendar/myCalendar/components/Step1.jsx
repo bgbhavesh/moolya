@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag';
 import moment from "moment";
 var Select = require('react-select');
@@ -210,7 +211,10 @@ this.bookDetails(data)
     const {onChangeSteps, isTaskComponent} = this.props;
     return (
       <div className="step_form_wrap step1">
-        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+        <Scrollbars
+          speed={0.8}
+          className="step_form_wrap"
+        >
           <br/><div className="col-lg-12">
             <div className="app_padding_wrap">
               <div className="col-md-12">
@@ -371,7 +375,7 @@ this.bookDetails(data)
                 {/*</div>*/}
                 <div className="pull-right">
                   <div className="ml_btn large_btn">
-                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
+                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount {this.props.serviceBasicInfo.payment && this.props.serviceBasicInfo.payment.currencyType ? this.props.serviceBasicInfo.payment.currencyType: "Rs."}{this.props.serviceBasicInfo.totalAmount}/-</a>
                   </div>
                 </div>
                 <br className="brclear"/><br className="brclear"/>
@@ -381,7 +385,7 @@ this.bookDetails(data)
               </div>
             </div>
           </div>
-        </ScrollArea>
+        </Scrollbars>
       </div>
     )
   }

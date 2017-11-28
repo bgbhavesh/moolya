@@ -32,8 +32,44 @@ export default class MlAppLeftNav extends Component {
         if(WinWidth > 768){
             $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
         }
-        let routeName = FlowRouter.getRouteName();
-        $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );
+        // let routeName = FlowRouter.getRouteName();
+        // $(".mCustomScrollbar").mCustomScrollbar("scrollTo","#"+routeName );
+      let mname='';
+      let data = this.context.menu||{};
+      let menu = data.menu || [];
+      if(menu && menu.length){
+        mname = menu[0].name;
+      }
+
+      $(document).ready(()=>{
+        $('.menu_item a').click(function(event) {
+          // Do the async thing
+          let margin = $(".mCSB_container").css("top");
+          let obj={};
+          obj.top =margin;
+          obj.name=mname;
+          let obj2 = JSON.stringify(obj);
+          localStorage.setItem('top',obj2);
+        });
+      });
+
+      let topscroll = localStorage.getItem('top');
+      try {
+        topscroll = JSON.parse(topscroll);
+      }catch(e){
+        topscroll='';
+      }
+
+      if(topscroll && topscroll.top && topscroll.name === mname) {
+        setTimeout(function () {
+          $(".mCSB_container").css({"top": topscroll.top});
+          // $(".admin_menu .scrollarea-content").refresh();
+          // $("#mCSB_1_container").animate({ scrollTop: -margin });
+
+        }, 500);
+      }else{
+        localStorage.setItem('top','');
+      }
     }
 
     render(){

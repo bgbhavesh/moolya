@@ -122,6 +122,7 @@ export async function fetchServiceActionHandler (serviceId) {
           sessions{
             id
             sequence
+            isOffline
           }
         }
         facilitationCharge{
@@ -234,6 +235,15 @@ export async function fetchServicesActionHandler (profileId) {
         duration {
           hours
           minutes
+        }
+        tasks {
+          id
+          sequence
+          sessions {
+            id
+            sequence 
+            isOffline
+          }
         }
         finalAmount
         termsAndCondition{

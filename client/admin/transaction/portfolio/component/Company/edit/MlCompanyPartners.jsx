@@ -413,7 +413,7 @@ export default class MlCompanyPartners extends React.Component {
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Duration" name="duration"
+                            <input type="text" placeholder="Duration in years" name="duration"
                                    defaultValue={this.state.data.duration}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"

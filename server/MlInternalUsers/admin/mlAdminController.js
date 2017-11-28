@@ -514,6 +514,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      context.browser=req.headers['user-agent'];
       if (req && req.body && req.body.data) {
         console.log("Processing started..!!");
 

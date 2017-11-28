@@ -38,7 +38,7 @@ export default class MlAppTaskSession extends Component {
     var response = await findTaskActionHandler(taskId);
     if (response) {
       let userSession = _.range(response ? response.noOfSession : 0);
-      console.log(userSession);
+      console.log(userSession, response);
       let sessionData = [];
       _.each(userSession, function (item, value) {
         sessionData.push({
@@ -57,7 +57,7 @@ export default class MlAppTaskSession extends Component {
           let sessionEditData = _.cloneDeep(response.session);
           sessionEditData.forEach((session, index) => {
             if (session.activities && session.activities.length) {
-              sessionEditData[index].isOffline = this.isOfflineSession(session.activities);
+              sessionEditData[index].isOffline =  sessionEditData[index].isOffline ? sessionEditData[index].isOffline : false; //this.isOfflineSession(session.activities);
             } else {
               sessionEditData[index].isOffline = false;
             }
@@ -267,7 +267,7 @@ export default class MlAppTaskSession extends Component {
                                   <div className={activity.isActive ? 'active' : 'inactive'}><FontAwesome onClick={() => that.removeActivity(id, index)} name='minus' /></div>
                                   <div className="clearfix"></div>
                                   <div className="list_icon mart0">
-                                    <span className="price">Rs. {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                                    <span className="price">{activity.payment && activity.payment.currencyType ? activity.payment.currencyType :"Rs." } {(activity.payment && activity.payment.derivedAmount) ? activity.payment.derivedAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
                                     <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                                     <div className="clearfix"></div>
                                     {activity.imageLink ?

@@ -72,7 +72,7 @@ export default class MlAppInvestmentItem extends Component {
       let stageIndex;
       if(port.stage.length) {
         stageIndex = props.stages.findIndex(function (stage) {
-          return stage.stageName == port.stage[0].resourceStage
+          return stage.stage == port.stage[0].resourceStage
         });
       }
       if( (currentStageIndex == 0 && !stageIndex ) || stageIndex == currentStageIndex ) {
@@ -93,7 +93,7 @@ export default class MlAppInvestmentItem extends Component {
                     let stageIndex;
                     if(data.stage.length) {
                       stageIndex = props.stages.findIndex(function (stage) {
-                        return stage.stageName == data.stage[0].resourceStage
+                        return stage.stage == data.stage[0].resourceStage
                       });
                     }
                     // > incase need to display at lower index tabs

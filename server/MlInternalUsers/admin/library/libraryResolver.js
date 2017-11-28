@@ -1,5 +1,6 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
+import MlLibraryRepo from './libraryRepo'
 var _ = require('lodash')
 
 
@@ -37,38 +38,12 @@ MlResolver.MlQueryResolver['fetchCurrentUserPermissions'] = (obj, args, context,
 
 
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
-
-  if (context.url.indexOf("transactions") > 0) {
-    var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
-    if (portfolioDetailsTransactions) {
-      args.detailsInput.userId = portfolioDetailsTransactions.userId;
-      let tempObject = {
-        portfolioId:portfolioDetailsTransactions._id,
-        isPrivate: false
-      }
-      let tempArray= []
-      tempArray.push(tempObject)
-      args.detailsInput.portfolioReference = tempArray;
-      let newPortfolio = mlDBController.insert('MlLibrary', args.detailsInput, context)
-      return newPortfolio
-    }
-  }else if(context.url.indexOf("library") > 0) {
-    args.detailsInput.userId = context.userId;
-    var newPortfolioCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
-    return newPortfolioCollection
-  }else{
-    let currentProfile = context.url.split("/")
-    let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile[6]}, context)
-    let tempObject = {
-      portfolioId:portfolioDetails._id,
-      isPrivate: true,
-    }
-    let tempArray= []
-    tempArray.push(tempObject)
-    args.detailsInput.portfolioReference = tempArray;
-    args.detailsInput.userId = context.userId;
-    let newPortfolio = mlDBController.insert('MlLibrary', args.detailsInput, context)
-    return newPortfolio
+  if (args.portfolioDetailsId) {
+    MlLibraryRepo.portfolioLibraryCreation(args.detailsInput, args.portfolioDetailsId , context)
+  } else {
+      args.detailsInput.userId = context.userId;
+      var newPortfolioCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+      return newPortfolioCollection
   }
 }
 

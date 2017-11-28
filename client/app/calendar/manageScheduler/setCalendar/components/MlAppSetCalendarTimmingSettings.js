@@ -657,14 +657,14 @@ class MlAppCalendarTimmingSettings extends Component {
                                         input={true}
                                         value={ slots[index] && slots[index].start ? ( index == 0 ? slots[index].start : slots[index].end ) : '' }
                                         onChange={(evt)=>that.updateSlotStartTime(evt, index)}
-                                        inputProps={{ placeholder: 'Start time', className:"form-control float-label",readOnly:true}}/>
+                                        inputProps={{ placeholder: 'Start time in HH:mm', className:"form-control float-label",readOnly:true}}/>
                             </div>
                             <div className="form-group col-md-6 nopadding-right">
                               <Datetime dateFormat={false} timeFormat={"HH:mm"}
                                         input={true}
                                         value={ slots && workEndTime ? workEndTime : '' }
                                         onChange={(evt)=>that.updateSlotEndTime(evt, index+1)}
-                                        inputProps={{ placeholder: 'End time', className:"form-control float-label",readOnly:true}}/>
+                                        inputProps={{ placeholder: 'End time in HH:mm', className:"form-control float-label",readOnly:true}}/>
                             </div>
                           </div>
                         </div>
@@ -691,12 +691,12 @@ class MlAppCalendarTimmingSettings extends Component {
                           <div className="form-group col-md-6 nopadding-left">
                             <Datetime dateFormat={false} timeFormat={"HH:mm"} value={data.start ? data.start : ''}
                                       input={true} onChange={(evt)=>that.updateBreakStartTime(evt, index)}
-                                      inputProps={{ placeholder: 'Start time', className:"form-control float-label",readOnly:true}}/>
+                                      inputProps={{ placeholder: 'Start time in HH:mm', className:"form-control float-label",readOnly:true}}/>
                           </div>
                           <div className="form-group col-md-6 nopadding-right">
                             <Datetime dateFormat={false} timeFormat={"HH:mm"} value={data.end ? data.end : ''}
                                       input={true} onChange={(evt, value)=>that.updateBreakEndTime(evt, index)}
-                                      inputProps={{ placeholder: 'End time', className:"form-control float-label",readOnly:true}}/>
+                                      inputProps={{ placeholder: 'End time in HH:mm', className:"form-control float-label",readOnly:true}}/>
                           </div>
                         </div>
                       </div>

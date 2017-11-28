@@ -22,7 +22,6 @@ export default class MlFunderEditTemplate extends Component {
     this.getChildContext.bind(this)
     this.getInvestmentsDetails.bind(this);
     this.getFunderNewsDetails.bind(this);
-    this.getFunderLibrary.bind(this)
   }
 
   getChildContext() {

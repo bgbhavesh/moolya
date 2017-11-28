@@ -33,6 +33,11 @@ class MlserviceCardHandler{
       if(!query)
           return {success:false};
 
+    const isAccessUrl = this.isCanAccessUrl(context);
+    if (!isAccessUrl) {
+      return {success: false,  msg:"Invalid Details"};
+    }
+
       var details = this.getQueryDetails(query);
       if(details.resourceName != "OFFICE" && details.resourceName != 'SERVICECARD')
         return {success:true}
@@ -109,9 +114,24 @@ class MlserviceCardHandler{
 
     return {resourceName:resourceName, actionName:actionName, interactionType:interactionType, isWhiteList:isWhiteList}
   }
+
+  isCanAccessUrl(context) {
+    const isInternalUserCheck = getActiveUserDetail(context).isInternaluser;
+    let res = true;
+    const urlPath = context.url ? context.url : null;
+    const pathCheck = isInternalUserCheck ? urlPath.indexOf('app') : urlPath.indexOf('admin');
+    if (pathCheck != -1)
+      res = false;
+    return res
+  }
 }
 
 const mlserviceCardHandler = new MlserviceCardHandler();
 Object.freeze(mlserviceCardHandler);
 
 export default mlserviceCardHandler;
+
+getActiveUserDetail = (context) => {
+  const user = mlDBController.findOne('users', {_id: context.userId}, context) || {};
+  return user.profile ? user.profile : {};
+};

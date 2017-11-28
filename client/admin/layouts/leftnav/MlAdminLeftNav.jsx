@@ -56,7 +56,7 @@ export default class MlAdminLeftNav extends Component {
     if(topscroll) {
       let margin = parseFloat(topscroll.split('px')[0])
 
-      localStorage.setItem('top','');
+      // localStorage.setItem('top','');
       setTimeout(function () {
         $(".admin_menu .scrollarea-content").css({"margin-top": margin});
         // $(".admin_menu .scrollarea-content").refresh();

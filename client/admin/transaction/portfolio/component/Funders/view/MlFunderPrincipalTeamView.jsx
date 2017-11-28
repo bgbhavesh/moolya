@@ -457,7 +457,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Duration" className="form-control float-label"/>
+                        <input type="text" placeholder="Duration in years" className="form-control float-label"/>
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
                       <div className="form-group">
@@ -516,7 +516,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Duration" className="form-control float-label"/>
+                        <input type="text" placeholder="Duration in years" className="form-control float-label"/>
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
 

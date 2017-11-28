@@ -1,11 +1,11 @@
 /**
  * Created by Mukhil on 14/6/17.
  */
-  import {mergeStrings} from 'gql-merge';
-  import MlSchemaDef from '../../commons/mlSchemaDef'
-  import MlResolver from "../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../commons/mlSchemaDef'
+import MlResolver from '../../commons/mlResolverDef';
 
-  let task=`
+const task = `
    type Attachments {
      name: String
      info: String
@@ -203,22 +203,44 @@
   `
 
 
-  MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], task])
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, task])
 
-  let supportedApi = [
-    {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTask', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"SERVICECARD", isAppWhiteList: true},
-    {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'createTask', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTaskForApointment', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchActivitiesTeams', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-  ]
-  MlResolver.MlModuleResolver.push(supportedApi)
+const supportedApi = [
+  {
+    api: 'fetchTasks', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTaskDetails', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTask', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTaskDetailsForServiceCard', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTaskDetailsForAdminServiceCard', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTaskDetailsAdmin', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTasksInBooking', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'createTask', actionName: 'CREATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateTask', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTaskForApointment', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchActivitiesTeams', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  }
+]
+MlResolver.MlModuleResolver.push(supportedApi)
 // termsAndCondition: TermsAndCondition
 
 // type TermsAndCondition {

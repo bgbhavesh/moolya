@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 17/1/17.
  */
 import { Meteor } from 'meteor/meteor';
-import {mergeStrings} from 'gql-merge'
+import { mergeStrings } from 'gql-merge'
 
 const schema = `
   type response{
@@ -25,6 +25,6 @@ const schema = `
   }
 `
 
-MlSchemaDef ={'schema':schema};
+MlSchemaDef = { schema };
 
 module.exports = MlSchemaDef;

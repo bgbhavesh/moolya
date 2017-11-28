@@ -4,15 +4,15 @@
 
 import MlAdminUserContext from '../mlAuthorization/mlAdminUserContext';
 
-class MlAdminContextBasedAuthorization{
-  constructor(context){
-    this.userId=context.userId;
+class MlAdminContextBasedAuthorization {
+  constructor(context) {
+    this.userId = context.userId;
     this.setUserProfile(context.userId);
   }
 
-  setUserProfile(userId){
-    let userProfile=new MlAdminUserContext().userProfileDetails(userId);
-    this.userProfile =userProfile;
+  setUserProfile(userId) {
+    const userProfile = new MlAdminUserContext().userProfileDetails(userId);
+    this.userProfile = userProfile;
   }
 }
 

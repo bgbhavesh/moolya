@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Role = `
+const Role = `
 
   type AssignRoles{
       cluster:String,
@@ -126,16 +126,20 @@ let Role = `
   }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
-let supportedApi = [
-    {api:'fetchRole', actionName:'READ', moduleName:"ROLES"},
-    {api:'fetchRolesByDepSubDep', actionName:'READ', moduleName:"ROLES", isWhiteList:true},
-    {api:'findRole', actionName:'READ', moduleName:"ROLES", isWhiteList:true},
-    {api:'fetchActiveRoles', actionName:'READ', moduleName:"ROLES"},
-    {api:'fetchAllAssignedRoles', actionName:'READ', moduleName:"ROLES"},
-    {api:'fetchRolesForRegistration', actionName:'READ', moduleName:"ROLES"},
-    {api:'createRole', actionName:'CREATE', moduleName:"ROLES"},
-    {api:'updateRole', actionName:'UPDATE', moduleName:"ROLES"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Role]);
+const supportedApi = [
+  { api: 'fetchRole', actionName: 'READ', moduleName: 'ROLES' },
+  {
+    api: 'fetchRolesByDepSubDep', actionName: 'READ', moduleName: 'ROLES', isWhiteList: true
+  },
+  {
+    api: 'findRole', actionName: 'READ', moduleName: 'ROLES', isWhiteList: true
+  },
+  { api: 'fetchActiveRoles', actionName: 'READ', moduleName: 'ROLES' },
+  { api: 'fetchAllAssignedRoles', actionName: 'READ', moduleName: 'ROLES' },
+  { api: 'fetchRolesForRegistration', actionName: 'READ', moduleName: 'ROLES' },
+  { api: 'createRole', actionName: 'CREATE', moduleName: 'ROLES' },
+  { api: 'updateRole', actionName: 'UPDATE', moduleName: 'ROLES' }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let AccountType = `        
+const AccountType = `        
     type Account{
       accountName :String
       accountDisplayName :String
@@ -24,12 +24,14 @@ let AccountType = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AccountType]);
-let supportedApi = [
-    {api:'CreateAccount', actionName:'CREATE', moduleName:"MASTERSETTINGS"},
-    {api:'UpdateAccount', actionName:'UPDATE', moduleName:"MASTERSETTINGS"},
-    {api:'FindAccount', actionName:'READ', moduleName:"MASTERSETTINGS"},
-    {api:'FetchAccount', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, AccountType]);
+const supportedApi = [
+  { api: 'CreateAccount', actionName: 'CREATE', moduleName: 'MASTERSETTINGS' },
+  { api: 'UpdateAccount', actionName: 'UPDATE', moduleName: 'MASTERSETTINGS' },
+  { api: 'FindAccount', actionName: 'READ', moduleName: 'MASTERSETTINGS' },
+  {
+    api: 'FetchAccount', actionName: 'READ', moduleName: 'MASTERSETTINGS', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,4 +1,4 @@
-var noData = "not mentioned";
+const noData = 'not mentioned';
 import mlNotificationRepo from '../mlNotificationRepo'
 
 // const MlSmsNotification= class MlSmsNotification {
@@ -18,21 +18,21 @@ import mlNotificationRepo from '../mlNotificationRepo'
 //   }
 // }
 
-class MlSmsController{
-  constructor(){
+class MlSmsController {
+  constructor() {
   }
 
   // Genric method to send sms
-  sendSMS(data, countryCode, mobileNumber){
-    var obj = {
-      notificationType: "SMS",
-      message:data
+  sendSMS(data, countryCode, mobileNumber) {
+    const obj = {
+      notificationType: 'SMS',
+      message: data
     }
 
-    let country=mlDBController.findOne('MlCountries',{$or:[{"_id":countryCode},{"countryCode":countryCode}]});
-    let countryPhoneNumberCode=country&&country.phoneNumberCode?country.phoneNumberCode:null;
-    if(mobileNumber&&countryPhoneNumberCode){
-      obj['toUserId'] = countryPhoneNumberCode.trim()+mobileNumber.trim();
+    const country = mlDBController.findOne('MlCountries', { $or: [{ _id: countryCode }, { countryCode }] });
+    const countryPhoneNumberCode = country && country.phoneNumberCode ? country.phoneNumberCode : null;
+    if (mobileNumber && countryPhoneNumberCode) {
+      obj.toUserId = countryPhoneNumberCode.trim() + mobileNumber.trim();
       mlNotificationRepo.sendNotification(obj)
     }
   }

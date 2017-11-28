@@ -2,12 +2,12 @@
  * Created by Mukhil on 14/6/17.
  */
 
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
 
-let activity=`
+const activity = `
 
 type AvailableCommunities{
   communityName: String
@@ -167,13 +167,23 @@ _id: String
 `
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
-let supportedApi = [
-  {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-  {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-  {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-  {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},
-  {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList: true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, activity]);
+const supportedApi = [
+  {
+    api: 'fetchActivities', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchActivitiesForTask', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchActivity', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'createActivity', actionName: 'CREATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateActivity', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 // fetchActivities:[Activity]

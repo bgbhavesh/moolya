@@ -9,31 +9,28 @@
  * Include internal and external modules.
  ---------------------------------------------*/
 
-import async from "async";
+import async from 'async';
 
 export default MlNotificationsServices = class MlNotificationsServices {
-
   // register new Alert.
   createNewAlert(params, context) {
-
     async.waterfall([
-      cb => { // Function to save the Alerts Notification Object in DB.
+      (cb) => { // Function to save the Alerts Notification Object in DB.
+        const saveObj = {
 
-        var saveObj = {
-
-          "notif_msg":{"text": params.text},
-          url: params.url || "",
+          notif_msg: { text: params.text },
+          url: params.url || '',
           isProfileSpecific: params.isProfileSpecific || false,
-          profileId: params.profileId || "",
-          "resource_context":{"resourceId":params.resourceId,"resourceType": params.resourceType},
-          "notif_type": params.notif_type,
-          "from":{"userId":params.from_userId,"userName": params.from_userName},
-          "to": {"userId":params.to_userId,"userName": params.to_userName},
+          profileId: params.profileId || '',
+          resource_context: { resourceId: params.resourceId, resourceType: params.resourceType },
+          notif_type: params.notif_type,
+          from: { userId: params.from_userId, userName: params.from_userName },
+          to: { userId: params.to_userId, userName: params.to_userName },
           createdBy: params.createdBy,
           createdAt: new Date()
         };
-        //MlNotifications(saveObj).save((err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification saved successfully' }));
-        //mlDBController.insert('MlNotifications', saveObj, context||{});
+        // MlNotifications(saveObj).save((err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification saved successfully' }));
+        // mlDBController.insert('MlNotifications', saveObj, context||{});
         MlNotifications.insert(saveObj);
       }
 
@@ -42,69 +39,63 @@ export default MlNotificationsServices = class MlNotificationsServices {
 
   // Update alert read status.
   updateNotifyStatus(params, context) {
-
     async.waterfall([
       (data, cb) => { // Update the read status of Alert Notification Object.
-        let queryObj = {_id: params.alert_id};
-        let updateObj = {updatedAt: new Date(), updatedBy: params.updatedBy};
+        const queryObj = { _id: params.alert_id };
+        const updateObj = { updatedAt: new Date(), updatedBy: params.updatedBy };
         if (params.mode == 1) {
           updateObj.isRead = true;
         } else {
           updateObj.isDeleted = true;
         }
-        ;
-        MlNotifications.update(queryObj, {$set:updateObj});
-       // mlDBController.update('MlNotifications', queryObj, updateObj, {$set: true}, context||{});
-        //MlNotifications.findOneAndUpdate(queryObj, updateObj, { new: true }, (err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification Updated successfully', data: res }));
+
+        MlNotifications.update(queryObj, { $set: updateObj });
+        // mlDBController.update('MlNotifications', queryObj, updateObj, {$set: true}, context||{});
+        // MlNotifications.findOneAndUpdate(queryObj, updateObj, { new: true }, (err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification Updated successfully', data: res }));
       }
 
     ]);
   }
 
-// fetch user Notifications.
+  // fetch user Notifications.
   getUserAlerts(params, context) {
-
     async.waterfall([
-      cb => { // Fetch the user Notifications list.
-        let queryObj = {
-          "to.userId": params.userId
+      (cb) => { // Fetch the user Notifications list.
+        const queryObj = {
+          'to.userId': params.userId
         };
-        //let projection = '_id url notif_type to.userId createdBy';
-        //MlNotifications.find(queryObj, projection, (err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notifications fetched successfully.', data: res }));
+        // let projection = '_id url notif_type to.userId createdBy';
+        // MlNotifications.find(queryObj, projection, (err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notifications fetched successfully.', data: res }));
       }
     ]);
   }
 
-// fetch the Notifications with servier side pagination.
+  // fetch the Notifications with servier side pagination.
   fetchNotifiPagination(params, context) {
-
     params.obj1 = {
       $match: {
         $and: [
-          {isDeleted: false},
-          {"to.userId": params.userId}
+          { isDeleted: false },
+          { 'to.userId': params.userId }
         ]
       }
     };
 
     if (params.profileId) { // if profile Id is given.
-
       params.obj2 = {
         $match: {
           $or: [
-            {isProfileSpecific: false},
-            {isProfileSpecific: true, profileId: params.profileId}
+            { isProfileSpecific: false },
+            { isProfileSpecific: true, profileId: params.profileId }
           ]
         }
       };
-
     } else { // if profile Id not provided.
-
       params.obj2 = {
-        $match: {isProfileSpecific: true}
+        $match: { isProfileSpecific: true }
       };
     }
-    ;
+
 
     async.waterfall([
 
@@ -168,9 +159,8 @@ export default MlNotificationsServices = class MlNotificationsServices {
        cb(null, { statusCode: 200, status: 'success', message: 'Notification fetched Successfully.', data: res });
        }
        });
-       }*/
+       } */
 
     ]);
   }
-
 }

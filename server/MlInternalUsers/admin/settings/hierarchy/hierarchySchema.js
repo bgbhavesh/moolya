@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let HierarchySchema = `
+const HierarchySchema = `
     type Hierarchy
     {
       _id                 : String
@@ -50,16 +50,24 @@ let HierarchySchema = `
         updateFinalApprovalRoles(finalRole:FinalApprovalInput):response
     }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);
-let supportedApi = [
-  {api:'fetchMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
-  {api:'fetchNonMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
-  {api:'fetchNonMoolyaBasedDepartmentAndSubDepartments', actionName:'UPDATE', moduleName:"HIERARCHY"},
-  {api:'fetchRolesForDepartment', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
-  {api:'fetchRolesForHierarchy', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
-  {api:'fetchRolesForFinalApprovalHierarchy', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
-  {api:'updateHierarchyRoles', actionName:'UPDATE', moduleName:"HIERARCHY"},
-  {api:'updateFinalApprovalRoles', actionName:'UPDATE', moduleName:"HIERARCHY"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, HierarchySchema]);
+const supportedApi = [
+  {
+    api: 'fetchMoolyaBasedDepartmentAndSubDepartment', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
+  { api: 'fetchNonMoolyaBasedDepartmentAndSubDepartment', actionName: 'READ', moduleName: 'HIERARCHY' },
+  { api: 'fetchNonMoolyaBasedDepartmentAndSubDepartments', actionName: 'UPDATE', moduleName: 'HIERARCHY' },
+  {
+    api: 'fetchRolesForDepartment', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
+  {
+    api: 'fetchRolesForHierarchy', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
+  {
+    api: 'fetchRolesForFinalApprovalHierarchy', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
+  { api: 'updateHierarchyRoles', actionName: 'UPDATE', moduleName: 'HIERARCHY' },
+  { api: 'updateFinalApprovalRoles', actionName: 'UPDATE', moduleName: 'HIERARCHY' }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

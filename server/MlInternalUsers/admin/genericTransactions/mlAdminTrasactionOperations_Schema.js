@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let transactOperations = `
+const transactOperations = `
 
 input transactionParams{  
    allocation        :   allocationInput
@@ -25,8 +25,10 @@ type Mutation {
   updateGenericTransaction(module: String,params:transactionParams,transactionType:String,operation:String,transactionId:[String]):response
 }`
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],transactOperations]);
-let supportedApi = [
-  {api:'updateGenericTransaction', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, transactOperations]);
+const supportedApi = [
+  {
+    api: 'updateGenericTransaction', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
 import MlResolver from '../../../commons/mlResolverDef'
 
-let librarySchema = `
+const librarySchema = `
 
     type PortfolioDetails{
       portfolioId: String
@@ -85,25 +85,41 @@ let librarySchema = `
 
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], librarySchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, librarySchema]);
 
-let supportedApi = [
-
-
-  {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchDataFromCentralLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchCurrentUserPermissions', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchLibraryBasedOnPortfolioId', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+const supportedApi = [
 
 
-  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'putDataIntoTheLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
-  ]
+  {
+    api: 'fetchLibrary', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchDataFromCentralLibrary', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchCurrentUserPermissions', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchLibraryBasedOnPortfolioId', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+
+
+  {
+    api: 'createLibrary', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updateLibraryData', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updatePrivacyDetails', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updateLibrary', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'putDataIntoTheLibrary', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  }
+]
 
 MlResolver.MlModuleResolver.push(supportedApi)
-
-
 

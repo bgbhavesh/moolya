@@ -2,9 +2,9 @@
  * Created by mohammed. mohasin on 13/04/17.
  */
 
-import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
-import MlUserContext from "../MlExternalUsers/mlUserContext";
-var _ = require('lodash');
+import MlAdminUserContext from '../mlAuthorization/mlAdminUserContext';
+import MlUserContext from '../MlExternalUsers/mlUserContext';
+const _ = require('lodash');
 /**
  * SubChapter Access Control returns the access control for sub chapter based on Permissions(SEARCH/VIEW/TRANSACT)
  * Returns Access control object
@@ -27,41 +27,43 @@ class MlSubChapterAccessControl {
    * returns result Object with the access control(hasAccess:true/false,privateSubChapters:[],allowedSubChapters:[])
    */
   static getAccessControl(permission, context, requestSubChapterId, internalCrossAccess) {
-    /**set the user context*/
+    /** set the user context */
     var context = MlSubChapterAccessControl.setUserContext(context, requestSubChapterId);
-    /**set externalUserAccess */
+    /** set externalUserAccess */
     // context.internalCrossAccess=internalCrossAccess?true:false;
-    /**fetch context details isInternal,isMoolya*/
-    var isInternalUser = context.isInternalUser;
+    /** fetch context details isInternal,isMoolya */
+    const isInternalUser = context.isInternalUser;
     context.internalCrossAccess = _.isBoolean(internalCrossAccess) ? internalCrossAccess : isInternalUser;
-    var isMoolya = context.isMoolya;
+    const isMoolya = context.isMoolya;
     var requestSubChapterId = context.requestSubChapterId;
-    var contextSubChapterId = context.contextSubChapterId;
+    const contextSubChapterId = context.contextSubChapterId;
 
-    var isSelfUser = (_.isString(requestSubChapterId) && _.isString(contextSubChapterId) && contextSubChapterId == requestSubChapterId) ? true : false;
-    var accessControl = {hasAccess: false, isInclusive: true, subChapters: [], chapters:[]};
+    const isSelfUser = !!((_.isString(requestSubChapterId) && _.isString(contextSubChapterId) && contextSubChapterId == requestSubChapterId));
+    let accessControl = {
+      hasAccess: false, isInclusive: true, subChapters: [], chapters: []
+    };
 
-    /** Internal User - moolya(admin/team members)*/
+    /** Internal User - moolya(admin/team members) */
     if (isInternalUser && isMoolya) {
       accessControl.hasAccess = true;
       return accessControl;
     }
-    /** Internal User - non moolya(subChapter admin/team members)*/
+    /** Internal User - non moolya(subChapter admin/team members) */
     else if (isInternalUser && !isMoolya) {
       accessControl = MlSubChapterAccessControl.resolveNonMoolyaInternalAccess(permission, context);
     }
-    /** External User - moolya(subChapter end users)*/
+    /** External User - moolya(subChapter end users) */
     else if (!isInternalUser && isMoolya) {
       accessControl = MlSubChapterAccessControl.resolveMoolyaExternalAccess(permission, context);
     }
-    /** External User - non moolya(subChapter end users)*/
+    /** External User - non moolya(subChapter end users) */
     else if (!isInternalUser && !isMoolya) {
       accessControl = MlSubChapterAccessControl.resolveNonMoolyaExternalAccess(permission, context);
     }
-    /** Browser/Office Bearer logins*/
+    /** Browser/Office Bearer logins */
     else {
     }
-    /*for Self User*/
+    /* for Self User */
     if (isSelfUser) {
       accessControl.hasAccess = true;
     }
@@ -69,19 +71,19 @@ class MlSubChapterAccessControl {
   }
 
   static resolveMoolyaExternalAccess(permission, context) {
-    /**todo: check context user SubChapterId and restrict view/transact permission for browser or others*/
-    var isInternalUser = context.isInternalUser;
-    var contextSubChapterId = context.contextSubChapterId;
-    var requestSubChapterId = context.requestSubChapterId;
-    var isSelfUser = (_.isBoolean(requestSubChapterId) && _.isBoolean(contextSubChapterId) && contextSubChapterId == requestSubChapterId) ? true : false;
-    var accessControl = {hasAccess: false, isInclusive: true, subChapters: null};
-    /**get all private sub Chapters.*/
-    var privateSubChapters = [];
-    var subChapter = mlDBController.findOne('MlSubChapters', {_id: requestSubChapterId}) || {};
+    /** todo: check context user SubChapterId and restrict view/transact permission for browser or others */
+    const isInternalUser = context.isInternalUser;
+    const contextSubChapterId = context.contextSubChapterId;
+    const requestSubChapterId = context.requestSubChapterId;
+    const isSelfUser = !!((_.isBoolean(requestSubChapterId) && _.isBoolean(contextSubChapterId) && contextSubChapterId == requestSubChapterId));
+    let accessControl = { hasAccess: false, isInclusive: true, subChapters: null };
+    /** get all private sub Chapters. */
+    let privateSubChapters = [];
+    const subChapter = mlDBController.findOne('MlSubChapters', { _id: requestSubChapterId }) || {};
     switch (permission) {
       case 'SEARCH':
         privateSubChapters = MlSubChapterAccessControl.getPrivateEcoSystemSubChapters(permission);
-        accessControl = {hasAccess: true, isInclusive: false, subChapters: privateSubChapters};
+        accessControl = { hasAccess: true, isInclusive: false, subChapters: privateSubChapters };
         break;
       case 'VIEW':
         var canAccess = MlSubChapterAccessControl.canMoolyaSubChapterAccess(permission, requestSubChapterId);
@@ -96,47 +98,47 @@ class MlSubChapterAccessControl {
   }
 
   static resolveNonMoolyaExternalAccess(permission, context) {
-    var isInternalUser = context.isInternalUser;
-    var contextSubChapterId = context.contextSubChapterId;
-    var requestSubChapterId = context.requestSubChapterId;
-    var subChapter = mlDBController.findOne('MlSubChapters', {_id: contextSubChapterId}) || {};
-    var ecoSystemAccessPermission = (subChapter.moolyaSubChapterAccess || {}).externalUser || {};
-    /**check for ecosystem access permission for context user subChapter*/
-    var scEcoSysSearch = _.isBoolean(ecoSystemAccessPermission.canSearch) ? ecoSystemAccessPermission.canSearch : false;
-    var scEcoSysView = _.isBoolean(ecoSystemAccessPermission.canView) ? ecoSystemAccessPermission.canView : false;
-    var scEcoSysTransact = _.isBoolean(ecoSystemAccessPermission.canTransact) ? ecoSystemAccessPermission.canTransact : false;
-    var canSearch = scEcoSysTransact ? true : (scEcoSysView ? true : scEcoSysSearch);
-    var canView = scEcoSysTransact ? true : scEcoSysView;
-    var canTransact = scEcoSysTransact;
+    const isInternalUser = context.isInternalUser;
+    const contextSubChapterId = context.contextSubChapterId;
+    const requestSubChapterId = context.requestSubChapterId;
+    const subChapter = mlDBController.findOne('MlSubChapters', { _id: contextSubChapterId }) || {};
+    const ecoSystemAccessPermission = (subChapter.moolyaSubChapterAccess || {}).externalUser || {};
+    /** check for ecosystem access permission for context user subChapter */
+    const scEcoSysSearch = _.isBoolean(ecoSystemAccessPermission.canSearch) ? ecoSystemAccessPermission.canSearch : false;
+    const scEcoSysView = _.isBoolean(ecoSystemAccessPermission.canView) ? ecoSystemAccessPermission.canView : false;
+    const scEcoSysTransact = _.isBoolean(ecoSystemAccessPermission.canTransact) ? ecoSystemAccessPermission.canTransact : false;
+    const canSearch = scEcoSysTransact ? true : (scEcoSysView ? true : scEcoSysSearch);
+    const canView = scEcoSysTransact ? true : scEcoSysView;
+    const canTransact = scEcoSysTransact;
 
-    var accessControl = {hasAccess: false, isInclusive: true, subChapters: null};
-    /** check for  context user specific subChapter ['subChapterId']*/
-    var allowedSubChapters = [contextSubChapterId];
-    /**get all related sub Chapters.*/
-    var relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(isInternalUser, contextSubChapterId, permission);
+    let accessControl = { hasAccess: false, isInclusive: true, subChapters: null };
+    /** check for  context user specific subChapter ['subChapterId'] */
+    let allowedSubChapters = [contextSubChapterId];
+    /** get all related sub Chapters. */
+    const relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(isInternalUser, contextSubChapterId, permission);
     allowedSubChapters = allowedSubChapters.concat(relatedObj.relatedSubChapters);
 
     switch (permission) {
       case 'SEARCH':
         if (canSearch) {
-          var privateSubChapters = MlSubChapterAccessControl.getNonRelatedPrivateEcoSystemSubChapters(permission, allowedSubChapters) || [];
-          accessControl = {hasAccess: true, isInclusive: false, subChapters: privateSubChapters};
+          const privateSubChapters = MlSubChapterAccessControl.getNonRelatedPrivateEcoSystemSubChapters(permission, allowedSubChapters) || [];
+          accessControl = { hasAccess: true, isInclusive: false, subChapters: privateSubChapters };
         } else {
-          accessControl = {hasAccess: true, isInclusive: true, subChapters: allowedSubChapters};
+          accessControl = { hasAccess: true, isInclusive: true, subChapters: allowedSubChapters };
         }
         break;
       case 'VIEW':
         if (canView) {
           accessControl.hasAccess = MlSubChapterAccessControl.canNonMoolyaSubChapterAccess(permission, requestSubChapterId, allowedSubChapters);
         } else {
-          accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
+          accessControl.hasAccess = !(_.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0);
         }
         break;
       case 'TRANSACT':
         if (canTransact) {
           accessControl.hasAccess = MlSubChapterAccessControl.canNonMoolyaSubChapterAccess(permission, requestSubChapterId, allowedSubChapters);
         } else {
-          accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
+          accessControl.hasAccess = !(_.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0);
         }
         break;
     }
@@ -144,21 +146,23 @@ class MlSubChapterAccessControl {
   }
 
   static resolveNonMoolyaInternalAccess(permission, context) {
-    var isInternalUser = context.isInternalUser;
-    var contextSubChapterId = context.contextSubChapterId;
-    var contextChapterId= context.contextChapterId;
-    var requestSubChapterId = context.requestSubChapterId;
-    var accessControl = {hasAccess: false, isInclusive: true, subChapters: [], chapters:[]};
-    /** Add context user specific subChapter*/
-    var allowedSubChapters = [contextSubChapterId];
-    var allowedChapters=[contextChapterId];
-    /**Non-Moolya can access external Users as well hence we are checking the externalUserAccess*/
+    const isInternalUser = context.isInternalUser;
+    const contextSubChapterId = context.contextSubChapterId;
+    const contextChapterId = context.contextChapterId;
+    const requestSubChapterId = context.requestSubChapterId;
+    let accessControl = {
+      hasAccess: false, isInclusive: true, subChapters: [], chapters: []
+    };
+    /** Add context user specific subChapter */
+    let allowedSubChapters = [contextSubChapterId];
+    let allowedChapters = [contextChapterId];
+    /** Non-Moolya can access external Users as well hence we are checking the externalUserAccess */
     // var accessInternalUser=context.internalCrossAccess?context.internalCrossAccess:isInternalUser;
-    var accessInternalUser = _.isBoolean(context.internalCrossAccess) ? context.internalCrossAccess : isInternalUser;
-    /**get all related sub Chapters.*/
-    var relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(accessInternalUser, contextSubChapterId, permission);
+    const accessInternalUser = _.isBoolean(context.internalCrossAccess) ? context.internalCrossAccess : isInternalUser;
+    /** get all related sub Chapters. */
+    const relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(accessInternalUser, contextSubChapterId, permission);
     allowedSubChapters = allowedSubChapters.concat(relatedObj.relatedSubChapters);
-    allowedChapters= allowedChapters.concat(relatedObj.relatedChapters);
+    allowedChapters = allowedChapters.concat(relatedObj.relatedChapters);
     switch (permission) {
       case 'SEARCH':
         accessControl = {
@@ -169,12 +173,12 @@ class MlSubChapterAccessControl {
         };
         break;
       case 'VIEW':
-        accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
+        accessControl.hasAccess = !(_.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0);
         break;
       case 'TRANSACT':
         // accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
         accessControl = {
-          hasAccess: _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true,
+          hasAccess: !(_.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0),
           isInclusive: true,
           subChapters: allowedSubChapters,
           chapters: allowedChapters
@@ -191,42 +195,42 @@ class MlSubChapterAccessControl {
    * returns result Object which contains private sub chapters list(all private sub chapters)
    */
   static getPrivateEcoSystemSubChapters(permission, requestSubChapterId) {
-    var privateSubChapters = [];
+    let privateSubChapters = [];
     switch (permission) {
       case 'SEARCH':
         privateSubChapters = mlDBController.find('MlSubChapters', {
-          isDefaultSubChapter: false,'moolyaSubChapterAccess.externalUser.canSearch':false,'moolyaSubChapterAccess.externalUser.canView':false,'moolyaSubChapterAccess.externalUser.canTransact':false
+          isDefaultSubChapter: false, 'moolyaSubChapterAccess.externalUser.canSearch': false, 'moolyaSubChapterAccess.externalUser.canView': false, 'moolyaSubChapterAccess.externalUser.canTransact': false
         }).fetch();
     }
-    var privateSubChaptersList = _.map(privateSubChapters, '_id');
+    const privateSubChaptersList = _.map(privateSubChapters, '_id');
     return privateSubChaptersList;
   }
 
-  /**get private ecosystem non-moolya subChapters*/
+  /** get private ecosystem non-moolya subChapters */
   static canMoolyaSubChapterAccess(permission, requestSubChapterId) {
-    var privateSubChapters = [];
-    var accessCount = 0;
-    var hasAccess = false;
+    const privateSubChapters = [];
+    let accessCount = 0;
+    let hasAccess = false;
     switch (permission) {
       case 'VIEW':
         accessCount = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
           _id: requestSubChapterId,
-          '$or':[{"moolyaSubChapterAccess.externalUser.canView": true},
-            {"moolyaSubChapterAccess.externalUser.canTransact": true}]
+          $or: [{ 'moolyaSubChapterAccess.externalUser.canView': true },
+            { 'moolyaSubChapterAccess.externalUser.canTransact': true }]
         }).count();
         break;
       case 'TRANSACT':
         accessCount = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
           _id: requestSubChapterId,
-          "moolyaSubChapterAccess.externalUser.canTransact": true
+          'moolyaSubChapterAccess.externalUser.canTransact': true
         }).count();
     }
     if (accessCount > 0) {
       hasAccess = true
     }
-    ;
+
     return hasAccess;
   }
 
@@ -237,53 +241,55 @@ class MlSubChapterAccessControl {
    * returns result Object which contains private sub chapters list(excluding the related subchapters)
    */
   static getNonRelatedPrivateEcoSystemSubChapters(permission, relatedSubChapters) {
-    var privateSubChapters = [];
+    let privateSubChapters = [];
     switch (permission) {
       case 'SEARCH':
         privateSubChapters = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
-          '_id': {'$nin': relatedSubChapters},
-          'moolyaSubChapterAccess.externalUser.canSearch':false,'moolyaSubChapterAccess.externalUser.canView':false,'moolyaSubChapterAccess.externalUser.canTransact':false
+          _id: { $nin: relatedSubChapters },
+          'moolyaSubChapterAccess.externalUser.canSearch': false,
+          'moolyaSubChapterAccess.externalUser.canView': false,
+          'moolyaSubChapterAccess.externalUser.canTransact': false
         }).fetch();
     }
-    var privateSubChaptersList = _.map(privateSubChapters, '_id');
+    const privateSubChaptersList = _.map(privateSubChapters, '_id');
     return privateSubChaptersList;
   }
 
-  /**check for view/transact access for nonMoolyaSubChapter Access*/
+  /** check for view/transact access for nonMoolyaSubChapter Access */
   static canNonMoolyaSubChapterAccess(permission, requestSubChapterId, relatedSubChapters) {
-    var hasAccess = false;
-    var accessCount = 0;
-    /** check if requested subchapter is part of relatedSubChapter or self*/
+    let hasAccess = false;
+    let accessCount = 0;
+    /** check if requested subchapter is part of relatedSubChapter or self */
     if (_.isArray(relatedSubChapters)) {
       accessCount = _.indexOf(relatedSubChapters, requestSubChapterId) < 0 ? 0 : 1;
     }
     if (accessCount <= 0) {
       switch (permission) {
         case 'VIEW':
-          /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+view/transact access check*/
+          /** conditions 1)moolya sub chapter check 2)non-moolya sub chapter+view/transact access check */
           accessCount = mlDBController.find('MlSubChapters', {
-            $or: [{isDefaultSubChapter: true, _id: requestSubChapterId},
+            $or: [{ isDefaultSubChapter: true, _id: requestSubChapterId },
               {
                 isDefaultSubChapter: false,
-                "moolyaSubChapterAccess.externalUser.canView": true,
+                'moolyaSubChapterAccess.externalUser.canView': true,
                 _id: requestSubChapterId
               },
               {
                 isDefaultSubChapter: false,
-                "moolyaSubChapterAccess.externalUser.canTransact": true,
+                'moolyaSubChapterAccess.externalUser.canTransact': true,
                 _id: requestSubChapterId
               }
             ]
           }).count();
           break;
         case 'TRANSACT':
-          /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+transact access check*/
+          /** conditions 1)moolya sub chapter check 2)non-moolya sub chapter+transact access check */
           accessCount = mlDBController.find('MlSubChapters', {
-            $or: [{isDefaultSubChapter: true, _id: requestSubChapterId},
+            $or: [{ isDefaultSubChapter: true, _id: requestSubChapterId },
               {
                 isDefaultSubChapter: false,
-                "moolyaSubChapterAccess.externalUser.canTransact": true,
+                'moolyaSubChapterAccess.externalUser.canTransact': true,
                 _id: requestSubChapterId
               }
             ]
@@ -294,88 +300,87 @@ class MlSubChapterAccessControl {
     if (accessCount > 0) {
       hasAccess = true
     }
-    ;
+
     return hasAccess;
   }
 
-  /**get related subChapters*/
+  /** get related subChapters */
   static getRelatedSubChapters(isInternalUser, subChapterId, permission) {
-    var matchQuery = MlSubChapterAccessControl.constructRelatedSubChapterQuery(isInternalUser, permission);
-    var pipeline = [{
-      $match: {'subChapters': {$elemMatch: {'subChapterId': subChapterId}}, isActive: true}
+    const matchQuery = MlSubChapterAccessControl.constructRelatedSubChapterQuery(isInternalUser, permission);
+    const pipeline = [{
+      $match: { subChapters: { $elemMatch: { subChapterId } }, isActive: true }
     },
-      {$unwind: "$subChapters"},
-      {
-        $match: {'subChapters.subChapterId': {$ne: subChapterId}}
-      },
-      {
-        $match: matchQuery
-      },
-      {
-        $project: {_id: "$subChapters.subChapterId", "chapterId": "$subChapters.chapterId"}
-      }
+    { $unwind: '$subChapters' },
+    {
+      $match: { 'subChapters.subChapterId': { $ne: subChapterId } }
+    },
+    {
+      $match: matchQuery
+    },
+    {
+      $project: { _id: '$subChapters.subChapterId', chapterId: '$subChapters.chapterId' }
+    }
     ];
-    var relatedObj = mlDBController.aggregate('MlRelatedSubChapters', pipeline);
-    var relatedSubChapters = _.map(relatedObj, '_id');
-    var relatedChapters = _.map(relatedObj, 'chapterId');
-    return {relatedSubChapters: relatedSubChapters, relatedChapters: relatedChapters};
+    const relatedObj = mlDBController.aggregate('MlRelatedSubChapters', pipeline);
+    const relatedSubChapters = _.map(relatedObj, '_id');
+    const relatedChapters = _.map(relatedObj, 'chapterId');
+    return { relatedSubChapters, relatedChapters };
   }
 
-  /**constructor query for related sub Chapters*/
+  /** constructor query for related sub Chapters */
   static constructRelatedSubChapterQuery(isInternalUser, permission) {
-    var matchQuery = null;
-    /**Business requirement specific query*/
-    /**Todo: change the 'subChapters' key(subChapters.externalUser.canSearch) is hardcoded in query constructor, make it parameterised*/
+    let matchQuery = null;
+    /** Business requirement specific query */
+    /** Todo: change the 'subChapters' key(subChapters.externalUser.canSearch) is hardcoded in query constructor, make it parameterised */
     switch (permission) {
       case 'SEARCH':
-        matchQuery = {$or: [{'externalUser.canSearch': true}, {'externalUser.canView': true}, {'externalUser.canTransact': true}]};
+        matchQuery = { $or: [{ 'externalUser.canSearch': true }, { 'externalUser.canView': true }, { 'externalUser.canTransact': true }] };
         if (isInternalUser) {
-          matchQuery = {$or: [{'backendUser.canSearch': true}, {'backendUser.canView': true}, {'backendUser.canTransact': true}]};
+          matchQuery = { $or: [{ 'backendUser.canSearch': true }, { 'backendUser.canView': true }, { 'backendUser.canTransact': true }] };
         }
         break;
       case 'VIEW':
-        matchQuery = {$or: [{'externalUser.canView': true}, {'externalUser.canTransact': true}]};
+        matchQuery = { $or: [{ 'externalUser.canView': true }, { 'externalUser.canTransact': true }] };
         if (isInternalUser) {
-          matchQuery = {$or: [{'backendUser.canView': true}, {'backendUser.canTransact': true}]};
+          matchQuery = { $or: [{ 'backendUser.canView': true }, { 'backendUser.canTransact': true }] };
         }
         break;
       case 'TRANSACT':
-        matchQuery = {'externalUser.canTransact': true};
+        matchQuery = { 'externalUser.canTransact': true };
         if (isInternalUser) {
-          matchQuery = {'backendUser.canTransact': true};
+          matchQuery = { 'backendUser.canTransact': true };
         }
-        ;
     }
     return matchQuery;
   }
 
   static fetchSubChapterDetails(subChapterId) {
-    var subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}) || {};
+    const subChapter = mlDBController.findOne('MlSubChapters', { _id: subChapterId }) || {};
     return subChapter;
   }
 
   static setUserContext(context, requestSubChapterId) {
-    var userId = context.userId;
+    const userId = context.userId;
     context.requestSubChapterId = requestSubChapterId;
-    var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
-    /**if its internal user */
+    let userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
+    /** if its internal user */
     if (userProfile && userProfile.isInternaluser) {
       context.isInternalUser = userProfile.isInternaluser;
       context.isMoolya = _.isBoolean(userProfile.isMoolya) ? userProfile.isMoolya : false;
-      /**todo:Provision for multi subchapter access control*/
+      /** todo:Provision for multi subchapter access control */
       context.contextSubChapterId = _.isArray(userProfile.defaultSubChapters) ? userProfile.defaultSubChapters[0] : null;
       context.contextChapterId = _.isArray(userProfile.defaultChapters) ? userProfile.defaultChapters[0] : null;
     }
-    /**if its external user */
+    /** if its external user */
     else {
       context.isInternalUser = false;
       userProfile = new MlUserContext().userProfileDetails(userId);
       if (userProfile && !userProfile.isInternaluser) {
-        var contextSubChapterId = userProfile.subChapterId ? userProfile.subChapterId : null;
-        var contextChapterId = userProfile.chapterId ? userProfile.chapterId : null;
+        const contextSubChapterId = userProfile.subChapterId ? userProfile.subChapterId : null;
+        const contextChapterId = userProfile.chapterId ? userProfile.chapterId : null;
         context.contextSubChapterId = contextSubChapterId;
         context.contextChapterId = contextChapterId;
-        var subChapter = MlSubChapterAccessControl.fetchSubChapterDetails(contextSubChapterId);
+        const subChapter = MlSubChapterAccessControl.fetchSubChapterDetails(contextSubChapterId);
         context.isMoolya = _.isBoolean(subChapter.isDefaultSubChapter) ? subChapter.isDefaultSubChapter : false;
       }
     }

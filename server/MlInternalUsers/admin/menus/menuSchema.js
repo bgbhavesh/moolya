@@ -1,8 +1,8 @@
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../commons/mlSchemaDef";
-import MlResolver from "../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef';
 
-let Menu = `
+const Menu = `
     type Menu{
       image: String
       link: String
@@ -33,19 +33,25 @@ let Menu = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],Menu]);
-let supportedApi = [{
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Menu]);
+const supportedApi = [{
   api: 'FetchMenu',
   actionName: 'READ',
   isAppWhiteList: true,
-  isWhiteList:true,
-  moduleName: "MENU"
+  isWhiteList: true,
+  moduleName: 'MENU'
 }, {
   api: 'fetchExternalUserMenu',
   actionName: 'READ',
   isAppWhiteList: true,
-  resource: "MENU"
-}, {api: 'fetchExternalUserProfileMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,},
-  {api: 'fetchExploreMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,},
-  {api: 'fetchCalendarMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,}];
+  resource: 'MENU'
+}, {
+  api: 'fetchExternalUserProfileMenu', isWhiteList: true, actionName: 'READ', moduleName: 'MENU', isAppWhiteList: true
+},
+{
+  api: 'fetchExploreMenu', isWhiteList: true, actionName: 'READ', moduleName: 'MENU', isAppWhiteList: true
+},
+{
+  api: 'fetchCalendarMenu', isWhiteList: true, actionName: 'READ', moduleName: 'MENU', isAppWhiteList: true
+}];
 MlResolver.MlModuleResolver.push(supportedApi)

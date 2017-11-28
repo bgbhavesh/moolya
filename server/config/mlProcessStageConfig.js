@@ -10,7 +10,7 @@
 //   'onboard'
 // ]
 
-let stages = [
+const stages = [
   {
     name: 'likes',
     displayName: 'Liked',
@@ -43,12 +43,12 @@ let stages = [
   }
 ];
 
-Meteor.startup(function () {
-    for (i = 0; i < stages.length; i++) {
-        let stage = MlProcessStages.findOne({name: stages[i].name});
-        if (!stage) {
-//            stage = {name: stages[i], displayName: stages[i], code: stages[i].toUpperCase(), isActive: true};
-            MlProcessStages.insert(stages[i]);
-        }
+Meteor.startup(() => {
+  for (i = 0; i < stages.length; i++) {
+    const stage = MlProcessStages.findOne({ name: stages[i].name });
+    if (!stage) {
+      //            stage = {name: stages[i], displayName: stages[i], code: stages[i].toUpperCase(), isActive: true};
+      MlProcessStages.insert(stages[i]);
     }
+  }
 });

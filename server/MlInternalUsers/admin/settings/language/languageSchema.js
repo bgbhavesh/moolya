@@ -1,6 +1,6 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-let LanguagesSchema = `
+const LanguagesSchema = `
     type Language
     {
       languageName :String
@@ -28,4 +28,4 @@ let LanguagesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],LanguagesSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, LanguagesSchema]);

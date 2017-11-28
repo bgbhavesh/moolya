@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Award = `        
+const Award = `        
     type Award{
       awardName :String
       awardDisplayName :String
@@ -24,12 +24,14 @@ let Award = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Award]);
-let supportedApi = [
-  {api:'CreateAward', actionName:'CREATE', moduleName:"AWARDS"},
-  {api:'UpdateAward', actionName:'UPDATE', moduleName:"AWARDS"},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Award]);
+const supportedApi = [
+  { api: 'CreateAward', actionName: 'CREATE', moduleName: 'AWARDS' },
+  { api: 'UpdateAward', actionName: 'UPDATE', moduleName: 'AWARDS' },
 
-  {api:'FindAward', actionName:'READ', moduleName:"AWARDS"},
-  {api:'fetchActiveAwards', actionName:'READ', moduleName:"AWARDS", isWhiteList:true}
+  { api: 'FindAward', actionName: 'READ', moduleName: 'AWARDS' },
+  {
+    api: 'fetchActiveAwards', actionName: 'READ', moduleName: 'AWARDS', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

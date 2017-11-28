@@ -1,11 +1,10 @@
 
 
-
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let moolya = `
+const moolya = `
     interface moolya {
      id : String
      }
@@ -24,9 +23,9 @@ let moolya = `
     
 `
 
-//MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
+// MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
-let search = `
+const search = `
 union SearchResult = GenericType | Cluster | Chapter | SubChapter | Community | Department | SubDepartment | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Account | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Assets | Technologies | SubDomain | FundingType | Roles | ProcessType | Tax | taxation | Title | Regional | Language | DateAndTime | NumericalFormat | AddressType | CompanyType | Gender | SocialLinks | EmployeeType | EmailType | ContactType | RegistrationInfo | TemplateDetails | TemplateAssignment | Hierarchy | Portfoliodetails | Award | Filters | FunderPortfolio | ActionAndStatusType | officeTransactionType | myTransaction | serviceProviderPortfolioDetails | startupPortfolioOutput | NotificationTemplate | OfficePackage 
 
 input SearchGenericSpec{
@@ -62,11 +61,11 @@ type Query {
   SearchQuery(module: String!,customParams: CustomParams, offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
 }`
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);
-let supportedApi = [{api:'SearchQuery', actionName:'READ', moduleName:"GENERIC"}];
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, search]);
+const supportedApi = [{ api: 'SearchQuery', actionName: 'READ', moduleName: 'GENERIC' }];
 MlResolver.MlModuleResolver.push(supportedApi)
 
-//have to integrate to search
+// have to integrate to search
 // valueType: String || Boolean || Date,
 // operator: String!,
 // valueType: String

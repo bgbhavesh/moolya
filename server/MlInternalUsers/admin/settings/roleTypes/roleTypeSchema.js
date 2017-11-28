@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let RoleTypesSchema = `
+const RoleTypesSchema = `
     type RoleTypes
     {
       roleTypeName :String
@@ -21,11 +21,11 @@ let RoleTypesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RoleTypesSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, RoleTypesSchema]);
 
-let supportedApi = [
-  {api:'FindRoleType', actionName:'READ', moduleName:"ROLETYPE"},
+const supportedApi = [
+  { api: 'FindRoleType', actionName: 'READ', moduleName: 'ROLETYPE' },
 
-  {api:'UpdateRoleType', actionName:'UPDATE', moduleName:"ROLETYPE"}
+  { api: 'UpdateRoleType', actionName: 'UPDATE', moduleName: 'ROLETYPE' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -3,9 +3,9 @@
  */
 import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
-let appointment = `
+const appointment = `
   
   input userServiceCardPaymentInfo {
     orderId: String!,
@@ -271,17 +271,27 @@ let appointment = `
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appointment]);
-let supportedApi = [
-  { api: 'bookUserServiceCard', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList: true },
-  { api: 'userServiceCardPayment', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList: true },
-  { api: 'fetchAdminServiceAppointment', actionName: 'READ', moduleName: "OFFICE", isWhiteList: true },
-  { api: 'fetchAdminSessionAppointment', actionName: 'READ', moduleName: "OFFICE", isWhiteList: true },
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, appointment]);
+const supportedApi = [
+  {
+    api: 'bookUserServiceCard', actionName: 'CREATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'userServiceCardPayment', actionName: 'CREATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'fetchAdminServiceAppointment', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'fetchAdminSessionAppointment', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
   // { api: 'fetchAppServiceAppointmentByTransactionId', actionName: 'READ', moduleName: "OFFICE", isWhiteList: true },
   // { api: 'fetchAppSessionAppointmentByTransactionId', actionName: 'READ', moduleName: "OFFICE", isWhiteList: true },
-  { api: 'bookUserServiceCardAppointment', actionName: 'CREATE', userAction: "CREATEAPPOINTMENT", resourceName: "SERVICECARD", isWhiteList: true },
-  { api: 'updateAppointmentByStatus', actionName: 'UPDATE', resourceName: "SERVICECARD" },
-  { api: 'fetchSlotDetails', actionName: 'READ', moduleName: "APPOINTMENT"},
+  {
+    api: 'bookUserServiceCardAppointment', actionName: 'CREATE', userAction: 'CREATEAPPOINTMENT', resourceName: 'SERVICECARD', isWhiteList: true
+  },
+  { api: 'updateAppointmentByStatus', actionName: 'UPDATE', resourceName: 'SERVICECARD' },
+  { api: 'fetchSlotDetails', actionName: 'READ', moduleName: 'APPOINTMENT' }
 ];
 
 MlResolver.MlModuleResolver.push(supportedApi);

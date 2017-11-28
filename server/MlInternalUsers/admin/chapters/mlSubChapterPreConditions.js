@@ -8,12 +8,12 @@ class MlSubChapterPreConditions {
   }
 
   static hasEditPermSubChapterAccessControl(context) {
-    var hasPerm=false;
-    let userProfile=new MlAdminUserContext().userProfileDetails((context||{}).userId);
-    if(userProfile&&userProfile.hierarchyLevel) {
-      var hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
-      //Platform Admin Hierarchy
-      if(hierarchy&&hierarchy.isParent===true) hasPerm=true;
+    let hasPerm = false;
+    const userProfile = new MlAdminUserContext().userProfileDetails((context || {}).userId);
+    if (userProfile && userProfile.hierarchyLevel) {
+      const hierarchy = MlHierarchy.findOne({ level: Number(userProfile.hierarchyLevel) });
+      // Platform Admin Hierarchy
+      if (hierarchy && hierarchy.isParent === true) hasPerm = true;
     }
     return hasPerm;
   }

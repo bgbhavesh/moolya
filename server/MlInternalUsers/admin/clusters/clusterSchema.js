@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let clusterSchema = `
+const clusterSchema = `
     type Cluster{
         _id:String
         countryName: String
@@ -67,13 +67,19 @@ let clusterSchema = `
     }    
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], clusterSchema]);
-let supportedApi = [
-    {api:'fetchCluster', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
-    {api:'fetchClustersForMap', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
-    {api:'fetchActiveClusters', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
-    {api:'createCluster', actionName:'CREATE', moduleName:"CLUSTER"},
-    {api:'upsertCluster', actionName:'UPDATE', moduleName:"CLUSTER"},
-    {api:'updateCluster', actionName:'UPDATE', moduleName:"CLUSTER"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, clusterSchema]);
+const supportedApi = [
+  {
+    api: 'fetchCluster', actionName: 'READ', moduleName: 'CLUSTER', isWhiteList: true
+  },
+  {
+    api: 'fetchClustersForMap', actionName: 'READ', moduleName: 'CLUSTER', isWhiteList: true
+  },
+  {
+    api: 'fetchActiveClusters', actionName: 'READ', moduleName: 'CLUSTER', isWhiteList: true
+  },
+  { api: 'createCluster', actionName: 'CREATE', moduleName: 'CLUSTER' },
+  { api: 'upsertCluster', actionName: 'UPDATE', moduleName: 'CLUSTER' },
+  { api: 'updateCluster', actionName: 'UPDATE', moduleName: 'CLUSTER' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

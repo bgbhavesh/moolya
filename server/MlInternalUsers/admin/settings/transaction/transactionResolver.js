@@ -2,71 +2,66 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
-MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.CreateTransaction = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
-  if(!args.transactionName){
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Transaction Name is Required", code);
+  if (!args.transactionName) {
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Transaction Name is Required', code);
     return response;
-  }else {
-    let id = MlTransactionTypes.insert({...args});
-    if (id) {
-      let code = 200;
-      let result = {transactionId: id}
-      let response = new MlRespPayload().successPayload(result, code);
-      return response
-    }
+  }
+  const id = MlTransactionTypes.insert({ ...args });
+  if (id) {
+    const code = 200;
+    const result = { transactionId: id }
+    const response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 };
 
-MlResolver.MlMutationResolver['UpdateTransaction'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.UpdateTransaction = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
-  if(!args.transactionName){
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Transaction Name is Required", code);
+  if (!args.transactionName) {
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Transaction Name is Required', code);
     return response;
-  }else {
-    if (args._id) {
-      var id= args._id;
-      args=_.omit(args,'_id');
-      let result= MlTransactionTypes.update(id, {$set: args});
-      let code = 200;
-      let response = new MlRespPayload().successPayload(result, code);
-      return response
-    }
+  }
+  if (args._id) {
+    const id = args._id;
+    args = _.omit(args, '_id');
+    const result = MlTransactionTypes.update(id, { $set: args });
+    const code = 200;
+    const response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 };
 
-MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.FindTransaction = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlTransactionTypes.findOne({"_id":id});
+    const id = args._id;
+    const response = MlTransactionTypes.findOne({ _id: id });
     return response;
   }
-
 }
 
 // This is being used in Request Types
-MlResolver.MlQueryResolver['fetchTransaction'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchTransaction = (obj, args, context, info) => {
   // TODO : Authorization
 
-    let response= MlTransactionTypes.find({isActive:true}).fetch();
-    return response;
-
+  const response = MlTransactionTypes.find({ isActive: true }).fetch();
+  return response;
 }
-
 

@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let LookingForSchema = `
+const LookingForSchema = `
     type LookingFor
     {
       lookingForName :String
@@ -28,13 +28,15 @@ let LookingForSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],LookingForSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, LookingForSchema]);
 
-let supportedApi = [
-  {api:'FindLookingFor', actionName:'READ', moduleName:"LOOKINGFOR"},
-  {api:'fetchLookingFor', actionName:'READ', moduleName:"LOOKINGFOR", isWhiteList:true},
+const supportedApi = [
+  { api: 'FindLookingFor', actionName: 'READ', moduleName: 'LOOKINGFOR' },
+  {
+    api: 'fetchLookingFor', actionName: 'READ', moduleName: 'LOOKINGFOR', isWhiteList: true
+  },
 
-  {api:'CreateLookingFor', actionName:'CREATE', moduleName:"LOOKINGFOR"},
-  {api:'UpdateLookingFor', actionName:'UPDATE', moduleName:"LOOKINGFOR"}
+  { api: 'CreateLookingFor', actionName: 'CREATE', moduleName: 'LOOKINGFOR' },
+  { api: 'UpdateLookingFor', actionName: 'UPDATE', moduleName: 'LOOKINGFOR' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,12 +1,12 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let startupPortfolioSchema = `
+const startupPortfolioSchema = `
 
     type PortfolioMenu{
         image: String
@@ -652,24 +652,24 @@ let startupPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], startupPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, startupPortfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchStartupPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupDetails', actionName:'READ', moduleName:"PORTFOLIO"},
+const supportedApi = [
+  { api: 'fetchStartupPortfolioAboutUs', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioMemberships', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioCompliances', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioLicenses', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioManagement', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioInvestor', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioLookingFor', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioAwards', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioCharts', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupPortfolioData', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchStartupDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
 
-  {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'createStartupPortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
+  { api: 'createStartupPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  { api: 'updateStartupPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' },
+  { api: 'createStartupPortfolioChart', actionName: 'UPDATE', moduleName: 'PORTFOLIO' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

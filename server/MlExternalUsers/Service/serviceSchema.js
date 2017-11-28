@@ -2,12 +2,12 @@
  * Created by Mukhil on 14/6/17.
  */
 
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
 
-let service=`
+const service = `
   type ServiceFacilitationCharge {
      type: String
      amount: Float
@@ -379,29 +379,59 @@ let service=`
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], service]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, service]);
 
-let supportedApi = [
-  {api:'fetchUserServices',           actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'findService',                 actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'fetchTasksAmount',            actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'getProfileBasedOnPortfolio',  actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'getTaskFromService',          actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'fetchBeSpokeServices',        actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'createService',               userAction:"CREATESERVICEDEF", actionName:'CREATE',  resourceName:"SERVICECARD"},
-  {api:'updateService',               userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceGoLive',         userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceSendReview',     userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD"},
-  {api:'createServiceCardOrder',      userAction:"CREATESERVICEORDER", actionName:'CREATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"},
+const supportedApi = [
+  {
+    api: 'fetchUserServices', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'findService', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'fetchTasksAmount', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'getProfileBasedOnPortfolio', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'getTaskFromService', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'fetchBeSpokeServices', actionName: 'READ', moduleName: 'SERVICECARD', isAppWhiteList: true
+  },
+  {
+    api: 'createService', userAction: 'CREATESERVICEDEF', actionName: 'CREATE', resourceName: 'SERVICECARD'
+  },
+  {
+    api: 'updateService', userAction: 'UPDATESERVICEDEF', actionName: 'UPDATE', resourceName: 'SERVICECARD'
+  },
+  {
+    api: 'updateServiceGoLive', userAction: 'UPDATESERVICEDEF', actionName: 'UPDATE', resourceName: 'SERVICECARD'
+  },
+  {
+    api: 'updateServiceSendReview', userAction: 'UPDATESERVICEDEF', actionName: 'UPDATE', resourceName: 'SERVICECARD'
+  },
+  { api: 'updateServiceAdmin', actionName: 'UPDATE', moduleName: 'SERVICECARD' },
+  {
+    api: 'createServiceCardOrder', userAction: 'CREATESERVICEORDER', actionName: 'CREATE', resourceName: 'SERVICECARD'
+  },
+  {
+    api: 'updateServiceCardOrder', userAction: 'UPDATESERVICEORDER', actionName: 'UPDATE', resourceName: 'SERVICECARD'
+  },
 
-  {api:'getServiceBasedOnServiceId',  actionName:'READ',    moduleName:"SERVICECARD", isWhiteList:true},
-  {api:'fetchServicesForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true},
-  {api:'getBeSpokeForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true}
+  {
+    api: 'getServiceBasedOnServiceId', actionName: 'READ', moduleName: 'SERVICECARD', isWhiteList: true
+  },
+  {
+    api: 'fetchServicesForAppointments', actionName: 'READ', resourceName: 'SERVICECARD', isWhiteList: true
+  },
+  {
+    api: 'getBeSpokeForAppointments', actionName: 'READ', resourceName: 'SERVICECARD', isWhiteList: true
+  }
 
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)
-/**note: removed white list from UPDATE*/
-  // , isWhiteList:true
+/** note: removed white list from UPDATE */
+// , isWhiteList:true

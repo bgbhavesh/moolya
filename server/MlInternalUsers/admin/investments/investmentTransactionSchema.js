@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 6/6/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../commons/mlSchemaDef";
-import MlResolver from "../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef';
 
-let investments = `
+const investments = `
 
     input paymentDetails{
         subscriptionName:String,
@@ -201,14 +201,20 @@ let investments = `
 `
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, investments]);
 
-let supportedApi = [
-  {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
-  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
-  {api: 'fetchProcessActions', actionName: 'READ', moduleName: "ACTIONS", isWhiteList: true},
-  {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
-  {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
-  {api:'fetchUserProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"}
+const supportedApi = [
+  { api: 'updateProcessSetup', actionName: 'UPDATE', moduleName: 'PROCESSSETUP' },
+  {
+    api: 'fetchProcessSetup', actionName: 'READ', moduleName: 'PROCESSSETUP', isWhiteList: true
+  },
+  {
+    api: 'fetchProcessActions', actionName: 'READ', moduleName: 'ACTIONS', isWhiteList: true
+  },
+  {
+    api: 'fetchProcessStages', actionName: 'READ', moduleName: 'PROCESSSETUP', isWhiteList: true
+  },
+  { api: 'updateProcessTransaction', actionName: 'UPDATE', moduleName: 'PROCESSSETUP' },
+  { api: 'fetchUserProcessSetup', actionName: 'READ', moduleName: 'PROCESSSETUP' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

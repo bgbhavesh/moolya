@@ -1,8 +1,8 @@
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../commons/mlSchemaDef";
-import MlResolver from "../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef';
 
-let registrationSchema = `        
+const registrationSchema = `        
     
     type ContactInfoSchema{
       numberType        : String
@@ -479,40 +479,72 @@ let registrationSchema = `
     }
     
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);
-let supportedApi = [
-    {api:'findRegistration', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'findRegistrationInfo', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION", isAppWhiteList:true},
-    {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
-    {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
-    {api:'createGeneralInfoInRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'updateRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'updateRegistrationInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'updateRegistrationUploadedDocumentUrl', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'updateRegistrationGeneralInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'ApprovedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'RejectedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'RemoveFileFromDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'ApprovedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'RejectedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'sendUserSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'resendUserSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'verifyUserMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'verifyLaterUserMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'createKYCDocument',actionName:'UPDATE',moduleName:"REGISTRATION"},
-    {api:'findUserPendingRegistration',actionName:'READ',moduleName:"REGISTRATION", isWhiteList:true},
-    {api: 'findRegistrationInfoUser', actionName: 'READ', moduleName: "REGISTRATION", isWhiteList: true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, registrationSchema]);
+const supportedApi = [
+  { api: 'findRegistration', actionName: 'READ', moduleName: 'REGISTRATION' },
+  { api: 'findRegistrationInfo', actionName: 'READ', moduleName: 'REGISTRATION' },
+  {
+    api: 'findRegistrationInfoForUser', actionName: 'READ', moduleName: 'REGISTRATION', isAppWhiteList: true
+  },
+  { api: 'registerAs', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'createRegistrationAPI', actionName: 'CREATE', moduleName: 'REGISTRATION' },
+  { api: 'createRegistration', actionName: 'CREATE', moduleName: 'REGISTRATION' },
+  { api: 'createGeneralInfoInRegistration', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'updateRegistration', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'updateRegistrationInfo', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'updateRegistrationUploadedDocumentUrl', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'updateRegistrationGeneralInfo', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'ApprovedStatusOfDocuments', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'RejectedStatusOfDocuments', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'RemoveFileFromDocuments', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'ApprovedStatusForUser', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  { api: 'RejectedStatusForUser', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  {
+    api: 'sendEmailVerificationForRegistration', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'sendSmsVerificationForRegistration', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'sendEmailVerification', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'sendUserSmsVerification', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'resendUserSmsVerification', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'verifyUserMobileNumber', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'resendSmsVerification', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'verifyEmail', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'verifyLaterUserMobileNumber', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'verifyMobileNumber', actionName: 'UPDATE', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'fetchContextClusters', actionName: 'READ', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'fetchContextChapters', actionName: 'READ', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'fetchContextSubChapters', actionName: 'READ', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  { api: 'forgotPassword', actionName: 'READ', moduleName: 'REGISTRATION' },
+  { api: 'createKYCDocument', actionName: 'UPDATE', moduleName: 'REGISTRATION' },
+  {
+    api: 'findUserPendingRegistration', actionName: 'READ', moduleName: 'REGISTRATION', isWhiteList: true
+  },
+  {
+    api: 'findRegistrationInfoUser', actionName: 'READ', moduleName: 'REGISTRATION', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

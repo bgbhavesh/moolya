@@ -1,11 +1,11 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let BackEndUser = `
+const BackEndUser = `
 
     type BackendUsers{
         _id: String,
@@ -568,48 +568,100 @@ let BackEndUser = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
-let supportedApi = [
-    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchExternalUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
-    {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchAssignedAndUnAssignedUsers', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS", isAppWhiteList:true},
-    {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
-    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
-    {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'passwordVerification', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'getUserProfiles', actionName:'READ', moduleName:"USERS"},
-    {api:'getUserProfile',actionName:'READ', moduleName:"USERS"},
-    {api:'getUserProfileForService',actionName:'READ', moduleName:"USERS"},
-    {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
-    {api:'findExternalUserAddressBook',actionName:'READ', moduleName:"USERS", isWhiteList: true},
-    {api:'fetchAnchorUsers',actionName:'READ', moduleName:"USERS", isWhiteList: true},
-    {api:'checkDefaultRole',actionName:'READ', moduleName:"USERS", isWhiteList: true},
-    {api:'fetchCurrencyType',actionName:'READ', moduleName:"USERS", isWhiteList: true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, BackEndUser]);
+const supportedApi = [
+  {
+    api: 'fetchUserDetails', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchExternalUserDetails', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchUser', actionName: 'READ', isWhiteList: true, moduleName: 'USERS'
+  },
+  { api: 'fetchUsersByClusterDepSubDep', actionName: 'READ', moduleName: 'USERS' },
+  {
+    api: 'fetchUserDepSubDep', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchUserRoles', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  { api: 'fetchAssignedUsers', actionName: 'READ', moduleName: 'USERS' },
+  { api: 'fetchUsersBysubChapterDepSubDep', actionName: 'READ', moduleName: 'USERS' },
+  { api: 'fetchsubChapterUserDepSubDep', actionName: 'READ', moduleName: 'USERS' },
+  { api: 'fetchAssignedAndUnAssignedUsers', actionName: 'READ', moduleName: 'USERS' },
+  {
+    api: 'fetchUsersForDashboard', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchUserTypeFromProfile', actionName: 'READ', isWhiteList: true, moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'fetchMapCenterCordsForUser', actionName: 'READ', isWhiteList: true, moduleName: 'USERS'
+  },
+  {
+    api: 'fetchAddressBookInfo', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  { api: 'findUserOnToken', actionName: 'READ', moduleName: 'USERS' },
+  {
+    api: 'fetchUserRoleDetails', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchMoolyaInternalUsers', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchInternalUserProfiles', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'passwordVerification', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  { api: 'getUserProfiles', actionName: 'READ', moduleName: 'USERS' },
+  { api: 'getUserProfile', actionName: 'READ', moduleName: 'USERS' },
+  { api: 'getUserProfileForService', actionName: 'READ', moduleName: 'USERS' },
+  {
+    api: 'fetchMyProfile', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'findExternalUserAddressBook', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchAnchorUsers', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'checkDefaultRole', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'fetchCurrencyType', actionName: 'READ', moduleName: 'USERS', isWhiteList: true
+  },
 
-    {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
-    {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'resetPassword', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'addUserProfile', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'assignUsers', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'deActivateUser', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'updateDataEntry', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
-    {api:'switchProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true}
+  { api: 'createUser', actionName: 'CREATE', moduleName: 'USERS' },
+  { api: 'updateUser', actionName: 'UPDATE', moduleName: 'USERS' },
+  {
+    api: 'resetPassword', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  { api: 'addUserProfile', actionName: 'UPDATE', moduleName: 'USERS' },
+  { api: 'assignUsers', actionName: 'UPDATE', moduleName: 'USERS' },
+  { api: 'deActivateUser', actionName: 'UPDATE', moduleName: 'USERS' },
+  {
+    api: 'updateDataEntry', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'updateSettings', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'updateAddressBookInfo', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'uploadUserImage', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'deActivateAdminUserProfile', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'setAdminDefaultProfile', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  },
+  {
+    api: 'switchProfile', actionName: 'UPDATE', moduleName: 'USERS', isWhiteList: true
+  }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

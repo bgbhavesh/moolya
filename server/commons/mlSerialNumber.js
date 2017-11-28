@@ -1,183 +1,183 @@
-MlSerialNumbers = new Mongo.Collection("mlSerialNumbers")
+MlSerialNumbers = new Mongo.Collection('mlSerialNumbers')
 
 // if(Meteor.isServer){
-var portfolioNumber = MlSerialNumbers.findOne({_id: "portfolioNumber"});
+const portfolioNumber = MlSerialNumbers.findOne({ _id: 'portfolioNumber' });
 if (!portfolioNumber) {
-  MlSerialNumbers.insert({_id: "portfolioNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'portfolioNumber', seq: 0 });
 }
 
-var registrationNumber = MlSerialNumbers.findOne({_id: "registrationNumber"});
+const registrationNumber = MlSerialNumbers.findOne({ _id: 'registrationNumber' });
 if (!registrationNumber) {
-  MlSerialNumbers.insert({_id: "registrationNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'registrationNumber', seq: 0 });
 }
 // }
-var transactionNumber = MlSerialNumbers.findOne({_id: "transactionNumber"});
+const transactionNumber = MlSerialNumbers.findOne({ _id: 'transactionNumber' });
 if (!transactionNumber) {
-  MlSerialNumbers.insert({_id: "transactionNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'transactionNumber', seq: 0 });
 }
-var requestsNumber = MlSerialNumbers.findOne({_id: "requestsNumber"});
+const requestsNumber = MlSerialNumbers.findOne({ _id: 'requestsNumber' });
 if (!requestsNumber) {
-  MlSerialNumbers.insert({_id: "requestsNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'requestsNumber', seq: 0 });
 }
-var officeNumber = MlSerialNumbers.findOne({_id: "officeTransaction"});
+const officeNumber = MlSerialNumbers.findOne({ _id: 'officeTransaction' });
 if (!officeNumber) {
-  MlSerialNumbers.insert({_id: "officeTransaction", seq: 0});
+  MlSerialNumbers.insert({ _id: 'officeTransaction', seq: 0 });
 }
 
-var profileNumber = MlSerialNumbers.findOne({_id: "profileNumber"});
+const profileNumber = MlSerialNumbers.findOne({ _id: 'profileNumber' });
 if (!profileNumber) {
-  MlSerialNumbers.insert({_id: "profileNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'profileNumber', seq: 0 });
 }
 
-var internalTaskNumber = MlSerialNumbers.findOne({_id: "internalTaskNumber"});
+const internalTaskNumber = MlSerialNumbers.findOne({ _id: 'internalTaskNumber' });
 if (!internalTaskNumber) {
-  MlSerialNumbers.insert({_id: "internalTaskNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'internalTaskNumber', seq: 0 });
 }
 
-var activityNumber = MlSerialNumbers.findOne({_id: "activityNumber"});
+const activityNumber = MlSerialNumbers.findOne({ _id: 'activityNumber' });
 if (!activityNumber) {
-  MlSerialNumbers.insert({_id: "activityNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'activityNumber', seq: 0 });
 }
-var taskNumber = MlSerialNumbers.findOne({_id: "taskNumber"});
+const taskNumber = MlSerialNumbers.findOne({ _id: 'taskNumber' });
 if (!taskNumber) {
-  MlSerialNumbers.insert({_id: "taskNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'taskNumber', seq: 0 });
 }
-var sessionNumber = MlSerialNumbers.findOne({_id: "sessionNumber"});
+const sessionNumber = MlSerialNumbers.findOne({ _id: 'sessionNumber' });
 if (!sessionNumber) {
-  MlSerialNumbers.insert({_id: "sessionNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'sessionNumber', seq: 0 });
 }
-var serviceNumber = MlSerialNumbers.findOne({_id: "serviceNumber"});
+const serviceNumber = MlSerialNumbers.findOne({ _id: 'serviceNumber' });
 if (!serviceNumber) {
-  MlSerialNumbers.insert({_id: "serviceNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'serviceNumber', seq: 0 });
 }
 
-let userServiceOrderNumber = MlSerialNumbers.findOne({_id: "userServiceOrderNumber"});
+const userServiceOrderNumber = MlSerialNumbers.findOne({ _id: 'userServiceOrderNumber' });
 if (!userServiceOrderNumber) {
-  MlSerialNumbers.insert({_id: "userServiceOrderNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'userServiceOrderNumber', seq: 0 });
 }
 
-let appointmentNumber = MlSerialNumbers.findOne({_id: "appointmentNumber"});
+const appointmentNumber = MlSerialNumbers.findOne({ _id: 'appointmentNumber' });
 if (!appointmentNumber) {
-  MlSerialNumbers.insert({_id: "appointmentNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'appointmentNumber', seq: 0 });
 }
 
-let vactionNumber = MlSerialNumbers.findOne({_id: "vactionNumber"});
+const vactionNumber = MlSerialNumbers.findOne({ _id: 'vactionNumber' });
 if (!vactionNumber) {
-  MlSerialNumbers.insert({_id: "vactionNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'vactionNumber', seq: 0 });
 }
 
-let shareNumber = MlSerialNumbers.findOne({_id: "shareNumber"});
+const shareNumber = MlSerialNumbers.findOne({ _id: 'shareNumber' });
 if (!shareNumber) {
-  MlSerialNumbers.insert({_id: "shareNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'shareNumber', seq: 0 });
 }
 
-let paymentNumber = MlSerialNumbers.findOne({_id: "paymentNumber"});
+const paymentNumber = MlSerialNumbers.findOne({ _id: 'paymentNumber' });
 if (!paymentNumber) {
-  MlSerialNumbers.insert({_id: "paymentNumber", seq: 0});
+  MlSerialNumbers.insert({ _id: 'paymentNumber', seq: 0 });
 }
 
-orderNumberGenService = (function(){
+orderNumberGenService = (function () {
   function getNextSequence(name) {
-    var ret = MlSerialNumbers.update(
+    const ret = MlSerialNumbers.update(
       { _id: name },
       { $inc: { seq: 1 } },
-      {upsert:true}
+      { upsert: true }
     )
-    if(ret===1){
-      let data=MlSerialNumbers.findOne({_id:name})
-      if(data){
-       return data.seq
+    if (ret === 1) {
+      const data = MlSerialNumbers.findOne({ _id: name })
+      if (data) {
+        return data.seq
       }
     }
     return ret;
   }
 
   return {
-    assignRegistrationId:function(registration){
-      registration.registrationId="MLRE"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
+    assignRegistrationId(registration) {
+      registration.registrationId = `MLRE${FormatUtil.leadingZeros(getNextSequence('registrationNumber'), 8)}`;
     },
-    assignPortfolioId:function(portfolio){
-      let portfolioId = "MLPF"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
-      portfolio.portfolioId=portfolioId
-      portfolio.transactionId= portfolioId
+    assignPortfolioId(portfolio) {
+      const portfolioId = `MLPF${FormatUtil.leadingZeros(getNextSequence('portfolioNumber'), 8)}`;
+      portfolio.portfolioId = portfolioId
+      portfolio.transactionId = portfolioId
     },
-    assignTransationRequest:function(transaction){
-      transaction.transactionTypeId="MLTR"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
+    assignTransationRequest(transaction) {
+      transaction.transactionTypeId = `MLTR${FormatUtil.leadingZeros(getNextSequence('transactionNumber'), 8)}`;
     },
-    assignRequests:function(requests){
-      requests.requestId="MLREQ"+FormatUtil.leadingZeros(getNextSequence("requestsNumber"),8);
+    assignRequests(requests) {
+      requests.requestId = `MLREQ${FormatUtil.leadingZeros(getNextSequence('requestsNumber'), 8)}`;
     },
-    assignOfficeTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "MLOF" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+    assignOfficeTransaction(officeTransaction) {
+      officeTransaction.transactionId = `MLOF${FormatUtil.leadingZeros(getNextSequence('officeTransaction'), 8)}`;
     },
-    assignProcessSetupTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "MLPS" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+    assignProcessSetupTransaction(officeTransaction) {
+      officeTransaction.transactionId = `MLPS${FormatUtil.leadingZeros(getNextSequence('officeTransaction'), 8)}`;
     },
-    createUserProfileId: function (userProfile) {
-      userProfile.profileId = "MLPRO" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
+    createUserProfileId(userProfile) {
+      userProfile.profileId = `MLPRO${FormatUtil.leadingZeros(getNextSequence('profileNumber'), 8)}`;
     },
-    createinternalTaskId: function (taskObj) {
-      taskObj.internalTaskId = "MLITK" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
+    createinternalTaskId(taskObj) {
+      taskObj.internalTaskId = `MLITK${FormatUtil.leadingZeros(getNextSequence('internalTaskNumber'), 8)}`;
     },
-    createInteractionSCcode: function (scDef) {
-      scDef.code = "MLINT"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+    createInteractionSCcode(scDef) {
+      scDef.code = `MLINT${FormatUtil.leadingZeros(getNextSequence('interactionSC'), 8)}`;
     },
-    createBspokeOfficeSCcode: function (scDef) {
-      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
+    createBspokeOfficeSCcode(scDef) {
+      scDef.code = `ML-OFF-${FormatUtil.leadingZeros(getNextSequence('bspoke'), 8)}`;
     },
-    createOfficeSCcode: function (scDef) {
-      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("office"), 8);
+    createOfficeSCcode(scDef) {
+      scDef.code = `ML-OFF-${FormatUtil.leadingZeros(getNextSequence('office'), 8)}`;
     },
 
-    createActivityId: function (userActivity) {
-      userActivity.transactionId = "MLACT"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"), 8);
+    createActivityId(userActivity) {
+      userActivity.transactionId = `MLACT${FormatUtil.leadingZeros(getNextSequence('activityNumber'), 8)}`;
     },
-    createTaskId: function (userTask) {
-      userTask.transactionId = "MLTSK"+ FormatUtil.leadingZeros(getNextSequence("taskNumber"), 8);
+    createTaskId(userTask) {
+      userTask.transactionId = `MLTSK${FormatUtil.leadingZeros(getNextSequence('taskNumber'), 8)}`;
     },
-    createSessionId: function (userTask) {
-      userTask.sessionId = "MLSES"+ FormatUtil.leadingZeros(getNextSequence("sessionNumber"), 8);
+    createSessionId(userTask) {
+      userTask.sessionId = `MLSES${FormatUtil.leadingZeros(getNextSequence('sessionNumber'), 8)}`;
     },
-    createServiceId: function (userService) {
-      userService.transactionId = "MLSER"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"), 8);
+    createServiceId(userService) {
+      userService.transactionId = `MLSER${FormatUtil.leadingZeros(getNextSequence('serviceNumber'), 8)}`;
     },
-    createUserServiceOrderId: function (data) {
-      data.orderId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
+    createUserServiceOrderId(data) {
+      data.orderId = `MLUSO${FormatUtil.leadingZeros(getNextSequence('userServiceOrderNumber'), 8)}`;
     },
-    createAppointmentId: function (appointmentData) {
-      appointmentData.appointmentId = "MLAPT"+ FormatUtil.leadingZeros(getNextSequence("appointmentNumber"), 8);
+    createAppointmentId(appointmentData) {
+      appointmentData.appointmentId = `MLAPT${FormatUtil.leadingZeros(getNextSequence('appointmentNumber'), 8)}`;
     },
-    createVactionId: function (vactionData) {
-      vactionData.vacationId = "MLHLD"+ FormatUtil.leadingZeros(getNextSequence("vactionNumber"), 8);
+    createVactionId(vactionData) {
+      vactionData.vacationId = `MLHLD${FormatUtil.leadingZeros(getNextSequence('vactionNumber'), 8)}`;
     },
-    createShareId: function (data) {
-      data.sharedId = "MLSHR"+ FormatUtil.leadingZeros(getNextSequence("shareNumber"), 8);
+    createShareId(data) {
+      data.sharedId = `MLSHR${FormatUtil.leadingZeros(getNextSequence('shareNumber'), 8)}`;
     },
-    createPaymentId: function (data) {
-      data.paymentId = "MLPYM"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"), 8);
+    createPaymentId(data) {
+      data.paymentId = `MLPYM${FormatUtil.leadingZeros(getNextSequence('paymentNumber'), 8)}`;
     },
-    generateRandomPassword:function(){
-      var randomId = function makeid(){
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for( var i=0; i < 7; i++ )
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
-          return text;
+    generateRandomPassword() {
+      const randomId = function makeid() {
+        let text = '';
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 7; i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)); }
+        return text;
       }
 
-      return "ML"+randomId();
+      return `ML${randomId()}`;
     }
 
-    /*generateProfileId:function(transaction){
+    /* generateProfileId:function(transaction){
       regDetails.profileId="ML-PR-"+FormatUtil.leadingZeros(getNextSequence("profileNumber"),8);
-    }*/
-  }})();
+    } */
+  }
+}());
 
 FormatUtil = {
   leadingZeros: pad
 };
 
 function pad(num, size) {
-  var s = "000000000" + num;
-  return s.substr(s.length-size);
+  const s = `000000000${num}`;
+  return s.substr(s.length - size);
 }

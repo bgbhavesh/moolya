@@ -1,13 +1,13 @@
 
 
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef';
 import MlResolver from '../../commons/mlResolverDef'
 
-let paymentSchema = `
+const paymentSchema = `
     type Mutation {
       updatePayment( transactionId:String, Status: String ): response       
     }
 `;
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], paymentSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, paymentSchema]);

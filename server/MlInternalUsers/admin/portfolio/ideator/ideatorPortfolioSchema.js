@@ -1,12 +1,12 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let ideatorPortfolioSchema = `
+const ideatorPortfolioSchema = `
 
     type PortfolioMenu{
         image: String
@@ -390,44 +390,74 @@ let ideatorPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, ideatorPortfolioSchema]);
 
-let supportedApi = [
-  {api:'validateUserForAnnotation', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchIdeatorPortfolioProblemsAndSolutions', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioAudience', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioLibrary', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioStrategyAndPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioIntellectualPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioRequests', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchAnnotations', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'putDataIntoTheLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
-  {api:'fetchDataFromCentralLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
+const supportedApi = [
+  { api: 'validateUserForAnnotation', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  {
+    api: 'fetchIdeatorPortfolioIdeas', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  { api: 'fetchIdeatorPortfolioProblemsAndSolutions', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioAudience', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioLibrary', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioStrategyAndPlanning', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioIntellectualPlanning', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchIdeatorPortfolioRequests', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  {
+    api: 'fetchAnnotations', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchComments', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  { api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  {
+    api: 'fetchIdeas', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  { api: 'fetchAllowableFormats', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  {
+    api: 'fetchLibrary', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'putDataIntoTheLibrary', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchDataFromCentralLibrary', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
 
 
-
-
-  {api:'createIdeatorPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  { api: 'createIdeatorPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  {
+    api: 'createAnnotation', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'createComment', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  { api: 'createIdea', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  {
+    api: 'createLibrary', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updateAnnotation', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  { api: 'updateIdeatorPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' },
+  {
+    api: 'updateIdea', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
+  {
+    api: 'resolveComment', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'reopenComment', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
   // {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {
+    api: 'updateLibraryData', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updateLibrary', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  }
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

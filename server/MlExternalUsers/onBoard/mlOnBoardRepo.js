@@ -2,44 +2,40 @@ import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 import _ from 'lodash';
 
 class MlOnBoard {
-
-
-  getUserDetails(userId){
-    var user =mlDBController.findOne('users',{_id:userId})||{};
+  getUserDetails(userId) {
+    const user = mlDBController.findOne('users', { _id: userId }) || {};
     return user;
   }
 
-  fetchContextUserDetails(context){
-    var contextUserId=context?context.userId:null;
-    var contextUser=this.getUserDetails(contextUserId)||{};
-    return {contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
+  fetchContextUserDetails(context) {
+    const contextUserId = context ? context.userId : null;
+    const contextUser = this.getUserDetails(contextUserId) || {};
+    return { contextUserId: contextUser._id, contextUserName: contextUser.username, contextUser };
   }
 
 
   createTransactionRequest(userId, transType, portfolioId, resourceId, fromUserId, fromUserType, context) {
     try {
-      var transactionType = transType;
+      const transactionType = transType;
       switch (transactionType) {
         case 'investments':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'onBoard',
-            'activity': 'onBoard',
-            'transactionType': 'investments',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': portfolioId,
-            'transactionDetails': 'investments',
-            'context': context || {},
-            'transactionTypeId': "investments",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'onBoard',
+            activity: 'onBoard',
+            transactionType: 'investments',
+            userId,
+            activityDocId: resourceId,
+            docId: portfolioId,
+            transactionDetails: 'investments',
+            context: context || {},
+            transactionTypeId: 'investments',
+            fromUserType
           });
           break;
-
       }
-    }
-    catch (e) {
-      //console
+    } catch (e) {
+      // console
       console.log(e);
     }
   }

@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let ProcessTypesSchema = `
+const ProcessTypesSchema = `
     type ProcessTypes
     {
       processName :String
@@ -16,8 +16,10 @@ let ProcessTypesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ProcessTypesSchema]);
-let supportedApi = [
-    {api:'FetchProcessType', actionName:'READ', moduleName:"PROCESSTYPES", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, ProcessTypesSchema]);
+const supportedApi = [
+  {
+    api: 'FetchProcessType', actionName: 'READ', moduleName: 'PROCESSTYPES', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

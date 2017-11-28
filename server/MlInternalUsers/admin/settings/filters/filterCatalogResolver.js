@@ -1,13 +1,13 @@
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
+import MlResolver from '../../../../commons/mlResolverDef';
+import MlRespPayload from '../../../../commons/mlPayload';
 
 
-MlResolver.MlQueryResolver['findFilterCatalog'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findFilterCatalog = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args.moduleName) {
-    var id= args._id;
-    let response= MlFiltersCatalog.findOne({"_id":args.moduleName});
+    const id = args._id;
+    const response = MlFiltersCatalog.findOne({ _id: args.moduleName });
     return response;
   }
 }

@@ -1,86 +1,83 @@
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
-import _ from "lodash";
-import _underscore from "underscore"
+import MlResolver from '../../../../commons/mlResolverDef';
+import MlRespPayload from '../../../../commons/mlPayload';
+import _ from 'lodash';
+import _underscore from 'underscore'
 /*
 MlResolver.MlQueryResolver['fetchProcess'] = (obj, args, context, info) =>{
   return MlProcessMapping.findOne({name});
-}*/
+} */
 
-MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.createProcess = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
-  let process = args.process;
-    // if(MlProcessMapping.find({processId:process.processId}).count() > 0){
-      if(mlDBController.find('MlProcessMapping', {processId:process.processId}, context).count() > 0){
-        let code = 409;
-        let response = new MlRespPayload().errorPayload("'Process mapping' already exists!", code);
-        return response
-    }
-    // let id = MlProcessMapping.insert({...args.process});
-  var firstName='';var lastName='';
+  const process = args.process;
+  // if(MlProcessMapping.find({processId:process.processId}).count() > 0){
+  if (mlDBController.find('MlProcessMapping', { processId: process.processId }, context).count() > 0) {
+    const code = 409;
+    const response = new MlRespPayload().errorPayload("'Process mapping' already exists!", code);
+    return response
+  }
+  // let id = MlProcessMapping.insert({...args.process});
+  let firstName = ''; let lastName = '';
   // let id = MlDepartments.insert({...args.department});
-  if(Meteor.users.findOne({_id : context.userId}))
-  {
-    let user = Meteor.users.findOne({_id: context.userId}) || {}
-    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-      firstName=(user.profile || {}).firstName||'';
-      lastName =(user.profile || {}).lastName||'';
+  if (Meteor.users.findOne({ _id: context.userId })) {
+    const user = Meteor.users.findOne({ _id: context.userId }) || {}
+    if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+      firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+      lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+    } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+      firstName = (user.profile || {}).firstName || '';
+      lastName = (user.profile || {}).lastName || '';
     }
   }
-  let createdBy = firstName +' '+lastName
+  const createdBy = `${firstName} ${lastName}`
   args.process.createdBy = createdBy;
   args.process.createdDate = new Date();
-  var randomId = Math.floor(Math.random() * 90000) + 10000;
-  args.process.processId = "PRO"+randomId
-    let id = mlDBController.insert('MlProcessMapping', args.process, context)
-    if(id){
-        let code = 200;
-        let result = {roleId: id}
-        let response = new MlRespPayload().successPayload(result, code);
-        return response
-    }
+  const randomId = Math.floor(Math.random() * 90000) + 10000;
+  args.process.processId = `PRO${randomId}`
+  const id = mlDBController.insert('MlProcessMapping', args.process, context)
+  if (id) {
+    const code = 200;
+    const result = { roleId: id }
+    const response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
 }
-MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findProcess = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args.id) {
-    var id= args.id;
+    const id = args.id;
     // let response= MlProcessMapping.findOne({"_id":id});
-    let response = mlDBController.findOne('MlProcessMapping', {_id: id}, context)
-    let documents=response&&response.documents?response.documents:[];
-    documents.map(function (doc, index) {
-     let kycCategeotyId=doc.category
-     // const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
-      const kycCategory = mlDBController.findOne('MlDocumentCategories', {_id: kycCategeotyId}, context)||'';
-        doc.categoryName=kycCategory.docCategoryName;
+    const response = mlDBController.findOne('MlProcessMapping', { _id: id }, context)
+    const documents = response && response.documents ? response.documents : [];
+    documents.map((doc, index) => {
+      const kycCategeotyId = doc.category
+      // const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
+      const kycCategory = mlDBController.findOne('MlDocumentCategories', { _id: kycCategeotyId }, context) || '';
+      doc.categoryName = kycCategory.docCategoryName;
     });
     return response;
   }
-
 }
 
-MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.updateProcess = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
   if (args.id) {
-    var id= args.id;
-    args=_.omit(args,'id');
-    /*//find the old  details
+    const id = args.id;
+    args = _.omit(args, 'id');
+    /* //find the old  details
 
     let processResult=MlProcessMapping.findOne({"_id":id});
     if(processResult&&processResult.documents){
@@ -112,41 +109,39 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
           }
 
       }
-    }*/
+    } */
     // let result= MlProcessMapping.update(id, {$set: args.process});
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
-      let user = Meteor.users.findOne({_id: context.userId}) || {}
-      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-        firstName=(user.profile || {}).firstName||'';
-        lastName =(user.profile || {}).lastName||'';
+    if (Meteor.users.findOne({ _id: context.userId })) {
+      const user = Meteor.users.findOne({ _id: context.userId }) || {}
+      if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+        firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+        lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+      } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+        firstName = (user.profile || {}).firstName || '';
+        lastName = (user.profile || {}).lastName || '';
       }
     }
-    let createdBy = firstName +' '+lastName
+    const createdBy = `${firstName} ${lastName}`
     args.process.updatedBy = createdBy;
     args.process.updatedDate = new Date();
 
-    let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
-      let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
+    const result = mlDBController.update('MlProcessMapping', id, args.process, { $set: true }, context)
+    const code = 200;
+    const response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
 
-MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.upsertProcessDocument = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
   if (args.id) {
-    var id = args.id;
+    const id = args.id;
     args = _.omit(args, '_id');
     if (args.kycCategoryId) {
       // let result = MlProcessMapping.update({_id:id,'processDocuments' : {
@@ -156,48 +151,49 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
       // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
       let result;
 
-     /* if(args.isMandatory && !args.isActive){ //as per issue 2648
+      /* if(args.isMandatory && !args.isActive){ //as per issue 2648
         let code = 401;
         let response = new MlRespPayload().errorPayload("Can't update status as document is inactive or maditory", code);
         return response;
-      }else{*/
-         result = mlDBController.update('MlProcessMapping', {
-          _id: id, 'processDocuments': {
-            $elemMatch: {
-              'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
-            }
+      }else{ */
+      result = mlDBController.update('MlProcessMapping', {
+        _id: id,
+        processDocuments: {
+          $elemMatch: {
+            kycCategoryId: args.kycCategoryId, docTypeId: args.docTypeId, documentId: args.documentId
           }
-        }, {
-          "processDocuments.$.isMandatory": args.isMandatory,
-          "processDocuments.$.isActive": args.isActive
-        }, {$set: true}, context)
-      //}
+        }
+      }, {
+        'processDocuments.$.isMandatory': args.isMandatory,
+        'processDocuments.$.isActive': args.isActive
+      }, { $set: true }, context)
+      // }
 
 
-      if(result!=1){
-          console.log("insertion opertion");
-          let processDocument={};
-          // let documentMappingDef=MlDocumentMapping.findOne(args.documentId);
-          let documentMappingDef = mlDBController.findOne('MlDocumentMapping', args.documentId, context)
-          // let doctypeDetails=MlDocumentTypes.findOne({_id:args.docTypeId})
-          let doctypeDetails = mlDBController.findOne('MlDocumentTypes', {_id: args.docTypeId}, context)
-          // let kycCategories=MlDocumentCategories.findOne({_id:args.kycCategoryId})
-          let kycCategories = mlDBController.findOne('MlDocumentCategories', {_id:args.kycCategoryId}, context)
-           processDocument=_.pick(documentMappingDef, ['documentDisplayName','allowableFormat','documentName','inputLength','allowableMaxSize'])
-           processDocument.kycCategoryId=args.kycCategoryId;
-           processDocument.kycCategoryName=kycCategories.docCategoryName
-           processDocument.docTypeId=args.docTypeId;
-           processDocument.docTypeName=doctypeDetails.docTypeName
-           processDocument.documentId=documentMappingDef._id;
-           processDocument.isMandatory=args.isMandatory;
-           processDocument.isActive=args.isActive;
-           processDocument.validity=documentMappingDef&&documentMappingDef.validity?documentMappingDef.validity:null
+      if (result != 1) {
+        console.log('insertion opertion');
+        let processDocument = {};
+        // let documentMappingDef=MlDocumentMapping.findOne(args.documentId);
+        const documentMappingDef = mlDBController.findOne('MlDocumentMapping', args.documentId, context)
+        // let doctypeDetails=MlDocumentTypes.findOne({_id:args.docTypeId})
+        const doctypeDetails = mlDBController.findOne('MlDocumentTypes', { _id: args.docTypeId }, context)
+        // let kycCategories=MlDocumentCategories.findOne({_id:args.kycCategoryId})
+        const kycCategories = mlDBController.findOne('MlDocumentCategories', { _id: args.kycCategoryId }, context)
+        processDocument = _.pick(documentMappingDef, ['documentDisplayName', 'allowableFormat', 'documentName', 'inputLength', 'allowableMaxSize'])
+        processDocument.kycCategoryId = args.kycCategoryId;
+        processDocument.kycCategoryName = kycCategories.docCategoryName
+        processDocument.docTypeId = args.docTypeId;
+        processDocument.docTypeName = doctypeDetails.docTypeName
+        processDocument.documentId = documentMappingDef._id;
+        processDocument.isMandatory = args.isMandatory;
+        processDocument.isActive = args.isActive;
+        processDocument.validity = documentMappingDef && documentMappingDef.validity ? documentMappingDef.validity : null
 
-        mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
+        mlDBController.update('MlProcessMapping', id, { processDocuments: processDocument }, { $push: true }, context)
         // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
       }
-      let code = 200;
-      let response = new MlRespPayload().successPayload(result, code);
+      const code = 200;
+      const response = new MlRespPayload().successPayload(result, code);
       return response
     }
   }
@@ -375,28 +371,26 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 */
 
 
-
-
-
-MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findProcessDocumentForRegistration = (obj, args, context, info) => {
   // TODO : Authorization
-  let email = args.email;
-  let country = args.countryId;
-  let clusters = args.clusterId;
-  let chapters = args.chapterId;
-  let selectedSubChapters = args.subChapterId;
-  let communities = args.communityType;
-  let professions = args.profession;
-  let userTypes = args.userType;
+  const email = args.email;
+  const country = args.countryId;
+  const clusters = args.clusterId;
+  const chapters = args.chapterId;
+  const selectedSubChapters = args.subChapterId;
+  const communities = args.communityType;
+  const professions = args.profession;
+  const userTypes = args.userType;
   let process = null
-  let specificQuery = [];
+  const specificQuery = [];
   let kycProcessDoc = null
 
   function getTheKyc(email, subChapters, nonMoolyaSubChapterId) {
-      let allKycDoc=[],allCombinationDoc=[];
+    let allKycDoc = [],
+      allCombinationDoc = [];
 
-    //check for specific condition for all criteria fields of processmapping
-   /* if (clusters != null && chapters != null && subChapters != null && communities != null && professions != null && userTypes != null) {
+    // check for specific condition for all criteria fields of processmapping
+    /* if (clusters != null && chapters != null && subChapters != null && communities != null && professions != null && userTypes != null) {
       let val = {clusters, chapters, subChapters, communities, professions, userTypes}
       process = fetchProcessProxy(val);
       if (process) {
@@ -406,54 +400,55 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           allKycDoc.push(doc);
         })
       }
-    }*/
-    //check for all or specific condition for all criteria fields of processmapping
-    let val = {clusters, chapters, subChapters, communities, professions, userTypes}
-    for (var key in val) {
-      let qu = {};
-      if(key == "subChapters"){
-        let nonMoolyaSubChapId = nonMoolyaSubChapterId?nonMoolyaSubChapterId:"";
-        qu[key] = {$in: ['all', val[key],nonMoolyaSubChapId]};
-      }else{
-        qu[key] = {$in: ['all', val[key]]};
+    } */
+    // check for all or specific condition for all criteria fields of processmapping
+    const val = {
+      clusters, chapters, subChapters, communities, professions, userTypes
+    }
+    for (const key in val) {
+      const qu = {};
+      if (key == 'subChapters') {
+        const nonMoolyaSubChapId = nonMoolyaSubChapterId || '';
+        qu[key] = { $in: ['all', val[key], nonMoolyaSubChapId] };
+      } else {
+        qu[key] = { $in: ['all', val[key]] };
       }
 
-      specificQuery.push(qu);//console.log(qu);
+      specificQuery.push(qu);// console.log(qu);
     }
-    let query = {$and: specificQuery}
+    const query = { $and: specificQuery }
     process = fetchProcessProxy(query);
     if (process) {
-      //need to return all the combination as per jiira-2189
+      // need to return all the combination as per jiira-2189
       // return process
-      process.map(function(doc){
+      process.map((doc) => {
         allKycDoc.push(doc);
       })
-
     }
-    //check for 'all' condition on criteria fields of processmapping
-    let allVal = {
-      clusters: "all",
-      chapters: "all",
-      subChapters: "all",
-      communities: "all",
-      professions: "all",
-      userTypes: "all"
+    // check for 'all' condition on criteria fields of processmapping
+    const allVal = {
+      clusters: 'all',
+      chapters: 'all',
+      subChapters: 'all',
+      communities: 'all',
+      professions: 'all',
+      userTypes: 'all'
     }
     process = fetchProcessProxy(allVal);
     if (process) {
-      //need to return all the combination as per jiira-2189
+      // need to return all the combination as per jiira-2189
       // return process
-      process.map(function(doc){
+      process.map((doc) => {
         allKycDoc.push(doc);
       })
     }
     if (allKycDoc && allKycDoc.length > 0) {
-      //getting uniq documents based on documentId
-      allCombinationDoc = _underscore.uniq(allKycDoc, function (kyc) {
-        let docId = kyc&&kyc.documentId?kyc.documentId:""
+      // getting uniq documents based on documentId
+      allCombinationDoc = _underscore.uniq(allKycDoc, (kyc) => {
+        const docId = kyc && kyc.documentId ? kyc.documentId : ''
         return docId;
       });
-      //allCombinationDoc = _underscore.uniq(allKycDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
+      // allCombinationDoc = _underscore.uniq(allKycDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
       return allCombinationDoc
     }
     return allKycDoc
@@ -461,26 +456,27 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query) {
     console.log(query)
-    let date = new Date();
-    date.setHours(0,0,0,0)
-    let document = MlProcessMapping.find({
+    const date = new Date();
+    date.setHours(0, 0, 0, 0)
+    const document = MlProcessMapping.find({
       $and: [query, {
-        "identity": {$in: [args.identityType]},
-        "industries": {$in: [args.industry]},
-        "isActive": true
-      }, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]}]
+        identity: { $in: [args.identityType] },
+        industries: { $in: [args.industry] },
+        isActive: true
+      }, { $or: [{ 'processDocuments.validity': null }, { 'processDocuments.validity': { $gte: date } }] }]
     }).fetch()
     if (document && document.length > 0) {
-      let combinationBasedDoc=[],kycDoc=[]
+      let combinationBasedDoc = [],
+        kycDoc = []
 
-      document.map(function (processDoc) {
+      document.map((processDoc) => {
         if (processDoc && processDoc.processDocuments) {
-          let combinationDoc = processDoc.processDocuments
-          //fetching the self based documents documents from processDocuments
-          combinationDoc.map(function (doc, index) {
-            const allowableFormatData = MlDocumentFormats.find({_id: {$in: doc.allowableFormat}}).fetch() || [];
-            let allowableFormatNames = [];  //@array of strings
-            allowableFormatData.map(function (doc) {
+          const combinationDoc = processDoc.processDocuments
+          // fetching the self based documents documents from processDocuments
+          combinationDoc.map((doc, index) => {
+            const allowableFormatData = MlDocumentFormats.find({ _id: { $in: doc.allowableFormat } }).fetch() || [];
+            const allowableFormatNames = []; // @array of strings
+            allowableFormatData.map((doc) => {
               allowableFormatNames.push(doc.docFormatName)
             });
             combinationDoc[index].allowableFormat = allowableFormatNames || []
@@ -488,11 +484,11 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               combinationBasedDoc.push(doc)
             }
           })
-        }else{
+        } else {
           combinationBasedDoc = combinationBasedDoc
         }
       })
-      /*if (combinationBasedDoc && combinationBasedDoc.length > 0) {
+      /* if (combinationBasedDoc && combinationBasedDoc.length > 0) {
         //getting uniq documents based on documentId
         kycDoc = _underscore.uniq(combinationBasedDoc, function (kyc) {
           let docId = kyc&&kyc.documentId?kyc.documentId:""
@@ -502,10 +498,10 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         });
          /!*kycDoc = _underscore.uniq(combinationBasedDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
         return kycDoc*!/
-      }*/
+      } */
       return combinationBasedDoc
     }
-/*    if (document != undefined) {
+    /*    if (document != undefined) {
       data = document.processDocuments;
       if (data) {
         data.map(function (doc, index) {
@@ -519,112 +515,108 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
       }
       return document
-    }*/
+    } */
   }
 
   function getCountryBasedDocuments(country) {
-    let countryBasedDoc = [], kycDoc = []
-    let date = new Date();
-    date.setHours(0,0,0,0)
-    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, { $or : [{"processDocuments.validity" : null},{"processDocuments.validity" : {"$gte": date}}]},{isActive: true}]}).fetch()
+    let countryBasedDoc = [],
+      kycDoc = []
+    const date = new Date();
+    date.setHours(0, 0, 0, 0)
+    const document = MlProcessMapping.find({ $and: [{ clusters: { $in: [country, 'all'] } }, { $or: [{ 'processDocuments.validity': null }, { 'processDocuments.validity': { $gte: date } }] }, { isActive: true }] }).fetch()
     if (document && document.length > 0) {
-      document.map(function (processDoc) {
+      document.map((processDoc) => {
         if (processDoc && processDoc.processDocuments) {
-          let countryDoc = processDoc.processDocuments
-          //fetching the self based documents documents from processDocuments
-          countryDoc.map(function (doc, index) {
-            const allowableFormatData = MlDocumentFormats.find({_id: {$in: doc.allowableFormat}}).fetch() || [];
-            let allowableFormatNames = [];  //@array of strings
-            allowableFormatData.map(function (doc) {
+          const countryDoc = processDoc.processDocuments
+          // fetching the self based documents documents from processDocuments
+          countryDoc.map((doc, index) => {
+            const allowableFormatData = MlDocumentFormats.find({ _id: { $in: doc.allowableFormat } }).fetch() || [];
+            const allowableFormatNames = []; // @array of strings
+            allowableFormatData.map((doc) => {
               allowableFormatNames.push(doc.docFormatName)
             });
             countryDoc[index].allowableFormat = allowableFormatNames || []
             let isNonMoolyaSubChapterSpecific;
             if (doc.docTypeId == 'self' && doc.isActive == true) {
-              let documentId = doc.documentId?doc.documentId:""
-              let documentMappingDef = mlDBController.findOne('MlDocumentMapping', documentId, context)
-              let documentMapSubChapters = documentMappingDef&&documentMappingDef.subChapters?documentMappingDef.subChapters:[]
-              if(documentMapSubChapters && documentMapSubChapters.length>0 && documentMapSubChapters.length == 1){
-                var latestdocs = documentMapSubChapters.join();
-                if(latestdocs == "all"){
+              const documentId = doc.documentId ? doc.documentId : ''
+              const documentMappingDef = mlDBController.findOne('MlDocumentMapping', documentId, context)
+              const documentMapSubChapters = documentMappingDef && documentMappingDef.subChapters ? documentMappingDef.subChapters : []
+              if (documentMapSubChapters && documentMapSubChapters.length > 0 && documentMapSubChapters.length == 1) {
+                const latestdocs = documentMapSubChapters.join();
+                if (latestdocs == 'all') {
                   countryBasedDoc.push(doc)
-                }else{
-                  let selectedSubChapter = [selectedSubChapters]
-                  var subChapterSame = documentMapSubChapters.length == selectedSubChapter.length && documentMapSubChapters.every(function(element, index) {
-                      return element === selectedSubChapter[index];
-                    });
+                } else {
+                  const selectedSubChapter = [selectedSubChapters]
+                  const subChapterSame = documentMapSubChapters.length == selectedSubChapter.length && documentMapSubChapters.every((element, index) => element === selectedSubChapter[index]);
                   isNonMoolyaSubChapterSpecific = mlDBController.findOne('MlSubChapters', {
-                    "_id": {$in: documentMapSubChapters},
+                    _id: { $in: documentMapSubChapters },
                     isDefaultSubChapter: false,
                     isActive: true
                   }, context)
 
-                  if(isNonMoolyaSubChapterSpecific && subChapterSame){
+                  if (isNonMoolyaSubChapterSpecific && subChapterSame) {
                     countryBasedDoc.push(doc)
-                  }else{
+                  } else {
                     countryBasedDoc = countryBasedDoc
                   }
                 }
-              }else{
+              } else {
                 countryBasedDoc.push(doc)
               }
-
-
-
             }
           })
-        }else{
+        } else {
           countryBasedDoc = countryBasedDoc
         }
       })
       if (countryBasedDoc && countryBasedDoc.length > 0) {
-        //getting uniq documents based on documentId
-        kycDoc = _underscore.uniq(countryBasedDoc, function (kyc) {
-          let docId = kyc&&kyc.documentId?kyc.documentId:""
+        // getting uniq documents based on documentId
+        kycDoc = _underscore.uniq(countryBasedDoc, (kyc) => {
+          const docId = kyc && kyc.documentId ? kyc.documentId : ''
           return docId;
         });
         return kycDoc
-      }else{
-        return kycDoc
       }
       return kycDoc
-    }
 
+      return kycDoc
+    }
   }
 
 
-  //checking for the email exist or not
-  let user = MlRegistration.find({"$and": [{"registrationInfo.email": email}, {"status": "REG_USER_APR"}]}).fetch();
+  // checking for the email exist or not
+  const user = MlRegistration.find({ $and: [{ 'registrationInfo.email': email }, { status: 'REG_USER_APR' }] }).fetch();
   if (user && user.length > 0) {
-    let ApprovedKyc = [];
+    const ApprovedKyc = [];
     let kycDoc = null;
-    //if user exist get the KYC of  approved Users
+    // if user exist get the KYC of  approved Users
     for (let j = 0; j < user.length; j++) {
       if (user[j].kycDocuments) {
-        let kyc = user[j].kycDocuments
+        const kyc = user[j].kycDocuments
         for (let i = 0; i < kyc.length; i++) {
           ApprovedKyc.push(kyc[i])
         }
       }
     }
-    kycDoc = _.uniqBy(ApprovedKyc, function (kyc) {
-      let docId = kyc&&kyc.documentId?kyc.documentId:""
-      //let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
+    kycDoc = _.uniqBy(ApprovedKyc, (kyc) => {
+      const docId = kyc && kyc.documentId ? kyc.documentId : ''
+      // let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
       return docId;
     });
 
 
     if (kycDoc) {
-      //get the kyc for multiple profile createria
-      //kycProcessDoc = getTheKyc(email)
-      kycProcessDoc=getTheUserKYC()
+      // get the kyc for multiple profile createria
+      // kycProcessDoc = getTheKyc(email)
+      kycProcessDoc = getTheUserKYC()
       if (kycProcessDoc) {
-        let props = ['documentId', 'docTypeId'];
-        let Documents = [], MatchingDocuments = []
-       // let latestKyc = kycProcessDoc.processDocuments;
-        let latestKyc=kycProcessDoc
+        const props = ['documentId', 'docTypeId'];
+        let Documents = [],
+          MatchingDocuments = []
+        // let latestKyc = kycProcessDoc.processDocuments;
+        const latestKyc = kycProcessDoc
         if (latestKyc.length > 0) {
-          //matching the documents in both latestkyc and alredy approved kyc
+          // matching the documents in both latestkyc and alredy approved kyc
           for (var i = 0; i < kycDoc.length; i++) {
             for (var j = 0; j < latestKyc.length; j++) {
               if ((kycDoc[i].documentId == latestKyc[j].documentId) && (kycDoc[i].docTypeId == latestKyc[j].docTypeId)) {
@@ -633,9 +625,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               }
             }
           }
-          //if matching documents available
+          // if matching documents available
           if (MatchingDocuments && MatchingDocuments.length > 0) {
-            //search for unmatched documents in latestkyc
+            // search for unmatched documents in latestkyc
             for (var i = 0, len = MatchingDocuments.length; i < len; i++) {
               for (var j = 0, len2 = latestKyc.length; j < len2; j++) {
                 if ((MatchingDocuments[i].documentId === latestKyc[j].documentId) && (MatchingDocuments[i].docTypeId === latestKyc[j].docTypeId)) {
@@ -645,215 +637,199 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               }
             }
             console.log(latestKyc)
-            //if unmatched docs found pushed to matching doc and return the documents
+            // if unmatched docs found pushed to matching doc and return the documents
             if (latestKyc && latestKyc.length) {
               for (let i = 0; i < latestKyc.length; i++) {
                 MatchingDocuments.push(latestKyc[i])
               }
-              if (MatchingDocuments&&MatchingDocuments.length>0) {
+              if (MatchingDocuments && MatchingDocuments.length > 0) {
                 return MatchingDocuments
-
               }
-
             } else {
-              //if no docs found in latest kyc  return matching docs
-              if (MatchingDocuments&&MatchingDocuments.length>0) {
+              // if no docs found in latest kyc  return matching docs
+              if (MatchingDocuments && MatchingDocuments.length > 0) {
                 return MatchingDocuments
-
               }
             }
-          }
-          else {
-            //if no matching documents return the latest kyc
-            if (latestKyc&&latestKyc.length>0) {
+          } else {
+            // if no matching documents return the latest kyc
+            if (latestKyc && latestKyc.length > 0) {
               return latestKyc
-
             }
-
           }
         } else {
           return kycProcessDoc
         }
       }
-
     }
-
   } else {
-
-   let  userKYC=getTheUserKYC()
-    userKYC = _underscore.uniq(userKYC, function (kyc) {
-      let docId = kyc&&kyc.documentId?kyc.documentId:""
+    let userKYC = getTheUserKYC()
+    userKYC = _underscore.uniq(userKYC, (kyc) => {
+      const docId = kyc && kyc.documentId ? kyc.documentId : ''
       return docId;
     });
-    return userKYC&&userKYC.length?userKYC : []
+    return userKYC && userKYC.length ? userKYC : []
   }
-    function getTheUserKYC() {
-    let countryBasedDoc=[]
-      if (country) {
-        //find clusterId of your country code
-        let response = mlDBController.findOne('MlClusters', {countryId: country})
-        if (response && response._id) {
-           countryBasedDoc = getCountryBasedDocuments(response._id);
-          if (countryBasedDoc) {
-            console.log(countryBasedDoc);
-            //return countryBasedDoc
-          }
+  function getTheUserKYC() {
+    let countryBasedDoc = []
+    if (country) {
+      // find clusterId of your country code
+      const response = mlDBController.findOne('MlClusters', { countryId: country })
+      if (response && response._id) {
+        countryBasedDoc = getCountryBasedDocuments(response._id);
+        if (countryBasedDoc) {
+          console.log(countryBasedDoc);
+          // return countryBasedDoc
         }
       }
-      if (selectedSubChapters) {
-        let isNonMoolyaSubChapter = mlDBController.findOne('MlSubChapters', {
-          "_id": selectedSubChapters,
-          isDefaultSubChapter: false,
+    }
+    if (selectedSubChapters) {
+      const isNonMoolyaSubChapter = mlDBController.findOne('MlSubChapters', {
+        _id: selectedSubChapters,
+        isDefaultSubChapter: false,
+        isActive: true
+      }, context)
+      if (isNonMoolyaSubChapter) {
+        const subchapterDocuments = []
+        // if nonmooyasubchapter need to show the documents of moolyanad non-moolya subchapter details.
+        const moolysSubchapter = mlDBController.findOne('MlSubChapters', {
+          chapterId: chapters,
+          isDefaultSubChapter: true,
           isActive: true
         }, context)
-        if (isNonMoolyaSubChapter) {
-          let subchapterDocuments = []
-          //if nonmooyasubchapter need to show the documents of moolyanad non-moolya subchapter details.
-          let moolysSubchapter = mlDBController.findOne('MlSubChapters', {
-            "chapterId": chapters,
-            isDefaultSubChapter: true,
-            isActive: true
-          }, context)
-          if (moolysSubchapter && moolysSubchapter._id) {
-            let processsChapterKYCDoc=[]
-            //get the kyc based on moolya-subchapter
-            let processschapterDoc = getTheKyc(email, moolysSubchapter._id,isNonMoolyaSubChapter._id)
-            if (processschapterDoc&&processschapterDoc.length>0) {
-              processschapterDoc.map(function (doc) {
-                if (doc.docTypeId != 'self' && doc.isActive == true) {
-                  processsChapterKYCDoc.push(doc)
-                }
-              })
-            }
-            let finalKYC=[]
-            //get the selected subchapter based kyc
-            let kyc=selectedSubChapterKYC()
-            let subchapterKYC= processsChapterKYCDoc.concat(kyc)
-            ///retun the unique docuumnets
-            //if country based documents available
-            if(countryBasedDoc&&countryBasedDoc.length>0){
-               finalKYC= countryBasedDoc.concat(subchapterKYC)
-            }else{
-              finalKYC=subchapterKYC
-            }
+        if (moolysSubchapter && moolysSubchapter._id) {
+          const processsChapterKYCDoc = []
+          // get the kyc based on moolya-subchapter
+          const processschapterDoc = getTheKyc(email, moolysSubchapter._id, isNonMoolyaSubChapter._id)
+          if (processschapterDoc && processschapterDoc.length > 0) {
+            processschapterDoc.map((doc) => {
+              if (doc.docTypeId != 'self' && doc.isActive == true) {
+                processsChapterKYCDoc.push(doc)
+              }
+            })
+          }
+          let finalKYC = []
+          // get the selected subchapter based kyc
+          const kyc = selectedSubChapterKYC()
+          const subchapterKYC = processsChapterKYCDoc.concat(kyc)
+          // /retun the unique docuumnets
+          // if country based documents available
+          if (countryBasedDoc && countryBasedDoc.length > 0) {
+            finalKYC = countryBasedDoc.concat(subchapterKYC)
+          } else {
+            finalKYC = subchapterKYC
+          }
 
-            /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+          /* finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               let docId = kyc&&kyc.documentId?kyc.documentId:""
               return docId;
-            });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
-            return finalKYC
-          } else {
-            let finalKYC=[]
-            //get the kyc based on selected subchapter
-            let kyc=selectedSubChapterKYC()
-            if(kyc){
-              //if country based documents available
-              if(countryBasedDoc&&countryBasedDoc.length>0){
-                 finalKYC= countryBasedDoc.concat(kyc)
-              }else{
-                finalKYC= kyc
-              }
-              ///return the unique docuumnets
-              /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
-                return kyc.documentId;
-              });*/
-              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
-              return finalKYC
-            }else{
-              return countryBasedDoc
-            }
-
-          }
-        } else {
-          //get the kyc based on selected subchapter
-          let kyc=selectedSubChapterKYC()
-          if(kyc&&kyc.length>0){
-            let finalKYC=[];
-            //if country based documents available
-            if(countryBasedDoc&&countryBasedDoc.length>0){
-               finalKYC= countryBasedDoc.concat(kyc);
-            }else {
-              finalKYC=kyc
-            }
-            ///return the unique docuumnets
-            /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
-              return kyc.documentId;
-            });*/
-            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc&&kyc.docTypeId?kyc.docTypeId:"", kyc&&kyc.documentId?kyc.documentId:""].join());
-            return finalKYC
-          }else{
-            return countryBasedDoc
-          }
-
-
+            }); */
+          finalKYC = _underscore.uniq(finalKYC, kyc => [kyc && kyc.docTypeId ? kyc.docTypeId : '', kyc && kyc.documentId ? kyc.documentId : ''].join());
+          return finalKYC
         }
-      }else{
+        let finalKYC = []
+        // get the kyc based on selected subchapter
+        const kyc = selectedSubChapterKYC()
+        if (kyc) {
+          // if country based documents available
+          if (countryBasedDoc && countryBasedDoc.length > 0) {
+            finalKYC = countryBasedDoc.concat(kyc)
+          } else {
+            finalKYC = kyc
+          }
+          // /return the unique docuumnets
+          /* finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+                return kyc.documentId;
+              }); */
+          finalKYC = _underscore.uniq(finalKYC, kyc => [kyc && kyc.docTypeId ? kyc.docTypeId : '', kyc && kyc.documentId ? kyc.documentId : ''].join());
+          return finalKYC
+        }
         return countryBasedDoc
       }
-    }
-    function selectedSubChapterKYC(){
-      let processsChapterKYCDoc = []
-      let processschapterDoc = getTheKyc(email, selectedSubChapters,null)
-      if (processschapterDoc && processschapterDoc.length>0) {
-        //fetching the chapter and process based documents documents from processDocuments
-        processschapterDoc.map(function (doc) {
-          if (doc.docTypeId != 'self' && doc.isActive == true) {
-            processsChapterKYCDoc.push(doc)
-          }
-        })
-        return processsChapterKYCDoc
+      // get the kyc based on selected subchapter
+      const kyc = selectedSubChapterKYC()
+      if (kyc && kyc.length > 0) {
+        let finalKYC = [];
+        // if country based documents available
+        if (countryBasedDoc && countryBasedDoc.length > 0) {
+          finalKYC = countryBasedDoc.concat(kyc);
+        } else {
+          finalKYC = kyc
+        }
+        // /return the unique docuumnets
+        /* finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+              return kyc.documentId;
+            }); */
+        finalKYC = _underscore.uniq(finalKYC, kyc => [kyc && kyc.docTypeId ? kyc.docTypeId : '', kyc && kyc.documentId ? kyc.documentId : ''].join());
+        return finalKYC
       }
+      return countryBasedDoc
     }
-    return
+    return countryBasedDoc
   }
+  function selectedSubChapterKYC() {
+    const processsChapterKYCDoc = []
+    const processschapterDoc = getTheKyc(email, selectedSubChapters, null)
+    if (processschapterDoc && processschapterDoc.length > 0) {
+      // fetching the chapter and process based documents documents from processDocuments
+      processschapterDoc.map((doc) => {
+        if (doc.docTypeId != 'self' && doc.isActive == true) {
+          processsChapterKYCDoc.push(doc)
+        }
+      })
+      return processsChapterKYCDoc
+    }
+  }
+}
 
 
+MlResolver.MlQueryResolver.fetchKYCDocuments = (obj, args, context, info) => {
+  const clusters = args.clusters;
+  const chapters = args.chapters;
+  const subChapters = args.subChapters;
+  const communities = args.community;
+  const kycCategory = args.kyc;
+  const documentTyp = args.documentType;
+  let process = null
+  const specificQuery = [];
 
-
-MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => {
-
-  let clusters=args.clusters;
-  let chapters=args.chapters;
-  let subChapters=args.subChapters;
-  let communities=args.community;
-  let kycCategory=args.kyc;
-  let documentTyp=args.documentType;
-  let process=null
-  let specificQuery=[];
-
-  //check for specific condition for all criteria fields of processmapping
-  if((clusters&&clusters.length>0)&&(chapters&&chapters.length>0)&&(subChapters&&subChapters.length>0)&&(communities&&communities.length>0)){
-    let val={clusters,chapters,subChapters,communities}
-      let result = fetchProcessDocumentProxy(val);
-    if(result){
+  // check for specific condition for all criteria fields of processmapping
+  if ((clusters && clusters.length > 0) && (chapters && chapters.length > 0) && (subChapters && subChapters.length > 0) && (communities && communities.length > 0)) {
+    const val = {
+      clusters, chapters, subChapters, communities
+    }
+    const result = fetchProcessDocumentProxy(val);
+    if (result) {
       return result
     }
   }
-  //check for all or specific condition for all criteria fields of processmapping
-  let val={clusters,chapters,subChapters,communities}
-  for (var key in val) {
-    let qu={};
-    let values =val[key]
-    let stringValues =  values.toString();
-    qu[key]={$in:['all',stringValues]};
-    specificQuery.push(qu);//console.log(qu);
+  // check for all or specific condition for all criteria fields of processmapping
+  const val = {
+    clusters, chapters, subChapters, communities
   }
-  let query={$and:specificQuery}
-  process=fetchProcessDocumentProxy(query);
-  if(process){
+  for (const key in val) {
+    const qu = {};
+    const values = val[key]
+    const stringValues = values.toString();
+    qu[key] = { $in: ['all', stringValues] };
+    specificQuery.push(qu);// console.log(qu);
+  }
+  const query = { $and: specificQuery }
+  process = fetchProcessDocumentProxy(query);
+  if (process) {
     return process
   }
-  //check for 'all' condition on criteria fields of processmapping
-  let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all"}
-  process=fetchProcessDocumentProxy(allVal);
-  if(process){
+  // check for 'all' condition on criteria fields of processmapping
+  const allVal = {
+    clusters: 'all', chapters: 'all', subChapters: 'all', communities: 'all'
+  }
+  process = fetchProcessDocumentProxy(allVal);
+  if (process) {
     return process
   }
 
 
-
-  /*let result;
+  /* let result;
   if(args.clusters&&args.chapters&&args.subChapters&&args.community&&args.kyc&&args.documentType){
     result = MlProcessMapping.find({"$and":[{ 'documents.category' : args.kyc ,'documents.type': args.documentType, clusters: {$in: args.clusters},
       chapters: {$in: args.chapters},
@@ -861,16 +837,16 @@ MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => 
   }
 */
 
-  function fetchProcessDocumentProxy(query){
+  function fetchProcessDocumentProxy(query) {
     let data;
-    if(args.kyc && args.documentType){
-      let document= MlProcessMapping.findOne({ $and: [query,{'documents.category' : args.kyc ,'documents.type': args.documentType,"isActive":true}]})
-      if(document && document.processDocuments){
-        data=document.processDocuments;
-        data.map(function (doc,index) {
-          const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
-          let allowableFormatNames = [];  //@array of strings
-          allowableFormatData.map(function (doc) {
+    if (args.kyc && args.documentType) {
+      const document = MlProcessMapping.findOne({ $and: [query, { 'documents.category': args.kyc, 'documents.type': args.documentType, isActive: true }] })
+      if (document && document.processDocuments) {
+        data = document.processDocuments;
+        data.map((doc, index) => {
+          const allowableFormatData = MlDocumentFormats.find({ _id: { $in: doc.allowableFormat } }).fetch() || [];
+          const allowableFormatNames = []; // @array of strings
+          allowableFormatData.map((doc) => {
             allowableFormatNames.push(doc.docFormatName)
           });
           data[index].allowableFormat = allowableFormatNames || [];
@@ -878,9 +854,8 @@ MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => 
         return data
       }
     }
-
   }
-  /*let processDocuments = []
+  /* let processDocuments = []
   if(result && result.length>0){
     for(let i=0;i < result.length;i++){
       processDocuments.push(result[i].processDocuments)
@@ -888,10 +863,6 @@ MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => 
     return processDocuments&&processDocuments[0]
   }else{
     return;
-  }*/
-
-
+  } */
 }
-
-
 

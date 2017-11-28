@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Process = `
+const Process = `
 
     type ProcessType{
         _id         : String,
@@ -205,13 +205,19 @@ let Process = `
     
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Process]);
-let supportedApi = [
-    {api:'createProcess', actionName:'CREATE', moduleName:"PROCESSMAPPING"},
-    {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
-    {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
-    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
-    {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
-  {api:'fetchKYCDocuments', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Process]);
+const supportedApi = [
+  { api: 'createProcess', actionName: 'CREATE', moduleName: 'PROCESSMAPPING' },
+  { api: 'updateProcess', actionName: 'UPDATE', moduleName: 'PROCESSMAPPING' },
+  { api: 'upsertProcessDocument', actionName: 'UPDATE', moduleName: 'PROCESSMAPPING' },
+  {
+    api: 'findProcess', actionName: 'READ', moduleName: 'PROCESSMAPPING', isWhiteList: true
+  },
+  {
+    api: 'findProcessDocumentForRegistration', actionName: 'READ', moduleName: 'PROCESSMAPPING', isWhiteList: true
+  },
+  {
+    api: 'fetchKYCDocuments', actionName: 'READ', moduleName: 'PROCESSMAPPING', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

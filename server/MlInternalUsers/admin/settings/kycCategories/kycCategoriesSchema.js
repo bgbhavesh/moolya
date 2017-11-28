@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let KycCategoriesSchema = `
+const KycCategoriesSchema = `
     type KycCategories
     {
       docCategoryName :String
@@ -45,13 +45,17 @@ let KycCategoriesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],KycCategoriesSchema]);
-let supportedApi = [
-  {api:'findKycCategory', actionName:'READ', moduleName:"DOCUMENTS"},
-  {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS",isWhiteList: true}, //made whitelist as per srinag word
-  {api:'createKycCategory', actionName:'CREATE', moduleName:"DOCUMENTS"},
-  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"},
-  {api:'findCategoryProcessDocuments', actionName:'READ', moduleName:"DOCUMENTS",isWhiteList: true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, KycCategoriesSchema]);
+const supportedApi = [
+  { api: 'findKycCategory', actionName: 'READ', moduleName: 'DOCUMENTS' },
+  {
+    api: 'fetchKYCCategories', actionName: 'READ', moduleName: 'DOCUMENTS', isWhiteList: true
+  }, // made whitelist as per srinag word
+  { api: 'createKycCategory', actionName: 'CREATE', moduleName: 'DOCUMENTS' },
+  { api: 'updateKycCategory', actionName: 'UPDATE', moduleName: 'DOCUMENTS' },
+  {
+    api: 'findCategoryProcessDocuments', actionName: 'READ', moduleName: 'DOCUMENTS', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

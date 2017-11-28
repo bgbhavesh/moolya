@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let breadCrumHierarchyDetails = `
+const breadCrumHierarchyDetails = `
     type BreadCrumHierarchyDetails{
       hierarchyLevel:Int
       hierarchyRefId:String
@@ -21,8 +21,10 @@ let breadCrumHierarchyDetails = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],breadCrumHierarchyDetails]);
-let supportedApi = [
-    {api:'FetchBreadCrumHierarchyDetails', actionName:'READ', moduleName:"GENERIC", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, breadCrumHierarchyDetails]);
+const supportedApi = [
+  {
+    api: 'FetchBreadCrumHierarchyDetails', actionName: 'READ', moduleName: 'GENERIC', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -2,35 +2,33 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['CreateEmployeeType'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.CreateEmployeeType = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlGlobalSettings.insert(args);
+  const id = MlGlobalSettings.insert(args);
   if (id) {
-    let code = 200;
-    let result = {transactionId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    const code = 200;
+    const result = { transactionId: id }
+    const response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return response
   }
 }
 
-MlResolver.MlMutationResolver['UpdateEmployeeType'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.UpdateEmployeeType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args});
+    const id = args._id;
+    const updatedResponse = MlGlobalSettings.update(id, { $set: args });
 
     return updatedResponse
   }
-
 }
-MlResolver.MlQueryResolver['FindEmployeeType'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.FindEmployeeType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    const id = args._id;
+    const response = MlGlobalSettings.findOne({ _id: id });
     return response;
   }
-
 }

@@ -1,10 +1,10 @@
 /**
  * Created by pankaj on 16/5/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
-let actionAndStatusesSchema = `        
+const actionAndStatusesSchema = `        
     
     type operationSchema {
         roleIds           : [String]
@@ -108,12 +108,12 @@ let actionAndStatusesSchema = `
     
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], actionAndStatusesSchema]);
-let supportedApi = [
-  {api:'createActionsAndStatuses', actionName:'CREATE', moduleName:"ACTIONANDSTATUS"},
-  {api:'updateActionsAndStatuses', actionName:'UPDATE', moduleName:"ACTIONANDSTATUS"},
-  {api:'updateGenericActionsAndStatuses', actionName:'UPDATE', moduleName:"ACTIONANDSTATUS"},
-  {api:'findActionsAndStatus', actionName:'READ', moduleName:"ACTIONANDSTATUS"},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, actionAndStatusesSchema]);
+const supportedApi = [
+  { api: 'createActionsAndStatuses', actionName: 'CREATE', moduleName: 'ACTIONANDSTATUS' },
+  { api: 'updateActionsAndStatuses', actionName: 'UPDATE', moduleName: 'ACTIONANDSTATUS' },
+  { api: 'updateGenericActionsAndStatuses', actionName: 'UPDATE', moduleName: 'ACTIONANDSTATUS' },
+  { api: 'findActionsAndStatus', actionName: 'READ', moduleName: 'ACTIONANDSTATUS' }
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

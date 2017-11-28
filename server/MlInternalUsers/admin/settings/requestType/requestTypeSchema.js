@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let RequestTypeSchema = `
+const RequestTypeSchema = `
     type Requests
     {
       requestName     : String
@@ -28,11 +28,15 @@ let RequestTypeSchema = `
     }
 `;
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RequestTypeSchema]);
-let supportedApi = [
-  {api:'CreateRequestType', actionName:'CREATE', moduleName:"REQUESTTYPE"},
-  {api:'UpdateRequestType', actionName:'UPDATE', moduleName:"REQUESTTYPE"},
-  {api:'FindRequestType', actionName:'READ', moduleName:"REQUESTTYPE", isWhiteList:true},
-  {api:'FetchRequestType', actionName:'READ', moduleName:"REQUESTTYPE", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, RequestTypeSchema]);
+const supportedApi = [
+  { api: 'CreateRequestType', actionName: 'CREATE', moduleName: 'REQUESTTYPE' },
+  { api: 'UpdateRequestType', actionName: 'UPDATE', moduleName: 'REQUESTTYPE' },
+  {
+    api: 'FindRequestType', actionName: 'READ', moduleName: 'REQUESTTYPE', isWhiteList: true
+  },
+  {
+    api: 'FetchRequestType', actionName: 'READ', moduleName: 'REQUESTTYPE', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

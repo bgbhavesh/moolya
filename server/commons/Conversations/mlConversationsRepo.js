@@ -4,111 +4,105 @@
 
 import request from 'request'
 
-class ConversationsRepo{
-  constructor(){
+class ConversationsRepo {
+  constructor() {
   }
 
-  login(context, cb)
-  {
-    var authRequest = {userId:context.userId};
+  login(context, cb) {
+    const authRequest = { userId: context.userId };
     // var checkData = await this.testApi()
     // console.log('............', checkData)
-    this.sendRequest('/login', authRequest, 'post' ,false,  function (res) {
-      if(cb){
+    this.sendRequest('/login', authRequest, 'post', false, (res) => {
+      if (cb) {
         cb(res);
       }
     });
   }
   // subscribe to conversations
-  createApplication(cb){
+  createApplication(cb) {
     const that = this;
-    var doc = MlConversations.find().fetch();
-    if(doc.length > 0)
-      return;
+    const doc = MlConversations.find().fetch();
+    if (doc.length > 0) { return; }
 
-    var body = {appName:"moolya"}
-    this.sendRequest('/createApplication', body, 'post', true, function (res) {
-      if(res.success){
+    const body = { appName: 'moolya' }
+    this.sendRequest('/createApplication', body, 'post', true, (res) => {
+      if (res.success) {
         that.setApiKey(res.result.apiKey)
       }
-      if(cb){
+      if (cb) {
         cb(res);
       }
     });
   }
 
   createUser(moolyaUser, cb) {
-    var user = {
-      _id:moolyaUser.userId,
-      username:moolyaUser.userName,
-      email:moolyaUser.userName,
+    const user = {
+      _id: moolyaUser.userId,
+      username: moolyaUser.userName,
+      email: moolyaUser.userName
     }
-    this.sendRequest('/createUser', user, 'post', false, function (res) {
-      if(res.success && cb) {
+    this.sendRequest('/createUser', user, 'post', false, (res) => {
+      if (res.success && cb) {
         cb(res)
       }
     });
   }
 
   // save api key into mlconversations collection
-  setApiKey(apiKey){
-    MlConversations.insert({apiKey:apiKey, isActive:true})
+  setApiKey(apiKey) {
+    MlConversations.insert({ apiKey, isActive: true })
   }
 
   // reterieve api key from mlConversations collection
-  getApiKey(){
-    var apiKey = null;
-    var result = MlConversations.find().fetch();
-    if(result.length > 0)
-      apiKey = result[0].apiKey;
+  getApiKey() {
+    let apiKey = null;
+    const result = MlConversations.find().fetch();
+    if (result.length > 0) { apiKey = result[0].apiKey; }
 
     return apiKey;
   }
 
   // Push Notifications to conversations server Notification types are email, sms, push
-  async sendNotifications(notification){
-    var ret = this.sendRequest('/createNotification', notification, 'post', false);
+  async sendNotifications(notification) {
+    const ret = this.sendRequest('/createNotification', notification, 'post', false);
     return ret;
   }
 
-  createNotifications(notification, cb){
-    this.sendRequest('/createNotification', notification, 'post', false, function (res) {
-      if(cb){
+  createNotifications(notification, cb) {
+    this.sendRequest('/createNotification', notification, 'post', false, (res) => {
+      if (cb) {
         cb(res);
       }
     });
   }
 
-  sendRequest(endPoint, payload, method, isApplication, cb){
-    var options = {
-      url: Meteor.settings.private.conversationsBaseURL+endPoint,
-      body:payload,
-      method: method,
+  sendRequest(endPoint, payload, method, isApplication, cb) {
+    const options = {
+      url: Meteor.settings.private.conversationsBaseURL + endPoint,
+      body: payload,
+      method,
       json: true
     };
 
     console.log('request end point', Meteor.settings.private.conversationsBaseURL + endPoint);
-    if(!isApplication){
-      var apiKey = this.getApiKey();
-      if(!apiKey)
-        return {success:false}
-      options['headers'] = {
+    if (!isApplication) {
+      const apiKey = this.getApiKey();
+      if (!apiKey) { return { success: false } }
+      options.headers = {
         'x-api-key': apiKey
       }
     }
 
-   new Promise(function (resolve, reject) {
-      request(options, function (err, res, body) {
-        if(err){
+    new Promise(((resolve, reject) => {
+      request(options, (err, res, body) => {
+        if (err) {
           reject(err)
-        }
-
-        else{
+        } else {
           resolve(body)
         }
       })
-    }).then((body) => {
-      if(cb) {
+    })).then((body) => {
+      if (cb) {
         cb(body);
       }
     });
@@ -130,7 +124,7 @@ class ConversationsRepo{
       })
     })
     return result;
-  }*/
+  } */
 }
 
 const mlConversationsRepo = new ConversationsRepo();

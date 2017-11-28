@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 21/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
-let reviewSchema = `
+const reviewSchema = `
     type Mutation{
         createReview(resourceId:String!,resourceType:String!,message:String!,rating:Float):response       
     }
@@ -43,4 +43,4 @@ let reviewSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],reviewSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, reviewSchema]);

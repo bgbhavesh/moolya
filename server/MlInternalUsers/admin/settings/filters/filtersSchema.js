@@ -1,11 +1,11 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Filters = `    
+const Filters = `    
         
     type fieldListSpecificsOutput{
       departmentId : String
@@ -91,15 +91,23 @@ let Filters = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Filters]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Filters]);
 
-let supportedApi = [
-  {api:'findFilters', actionName:'READ', moduleName:"FILTERS"},
-  {api:'fetchModuleFilters', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
-  {api:'fetchSelectedFilterListDropDown', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
-  {api:'fetchSelectedFilterData', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
-  {api:'fetchFilterListDropDown', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
-  {api:'createRequestss', actionName:'CREATE', moduleName:"FILTERS"},
-  {api:'updateFilter', actionName:'UPDATE', moduleName:"FILTERS"}
+const supportedApi = [
+  { api: 'findFilters', actionName: 'READ', moduleName: 'FILTERS' },
+  {
+    api: 'fetchModuleFilters', actionName: 'READ', moduleName: 'FILTERS', isWhiteList: true
+  },
+  {
+    api: 'fetchSelectedFilterListDropDown', actionName: 'READ', moduleName: 'FILTERS', isWhiteList: true
+  },
+  {
+    api: 'fetchSelectedFilterData', actionName: 'READ', moduleName: 'FILTERS', isWhiteList: true
+  },
+  {
+    api: 'fetchFilterListDropDown', actionName: 'READ', moduleName: 'FILTERS', isWhiteList: true
+  },
+  { api: 'createRequestss', actionName: 'CREATE', moduleName: 'FILTERS' },
+  { api: 'updateFilter', actionName: 'UPDATE', moduleName: 'FILTERS' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

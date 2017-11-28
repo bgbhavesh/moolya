@@ -5,20 +5,19 @@
 import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
 import MlUserContext from '../../MlExternalUsers/mlUserContext'
-var _ = require('lodash')
+const _ = require('lodash')
 
-MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
-  if(args.profileId === "all" ) {
-   var query = {userId: context.userId, isCurrentVersion: true};
+MlResolver.MlQueryResolver.fetchActivities = (obj, args, context, info) => {
+  if (args.profileId === 'all') {
+    var query = { userId: context.userId, isCurrentVersion: true };
   } else {
-    var query = {userId:context.userId, profileId: args.profileId, isCurrentVersion: true
-    };
+    var query = { userId: context.userId, profileId: args.profileId, isCurrentVersion: true };
   }
-  if(args.isInternal || args.isExternal){
-    let typeQuery = _.pickBy(args, _.isBoolean)
+  if (args.isInternal || args.isExternal) {
+    const typeQuery = _.pickBy(args, _.isBoolean)
     query = _.extend(query, typeQuery)
   }
-  let result = mlDBController.find('MlActivity', query , context).fetch()
+  const result = mlDBController.find('MlActivity', query, context).fetch()
 
   return result;
 };
@@ -54,36 +53,35 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
 //   return result;
 // }
 
-MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlActivity', {_id: args.activityId} , context);
+MlResolver.MlQueryResolver.fetchActivity = (obj, args, context, info) => {
+  const result = mlDBController.findOne('MlActivity', { _id: args.activityId }, context);
   if (result) {
-    let query = {
+    const query = {
       transactionId: result.transactionId,
       isCurrentVersion: true
     };
-    let activity = mlDBController.findOne('MlActivity', query, context);
+    const activity = mlDBController.findOne('MlActivity', query, context);
     return activity;
-  } else  {
-    let code = 404;
-    let response = new MlRespPayload().successPayload('Activity not found', code);
-    return response;
   }
+  const code = 404;
+  const response = new MlRespPayload().successPayload('Activity not found', code);
+  return response;
 };
 
-MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.createActivity = (obj, args, context, info) => {
   if (args.Details) {
-    let name = args.Details.name;
-    let displayName = args.Details.displayName;
-    let profileId = args.Details.profileId;
-    let activity = mlDBController.findOne('MlActivity', { profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
-    if(activity) {
-      let code = 400;
+    const name = args.Details.name;
+    const displayName = args.Details.displayName;
+    const profileId = args.Details.profileId;
+    const activity = mlDBController.findOne('MlActivity', { profileId, isCurrentVersion: true, $or: [{ name }, { displayName }] }, context);
+    if (activity) {
+      const code = 400;
       let response;
-      if(activity.name == name){
+      if (activity.name == name) {
         // response = new MlRespPayload().errorPayload('Activity already exists', code)
         response = new MlRespPayload().errorPayload('Activity name already exists', code)
       } else {
-       response = new MlRespPayload().errorPayload('Activity display name already exists', code)
+        response = new MlRespPayload().errorPayload('Activity display name already exists', code)
       }
       return response
     }
@@ -93,31 +91,31 @@ MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => 
     args.Details.createdAt = new Date();
     args.Details.versions = 0.001;
     orderNumberGenService.createActivityId(args.Details);
-    let result = mlDBController.insert('MlActivity', args.Details , context)
-    if(result){
-      let code = 200;
-      let response = new MlRespPayload().successPayload(result, code);
+    const result = mlDBController.insert('MlActivity', args.Details, context)
+    if (result) {
+      const code = 200;
+      const response = new MlRespPayload().successPayload(result, code);
       return response
     }
   } else {
-    let code = 400;
-    let response = new MlRespPayload().errorPayload('Data required', code);
+    const code = 400;
+    const response = new MlRespPayload().errorPayload('Data required', code);
     return response
   }
 }
 
-MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
-  let oldVersionActivity = mlDBController.findOne('MlActivity', {_id: args.activityId}, context);
+MlResolver.MlMutationResolver.updateActivity = (obj, args, context, info) => {
+  const oldVersionActivity = mlDBController.findOne('MlActivity', { _id: args.activityId }, context);
   let oldActiveActivity;
   if (oldVersionActivity) {
-    let query = {
+    const query = {
       transactionId: oldVersionActivity.transactionId,
       isCurrentVersion: true
     };
     oldActiveActivity = mlDBController.findOne('MlActivity', query, context);
   }
   if (oldActiveActivity) {
-    /*let activity = _.omit(oldActiveActivity, 'payment');
+    /* let activity = _.omit(oldActiveActivity, 'payment');
     if (!args.Details.teams) {
       args.Details.teams = _.cloneDeep(oldActiveActivity.teams)
     } else if (args.Details.teams) {
@@ -134,14 +132,16 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     }
     args.Details = _.cloneDeep(activity); */
 
-    let name = args.Details.name;
-    let displayName = args.Details.displayName;
-    let profileId = args.Details.profileId;
-    let activity = mlDBController.findOne('MlActivity', { transactionId:{$ne: oldActiveActivity.transactionId }, profileId: profileId, isCurrentVersion: true, "$or": [ {name: name} , {displayName: displayName} ] }, context);
-    if(activity) {
-      let code = 400;
+    const name = args.Details.name;
+    const displayName = args.Details.displayName;
+    const profileId = args.Details.profileId;
+    const activity = mlDBController.findOne('MlActivity', {
+      transactionId: { $ne: oldActiveActivity.transactionId }, profileId, isCurrentVersion: true, $or: [{ name }, { displayName }]
+    }, context);
+    if (activity) {
+      const code = 400;
       let response;
-      if(activity.name == name){
+      if (activity.name == name) {
         // response = new MlRespPayload().errorPayload('Activity already exists', code)
         response = new MlRespPayload().errorPayload('Activity name already exists', code)
       } else {
@@ -151,94 +151,92 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     }
 
     oldActiveActivity.isCurrentVersion = false;
-    let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
+    const updatedOldVersionActivity = mlDBController.update('MlActivity', { _id: oldActiveActivity._id }, oldActiveActivity, { $set: 1 }, context);
     args.Details.isCurrentVersion = true;
     args.Details.userId = oldActiveActivity.userId
     args.Details.updatedAt = new Date();
     args.Details.transactionId = oldActiveActivity.transactionId;
     args.Details.versions = oldActiveActivity.versions + 0.001;
-    for(key in oldActiveActivity){
+    for (key in oldActiveActivity) {
       if ((typeof args.Details[key] === 'undefined' || args.Details[key] === null) && key !== 'createdAt' && key !== '_id') {
         args.Details[key] = oldActiveActivity[key];
       }
     }
-    let newVersionActivity = mlDBController.insert('MlActivity', args.Details , context);
-    if(newVersionActivity){
-      let code = 200;
-      let result = newVersionActivity
-      let response = new MlRespPayload().successPayload(result, code);
+    const newVersionActivity = mlDBController.insert('MlActivity', args.Details, context);
+    if (newVersionActivity) {
+      const code = 200;
+      const result = newVersionActivity
+      const response = new MlRespPayload().successPayload(result, code);
       return response
     }
   } else {
-    let code = 404;
-    let response = new MlRespPayload().errorPayload('Activity not found', code);
+    const code = 404;
+    const response = new MlRespPayload().errorPayload('Activity not found', code);
     return response
   }
 }
 
-MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info) => {
-  if(!args.taskId){
-    let code = 400;
-    let response = new MlRespPayload().errorPayload("Task id is required", code);
+MlResolver.MlQueryResolver.fetchActivitiesForTask = (obj, args, context, info) => {
+  if (!args.taskId) {
+    const code = 400;
+    const response = new MlRespPayload().errorPayload('Task id is required', code);
     return response;
   }
 
-  let oldVersionTask = mlDBController.findOne('MlTask', {_id: args.taskId}, context);
+  const oldVersionTask = mlDBController.findOne('MlTask', { _id: args.taskId }, context);
 
-  let taskQuery = {
+  const taskQuery = {
     transactionId: oldVersionTask.transactionId,
     isCurrentVersion: true
   };
-  let task = mlDBController.findOne('MlTask', taskQuery, context);
+  const task = mlDBController.findOne('MlTask', taskQuery, context);
 
   let sessionQuery = [];
   if (task.session && task.session.length > 0) {
-    sessionQuery = task.session.reduce(function(result, session) {
-      return result.concat(session.activities);
-    }, []);
+    sessionQuery = task.session.reduce((result, session) => result.concat(session.activities), []);
   }
   sessionQuery = _.uniq(sessionQuery);
 
-  let query = {
-    userId:context.userId,
+  const query = {
+    userId: context.userId,
     profileId: task.profileId,
     isActive: true,
-    $and:[{
+    $and: [{
       $or: [
-        {_id: {'$in': sessionQuery}},
-        {isCurrentVersion: true}
+        { _id: { $in: sessionQuery } },
+        { isCurrentVersion: true }
       ]
     }]
   }
 
-  if( task.isInternal && !task.isExternal && !task.isServiceCardEligible ) {
+  if (task.isInternal && !task.isExternal && !task.isServiceCardEligible) {
     query.isInternal = true;
     query.isServiceCardEligible = false;
-  } else if ( !task.isInternal && task.isExternal && !task.isServiceCardEligible ) {
+  } else if (!task.isInternal && task.isExternal && !task.isServiceCardEligible) {
     query.isExternal = true;
     query.isServiceCardEligible = false;
-  } else if ( task.isInternal && task.isExternal && !task.isServiceCardEligible ) {
-    query["$and"].push({
+  } else if (task.isInternal && task.isExternal && !task.isServiceCardEligible) {
+    query.$and.push({
       $or: [
-        {isInternal: true},
-        {isExternal: true}
+        { isInternal: true },
+        { isExternal: true }
       ]
     });
     query.isServiceCardEligible = false;
-  } else if ( !task.isInternal && task.isExternal && task.isServiceCardEligible ) {
+  } else if (!task.isInternal && task.isExternal && task.isServiceCardEligible) {
     query.isExternal = true;
     query.isServiceCardEligible = true;
-  } else if ( task.isInternal && task.isExternal && task.isServiceCardEligible ) {
-    query["$and"].push({
+  } else if (task.isInternal && task.isExternal && task.isServiceCardEligible) {
+    query.$and.push({
       $or: [
-        {isInternal: true},
-        {isExternal: true}
+        { isInternal: true },
+        { isExternal: true }
       ]
     });
     query.isServiceCardEligible = true;
   }
 
-  let result = mlDBController.find('MlActivity', query , context).fetch()
+  const result = mlDBController.find('MlActivity', query, context).fetch()
 
   return result;
 }

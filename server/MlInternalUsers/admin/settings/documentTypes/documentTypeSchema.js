@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let DocumentTypesSchema = `
+const DocumentTypesSchema = `
     type DocumentTypes
     {
       docTypeName :String
@@ -30,12 +30,14 @@ let DocumentTypesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentTypesSchema]);
-let supportedApi = [
-  {api:'findDocumentType', actionName:'READ', moduleName:"DOCUMENTTYPE"},
-  {api:'fetchDocumentsType', actionName:'READ', moduleName:"DOCUMENTTYPE", isWhiteList:true},
-  {api:'createDocumentType', actionName:'CREATE', moduleName:"DOCUMENTTYPE"},
-  {api:'updateDocumentType', actionName:'UPDATE', moduleName:"DOCUMENTTYPE"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, DocumentTypesSchema]);
+const supportedApi = [
+  { api: 'findDocumentType', actionName: 'READ', moduleName: 'DOCUMENTTYPE' },
+  {
+    api: 'fetchDocumentsType', actionName: 'READ', moduleName: 'DOCUMENTTYPE', isWhiteList: true
+  },
+  { api: 'createDocumentType', actionName: 'CREATE', moduleName: 'DOCUMENTTYPE' },
+  { api: 'updateDocumentType', actionName: 'UPDATE', moduleName: 'DOCUMENTTYPE' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

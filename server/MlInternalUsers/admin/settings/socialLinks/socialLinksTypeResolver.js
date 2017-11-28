@@ -2,36 +2,34 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['updateSocialLinksType'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.updateSocialLinksType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let updatedResponse= MlGlobalSettings.update({_id:id}, {$set: args.socialLinksType});
+    const id = args._id;
+    const updatedResponse = MlGlobalSettings.update({ _id: id }, { $set: args.socialLinksType });
     return updatedResponse
   }
-
 }
-MlResolver.MlQueryResolver['findSocialLinksType'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findSocialLinksType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    const id = args._id;
+    const response = MlGlobalSettings.findOne({ _id: id });
     return response;
   }
-
 }
-MlResolver.MlMutationResolver['createSocialLinksType'] = (obj, args, context, info) =>{
-  if(MlGlobalSettings.find({_id:args.socialLinksType._id}).count() > 0){
-    let code = 409;
+MlResolver.MlMutationResolver.createSocialLinksType = (obj, args, context, info) => {
+  if (MlGlobalSettings.find({ _id: args.socialLinksType._id }).count() > 0) {
+    const code = 409;
     return new MlRespPayload().errorPayload("'Social link type' already exists", code);
   }
-  let id = MlGlobalSettings.insert({...args.socialLinksType});
-  if(id){
-    let code = 200;
-    let result = {socialLinksTypeId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  const id = MlGlobalSettings.insert({ ...args.socialLinksType });
+  if (id) {
+    const code = 200;
+    const result = { socialLinksTypeId: id }
+    const response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return response
   }
 }
@@ -39,5 +37,4 @@ MlResolver.MlMutationResolver['createSocialLinksType'] = (obj, args, context, in
 //   let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
 //   return result;
 // }
-
 

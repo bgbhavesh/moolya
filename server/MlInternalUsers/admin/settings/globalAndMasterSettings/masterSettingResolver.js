@@ -5,32 +5,32 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlMasterSettingRepo from './repository/mlMasterSettingRepo';
 // import MlRespPayload from '../../../../commons/mlPayload'
 
-MlResolver.MlQueryResolver['fetchMasterSettingsForDropDown'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchMasterSettingsForDropDown = (obj, args, context, info) => {
   // TODO : Authorization
   console.log(args);
-  let masterRecord=new MlMasterSettingRepo(context.userId).getDroDownMasterSettings(args);
+  const masterRecord = new MlMasterSettingRepo(context.userId).getDroDownMasterSettings(args);
   return masterRecord;
 }
-MlResolver.MlQueryResolver['fetchMasterSettings'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchMasterSettings = (obj, args, context, info) => {
   // TODO : Authorization
-         console.log(args);
-     return MlMasterSettings.find({type:args.type,isActive:true}).fetch();
+  console.log(args);
+  return MlMasterSettings.find({ type: args.type, isActive: true }).fetch();
 }
 
-MlResolver.MlQueryResolver['findMasterSetting'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findMasterSetting = (obj, args, context, info) => {
   // TODO : Authorization
   console.log(args);
 
-  return MlMasterSettings.findOne({_id:args._id});
+  return MlMasterSettings.findOne({ _id: args._id });
 }
 
-MlResolver.MlMutationResolver['createMasterSetting'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.createMasterSetting = (obj, args, context, info) => {
   // TODO : Authorization
-  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
+  const masterRecord = new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
   return masterRecord;
 };
 
-MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.updateMasterSetting = (obj, args, context, info) => {
   // TODO : Authorization
   // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   // if (!isValidAuth) {
@@ -39,15 +39,13 @@ MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info
   //   return response;
   // }
 
-  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args, context);
+  const masterRecord = new MlMasterSettingRepo(context.userId).updateMasterSetting(args, context);
   return masterRecord;
 };
 
-MlResolver.MlQueryResolver['fetchMasterSettingsForPlatFormAdmin'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchMasterSettingsForPlatFormAdmin = (obj, args, context, info) => {
   // TODO : Authorization
-  let masterRecord=new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin(args);
+  const masterRecord = new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin(args);
   return masterRecord;
 }
-
-
 

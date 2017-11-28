@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 24/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let FunderPortfolioSchema = `
+const FunderPortfolioSchema = `
 
     type SuccessStories{
         date:String,
@@ -400,20 +400,20 @@ let FunderPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FunderPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, FunderPortfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchFunderDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchFunderAbout', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchfunderPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchFunderPrincipal', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchFunderTeam', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchFunderAreaOfInterest', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchFunderSuccessStories', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api: 'fetchfunderPortfolioService',actionName:'READ', moduleName:"PORTFOLIO" },
+const supportedApi = [
+  { api: 'fetchFunderDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchFunderAbout', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchfunderPortfolioInvestor', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchFunderPrincipal', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchFunderTeam', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchFunderAreaOfInterest', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchFunderSuccessStories', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchfunderPortfolioService', actionName: 'READ', moduleName: 'PORTFOLIO' },
 
-  {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  { api: 'createFunderPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  { api: 'updateFunderPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' }
 
 
 ]

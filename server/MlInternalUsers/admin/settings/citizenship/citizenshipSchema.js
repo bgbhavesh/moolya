@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Citizenship = `        
+const Citizenship = `        
     type Citizenship{
       citizenshipTypeName :String
       citizenshipTypeDisplayName :String
@@ -24,12 +24,16 @@ let Citizenship = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], Citizenship]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Citizenship]);
 
-let supportedApi = [
-  {api:'CreateCitizenship', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
-  {api:'UpdateCitizenship', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
-  {api:'FindCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
-  {api:'FetchCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+const supportedApi = [
+  { api: 'CreateCitizenship', actionName: 'CREATE', moduleName: 'GLOBALSETTINGS' },
+  { api: 'UpdateCitizenship', actionName: 'CREATE', moduleName: 'GLOBALSETTINGS' },
+  {
+    api: 'FindCitizenship', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'FetchCitizenship', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,11 +1,11 @@
 /**
  * Created by venkatasrinag on 3/4/17.
    */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
 import MlResolver from '../../../commons/mlResolverDef'
 
-let ideatorPortfolioSchema = ` 
+const ideatorPortfolioSchema = ` 
     
     type Ideator{
         ideas:[ideasOutput],
@@ -44,10 +44,12 @@ let ideatorPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, ideatorPortfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchIdeators', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeaByPortfolioId', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+const supportedApi = [
+  { api: 'fetchIdeators', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  {
+    api: 'fetchIdeaByPortfolioId', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

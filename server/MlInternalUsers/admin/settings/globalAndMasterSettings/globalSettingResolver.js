@@ -6,90 +6,88 @@ import MlGlobalSettingRepo from './repository/mlGlobalSettingRepo';
 import MlRespPayload from '../../../../commons/mlPayload'
 import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 
-MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchGlobalSettings = (obj, args, context, info) => {
   // TODO : Authorization
-  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-  let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
-   let result = mlDBController.findOne('MlGlobalSettings', {hierarchyRefId:clusterId}, context)||{};
-   // return MlGlobalSettings.find({}).fetch();
-  let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
-  if(cluster){
-    let countryCode = cluster.clusterCode
-    let countryCapital = mlDBController.findOne("MlCountries", {"countryCode": countryCode}, context) || {}
-    if(!result.regionalInfo){
-      result.regionalInfo={};
+  const userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+  const clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
+  const result = mlDBController.findOne('MlGlobalSettings', { hierarchyRefId: clusterId }, context) || {};
+  // return MlGlobalSettings.find({}).fetch();
+  const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context)
+  if (cluster) {
+    const countryCode = cluster.clusterCode
+    const countryCapital = mlDBController.findOne('MlCountries', { countryCode }, context) || {}
+    if (!result.regionalInfo) {
+      result.regionalInfo = {};
     }
     result.regionalInfo.capitalName = countryCapital.capital
     result.regionalInfo.regionalFlag = cluster.countryFlag
   }
-     return [result];
+  return [result];
 }
 
 
-MlResolver.MlMutationResolver['updateGlobalSetting'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.updateGlobalSetting = (obj, args, context, info) => {
   // TODO : Authorization
-     let globalSettingRecord=new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args, context);
-     return globalSettingRecord;
+  const globalSettingRecord = new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args, context);
+  return globalSettingRecord;
 }
 
-MlResolver.MlQueryResolver['findTimeZones'] = (obj, args, context, info) => {
-  //ommited args clusterId
-  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-  let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
+MlResolver.MlQueryResolver.findTimeZones = (obj, args, context, info) => {
+  // ommited args clusterId
+  const userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+  const clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
   let response
-  if(clusterId){
-    if(clusterId === "all") {
-      let timeZones = mlDBController.find("MlTimeZones", {}, context).fetch();
+  if (clusterId) {
+    if (clusterId === 'all') {
+      const timeZones = mlDBController.find('MlTimeZones', {}, context).fetch();
       return timeZones
-    }else {
-      let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
-      if(cluster && cluster._id){
-        let timeZones = mlDBController.find("MlTimeZones", {"countryCode": cluster.clusterCode}, context).fetch();
-        if (timeZones) {
-          timeZones.map(function (tz) {
-            tz.timeZone = tz.timeZone+" "+tz.gmtOffset
-          })
-          let code = 200;
-          let response = new MlRespPayload().successPayload('', code);
-          return timeZones
-        }
+    }
+    const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context)
+    if (cluster && cluster._id) {
+      const timeZones = mlDBController.find('MlTimeZones', { countryCode: cluster.clusterCode }, context).fetch();
+      if (timeZones) {
+        timeZones.map((tz) => {
+          tz.timeZone = `${tz.timeZone} ${tz.gmtOffset}`
+        })
+        const code = 200;
+        const response = new MlRespPayload().successPayload('', code);
+        return timeZones
       }
     }
-
   }
 
   return [];
 }
-MlResolver.MlQueryResolver['findRounding'] = (obj, args, context, info) => {
-  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-  let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
+MlResolver.MlQueryResolver.findRounding = (obj, args, context, info) => {
+  const userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+  const clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
   if (clusterId) {
-      let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
-      if(cluster && cluster.clusterCode){
-        let roundings = mlDBController.find("MlCurrencyType", {"countryCode": cluster.clusterCode}, context).fetch();
-        if (roundings) {
-          let code = 200;
-          let response = new MlRespPayload().successPayload('', code);
-          return roundings
-        }
+    const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context)
+    if (cluster && cluster.clusterCode) {
+      const roundings = mlDBController.find('MlCurrencyType', { countryCode: cluster.clusterCode }, context).fetch();
+      if (roundings) {
+        const code = 200;
+        const response = new MlRespPayload().successPayload('', code);
+        return roundings
       }
+    }
   }
 }
-MlResolver.MlQueryResolver['findCurrencyNames'] = (obj, args, context, info) => {
-  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-  let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
+MlResolver.MlQueryResolver.findCurrencyNames = (obj, args, context, info) => {
+  const userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+  const clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
   if (clusterId) {
-    let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
-    if(cluster && cluster.clusterCode){
-      let currencyName = mlDBController.find("MlCurrencyType", {"countryCode": cluster.clusterCode}, context).fetch();
+    const cluster = mlDBController.findOne('MlClusters', { _id: clusterId }, context)
+    if (cluster && cluster.clusterCode) {
+      const currencyName = mlDBController.find('MlCurrencyType', { countryCode: cluster.clusterCode }, context).fetch();
       if (currencyName) {
-        let code = 200;
-        let result = []
-        let response = new MlRespPayload().successPayload('', code);
-        currencyName.map(function (currency) {
-          let json={
-            regionalCurrencyName : currency.currencyName,
-            _id : currency._id
+        const code = 200;
+        const result = []
+        const response = new MlRespPayload().successPayload('', code);
+        currencyName.map((currency) => {
+          const json = {
+            regionalCurrencyName: currency.currencyName,
+            _id: currency._id
           }
           result.push(json)
         })
@@ -100,19 +98,19 @@ MlResolver.MlQueryResolver['findCurrencyNames'] = (obj, args, context, info) => 
   }
 }
 
-MlResolver.MlQueryResolver['findLanguages'] = (obj, args, context, info) => {
-  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-  let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
+MlResolver.MlQueryResolver.findLanguages = (obj, args, context, info) => {
+  const userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+  const clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
   if (clusterId) {
-    let languages = mlDBController.find("MlMasterSettings", {"hierarchyRefId": clusterId}, context).fetch();
-    if(languages){
-      let response = []
+    const languages = mlDBController.find('MlMasterSettings', { hierarchyRefId: clusterId }, context).fetch();
+    if (languages) {
+      const response = []
       // data = languages.languageInfo
-      languages.map(function (lang) {
-        if(lang.languageInfo){
-          let json = {
-            lang_code : lang.languageInfo.languageName,
-            language_name : lang.languageInfo.languageName
+      languages.map((lang) => {
+        if (lang.languageInfo) {
+          const json = {
+            lang_code: lang.languageInfo.languageName,
+            language_name: lang.languageInfo.languageName
           }
           response.push(json)
         }

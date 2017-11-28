@@ -2,134 +2,127 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
-MlResolver.MlMutationResolver['CreateEntity'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.CreateEntity = (obj, args, context, info) => {
   // TODO : Authorization
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
-  let query ={
-    "$or":[
+  const query = {
+    $or: [
       {
         entityName: {
-          "$regex" : new RegExp('^' + args.entityName + '$', 'i')
+          $regex: new RegExp(`^${args.entityName}$`, 'i')
         }
       },
       {
-        entityDisplayName: {
-          "$regex" :new RegExp("^" + args.entityDisplayName + '$','i')}
+        entityDisplayName: { $regex: new RegExp(`^${args.entityDisplayName}$`, 'i') }
       }
     ]
   };
 
-  let isFind = MlEntity.find(query).fetch();
-  if(isFind.length){
-    let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+  const isFind = MlEntity.find(query).fetch();
+  if (isFind.length) {
+    const code = 409;
+    const response = new MlRespPayload().errorPayload('Already Exists!!!!', code);
     return response;
   }
-  var firstName='';var lastName='';
+  let firstName = ''; let lastName = '';
   // let id = MlDepartments.insert({...args.department});
-  if(Meteor.users.findOne({_id : context.userId}))
-  {
-    let user = Meteor.users.findOne({_id: context.userId}) || {}
-    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-      firstName=(user.profile || {}).firstName||'';
-      lastName =(user.profile || {}).lastName||'';
+  if (Meteor.users.findOne({ _id: context.userId })) {
+    const user = Meteor.users.findOne({ _id: context.userId }) || {}
+    if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+      firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+      lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+    } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+      firstName = (user.profile || {}).firstName || '';
+      lastName = (user.profile || {}).lastName || '';
     }
   }
-  let createdBy = firstName +' '+lastName
+  const createdBy = `${firstName} ${lastName}`
   args.createdBy = createdBy;
   args.createdDate = new Date();
 
-  let id = MlEntity.insert({...args});
+  const id = MlEntity.insert({ ...args });
   if (id) {
-    let code = 200;
-    let result = {entityId: id}
-    let response = new MlRespPayload().successPayload(result, code);
+    const code = 200;
+    const result = { entityId: id }
+    const response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
-MlResolver.MlMutationResolver['UpdateEntity'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.UpdateEntity = (obj, args, context, info) => {
   // TODO : Authorization
 
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
   if (args._id) {
-    var id= args._id;
+    const id = args._id;
 
-    let query ={
-      "_id":{
-        "$ne": id
+    const query = {
+      _id: {
+        $ne: id
       },
-      "$or":[
+      $or: [
         {
           entityName: {
-            "$regex" : new RegExp('^' + args.entityName + '$', 'i')
+            $regex: new RegExp(`^${args.entityName}$`, 'i')
           }
         },
         {
-          entityDisplayName: {
-            "$regex" :new RegExp("^" + args.entityDisplayName + '$','i')}
+          entityDisplayName: { $regex: new RegExp(`^${args.entityDisplayName}$`, 'i') }
         }
       ]
     };
 
-    let isFind = MlEntity.find(query).fetch();
-    if(isFind.length) {
-      let code = 409;
-      let response = new MlRespPayload().errorPayload("'Entity type' already exists!", code);
+    const isFind = MlEntity.find(query).fetch();
+    if (isFind.length) {
+      const code = 409;
+      const response = new MlRespPayload().errorPayload("'Entity type' already exists!", code);
       return response;
     }
-    args=_.omit(args,'_id');
-    var firstName='';var lastName='';
+    args = _.omit(args, '_id');
+    let firstName = ''; let lastName = '';
     // let id = MlDepartments.insert({...args.department});
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
-      let user = Meteor.users.findOne({_id: context.userId}) || {}
-      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-        firstName=(user.profile || {}).firstName||'';
-        lastName =(user.profile || {}).lastName||'';
+    if (Meteor.users.findOne({ _id: context.userId })) {
+      const user = Meteor.users.findOne({ _id: context.userId }) || {}
+      if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+        firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+        lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+      } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+        firstName = (user.profile || {}).firstName || '';
+        lastName = (user.profile || {}).lastName || '';
       }
     }
-    let createdBy = firstName +' '+lastName
+    const createdBy = `${firstName} ${lastName}`
     args.updatedBy = createdBy;
     args.updatedDate = new Date();
 
-    let result= MlEntity.update(id, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
+    const result = MlEntity.update(id, { $set: args });
+    const code = 200;
+    const response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
-MlResolver.MlQueryResolver['FindEntity'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.FindEntity = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlEntity.findOne({"_id":id});
+    const id = args._id;
+    const response = MlEntity.findOne({ _id: id });
     return response;
   }
 }
-MlResolver.MlQueryResolver['fetchEntities'] = (obj, args, context, info) => {
-  let result=MlEntity.find({isActive:true}).fetch()||[];
+MlResolver.MlQueryResolver.fetchEntities = (obj, args, context, info) => {
+  const result = MlEntity.find({ isActive: true }).fetch() || [];
   return result;
 }
-
 

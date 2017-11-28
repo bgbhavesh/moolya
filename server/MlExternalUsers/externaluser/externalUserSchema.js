@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 28/4/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../commons/mlSchemaDef";
-import MlResolver from "../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../commons/mlSchemaDef';
+import MlResolver from '../../commons/mlResolverDef';
 
-let externalUser = `
+const externalUser = `
     input externalUser{
         username: String,
         profile:  profile
@@ -261,23 +261,47 @@ let externalUser = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, externalUser]);
 
-let supportedApi = [
-    {api:'fetchMapCenterCordsForExternalUser', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'fetchAppMapData', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'findDefaultUserProfile', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
-    {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'deActivateUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'blockUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'updateUserShowOnMap', actionName:'UPDATE', moduleName:"USERS"},
+const supportedApi = [
+  {
+    api: 'fetchMapCenterCordsForExternalUser', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'fetchUserProfiles', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'fetchAppMapData', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'findDefaultUserProfile', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'findAddressBook', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'fetchUserProfiles', actionName: 'READ', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'updateContactNumber', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'deActivateUserProfile', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'blockUserProfile', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'setDefaultProfile', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'createUserAddressInfo', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  {
+    api: 'updateUserGeneralInfo', actionName: 'UPDATE', moduleName: 'USERS', isAppWhiteList: true
+  },
+  { api: 'deActivateUserProfileByContext', actionName: 'UPDATE', moduleName: 'USERS' },
+  { api: 'updateUserShowOnMap', actionName: 'UPDATE', moduleName: 'USERS' }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

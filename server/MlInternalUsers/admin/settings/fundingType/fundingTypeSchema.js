@@ -1,11 +1,11 @@
 /**
  * Created by rajatshekhar on 27/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let FundingTypesSchema = `
+const FundingTypesSchema = `
     type FundingType
     {
         _id:String,
@@ -44,14 +44,16 @@ let FundingTypesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FundingTypesSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, FundingTypesSchema]);
 
-let supportedApi = [
-  {api:'fetchFundingType', actionName:'READ', moduleName:"FUNDINGTYPE"},
-  {api:'fetchFundingTypes', actionName:'READ', moduleName:"FUNDINGTYPE", isWhiteList:true},
+const supportedApi = [
+  { api: 'fetchFundingType', actionName: 'READ', moduleName: 'FUNDINGTYPE' },
+  {
+    api: 'fetchFundingTypes', actionName: 'READ', moduleName: 'FUNDINGTYPE', isWhiteList: true
+  },
 
-  {api:'createFundingType', actionName:'CREATE', moduleName:"FUNDINGTYPE"},
-  {api:'updateFundingType', actionName:'UPDATE', moduleName:"FUNDINGTYPE"}
+  { api: 'createFundingType', actionName: 'CREATE', moduleName: 'FUNDINGTYPE' },
+  { api: 'updateFundingType', actionName: 'UPDATE', moduleName: 'FUNDINGTYPE' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
 

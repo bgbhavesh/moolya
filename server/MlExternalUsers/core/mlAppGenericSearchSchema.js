@@ -8,11 +8,11 @@
 /**
  * Import Graphql libs
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
-let appGenericSearch = `
+const appGenericSearch = `
     
     scalar JSON
 
@@ -42,6 +42,6 @@ let appGenericSearch = `
     }
   `;
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],appGenericSearch]);
-let supportedApi = [{api:'AppGenericSearch', actionName:'READ', moduleName:"GENERIC"}];
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, appGenericSearch]);
+const supportedApi = [{ api: 'AppGenericSearch', actionName: 'READ', moduleName: 'GENERIC' }];
 MlResolver.MlModuleResolver.push(supportedApi);

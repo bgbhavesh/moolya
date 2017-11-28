@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Transaction = `        
+const Transaction = `        
     
     type Transaction{
       transactionName :String
@@ -22,12 +22,12 @@ let Transaction = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Transaction]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Transaction]);
 
-let supportedApi = [
-  {api:'CreateTransaction', actionName:'CREATE', moduleName:"TRANSACTIONTYPES"},
-  {api:'UpdateTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONTYPES"},
-  {api:'FindTransaction', actionName:'READ', moduleName:"TRANSACTIONTYPES"},
-  {api:'fetchTransaction', actionName:'READ', moduleName:"TRANSACTIONTYPES"},
+const supportedApi = [
+  { api: 'CreateTransaction', actionName: 'CREATE', moduleName: 'TRANSACTIONTYPES' },
+  { api: 'UpdateTransaction', actionName: 'UPDATE', moduleName: 'TRANSACTIONTYPES' },
+  { api: 'FindTransaction', actionName: 'READ', moduleName: 'TRANSACTIONTYPES' },
+  { api: 'fetchTransaction', actionName: 'READ', moduleName: 'TRANSACTIONTYPES' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

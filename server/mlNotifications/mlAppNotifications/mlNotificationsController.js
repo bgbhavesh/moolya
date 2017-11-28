@@ -2,25 +2,24 @@
 
 import mlConversationsRepo from '../../commons/Conversations/mlConversationsRepo'
 class MlNotificationControllerClass {
-
-  /**create new Notification*/
+  /** create new Notification */
 
   createNewApplication() {
     mlConversationsRepo.createApplication();
   }
 
   createNewUser(user) {
-    var userId = user.userId
-    var notifyMessage = "Welcome to moolya. Your moolya relationship manager will coordinate with you to complete your moolya profile"
-    var that = this
-    mlConversationsRepo.createUser(user, function (ret) {
+    const userId = user.userId
+    const notifyMessage = 'Welcome to moolya. Your moolya relationship manager will coordinate with you to complete your moolya profile'
+    const that = this
+    mlConversationsRepo.createUser(user, (ret) => {
       if (ret && ret.success) {
-        let obj = {
-          "notificationType": "PUSHNOTIFICATION",
-          "subNotificationType":"newUserCreation",
-          "message": notifyMessage,
-          "fromUserId": "system",
-          "toUserId": userId
+        const obj = {
+          notificationType: 'PUSHNOTIFICATION',
+          subNotificationType: 'newUserCreation',
+          message: notifyMessage,
+          fromUserId: 'system',
+          toUserId: userId
         }
         that.createNewNotification(obj)
       }
@@ -28,304 +27,303 @@ class MlNotificationControllerClass {
   }
 
   onKYCApprove(payload) {
-    var userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ""
-    var notifyMessage = "KYC documents have been approved on " + new Date()
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"kycApprove",
+    const userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ''
+    const notifyMessage = `KYC documents have been approved on ${new Date()}`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'kycApprove',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
   onKYCDecline(payload) {
-    var userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ""
-    var firstName = payload && payload.registrationInfo && payload.registrationInfo.firstName ? payload.registrationInfo.firstName : ""
-    var notifyMessage = "Your KYC document(s): "+firstName+ " have been declined by the admin. Please login and upload the KYC documents as per the requirement."
+    const userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ''
+    const firstName = payload && payload.registrationInfo && payload.registrationInfo.firstName ? payload.registrationInfo.firstName : ''
+    const notifyMessage = `Your KYC document(s): ${firstName} have been declined by the admin. Please login and upload the KYC documents as per the requirement.`
 
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"kycDecline",
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'kycDecline',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onPotfolioUpdate(details){
-    var userId = details&&details.userId?details.userId:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "Your portfolio has been updated on "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"portfolioUpdate",
+  onPotfolioUpdate(details) {
+    const userId = details && details.userId ? details.userId : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `Your portfolio has been updated on ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'portfolioUpdate',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onGoLiveRequest(details){
-    var userId = details&&details.userId?details.userId:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "Your Portfolio Go-Live request has been sent to Admin on "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"goLiveRequest",
+  onGoLiveRequest(details) {
+    const userId = details && details.userId ? details.userId : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `Your Portfolio Go-Live request has been sent to Admin on ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'goLiveRequest',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onGoLiveRequestApproval(details){
-    var userId = details&&details._id?details._id:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "Your Go-Live request has been approved by the Admin  on  "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"goLiveRequestApproval",
+  onGoLiveRequestApproval(details) {
+    const userId = details && details._id ? details._id : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `Your Go-Live request has been approved by the Admin  on  ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'goLiveRequestApproval',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onGoLiveRequestDecline(details){
-    var userId = details&&details._id?details._id:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "Your Go-Live request has been declined by the Admin on "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"goLiveRequestDecline",
+  onGoLiveRequestDecline(details) {
+    const userId = details && details._id ? details._id : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `Your Go-Live request has been declined by the Admin on ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'goLiveRequestDecline',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onConnectionRequestReceived(fromUserId,toUserId){
-    fromUserId  = fromUserId?fromUserId:"";
-    toUserId = toUserId?toUserId:""
-    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
-    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
-    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
-    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+  onConnectionRequestReceived(fromUserId, toUserId) {
+    fromUserId = fromUserId || '';
+    toUserId = toUserId || ''
+    const fromUserDetails = mlDBController.findOne('users', { _id: fromUserId })
+    const toUserDetails = mlDBController.findOne('users', { _id: toUserId })
+    const fromUserFirstName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.firstName ? fromUserDetails.profile.firstName : '';
+    const fromUserLastName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.lastName ? fromUserDetails.profile.lastName : '';
 
-    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
-    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+    const toUserFirstName = toUserDetails && toUserDetails.profile && toUserDetails.profile.firstName ? toUserDetails.profile.firstName : '';
+    const toUserLastName = toUserDetails && toUserDetails.profile && toUserDetails.profile.lastName ? toUserDetails.profile.lastName : '';
 
-    var notifyMessage = "New connection request from  "+fromUserFirstName+" "+fromUserLastName+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"connectionRequestReceived",
+    const notifyMessage = `New connection request from  ${fromUserFirstName} ${fromUserLastName}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'connectionRequestReceived',
       message: notifyMessage,
-      fromUserId: "system",
-      toUserId: toUserId
+      fromUserId: 'system',
+      toUserId
     }
     this.createNewNotification(obj)
   }
 
-  onConnectionRequestSent(fromUserId,toUserId){
-    fromUserId  = fromUserId?fromUserId:"";
-    toUserId = toUserId?toUserId:""
-    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
-    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
-    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
-    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+  onConnectionRequestSent(fromUserId, toUserId) {
+    fromUserId = fromUserId || '';
+    toUserId = toUserId || ''
+    const fromUserDetails = mlDBController.findOne('users', { _id: fromUserId })
+    const toUserDetails = mlDBController.findOne('users', { _id: toUserId })
+    const fromUserFirstName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.firstName ? fromUserDetails.profile.firstName : '';
+    const fromUserLastName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.lastName ? fromUserDetails.profile.lastName : '';
 
-    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
-    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+    const toUserFirstName = toUserDetails && toUserDetails.profile && toUserDetails.profile.firstName ? toUserDetails.profile.firstName : '';
+    const toUserLastName = toUserDetails && toUserDetails.profile && toUserDetails.profile.lastName ? toUserDetails.profile.lastName : '';
 
-    var notifyMessage = "Connection request for "+toUserFirstName+" "+toUserLastName+"sent."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"connectionRequestSent",
+    const notifyMessage = `Connection request for ${toUserFirstName} ${toUserLastName}sent.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'connectionRequestSent',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: fromUserId
     }
     this.createNewNotification(obj)
   }
 
 
-
-  onEnquiryRequestReceived(fromUser,toUser){
-    let fromUserId  = fromUser&&fromUser._id?fromUser._id:"";
-    let toUserId = toUser&&toUser._id?toUser._id:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "You have received an Enquiry from "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"enquiryRequestRecieved",
+  onEnquiryRequestReceived(fromUser, toUser) {
+    const fromUserId = fromUser && fromUser._id ? fromUser._id : '';
+    const toUserId = toUser && toUser._id ? toUser._id : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `You have received an Enquiry from ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'enquiryRequestRecieved',
       message: notifyMessage,
-      fromUserId: "system",
-      toUserId: toUserId
+      fromUserId: 'system',
+      toUserId
     }
     this.createNewNotification(obj)
   }
 
-  onReviewReceived(fromUser,toUser){
-    let fromUserId  = fromUser&&fromUser._id?fromUser._id:"";
-    let toUserId = toUser&&toUser._id?toUser._id:""
-    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
-    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
-    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
-    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+  onReviewReceived(fromUser, toUser) {
+    const fromUserId = fromUser && fromUser._id ? fromUser._id : '';
+    const toUserId = toUser && toUser._id ? toUser._id : ''
+    const fromUserDetails = mlDBController.findOne('users', { _id: fromUserId })
+    const toUserDetails = mlDBController.findOne('users', { _id: toUserId })
+    const fromUserFirstName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.firstName ? fromUserDetails.profile.firstName : '';
+    const fromUserLastName = fromUserDetails && fromUserDetails.profile && fromUserDetails.profile.lastName ? fromUserDetails.profile.lastName : '';
 
-    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
-    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+    const toUserFirstName = toUserDetails && toUserDetails.profile && toUserDetails.profile.firstName ? toUserDetails.profile.firstName : '';
+    const toUserLastName = toUserDetails && toUserDetails.profile && toUserDetails.profile.lastName ? toUserDetails.profile.lastName : '';
 
-    var notifyMessage = "You have received a review from "+fromUserFirstName+" "+fromUserLastName+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"reviewRecieved",
+    const notifyMessage = `You have received a review from ${fromUserFirstName} ${fromUserLastName}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'reviewRecieved',
       message: notifyMessage,
-      fromUserId: "system",
-      toUserId: toUserId
+      fromUserId: 'system',
+      toUserId
     }
     this.createNewNotification(obj)
   }
 
 
   onUserApproval(payload) {
-    var userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ""
-    var communityName = payload && payload.registrationInfo && payload.registrationInfo.communityDefName ? payload.registrationInfo.communityDefName : ""
-    var notifyMessage = "You have been added to the "+communityName+" on "+ new Date()+".Please proceed to complete your portfolio process."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"userApproval",
+    const userId = payload && payload.registrationInfo && payload.registrationInfo.userId ? payload.registrationInfo.userId : ''
+    const communityName = payload && payload.registrationInfo && payload.registrationInfo.communityDefName ? payload.registrationInfo.communityDefName : ''
+    const notifyMessage = `You have been added to the ${communityName} on ${new Date()}.Please proceed to complete your portfolio process.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'userApproval',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
-  profileUpdated(userId){
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    var notifyMessage = "Your profile has been updated by you on  "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"profileUpdate",
+  profileUpdated(userId) {
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `Your profile has been updated by you on  ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'profileUpdate',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
-  changePassword(userId){
-    if(userId){
-      var currentdate = new Date();
-      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-      var updatedDateTime = date+" "+time
-      var notifyMessage = "Your password was last changed on "+updatedDateTime+"."
-      let obj = {
-        notificationType: "PUSHNOTIFICATION",
-        "subNotificationType":"changePassword",
+  changePassword(userId) {
+    if (userId) {
+      const currentdate = new Date();
+      const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+      const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+      const updatedDateTime = `${date} ${time}`
+      const notifyMessage = `Your password was last changed on ${updatedDateTime}.`
+      const obj = {
+        notificationType: 'PUSHNOTIFICATION',
+        subNotificationType: 'changePassword',
         message: notifyMessage,
-        fromUserId: "system",
+        fromUserId: 'system',
         toUserId: userId
       }
       this.createNewNotification(obj)
     }
   }
   officeActivation(officeId) {
-    if (officeId){
-      var office = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+    if (officeId) {
+      const office = mlDBController.findOne('MlOffice', { _id: officeId }) || {}
       if (office) {
-        var notifyMessage = "Your customized office has been activated."
-        let obj = {
-          notificationType: "PUSHNOTIFICATION",
-          "subNotificationType":"officeActivation",
+        const notifyMessage = 'Your customized office has been activated.'
+        const obj = {
+          notificationType: 'PUSHNOTIFICATION',
+          subNotificationType: 'officeActivation',
           message: notifyMessage,
-          fromUserId: "system",
+          fromUserId: 'system',
           toUserId: office.userId
         }
         this.createNewNotification(obj)
       }
     }
   }
-  officeMemberIndependent(officeMemberId,userId) {
-    if(userId && officeMemberId){
-      var defaultProfile = new MlUserContext().userProfileDetails(userId);
-      let firstName=defaultProfile && defaultProfile.firstName?defaultProfile.firstName:'';
-      let lastName=defaultProfile && defaultProfile.lastName?defaultProfile.lastName:'';
-      var currentdate = new Date();
-      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-      var updatedDateTime = date+" "+time
-      var notifyMessage = "Go Independent request for "+firstName+" "+lastName +" has been received on "+updatedDateTime+".";
-      let obj = {
-        notificationType: "PUSHNOTIFICATION",
-        "subNotificationType":"officeMemberIndependent",
+  officeMemberIndependent(officeMemberId, userId) {
+    if (userId && officeMemberId) {
+      const defaultProfile = new MlUserContext().userProfileDetails(userId);
+      const firstName = defaultProfile && defaultProfile.firstName ? defaultProfile.firstName : '';
+      const lastName = defaultProfile && defaultProfile.lastName ? defaultProfile.lastName : '';
+      const currentdate = new Date();
+      const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+      const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+      const updatedDateTime = `${date} ${time}`
+      const notifyMessage = `Go Independent request for ${firstName} ${lastName} has been received on ${updatedDateTime}.`;
+      const obj = {
+        notificationType: 'PUSHNOTIFICATION',
+        subNotificationType: 'officeMemberIndependent',
         message: notifyMessage,
-        fromUserId: "system",
+        fromUserId: 'system',
         toUserId: officeMemberId
       }
       this.createNewNotification(obj)
     }
   }
 
-  onNewRegistrationRequest(registrationId,communityName,context){
-    let payload  = mlDBController.findOne('MlRegistration',registrationId,context)
-    let userName = payload && payload.registrationInfo && payload.registrationInfo.userName ? payload.registrationInfo.userName : ""
-    let userDetails =  mlDBController.findOne('users', {username: userName}) || {}
-    let userId = userDetails&&userDetails._id?userDetails._id:""
-    let notifyMessage = "Your new registration request for "+communityName+ " has been submitted successfully."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"newRegistrationRequest",
+  onNewRegistrationRequest(registrationId, communityName, context) {
+    const payload = mlDBController.findOne('MlRegistration', registrationId, context)
+    const userName = payload && payload.registrationInfo && payload.registrationInfo.userName ? payload.registrationInfo.userName : ''
+    const userDetails = mlDBController.findOne('users', { username: userName }) || {}
+    const userId = userDetails && userDetails._id ? userDetails._id : ''
+    const notifyMessage = `Your new registration request for ${communityName} has been submitted successfully.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'newRegistrationRequest',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-  onNewOfficeRequest(payload){
-    let userId = payload&&payload.userId?payload.userId:""
-    var currentdate = new Date();
-    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    var updatedDateTime = date+" "+time
-    let notifyMessage = "New Office Request has been sent on "+updatedDateTime+"."
-    let obj = {
-      notificationType: "PUSHNOTIFICATION",
-      "subNotificationType":"newOfficeRequest",
+  onNewOfficeRequest(payload) {
+    const userId = payload && payload.userId ? payload.userId : ''
+    const currentdate = new Date();
+    const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+    const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+    const updatedDateTime = `${date} ${time}`
+    const notifyMessage = `New Office Request has been sent on ${updatedDateTime}.`
+    const obj = {
+      notificationType: 'PUSHNOTIFICATION',
+      subNotificationType: 'newOfficeRequest',
       message: notifyMessage,
-      fromUserId: "system",
+      fromUserId: 'system',
       toUserId: userId
     }
     this.createNewNotification(obj)
   }
 
-/*
+  /*
   onPricipalInvitation(officeId){
     if(officeId){
       let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
@@ -347,70 +345,68 @@ class MlNotificationControllerClass {
   }
 */
 
-  officeBearerApprovedByAdmin(userId){
-    if(userId){
-      var currentdate = new Date();
-      var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-      var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-      var updatedDateTime = date+" "+time
-      let notifyMessage = "Office Bearer request has been approved on  "+updatedDateTime+"."
-      let obj = {
-        notificationType: "PUSHNOTIFICATION",
-        "subNotificationType":"officeBearerApproved",
+  officeBearerApprovedByAdmin(userId) {
+    if (userId) {
+      const currentdate = new Date();
+      const date = `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()}`;
+      const time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
+      const updatedDateTime = `${date} ${time}`
+      const notifyMessage = `Office Bearer request has been approved on  ${updatedDateTime}.`
+      const obj = {
+        notificationType: 'PUSHNOTIFICATION',
+        subNotificationType: 'officeBearerApproved',
         message: notifyMessage,
-        fromUserId: "system",
+        fromUserId: 'system',
         toUserId: userId
       }
       this.createNewNotification(obj)
     }
-
   }
 
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
   }
-  onUserAssigned(collectionName,transactionId) {
+  onUserAssigned(collectionName, transactionId) {
     if (transactionId) {
-      let userDetails= mlDBController.findOne(collectionName,{"transactionId":transactionId})||{};
-      let userId='';
-      //receiver user details
-      if(userDetails && userDetails.registrationInfo){
-        userId = userDetails&&userDetails.registrationInfo&&userDetails&&userDetails.registrationInfo.userId?userDetails.registrationInfo.userId:'';
-      }else{
-        userId = userDetails&&userDetails.userId?userDetails.userId:'';
+      const userDetails = mlDBController.findOne(collectionName, { transactionId }) || {};
+      let userId = '';
+      // receiver user details
+      if (userDetails && userDetails.registrationInfo) {
+        userId = userDetails && userDetails.registrationInfo && userDetails && userDetails.registrationInfo.userId ? userDetails.registrationInfo.userId : '';
+      } else {
+        userId = userDetails && userDetails.userId ? userDetails.userId : '';
       }
       //
       // let userInfo=mlDBController.findOne('users', {_id: userId}) || {};
 
-      //let allocationId =  userDetails&&userDetails.allocation&&userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:''
-      //let userInfo =  mlDBController.findOne('users', {_id: userId}) || {}
+      // let allocationId =  userDetails&&userDetails.allocation&&userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:''
+      // let userInfo =  mlDBController.findOne('users', {_id: userId}) || {}
       // let firstName = userInfo&&userInfo.profile&&userInfo.profile.firstName?userInfo.profile.firstName:"";
       // let lastName = userInfo&&userInfo.profile&&userInfo.profile.lastName?userInfo.profile.lastName:"";
 
       // community manager details
-      let allocationId = userDetails&&userDetails.allocation && userDetails.allocation.assigneeId?userDetails.allocation.assigneeId:'';
-      let allocationUserDetails =  mlDBController.findOne('users', {_id: allocationId}) || {}
-      let comMngFirstName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.firstName?allocationUserDetails.profile.firstName:"";
-      let comMngLastName = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.lastName?allocationUserDetails.profile.lastName:"";
-      let genderType = allocationUserDetails&&allocationUserDetails.profile&&allocationUserDetails.profile.genderType?allocationUserDetails.profile.genderType:"";
+      const allocationId = userDetails && userDetails.allocation && userDetails.allocation.assigneeId ? userDetails.allocation.assigneeId : '';
+      const allocationUserDetails = mlDBController.findOne('users', { _id: allocationId }) || {}
+      const comMngFirstName = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.firstName ? allocationUserDetails.profile.firstName : '';
+      const comMngLastName = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.lastName ? allocationUserDetails.profile.lastName : '';
+      const genderType = allocationUserDetails && allocationUserDetails.profile && allocationUserDetails.profile.genderType ? allocationUserDetails.profile.genderType : '';
       let gender;
-      if(genderType == "male"){
-        gender = "Mr"
-      }else{
-        gender = "Ms"
+      if (genderType == 'male') {
+        gender = 'Mr'
+      } else {
+        gender = 'Ms'
       }
-      var notifyMessage = gender+" "+comMngFirstName+"will be your Community Manager and will help you complete your moolya profile."
-      let obj = {
-        notificationType: "PUSHNOTIFICATION",
-        "subNotificationType": "onUserAssigned",
+      const notifyMessage = `${gender} ${comMngFirstName}will be your Community Manager and will help you complete your moolya profile.`
+      const obj = {
+        notificationType: 'PUSHNOTIFICATION',
+        subNotificationType: 'onUserAssigned',
         message: notifyMessage,
-        fromUserId: "system",
+        fromUserId: 'system',
         toUserId: userId
       }
       this.createNewNotification(obj)
     }
   }
-
 }
 
 const MlNotificationController = new MlNotificationControllerClass();

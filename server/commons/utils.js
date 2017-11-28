@@ -6,22 +6,22 @@
  * Updated by shubhankit on 24/8/17
  */
 
-var useragent = require('useragent');
-Number.prototype.round = function(p) {
+const useragent = require('useragent');
+Number.prototype.round = function (p) {
   p = p || 10;
-  return parseFloat( this.toFixed(p) );
+  return parseFloat(this.toFixed(p));
 };
 
 
-export const GenerateUniqueCode=function(u1,u2){
-  var uniqueCode=u1+u2;
-  if(u1>u2)uniqueCode=u2+u1;
-  if(u1===u2)uniqueCode=null;
+export const GenerateUniqueCode = function (u1, u2) {
+  let uniqueCode = u1 + u2;
+  if (u1 > u2)uniqueCode = u2 + u1;
+  if (u1 === u2)uniqueCode = null;
   return uniqueCode;
 }
 
-export const getCommunityName = function(communityCode) {
-  switch(communityCode){
+export const getCommunityName = function (communityCode) {
+  switch (communityCode) {
     case 'IDE':
       return 'Ideator'
 
@@ -51,14 +51,14 @@ export const getCommunityName = function(communityCode) {
   }
 }
 
-export const userAgent = function(useragentString){
-      let ugDetails= useragent.parse(useragentString||'',null) || {};
-      return {
-           deviceVersion:ugDetails.device.toVersion(),
-           deviceName:ugDetails.device.toString(),
-           osName:ugDetails.os.toString(),
-           osVersion:ugDetails.os.toVersion(),
-           agentName:ugDetails.toString(),
-           agentVersion:ugDetails.toVersion()
-      };
+export const userAgent = function (useragentString) {
+  const ugDetails = useragent.parse(useragentString || '', null) || {};
+  return {
+    deviceVersion: ugDetails.device.toVersion(),
+    deviceName: ugDetails.device.toString(),
+    osName: ugDetails.os.toString(),
+    osVersion: ugDetails.os.toVersion(),
+    agentName: ugDetails.toString(),
+    agentVersion: ugDetails.toVersion()
+  };
 }

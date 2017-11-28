@@ -1,288 +1,282 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
-import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
-import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import MlResolver from '../../../../commons/mlResolverDef';
+import MlRespPayload from '../../../../commons/mlPayload';
+import MlUserContext from '../../../../MlExternalUsers/mlUserContext';
+import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext';
 import portfolioValidationRepo from '../portfolioValidation'
-import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlEmailNotification from '../../../../mlNotifications/mlEmailNotifications/mlEMailNotification';
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
-import mlRegistrationRepo from "../../registration/mlRegistrationRepo";
-var _ = require('lodash')
+import mlRegistrationRepo from '../../registration/mlRegistrationRepo';
+const _ = require('lodash')
 
-MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
-      try {
-          if (args && args.userId && args.communityType) {
-              // user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
-            var user = mlDBController.findOne('MlIdeatorPortfolio', {"$and": [{'userId': args.userId}, {'communityId': args.communityType}]}, context)
-              if (!user) {
-                  // MlIdeatorPortfolio.insert({
-                  //   userId: args.userId,
-                  //   communityType: args.communityType,
-                  //   portfolioDetailsId: args.portfolioDetailsId,
-                  //   portfolioIdeatorDetails:args.portfolioIdeatorDetails
-                  // })
-                mlDBController.insert('MlIdeatorPortfolio', {
-                  userId: args.userId,
-                  communityType: args.communityType,
-                  portfolioDetailsId: args.portfolioDetailsId,
-                  portfolioIdeatorDetails: args.portfolioIdeatorDetails
-                }, context)
-              }
-          }
-      }catch(e) {
-
+MlResolver.MlMutationResolver.createIdeatorPortfolio = (obj, args, context, info) => {
+  try {
+    if (args && args.userId && args.communityType) {
+      // user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+      const user = mlDBController.findOne('MlIdeatorPortfolio', { $and: [{ userId: args.userId }, { communityId: args.communityType }] }, context)
+      if (!user) {
+        // MlIdeatorPortfolio.insert({
+        //   userId: args.userId,
+        //   communityType: args.communityType,
+        //   portfolioDetailsId: args.portfolioDetailsId,
+        //   portfolioIdeatorDetails:args.portfolioIdeatorDetails
+        // })
+        mlDBController.insert('MlIdeatorPortfolio', {
+          userId: args.userId,
+          communityType: args.communityType,
+          portfolioDetailsId: args.portfolioDetailsId,
+          portfolioIdeatorDetails: args.portfolioIdeatorDetails
+        }, context)
       }
+    }
+  } catch (e) {
+
+  }
 }
 
-MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, info) =>
-{
-    if(args.portfoliodetailsId){
-        try {
-            let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-            let updateFor = args.portfolio.ideatorPortfolio;
-            if (ideatorPortfolio) {
-                for (key in updateFor) {
-                    if (ideatorPortfolio.hasOwnProperty(key)) {
-                      _.mergeWith(ideatorPortfolio[key], updateFor[key], function (objValue, srcValue) {
-                        if (_.isArray(objValue)) {
-                          return objValue.concat(srcValue);
-                        }
-                      });
-                    }
-                    else {
-                      ideatorPortfolio[key] = updateFor[key];
-                    }
-                }
-
-                // let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio})
-              let ret = mlDBController.update('MlIdeatorPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, ideatorPortfolio, {$set: true}, context)
-              if (ret) {
-                      let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
-                      MlEmailNotification.onPortfolioUpdate(details);
-                      MlNotificationController.onPotfolioUpdate(details);
-                      let ideatoralert =  MlAlertNotification.onPortfolioUpdates()
-                      let code = 200;
-                      let response = new MlRespPayload().successPayload(ideatoralert, code);
-                      return response;
+MlResolver.MlMutationResolver.updateIdeatorPortfolio = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    try {
+      const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
+      const updateFor = args.portfolio.ideatorPortfolio;
+      if (ideatorPortfolio) {
+        for (key in updateFor) {
+          if (ideatorPortfolio.hasOwnProperty(key)) {
+            _.mergeWith(ideatorPortfolio[key], updateFor[key], (objValue, srcValue) => {
+              if (_.isArray(objValue)) {
+                return objValue.concat(srcValue);
               }
-            }
-        }
-        catch (e){
-            let code = 400;
-            let response = new MlRespPayload().errorPayload(e.message, code);
-            return response;
-        }
-    }
-}
-
-MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) => {
-    try {
-      let userDetails = Meteor.users.findOne({_id:context.userId});
-        if(args.portfoliodetailsId && args.docId && args.quote && context.userId){
-          let annotator = {
-            portfolioId:args.portfoliodetailsId,
-            referenceDocId:args.docId,
-            quote:args.quote,
-            userId:context.userId,
-            userName:userDetails.username,
-            isResolved:false,
-            isReopened:false,
-            createdAt: new Date()
+            });
+          } else {
+            ideatorPortfolio[key] = updateFor[key];
           }
-          MlAnnotator.insert({...annotator})
         }
-        else{
-            let code = 400;
-            let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
-            return response;
-        }
-    }catch (e){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload(e.message, code);
-        return response;
-    }
 
-    let code = 200;
-    let response = new MlRespPayload().successPayload("Annotator created successfully", code);
-    return response;
-}
-
-MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) => {
-}
-
-MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
-    let userDetails = Meteor.users.findOne({_id:context.userId});
-    try {
-        if(args.portfolioId && args.annotatorId && args.comment && context.userId){
-          var isInternal=userDetails.profile.isInternaluser
-          if(isInternal){
-            var intFirstName=userDetails.profile.InternalUprofile.moolyaProfile.firstName?userDetails.profile.InternalUprofile.moolyaProfile.firstName:''
-            var intLastName=userDetails.profile.InternalUprofile.moolyaProfile.lastName?userDetails.profile.InternalUprofile.moolyaProfile.lastName:''
-          }
-            let comment = {
-                              annotatorId:args.annotatorId,
-                              portfolioId:args.portfolioId,
-                              comment:args.comment,
-                              quote:args.quote,
-                              userId:context.userId,
-                              userName:userDetails.username,
-                              // isResolved:false,
-                              // isReopened:false,
-                              firstName:userDetails.profile.firstName?userDetails.profile.firstName:intFirstName,
-                              lastName:userDetails.profile.lastName?userDetails.profile.lastName:intLastName,
-                              createdAt: new Date()
-                          }
-            MlAnnotatorComments.insert({...comment})
-        }
-        else{
-           let code = 400;
-           let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
-           return response;
-        }
-    }catch (e){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload(e.message, code);
-        return response;
-    }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload("Annotator created successfully", code);
-    return response;
-}
-
-MlResolver.MlMutationResolver['resolveComment'] = (obj, args, context, info) => {
-  if (args.commentId) {
-    let id = MlAnnotator.update(args.commentId, {$set:  {isResolved:true}});
-    if(id){
-      let code = 200;
-      let response = new MlRespPayload().successPayload("Comment Resolved", code);
-      return response;
-    }
-  }
-}
-
-MlResolver.MlMutationResolver['reopenComment'] = (obj, args, context, info) => {
-  if (args.commentId) {
-    let id = MlAnnotator.update(args.commentId, {$set:  {isReopened:true}});
-    if(id){
-      let code = 200;
-      let response = new MlRespPayload().successPayload("Comment Re-Opened", code);
-      return response;
-    }
-  }
-}
-
-MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
-    let annotators = [];
-    try {
-        if(args.portfoliodetailsId && args.docId){
-            let annotatorObj = MlAnnotator.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
-            var firstName='';var lastName='';var profileImage = ''
-            if(annotatorObj.length > 0){
-                _.each(annotatorObj, function (value) {
-                      let quote = JSON.parse(value['quote'])
-                      //var user = Meteor.users.findOne({_id:value.userId});
-                      var user = mlDBController.findOne('users', {_id: value.userId})
-                      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-                        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-                        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
-                      }else if(user&&user.profile&&user.profile.isExternaluser){
-                        firstName=(user.profile || {}).firstName||'';
-                        lastName =(user.profile || {}).lastName||'';
-                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
-                      }
-                    let details = new MlAdminUserContext().userProfileDetails(value.userId)||{};
-                      annotators.push({annotatorId:value._id, quote:quote,userName: firstName +' '+ lastName,createdAt:value.createdAt,roleName:details.roleName,profileImage:profileImage})
-                })
-            }
-        }
-        else{
-          let code = 400;
-          let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
+        // let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio})
+        const ret = mlDBController.update('MlIdeatorPortfolio', { portfolioDetailsId: args.portfoliodetailsId }, ideatorPortfolio, { $set: true }, context)
+        if (ret) {
+          const details = MlPortfolioDetails.findOne({ _id: args.portfoliodetailsId })
+          MlEmailNotification.onPortfolioUpdate(details);
+          MlNotificationController.onPotfolioUpdate(details);
+          const ideatoralert = MlAlertNotification.onPortfolioUpdates()
+          const code = 200;
+          const response = new MlRespPayload().successPayload(ideatoralert, code);
           return response;
         }
-      }catch (e){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload(e.message, code);
-        return response;
+      }
+    } catch (e) {
+      const code = 400;
+      const response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
     }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload(annotators, code);
-    return response;
+  }
 }
 
-MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
-  let comments = [];
+MlResolver.MlMutationResolver.createAnnotation = (obj, args, context, info) => {
   try {
-    if (args.annotationId) {
-      let response = MlAnnotatorComments.find({"annotatorId": args.annotationId}).fetch()
-      _.each(response, function (say, value) {
-        say.profileImage = Meteor.users.findOne({_id: say.userId}).profile ? Meteor.users.findOne({_id: say.userId}).profile.profileImage : ''
-      })
-      return response
-    }
-    else {
-      let code = 400;
-      let response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
+    const userDetails = Meteor.users.findOne({ _id: context.userId });
+    if (args.portfoliodetailsId && args.docId && args.quote && context.userId) {
+      const annotator = {
+        portfolioId: args.portfoliodetailsId,
+        referenceDocId: args.docId,
+        quote: args.quote,
+        userId: context.userId,
+        userName: userDetails.username,
+        isResolved: false,
+        isReopened: false,
+        createdAt: new Date()
+      }
+      MlAnnotator.insert({ ...annotator })
+    } else {
+      const code = 400;
+      const response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
       return response;
     }
   } catch (e) {
-    let code = 400;
-    let response = new MlRespPayload().errorPayload(e.message, code);
+    const code = 400;
+    const response = new MlRespPayload().errorPayload(e.message, code);
     return response;
   }
 
-  let code = 200;
-  let response = new MlRespPayload().successPayload(comments, code);
+  const code = 200;
+  const response = new MlRespPayload().successPayload('Annotator created successfully', code);
   return response;
 }
 
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.updateAnnotation = (obj, args, context, info) => {
+}
+
+MlResolver.MlMutationResolver.createComment = (obj, args, context, info) => {
+  const userDetails = Meteor.users.findOne({ _id: context.userId });
+  try {
+    if (args.portfolioId && args.annotatorId && args.comment && context.userId) {
+      const isInternal = userDetails.profile.isInternaluser
+      if (isInternal) {
+        var intFirstName = userDetails.profile.InternalUprofile.moolyaProfile.firstName ? userDetails.profile.InternalUprofile.moolyaProfile.firstName : ''
+        var intLastName = userDetails.profile.InternalUprofile.moolyaProfile.lastName ? userDetails.profile.InternalUprofile.moolyaProfile.lastName : ''
+      }
+      const comment = {
+        annotatorId: args.annotatorId,
+        portfolioId: args.portfolioId,
+        comment: args.comment,
+        quote: args.quote,
+        userId: context.userId,
+        userName: userDetails.username,
+        // isResolved:false,
+        // isReopened:false,
+        firstName: userDetails.profile.firstName ? userDetails.profile.firstName : intFirstName,
+        lastName: userDetails.profile.lastName ? userDetails.profile.lastName : intLastName,
+        createdAt: new Date()
+      }
+      MlAnnotatorComments.insert({ ...comment })
+    } else {
+      const code = 400;
+      const response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
+      return response;
+    }
+  } catch (e) {
+    const code = 400;
+    const response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
+
+  const code = 200;
+  const response = new MlRespPayload().successPayload('Annotator created successfully', code);
+  return response;
+}
+
+MlResolver.MlMutationResolver.resolveComment = (obj, args, context, info) => {
+  if (args.commentId) {
+    const id = MlAnnotator.update(args.commentId, { $set: { isResolved: true } });
+    if (id) {
+      const code = 200;
+      const response = new MlRespPayload().successPayload('Comment Resolved', code);
+      return response;
+    }
+  }
+}
+
+MlResolver.MlMutationResolver.reopenComment = (obj, args, context, info) => {
+  if (args.commentId) {
+    const id = MlAnnotator.update(args.commentId, { $set: { isReopened: true } });
+    if (id) {
+      const code = 200;
+      const response = new MlRespPayload().successPayload('Comment Re-Opened', code);
+      return response;
+    }
+  }
+}
+
+MlResolver.MlQueryResolver.fetchAnnotations = (obj, args, context, info) => {
+  const annotators = [];
+  try {
+    if (args.portfoliodetailsId && args.docId) {
+      const annotatorObj = MlAnnotator.find({ $and: [{ portfolioId: args.portfoliodetailsId, referenceDocId: args.docId }] }).fetch()
+      let firstName = ''; let lastName = ''; let profileImage = ''
+      if (annotatorObj.length > 0) {
+        _.each(annotatorObj, (value) => {
+          const quote = JSON.parse(value.quote)
+          // var user = Meteor.users.findOne({_id:value.userId});
+          const user = mlDBController.findOne('users', { _id: value.userId })
+          if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+            firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+            lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+            profileImage = user.profile && user.profile.profileImage ? user.profile.profileImage : ''
+          } else if (user && user.profile && user.profile.isExternaluser) {
+            firstName = (user.profile || {}).firstName || '';
+            lastName = (user.profile || {}).lastName || '';
+            profileImage = user.profile && user.profile.profileImage ? user.profile.profileImage : ''
+          }
+          const details = new MlAdminUserContext().userProfileDetails(value.userId) || {};
+          annotators.push({
+            annotatorId: value._id, quote, userName: `${firstName} ${lastName}`, createdAt: value.createdAt, roleName: details.roleName, profileImage
+          })
+        })
+      }
+    } else {
+      const code = 400;
+      const response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
+      return response;
+    }
+  } catch (e) {
+    const code = 400;
+    const response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
+
+  const code = 200;
+  const response = new MlRespPayload().successPayload(annotators, code);
+  return response;
+}
+
+MlResolver.MlQueryResolver.fetchComments = (obj, args, context, info) => {
+  const comments = [];
+  try {
+    if (args.annotationId) {
+      const response = MlAnnotatorComments.find({ annotatorId: args.annotationId }).fetch()
+      _.each(response, (say, value) => {
+        say.profileImage = Meteor.users.findOne({ _id: say.userId }).profile ? Meteor.users.findOne({ _id: say.userId }).profile.profileImage : ''
+      })
+      return response
+    }
+
+    const code = 400;
+    const response = new MlRespPayload().errorPayload("Invalid 'Portfolio ID'", code);
+    return response;
+  } catch (e) {
+    const code = 400;
+    const response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
+
+  const code = 200;
+  const response = new MlRespPayload().successPayload(comments, code);
+  return response;
+}
+
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioDetails = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
-      let details = ideatorPortfolio.portfolioIdeatorDetails
-      let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
+      const details = ideatorPortfolio.portfolioIdeatorDetails
+      const extendData = MlProfessions.findOne({ _id: details.profession, industryId: details.industry }) || {};
       details.industry = extendData.industryName || details.industry;
-      details.profession = extendData.professionName ||  details.profession;
-     // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
-    //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
-      let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
-      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName :  details.employmentStatus
+      details.profession = extendData.professionName || details.profession;
+      // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+      //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
+      const userEmp = MlMasterSettings.findOne({ _id: details.employmentStatus }) || {}
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : details.employmentStatus
 
-      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context, "portfolioIdeatorDetails");
+      const object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context, 'portfolioIdeatorDetails');
 
-      //for view action
-      MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+      // for view action
+      MlResolver.MlMutationResolver.createView(obj, { resourceId: args.portfoliodetailsId, resourceType: 'portfolio' }, context, info);
       return object;
     }
   }
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
-  if(args.ideaId){
-    let idea = MlIdeas.findOne({"_id": args.ideaId})
-    if(!idea)
-      return {};
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, "ideas");
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioIdeas = (obj, args, context, info) => {
+  if (args.ideaId) {
+    const idea = MlIdeas.findOne({ _id: args.ideaId })
+    if (!idea) { return {}; }
+    const filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, 'ideas');
     return filteredObject;
   }
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioProblemsAndSolutions = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('problemSolution')) {
-      var problemSoultion = ideatorPortfolio['problemSolution'];
-      if(ideatorPortfolio['problemSolution'].isProblemPrivate){
-        problemSoultion = _.omit(ideatorPortfolio['problemSolution'], "problemStatement");
+      let problemSoultion = ideatorPortfolio.problemSolution;
+      if (ideatorPortfolio.problemSolution.isProblemPrivate) {
+        problemSoultion = _.omit(ideatorPortfolio.problemSolution, 'problemStatement');
       }
       return problemSoultion;
     }
@@ -290,31 +284,31 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, 
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioAudience'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioAudience = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('audience')) {
-      return ideatorPortfolio['audience'];
+      return ideatorPortfolio.audience;
     }
   }
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioLibrary'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioLibrary = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('library')) {
-      return ideatorPortfolio['library'];
+      return ideatorPortfolio.library;
     }
   }
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioStrategyAndPlanning = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('strategyAndPlanning')) {
-      return ideatorPortfolio['strategyAndPlanning'];
+      return ideatorPortfolio.strategyAndPlanning;
     }
   }
 
@@ -331,11 +325,11 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, a
 //   return {};
 // }
 
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioIntellectualPlanning = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('intellectualPlanning')) {
-      return ideatorPortfolio['intellectualPlanning'];
+      return ideatorPortfolio.intellectualPlanning;
     }
   }
 
@@ -343,122 +337,117 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, 
 }
 
 
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchIdeatorPortfolioRequests = (obj, args, context, info) => {
 
 }
 
-MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) => {
-    return MlPortfolioMenu.findOne({"$and":[{communityType:args.communityType}, {templateName:args.templateName}]});
-}
+MlResolver.MlQueryResolver.fetchPortfolioMenu = (obj, args, context, info) => MlPortfolioMenu.findOne({ $and: [{ communityType: args.communityType }, { templateName: args.templateName }] })
 
 
-
-MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
-    let portfolioId = ""
-    let  user = {}
-    let updateRecord = {}
-    if(args && args.idea){
-        try{
-            let idea = args.idea;
-            let isCreatePortfolioRequest = true;
-            if(!context.userId){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload("Invalid user", code);
-                return response;
-            }
-
-            let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-            if(!profile){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload("No profile found", code);
-                return response;
-            }
-
-            let pfDetails = MlPortfolioDetails.find({"$and": [{'userId': context.userId}, {'communityType': profile.communityDefName}, {'clusterId':profile.clusterId}]}).fetch();
-            if(pfDetails.length == 1){
-                portfolioId = pfDetails[0]._id;
-                let ideas = MlIdeas.findOne({"portfolioId":portfolioId})
-                if(!ideas){
-                  idea.portfolioId = portfolioId;
-                  isCreatePortfolioRequest = false
-                }
-            }
-            if(isCreatePortfolioRequest) {
-                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "REG_USER_APR"}, context) //|| {"registrationInfo": {}};
-                let createdName
-                if(Meteor.users.findOne({_id : context.userId}))
-                {
-                  createdName = Meteor.users.findOne({_id: context.userId}).username
-                }
-                if(regRecord){
-                  let portfolioDetails={
-                    "transactionType" : "portfolio",
-                    "communityType" : regRecord.registrationInfo.communityDefName,
-                    "communityCode" :regRecord.registrationInfo.communityDefCode,
-                    "clusterId" :regRecord.registrationInfo.clusterId,
-                    "chapterId" : regRecord.registrationInfo.chapterId,
-                    "subChapterId" :regRecord.registrationInfo.subChapterId,
-                    "source" : "self",
-                    "createdBy" : createdName,
-                    "status" : "REG_PORT_KICKOFF",
-                    "isPublic": false,
-                    "isGoLive" : false,
-                    "isActive" : false,
-                    "portfolioUserName" : regRecord.registrationInfo.userName,
-                    "userId" :context.userId,
-                    "userType":regRecord.registrationInfo.userType,
-                    contactNumber : regRecord.registrationInfo.contactNumber,
-                    accountType   : regRecord.registrationInfo.accountType,
-                    registrationId: regRecord._id,
-                    clusterName   : regRecord.registrationInfo.clusterName,
-                    chapterName   : regRecord.registrationInfo.chapterName,
-                    subChapterName: regRecord.registrationInfo.subChapterName,
-                    communityName : regRecord.registrationInfo.communityName,
-                    identityType  : regRecord.registrationInfo.identityType,
-                    industryId    : regRecord.registrationInfo.industry,
-                    professionId  : regRecord.registrationInfo.profession,
-                  }
-                  orderNumberGenService.assignPortfolioId(portfolioDetails)
-                  let registrationData = regRecord.registrationDetails;
-                  registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
-                  registrationData.emailId = regRecord.registrationInfo.userName;
-                  registrationData.industry = regRecord.registrationInfo.industry;
-                  registrationData.profession = regRecord.registrationInfo.profession;
-                  registrationData.profileImage = regRecord.registrationInfo.profileImage;
-                  let resp = MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
-                  if(!resp.success){
-                    return resp;
-                  }
-                  idea.portfolioId = resp.result;
-                  if(resp&&resp.result){
-                    mlRegistrationRepo.updateStatus(updateRecord,'REG_PORT_KICKOFF');
-                    let updatedResponse = mlDBController.update('MlPortfolioDetails',resp.result,updateRecord, {$set: true}, context)
-                  }
-                }else {
-                  let code = 400;
-                  let response = new MlRespPayload().errorPayload('User is not been approved in hard registration', code);
-                  return response;
-                }
-            }
-
-            idea.userId = context.userId;
-            let id = mlDBController.insert('MlIdeas', idea, context)
-            if(!id){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload(e.message, code);
-                return response;
-            }
-        }
-        catch (e){
-            let code = 400;
-            let response = new MlRespPayload().errorPayload(e.message, code);
-            return response;
-        }
-
-        let code = 200;
-        let response = new MlRespPayload().successPayload('Idea created successfully', code);
+MlResolver.MlMutationResolver.createIdea = (obj, args, context, info) => {
+  let portfolioId = ''
+  const user = {}
+  const updateRecord = {}
+  if (args && args.idea) {
+    try {
+      const idea = args.idea;
+      let isCreatePortfolioRequest = true;
+      if (!context.userId) {
+        const code = 400;
+        const response = new MlRespPayload().errorPayload('Invalid user', code);
         return response;
+      }
+
+      const profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+      if (!profile) {
+        const code = 400;
+        const response = new MlRespPayload().errorPayload('No profile found', code);
+        return response;
+      }
+
+      const pfDetails = MlPortfolioDetails.find({ $and: [{ userId: context.userId }, { communityType: profile.communityDefName }, { clusterId: profile.clusterId }] }).fetch();
+      if (pfDetails.length == 1) {
+        portfolioId = pfDetails[0]._id;
+        const ideas = MlIdeas.findOne({ portfolioId })
+        if (!ideas) {
+          idea.portfolioId = portfolioId;
+          isCreatePortfolioRequest = false
+        }
+      }
+      if (isCreatePortfolioRequest) {
+        const regRecord = mlDBController.findOne('MlRegistration', { _id: profile.registrationId, status: 'REG_USER_APR' }, context) // || {"registrationInfo": {}};
+        let createdName
+        if (Meteor.users.findOne({ _id: context.userId })) {
+          createdName = Meteor.users.findOne({ _id: context.userId }).username
+        }
+        if (regRecord) {
+          const portfolioDetails = {
+            transactionType: 'portfolio',
+            communityType: regRecord.registrationInfo.communityDefName,
+            communityCode: regRecord.registrationInfo.communityDefCode,
+            clusterId: regRecord.registrationInfo.clusterId,
+            chapterId: regRecord.registrationInfo.chapterId,
+            subChapterId: regRecord.registrationInfo.subChapterId,
+            source: 'self',
+            createdBy: createdName,
+            status: 'REG_PORT_KICKOFF',
+            isPublic: false,
+            isGoLive: false,
+            isActive: false,
+            portfolioUserName: regRecord.registrationInfo.userName,
+            userId: context.userId,
+            userType: regRecord.registrationInfo.userType,
+            contactNumber: regRecord.registrationInfo.contactNumber,
+            accountType: regRecord.registrationInfo.accountType,
+            registrationId: regRecord._id,
+            clusterName: regRecord.registrationInfo.clusterName,
+            chapterName: regRecord.registrationInfo.chapterName,
+            subChapterName: regRecord.registrationInfo.subChapterName,
+            communityName: regRecord.registrationInfo.communityName,
+            identityType: regRecord.registrationInfo.identityType,
+            industryId: regRecord.registrationInfo.industry,
+            professionId: regRecord.registrationInfo.profession
+          }
+          orderNumberGenService.assignPortfolioId(portfolioDetails)
+          const registrationData = regRecord.registrationDetails;
+          registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
+          registrationData.emailId = regRecord.registrationInfo.userName;
+          registrationData.industry = regRecord.registrationInfo.industry;
+          registrationData.profession = regRecord.registrationInfo.profession;
+          registrationData.profileImage = regRecord.registrationInfo.profileImage;
+          const resp = MlResolver.MlMutationResolver.createPortfolioRequest(obj, { portfoliodetails: portfolioDetails, registrationInfo: registrationData }, context, info);
+          if (!resp.success) {
+            return resp;
+          }
+          idea.portfolioId = resp.result;
+          if (resp && resp.result) {
+            mlRegistrationRepo.updateStatus(updateRecord, 'REG_PORT_KICKOFF');
+            const updatedResponse = mlDBController.update('MlPortfolioDetails', resp.result, updateRecord, { $set: true }, context)
+          }
+        } else {
+          const code = 400;
+          const response = new MlRespPayload().errorPayload('User is not been approved in hard registration', code);
+          return response;
+        }
+      }
+
+      idea.userId = context.userId;
+      const id = mlDBController.insert('MlIdeas', idea, context)
+      if (!id) {
+        const code = 400;
+        const response = new MlRespPayload().errorPayload(e.message, code);
+        return response;
+      }
+    } catch (e) {
+      const code = 400;
+      const response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
     }
+
+    const code = 200;
+    const response = new MlRespPayload().successPayload('Idea created successfully', code);
+    return response;
+  }
 }
 
 // MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
@@ -682,36 +671,35 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 // }
 
 
-MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
-  if(args.idea) {
-    var idea = mlDBController.findOne('MlIdeas', {_id: args.ideaId}, context)
-    var updatedIdea = args.idea;
-    if(idea){
-      let ret = mlDBController.update('MlIdeas', args.ideaId, updatedIdea, {$set:true}, context)
+MlResolver.MlMutationResolver.updateIdea = (obj, args, context, info) => {
+  if (args.idea) {
+    const idea = mlDBController.findOne('MlIdeas', { _id: args.ideaId }, context)
+    const updatedIdea = args.idea;
+    if (idea) {
+      const ret = mlDBController.update('MlIdeas', args.ideaId, updatedIdea, { $set: true }, context)
       if (ret) {
-        let ideatoralert = MlAlertNotification.onPortfolioUpdates()
-        let code = 200;
-        let response = new MlRespPayload().successPayload(ideatoralert, code);
+        const ideatoralert = MlAlertNotification.onPortfolioUpdates()
+        const code = 200;
+        const response = new MlRespPayload().successPayload(ideatoralert, code);
         return response;
       }
     }
   }
 }
 
-MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
-  let ideas = [];
+MlResolver.MlQueryResolver.fetchIdeas = (obj, args, context, info) => {
+  const ideas = [];
   let userId;
-  var mongoQuery = {}
+  let mongoQuery = {}
   if (args.portfolioId) {
-    var portfolio = MlPortfolioDetails.findOne({_id: args.portfolioId}) || {}
+    const portfolio = MlPortfolioDetails.findOne({ _id: args.portfolioId }) || {}
     userId = portfolio.userId
-    mongoQuery = {"$and": [{"userId": userId}, {"communityCode": "IDE"}]}
+    mongoQuery = { $and: [{ userId }, { communityCode: 'IDE' }] }
   } else if (context.userId) {
     userId = context.userId
-    var defaultProfile = new MlUserContext(userId).userProfileDetails(userId)
-    mongoQuery = {userId: userId, communityCode: "IDE", profileId: defaultProfile.profileId}
-    if (!defaultProfile)
-      return ideas;
+    const defaultProfile = new MlUserContext(userId).userProfileDetails(userId)
+    mongoQuery = { userId, communityCode: 'IDE', profileId: defaultProfile.profileId }
+    if (!defaultProfile) { return ideas; }
   }
   if (!context.userId) {
     return ideas;
@@ -723,22 +711,21 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
 
   // let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
   // let portfolios = MlPortfolioDetails.find({"$and": [{"userId": userId}, {"communityType": "Ideators"}]}).fetch()
-  let portfolios = MlPortfolioDetails.find(mongoQuery).fetch()
-  if (!portfolios)
-    return ideas;
+  const portfolios = MlPortfolioDetails.find(mongoQuery).fetch()
+  if (!portfolios) { return ideas; }
 
-  _.each(portfolios, function (portfolio) {
-    let idea = MlIdeas.findOne({"portfolioId": portfolio._id})
+  _.each(portfolios, (portfolio) => {
+    let idea = MlIdeas.findOne({ portfolioId: portfolio._id })
     if (idea) {
-      idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, "ideas");
+      idea = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context, 'ideas');
       idea.createdAt = portfolio ? portfolio.createdAt : null;
       idea.updatedAt = portfolio ? portfolio.transactionUpdatedDate : null;
       ideas.push(idea);
     }
   })
 
-  //for view action
-  MlResolver.MlMutationResolver['createView'](obj, {
+  // for view action
+  MlResolver.MlMutationResolver.createView(obj, {
     resourceId: args.portfolioId,
     resourceType: 'portfolio'
   }, context, info);
@@ -746,33 +733,30 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
   return ideas;
 }
 
-MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) => {
-  if(_.isEmpty(args))
-      return;
-  var key = args.key;
-  var ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+MlResolver.MlQueryResolver.fetchIdeatorDetails = (obj, args, context, info) => {
+  if (_.isEmpty(args)) { return; }
+  const key = args.key;
+  const ideatorPortfolio = MlIdeatorPortfolio.findOne({ portfolioDetailsId: args.portfoliodetailsId })
   if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty(key)) {
-    var object = ideatorPortfolio[key];
-    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
+    const object = ideatorPortfolio[key];
+    const filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context, key);
     ideatorPortfolio[key] = filteredObject
     return ideatorPortfolio;
   }
-
 }
 
-MlResolver.MlQueryResolver['validateUserForAnnotation'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    var portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context);
-    var user = mlDBController.findOne('users', {_id: context.userId}, context);
-    if(portfolio && portfolio.userId){
-        if(portfolio.userId == context.userId){
-          return true;
-        }
-        if(user && user.profile &&user.profile.isInternaluser){
-          return true;
-        }
-        return false;
+MlResolver.MlQueryResolver.validateUserForAnnotation = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    const portfolio = mlDBController.findOne('MlPortfolioDetails', { _id: args.portfoliodetailsId }, context);
+    const user = mlDBController.findOne('users', { _id: context.userId }, context);
+    if (portfolio && portfolio.userId) {
+      if (portfolio.userId == context.userId) {
+        return true;
+      }
+      if (user && user.profile && user.profile.isInternaluser) {
+        return true;
+      }
+      return false;
     }
   }
-
 }

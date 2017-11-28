@@ -1,14 +1,14 @@
 /**
  * Created by venkatsrinag on 8/21/17.
  */
-import {mergeStrings} from "gql-merge";
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
-let conversationSchema = `
+const conversationSchema = `
    type Query{
       fetchConversationAuthToken : response
    }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], conversationSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, conversationSchema]);

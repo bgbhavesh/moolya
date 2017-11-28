@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 9/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
-let followSchema = `
+const followSchema = `
      type FollowUser{
         id:String,
         userId:String,
@@ -31,4 +31,4 @@ let followSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],followSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, followSchema]);

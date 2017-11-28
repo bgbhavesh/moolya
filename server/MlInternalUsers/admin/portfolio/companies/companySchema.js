@@ -1,12 +1,12 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let startupPortfolioSchema = `
+const startupPortfolioSchema = `
 
     type PortfolioMenu{
         image: String
@@ -651,17 +651,17 @@ let startupPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], startupPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, startupPortfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchCompanyPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchCompanyDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchCompanyPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchCompanyPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchCompanyPortfolioCSRReports', actionName:'READ', moduleName:"PORTFOLIO"},
+const supportedApi = [
+  { api: 'fetchCompanyPortfolioAboutUs', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchCompanyDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchCompanyPortfolioCharts', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchCompanyPortfolioData', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchCompanyPortfolioCSRReports', actionName: 'READ', moduleName: 'PORTFOLIO' },
 
-  {api:'createCompanyPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateCompanyPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  { api: 'createCompanyPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  { api: 'updateCompanyPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

@@ -2,129 +2,123 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
-MlResolver.MlMutationResolver['CreateStageOfCompany'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.CreateStageOfCompany = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
-  let query ={
-    "$or":[
+  const query = {
+    $or: [
       {
         stageOfCompanyName: {
-          "$regex" : new RegExp('^' + args.stageOfCompanyName + '$', 'i')
+          $regex: new RegExp(`^${args.stageOfCompanyName}$`, 'i')
         }
       },
       {
-        stageOfCompanyDisplayName: {
-          "$regex" :new RegExp("^" + args.stageOfCompanyDisplayName + '$','i')}
+        stageOfCompanyDisplayName: { $regex: new RegExp(`^${args.stageOfCompanyDisplayName}$`, 'i') }
       }
     ]
   };
 
-  let isFind = MlStageOfCompany.find(query).fetch();
-  if(isFind.length){
-    let code = 409;
-    let response = new MlRespPayload().errorPayload("'Stage of company type' already exists!", code);
+  const isFind = MlStageOfCompany.find(query).fetch();
+  if (isFind.length) {
+    const code = 409;
+    const response = new MlRespPayload().errorPayload("'Stage of company type' already exists!", code);
     return response;
   }
-  var firstName='';var lastName='';
+  let firstName = ''; let lastName = '';
   // let id = MlDepartments.insert({...args.department});
-  if(Meteor.users.findOne({_id : context.userId}))
-  {
-    let user = Meteor.users.findOne({_id: context.userId}) || {}
-    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-      firstName=(user.profile || {}).firstName||'';
-      lastName =(user.profile || {}).lastName||'';
+  if (Meteor.users.findOne({ _id: context.userId })) {
+    const user = Meteor.users.findOne({ _id: context.userId }) || {}
+    if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+      firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+      lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+    } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+      firstName = (user.profile || {}).firstName || '';
+      lastName = (user.profile || {}).lastName || '';
     }
   }
-  let createdBy = firstName +' '+lastName
+  const createdBy = `${firstName} ${lastName}`
   args.createdBy = createdBy;
   args.createdDate = new Date();
 
-  let id = MlStageOfCompany.insert({...args});
+  const id = MlStageOfCompany.insert({ ...args });
   if (id) {
-    let code = 200;
-    let result = {stageOfCompanyId: id}
-    let response = new MlRespPayload().successPayload(result, code);
+    const code = 200;
+    const result = { stageOfCompanyId: id }
+    const response = new MlRespPayload().successPayload(result, code);
     return response
   }
 };
 
-MlResolver.MlMutationResolver['UpdateStageOfCompany'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+MlResolver.MlMutationResolver.UpdateStageOfCompany = (obj, args, context, info) => {
+  const isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    const code = 401;
+    const response = new MlRespPayload().errorPayload('Not Authorized', code);
     return response;
   }
 
   if (args._id) {
-    var id= args._id;
-    let query ={
-      "_id":{
-        "$ne": id
+    const id = args._id;
+    const query = {
+      _id: {
+        $ne: id
       },
-      "$or":[
+      $or: [
         {
           stageOfCompanyName: {
-            "$regex" : new RegExp('^' + args.stageOfCompanyName + '$', 'i')
+            $regex: new RegExp(`^${args.stageOfCompanyName}$`, 'i')
           }
         },
         {
-          stageOfCompanyDisplayName: {
-            "$regex" :new RegExp("^" + args.stageOfCompanyDisplayName + '$','i')}
+          stageOfCompanyDisplayName: { $regex: new RegExp(`^${args.stageOfCompanyDisplayName}$`, 'i') }
         }
       ]
     };
-    let isFind = MlStageOfCompany.find(query).fetch();
-    if(isFind.length) {
-      let code = 409;
-      let response = new MlRespPayload().errorPayload("'Stage of company type' already exists!", code);
+    const isFind = MlStageOfCompany.find(query).fetch();
+    if (isFind.length) {
+      const code = 409;
+      const response = new MlRespPayload().errorPayload("'Stage of company type' already exists!", code);
       return response;
     }
-    args=_.omit(args,'_id');
-    var firstName='';var lastName='';
+    args = _.omit(args, '_id');
+    let firstName = ''; let lastName = '';
     // let id = MlDepartments.insert({...args.department});
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
-      let user = Meteor.users.findOne({_id: context.userId}) || {}
-      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
-
-        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
-        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
-      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
-        firstName=(user.profile || {}).firstName||'';
-        lastName =(user.profile || {}).lastName||'';
+    if (Meteor.users.findOne({ _id: context.userId })) {
+      const user = Meteor.users.findOne({ _id: context.userId }) || {}
+      if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
+        firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
+        lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
+      } else if (user && user.profile && user.profile.isExternaluser) { // resolve external user context based on default profile
+        firstName = (user.profile || {}).firstName || '';
+        lastName = (user.profile || {}).lastName || '';
       }
     }
-    let createdBy = firstName +' '+lastName
+    const createdBy = `${firstName} ${lastName}`
     args.updatedBy = createdBy;
     args.updatedDate = new Date();
 
-    let result = MlStageOfCompany.update(id, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
+    const result = MlStageOfCompany.update(id, { $set: args });
+    const code = 200;
+    const response = new MlRespPayload().successPayload(result, code);
     return response;
   }
 }
-MlResolver.MlQueryResolver['FindStageOfCompany'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.FindStageOfCompany = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response = MlStageOfCompany.findOne({"_id":id});
+    const id = args._id;
+    const response = MlStageOfCompany.findOne({ _id: id });
     return response;
   }
 }
-MlResolver.MlQueryResolver['fetchStageOfCompany'] = (obj, args, context, info) => {
-  let result=MlStageOfCompany.find({isActive:true}).fetch()||[];
+MlResolver.MlQueryResolver.fetchStageOfCompany = (obj, args, context, info) => {
+  const result = MlStageOfCompany.find({ isActive: true }).fetch() || [];
   return result;
 }
 

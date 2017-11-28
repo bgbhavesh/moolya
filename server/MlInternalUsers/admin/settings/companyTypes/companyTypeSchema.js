@@ -1,8 +1,8 @@
 
 
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-let CompanyType = `        
+const CompanyType = `        
     
     type CompanyType{
       companyName :String
@@ -21,4 +21,4 @@ let CompanyType = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CompanyType]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, CompanyType]);

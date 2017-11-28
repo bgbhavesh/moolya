@@ -1,12 +1,12 @@
 /**
  * Created by venkatsrinag on 28/7/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../../commons/mlSchemaDef";
-import MlResolver from "../../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef';
 
 
-let servicecardtype = `
+const servicecardtype = `
   type ServicecardType{
     _id:String,
     name:String,
@@ -31,12 +31,14 @@ let servicecardtype = `
       updateServicecardType(servicecardType:servicecardType, servicecardId:String):response
   }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], servicecardtype]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, servicecardtype]);
 
-let supportedApi = [
-  {api: 'createServiceCardType', actionName:'CREATE', MODULE: "SERVICECARDTYPE"},
-  {api: 'updateServicecardType', actionName:'UPDATE', MODULE: "SERVICECARDTYPE"},
-  {api: 'fetchServicecardTypes', actionName:'READ', MODULE: "SERVICECARDTYPE", isWhiteList:true}
+const supportedApi = [
+  { api: 'createServiceCardType', actionName: 'CREATE', MODULE: 'SERVICECARDTYPE' },
+  { api: 'updateServicecardType', actionName: 'UPDATE', MODULE: 'SERVICECARDTYPE' },
+  {
+    api: 'fetchServicecardTypes', actionName: 'READ', MODULE: 'SERVICECARDTYPE', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

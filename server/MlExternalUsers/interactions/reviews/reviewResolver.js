@@ -9,45 +9,44 @@ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/m
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
-import MlUserContext from "../../../MlExternalUsers/mlUserContext";
+import MlUserContext from '../../../MlExternalUsers/mlUserContext';
 import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
-MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.createReview = (obj, args, context, info) => {
   if (args && context && context.userId) {
-    var resp = null;
+    let resp = null;
     try {
-
       /**
        * Sub chapter access control
        */
-      let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:args.resourceId}, context);
-      let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
-      let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
-      if(!mlSubChapterAccessControl.hasAccess){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+      const portfolioDetails = mlDBController.findOne('MlPortfolioDetails', { _id: args.resourceId }, context);
+      const subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+      const mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+      if (!mlSubChapterAccessControl.hasAccess) {
+        const code = 400;
+        const response = new MlRespPayload().errorPayload('You do not have access to transact', code);
         return response;
       }
 
-      let user = mlDBController.findOne('users', {_id: context.userId}, context);
-      var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
-      var fromuser = resourceDetails.contextUser;
-      var toUser = resourceDetails.resourceOwner;
+      const user = mlDBController.findOne('users', { _id: context.userId }, context);
+      const resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
+      const fromuser = resourceDetails.contextUser;
+      const toUser = resourceDetails.resourceOwner;
       if (!toUser._id || !fromuser._id || fromuser._id === toUser._id) {
-        let code = 400;
-        let response = new MlRespPayload().errorPayload('Invalid User', code);
+        const code = 400;
+        const response = new MlRespPayload().errorPayload('Invalid User', code);
         return response;
       }
 
-      //fix for Issue: MOOLYA-2508
-      var updateCount = mlDBController.update('MlReviews',{resourceId: args.resourceId,resourceType: args.resourceType,userId: fromuser._id},{resourceId: args.resourceId},{$set:true,upsert:false}, context);
-      if(updateCount==1){
-        let response = new MlRespPayload().errorPayload('Limit exceeded for adding review', 401);
+      // fix for Issue: MOOLYA-2508
+      const updateCount = mlDBController.update('MlReviews', { resourceId: args.resourceId, resourceType: args.resourceType, userId: fromuser._id }, { resourceId: args.resourceId }, { $set: true, upsert: false }, context);
+      if (updateCount == 1) {
+        const response = new MlRespPayload().errorPayload('Limit exceeded for adding review', 401);
         return response;
       }
 
-      //todo:set Active through admin
+      // todo:set Active through admin
 
-      let review = {
+      const review = {
         resourceId: args.resourceId,
         resourceType: args.resourceType,
         message: args.message,
@@ -61,50 +60,59 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
       resp = mlDBController.insert('MlReviews', review, context);
 
       if (resp) {
-        //create transaction and transaction Log
-        let fromUserType = 'user';
-        mlInteractionService.createTransactionRequest(toUser._id,'review', args.resourceId, resp, fromuser._id, fromUserType , context);
-        MlEmailNotification.reviewRecieved(fromuser,toUser)
-        MlNotificationController.onReviewReceived(fromuser,toUser);
+        // create transaction and transaction Log
+        const fromUserType = 'user';
+        mlInteractionService.createTransactionRequest(toUser._id, 'review', args.resourceId, resp, fromuser._id, fromUserType, context);
+        MlEmailNotification.reviewRecieved(fromuser, toUser)
+        MlNotificationController.onReviewReceived(fromuser, toUser);
         MlSMSNotification.sendSMSForReviewRecvd(fromuser, args.resourceId, context)
       }
-
     } catch (e) {
-      let code = 400;
-      let response = new MlRespPayload().errorPayload(e.message, code);
+      const code = 400;
+      const response = new MlRespPayload().errorPayload(e.message, code);
       return response;
     }
-    let code = 200;
-    let response = new MlRespPayload().successPayload(resp, code);
+    const code = 200;
+    const response = new MlRespPayload().successPayload(resp, code);
     return response;
   }
-
 }
 
 
-
-  MlResolver.MlQueryResolver['fetchReviews'] = (obj, args, context, info) => {
-    try {
-      if(!context.userId){
-        return null;
-      }
-      //todo: pagination based result
-      var pipeline=[{$match:{'resourceId':args.resourceId,'resourceType':args.resourceType,isActive:true}},
-        {$lookup:{from:'users',localField:'userId',foreignField:'_id',as:'userDetails'}},//join with user
-        {$unwind:"$userDetails"},
-        {$project: {reviewId:'$_id',resourceId: '$resourceId',resourceType: '$resourceType',rating: '$rating',
-            message: '$message',userId: '$userId',userEmail: '$userEmail',createdOn: '$createdOn',
-            userName: '$userDetails.profile.displayName',
-            userProfileImage: '$userDetails.profile.profileImage',
-        }
-        }
-       ];
-      var reviews=mlDBController.aggregate('MlReviews',pipeline,context);
-
-      return reviews;
-    } catch (e) {
-      console.log(e);
+MlResolver.MlQueryResolver.fetchReviews = (obj, args, context, info) => {
+  try {
+    if (!context.userId) {
       return null;
     }
+    // todo: pagination based result
+    const pipeline = [{ $match: { resourceId: args.resourceId, resourceType: args.resourceType, isActive: true } },
+      {
+        $lookup: {
+          from: 'users', localField: 'userId', foreignField: '_id', as: 'userDetails'
+        }
+      }, // join with user
+      { $unwind: '$userDetails' },
+      {
+        $project: {
+          reviewId: '$_id',
+          resourceId: '$resourceId',
+          resourceType: '$resourceType',
+          rating: '$rating',
+          message: '$message',
+          userId: '$userId',
+          userEmail: '$userEmail',
+          createdOn: '$createdOn',
+          userName: '$userDetails.profile.displayName',
+          userProfileImage: '$userDetails.profile.profileImage'
+        }
+      }
+    ];
+    const reviews = mlDBController.aggregate('MlReviews', pipeline, context);
+
+    return reviews;
+  } catch (e) {
+    console.log(e);
+    return null;
   }
+}
 

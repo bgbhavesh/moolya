@@ -16,63 +16,60 @@ class portfolioValidation {
   /**
    * allowPrivateFields checks for conditions to restrict the fields for portfolio
    * Returns Boolean for restricting the fields
-   **/
+   * */
   static allowPrivateFields(portfolioDetails, context) {
-    var allowPrivateFields = false;
-    var user = mlDBController.findOne('users', {"_id": (context || {}).userId}, context) || {};
-    var portfolioDetailsId = (portfolioDetails || {})._id;
+    let allowPrivateFields = false;
+    const user = mlDBController.findOne('users', { _id: (context || {}).userId }, context) || {};
+    const portfolioDetailsId = (portfolioDetails || {})._id;
 
-    /** actual private fields condition : true if Internal User or if its portfolio owner*/
+    /** actual private fields condition : true if Internal User or if its portfolio owner */
     if ((user && user.profile && user.profile.isInternaluser) || (user._id === (portfolioDetails || {}).userId)) {
       allowPrivateFields = true;
       return true;
     }
 
-    /** check for user onBoard condition and restrict the private fields*/
+    /** check for user onBoard condition and restrict the private fields */
     allowPrivateFields = MlInvestmentsStageRepoService.canViewCompletePortfolio((context || {}).userId, portfolioDetailsId) || false;
     return allowPrivateFields;
   }
 
   omitPrivateDetails(portfolioDetailsId, object, context, tabName) {
-    var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
-    //Pre Condition for restricting the private fields.
-    var allowPrivateFields = portfolioValidation.allowPrivateFields(portfolioDetails, context);
-    var praviteFields = portfolioDetails.privateFields
-    var omittedFields = []
+    const portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
+    // Pre Condition for restricting the private fields.
+    const allowPrivateFields = portfolioValidation.allowPrivateFields(portfolioDetails, context);
+    const praviteFields = portfolioDetails.privateFields
+    const omittedFields = []
 
     if (!_.isArray(object)) {
     } else {
-      _.each(object, function (item, index) {
-        var omittedfields = []
-        _.each(praviteFields, function (praviteField) {
+      _.each(object, (item, index) => {
+        const omittedfields = []
+        _.each(praviteFields, (praviteField) => {
           if ((item[praviteField.keyName] != undefined || ((_.isEmpty(item[praviteField.objectName]) == false && item[praviteField.objectName][praviteField.keyName] != undefined))) && praviteField.index == index) {
-            if(praviteField.tabName === tabName){
+            if (praviteField.tabName === tabName) {
               if (!allowPrivateFields) {
                 delete item[praviteField.keyName]
               }
             }
             // var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
-            var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName, tabName: praviteField.tabName});
+            const praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: praviteField.tabName });
             omittedfields.push(praviteObject)
           }
         })
         item.privateFields = _.cloneDeep(omittedfields);
       })
       if (!allowPrivateFields) {
-        _.remove(object, {makePrivate: true})
+        _.remove(object, { makePrivate: true })
       }
       return object;
     }
-    _.each(praviteFields, function (praviteField) {
+    _.each(praviteFields, (praviteField) => {
       if (object[praviteField.keyName] != undefined || ((_.isEmpty(object[praviteField.objectName]) == false && object[praviteField.objectName][praviteField.keyName] != undefined))) {
         if (!allowPrivateFields) {
           // delete object[praviteField.keyName]
-          if (object[praviteField.keyName])
-            delete object[praviteField.keyName]
-          else
-            delete object[praviteField.objectName][praviteField.keyName]
+          if (object[praviteField.keyName]) { delete object[praviteField.keyName] } else { delete object[praviteField.objectName][praviteField.keyName] }
         }
-        var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
+        const praviteObject = _.find(praviteFields, { keyName: praviteField.keyName })
         omittedFields.push(praviteObject)
       }
     })
@@ -86,14 +83,13 @@ class portfolioValidation {
     }
 
     if (removeArray.length > 0 && dbArray.length > 0) {
-      _.each(removeArray, function (item) {
-        var index = _.find(dbArray, {keyName: item.keyName})
-        if (index)
-          _.remove(dbArray, {keyName: index.keyName});
+      _.each(removeArray, (item) => {
+        const index = _.find(dbArray, { keyName: item.keyName })
+        if (index) { _.remove(dbArray, { keyName: index.keyName }); }
       })
     }
 
-    var concat = _.concat(dbArray, privateKeyArray);
+    const concat = _.concat(dbArray, privateKeyArray);
 
     return concat
   }
@@ -113,32 +109,35 @@ class portfolioValidation {
   getLivePortfolioCount(clusterId, chapterId, subChapterId) {
     return mlDBController.aggregate('MlPortfolioDetails', [
       {
-        "$group": {
-          _id: "$communityCode",
-          "communityType": {$first: "$communityType"},
-          "count": {
+        $group: {
+          _id: '$communityCode',
+          communityType: { $first: '$communityType' },
+          count: {
             $sum: {
-              "$cond": [
-                { "$and": [
-                  {"$eq": ["$status", "PORT_LIVE_NOW"]},
-                  {"$eq": ["$clusterId", clusterId]},
-                  {"$eq": ["$chapterId", chapterId]},
-                  {"$eq": ["$subChapterId", subChapterId]},
-                ]
-                }, 1, 0],
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ['$status', 'PORT_LIVE_NOW'] },
+                    { $eq: ['$clusterId', clusterId] },
+                    { $eq: ['$chapterId', chapterId] },
+                    { $eq: ['$subChapterId', subChapterId] }
+                  ]
+                }, 1, 0]
             }
           }
         }
       },
       {
-        "$lookup": {from: "mlCommunityDefinition", localField: "_id", foreignField: "code", as: "imageLink"}
+        $lookup: {
+          from: 'mlCommunityDefinition', localField: '_id', foreignField: 'code', as: 'imageLink'
+        }
       },
-      {"$unwind": "$imageLink"},
+      { $unwind: '$imageLink' },
       {
         $project: {
-          "communityType": 1,
-          "count": 1,
-          "communityImageLink": '$imageLink.communityImageLink'
+          communityType: 1,
+          count: 1,
+          communityImageLink: '$imageLink.communityImageLink'
         }
       }
     ])

@@ -5,19 +5,19 @@
 const TIMINIG = [
   {
     name: 'morning',
-    start: "00:00",
-    end:  "12:00",
+    start: '00:00',
+    end: '12:00'
 
   },
   {
     name: 'afternoon',
-    start: "12:00",
-    end:  "18:00",
+    start: '12:00',
+    end: '18:00'
   },
   {
     name: 'evening',
-    start: "18:00",
-    end:  "24:00",
+    start: '18:00',
+    end: '24:00'
   }
 ];
 
@@ -30,104 +30,104 @@ const defaultCalenderSetting = {
   slotBreakTime: 0,
   workingDays: [
     {
-      "isActive" : true,
-      "dayName" : 0,
-      "lunch" : [
+      isActive: true,
+      dayName: 0,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 1,
-      "lunch" : [
+      isActive: true,
+      dayName: 1,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 2,
-      "lunch" : [
+      isActive: true,
+      dayName: 2,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 3,
-      "lunch" : [
+      isActive: true,
+      dayName: 3,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 4,
-      "lunch" : [
+      isActive: true,
+      dayName: 4,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 5,
-      "lunch" : [
+      isActive: true,
+      dayName: 5,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
     },
     {
-      "isActive" : true,
-      "dayName" : 6,
-      "lunch" : [
+      isActive: true,
+      dayName: 6,
+      lunch: [
         {}
       ],
-      "slots" : [
+      slots: [
         {
-          "isActive" : true,
-          "start" : "00:00",
-          "end" : "24:00"
+          isActive: true,
+          start: '00:00',
+          end: '24:00'
         }
       ]
-    },
-  ],
+    }
+  ]
 };
 
 /**
@@ -145,17 +145,17 @@ class MlAppointment {
    * @param slots    :: Array   :: All slot times of user
    * @returns {Array}
    */
-  buildSlotTimes(duration, lunch, slots){
+  buildSlotTimes(duration, lunch, slots) {
     let response = [];
     duration.hours = duration.hours ? duration.hours : 0;
     duration.minutes = duration.minutes ? duration.minutes : 0;
-    let internal = duration.hours*60 + duration.minutes;
-    slots = slots ? slots : [];
-    slots.forEach(function (slot, index) {
-      if(slot.isActive){
-        let startTime = getTimeDate(slot.start);
-        let endTime   = getTimeDate(slot.end);
-        let timeSlots = getTimeSlots(startTime, endTime, internal);
+    const internal = duration.hours * 60 + duration.minutes;
+    slots = slots || [];
+    slots.forEach((slot, index) => {
+      if (slot.isActive) {
+        const startTime = getTimeDate(slot.start);
+        const endTime = getTimeDate(slot.end);
+        const timeSlots = getTimeSlots(startTime, endTime, internal);
         response = response.concat(timeSlots);
       }
     });
@@ -169,33 +169,29 @@ class MlAppointment {
    * @param date
    * @returns {userTimeSlot}
    */
-  getUserSlot(calendarSetting, reqDate){
+  getUserSlot(calendarSetting, reqDate) {
     const that = this;
-    if(calendarSetting){
-      let date = new Date(reqDate);
+    if (calendarSetting) {
+      const date = new Date(reqDate);
       /**
        * Find request day through all the working day to get slots
        */
       calendarSetting.workingDays = calendarSetting.workingDays ? calendarSetting.workingDays : [];
-      let isWorkingDay = calendarSetting.workingDays.find(function (workingDay) {
-        return date.getDay() == workingDay.dayName;
-      });
-      if(isWorkingDay){
+      const isWorkingDay = calendarSetting.workingDays.find(workingDay => date.getDay() == workingDay.dayName);
+      if (isWorkingDay) {
         isWorkingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, isWorkingDay.lunch, isWorkingDay.slots);
         isWorkingDay.appointmentPerSlot = calendarSetting.appointmentCountPerSlots;
         isWorkingDay.totalSlots = isWorkingDay.appointmentPerSlot * isWorkingDay.slotTimes.length;
         delete isWorkingDay.lunch;
         delete isWorkingDay.slots;
         return isWorkingDay;
-      } else {
-        //Handle if user calendar is not set up
-        return {
-          isActive: false
-        }
       }
-    } else {
-      //they are free
+      // Handle if user calendar is not set up
+      return {
+        isActive: false
+      }
     }
+    // they are free
   }
 
   /**
@@ -207,88 +203,87 @@ class MlAppointment {
    * @param profileId  :: String - ProfileId of user
    * @returns {Array}
    */
-  getUserAvailabilityOfDifferentSlotOnDay(appointmentId, date, slotsInfo, userId, profileId){
-
+  getUserAvailabilityOfDifferentSlotOnDay(appointmentId, date, slotsInfo, userId, profileId) {
     /**
      * Check slot is active or not
      */
-    if(slotsInfo.isActive){
+    if (slotsInfo.isActive) {
       /**
        * Define the next day to get current date appointment
        */
-      date.setSeconds(0,0);
-      let endDate = new Date(date);
-      endDate.setDate(endDate.getDate()+1);
-      endDate.setSeconds(0,0);
-      let matchQuery = {
-        "$match": {
-          'members.userId':userId,
-          'isInternal':false,
-          'members.profileId':profileId,
-          startDate: { $gte:date } ,
-          endDate: {$lt:endDate} }
+      date.setSeconds(0, 0);
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+      endDate.setSeconds(0, 0);
+      const matchQuery = {
+        $match: {
+          'members.userId': userId,
+          isInternal: false,
+          'members.profileId': profileId,
+          startDate: { $gte: date },
+          endDate: { $lt: endDate }
+        }
       };
-      if(appointmentId) {
-        matchQuery["$match"]["appointmentId"] = { "$ne": appointmentId };
+      if (appointmentId) {
+        matchQuery.$match.appointmentId = { $ne: appointmentId };
       }
 
-      let appointments = mlDBController.aggregate( 'MlAppointments', [
+      const appointments = mlDBController.aggregate('MlAppointments', [
         {
           $lookup: {
-            from: "mlAppointmentMembers",
-            localField: "appointmentId",
-            foreignField: "appointmentId",
-            as: "members"
+            from: 'mlAppointmentMembers',
+            localField: 'appointmentId',
+            foreignField: 'appointmentId',
+            as: 'members'
           }
         },
-        { "$unwind": "$members" },
+        { $unwind: '$members' },
         matchQuery
       ]);
 
       /**
        * Create response
        */
-      let response = slotsInfo.slotTimes.map(function (time) {
-        let slotStartTime = getTimeDate(time.split('-')[0], date);
-        slotStartTime.setSeconds(0,0);
-        let slotEndTime = getTimeDate(time.split('-')[1], date);
-        slotEndTime.setSeconds(0,0);
+      const response = slotsInfo.slotTimes.map((time) => {
+        const slotStartTime = getTimeDate(time.split('-')[0], date);
+        slotStartTime.setSeconds(0, 0);
+        const slotEndTime = getTimeDate(time.split('-')[1], date);
+        slotEndTime.setSeconds(0, 0);
 
         /**
          * Filter the current slot appointment form current day appointment
          */
-        let appoinmentsCountPerSlot = appointments.filter(function (appointment) {
-          let appointmentStartDate = new Date(appointment.startDate);
-          appointmentStartDate.setSeconds(0,0);
-          let appointmentEndDate = new Date(appointment.endDate);
-          appointmentStartDate.setSeconds(0,0);
+        const appoinmentsCountPerSlot = appointments.filter((appointment) => {
+          const appointmentStartDate = new Date(appointment.startDate);
+          appointmentStartDate.setSeconds(0, 0);
+          const appointmentEndDate = new Date(appointment.endDate);
+          appointmentStartDate.setSeconds(0, 0);
           // return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
           // return (slotStartTime <= appointmentStartDate && appointmentStartDate <= slotEndTime);
-          return ( appointmentStartDate <= slotStartTime && slotStartTime < appointmentEndDate);
+          return (appointmentStartDate <= slotStartTime && slotStartTime < appointmentEndDate);
         }).length;
 
         /**
          * Create status based on no of appointment count on this slot
          */
         let status = 0;
-        if(appoinmentsCountPerSlot == 0 || slotsInfo.appointmentPerSlot/2 < appoinmentsCountPerSlot ){
+        if (appoinmentsCountPerSlot == 0 || slotsInfo.appointmentPerSlot / 2 < appoinmentsCountPerSlot) {
           status = 0;
-        } else if(appoinmentsCountPerSlot != slotsInfo.appointmentPerSlot && slotsInfo.appointmentPerSlot/2 >= appoinmentsCountPerSlot){
+        } else if (appoinmentsCountPerSlot != slotsInfo.appointmentPerSlot && slotsInfo.appointmentPerSlot / 2 >= appoinmentsCountPerSlot) {
           status = 1;
-        } else if (appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot){
+        } else if (appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot) {
           status = 2;
         }
 
         return {
-          slotTime : time,
-          isAvailable: appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot ? false : true,
+          slotTime: time,
+          isAvailable: !(appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot),
           status: appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot ? 2 : status
         }
       });
-        return response;
-    } else {
-      // User is not available
+      return response;
     }
+    // User is not available
   }
 
   /**
@@ -298,12 +293,12 @@ class MlAppointment {
    * @param month
    * @param year
    */
-  getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year){
+  getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year) {
     const that = this;
     /**
      * Initialize the date object and set date month and year
      */
-    let date = new Date();
+    const date = new Date();
     date.setDate(day);
     date.setMonth(month);
     date.setYear(year);
@@ -313,54 +308,52 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask', {_id:taskId} );
-    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
-    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
+    const task = mlDBController.findOne('MlTask', { _id: taskId });
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings', { userId: task.userId, profileId: task.profileId });
+    calendarSetting = calendarSetting || JSON.parse(JSON.stringify(defaultCalenderSetting));
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**
      * Get service provider available slots
      */
-    let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
+    const serviceProviderSlots = that.getUserSlot(calendarSetting, date);
 
-    if(!serviceProviderSlots || !serviceProviderSlots.isActive){
+    if (!serviceProviderSlots || !serviceProviderSlots.isActive) {
       return []
     }
 
     let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(appointmentId, date, serviceProviderSlots, task.userId, task.profileId);
-    let teamSlotsAvailabilities = [];
+    const teamSlotsAvailabilities = [];
 
     /**
      * Find the requested session
      */
-    let session = task.session.find(function (data) {
-      return data.sessionId == sessionId;
-    });
+    const session = task.session.find(data => data.sessionId == sessionId);
 
-    let activities = mlDBController.find('MlActivity',{'_id': { $in: session.activities }}).fetch();
+    const activities = mlDBController.find('MlActivity', { _id: { $in: session.activities } }).fetch();
 
     /**
      * Get activity assignees available slots
      */
-    activities.forEach(function(activity){
+    activities.forEach((activity) => {
       activity.teams = activity.teams ? activity.teams : [];
-      //Skip for moolya admin
-      activity.teams.forEach(function (team) {
+      // Skip for moolya admin
+      activity.teams.forEach((team) => {
         team.users = team.users ? team.users : [];
-        team.users.forEach(function (user) {
-          if ( !user.isMandatory ) {
+        team.users.forEach((user) => {
+          if (!user.isMandatory) {
             return
           }
-          let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: user.userId, profileId: user.profileId});
+          const calendarSetting = mlDBController.findOne('MlCalendarSettings', { userId: user.userId, profileId: user.profileId });
           let teamSlots;
-          if(calendarSetting){
+          if (calendarSetting) {
             calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
             teamSlots = that.getUserSlot(calendarSetting, date);
           } else {
             teamSlots = serviceProviderSlots;
             teamSlots.appointmentPerSlot = 1;
           }
-          let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, teamSlots, task.userId, task.profileId);
+          const serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, teamSlots, task.userId, task.profileId);
           user.slotsAvailability = serviceProviderSlotsAvailability;
           teamSlotsAvailabilities.push(user);
         });
@@ -373,42 +366,42 @@ class MlAppointment {
 
     let isFullDayVacation = false;
 
-    serviceProviderSlotsAvailability.forEach(function(serviceProviderSlotAvailabily){
-      let serviceProviderSlotStartTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[0], date);
-      let serviceProviderSlotEndTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[1], date);
+    serviceProviderSlotsAvailability.forEach((serviceProviderSlotAvailabily) => {
+      const serviceProviderSlotStartTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[0], date);
+      const serviceProviderSlotEndTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[1], date);
       let isServiceProviderSlotStartTimeFind = false;
       let isServiceProviderSlotEndTimeFind = false;
 
       let isHoliday = false;
 
-      calendarSetting.vacations.forEach( (vacation) => {
-        let vacationStart = new Date(vacation.start);
-        let vacationEnd = new Date(vacation.end);
-        if( vacationStart.getTime() <= serviceProviderSlotStartTime.getTime() && vacationEnd.getTime() >= serviceProviderSlotEndTime.getTime()  ) {
+      calendarSetting.vacations.forEach((vacation) => {
+        const vacationStart = new Date(vacation.start);
+        const vacationEnd = new Date(vacation.end);
+        if (vacationStart.getTime() <= serviceProviderSlotStartTime.getTime() && vacationEnd.getTime() >= serviceProviderSlotEndTime.getTime()) {
           isFullDayVacation = !vacation.isAllowBooking;
           isHoliday = true;
-          serviceProviderSlotAvailabily.isAvailable= false;
+          serviceProviderSlotAvailabily.isAvailable = false;
           serviceProviderSlotAvailabily.status = 2;
         }
       });
 
-      if( !isHoliday ) {
-        teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
+      if (!isHoliday) {
+        teamSlotsAvailabilities.forEach((teamSlotsAvailability) => {
           teamSlotsAvailability.slotsAvailability = teamSlotsAvailability.slotsAvailability ? teamSlotsAvailability.slotsAvailability : [];
-          teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
-            if(!serviceProviderSlotAvailabily.isAvailable){
+          teamSlotsAvailability.slotsAvailability.forEach((slotAvailability) => {
+            if (!serviceProviderSlotAvailabily.isAvailable) {
               serviceProviderSlotAvailabily.status = 2;
               return;
             }
-            let teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
-            let teamSlotEndTime = getTimeDate(slotAvailability.slotTime.split('-')[1], date);
-            if(teamSlotStartTime <= serviceProviderSlotStartTime && serviceProviderSlotStartTime < teamSlotEndTime) {
+            const teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
+            const teamSlotEndTime = getTimeDate(slotAvailability.slotTime.split('-')[1], date);
+            if (teamSlotStartTime <= serviceProviderSlotStartTime && serviceProviderSlotStartTime < teamSlotEndTime) {
               isServiceProviderSlotStartTimeFind = true;
             }
-            if(isServiceProviderSlotStartTimeFind && !isServiceProviderSlotEndTimeFind){
+            if (isServiceProviderSlotStartTimeFind && !isServiceProviderSlotEndTimeFind) {
               serviceProviderSlotAvailabily.isAvailable = slotAvailability.isAvailable;
             }
-            if(teamSlotStartTime < serviceProviderSlotEndTime && serviceProviderSlotEndTime <= teamSlotEndTime) {
+            if (teamSlotStartTime < serviceProviderSlotEndTime && serviceProviderSlotEndTime <= teamSlotEndTime) {
               isServiceProviderSlotEndTimeFind = true;
             }
           });
@@ -416,17 +409,16 @@ class MlAppointment {
       }
 
 
-      let shift = TIMINIG.find((shift) => {
-        let shiftStart = getTimeDate(shift.start, date);
-        let shiftEnd = getTimeDate(shift.end, date);
+      const shift = TIMINIG.find((shift) => {
+        const shiftStart = getTimeDate(shift.start, date);
+        const shiftEnd = getTimeDate(shift.end, date);
         return serviceProviderSlotStartTime.getTime() >= shiftStart.getTime() && serviceProviderSlotStartTime < shiftEnd.getTime();
       });
 
       serviceProviderSlotAvailabily.shift = shift ? shift.name : '';
-
     });
-    if(isFullDayVacation) {
-      serviceProviderSlotsAvailability = serviceProviderSlotsAvailability.map( (data) => {
+    if (isFullDayVacation) {
+      serviceProviderSlotsAvailability = serviceProviderSlotsAvailability.map((data) => {
         data.status = 2;
         data.isAvailable = false;
         return data;
@@ -441,14 +433,14 @@ class MlAppointment {
    * @param calendarSetting :: Calender setting of user
    * @returns {Array} :: Users slot of all days
    */
-  getUserSlots(calendarSetting){
+  getUserSlots(calendarSetting) {
     const that = this;
-    if(calendarSetting){
+    if (calendarSetting) {
       /**
        * Looping through all the working day to get slots
        */
       calendarSetting.workingDays = calendarSetting.workingDays ? calendarSetting.workingDays : [];
-      let userSlots = calendarSetting.workingDays.map(function (workingDay) {
+      const userSlots = calendarSetting.workingDays.map((workingDay) => {
         workingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, workingDay.lunch, workingDay.slots);
         workingDay.appointmentPerSlot = workingDay.slotTimes.length;
         workingDay.totalSlots = workingDay.appointmentPerSlot * calendarSetting.appointmentCountPerSlots;
@@ -457,18 +449,17 @@ class MlAppointment {
         return workingDay;
       });
       return userSlots;
-    } else {
-      //they are free
     }
+    // they are free
   }
 
-  //Will book appointment if user is free
-  bookAppointment(appointmentId, taskId, sessionId, hour, minute, day, month, year){
+  // Will book appointment if user is free
+  bookAppointment(appointmentId, taskId, sessionId, hour, minute, day, month, year) {
     const that = this;
     /**
      * Initialize the date object and set date month and year
      */
-    let date = new Date();
+    const date = new Date();
     date.setDate(day);
     date.setMonth(month);
     date.setYear(year);
@@ -478,72 +469,68 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask', taskId);
+    const task = mlDBController.findOne('MlTask', taskId);
     /**
      * Find the requested session
      */
-    let session = task.session.find(function (data) {
-      return data.sessionId == sessionId;
-    });
-    let sessionDuration = session.duration;
-    if(sessionDuration){
+    const session = task.session.find(data => data.sessionId == sessionId);
+    const sessionDuration = session.duration;
+    if (sessionDuration) {
       let canAppoinmentBook = true;
       let isStartTimeFind = false;
       let totalSlotsDuration = 0;
-      let availableSlots = that.getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year);
-      if(!availableSlots || !availableSlots.length) {
+      const availableSlots = that.getSessionTimeSlots(appointmentId, taskId, sessionId, day, month, year);
+      if (!availableSlots || !availableSlots.length) {
         canAppoinmentBook = false;
       }
-      session.duration.hours = session.duration.hours ? session.duration.hours : 0 ;
-      session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0 ;
-      let sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
-      let slotEndString = "";
-      availableSlots.forEach(function (availableSlot, index) {
-        if(!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes ) {
-          return ;
+      session.duration.hours = session.duration.hours ? session.duration.hours : 0;
+      session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0;
+      const sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
+      let slotEndString = '';
+      availableSlots.forEach((availableSlot, index) => {
+        if (!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes) {
+          return;
         }
-        let slotStartTime = getTimeDate(availableSlot.slotTime.split('-')[0], date);
-        if(date.getHours() === slotStartTime.getHours() && date.getMinutes() === slotStartTime.getMinutes()){
+        const slotStartTime = getTimeDate(availableSlot.slotTime.split('-')[0], date);
+        if (date.getHours() === slotStartTime.getHours() && date.getMinutes() === slotStartTime.getMinutes()) {
           isStartTimeFind = true;
           slotEndString = availableSlot.slotTime.split('-')[0];
         }
-        let slotEndTime = getTimeDate(availableSlot.slotTime.split('-')[1], date);
-        let slotDifference = slotEndTime - slotStartTime;
-        let slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
-        if(isStartTimeFind) {
-          if(!availableSlot.isAvailable || (slotEndString !==  availableSlot.slotTime.split('-')[0] && index !== 0 ) ) {
-            canAppoinmentBook =false;
+        const slotEndTime = getTimeDate(availableSlot.slotTime.split('-')[1], date);
+        const slotDifference = slotEndTime - slotStartTime;
+        const slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
+        if (isStartTimeFind) {
+          if (!availableSlot.isAvailable || (slotEndString !== availableSlot.slotTime.split('-')[0] && index !== 0)) {
+            canAppoinmentBook = false;
           }
           totalSlotsDuration += slotDurationInMinutes;
         }
         slotEndString = availableSlot.slotTime.split('-')[1];
       });
 
-      if(canAppoinmentBook && (totalSlotsDuration >= sessionDurationInMinutes) ) {
-        let endDate = new Date(date);
-        endDate.setMinutes(endDate.getMinutes()+sessionDurationInMinutes);
+      if (canAppoinmentBook && (totalSlotsDuration >= sessionDurationInMinutes)) {
+        const endDate = new Date(date);
+        endDate.setMinutes(endDate.getMinutes() + sessionDurationInMinutes);
         return {
           success: true,
           start: date,
           end: endDate
         };
-      } else {
-        return {
-          success: false,
-          message: "Service Provide is not available, Please select a different time slot"
-        };
       }
-    } else {
-      //Send error session duration not set
+      return {
+        success: false,
+        message: 'Service Provide is not available, Please select a different time slot'
+      };
     }
+    // Send error session duration not set
   }
-  //return booked appointment of user
-  getAllAppointment(userId, profileId){
+  // return booked appointment of user
+  getAllAppointment(userId, profileId) {
 
   }
 
-  //return booked appointment of specific branch
-  getBranchAppointment(branchId){
+  // return booked appointment of specific branch
+  getBranchAppointment(branchId) {
 
   }
 
@@ -556,18 +543,17 @@ class MlAppointment {
    * @param year       :: Integer - Year of calendar
    * @returns {{days: Array}}
    */
-  getUserCalendar(userId, profileId, month, year, data){
-
+  getUserCalendar(userId, profileId, month, year, data) {
     /**
      * response variable for send response to user
      */
-    let response = []
+    const response = []
 
     /**
      * Create the first date of current requested month
      */
-    let date = new Date();
-    date.setDate( data ? data : 1 );
+    const date = new Date();
+    date.setDate(data || 1);
     date.setMonth(month);
     date.setYear(year);
     date.setHours(0);
@@ -577,9 +563,9 @@ class MlAppointment {
     /**
      * Create the first date of next month
      */
-    let monthEnd = new Date();
+    const monthEnd = new Date();
     monthEnd.setDate(1);
-    monthEnd.setMonth(month+1);
+    monthEnd.setMonth(month + 1);
     monthEnd.setYear(year);
     monthEnd.setHours(0);
     monthEnd.setMinutes(0);
@@ -588,10 +574,10 @@ class MlAppointment {
     /**
      *  Get the user calendar setting
      */
-    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId});
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings', { userId, profileId });
 
 
-    if(!calendarSetting){
+    if (!calendarSetting) {
       calendarSetting = JSON.parse(JSON.stringify(defaultCalenderSetting));
       // return { days: [] };
     }
@@ -601,53 +587,54 @@ class MlAppointment {
     /**
      * Get user slot information of all days
      */
-    let userTimeSlots = this.getUserSlots(calendarSetting);
+    const userTimeSlots = this.getUserSlots(calendarSetting);
 
     /**
      *  Get all the appointment of the month
      */
-    let appointments = mlDBController.aggregate( 'MlAppointments', [
+    const appointments = mlDBController.aggregate('MlAppointments', [
       {
         $lookup: {
-          from: "mlAppointmentMembers",
-          localField: "appointmentId",
-          foreignField: "appointmentId",
-          as: "members"
+          from: 'mlAppointmentMembers',
+          localField: 'appointmentId',
+          foreignField: 'appointmentId',
+          as: 'members'
         }
       },
-      { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:monthEnd} } }
+      { $unwind: '$members' },
+      {
+        $match: {
+          'members.userId': userId, 'members.profileId': profileId, startDate: { $gte: date }, endDate: { $lt: monthEnd }
+        }
+      }
     ]);
 
-    //mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:monthEnd} }).fetch();
+    // mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:monthEnd} }).fetch();
 
     /**
      *  loop the all days in request month
      */
-    while(date.getMonth() == month){
+    while (date.getMonth() == month) {
       /**
        * Calculate the total booked appoint on current day
        */
-      let bookAppoinmentsCount = appointments.filter(function (appoinment) {
-        let startDate = new Date(appoinment.startDate);
+      const bookAppoinmentsCount = appointments.filter((appoinment) => {
+        const startDate = new Date(appoinment.startDate);
         return startDate.getDate() == date.getDate();
       }).length;
 
       /**
        * Find the user slot information on current day
        */
-      let isUserTimeSlot = userTimeSlots.find(function (userTimeSlots) {
-        return userTimeSlots.dayName == date.getDay();
-      });
+      const isUserTimeSlot = userTimeSlots.find(userTimeSlots => userTimeSlots.dayName == date.getDay());
       let status;
-      if(isUserTimeSlot){
-
+      if (isUserTimeSlot) {
         /**
          * Define status based on no of appointment book
          */
-        if(bookAppoinmentsCount == 0 || isUserTimeSlot.totalSlots/2 > bookAppoinmentsCount){
+        if (bookAppoinmentsCount == 0 || isUserTimeSlot.totalSlots / 2 > bookAppoinmentsCount) {
           status = 0;
-        } else if (isUserTimeSlot.totalSlots/2 < bookAppoinmentsCount && isUserTimeSlot.totalSlots != bookAppoinmentsCount) {
+        } else if (isUserTimeSlot.totalSlots / 2 < bookAppoinmentsCount && isUserTimeSlot.totalSlots != bookAppoinmentsCount) {
           status = 1;
         } else if (isUserTimeSlot.totalSlots == bookAppoinmentsCount) {
           status = 2;
@@ -658,29 +645,29 @@ class MlAppointment {
       /**
        * Overwrite the status if user on leave
        */
-      calendarSetting.vacations.forEach(function (vacation) {
-        let vacationStartDate = new Date(vacation.start);
-        let vacationEndDate = new Date(vacation.end);
-          if(vacationStartDate.getDate() <= date.getDate() && vacationEndDate.getDate() >= date.getDate() &&
+      calendarSetting.vacations.forEach((vacation) => {
+        const vacationStartDate = new Date(vacation.start);
+        const vacationEndDate = new Date(vacation.end);
+        if (vacationStartDate.getDate() <= date.getDate() && vacationEndDate.getDate() >= date.getDate() &&
                 vacationStartDate.getMonth() <= date.getMonth() && vacationEndDate.getMonth() >= date.getMonth() &&
                     vacationStartDate.getYear() <= date.getYear() && vacationEndDate.getYear() >= date.getYear()) {
-            if(vacation.type == 'travel'){
-              status = 4;
-            } else {
-              status = 3;
-            }
+          if (vacation.type == 'travel') {
+            status = 4;
+          } else {
+            status = 3;
           }
+        }
       });
       /**
        * push the date information to response
        */
-      let dayResponse = {
-        date: new Date(date),//.getDate(),
-        status: status
+      const dayResponse = {
+        date: new Date(date), // .getDate(),
+        status
       };
 
       response.push(dayResponse);
-      date.setDate(date.getDate()+1);
+      date.setDate(date.getDate() + 1);
     }
     return { days: response };
   }
@@ -688,112 +675,114 @@ class MlAppointment {
   /**
    *
    */
-  getUserAppointments( userId, profileId, day, month, year) {
+  getUserAppointments(userId, profileId, day, month, year) {
     const that = this;
     /**
      * Initialize the date object and set date month and year
      */
-    let date = new Date();
+    const date = new Date();
     date.setDate(day);
     date.setMonth(month);
     date.setYear(year);
     date.setHours(0);
     date.setMinutes(0);
-    date.setSeconds(0,0);
+    date.setSeconds(0, 0);
 
-    let endDate = new Date(date);
-    endDate.setDate(endDate.getDate()+1);
+    const endDate = new Date(date);
+    endDate.setDate(endDate.getDate() + 1);
     /**
      * Fetch user task info and calendar setting
      */
-    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
-    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings', { userId, profileId });
+    calendarSetting = calendarSetting || JSON.parse(JSON.stringify(defaultCalenderSetting));
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**
      * Get service provider available slots
      */
-    let userSlotsInfo = that.getUserSlot(calendarSetting, date);
-    let userSlots = userSlotsInfo.slotTimes ? userSlotsInfo.slotTimes : [];
+    const userSlotsInfo = that.getUserSlot(calendarSetting, date);
+    const userSlots = userSlotsInfo.slotTimes ? userSlotsInfo.slotTimes : [];
 
-    let appointments = mlDBController.aggregate( 'MlAppointments', [
+    const appointments = mlDBController.aggregate('MlAppointments', [
       {
         $lookup: {
-          from: "mlAppointmentMembers",
-          localField: "appointmentId",
-          foreignField: "appointmentId",
-          as: "members"
+          from: 'mlAppointmentMembers',
+          localField: 'appointmentId',
+          foreignField: 'appointmentId',
+          as: 'members'
         }
       },
-      { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+      { $unwind: '$members' },
+      {
+        $match: {
+          'members.userId': userId, 'members.profileId': profileId, startDate: { $gte: date }, endDate: { $lt: endDate }
+        }
+      }
     ]);
 
     /**
      * Intersection service provider available slots with assignees available slots
      */
 
-    let response= [];
+    let response = [];
 
     let isFullDayVacation = false;
 
-    userSlots.forEach(function(userSlots){
-      let userSlotStart = getTimeDate(userSlots.split('-')[0], date);
-      let userSlotEnd = getTimeDate(userSlots.split('-')[1], date);
+    userSlots.forEach((userSlots) => {
+      const userSlotStart = getTimeDate(userSlots.split('-')[0], date);
+      const userSlotEnd = getTimeDate(userSlots.split('-')[1], date);
       let isHoliday = false;
 
-      calendarSetting.vacations.forEach( (vacation) => {
-        let vacationStart = new Date(vacation.start);
-        let vacationEnd = new Date(vacation.end);
-        if( vacationStart.getTime() <= userSlotStart.getTime() && vacationEnd.getTime() >= userSlotStart.getTime()  ) {
+      calendarSetting.vacations.forEach((vacation) => {
+        const vacationStart = new Date(vacation.start);
+        const vacationEnd = new Date(vacation.end);
+        if (vacationStart.getTime() <= userSlotStart.getTime() && vacationEnd.getTime() >= userSlotStart.getTime()) {
           isFullDayVacation = !vacation.isAllowBooking;
           isHoliday = true;
         }
       });
 
-      let userAppointments = appointments.filter(function (appointment) {
-        let appointmentStartDate = new Date(appointment.startDate);
-        appointmentStartDate.setSeconds(0,0);
-        let appointmentEndDate = new Date(appointment.endDate);
-        appointmentEndDate.setSeconds(0,0);
+      const userAppointments = appointments.filter((appointment) => {
+        const appointmentStartDate = new Date(appointment.startDate);
+        appointmentStartDate.setSeconds(0, 0);
+        const appointmentEndDate = new Date(appointment.endDate);
+        appointmentEndDate.setSeconds(0, 0);
         return appointmentStartDate.getTime() <= userSlotStart.getTime() && appointmentEndDate.getTime() > userSlotStart.getTime();
-      }).map(function (appointment) {
+      }).map((appointment) => {
         appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
         let name;
-        if(appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard' ) {
-          name = appointment.appointmentInfo.serviceName + ' ' + appointment.appointmentInfo.sessionId;
-
-        } else if(appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
-          name = appointment.appointmentInfo.taskName + ' ' + appointment.appointmentInfo.sessionId;
-
-        } else if(appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+        if (appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard') {
+          name = `${appointment.appointmentInfo.serviceName} ${appointment.appointmentInfo.sessionId}`;
+        } else if (appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task') {
+          name = `${appointment.appointmentInfo.taskName} ${appointment.appointmentInfo.sessionId}`;
+        } else if (appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task') {
           name = appointment.appointmentInfo.taskName;
         }
 
         return {
           id: appointment.appointmentId,
           type: appointment.appointmentType,
-          status : appointment.status,
+          status: appointment.status,
           isRescheduled: appointment.isRescheduled,
-          name: name
+          name
         }
       });
 
-      let shift = TIMINIG.find((shift) => {
-        let shiftStart = getTimeDate(shift.start, date);
-        let shiftEnd = getTimeDate(shift.end, date);
+      const shift = TIMINIG.find((shift) => {
+        const shiftStart = getTimeDate(shift.start, date);
+        const shiftEnd = getTimeDate(shift.end, date);
         return userSlotStart.getTime() >= shiftStart.getTime() && userSlotStart < shiftEnd.getTime();
       });
 
       response.push({
-        isHoliday: isHoliday,
+        isHoliday,
         slot: userSlots,
         shift: shift ? shift.name : '',
         appointments: userAppointments
       });
     });
-    if(isFullDayVacation) {
-      response = response.map( (data) => {
+    if (isFullDayVacation) {
+      response = response.map((data) => {
         data.isHoliday = true;
         return data;
       });
@@ -815,72 +804,74 @@ class MlAppointment {
    * @param endYear       :: Integer - Year of calendar
    * @returns {{userAppointments: Array}}
    */
-  getUserAppointmentsBetweenTwoDates( userId, profileId, startDay, startMonth, startYear , endDay, endMonth, endYear) {
+  getUserAppointmentsBetweenTwoDates(userId, profileId, startDay, startMonth, startYear, endDay, endMonth, endYear) {
     const that = this;
     /**
      * setting starting date object
      */
-    let startDate = new Date();
+    const startDate = new Date();
     startDate.setDate(startDay);
     startDate.setMonth(startMonth);
     startDate.setYear(startYear);
     startDate.setHours(0);
     startDate.setMinutes(0);
-    startDate.setSeconds(0,0);
+    startDate.setSeconds(0, 0);
 
     /**
      * setting ending date object
      */
-    let endDate = new Date();
+    const endDate = new Date();
     endDate.setDate(endDay);
     endDate.setMonth(endMonth);
     endDate.setYear(endYear);
     endDate.setHours(23);
     endDate.setMinutes(59);
-    endDate.setSeconds(59,0);
+    endDate.setSeconds(59, 0);
 
     /**
      * Fetch user task info and calendar setting
      */
-    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
-    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings', { userId, profileId });
+    calendarSetting = calendarSetting || JSON.parse(JSON.stringify(defaultCalenderSetting));
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
-    let appointments = mlDBController.aggregate( 'MlAppointments', [
+    const appointments = mlDBController.aggregate('MlAppointments', [
       {
         $lookup: {
-          from: "mlAppointmentMembers",
-          localField: "appointmentId",
-          foreignField: "appointmentId",
-          as: "members"
+          from: 'mlAppointmentMembers',
+          localField: 'appointmentId',
+          foreignField: 'appointmentId',
+          as: 'members'
         }
       },
-      { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:startDate } ,endDate: {$lt:endDate} } }
+      { $unwind: '$members' },
+      {
+        $match: {
+          'members.userId': userId, 'members.profileId': profileId, startDate: { $gte: startDate }, endDate: { $lt: endDate }
+        }
+      }
     ]);
 
     /**
      * Adding names to appointments
      */
-    let userAppointments = appointments.map(function (appointment) {
+    const userAppointments = appointments.map((appointment) => {
       appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
       let name;
-      if(appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard' ) {
-        name = appointment.appointmentInfo.serviceName + ' ' + appointment.appointmentInfo.sessionId;
-
-      } else if(appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
-        name = appointment.appointmentInfo.taskName + ' ' + appointment.appointmentInfo.sessionId;
-
-      } else if(appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+      if (appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard') {
+        name = `${appointment.appointmentInfo.serviceName} ${appointment.appointmentInfo.sessionId}`;
+      } else if (appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task') {
+        name = `${appointment.appointmentInfo.taskName} ${appointment.appointmentInfo.sessionId}`;
+      } else if (appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task') {
         name = appointment.appointmentInfo.taskName;
       }
 
       return {
         id: appointment.appointmentId,
         type: appointment.appointmentType,
-        name: name,
-        startDate:appointment.startDate,
-        endDate:appointment.endDate
+        name,
+        startDate: appointment.startDate,
+        endDate: appointment.endDate
       }
     });
 
@@ -895,11 +886,11 @@ class MlAppointment {
  * @returns {Date}
  */
 function getTimeDate(time, date) {
-  let timeParts = time.split(':');
-  let d = date ? new Date(date) : new Date();
+  const timeParts = time.split(':');
+  const d = date ? new Date(date) : new Date();
   d.setHours(timeParts[0]);
   d.setMinutes(timeParts[1]);
-  d.setSeconds(0,0);
+  d.setSeconds(0, 0);
   return d;
 }
 
@@ -912,17 +903,17 @@ function getTimeDate(time, date) {
  * @returns {Array}
  */
 function getTimeSlots(startDate, endDate, interval) {
-  let slots = [];
-  let intervalMillis = interval * 60 * 1000;
+  const slots = [];
+  const intervalMillis = interval * 60 * 1000;
   while (startDate < endDate && startDate.getTime() + intervalMillis <= endDate.getTime()) {
     /**
      * So that you get "00" if we're on the hour.
      */
-    let mins = (startDate.getMinutes() + '0').slice(0, 2);
-    let endTime = new Date();
+    const mins = (`${startDate.getMinutes()}0`).slice(0, 2);
+    const endTime = new Date();
     endTime.setTime(startDate.getTime() + intervalMillis);
-    let endTimeMins = (endTime.getMinutes() + '0').slice(0, 2);
-    slots.push(startDate.getHours() + ':' + mins + '-' + endTime.getHours() + ':' + endTimeMins);
+    const endTimeMins = (`${endTime.getMinutes()}0`).slice(0, 2);
+    slots.push(`${startDate.getHours()}:${mins}-${endTime.getHours()}:${endTimeMins}`);
     startDate.setTime(startDate.getTime() + intervalMillis);
   }
   return slots;

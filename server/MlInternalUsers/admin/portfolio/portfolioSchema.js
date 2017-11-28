@@ -1,11 +1,11 @@
 /**
  * Created by venkatasrinag on 6/4/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../commons/mlSchemaDef";
-import MlResolver from "../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef';
 
-let portfolioSchema = `
+const portfolioSchema = `
     type Portfoliodetails{
         _id:String,
         transactionType:String,
@@ -136,21 +136,41 @@ let portfolioSchema = `
 
     }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, portfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchPortfolioDetailsByUserId', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
+const supportedApi = [
+  {
+    api: 'fetchPortfolioDetailsByUserId', actionName: 'READ', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
   // {api:'fetchPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api: 'fetchPortfolioByReg', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList: true},
-  {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api: 'findPortfolioDetails', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},   //temp making white list
-  {api: 'fetchPortfolioImage', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},
-  {api:'removePortfolioFileUrl',actionName:'UPDATE',moduleName:"PORTFOLIO", isWhiteList:true}
+  {
+    api: 'fetchPortfolioByReg', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'createPortfolioRequest', actionName: 'CREATE', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
+  {
+    api: 'updatePortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
+  { api: 'approvePortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' },
+  {
+    api: 'rejectPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'requestForGoLive', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
+  {
+    api: 'removeIdetaorProfilePic', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  },
+  {
+    api: 'findPortfolioDetails', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  }, // temp making white list
+  {
+    api: 'fetchPortfolioImage', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'removePortfolioFileUrl', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

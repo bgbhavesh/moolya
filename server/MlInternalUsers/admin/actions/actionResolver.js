@@ -4,6 +4,6 @@
 import MlResolver from '../../../commons/mlResolverDef'
 
 
-MlResolver.MlQueryResolver['fetchActions'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver.fetchActions = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
 }

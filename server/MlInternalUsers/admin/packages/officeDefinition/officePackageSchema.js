@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 28/7/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../../commons/mlSchemaDef";
-import MlResolver from "../../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef';
 
-let officePackage = `
+const officePackage = `
 
   type ApplicableCommunity{
     communityName:String,
@@ -109,13 +109,17 @@ let officePackage = `
     updateOfficePackage(package:officePackage, packageId:String):response
   }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officePackage]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, officePackage]);
 
-let supportedApi = [
-    {api: 'createOfficePackage', actionName:'CREATE', moduleName: "OFFICEPACKAGE"},
-    {api: 'updateOfficePackage', actionName:'UPDATE', moduleName: "OFFICEPACKAGE"},
-    {api: 'fetchOfficePackages', actionName:'READ', moduleName: "OFFICEPACKAGE", isWhiteList:true},
-    {api: 'fetchOfficePackageById', actionName:'READ', moduleName: "OFFICEPACKAGE", isWhiteList:true},
+const supportedApi = [
+  { api: 'createOfficePackage', actionName: 'CREATE', moduleName: 'OFFICEPACKAGE' },
+  { api: 'updateOfficePackage', actionName: 'UPDATE', moduleName: 'OFFICEPACKAGE' },
+  {
+    api: 'fetchOfficePackages', actionName: 'READ', moduleName: 'OFFICEPACKAGE', isWhiteList: true
+  },
+  {
+    api: 'fetchOfficePackageById', actionName: 'READ', moduleName: 'OFFICEPACKAGE', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

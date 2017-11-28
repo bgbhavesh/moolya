@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef';
 import MlResolver from '../../commons/mlResolverDef'
 
-let sharedLibrarySchema = `
+const sharedLibrarySchema = `
 
     type userDetails{
       userId: String
@@ -124,15 +124,25 @@ let sharedLibrarySchema = `
       createSharedLibrary(detailsInput:sharedInput):response
  }`;
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema ]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, sharedLibrarySchema]);
 
-let supportedApi = [
-  {api:'fetchSharedLibraryDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'fetchShareMembersInfo', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+const supportedApi = [
+  {
+    api: 'fetchSharedLibraryDetails', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchSharedLibrary', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'fetchShareMembersInfo', actionName: 'READ', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
 
-  {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {
+    api: 'createSharedLibrary', actionName: 'CREATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  },
+  {
+    api: 'updateSharedLibrary', actionName: 'UPDATE', moduleName: 'PORTFOLIO', isWhiteList: true
+  }
 ];
 
 MlResolver.MlModuleResolver.push(supportedApi);

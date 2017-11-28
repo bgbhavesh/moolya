@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let BugReportSchema = `
+const BugReportSchema = `
    input bugDetails{
         details  :String,
         reportedUrl   :String
@@ -14,8 +14,10 @@ let BugReportSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BugReportSchema]);
-let supportedApi = [
-  {api:'createBugReport', actionName:'CREATE', moduleName:"BUG_REPORT",isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, BugReportSchema]);
+const supportedApi = [
+  {
+    api: 'createBugReport', actionName: 'CREATE', moduleName: 'BUG_REPORT', isWhiteList: true
+  }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

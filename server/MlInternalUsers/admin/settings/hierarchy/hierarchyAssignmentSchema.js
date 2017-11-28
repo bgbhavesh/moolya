@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let HierarchyAssignmentSchema = `
+const HierarchyAssignmentSchema = `
 
     type HierarchyAssignment{
       _id                  : String
@@ -71,15 +71,19 @@ let HierarchyAssignmentSchema = `
       updateHierarchyAssignment(hierarchy:HierarchyAssignmentInput):response
     }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchyAssignmentSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, HierarchyAssignmentSchema]);
 
-let supportedApi = [
-  {api:'fetchAssignedRolesHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
-  {api:'fetchFinalApprovalRole', actionName:'READ', moduleName:"HIERARCHY"},
-  {api:'fetchHierarchyRoles', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
-  {api:'fetchHierarchyUsers', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
+const supportedApi = [
+  { api: 'fetchAssignedRolesHierarchy', actionName: 'READ', moduleName: 'HIERARCHY' },
+  { api: 'fetchFinalApprovalRole', actionName: 'READ', moduleName: 'HIERARCHY' },
+  {
+    api: 'fetchHierarchyRoles', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
+  {
+    api: 'fetchHierarchyUsers', actionName: 'READ', moduleName: 'HIERARCHY', isWhiteList: true
+  },
 
-  {api:'updateHierarchyAssignment', actionName:'UPDATE', moduleName:"HIERARCHY"},
+  { api: 'updateHierarchyAssignment', actionName: 'UPDATE', moduleName: 'HIERARCHY' }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

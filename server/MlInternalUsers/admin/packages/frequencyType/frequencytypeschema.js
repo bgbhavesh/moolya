@@ -1,12 +1,12 @@
 /**
  * Created by venkatsrinag on 28/7/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../../commons/mlSchemaDef";
-import MlResolver from "../../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef';
 
 
-let servicecardtype = `
+const servicecardtype = `
   type FrequencyType{
     _id:String,
     name:String,
@@ -31,12 +31,14 @@ let servicecardtype = `
       updateFrequencyType(frequencyType:frequencyType, frequencyTypeId:String):response
   }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], servicecardtype]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, servicecardtype]);
 
-let supportedApi = [
-  {api: 'createFrequencyType', actionName:'CREATE', MODULE: "SERVICECARDTYPE"},
-  {api: 'updateFrequencyType', actionName:'UPDATE', MODULE: "SERVICECARDTYPE"},
-  {api: 'fetchFrequencyTypes', actionName:'READ', MODULE: "SERVICECARDTYPE", isWhiteList:true}
+const supportedApi = [
+  { api: 'createFrequencyType', actionName: 'CREATE', MODULE: 'SERVICECARDTYPE' },
+  { api: 'updateFrequencyType', actionName: 'UPDATE', MODULE: 'SERVICECARDTYPE' },
+  {
+    api: 'fetchFrequencyTypes', actionName: 'READ', MODULE: 'SERVICECARDTYPE', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

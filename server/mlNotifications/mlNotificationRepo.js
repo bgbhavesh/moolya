@@ -3,11 +3,11 @@
  */
 import mlConversationsRepo from '../commons/Conversations/mlConversationsRepo'
 
-class NotificationRepo{
-  constructor(){
+class NotificationRepo {
+  constructor() {
   }
 
-  sendNotification(data){
+  sendNotification(data) {
     mlConversationsRepo.createNotifications(data)
   }
 }

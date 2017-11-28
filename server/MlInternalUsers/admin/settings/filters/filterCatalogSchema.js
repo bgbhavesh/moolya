@@ -1,10 +1,10 @@
 /**
  * Created by sireesha on 01/05/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 
-let FiltersCatalogSchema = `
+const FiltersCatalogSchema = `
     type fieldsCatalog
     {
       name : String
@@ -25,4 +25,4 @@ let FiltersCatalogSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],FiltersCatalogSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, FiltersCatalogSchema]);

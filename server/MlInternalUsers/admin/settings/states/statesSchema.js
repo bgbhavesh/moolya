@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let States = `       
+const States = `       
     type States 
     {     
         _id         : String
@@ -39,14 +39,20 @@ let States = `
         updateState(stateId: String, state:stateObject , moduleName:String, actionName:String):response
     }
 `
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],States]);
-let supportedApi = [
-  {api:'fetchState', actionName:'READ', moduleName:"STATES"},
-  {api:'FetchActiveStates', actionName:'READ', moduleName:"STATES", isWhiteList:true},
-  {api:'fetchStatesPerCountry', actionName:'READ', moduleName:"STATES", isWhiteList:true},
-  {api:'fetchStatesPerCountryWithAll', actionName:'READ', moduleName:"STATES", isWhiteList:true},
-  {api:'FetchActiveStatesForCluster', actionName:'READ', moduleName:"STATES"},
-  {api:'updateState', actionName:'UPDATE', moduleName:"STATES"},
-  {api: 'FetchStates', actionName:'READ' , moduleName:'STATES'}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, States]);
+const supportedApi = [
+  { api: 'fetchState', actionName: 'READ', moduleName: 'STATES' },
+  {
+    api: 'FetchActiveStates', actionName: 'READ', moduleName: 'STATES', isWhiteList: true
+  },
+  {
+    api: 'fetchStatesPerCountry', actionName: 'READ', moduleName: 'STATES', isWhiteList: true
+  },
+  {
+    api: 'fetchStatesPerCountryWithAll', actionName: 'READ', moduleName: 'STATES', isWhiteList: true
+  },
+  { api: 'FetchActiveStatesForCluster', actionName: 'READ', moduleName: 'STATES' },
+  { api: 'updateState', actionName: 'UPDATE', moduleName: 'STATES' },
+  { api: 'FetchStates', actionName: 'READ', moduleName: 'STATES' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

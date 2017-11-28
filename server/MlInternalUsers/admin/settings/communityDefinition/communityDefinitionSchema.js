@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let CommunityDefinition = `        
+const CommunityDefinition = `        
     type CommunityDefinition{
       name :String
       displayName :String
@@ -25,12 +25,22 @@ let CommunityDefinition = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CommunityDefinition]);
-let supportedApi = [
-    {api:'fetchCommunityDefinition', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
-    {api:'fetchCommunityDefinitionForRegistration', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
-    {api:'fetchCommunityDefinitionForSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
-    {api:'fetchCommunityDefinitionAPI', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
-  {api:'fetchCommunityDefinitionForProcessMapping', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, CommunityDefinition]);
+const supportedApi = [
+  {
+    api: 'fetchCommunityDefinition', actionName: 'READ', moduleName: 'COMMUNITY', isWhiteList: true
+  },
+  {
+    api: 'fetchCommunityDefinitionForRegistration', actionName: 'READ', moduleName: 'COMMUNITY', isWhiteList: true
+  },
+  {
+    api: 'fetchCommunityDefinitionForSelect', actionName: 'READ', moduleName: 'COMMUNITY', isWhiteList: true
+  },
+  {
+    api: 'fetchCommunityDefinitionAPI', actionName: 'READ', moduleName: 'COMMUNITY', isWhiteList: true
+  },
+  {
+    api: 'fetchCommunityDefinitionForProcessMapping', actionName: 'READ', moduleName: 'COMMUNITY', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

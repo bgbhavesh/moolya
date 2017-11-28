@@ -1,43 +1,41 @@
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
-MlResolver.MlMutationResolver['createContactType'] = (obj, args, context, info) =>{
-  if(MlGlobalSettings.find({_id:args.contactType._id}).count() > 0){
-    let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
+MlResolver.MlMutationResolver.createContactType = (obj, args, context, info) => {
+  if (MlGlobalSettings.find({ _id: args.contactType._id }).count() > 0) {
+    const code = 409;
+    return new MlRespPayload().errorPayload('Already Exist', code);
   }
-  let id = MlGlobalSettings.insert({...args.contactType});
-  if(id){
-    let code = 200;
-    let result = {addressTypeId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  const id = MlGlobalSettings.insert({ ...args.contactType });
+  if (id) {
+    const code = 200;
+    const result = { addressTypeId: id }
+    const response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return response
   }
 }
 
-MlResolver.MlMutationResolver['updateContactType'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver.updateContactType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args.contactType});
+    const id = args._id;
+    const updatedResponse = MlGlobalSettings.update(id, { $set: args.contactType });
     return updatedResponse
   }
-
 }
-MlResolver.MlQueryResolver['findContactType'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.findContactType = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
-    var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    const id = args._id;
+    const response = MlGlobalSettings.findOne({ _id: id });
     return response;
   }
-
 }
-MlResolver.MlQueryResolver['fetchContactTypes'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver.fetchContactTypes = (obj, args, context, info) => {
   // TODO : Authorization
 
-    let response= MlGlobalSettings.find({"isActive":true}).fetch();
-    return response;
+  const response = MlGlobalSettings.find({ isActive: true }).fetch();
+  return response;
 }

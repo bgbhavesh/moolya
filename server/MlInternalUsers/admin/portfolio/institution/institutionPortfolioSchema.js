@@ -1,12 +1,12 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let institutePortfolioSchema = `
+const institutePortfolioSchema = `
     type imagesTypeSchema{
         fileUrl   : String,
         fileName  : String,
@@ -460,17 +460,17 @@ let institutePortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, institutePortfolioSchema]);
 
-let supportedApi = [
-  {api:'fetchInstitutionDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutionPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutionPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutionPortfolioCSRReports', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateInstitutionPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
+const supportedApi = [
+  { api: 'fetchInstitutionDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchInstitutionPortfolioAboutUs', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchInstitutionPortfolioData', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchInstitutePortfolioCharts', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'fetchInstitutionPortfolioCSRReports', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'createInstitutionPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  { api: 'updateInstitutionPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' },
+  { api: 'createInstitutePortfolioChart', actionName: 'UPDATE', moduleName: 'PORTFOLIO' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

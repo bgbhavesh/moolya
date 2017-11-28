@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let subDepartmentSchema = `
+const subDepartmentSchema = `
   
    
     type SubDepartment{
@@ -69,16 +69,22 @@ let subDepartmentSchema = `
         fetchSubDepartmentsHierarchy(id: String,subDepartmentId:String):[SubDepartment]
     }
 `
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);
-let supportedApi = [
-    {api:'createSubDepartment', actionName:'CREATE', moduleName:"SUBDEPARTMENT"},
-    {api:'updateSubDepartment', actionName:'UPDATE', moduleName:"SUBDEPARTMENT"},
-    {api:'findSubDepartment', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
-    {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
-    {api:'fetchSubDepartmentsHierarchy', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, subDepartmentSchema]);
+const supportedApi = [
+  { api: 'createSubDepartment', actionName: 'CREATE', moduleName: 'SUBDEPARTMENT' },
+  { api: 'updateSubDepartment', actionName: 'UPDATE', moduleName: 'SUBDEPARTMENT' },
+  { api: 'findSubDepartment', actionName: 'READ', moduleName: 'SUBDEPARTMENT' },
+  {
+    api: 'fetchSubDepartments', actionName: 'READ', moduleName: 'SUBDEPARTMENT', isWhiteList: true
+  },
+  { api: 'findSubDepartments', actionName: 'READ', moduleName: 'SUBDEPARTMENT' },
+  { api: 'fetchActiveSubDepartments', actionName: 'READ', moduleName: 'SUBDEPARTMENT' },
+  {
+    api: 'fetchSubDepartmentsForRegistration', actionName: 'READ', moduleName: 'SUBDEPARTMENT', isWhiteList: true
+  },
+  {
+    api: 'fetchSubDepartmentsHierarchy', actionName: 'READ', moduleName: 'SUBDEPARTMENT', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

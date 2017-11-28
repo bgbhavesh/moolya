@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let IdentityTypesSchema = `
+const IdentityTypesSchema = `
     type IdentityTypes
     {
       _id :String
@@ -19,10 +19,12 @@ let IdentityTypesSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],IdentityTypesSchema]);
-let supportedApi = [
-  {api:'FetchIdentityTypes', actionName:'READ', moduleName:"IDENTITYTYPES", isWhiteList:true},
-  {api:'FetchCommunityBasedIdentity', actionName:'READ', moduleName:"IDENTITYTYPES"},
-  {api:'FetchCommunityIdentity', actionName:'READ', moduleName:"IDENTITYTYPES"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, IdentityTypesSchema]);
+const supportedApi = [
+  {
+    api: 'FetchIdentityTypes', actionName: 'READ', moduleName: 'IDENTITYTYPES', isWhiteList: true
+  },
+  { api: 'FetchCommunityBasedIdentity', actionName: 'READ', moduleName: 'IDENTITYTYPES' },
+  { api: 'FetchCommunityIdentity', actionName: 'READ', moduleName: 'IDENTITYTYPES' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

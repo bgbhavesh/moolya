@@ -2,11 +2,11 @@
  * Created by pankaj on 19/6/17.
  */
 
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../commons/mlSchemaDef";
-import MlResolver from "../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../commons/mlSchemaDef';
+import MlResolver from '../../commons/mlResolverDef';
 
-let internalTaskSchema = `
+const internalTaskSchema = `
     
     type InternalTaskCommunity {
       code: String
@@ -119,12 +119,22 @@ let internalTaskSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], internalTaskSchema]);
-let supportedApi = [
-  {api: 'fetchInternalTask', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
-  {api: 'fetchInternalTaskById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
-  {api: 'fetchMyInternalTask', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
-  {api: 'createInternalTask', actionName: 'CREATE', moduleName: "OFFICE", isAppWhiteList: true},
-  {api: 'updateInternalTask', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList: true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, internalTaskSchema]);
+const supportedApi = [
+  {
+    api: 'fetchInternalTask', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchInternalTaskById', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'fetchMyInternalTask', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'createInternalTask', actionName: 'CREATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateInternalTask', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  }
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

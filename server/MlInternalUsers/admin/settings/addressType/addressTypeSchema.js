@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../admin/../../commons/mlResolverDef'
 
-let AddressTypeSchema = `
+const AddressTypeSchema = `
     type AddressType
     {
       addressTypeInfo:addressDetails
@@ -37,8 +37,10 @@ let AddressTypeSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AddressTypeSchema]);
-let supportedApi = [
-  {api:'fetchAddressTypes', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, AddressTypeSchema]);
+const supportedApi = [
+  {
+    api: 'fetchAddressTypes', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

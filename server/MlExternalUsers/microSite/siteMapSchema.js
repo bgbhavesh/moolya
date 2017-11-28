@@ -2,12 +2,12 @@
  * Created by Mukhil on 14/6/17.
  */
 
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
 
-let siteMapSchema = `
+const siteMapSchema = `
   type SiteMapUrl {
      url: String
   }
@@ -19,13 +19,15 @@ let siteMapSchema = `
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], siteMapSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, siteMapSchema]);
 
-let supportedApi = [
-  {api: 'getMySiteMapUrl', actionName: 'READ', moduleName: "PORTFOLIO", isAppWhiteList: true}
+const supportedApi = [
+  {
+    api: 'getMySiteMapUrl', actionName: 'READ', moduleName: 'PORTFOLIO', isAppWhiteList: true
+  }
 
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)
-/**note: removed white list from UPDATE*/
+/** note: removed white list from UPDATE */
 // , isWhiteList:true

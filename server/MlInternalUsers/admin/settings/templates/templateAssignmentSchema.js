@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let TemplateAssignment = `        
+const TemplateAssignment = `        
     type SubProcess{
             _id             : String
             processName     : String
@@ -102,15 +102,25 @@ let TemplateAssignment = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],TemplateAssignment]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, TemplateAssignment]);
 
-let supportedApi = [
-  {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'fetchSubProcess', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'findTemplateStepsSelect', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'createTemplateAssignment', actionName:'CREATE', moduleName:"TEMPLATEASSIGNMENT"},
-  {api:'updateTemplateAssignment', actionName:'UPDATE', moduleName:"TEMPLATEASSIGNMENT"}
+const supportedApi = [
+  {
+    api: 'findTemplateSteps', actionName: 'READ', moduleName: 'TEMPLATEASSIGNMENT', isWhiteList: true
+  },
+  {
+    api: 'fetchAssignedTemplate', actionName: 'READ', moduleName: 'TEMPLATEASSIGNMENT', isWhiteList: true
+  },
+  {
+    api: 'fetchSubProcess', actionName: 'READ', moduleName: 'TEMPLATEASSIGNMENT', isWhiteList: true
+  },
+  {
+    api: 'findAssignedTemplates', actionName: 'READ', moduleName: 'TEMPLATEASSIGNMENT', isWhiteList: true
+  },
+  {
+    api: 'findTemplateStepsSelect', actionName: 'READ', moduleName: 'TEMPLATEASSIGNMENT', isWhiteList: true
+  },
+  { api: 'createTemplateAssignment', actionName: 'CREATE', moduleName: 'TEMPLATEASSIGNMENT' },
+  { api: 'updateTemplateAssignment', actionName: 'UPDATE', moduleName: 'TEMPLATEASSIGNMENT' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

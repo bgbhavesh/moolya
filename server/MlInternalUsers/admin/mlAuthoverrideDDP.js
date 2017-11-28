@@ -1,6 +1,6 @@
 /* global Npm */
-import {DDP} from 'meteor/ddp'
-import {Meteor} from 'meteor/meteor'
+import { DDP } from 'meteor/ddp'
+import { Meteor } from 'meteor/meteor'
 const Fiber = Npm.require('fibers')
 
 DDP._CurrentInvocation.get = function () {

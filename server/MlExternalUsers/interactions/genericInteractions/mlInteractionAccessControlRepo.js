@@ -10,9 +10,8 @@ import MlUserContext from '../../../MlExternalUsers/mlUserContext';
  * Returns Boolean
  * canPerform: Boolean (specifies if the context can interact with external source)
  * */
-class MlInteractionAccessControlRepo{
-
-  constructor(){
+class MlInteractionAccessControlRepo {
+  constructor() {
   }
 
   /**
@@ -20,7 +19,7 @@ class MlInteractionAccessControlRepo{
    * @param userId(Id of user)
    * returns Object (Profile context object)
    */
-  getDefaultProfile(userId){
+  getDefaultProfile(userId) {
     return new MlUserContext().userProfileDetails(userId);
   }
 
@@ -29,24 +28,24 @@ class MlInteractionAccessControlRepo{
    * @param resourceDetails(both context and resourceOwner Details)
    * returns Boolean true/false
    */
-  canPerformPortfolioInteraction(resourceDetails){
-    var isInteractionAllowed=true;
-    var contextUser=resourceDetails.contextUser;
-    var resourceOwnerUser=resourceDetails.resourceOwner;
-    //1-cannot allow interaction for unknown user
-    if(!contextUser||!resourceOwnerUser||!contextUser._id||!resourceOwnerUser._id){
-      isInteractionAllowed=false;
+  canPerformPortfolioInteraction(resourceDetails) {
+    let isInteractionAllowed = true;
+    const contextUser = resourceDetails.contextUser;
+    const resourceOwnerUser = resourceDetails.resourceOwner;
+    // 1-cannot allow interaction for unknown user
+    if (!contextUser || !resourceOwnerUser || !contextUser._id || !resourceOwnerUser._id) {
+      isInteractionAllowed = false;
       return isInteractionAllowed;
     }
-    //2-check if the resource is owned by context user and return false
-    if(contextUser&&resourceOwnerUser&&contextUser._id===resourceOwnerUser._id){
-      isInteractionAllowed=false;
+    // 2-check if the resource is owned by context user and return false
+    if (contextUser && resourceOwnerUser && contextUser._id === resourceOwnerUser._id) {
+      isInteractionAllowed = false;
       return isInteractionAllowed;
     }
-    //3-check if the context user is Office Bearer/Principal
-    var defaultProfile=this.getDefaultProfile((contextUser||{})._id);
-    if(defaultProfile&&defaultProfile.communityDefCode==="OFB"){
-      isInteractionAllowed=false;
+    // 3-check if the context user is Office Bearer/Principal
+    const defaultProfile = this.getDefaultProfile((contextUser || {})._id);
+    if (defaultProfile && defaultProfile.communityDefCode === 'OFB') {
+      isInteractionAllowed = false;
       return isInteractionAllowed;
     }
 
@@ -58,17 +57,16 @@ class MlInteractionAccessControlRepo{
    * @param resourceDetails(both context and resourceOwner Details)
    * returns Boolean true/false
    */
-  canPerformInteraction(resourceDetails){
-    var resourceType=(resourceDetails||{}).resourceType||"";
-    var canPerform=false;
+  canPerformInteraction(resourceDetails) {
+    const resourceType = (resourceDetails || {}).resourceType || '';
+    let canPerform = false;
     switch (resourceType) {
       case 'portfolio':
-        canPerform=this.canPerformPortfolioInteraction(resourceDetails);
+        canPerform = this.canPerformPortfolioInteraction(resourceDetails);
         break;
     }
     return canPerform;
   }
-
 }
 
 const mlInteractionAccessControlRepo = new MlInteractionAccessControlRepo();

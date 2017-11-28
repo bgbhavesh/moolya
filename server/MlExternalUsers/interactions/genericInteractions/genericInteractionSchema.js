@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 19/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
-let viewSchema = `
+const viewSchema = `
     type Counter{
       actionName:String,
       count:Int  
@@ -21,4 +21,4 @@ let viewSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],viewSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, viewSchema]);

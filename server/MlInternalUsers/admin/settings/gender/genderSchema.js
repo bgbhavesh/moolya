@@ -1,6 +1,6 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-let GenderSchema = `
+const GenderSchema = `
     type Gender
     {
       genderName :String
@@ -30,4 +30,4 @@ let GenderSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GenderSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, GenderSchema]);

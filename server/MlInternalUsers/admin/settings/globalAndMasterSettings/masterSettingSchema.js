@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 05/03/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let MasterSettingsSchema = `
+const MasterSettingsSchema = `
        enum MASTER_SETTINGS_TYPE {
                 LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
                 EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
@@ -189,13 +189,21 @@ let MasterSettingsSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],MasterSettingsSchema]);
-let supportedApi = [
-    {api:'fetchMasterSettings', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
-    {api:'findMasterSetting', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
-    {api:'fetchMasterSettingsForDropDown', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
-    {api:'fetchMasterSettingsForPlatFormAdmin', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
-    {api:'createMasterSetting', actionName:'CREATE', moduleName:"MASTERSETTINGS"},
-    {api:'updateMasterSetting', actionName:'UPDATE', moduleName:"MASTERSETTINGS"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, MasterSettingsSchema]);
+const supportedApi = [
+  {
+    api: 'fetchMasterSettings', actionName: 'READ', moduleName: 'MASTERSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'findMasterSetting', actionName: 'READ', moduleName: 'MASTERSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'fetchMasterSettingsForDropDown', actionName: 'READ', moduleName: 'MASTERSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'fetchMasterSettingsForPlatFormAdmin', actionName: 'READ', moduleName: 'MASTERSETTINGS', isWhiteList: true
+  },
+  { api: 'createMasterSetting', actionName: 'CREATE', moduleName: 'MASTERSETTINGS' },
+  { api: 'updateMasterSetting', actionName: 'UPDATE', moduleName: 'MASTERSETTINGS' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

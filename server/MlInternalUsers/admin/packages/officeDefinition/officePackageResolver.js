@@ -1,47 +1,47 @@
 /**
  * Created by venkatsrinag on 28/7/17.
  */
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
-import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
-import _ from "lodash";
+import MlResolver from '../../../../commons/mlResolverDef';
+import MlRespPayload from '../../../../commons/mlPayload';
+import MlUserContext from '../../../../MlExternalUsers/mlUserContext';
+import _ from 'lodash';
 
-MlResolver.MlMutationResolver['createOfficePackage'] = (obj, args, context, info) => {
-  if(_.isEmpty(args.package)){
+MlResolver.MlMutationResolver.createOfficePackage = (obj, args, context, info) => {
+  if (_.isEmpty(args.package)) {
     return new MlRespPayload().errorPayload('Error in creating office package', 400)
   }
   try {
-    var office = args.package
+    const office = args.package
     orderNumberGenService.createOfficeSCcode(office)
-    office['createdBy'] = context.userId;
-    office['createdOn'] = new Date();
+    office.createdBy = context.userId;
+    office.createdOn = new Date();
     mlDBController.insert('MlOfficeSCDef', office, context)
-  }catch (e){
+  } catch (e) {
     return new MlRespPayload().errorPayload(e.message, 400)
   }
   return new MlRespPayload().successPayload('Office Package Created Successfully', 200)
 }
 
-MlResolver.MlMutationResolver['updateOfficePackage'] = (obj, args, context, info) => {
-  if(_.isEmpty(args.packageId) || _.isEmpty(args.package)){
+MlResolver.MlMutationResolver.updateOfficePackage = (obj, args, context, info) => {
+  if (_.isEmpty(args.packageId) || _.isEmpty(args.package)) {
     return new MlRespPayload().errorPayload('Invalid Office', 400)
   }
 
   try {
-    var isOffice = mlDBController.findOne('MlOfficeSCDef', {_id:args.packageId}, context)
-    if(!isOffice){
+    const isOffice = mlDBController.findOne('MlOfficeSCDef', { _id: args.packageId }, context)
+    if (!isOffice) {
       return new MlRespPayload().errorPayload('Invalid Office', 400)
     }
 
-    var office = args.package;
+    const office = args.package;
 
-    //office['_id'] = args.packageId;
+    // office['_id'] = args.packageId;
 
-    var result = mlDBController.update('MlOfficeSCDef', args.packageId, office, {$set:true, upsert:true}, context)
-    if(!result){
+    const result = mlDBController.update('MlOfficeSCDef', args.packageId, office, { $set: true, upsert: true }, context)
+    if (!result) {
       return new MlRespPayload().errorPayload('Error in updating office package', 400)
     }
-  }catch (e){
+  } catch (e) {
     return new MlRespPayload().errorPayload(e.message, 400)
   }
 
@@ -53,36 +53,40 @@ MlResolver.MlMutationResolver['updateOfficePackage'] = (obj, args, context, info
  * @params [context.userId]
  * @returns *Array* [officePackages]
  * */
-MlResolver.MlQueryResolver['fetchOfficePackages'] = (obj, args, context, info) => {
-  let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-  let query = [
-    {'$lookup': {from: 'mlOfficeSC', localField: '_id', foreignField: 'scDefId', as: 'def'}},
-    {'$unwind': {"path": "$def", "preserveNullAndEmptyArrays": true}},
+MlResolver.MlQueryResolver.fetchOfficePackages = (obj, args, context, info) => {
+  const extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+  const query = [
     {
-      '$match': {
-        "$or": [
-          {"def.profileId": extProfile.profileId},
+      $lookup: {
+        from: 'mlOfficeSC', localField: '_id', foreignField: 'scDefId', as: 'def'
+      }
+    },
+    { $unwind: { path: '$def', preserveNullAndEmptyArrays: true } },
+    {
+      $match: {
+        $or: [
+          { 'def.profileId': extProfile.profileId },
           {
             isBSpoke: false,
-            clusters: {$elemMatch: {clusterId: extProfile.clusterId}},
-            chapters: {$elemMatch: {chapterId: extProfile.chapterId}},
-            subChapters: {$elemMatch: {subChapterId: extProfile.subChapterId}}
+            clusters: { $elemMatch: { clusterId: extProfile.clusterId } },
+            chapters: { $elemMatch: { chapterId: extProfile.chapterId } },
+            subChapters: { $elemMatch: { subChapterId: extProfile.subChapterId } }
           }]
       }
     }
   ]
-  var response = mlDBController.aggregate('MlOfficeSCDef', query, context)
+  const response = mlDBController.aggregate('MlOfficeSCDef', query, context)
   return response
 }
 
-MlResolver.MlQueryResolver['fetchOfficePackageById'] = (obj, args, context, info) => {
-  var office;
-  if(!args.officePackageId){
+MlResolver.MlQueryResolver.fetchOfficePackageById = (obj, args, context, info) => {
+  let office;
+  if (!args.officePackageId) {
     return office
   }
 
   try {
-    office = mlDBController.findOne('MlOfficeSCDef', {_id:args.officePackageId}, context)
+    office = mlDBController.findOne('MlOfficeSCDef', { _id: args.officePackageId }, context)
     // var frequencyType = mlDBController.findOne('MlFrequencyType', {_id:office.frequencyType}, context)
     // if(!frequencyType)
     //   return;
@@ -97,8 +101,7 @@ MlResolver.MlQueryResolver['fetchOfficePackageById'] = (obj, args, context, info
     // if(!accountType)
     //   return;
     // office.accountType = accountType.accountName
-
-  }catch (e){
+  } catch (e) {
     return office
   }
 

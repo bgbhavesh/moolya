@@ -1,11 +1,11 @@
 /**
  * Created by vishwadeep on 10/7/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../../commons/mlSchemaDef";
-import MlResolver from "../../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef';
 
-let serviceProviderPortfolioSchema = `
+const serviceProviderPortfolioSchema = `
     type PortfolioMenu{
         image: String
         link: String
@@ -188,13 +188,13 @@ let serviceProviderPortfolioSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], serviceProviderPortfolioSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, serviceProviderPortfolioSchema]);
 
-let supportedApi = [
-  {api: 'fetchServiceProviderDetails', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'createServiceProviderPortfolio', actionName: 'CREATE', moduleName: "PORTFOLIO"},
-  {api: 'updateServiceProviderPortfolio', actionName: 'UPDATE', moduleName: "PORTFOLIO"},
-  {api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: "PORTFOLIO"},
+const supportedApi = [
+  { api: 'fetchServiceProviderDetails', actionName: 'READ', moduleName: 'PORTFOLIO' },
+  { api: 'createServiceProviderPortfolio', actionName: 'CREATE', moduleName: 'PORTFOLIO' },
+  { api: 'updateServiceProviderPortfolio', actionName: 'UPDATE', moduleName: 'PORTFOLIO' },
+  { api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: 'PORTFOLIO' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

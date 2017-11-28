@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let DocumentMapping = `
+const DocumentMapping = `
      type DocumentMapping{
         documentId   : String
         documentName : String
@@ -113,15 +113,17 @@ let DocumentMapping = `
      
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentMapping]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, DocumentMapping]);
 
-let supportedApi = [
-  {api:'findDocument', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-  {api:'findDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-  {api:'findProcessDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING", isWhiteList:true},
-  {api:'fetchKycDocProcessMapping', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-  {api:'createDocument', actionName:'CREATE', moduleName:"DOCUMENTMAPPING"},
-  {api:'updateDocument', actionName:'UPDATE', moduleName:"DOCUMENTMAPPING"}
+const supportedApi = [
+  { api: 'findDocument', actionName: 'READ', moduleName: 'DOCUMENTMAPPING' },
+  { api: 'findDocuments', actionName: 'READ', moduleName: 'DOCUMENTMAPPING' },
+  {
+    api: 'findProcessDocuments', actionName: 'READ', moduleName: 'DOCUMENTMAPPING', isWhiteList: true
+  },
+  { api: 'fetchKycDocProcessMapping', actionName: 'READ', moduleName: 'DOCUMENTMAPPING' },
+  { api: 'createDocument', actionName: 'CREATE', moduleName: 'DOCUMENTMAPPING' },
+  { api: 'updateDocument', actionName: 'UPDATE', moduleName: 'DOCUMENTMAPPING' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

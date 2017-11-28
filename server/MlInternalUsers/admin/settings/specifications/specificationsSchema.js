@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Specification = `        
+const Specification = `        
     type Specification{
       specificationName :String
       specificationDisplayName :String
@@ -23,12 +23,12 @@ let Specification = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Specification]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Specification]);
 
-let supportedApi = [
-  {api:'FindSpecification', actionName:'READ', moduleName:"SPECIFICATION"},
+const supportedApi = [
+  { api: 'FindSpecification', actionName: 'READ', moduleName: 'SPECIFICATION' },
 
-  {api:'CreateSpecification', actionName:'CREATE', moduleName:"SPECIFICATION"},
-  {api:'UpdateSpecification', actionName:'UPDATE', moduleName:"SPECIFICATION"}
+  { api: 'CreateSpecification', actionName: 'CREATE', moduleName: 'SPECIFICATION' },
+  { api: 'UpdateSpecification', actionName: 'UPDATE', moduleName: 'SPECIFICATION' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 1/5/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
-let appCommunitySchema = `
+const appCommunitySchema = `
     type appCommunities{
         name:String,
         communityName:String,
@@ -22,10 +22,12 @@ let appCommunitySchema = `
 `
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appCommunitySchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, appCommunitySchema]);
 
-let supportedApi = [
-  {api: 'fetchCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true, isWhiteList:true},
+const supportedApi = [
+  {
+    api: 'fetchCommunitiesFromDef', userAction: 'READ', actionName: 'READ', resource: 'COMMUNITY', isAppWhiteList: true, isWhiteList: true
+  }
 
 ]
 

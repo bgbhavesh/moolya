@@ -1,6 +1,6 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-let Title = `        
+const Title = `        
     type Title{
       titleName :String
       titleDisplayName :String
@@ -17,4 +17,4 @@ let Title = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], Title ]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Title]);

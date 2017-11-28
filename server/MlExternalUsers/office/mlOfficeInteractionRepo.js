@@ -4,7 +4,6 @@
 import _ from 'lodash';
 import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 class MlOfficeInteractionService {
-
   constructor() {
     if (!MlOfficeInteractionService.instance) {
       MlOfficeInteractionService.instance = this;
@@ -25,105 +24,104 @@ class MlOfficeInteractionService {
 
   createTransactionRequest(userId, transType, officeId, resourceId, fromUserId, fromUserType, context) {
     try {
-      var activityType = transType;
+      const activityType = transType;
       switch (activityType) {
         case 'officeDeactivate':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'officeDeactivate',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office Deactivate',
-            'context': context || {},
-            'transactionTypeId': "office Deactivate",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'officeDeactivate',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office Deactivate',
+            context: context || {},
+            transactionTypeId: 'office Deactivate',
+            fromUserType
           });
           break;
         case 'officeBearerInvitation':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'officeBearerInvitation',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office Bearer Invitation',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'officeBearerInvitation',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office Bearer Invitation',
+            context: context || {},
+            transactionTypeId: 'office',
+            fromUserType
           });
           break;
         case 'principal':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'principal',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office principal',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'principal',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office principal',
+            context: context || {},
+            transactionTypeId: 'office',
+            fromUserType
           });
           break;
         case 'officeBearerGoIndependent':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'goIndependent',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office bearer go independent',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'goIndependent',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office bearer go independent',
+            context: context || {},
+            transactionTypeId: 'office',
+            fromUserType
           });
           break;
         case 'retireOfficeBearer':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'retire OfficeBearer',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office bearer retired',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'retire OfficeBearer',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office bearer retired',
+            context: context || {},
+            transactionTypeId: 'office',
+            fromUserType
           });
           break;
         case 'deactivateOfficeBearer':
           new MlTransactionsHandler().recordTransaction({
-            'fromUserId': fromUserId,
-            'moduleName': 'office',
-            'activity': 'deactivate OfficeBearer',
-            'transactionType': 'office',
-            'userId': userId,
-            'activityDocId': resourceId,
-            'docId': officeId,
-            'transactionDetails': 'office bearer deactivated',
-            'context': context || {},
-            'transactionTypeId': "office",
-            'fromUserType': fromUserType
+            fromUserId,
+            moduleName: 'office',
+            activity: 'deactivate OfficeBearer',
+            transactionType: 'office',
+            userId,
+            activityDocId: resourceId,
+            docId: officeId,
+            transactionDetails: 'office bearer deactivated',
+            context: context || {},
+            transactionTypeId: 'office',
+            fromUserType
           });
           break;
       }
     } catch (e) {
-      //console
+      // console
       console.log(e);
     }
   }
-
 }
 const mlOfficeInteractionService = new MlOfficeInteractionService();
 Object.freeze(mlOfficeInteractionService);

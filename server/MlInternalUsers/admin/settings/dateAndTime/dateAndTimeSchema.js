@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let DateAndTimeSchema = `
+const DateAndTimeSchema = `
     type DateAndTime
     {
       _id : String
@@ -34,9 +34,9 @@ let DateAndTimeSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DateAndTimeSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, DateAndTimeSchema]);
 
-let dateFormat = `        
+const dateFormat = `        
     
     type DateFormat{
       dateFormatName :String
@@ -72,17 +72,17 @@ let dateFormat = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],dateFormat]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, dateFormat]);
 
-let supportedApi = [
-  {api:'createDateAndTime', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
-  {api:'updateDateAndTime', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
+const supportedApi = [
+  { api: 'createDateAndTime', actionName: 'CREATE', moduleName: 'GLOBALSETTINGS' },
+  { api: 'updateDateAndTime', actionName: 'UPDATE', moduleName: 'GLOBALSETTINGS' },
 
-  {api:'findDateAndTime', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-  {api:'fetchDateAndTime', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+  { api: 'findDateAndTime', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
+  { api: 'fetchDateAndTime', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
 
-  {api:'findWeekDays', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-  {api:'findDateFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-  {api:'findTimeFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"}
+  { api: 'findWeekDays', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
+  { api: 'findDateFormat', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
+  { api: 'findTimeFormat', actionName: 'READ', moduleName: 'GLOBALSETTINGS' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

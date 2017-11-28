@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let citiesSchema = `       
+const citiesSchema = `       
     type Cities
     {     
         _id         : String,
@@ -50,17 +50,31 @@ let citiesSchema = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], citiesSchema]);
-let supportedApi = [
-  {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
-  {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'fetchCitiesPerStates', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"},
-  {api:'fetchBrachesOfRegisteredCommunity', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'fetchHeadQuarterOfRegisteredCommunity', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, citiesSchema]);
+const supportedApi = [
+  {
+    api: 'fetchCities', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  { api: 'fetchCity', actionName: 'READ', moduleName: 'CITIES' },
+  {
+    api: 'fetchCitiesPerState', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  {
+    api: 'fetchCitiesPerStates', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  {
+    api: 'fetchCitiesPerCountry', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  {
+    api: 'searchCities', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  { api: 'updateCity', actionName: 'UPDATE', moduleName: 'CITIES' },
+  {
+    api: 'fetchBrachesOfRegisteredCommunity', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  },
+  {
+    api: 'fetchHeadQuarterOfRegisteredCommunity', actionName: 'READ', moduleName: 'CITIES', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

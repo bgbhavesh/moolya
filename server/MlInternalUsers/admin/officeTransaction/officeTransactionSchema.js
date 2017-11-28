@@ -1,11 +1,11 @@
 /**
  * Created by vishwadeep on 6/6/17.
  */
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../../commons/mlSchemaDef";
-import MlResolver from "../../../commons/mlResolverDef";
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef';
 
-let officeTransaction = ` 
+const officeTransaction = ` 
   
     input officeTransaction {
       officeId:String
@@ -130,13 +130,23 @@ let officeTransaction = `
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction]);
-let supportedApi = [
-  {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, officeTransaction]);
+const supportedApi = [
+  {
+    api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'findOfficeTransaction', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'findAllTransaction', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
 // findOfficeTransaction(officeTransactionId:String):response    /* updated with all admin data context*/

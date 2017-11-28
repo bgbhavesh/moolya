@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 22/07/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let NotificationTemplateSchema = `
+const NotificationTemplateSchema = `
     type NotificationTemplate
     {
         _id:String,
@@ -46,13 +46,15 @@ let NotificationTemplateSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], NotificationTemplateSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, NotificationTemplateSchema]);
 
-let supportedApi = [
-  {api:'fetchNotificationTemplate', actionName:'READ', moduleName:"NOTIFICATIONTEMPLATE"},
-  {api:'fetchNotificationTemplates', actionName:'READ', moduleName:"NOTIFICATIONTEMPLATE", isWhiteList:true},
-  {api:'createNotificationTemplate', actionName:'CREATE', moduleName:"NOTIFICATIONTEMPLATE"},
-  {api:'updateNotificationTemplate', actionName:'UPDATE', moduleName:"NOTIFICATIONTEMPLATE"}
+const supportedApi = [
+  { api: 'fetchNotificationTemplate', actionName: 'READ', moduleName: 'NOTIFICATIONTEMPLATE' },
+  {
+    api: 'fetchNotificationTemplates', actionName: 'READ', moduleName: 'NOTIFICATIONTEMPLATE', isWhiteList: true
+  },
+  { api: 'createNotificationTemplate', actionName: 'CREATE', moduleName: 'NOTIFICATIONTEMPLATE' },
+  { api: 'updateNotificationTemplate', actionName: 'UPDATE', moduleName: 'NOTIFICATIONTEMPLATE' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
 

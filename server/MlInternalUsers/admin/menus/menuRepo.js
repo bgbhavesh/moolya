@@ -5,40 +5,40 @@ import mlResourceConfigRepo from '../../../MlExternalUsers/ResourceConfiguration
 import MlUserContext from '../../../MlExternalUsers/mlUserContext'
 import _ from 'lodash'
 
-class MenuRepo{
-  constructor(){
+class MenuRepo {
+  constructor() {
   }
 
-  findProfileResources(menuObject, context){
-    var menu = _.cloneDeep(menuObject);
-    var userProfile = new MlUserContext().userProfileDetails(context.userId)||{};
-    if(userProfile && userProfile.communityDefCode){
-      var resources = mlResourceConfigRepo.getResourceConfig(userProfile.communityDefCode)
-      if(resources.length > 0){
-        _.each(resources, function (resource) {
-          switch (resource.resourceCode){
-            case 'OFFICE':{
-              var office = {
-                "image": "ml ml-institutions",
-                "link": "/app/myOffice",
-                "isLink": true,
-                "isMenu": true,
-                "name": "Digital Office",
-                "uniqueId": "myOffice",
-                "hideSubMenu": true,
-                "subMenu": [{
-                  "link": "/app/addOffice",
-                  "isLink": true,
-                  "isMenu": false,
-                  "name": "Add Office",
-                  "uniqueId": "addOffice",
-                  "subMenusId": "myOffice"
+  findProfileResources(menuObject, context) {
+    const menu = _.cloneDeep(menuObject);
+    const userProfile = new MlUserContext().userProfileDetails(context.userId) || {};
+    if (userProfile && userProfile.communityDefCode) {
+      const resources = mlResourceConfigRepo.getResourceConfig(userProfile.communityDefCode)
+      if (resources.length > 0) {
+        _.each(resources, (resource) => {
+          switch (resource.resourceCode) {
+            case 'OFFICE': {
+              const office = {
+                image: 'ml ml-institutions',
+                link: '/app/myOffice',
+                isLink: true,
+                isMenu: true,
+                name: 'Digital Office',
+                uniqueId: 'myOffice',
+                hideSubMenu: true,
+                subMenu: [{
+                  link: '/app/addOffice',
+                  isLink: true,
+                  isMenu: false,
+                  name: 'Add Office',
+                  uniqueId: 'addOffice',
+                  subMenusId: 'myOffice'
                 }]
               }
               // menu.menu.push(office)
               menu.menu.splice(4, 0, office)
             }
-            break;
+              break;
           }
         })
       }
@@ -46,43 +46,43 @@ class MenuRepo{
     return menu;
   }
 
-  findCalendarResources(menuObject, context){
-    var menu = _.cloneDeep(menuObject);
-    var userProfile = new MlUserContext().userProfileDetails(context.userId)||{};
-    let registerId = userProfile.registrationId;
-    let regData = MlRegistration.findOne({"_id": registerId, status: { $ne: "REG_USER_APR"}});
-    if(regData) {
-      menu.menu.forEach( function (data, index , arr){
-        if([ "mycalendar", "calendar_share", "calendar_office" ].indexOf(data.uniqueId) >= 0 ) {
+  findCalendarResources(menuObject, context) {
+    const menu = _.cloneDeep(menuObject);
+    const userProfile = new MlUserContext().userProfileDetails(context.userId) || {};
+    const registerId = userProfile.registrationId;
+    const regData = MlRegistration.findOne({ _id: registerId, status: { $ne: 'REG_USER_APR' } });
+    if (regData) {
+      menu.menu.forEach((data, index, arr) => {
+        if (['mycalendar', 'calendar_share', 'calendar_office'].indexOf(data.uniqueId) >= 0) {
           arr[index].isDisabled = true
         }
       });
     }
-    if(userProfile && userProfile.communityDefCode){
-      var resources = mlResourceConfigRepo.getResourceConfig(userProfile.communityDefCode)
-      if(resources.length > 0){
-        _.each(resources, function (resource) {
-          switch (resource.resourceCode){
-            case 'MANAGESCHEDULE':{
-              var item = {
-                  "image":"ml my-ml-manage_schedule",
-                  "link": "/app/calendar/manageSchedule/all/activityList",
-                  "isLink" : true,
-                  "isMenu" : true,
-                  "name" : "Manage Schedule",
-                  "uniqueId" : "calendar_manageSchedule"
+    if (userProfile && userProfile.communityDefCode) {
+      const resources = mlResourceConfigRepo.getResourceConfig(userProfile.communityDefCode)
+      if (resources.length > 0) {
+        _.each(resources, (resource) => {
+          switch (resource.resourceCode) {
+            case 'MANAGESCHEDULE': {
+              const item = {
+                image: 'ml my-ml-manage_schedule',
+                link: '/app/calendar/manageSchedule/all/activityList',
+                isLink: true,
+                isMenu: true,
+                name: 'Manage Schedule',
+                uniqueId: 'calendar_manageSchedule'
               }
               menu.menu.push(item)
             }
-            break;
-            case "OFFICE":{
-              menu.menu.forEach( function (data, index , arr){
-                if(data.uniqueId === "calendar_office"){
+              break;
+            case 'OFFICE': {
+              menu.menu.forEach((data, index, arr) => {
+                if (data.uniqueId === 'calendar_office') {
                   arr[index].isDisabled = false
                 }
               })
             }
-            break;
+              break;
           }
         })
       }
@@ -92,5 +92,5 @@ class MenuRepo{
   }
 }
 
-var menuRepo = new MenuRepo()
+const menuRepo = new MenuRepo()
 export default menuRepo;

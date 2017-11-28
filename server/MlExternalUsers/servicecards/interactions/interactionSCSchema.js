@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 21/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
-import MlResolver from "../../../commons/mlResolverDef";
+import MlResolver from '../../../commons/mlResolverDef';
 
-let interactionSCSchema = `
+const interactionSCSchema = `
   
     type Actions{
       actionId:String,
@@ -60,4 +60,4 @@ let interactionSCSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], interactionSCSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, interactionSCSchema]);

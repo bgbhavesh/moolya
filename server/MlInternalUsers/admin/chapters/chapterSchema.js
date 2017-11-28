@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let chapterSchema = `
+const chapterSchema = `
     type Chapter{
         _id:String,
         clusterId:String,
@@ -239,27 +239,43 @@ let chapterSchema = `
      }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], chapterSchema]);
-let supportedApi = [
-    {api:'createChapter', actionName:'CREATE', moduleName:"CHAPTER"},
-    {api:'createSubChapter', actionName:'CREATE', moduleName:"SUBCHAPTER"},
-    {api:'updateChapter', actionName:'UPDATE', moduleName:"CHAPTER"},
-    {api:'updateSubChapter', actionName:'UPDATE', moduleName:"SUBCHAPTER"},
-    {api:'fetchChapter', actionName:'READ', moduleName:"CHAPTER"},
-    {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
-    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
-    {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
-    {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
-    {api:'fetchSubChaptersSelectNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
-    {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
-    {api:'fetchActiveStatesChapters', actionName:'READ', moduleName:"CHAPTER"},
-    {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
-    {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'isSubChapterMoolyaNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, chapterSchema]);
+const supportedApi = [
+  { api: 'createChapter', actionName: 'CREATE', moduleName: 'CHAPTER' },
+  { api: 'createSubChapter', actionName: 'CREATE', moduleName: 'SUBCHAPTER' },
+  { api: 'updateChapter', actionName: 'UPDATE', moduleName: 'CHAPTER' },
+  { api: 'updateSubChapter', actionName: 'UPDATE', moduleName: 'SUBCHAPTER' },
+  { api: 'fetchChapter', actionName: 'READ', moduleName: 'CHAPTER' },
+  {
+    api: 'fetchChaptersWithoutAll', actionName: 'READ', moduleName: 'CHAPTER', isWhiteList: true
+  },
+  {
+    api: 'fetchChapters', actionName: 'READ', moduleName: 'CHAPTER', isWhiteList: true
+  },
+  { api: 'fetchSubChapter', actionName: 'READ', moduleName: 'SUBCHAPTER' },
+  {
+    api: 'fetchSubChaptersSelect', actionName: 'READ', moduleName: 'SUBCHAPTER', isWhiteList: true
+  },
+  {
+    api: 'fetchActiveSubChapters', actionName: 'READ', moduleName: 'SUBCHAPTER', isWhiteList: true
+  },
+  {
+    api: 'fetchSubChaptersSelectNonMoolya', actionName: 'READ', moduleName: 'SUBCHAPTER', isWhiteList: true
+  },
+  {
+    api: 'fetchActiveClusterChapters', actionName: 'READ', moduleName: 'CHAPTER', isWhiteList: true
+  },
+  { api: 'fetchActiveStatesChapters', actionName: 'READ', moduleName: 'CHAPTER' },
+  {
+    api: 'fetchActiveChaptersSubChapters', actionName: 'READ', moduleName: 'SUBCHAPTER', isWhiteList: true
+  },
+  { api: 'fetchSubChaptersForRegistration', actionName: 'READ', moduleName: 'SUBCHAPTER' },
+  { api: 'fetchSubChaptersSelectMoolya', actionName: 'READ', moduleName: 'SUBCHAPTER' },
+  { api: 'fetchRelatedSubChapters', actionName: 'READ', moduleName: 'SUBCHAPTER' },
+  { api: 'updateRelatedSubChapters', actionName: 'READ', moduleName: 'SUBCHAPTER' },
+  {
+    api: 'isSubChapterMoolyaNonMoolya', actionName: 'READ', moduleName: 'SUBCHAPTER', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

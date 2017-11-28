@@ -1,11 +1,11 @@
 /**
  * Created by mohammed.mohasin on 04/03/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let GlobalSettingsSchema = `
+const GlobalSettingsSchema = `
    enum GLOBAL_SETTINGS_TYPE {
             DATEANDTIME,NUMERICAL,REGIONAL
    }
@@ -134,15 +134,25 @@ let GlobalSettingsSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GlobalSettingsSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, GlobalSettingsSchema]);
 
-let supportedApi = [
-    {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
-    {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
-    {api:'findTimeZones', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
-    {api: 'findCurrencyNames', actionName:'READ',moduleName:"GLOBALSETTINGS", isWhiteList:true},
-    {api:'findRounding', actionName:'READ', moudleName:"GLOBALSETTTINGS",isWhiteList:true},
-    {api:'findLanguages', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true}
+const supportedApi = [
+  {
+    api: 'fetchGlobalSettings', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  },
+  { api: 'updateGlobalSetting', actionName: 'UPDATE', moduleName: 'GLOBALSETTINGS' },
+  {
+    api: 'findTimeZones', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'findCurrencyNames', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  },
+  {
+    api: 'findRounding', actionName: 'READ', moudleName: 'GLOBALSETTTINGS', isWhiteList: true
+  },
+  {
+    api: 'findLanguages', actionName: 'READ', moduleName: 'GLOBALSETTINGS', isWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

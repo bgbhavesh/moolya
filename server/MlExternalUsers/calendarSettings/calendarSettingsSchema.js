@@ -1,12 +1,12 @@
 /**
  * Created by pankaj on 24/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
 
-let calendarSettingSlot=`
+const calendarSettingSlot = `
   type CalendarSettingSlotDuration {
     hours: Int
     minutes: Int
@@ -165,15 +165,31 @@ let calendarSettingSlot=`
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], calendarSettingSlot]);
-let supportedApi = [
-  {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'getMyCalendar', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'getMyCalendarDayAvailable', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateMyCalendarVacation', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateCalendarVacationByVacationId', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, calendarSettingSlot]);
+const supportedApi = [
+  {
+    api: 'fetchMyCalendarSetting', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'getMyCalendar', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'getMyCalendarDayAvailable', actionName: 'READ', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateMyCalendarSetting', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateMyCalendarWorkingDay', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateMyCalendarWorkingDays', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateMyCalendarVacation', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateCalendarVacationByVacationId', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

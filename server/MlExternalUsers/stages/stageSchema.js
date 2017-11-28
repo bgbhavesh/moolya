@@ -1,12 +1,12 @@
 /**
  * Created by pankaj on 17/6/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from "../../commons/mlResolverDef";
+import MlResolver from '../../commons/mlResolverDef';
 
 
-let stage=`
+const stage = `
   type Stage {
     _id: String
     userId: String
@@ -39,15 +39,25 @@ let stage=`
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], stage]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, stage]);
 
-let supportedApi = [
-  {api:'fetchStages', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
-  {api:'fetchStage', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
+const supportedApi = [
+  {
+    api: 'fetchStages', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'fetchStage', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
 
-  {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
-  {api:'updateOnBoardStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true}
+  {
+    api: 'createStage', actionName: 'CREATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateStage', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  },
+  {
+    api: 'updateOnBoardStage', actionName: 'UPDATE', moduleName: 'OFFICE', isAppWhiteList: true
+  }
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let NumericalFormatSchema = `
+const NumericalFormatSchema = `
     type NumericalFormat
     {
       _id : String
@@ -32,12 +32,12 @@ let NumericalFormatSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],NumericalFormatSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, NumericalFormatSchema]);
 
-let supportedApi = [
-    {api:'fetchNumericalFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-    {api:'findNumericalFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-    {api:'createNumericalFormat', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
-    {api:'updateNumericalFormat', actionName:'UPDATE  ', moduleName:"GLOBALSETTINGS"}
+const supportedApi = [
+  { api: 'fetchNumericalFormat', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
+  { api: 'findNumericalFormat', actionName: 'READ', moduleName: 'GLOBALSETTINGS' },
+  { api: 'createNumericalFormat', actionName: 'CREATE', moduleName: 'GLOBALSETTINGS' },
+  { api: 'updateNumericalFormat', actionName: 'UPDATE  ', moduleName: 'GLOBALSETTINGS' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

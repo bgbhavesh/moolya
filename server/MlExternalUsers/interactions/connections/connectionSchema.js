@@ -1,11 +1,11 @@
 /**
  * Created by venkatsrinag on 6/5/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
-let connections = `
+const connections = `
     type User{
         userid:String,
         userName:String,
@@ -79,10 +79,12 @@ let connections = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],connections]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, connections]);
 
-/**admin API data*/
-let supportedApi = [
-  {api:'fetchConnectionsByReg', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true}  //temp making white list
+/** admin API data */
+const supportedApi = [
+  {
+    api: 'fetchConnectionsByReg', actionName: 'READ', moduleName: 'INTERACTION', isWhiteList: true
+  } // temp making white list
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

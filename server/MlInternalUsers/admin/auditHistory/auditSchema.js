@@ -1,9 +1,9 @@
 /**
  * Created by vishwadeep.kapoor on 07/04/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
-let AuditLogSchema = ` 
+const AuditLogSchema = ` 
       type userAgentDetails{
            ipAddress:String
            OS:String
@@ -47,4 +47,4 @@ let AuditLogSchema = `
      }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AuditLogSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, AuditLogSchema]);

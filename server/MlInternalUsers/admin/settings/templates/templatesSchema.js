@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let Template = `        
+const Template = `        
     type TemplateDetails{
             _id                         : String,
             procesId                    : String,
@@ -34,11 +34,15 @@ let Template = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Template]);
-let supportedApi = [
-  {api:'findStepAssignedTemplates', actionName:'READ', moduleName:"TEMPLATE"},
-  {api:'findTemplates', actionName:'READ', moduleName:"TEMPLATE", isWhiteList:true},
-  {api:'findTemplatesSelect', actionName:'READ', moduleName:"TEMPLATE", isWhiteList:true},
-  {api:'updateStepAssignedTemplate', actionName:'UPDATE', moduleName:"TEMPLATE"}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, Template]);
+const supportedApi = [
+  { api: 'findStepAssignedTemplates', actionName: 'READ', moduleName: 'TEMPLATE' },
+  {
+    api: 'findTemplates', actionName: 'READ', moduleName: 'TEMPLATE', isWhiteList: true
+  },
+  {
+    api: 'findTemplatesSelect', actionName: 'READ', moduleName: 'TEMPLATE', isWhiteList: true
+  },
+  { api: 'updateStepAssignedTemplate', actionName: 'UPDATE', moduleName: 'TEMPLATE' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

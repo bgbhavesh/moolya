@@ -1,12 +1,12 @@
 /**
  * Created by venkatsrinag on 21/4/17.
  */
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let AssetsSchema = `
+const AssetsSchema = `
     type Assets
     {
         _id:String,
@@ -45,14 +45,16 @@ let AssetsSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], AssetsSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, AssetsSchema]);
 
-let supportedApi = [
-  {api:'createAssets', actionName:'CREATE', moduleName:"ASSETS"},
-  {api:'updateSelectedAsset', actionName:'UPDATE', moduleName:"ASSETS"},
+const supportedApi = [
+  { api: 'createAssets', actionName: 'CREATE', moduleName: 'ASSETS' },
+  { api: 'updateSelectedAsset', actionName: 'UPDATE', moduleName: 'ASSETS' },
 
-  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS",isWhiteList:true},
-  {api:'findAsset', actionName:'READ', moduleName:"ASSETS"}
+  {
+    api: 'fetchAssets', actionName: 'READ', moduleName: 'ASSETS', isWhiteList: true
+  },
+  { api: 'findAsset', actionName: 'READ', moduleName: 'ASSETS' }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

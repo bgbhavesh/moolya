@@ -1,6 +1,6 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-let SocialLinksTypeSchema = `
+const SocialLinksTypeSchema = `
     type SocialLinks
     {
       socialName :String
@@ -30,4 +30,4 @@ let SocialLinksTypeSchema = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],SocialLinksTypeSchema]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, SocialLinksTypeSchema]);

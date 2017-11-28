@@ -6,37 +6,33 @@ _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
 };
 
-export default NotificationTemplateEngine= class NotificationTemplateEngine{
-
-  static getNotificationTemplateDefinition(code,type){
-    var template= MlNotificationTemplates.findOne({tempCode:code,type:type})||{};
+export default NotificationTemplateEngine = class NotificationTemplateEngine {
+  static getNotificationTemplateDefinition(code, type) {
+    const template = MlNotificationTemplates.findOne({ tempCode: code, type }) || {};
     return template;
   }
 
-  static interpolateTemplateContent(content,reqObj){
-    var content=content||'';
-    var obj=reqObj||{};
-    try{
-      var template = _.template(content);
-      content=template(obj);
-    }catch(e){
+  static interpolateTemplateContent(content, reqObj) {
+    var content = content || '';
+    const obj = reqObj || {};
+    try {
+      const template = _.template(content);
+      content = template(obj);
+    } catch (e) {
     }
-    //unescape the content
-     content= _.unescape(content);
+    // unescape the content
+    content = _.unescape(content);
     return content;
   }
 
-  static fetchTemplateContent(code,type,reqObj){
+  static fetchTemplateContent(code, type, reqObj) {
+    /** get template definition */
+    const template = NotificationTemplateEngine.getNotificationTemplateDefinition(code, type);
+    const content = template.content || '';
 
-    /**get template definition*/
-    var template=NotificationTemplateEngine.getNotificationTemplateDefinition(code,type);
-    var content=template.content||'';
+    /** interpolate the content */
+    const interpolatedContent = NotificationTemplateEngine.interpolateTemplateContent(content, reqObj);
 
-    /**interpolate the content*/
-    var interpolatedContent=NotificationTemplateEngine.interpolateTemplateContent(content,reqObj);
-
-    return {tempConfig:template,content:interpolatedContent};
-
+    return { tempConfig: template, content: interpolatedContent };
   }
-
 }

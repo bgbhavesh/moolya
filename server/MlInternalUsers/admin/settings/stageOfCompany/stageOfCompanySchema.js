@@ -1,8 +1,8 @@
-import {mergeStrings} from 'gql-merge';
+import { mergeStrings } from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 import MlResolver from '../../../../commons/mlResolverDef'
 
-let StageOfCompany = `        
+const StageOfCompany = `        
     type StageOfCompany{
       stageOfCompanyName :String
       stageOfCompanyDisplayName :String
@@ -24,13 +24,15 @@ let StageOfCompany = `
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], StageOfCompany]);
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, StageOfCompany]);
 
-let supportedApi = [
-  {api:'FindStageOfCompany', actionName:'READ', moduleName:"STAGEOFCOMPANY"},
-  {api:'fetchStageOfCompany', actionName:'READ', moduleName:"STAGEOFCOMPANY", isWhiteList:true},
+const supportedApi = [
+  { api: 'FindStageOfCompany', actionName: 'READ', moduleName: 'STAGEOFCOMPANY' },
+  {
+    api: 'fetchStageOfCompany', actionName: 'READ', moduleName: 'STAGEOFCOMPANY', isWhiteList: true
+  },
 
-  {api:'CreateStageOfCompany', actionName:'CREATE', moduleName:"STAGEOFCOMPANY"},
-  {api:'UpdateStageOfCompany', actionName:'UPDATE', moduleName:"STAGEOFCOMPANY"}
+  { api: 'CreateStageOfCompany', actionName: 'CREATE', moduleName: 'STAGEOFCOMPANY' },
+  { api: 'UpdateStageOfCompany', actionName: 'UPDATE', moduleName: 'STAGEOFCOMPANY' }
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

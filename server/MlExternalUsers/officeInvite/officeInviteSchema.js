@@ -2,10 +2,10 @@
  * Created by vishwadeep on 8/6/17.
  */
 
-import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../commons/mlSchemaDef";
-import MlResolver from "../../commons/mlResolverDef";
-let officeInviteSchema = `
+import { mergeStrings } from 'gql-merge';
+import MlSchemaDef from '../../commons/mlSchemaDef';
+import MlResolver from '../../commons/mlResolverDef';
+const officeInviteSchema = `
     input officeInvite{
       officeId :String
       toUserId :String
@@ -37,11 +37,19 @@ let officeInviteSchema = `
 
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeInviteSchema]);
-let supportedApi = [
-  {api: 'createOfficeInvite', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'fetchAllOfficeInvite', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'fetchUserOfficeInvite', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'updateOfficeInvite', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true}
+MlSchemaDef.schema = mergeStrings([MlSchemaDef.schema, officeInviteSchema]);
+const supportedApi = [
+  {
+    api: 'createOfficeInvite', actionName: 'CREATE', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'fetchAllOfficeInvite', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'fetchUserOfficeInvite', actionName: 'READ', moduleName: 'OFFICE', isWhiteList: true
+  },
+  {
+    api: 'updateOfficeInvite', actionName: 'UPDATE', moduleName: 'OFFICE', isWhiteList: true
+  }
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

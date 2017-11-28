@@ -13,7 +13,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.my-ml-enter_arrow:before {
+  content: "\ea0d";
+}
+.my-ml-exclamation:before {
+  content: "\ea0e";
+}
 .my-ml-book_now:before {
   content: "\ea0c";
 }

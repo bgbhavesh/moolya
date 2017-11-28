@@ -391,6 +391,10 @@ export default class Company extends React.Component{
     let countryOption = {options: { variables: {countryId:this.state&&this.state.selectedHeadquarter?this.state.selectedHeadquarter:""}}};
     let branchesOption = {options: { variables: {countryId:this.state&&this.state.selectedBranches?this.state.selectedBranches:null}}};
     let that=this;
+    let foundationActive =''
+    if(that.state.foundationDate){
+      foundationActive='active'
+    }
     const showLoader=this.state.loading;
     return (
       <div>
@@ -424,6 +428,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group" id="date-of-birth">
+                <span className={`placeHolder ${foundationActive}`}>Foundation Year</span>
                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
                 <FontAwesome name="calendar" className="password_icon"onClick={that.openDatePickerDateOfBirth.bind(that)}/>
               </div>

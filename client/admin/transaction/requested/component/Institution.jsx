@@ -205,7 +205,13 @@ export default class institution extends React.Component{
       ]
     }
     let that=this;
-
+    let foundationActive ='',institutionTypesActive = ''
+    if(that.state.foundationDate){
+      foundationActive='active'
+    }
+    if(this.state.selectedInstitutionType){
+      institutionTypesActive = 'active'
+    }
     let institutionTypes = [
       {value: 'SubChapter', label: 'SubChapter'},
       {value: 'Institution', label: 'Institution'}
@@ -275,6 +281,7 @@ export default class institution extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
+                  <span className={`placeHolder ${institutionTypesActive}`}>Select Institution Type</span>
                   <Select name="form-field-name" placeholder="Select Institution Type" options={institutionTypes} value={this.state.selectedInstitutionType}  onChange={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
@@ -284,6 +291,7 @@ export default class institution extends React.Component{
                   <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">
+                  <span className={`placeHolder ${foundationActive}`}>Foundation Year</span>
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"foundationDate"} inputProps={{placeholder: "Foundation Year",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>

@@ -16,6 +16,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {createKYCDocument} from "../actions/createKYCDocumentAction";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+var convertS = require('unit-converter');
 import MlLoader from "../../../commons/components/loader/loader";
 // import {approvedStausForDocuments} from "../actions/approvedStatusForDocuments";
 // import {rejectedStausForDocuments} from "../actions/rejectedStatusForDocuments";
@@ -205,7 +206,11 @@ export default class MlAppRegStep5 extends React.Component {
     console.log(docFormate)
     let lowerDocFormate = docFormate.toLowerCase();
     let docResponse = _.includes(lowerDocFormate, fileFormate);
-    if (docResponse) {
+    let documentAllowableSize = convertS(kycDoc&&kycDoc.allowableMaxSize?kycDoc.allowableMaxSize:null).to('B');
+    let uploadedDocSize = file&&file.size?file.size:""
+    if(uploadedDocSize > documentAllowableSize){
+      toastr.error("Please upload documents only in the permitted file size")
+    }else if (docResponse) {
       let data = {
         moduleName: "REGISTRATION",
         actionName: "UPLOAD",

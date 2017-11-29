@@ -300,7 +300,7 @@ export default class Step5 extends React.Component {
      let documentAllowableSize = convertS(kycDoc&&kycDoc.allowableMaxSize?kycDoc.allowableMaxSize:null).to('B');
      let uploadedDocSize = file&&file.size?file.size:""
      if(uploadedDocSize > documentAllowableSize){
-       toastr.error("Please documents only in the permitted file size")
+       toastr.error("Please upload documents only in the permitted file size")
      }else if(docResponse){
       let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));

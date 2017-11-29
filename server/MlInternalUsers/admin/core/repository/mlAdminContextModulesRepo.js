@@ -291,7 +291,43 @@ let CoreModules = {
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery), '$and');
-    var data = MlTemplateAssignment.find(resultantQuery, fieldsProj).fetch();
+    //var data = MlTemplateAssignment.find(resultantQuery, fieldsProj).fetch();
+    var pipeline=[];
+    if (Object.keys(resultantQuery).length) {
+      pipeline.push({'$match': resultantQuery});
+    };
+    pipeline= pipeline.concat([{
+      '$lookup': {
+        from: "mlUserTypes",
+        localField: "templateuserType",
+        foreignField: "_id",
+        as: "userType"
+      }
+    },
+      {'$unwind': {'path': '$userType', preserveNullAndEmptyArrays: true}},
+      {
+        '$project': {
+          "_id": 1,
+          "templateprocess": 1,
+          "templatesubProcess": 1,
+          "templateProcessName": 1,
+          "templateSubProcessName": 1,
+          "templateclusterId": 1,
+          "templateclusterName": 1,
+          "templatechapterId": 1,
+          "templatechapterName": 1,
+          "templatesubChapterId": 1,
+          "templatesubChapterName": 1,
+          "templatecommunityCode": 1,
+          "templatecommunityName": 1,
+          "templateuserType": {"$ifNull": ["$userType.userTypeName", "$templateuserType"]},
+          "templateidentity": 1,
+          "assignedTemplates": 1,
+          "createdDate": 1,
+          "createdBy": 1
+        }
+      }, {'$sort': fieldsProj.sort}, {'$skip': parseInt(fieldsProj.skip||0)}, {'$limit': parseInt(fieldsProj.limit)}]);
+    var data = mlDBController.aggregate('MlTemplateAssignment', pipeline, context);
     var totalRecords = MlTemplateAssignment.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },

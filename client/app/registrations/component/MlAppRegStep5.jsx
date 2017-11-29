@@ -200,9 +200,9 @@ export default class MlAppRegStep5 extends React.Component {
     kycDoc = _.find(processDocument, function (item) {
       return item.docTypeId == docTypeId && item.documentId == documentId;
     });
-    let fileName = file.name
+    let fileName = file&&file.name?file.name:""
     let fileFormate = fileName.split('.').pop()
-    let docFormate = kycDoc.allowableFormat[0]
+    let docFormate = kycDoc&&kycDoc.allowableFormat&&kycDoc.allowableFormat[0]?kycDoc.allowableFormat[0]:{}
     console.log(docFormate)
     let lowerDocFormate = docFormate.toLowerCase();
     let docResponse = _.includes(lowerDocFormate, fileFormate);

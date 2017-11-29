@@ -35,7 +35,8 @@ class MlAddBackendUser extends React.Component {
       genderSelectMale: " ",
       genderSelectFemale: " ",
       genderSelectOthers: " ",
-      genderSelect:" "
+      genderSelect:" ",
+      clusterId:''
 
     }
     this.addEventHandler.bind(this);
@@ -354,7 +355,7 @@ class MlAddBackendUser extends React.Component {
                         </div>
                       </div>
                     <div className="clearfix"></div>
-                    <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)}/>
+                    <MlContactFormComponent clusterId={this.state.clusterId} getAssignedContacts={this.getAssignedContacts.bind(this)}/>
 
                     <div className="form-group switch_wrap inline_switch">
                       <label>Global Assignment Availability</label>

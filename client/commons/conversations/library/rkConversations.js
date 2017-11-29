@@ -34,6 +34,11 @@ class __Utils{
         console.log('-----save auth token-----');
     }
 
+    setBuildVersionToken(version){
+      localStorage.setItem('build_version', version);
+      console.log('-----build_version saved-----');
+    }
+
     getToken(){
         return localStorage.getItem('auth_token')
     }

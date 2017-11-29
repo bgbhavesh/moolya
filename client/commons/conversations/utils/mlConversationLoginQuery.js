@@ -18,7 +18,10 @@ import gql from 'graphql-tag'
 //   const ret = result.data.fetchConversationAuthToken;
 //   return ret;
 // }
-
+/**
+ * Note: Function to be used for all the post request from the client
+ *      [auth_token, build_version]
+ * */
 export function loginHandler(endPoint, cb) {
   new Promise(function (resolve, reject) {
     // Make ajax call

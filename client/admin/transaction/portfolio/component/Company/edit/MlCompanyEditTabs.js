@@ -22,7 +22,7 @@ import {client} from '../../../../../core/apolloConnection'
 export default class MlCompanyEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {tabs: [], aboutUs: {}, companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: [],activeTab:'About'}};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -78,6 +78,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlCompanyAboutUsLandingPage key="1" isAdmin={true} client={client} getAboutus={this.getAboutus.bind(this)}
                                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                                 backClickHandler={this.backClickHandler.bind(this)}/>
@@ -86,6 +87,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Management",
+        name: "Management",
         component: <MlCompanyManagement client={client} isAdmin={true} key="2" tabName={"management"}
                                         getManagementDetails={this.getManagementDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -94,6 +96,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
+        name: "Data",
         component: <MlCompanyData key="4" isApp={false} client={client} getDataDetails={this.getDataDetails.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -101,6 +104,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Charts",
+        name: "Charts",
         component: <MlCompanyEditCharts key="5" getChartDetails={this.getChartDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -108,6 +112,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards",
+        name: "Awards",
         component: <MlCompanyAwards key="6" client={client} getAwardsDetails={this.getAwardsDetails.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
@@ -115,6 +120,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary key="7" client={client} isAdmin={true}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
@@ -122,6 +128,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "M C & L",
+        name: "M C And L",
         component: <MlCompanyMCL key="8" client={client} getMCL={this.getMCL.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -129,6 +136,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Incubators",
+        name: "Incubators",
         component: <MlCompanyIncubatorsEditTabs key="9" client={client} getIncubators={this.getIncubators.bind(this)}
                                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                                 backClickHandler={this.backClickHandler.bind(this)}/>
@@ -137,6 +145,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Partners",
+        name: "Partners",
         component: <MlCompanyPartners key="10" client={client} getPartnersDetails={this.getPartnersDetails.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
@@ -144,6 +153,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "CSR",
+        name: "CSR",
         component: <MlCompanyCSREditTabs key="11" client={client} getCSRDetails={this.getCSRDetails.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          backClickHandler={this.backClickHandler.bind(this)}/>
@@ -152,6 +162,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "R&D",
+        name: "R And D",
         component: <MlCompanyRAndD key="13" client={client} getRDDetails={this.getRDDetails.bind(this)}
                                    portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>
       },
@@ -159,6 +170,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Intrapreneur",
+        name: "Intrapreneur",
         component: <MlCompanyIntrapreneur key="12" client={client}
                                           getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)}
                                           portfolioDetailsId={this.props.portfolioDetailsId}
@@ -168,6 +180,7 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlCompanyLookingFor key="14" client={client}
                                         getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
@@ -298,16 +311,24 @@ export default class MlCompanyEditTabs extends Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key:tab.name,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
+  }
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
   }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }
 MlCompanyEditTabs.childContextTypes = {

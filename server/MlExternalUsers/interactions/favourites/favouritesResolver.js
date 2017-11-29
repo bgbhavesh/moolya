@@ -6,7 +6,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
 import mlInteractionService from '../mlInteractionRepoService';
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
-
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 var generateConnectionCode=function(u1,u2){
   var connectionCode=u1+u2;
   if(u1>u2)connectionCode=u2+u1;
@@ -51,6 +51,7 @@ MlResolver.MlQueryResolver['fetchFavourites'] = (obj, args, context, info) => {
 * returns result if user is marked as favourite
 */
 MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
+  let favouriteRequest;
   if(args && context && context.userId){
 
     /**
@@ -94,7 +95,8 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
         let fromUserType = 'user';
         let connectionData = mlDBController.findOne('MlConnections', {connectionCode:connectionCode,"users.userId":fromuser._id,isBlocked:false,isDenied:false,isAccepted:true}, context);
         mlInteractionService.createTransactionRequest(toUser._id,'favorite', args.resourceId, connectionData._id, fromuser._id, fromUserType , context);
-        return new MlRespPayload().successPayload(resp,200);
+        favouriteRequest = MlAlertNotification.onFavouriteRequestMsg(toUser&&toUser._id?toUser._id:"");
+        return new MlRespPayload().successPayload(favouriteRequest,200);
       };
 
       //todo: if user is not in his connection, return valud error message

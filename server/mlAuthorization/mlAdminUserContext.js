@@ -235,6 +235,49 @@ class MlAdminUserContext
     })
     return users;
   }
+
+  getRelatedSubChaptersForNonMoolya(userId){
+    var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
+
+    // Default Profile. Expecting user default profile changes on profile change.
+    var userSubChapterId = userProfile.defaultSubChapters[0];
+    if(userSubChapterId == 'all') {
+      return {}
+    }
+    var userSubChapter = mlDBController.findOne('MlSubChapters', {_id:userSubChapterId});
+    var clusterId = userSubChapter.clusterId
+    var isDefaultSubChapter = userSubChapter.isDefaultSubChapter;
+    var relatedSubChapterIds = [];
+    var relatedChapterIds = [];
+    if(!isDefaultSubChapter){
+      var relatedSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters:{$elemMatch:{subChapterId:userSubChapterId}}}).fetch()
+      if(relatedSubChapters&&relatedSubChapters.length>0){
+        _.each(relatedSubChapters, function(obj){
+          let ids = _.map(obj.subChapters, "subChapterId");
+          relatedSubChapterIds = _.concat(relatedSubChapterIds, ids)
+        })
+        relatedSubChapterIds = _.uniq(relatedSubChapterIds);
+
+        var relatedSC = mlDBController.find('MlSubChapters', {_id:{$in:relatedSubChapterIds}, clusterId:clusterId, isActive:true}).fetch()
+        relatedSubChapterIds = _.map(relatedSC, "_id");
+        var relatedChapterIds = _.map(relatedSC, "chapterId");
+        var relatedC = mlDBController.find('MlChapters', {_id:{$in:relatedChapterIds}, isActive:true}).fetch()
+        relatedChapterIds = _.map(relatedC, "_id");
+      }
+
+    }else{
+      relatedSubChapterIds = [userSubChapterId];
+      relatedChapterIds = [userSubChapter.chapterId];
+    }
+    return{
+      userSubChapter:userSubChapter,
+      isDefaultSubChapter:isDefaultSubChapter,
+      relatedSubChapterIds:relatedSubChapterIds,
+      relatedChapterIds:relatedChapterIds,
+      clusterId:clusterId
+    }
+  }
+
 }
 
 module.exports = MlAdminUserContext

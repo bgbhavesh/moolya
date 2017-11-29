@@ -52,8 +52,10 @@ export default class MlAppInvestment extends Component {
     const MlTabs = data.filter(function (stage) {
       return stage.isActive;
     }).map(function (stage, id) {
+      console.log(stage, 'stage');
       return {
           name: stage.stageName,
+          stage: stage.stage,
           tabContent: <MlAppInvestmentItem fetchPortfolio={that.fetchPortfolio}  stages={data} portfolio={that.state.portfolio} currentStage={stage} />
         }
     });

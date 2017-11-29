@@ -24,7 +24,7 @@ export async function followActionHandler(details) {
   })
   const resp = result.data.followUser;
   if (resp.success) {
-    toastr.success("User added to your following list");
+    toastr.success(resp.result);
     return resp;
   }
   return null;

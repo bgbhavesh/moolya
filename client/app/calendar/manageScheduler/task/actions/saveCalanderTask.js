@@ -67,6 +67,7 @@ export async function findTaskActionHandler(taskId) {
                 }
                 sessionId
                 activities
+                isOffline
               }
               attachments{
                 name

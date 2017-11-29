@@ -137,6 +137,19 @@ class MlUserContext{
     }
     return returnStatus;
   }
+
+  currencyTypeForEndUsers(userDetails) {
+    const {userId, profileId, userInfo} = userDetails;
+    let profileClusterId = null;
+    if(profileId !== "all"){
+      let userProfiles = userInfo.profile.externalUserProfiles;
+      userProfiles.forEach(defaultProfile => {
+        if(defaultProfile.profileId === profileId)
+          profileClusterId = defaultProfile.clusterId;
+      })
+      return profileClusterId;
+    } else return this.userProfileDetails(userId).clusterId;
+  }
 }
 
 

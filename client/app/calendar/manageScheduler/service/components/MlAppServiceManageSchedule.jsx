@@ -320,7 +320,7 @@ class MlAppServiceManageSchedule extends Component {
     let session = [];
     if (taskId) {
       serviceTask.selectedTaskId = taskId;
-      console.log(service, serviceTask);
+      //console.log(service, serviceTask);
       let selectedTaskDetails = serviceTask.serviceTaskDetails.filter((task) => {
         return task.id === taskId
       });
@@ -692,7 +692,7 @@ class MlAppServiceManageSchedule extends Component {
             isError = true;
             return false;
           }
-          sessions.push({ id: session.sessionId, sequence: (session.sequence || seqData) })
+          sessions.push({ id: session.sessionId, sequence: (session.sequence || seqData), isOffline: session.isOffline || false })
         });
         if (isError) {
           toastr.error('Session sequence is required');
@@ -1091,7 +1091,7 @@ class MlAppServiceManageSchedule extends Component {
    * Desc :: Send to admin for review
    */
   async cloneServiceCard() {
-    console.log('Clone', this.serviceId);
+    //console.log('Clone', this.serviceId);
     const resp = await cloneServiceCardActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Service clone successfully');
     if (resp.success) {
@@ -1107,7 +1107,7 @@ class MlAppServiceManageSchedule extends Component {
     let { serviceBasicInfo, service } = this.state;
     const isViewMode = this.props.viewMode;
     const isApproved = serviceBasicInfo.isApproved;
-    console.log("Service :", service);
+    //console.log("Service :", service);
     let _this = this;
     let appActionConfig = [
       {

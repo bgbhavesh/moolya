@@ -18,11 +18,10 @@ import {client} from '../../../../../core/apolloConnection'
 export default class MlFunderEditTemplate extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, funderPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {tabs: [], aboutUs: {}, funderPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: [],activeTab:'About'}};
     this.getChildContext.bind(this)
     this.getInvestmentsDetails.bind(this);
     this.getFunderNewsDetails.bind(this);
-    this.getFunderLibrary.bind(this)
   }
 
   getChildContext() {
@@ -51,6 +50,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlFunderAbout client={client} tabName="funderAbout" isAdmin={true} key="1"
                                   getAboutus={this.getAboutus.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -59,6 +59,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investments",
+        name: "Investments",
         component: <MlFunderInvestment key="2" tabName="investments"
                                        getInvestmentsDetails={this.getInvestmentsDetails.bind(this)}
                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -67,6 +68,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Principals & Team",
+        name: "Principals And Team",
         component: <MlFunderPrincipalTeam client={client} tabName="Principals & Team" key="3"
                                           getPrincipalDetails={this.getPrincipalDetails.bind(this)}
                                           getTeamDetails={this.getTeamDetails.bind(this)}
@@ -76,6 +78,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Engagement Methods",
+        name: "Engagement Methods",
         component: <MlFunderEngagementMethod key="4" tabName="Engagement Methods"
                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -83,6 +86,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Areas Of Interest",
+        name: "Areas Of Interest",
         component: <MlFunderAreaOfInterest key="6" tabName="areaOfInterest"
                                            getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -91,6 +95,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Success Stories",
+        name: "Success Stories",
         component: <MlFunderSuccessStories key="7" tabName="successStories" client={client} isAdmin={true}
                                            getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -99,6 +104,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary key="8" client={client} tabName="Library" isAdmin={true}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -106,6 +112,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "News",
+        name: "News",
         component: <MlFunderNews key="9" tabName="News" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -113,6 +120,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlFunderLookingFor key="8" getLookingFor={this.getLookingFor.bind(this)} tabName="lookingFor"
                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -120,6 +128,7 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services",
+        name: "Services",
         component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
@@ -243,16 +252,25 @@ export default class MlFunderEditTemplate extends Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
+  }
+
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
   }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }
 MlFunderEditTemplate.childContextTypes = {

@@ -134,6 +134,7 @@ let investments = `
     type ProcessSteps{
         stageId:String,
         stageName : String
+        stage : String
         stageActions:[StageActions]
         isActive:Boolean
     }
@@ -179,7 +180,15 @@ let investments = `
         username:String,
         name:String
         profileId       : String
+        deviceDetails:  deviceInfo
     }
+    
+    type deviceInfo {
+    deviceName: String
+    ipAddress: String
+    deviceId: String
+    location: String
+  }
     
     
     

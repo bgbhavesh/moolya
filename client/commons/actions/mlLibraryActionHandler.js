@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 import {appClient} from "../../app/core/appConnection";
 
-export async function createLibrary(detailsInput, connection) {
+export async function createLibrary(portfolioDetailsId, detailsInput, connection) {
   const result = await connection.mutate({
     mutation: gql`
-   mutation ($detailsInput: libraryInput) {
-  createLibrary(detailsInput: $detailsInput) {
+   mutation ($detailsInput: libraryInput, $portfolioDetailsId: String) {
+  createLibrary(detailsInput: $detailsInput, portfolioDetailsId: $portfolioDetailsId) {
     success
     code
     result
@@ -13,7 +13,8 @@ export async function createLibrary(detailsInput, connection) {
 }
 `,
     variables:{
-      detailsInput
+      detailsInput,
+      portfolioDetailsId
     }
   })
   const id = result.data.createLibrary;

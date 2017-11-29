@@ -8,29 +8,86 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
   let moduleContext = "";
+  let sub = {};
   var chapterCount=0
-  switch(args.moduleName){
-    case "cluster":
-      query={"clusterId":args.id};
-      moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
-      chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
-      break;
-    case "chapter":
-      query={"chapterId":args.id};
-      moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
-      chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count();
-      break;
-    case "subChapter":
-      query={"subChapterId":args.id};
-      moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
-      break;
-    case "community":
-      moduleContext="Users"
-      query={"communityDefId":args.id};
-      break;
-    default:
-      query={"noSuchQuery":args.id};
+
+  let userId = context.userId;
+  var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
+
+  if(userProfile.hierarchyLevel != 1){
+    switch(args.moduleName){
+      case "cluster":
+        query={"clusterId":args.id};
+        moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
+        chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
+        break;
+      case "chapter":
+        query={"chapterId":args.id};
+        moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
+        chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count();
+        break;
+      case "subChapter":
+        query={"subChapterId":args.id};
+        moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
+        break;
+      case "community":
+        moduleContext="Users"
+        query={"communityDefId":args.id};
+        break;
+      default:
+        query={"noSuchQuery":args.id};
+    }
+  }else{
+    var related = new MlAdminUserContext().getRelatedSubChaptersForNonMoolya(userId);
+    var relatedSubChapterIds = related.relatedSubChapterIds;
+    var relatedChapterIds = related.relatedChapterIds;
+    var isDefaultSubChapter = related.isDefaultSubChapter;
+    var userSubChapter = related.userSubChapter;
+
+    switch(args.moduleName){
+      case "cluster":
+        moduleContext=mlDBController.findOne('MlClusters', {_id:args.id}, context).clusterName;
+        chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
+        if(isDefaultSubChapter){
+          sub = mlDBController.find('MlSubChapters', {clusterId:args.id, isActive:true, isDefaultSubChapter:true}, context).fetch()
+          let subIds = _.map(sub, "_id");
+          let chapIds = _.map(sub, "chapterId");
+          chapIds = _.uniq(chapIds)
+
+          chapterCount = mlDBController.find('MlChapters', {_id:{$in:chapIds}, clusterId:args.id,isActive:true}, context).count();
+          query={"clusterId":args.id, chapterId:{$in:chapIds}, subChapterId:{$in:subIds}, isActive:true};
+        }else{
+          chapterCount = mlDBController.find('MlChapters', {clusterId:args.id, isActive:true, _id:{$in:relatedChapterIds}}, context).count();
+          query={"clusterId":args.id, isActive:true, "chapterId":{$in:relatedChapterIds}, "subChapterId":{$in:relatedSubChapterIds}};
+        }
+        break;
+      case "chapter":
+        moduleContext=mlDBController.findOne('MlChapters', {_id:args.id}, context).chapterName;
+        let chapter = mlDBController.findOne('MlChapters', {_id:args.id}, context);
+        if(isDefaultSubChapter){
+          let sc = mlDBController.findOne('MlSubChapters', {chapterId:args.id, isActive:true, isDefaultSubChapter:true}, context);
+          chapterCount = 1;
+          query={"clusterId":chapter.clusterId, "chapterId":args.id, 'subChapterId':sc._id, isActive:true};
+        }else{
+          chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id, isActive:true, _id:{$in:relatedSubChapterIds}}, context).count();
+          query={"clusterId":chapter.clusterId, "chapterId":args.id, isActive:true, "subChapterId":{$in:relatedSubChapterIds}};
+        }
+        break;
+      case "subChapter":
+        moduleContext=mlDBController.findOne('MlSubChapters', {_id:args.id}, context).subChapterName;
+        let subChapter = mlDBController.findOne('MlSubChapters', {_id:args.id})
+        query={"clusterId":subChapter.clusterId, "chapterId":subChapter.chapterId, "subChapterId":args.id};
+        break;
+      case "community":
+        moduleContext="Users"
+        query={"communityDefId":args.id};
+        break;
+      default:
+        query={"noSuchQuery":args.id};
+    }
   }
+
+
   query.isActive=true;
   // let communityData=MlCommunityDefinition.find({isActive:true}).fetch();
   let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
@@ -39,7 +96,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   if(query){
     response.push({
       key: 'backendUsers',
-      count: mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: query}}]}).count(),
+      count: mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: query}}]}).count(),
       icon: "ml ml-moolya-symbol"
     })
   }
@@ -48,9 +105,33 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     query.communityDefName = item.name;
     query.isApprove=true;
     if(item.communityImageLink!="ml my-ml-browser_5" && item.communityImageLink!="ml ml-moolya-symbol"){
+      var queryObj = query;
+      var pipeline=[
+        { "$match": {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}} },
+        { "$unwind" :"$profile.externalUserProfiles" },
+        { "$lookup": { from: "mlPortfolioDetails", localField: "profile.externalUserProfiles.profileId", foreignField: "profileId", as: "portfolio" } },
+        { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+        { "$match" : {"portfolio.status":"PORT_LIVE_NOW"}},
+      ];
+
+      if(query){
+        if(query.clusterId && query.chapterId && query.subChapterId){
+          pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.chapterId":query.chapterId, "profile.externalUserProfiles.subChapterId":query.subChapterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
+        }
+        else if(query.clusterId && query.chapterId){
+          pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.chapterId":query.chapterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
+        }
+        else if(query.clusterId){
+          pipeline.push({$match:{"profile.externalUserProfiles.clusterId":query.clusterId, "profile.externalUserProfiles.communityDefName":query.communityDefName, "profile.externalUserProfiles.isApprove":true, "profile.externalUserProfiles.isActive":true}})
+        }
+      }
+
+      let users=mlDBController.aggregate('users',pipeline,context);
+
       response.push({
         key: item._id,
-        count: mlDBController.find('users', {'profile.externalUserProfiles':{$elemMatch: query}}, context).count(),
+        // count: mlDBController.find('users', {'profile.externalUserProfiles':{$elemMatch: query}}, context).count(),
+        count:users.length,
         icon: item.communityImageLink
       })
     }
@@ -531,6 +612,14 @@ MlResolver.MlQueryResolver['fetchCommunitiesSelect'] = (obj, args, context, info
 MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, context, info) =>
 {
   // TODO : Authorization
+  let user = new MlAdminUserContext().userProfileDetails(context.userId);
+  if(user.hierarchyLevel==0){
+    let allCommunity = user.defaultCommunities.map(function (item) {
+      let community = MlCommunityDefinition.findOne({code:item.communityCode});
+      return{"name":community.name, "code":community.code}
+    })
+    return allCommunity;
+  }
   let query;
   let communities = [];
   if(args.clusterId != "" && args.chapterId == "all" && args.subChapterId != "all" ){

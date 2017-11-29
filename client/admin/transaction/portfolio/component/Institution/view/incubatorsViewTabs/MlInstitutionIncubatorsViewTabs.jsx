@@ -91,9 +91,9 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
     }
 
     let AllTabs =getTabs() ||[];
-    if(admin){
-      AllTabs.forEach(function(v){ delete v.key });
-    }
+    // if(admin){
+    //   AllTabs.forEach(function(v){ delete v.key });
+    // }
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
       this.setState({activeTab,tabs:AllTabs,admin});
@@ -110,10 +110,10 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    if(this.state.admin){
-      return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
-    }
-    else{
+    // if(this.state.admin){
+    //   return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    // }
+    // else{
       return <MlTabComponent tabs={tabs}
                              selectedTabKey={this.state.activeTab}
                              onChange={this.updateTab}
@@ -122,6 +122,6 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
       />
     }
 
-  }
+  // }
 }
 

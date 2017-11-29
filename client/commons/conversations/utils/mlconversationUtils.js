@@ -22,7 +22,11 @@ class ConversationUtils{
         }
       });
   }
-
+  /**
+   * Note: getting build version from endPoint: "getBuildVersion"
+   *      using same function for the login handler
+   *      endPoint written at mlAdminController and setting build version in localStorage
+   * */
   buildVersion(){
     loginHandler('getBuildVersion', function (response) {
       if(response && response.success){

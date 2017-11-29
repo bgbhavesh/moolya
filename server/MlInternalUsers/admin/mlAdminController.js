@@ -1001,6 +1001,5 @@ getBuildVersion = () => {
   const mm = (today.getMonth() + 1).toString(); //January is 0!
   const yy = today.getFullYear().toString().substr(-2);
   const finalResponse = response + ' / ' + dd + mm + yy;
-  console.log("response", response);
   return {success: true, buildVersion: finalResponse}
 };

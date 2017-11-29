@@ -159,6 +159,12 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                               mobileNumber
                               subChapterName
                             }
+                            deviceDetails{
+                              deviceName
+                              ipAddress
+                              deviceId
+                              location
+                            }
                             
                       }
                     }

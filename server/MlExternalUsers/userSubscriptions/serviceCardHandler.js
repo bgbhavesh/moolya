@@ -119,7 +119,8 @@ class MlserviceCardHandler{
     const isInternalUserCheck = getActiveUserDetail(context).isInternaluser;
     let res = true;
     const urlPath = context.url ? context.url : null;
-    const pathCheck = isInternalUserCheck ? urlPath.indexOf('app') : urlPath.indexOf('admin');
+    const urlSplit = urlPath ? urlPath.split('/') : [];
+    const pathCheck = isInternalUserCheck ? urlSplit.indexOf('app') : urlSplit.indexOf('admin');
     if (pathCheck != -1)
       res = false;
     return res

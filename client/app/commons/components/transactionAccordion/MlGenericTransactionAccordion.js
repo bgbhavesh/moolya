@@ -67,14 +67,17 @@ function getOfficeActivity(data) {
     }
     case 'officeBearerRetire': {
       console.log('officeBearerRetire')
+      return <MlEmptyView data={data} />
       break;
     }
     case 'principal': {
       console.log('principal')
+      return <MlEmptyView data={data} />
       break;
     }
     case 'officeBearerGoIndependent': {
       console.log('officeBearerGoIndependent')
+      return <MlEmptyView data={data} />
       break;
     }
     default:

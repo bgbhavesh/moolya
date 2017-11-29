@@ -102,12 +102,11 @@ export default class MlAppIdeatorIdeas extends React.Component {
                   <div className="col-md-4">
                     <img src="/images/ideas2.png"/>
                   </div>
-                  <div className="col-md-8">
-                    <h3>Get Started With Your Ideas</h3>
-                    <p>With wings to your dreams<br />
-                      and make them happen here
+                  <div className="col-md-8 text-center">
+                    <h3>Get Started with your ideas and grow your wings</h3>
+                    <p>Build your ideas on <span className="m_red">m</span><span className="m_yellow">oo</span><span className="m_red">lya</span>
                     </p>
-                    <a href="" className="ideabtn" onClick={this.addNewIdea.bind(this)}>pen down your idea</a>
+                    <a href="" className="ideabtn" onClick={this.addNewIdea.bind(this)}>Click to pen your ideas</a>
                   </div>
                 </div>
                 :

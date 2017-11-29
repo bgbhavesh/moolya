@@ -1,11 +1,11 @@
 import React from "react";
-import {render} from "react-dom";
 import MlAppRegCompany from "./MlAppRegCompany";
 import MlAppRegStep3 from "./MlAppRegStep3";
 import MlAppRegStep4 from "./MlAppRegStep4";
 import MlAppRegStep5 from "./MlAppRegStep5";
 import MlAppRegStep6 from "./MlAppRegStep6";
-// import MlAppRegStep7 from "./MlAppRegStep7";
+import MlAppRegStep7 from "./MlAppRegStep7";
+
 export default class MlAppStartupHardReg extends React.Component {
   constructor(props) {
     super(props);
@@ -39,11 +39,11 @@ export default class MlAppStartupHardReg extends React.Component {
         'icon': <span className="ml ml-payments"></span>,
         component: <MlAppRegStep6 {...props} />
       },
-      // {
-      //   name: 'History',
-      //   'icon': <span className="ml my-ml-history"></span>,
-      //   component: <MlAppRegStep7 {...props} />
-      // }
+      {
+        name: 'Submit',
+        'icon': <span className="ml my-ml-enter_arrow"></span>,
+        component: <MlAppRegStep7 {...props} />
+      }
     ];
     return hardRegSteps;
   }

@@ -4,6 +4,7 @@
 import MlUserContext from '../mlUserContext'
 import MlRespPayload from '../../commons/mlPayload'
 import _ from 'lodash'
+import {userAgent} from '../../commons/utils'
 
 import moment from "moment";
 import MlTransactionsHandler from '../../commons/mlTransactionsLog';
@@ -66,6 +67,12 @@ class MlServiceCardRepo{
               }
               return response
             }
+            let machineInfo =userAgent(context.browser);
+            var deviceInfo = {
+                deviceName: machineInfo.osName,
+                deviceId: machineInfo.osVersion,
+                ipAddress: context.ip
+            }
 
             var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName', 'communityCode'];
             var serviceCard                 = service;
@@ -75,6 +82,7 @@ class MlServiceCardRepo{
             serviceCard["versions"]         =  INITIAL_VERSION;
             serviceCard["isApproved"]       =  false;
             serviceCard["isCurrentVersion"] =  true;
+            serviceCard["deviceDetails"]    =  deviceInfo;
             orderNumberGenService.createServiceId(serviceCard);
             var userExternalProfile = new MlUserContext().userProfileDetailsByProfileId(service.profileId);
             if (userExternalProfile) {
@@ -162,6 +170,13 @@ class MlServiceCardRepo{
           return response
         }
 
+        let machineInfo =userAgent(context.browser);
+        var deviceInfo = {
+          deviceName: machineInfo.osName,
+          deviceId: machineInfo.osVersion,
+          ipAddress: context.ip
+        }
+        serviceCard["deviceDetails"] =  deviceInfo;
 
         if(servicecard.tasks){
           let taskIds = servicecard.tasks.map(function (task) { return task.id; });

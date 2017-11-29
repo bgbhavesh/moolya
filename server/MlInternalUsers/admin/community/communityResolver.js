@@ -612,6 +612,14 @@ MlResolver.MlQueryResolver['fetchCommunitiesSelect'] = (obj, args, context, info
 MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, context, info) =>
 {
   // TODO : Authorization
+  let user = new MlAdminUserContext().userProfileDetails(context.userId);
+  if(user.hierarchyLevel==0){
+    let allCommunity = user.defaultCommunities.map(function (item) {
+      let community = MlCommunityDefinition.findOne({code:item.communityCode});
+      return{"name":community.name, "code":community.code}
+    })
+    return allCommunity;
+  }
   let query;
   let communities = [];
   if(args.clusterId != "" && args.chapterId == "all" && args.subChapterId != "all" ){

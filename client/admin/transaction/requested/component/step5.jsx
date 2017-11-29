@@ -522,10 +522,11 @@ export default class Step5 extends React.Component {
         {showLoader === true ? ( <MlLoader/>) : (<div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           {Object.keys(registrationDocumentsGroup).map(function(key) {
+            var documentNames =  key.replace(/\b\w/g, l => l.toUpperCase())
             return (
               <div>
                <div className="col-md-12"> <div key={key} className="row">
-                     <h3>{key}</h3>
+                     <h3>{documentNames}</h3>
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(

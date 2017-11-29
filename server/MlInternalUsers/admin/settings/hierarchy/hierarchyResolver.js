@@ -360,8 +360,7 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
 
     }
   }else{
-
-      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}, {"$or":[{"roleType" : "moolya", "isNonMoolyaAvailable" : true},{"roleType" : "non-moolya"}]}]}, context).fetch()
+    var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}, {"$or":[{"isNonMoolyaAvailable" : true},{"roleType" : "non-moolya"}]}]}, context).fetch()
 
       if (levelCode == 'subChapter'){
           _.each(valueGet, function (item, say) {

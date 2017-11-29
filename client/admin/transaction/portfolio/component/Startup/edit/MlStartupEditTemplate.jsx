@@ -58,6 +58,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
+        name: "About",
         component: <MlStartupAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.backClickHandler.bind(this)}/>
@@ -65,6 +66,7 @@ class MlStartupEditTemplate extends Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        name: "Management",
         title: "Management",
         component: <MlStartupManagement client={client} isAdmin={true} key="2" tabName={"management"}
                                         getManagementDetails={this.getManagementDetails.bind(this)}
@@ -74,6 +76,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investor",
+        name: "Investor",
         component: <MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
@@ -81,6 +84,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
+        name: "Data",
         component: <MlStartupData key="4" isApp={false} isAdmin={true} client={client} getDataDetails={this.getDataDetails.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -88,6 +92,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Charts",
+        name: "Charts",
         component: <MlStartupCharts key="5" getChartDetails={this.getChartDetails.bind(this)} isAdmin={true}
                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -95,6 +100,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards",
+        name: "Awards",
         component: <MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
@@ -102,6 +108,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
+        name: "Library",
         component: <PortfolioLibrary key="7" client={client} isAdmin={false}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
@@ -109,6 +116,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "M C & L",
+        name: "M C And L",
         component: <MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -116,6 +124,7 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
+        name: "Looking For",
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
@@ -233,16 +242,25 @@ class MlStartupEditTemplate extends Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.name,
         getContent: () => tab.component
       }));
     }
-
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
+    }
     this.setState({tabs: getTabs() || []});
+  }
+
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
   }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }
 MlStartupEditTemplate.childContextTypes = {

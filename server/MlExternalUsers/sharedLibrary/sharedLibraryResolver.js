@@ -50,7 +50,7 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
       createdBy: userId
     };
 
-    orderNumberGenService.createShareId(dataToInsert);
+    dataToInsert.sharedId=orderNumberGenService.createShareLibraryId();
 
     if(libraryInput.sharedStartDate) {
       dataToInsert.sharedStartDate = libraryInput.sharedStartDate;

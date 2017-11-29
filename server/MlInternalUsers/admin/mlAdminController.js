@@ -66,6 +66,7 @@ const defaultServerConfig = {
   //microSite: '/*',
   view: '/view/*',
   buildVersion: '/buildVersion/:releaseType',
+  getBuildVersion: '/getBuildVersion',
   graphiqlOptions: {
     passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -897,10 +898,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
 
   if (config.buildVersion) {
     graphQLServer.options('/buildVersion', cors());
-    graphQLServer.post(config.buildVersion, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+    graphQLServer.get(config.buildVersion, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       const response = updateBuildVersion(req);
+      res.send(response);
+    }))
+  }
+
+  if (config.getBuildVersion) {
+    graphQLServer.options('/buildVersion', cors());
+    graphQLServer.post(config.getBuildVersion, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      const response = getBuildVersion(req);
       res.send(response);
     }))
   }
@@ -930,54 +941,66 @@ createApolloServer(defaultGraphQLOptions, defaultServerConfig);
  * */
 updateBuildVersion = (request) => {
   const id = "releases";
-  var statusUpdate = null;
-  var returnResponse = {success: false, dbUpdate: false};
-
+  let statusUpdate = null;
+  let returnResponse = {success: false};
+  let mongoQuery = null;
   const releaseType = request.params && request.params.releaseType ? request.params.releaseType.toUpperCase() : null;
-  if (releaseType === "MAJOR") {
 
-    statusUpdate = MlBuildVersion.update({_id: id}, {
-      $inc: {majorPatch: 1},
-      $set: {
-        minorPatch: 0,
-        hotPatch: 0,
-        latestRelease: releaseType,
-        updatedAt: new Date()
-      }
-    }, {upsert: true});
-    returnResponse.success = true;
-
-  } else if (releaseType === "MINOR") {
-
-    statusUpdate = MlBuildVersion.update({_id: id}, {
-      $inc: {minorPatch: 1},
-      $set: {
-        hotPatch: 0,
-        latestRelease: releaseType,
-        updatedAt: new Date()
-      }
-    }, {upsert: true});
-    returnResponse.success = true;
-
-  } else if (releaseType === "HOT") {
-
-    statusUpdate = MlBuildVersion.update({_id: id}, {
-      $inc: {hotPatch: 1},
-      $set: {latestRelease: releaseType, updatedAt: new Date()}
-    }, {upsert: true});
-    returnResponse.success = true;
-
-  } else {
-    returnResponse.success = false
+  switch (releaseType) {
+    case "MAJOR":
+      mongoQuery = {
+        $inc: {majorPatch: 1},
+        $set: {
+          minorPatch: 0,
+          hotPatch: 0,
+          latestRelease: releaseType,
+          updatedAt: new Date()
+        }
+      };
+      returnResponse.success = true;
+      break;
+    case "MINOR":
+      mongoQuery = {
+        $inc: {minorPatch: 1},
+        $set: {
+          hotPatch: 0,
+          latestRelease: releaseType,
+          updatedAt: new Date()
+        }
+      };
+      returnResponse.success = true;
+      break;
+    case "HOT":
+      mongoQuery = {
+        $inc: {hotPatch: 1},
+        $set: {latestRelease: releaseType, updatedAt: new Date()}
+      };
+      returnResponse.success = true;
+      break;
+    default:
+      returnResponse.success = false
   }
   returnResponse.releaseType = releaseType;
 
-  if (statusUpdate) {
-    const patch = MlBuildVersion.findOne({_id: id}) || {}
-    returnResponse.majorPatch = patch.majorPatch ? patch.majorPatch : 0;
-    returnResponse.minorPatch = patch.minorPatch ? patch.minorPatch : 0;
-    returnResponse.hotPatch = patch.hotPatch ? patch.hotPatch : 0;
-    returnResponse.dbUpdate = true;
+  if (returnResponse && returnResponse.success && mongoQuery) {
+    statusUpdate = MlBuildVersion.update({_id: id}, mongoQuery, {upsert: true});
+    const patch = MlBuildVersion.findOne({_id: id}) || {};
+    returnResponse.majorPatch = patch.majorPatch;
+    returnResponse.minorPatch = patch.minorPatch;
+    returnResponse.hotPatch = patch.hotPatch;
+    returnResponse.statusUpdate = statusUpdate;
   }
   return returnResponse
+};
+
+getBuildVersion = () => {
+  const getPatch = MlBuildVersion.findOne({_id: "releases"}) || {};
+  let response = getPatch.majorPatch+"."+ getPatch.minorPatch+"."+ getPatch.hotPatch;
+  const today = new Date(getPatch.updatedAt);
+  const dd = today.getDate().toString();
+  const mm = (today.getMonth() + 1).toString(); //January is 0!
+  const yy = today.getFullYear().toString().substr(-2);
+  const finalResponse = response + ' / ' + dd + mm + yy;
+  console.log("response", response);
+  return {success: true, buildVersion: finalResponse}
 };

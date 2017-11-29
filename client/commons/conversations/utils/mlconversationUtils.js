@@ -23,6 +23,15 @@ class ConversationUtils{
       });
   }
 
+  buildVersion(){
+    loginHandler('getBuildVersion', function (response) {
+      if(response && response.success){
+        rkConversations.init();
+        rkConversations.utils.setBuildVersionToken(response.buildVersion);
+      }
+    });
+  }
+
   init(){
     rkConversations.init();
     rkConversations.connect(url)

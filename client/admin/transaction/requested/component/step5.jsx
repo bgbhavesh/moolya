@@ -22,6 +22,7 @@ import gql from 'graphql-tag'
 import {createKYCDocument} from '../actions/createKYCDocumentAction'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from "../../../../commons/components/loader/loader";
+var convertS = require('unit-converter');
 export default class Step5 extends React.Component {
   constructor(props) {
     super(props);
@@ -288,14 +289,19 @@ export default class Step5 extends React.Component {
      kycDoc=_.find(processDocument, function(item) {
        return item.docTypeId==docTypeId&&item.documentId == documentId;
      });
-    let fileName=file.name
+    let fileName=file&&file.name?file.name:""
      let fileFormate=fileName.split('.').pop()
-     let docFormate=kycDoc.allowableFormat[0]
+     let docFormate=kycDoc&&kycDoc.allowableFormat&&kycDoc.allowableFormat[0]?kycDoc.allowableFormat[0]:{}
      console.log(docFormate)
      let lowerDocFormate=docFormate.toLowerCase();
      console.log(lowerDocFormate)
     let docResponse=_.includes(lowerDocFormate, fileFormate);
-    if(docResponse){
+
+     let documentAllowableSize = convertS(kycDoc&&kycDoc.allowableMaxSize?kycDoc.allowableMaxSize:null).to('B');
+     let uploadedDocSize = file&&file.size?file.size:""
+     if(uploadedDocSize > documentAllowableSize){
+       toastr.error("Please upload documents only in the permitted file size")
+     }else if(docResponse){
       let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
         if(response){
@@ -516,10 +522,11 @@ export default class Step5 extends React.Component {
         {showLoader === true ? ( <MlLoader/>) : (<div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           {Object.keys(registrationDocumentsGroup).map(function(key) {
+            var documentNames =  key.replace(/\b\w/g, l => l.toUpperCase())
             return (
               <div>
                <div className="col-md-12"> <div key={key} className="row">
-                     <h3>{key}</h3>
+                     <h3>{documentNames}</h3>
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(

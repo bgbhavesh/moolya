@@ -146,19 +146,19 @@ export default class MlAppRegistrationWizard extends Component {
       registrationId: registrationId,
       userType: this.context.userType,
       getRegistrationDetails: this.getRegistrationDetails.bind(this),
-      registrationInfo: this.state.registrationDetails.registrationInfo,
+      registrationInfo: this.state.registrationDetails && this.state.registrationDetails.registrationInfo ? this.state.registrationDetails.registrationInfo :"",
       refetchRegistrationAndTemplates: this.refetchRegistrationAndTemplates.bind(this),
 
-      registrationDetails: this.state.registrationDetails.registrationDetails,
-      community: this.state.registrationDetails.registrationInfo ? this.state.registrationDetails.registrationInfo.communityName : null,
+      registrationDetails: this.state.registrationDetails && this.state.registrationDetails.registrationDetails ? this.state.registrationDetails.registrationDetails : "" ,
+      community: this.state.registrationDetails && this.state.registrationDetails.registrationInfo && this.state.registrationDetails.registrationInfo.communityName ? this.state.registrationDetails.registrationInfo.communityName : null,
 
       getRegistrationContactDetails: this.getRegistrationContactDetails.bind(this),
       registrationData: this.state.registrationDetails,
-      clusterId: this.state.registrationDetails.registrationInfo ? this.state.registrationDetails.registrationInfo.clusterId : null,
+      clusterId: this.state.registrationDetails && this.state.registrationDetails.registrationInfo && this.state.registrationDetails.registrationInfo.clusterId ? this.state.registrationDetails.registrationInfo.clusterId : null,
 
       getRegistrationSocialLinks: this.getRegistrationSocialLinks.bind(this),
       registrationData: this.state.registrationDetails,
-      uploadedProfileImg: this.state.registrationDetails.registrationInfo ? this.state.registrationDetails.registrationInfo.profileImage : null,
+      uploadedProfileImg: this.state.registrationDetails && this.state.registrationDetails.registrationInfo && this.state.registrationDetails.registrationInfo.profileImage ? this.state.registrationDetails.registrationInfo.profileImage : null,
 
       getRegistrationKYCDetails: this.getRegistrationKYCDetails.bind(this),
       registrationData: this.state.registrationDetails,

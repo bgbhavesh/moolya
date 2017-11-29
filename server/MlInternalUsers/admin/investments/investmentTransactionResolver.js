@@ -5,6 +5,7 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlSMSNotification from "../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
+import {userAgent} from '../../../commons/utils'
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
 }
@@ -75,6 +76,13 @@ MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context,
         portfolioId: args.portfoliodetails.portfolioId
       }, context)
       if (!trans) {
+        let machineInfo = userAgent(context.browser);
+        var deviceInfo = {
+          deviceName: machineInfo.osName,
+          deviceId: machineInfo.osVersion,
+          ipAddress: context.ip
+        }
+        args.portfoliodetails["deviceDetails"] =  deviceInfo;
         orderNumberGenService.assignProcessSetupTransaction(args.portfoliodetails)
         ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
       }else{
@@ -97,7 +105,14 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
   if(args.processTransactionId){
     let ret;
     let processSetup = mlDBController.findOne('MlProcessSetup', {processTransactionId:args.processTransactionId}, context)
-
+    let machineInfo = userAgent(context.browser);
+    var deviceInfo = {
+      deviceName: machineInfo.osName,
+      deviceId: machineInfo.osVersion,
+      ipAddress: context.ip
+    }
+    args.processSetup["deviceDetails"] =  deviceInfo;
+    processSetup["deviceDetails"] =  deviceInfo;
     if(processSetup){
         try{
           ret = mlDBController.update('MlProcessSetup', {processTransactionId:args.processTransactionId}, args.processSetup, {$set:true}, context)

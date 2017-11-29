@@ -22,6 +22,7 @@ import gql from 'graphql-tag'
 import {createKYCDocument} from '../actions/createKYCDocumentAction'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from "../../../../commons/components/loader/loader";
+var convertS = require('unit-converter');
 export default class Step5 extends React.Component {
   constructor(props) {
     super(props);
@@ -288,14 +289,19 @@ export default class Step5 extends React.Component {
      kycDoc=_.find(processDocument, function(item) {
        return item.docTypeId==docTypeId&&item.documentId == documentId;
      });
-    let fileName=file.name
+    let fileName=file&&file.name?file.name:""
      let fileFormate=fileName.split('.').pop()
-     let docFormate=kycDoc.allowableFormat[0]
+     let docFormate=kycDoc&&kycDoc.allowableFormat&&kycDoc.allowableFormat[0]?kycDoc.allowableFormat[0]:{}
      console.log(docFormate)
      let lowerDocFormate=docFormate.toLowerCase();
      console.log(lowerDocFormate)
     let docResponse=_.includes(lowerDocFormate, fileFormate);
-    if(docResponse){
+
+     let documentAllowableSize = convertS(kycDoc&&kycDoc.allowableMaxSize?kycDoc.allowableMaxSize:null).to('B');
+     let uploadedDocSize = file&&file.size?file.size:""
+     if(uploadedDocSize > documentAllowableSize){
+       toastr.error("Please documents only in the permitted file size")
+     }else if(docResponse){
       let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
         if(response){

@@ -34,7 +34,7 @@ if(Meteor.isServer){
         "link": "/app/task",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Task",
+        "name" : "Tasks",
         "uniqueId" : "my_task"
       },
       {

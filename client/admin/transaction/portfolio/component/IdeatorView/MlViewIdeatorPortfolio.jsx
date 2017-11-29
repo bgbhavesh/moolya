@@ -14,7 +14,7 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
   constructor(props, context){
     super(props)
     console.log(context)
-    this.state =  {tabs: [], portfolioIdeatorInfo:{}};
+    this.state =  {tabs: [], portfolioIdeatorInfo:{},activeTab:'The Idea'};
   }
 
 
@@ -42,6 +42,7 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
@@ -70,8 +71,13 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
     return tabs;
   }
 
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
+
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
   }
 }

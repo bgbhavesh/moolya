@@ -1,4 +1,4 @@
-
+import {logoutActionHandler} from "../actions/logoutAction";
 export let loginContainer = {
     login(username, password, callback){
         Meteor.loginWithPassword({username:username},password, function (result)
@@ -15,8 +15,8 @@ export let loginContainer = {
              }
         })
     },
-
-    logout(callback){
+    /*this function is depricated.*/
+    depricatedLogout(callback){
         let originalLogout = Meteor.logout;
         Meteor.logout()
         {
@@ -31,6 +31,20 @@ export let loginContainer = {
               callback();
             }
         }
-    }
+    },
+  logout(callback){
+    const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
+    const logoutPromise =  logoutActionHandler(localStorageLoginToken);
+    logoutPromise.then(res =>{
+      //handle logout success
+      if(res&&res.data&&res.data.logout&&res.data.logout.success){
+        if(callback)callback();
+        //handle logout failure
+      }else{
+
+      };
+    });
+
+  }
 }
 

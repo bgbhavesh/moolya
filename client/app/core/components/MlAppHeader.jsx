@@ -1,21 +1,16 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
+import _ from 'lodash';
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
 import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
-import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
-var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
 import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
-import _ from 'lodash';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
+import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
+var FontAwesome = require('react-fontawesome');
 
-const today = new Date();
-const dd = today.getDate().toString();
-const mm = (today.getMonth()+1).toString(); //January is 0!
-const yy = today.getFullYear().toString().substr(-2)
-const curDate = dd+mm+yy;
+const build_versionToken = localStorage.getItem('build_version');
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
@@ -135,7 +130,7 @@ class MlAppProfileHeader extends Component {
 
         <div className="overlay"></div>
         <div className="filter_overlay"></div>
-        <span className="version">Ver.&beta;eta 1.0.1 / {curDate}</span>
+        <span className="version">Ver.&beta;eta {build_versionToken}</span>
         {breadcrumType ?
           <DynamicBreadcrum/>
           :

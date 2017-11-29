@@ -240,6 +240,15 @@ export default class MlAudienceView extends Component{
                                 </div>
                             </div>
                         </div>
+
+
+                      <div className="panel panel-default">
+                        <div className="panel-heading">Images</div>
+                         <div className="panel-body nopadding">
+                            {audienceImages}
+                         </div>
+                      </div>
+
                     </div>
               </div>
           </div>

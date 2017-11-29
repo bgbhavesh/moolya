@@ -332,7 +332,7 @@ export default class MlAppChooseTeam extends React.Component{
             <div className="col-md-12 nopadding-left" key={index}>
               <div className="panel panel-default cal_view_task">
                 <div className="panel-heading">
-                  Suggestable teams
+                  Suggested teams
                   <span className="see-more pull-right">
                     { index == 0
                       ?

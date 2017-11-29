@@ -21,8 +21,7 @@ export let loginActionHandler = {
                 FlowRouter.redirect("/app");
                 mlConversationUtils.login()
             }
-
-
+            mlConversationUtils.buildVersion();
         });
     },
     onLogout(callback){

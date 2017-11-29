@@ -2,37 +2,37 @@
  * Created by pankaj on 3/6/17.
  */
 
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {resetPasswordActionHandler} from '../actions/resetPassword'
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { resetPasswordActionHandler } from '../actions/resetPassword'
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 MlResetPasswordContent = React.createClass({
 
-  async submit(){
+  async submit() {
     // let errMessages = {"userName": "A valid username is required"};
-    let password = this.refs.password.value;
-    let conformPassword = this.refs.conformPassword.value;
+    const password = this.refs.password.value;
+    const conformPassword = this.refs.conformPassword.value;
 
-    var validate = passwordSAS_validate(password);
-    if (!validate.isValid && typeof (validate) == 'object') {
-      toastr.error('Password '+ validate.errorMsg);
+    const validate = passwordSAS_validate(password);
+    if (!validate.isValid && typeof (validate) === 'object') {
+      toastr.error(`Password ${validate.errorMsg}`);
       return;
     }
 
-    if(password == conformPassword){
-      let token = FlowRouter.getParam('token');
+    if (password == conformPassword) {
+      const token = FlowRouter.getParam('token');
       // let response = await resetPasswordActionHandler(token, password);
-      let data={token:token,password:password};
-      var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+      const data = { token, password };
+      const header = { apiKey: '741432fd-8c10-404b-b65c-a4c4e9928d32' };
       $.ajax({
         type: 'POST',
         dataType: 'json',
         url: Meteor.absoluteUrl('resetPassword'),
-        data :JSON.stringify(data),
+        data: JSON.stringify(data),
         headers: header,
-        contentType: "application/json; charset=utf-8",
-        success:function(response){
-          if(response.success){
+        contentType: 'application/json; charset=utf-8',
+        success(response) {
+          if (response.success) {
             toastr.success(response.result);
             FlowRouter.go('/login');
           } else {

@@ -3,10 +3,10 @@
  */
 import React from 'react';
 // import {fetchInstitutionDetailsHandler} from '../../actions/findPortfolioInstitutionDetails'
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
+import { validateUserForAnnotation } from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 const KEY = 'clients'
@@ -14,22 +14,21 @@ const KEY = 'clients'
 export default class MlInstitutionViewClients extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionBranchesList: []};
+    this.state = { institutionBranchesList: [] };
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
   }
 
   componentDidMount() {
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
   }
 
 
-  componentWillMount(){
-    let resp = this.validateUserForAnnotation();
+  componentWillMount() {
+    const resp = this.validateUserForAnnotation();
     return resp
   }
 
@@ -37,7 +36,7 @@ export default class MlInstitutionViewClients extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -69,19 +68,18 @@ export default class MlInstitutionViewClients extends React.Component {
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -93,16 +91,15 @@ export default class MlInstitutionViewClients extends React.Component {
         } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
   async createAnnotations(annotation) {
-    let details = {
+    const details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "institutionClients",
+      docId: 'institutionClients',
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -114,23 +111,23 @@ export default class MlInstitutionViewClients extends React.Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionClients");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'institutionClients');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName": value.roleName,
-        "profileImage": value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -148,26 +145,24 @@ export default class MlInstitutionViewClients extends React.Component {
   // }
 
   render() {
-    let that = this;
+    const that = this;
     // let branchesArray = that.state.institutionBranchesList || [];
-    let clientsArray = that.props.clientsDetails || [];
+    const clientsArray = that.props.clientsDetails || [];
     return (
       <div id="annotatorContent">
         <h2>Clients</h2>
-        {clientsArray && clientsArray.length?<div className="col-lg-12">
+        {clientsArray && clientsArray.length ? <div className="col-lg-12">
           <div className="row">
-            {clientsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo && generateAbsolutePath(details.logo.fileUrl)} className="team_img"/>
-                  <h3>
-                    {details.companyName && details.companyName} <br />
-                  </h3>
-                </div>
-              </div>)
-            })}
+            {clientsArray.map((details, idx) => (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+              <div className="team-block">
+                <img src={details.logo && generateAbsolutePath(details.logo.fileUrl)} className="team_img"/>
+                <h3>
+                  {details.companyName && details.companyName} <br />
+                </h3>
+              </div>
+            </div>))}
           </div>
-        </div>:(<NoData tabName={this.props.tabName}/>)}
+        </div> : (<NoData tabName={this.props.tabName}/>)}
       </div>
     )
   }

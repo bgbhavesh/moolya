@@ -3,11 +3,10 @@
  */
 
 import React from 'react';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlOfficeTableConfig} from "../config/MlOfficeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlOfficeTableConfig } from '../config/MlOfficeConfig';
 
 export default class EditTaxation extends React.Component {
-
   render() {
     return (
       <div className="admin_main_wrap">
@@ -18,4 +17,4 @@ export default class EditTaxation extends React.Component {
       </div>
     );
   }
-};
+}

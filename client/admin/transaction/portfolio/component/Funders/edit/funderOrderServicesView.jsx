@@ -1,19 +1,18 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-var FontAwesome = require('react-fontawesome');
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
+const FontAwesome = require('react-fontawesome');
 
 export default class FunderOrderServicesView extends Component {
   componentDidMount() {
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    $(function () {
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    $(() => {
       $('.float-label').jvFloat();
     });
 
     $('.switch input').change(function () {
       if ($(this).parent().hasClass('nocolor-switch')) {
-
         if ($(this).is(':checked')) {
           $('.state_label:nth-of-type(1)').removeClass('acLabel');
           $('.state_label:nth-of-type(2)').addClass('acLabel');
@@ -21,18 +20,16 @@ export default class FunderOrderServicesView extends Component {
           $('.state_label:nth-of-type(2)').removeClass('acLabel');
           $('.state_label:nth-of-type(1)').addClass('acLabel');
         }
+      } else if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
       } else {
-        if ($(this).is(':checked')) {
-          $(this).parent('.switch').addClass('on');
-        } else {
-          $(this).parent('.switch').removeClass('on');
-        }
+        $(this).parent('.switch').removeClass('on');
       }
     });
 
     $('.tab_wrap_scroll').height(WinHeight - ($('.app_header').outerHeight(true) + 120));
     if (WinWidth > 768) {
-      $(".tab_wrap_scroll").mCustomScrollbar({theme: "minimal-dark"});
+      $('.tab_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
     }
   }
 
@@ -140,7 +137,7 @@ export default class FunderOrderServicesView extends Component {
                     <FontAwesome name='clock-o'/> &nbsp; 10:00 - 10:30 am (GST)
                   </div>
                   <div className="col-md-3 nopadding-right">
-                    <div className="ml_btn" style={{'textAlign': 'left'}}>
+                    <div className="ml_btn" style={{ textAlign: 'left' }}>
                       <a href="" className="save_btn"><FontAwesome name='pencil'/> &nbsp; Change</a>
                     </div>
                   </div>
@@ -161,7 +158,7 @@ export default class FunderOrderServicesView extends Component {
                         <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
                           src="/images/sub_default.jpg"/></li>
                       </ul>
-                      <p className="show-information" style={{'display': 'none'}}>text</p>
+                      <p className="show-information" style={{ display: 'none' }}>text</p>
                     </div>
                   </div>
                   <div className="panel panel-default uploaded_files">
@@ -179,43 +176,43 @@ export default class FunderOrderServicesView extends Component {
                         <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
                           src="/images/sub_default.jpg"/></li>
                       </ul>
-                      <p className="show-information" style={{'display': 'none'}}>text</p>
+                      <p className="show-information" style={{ display: 'none' }}>text</p>
                     </div>
                   </div>
                   <table className="table">
                     <thead>
-                    <tr>
-                      <th>
+                      <tr>
+                        <th>
                         Cost
-                      </th>
-                    </tr>
+                        </th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td>Actual Amount</td>
-                      <td>: 5,000 INR</td>
-                    </tr>
-                    <tr>
-                      <td>Offer Amount</td>
-                      <td>: 500 INR</td>
-                    </tr>
-                    <tr>
-                      <td>Tax</td>
-                      <td>: 200 INR</td>
-                    </tr>
-                    <tr>
-                      <td>Total Amount</td>
-                      <td>: 5,700 INR</td>
-                    </tr>
-                    <tr>
-                      <td>&nbsp;</td>
-                      <td>
-                        <div className="ml_btn" style={{'textAlign': 'left'}}>
-                          <a href="" className="save_btn">Book</a>
-                          <a href="" className="cancel_btn">Cancel</a>
-                        </div>
-                      </td>
-                    </tr>
+                      <tr>
+                        <td>Actual Amount</td>
+                        <td>: 5,000 INR</td>
+                      </tr>
+                      <tr>
+                        <td>Offer Amount</td>
+                        <td>: 500 INR</td>
+                      </tr>
+                      <tr>
+                        <td>Tax</td>
+                        <td>: 200 INR</td>
+                      </tr>
+                      <tr>
+                        <td>Total Amount</td>
+                        <td>: 5,700 INR</td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                          <div className="ml_btn" style={{ textAlign: 'left' }}>
+                            <a href="" className="save_btn">Book</a>
+                            <a href="" className="cancel_btn">Cancel</a>
+                          </div>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </form>
@@ -249,4 +246,4 @@ export default class FunderOrderServicesView extends Component {
       </div>
     )
   }
-};
+}

@@ -8,19 +8,18 @@
 /**
  * Imports libs and components
  */
-import React from "react";
-import { initalizeFloatLabel, OnToggleSwitch } from "../../../../../../commons/utils/formElemUtil";
+import React from 'react';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../../../../commons/utils/formElemUtil';
 import MlServiceManageSchedule from './MlServicesComponent'
-import _ from "lodash";
+import _ from 'lodash';
 import {
   getServiceBasedOnServiceId,
   fetchTaskDetailsForAdminServiceCard
 } from '../../action/mlFindService'
 // import { getAdminUserContext } from '../../../../../commons/getAdminUserContext';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlServiceCardsDetailsComponent extends React.Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
@@ -114,7 +113,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
   async getServiceDetails() {
-    let resp = await getServiceBasedOnServiceId(this.state.serviceId, this.loggedUserDetails);
+    const resp = await getServiceBasedOnServiceId(this.state.serviceId, this.loggedUserDetails);
     if (resp) {
       this.constructServiceData(resp);
     }
@@ -126,14 +125,16 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    * @returns Void
    */
   async constructServiceData(serviceDeatails) {
-    let { serviceBasicInfo, finalAmount, prevFinalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge } = this.state.data;
+    let {
+      serviceBasicInfo, finalAmount, prevFinalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge
+    } = this.state.data;
     let { data } = this.state;
     const resp = await fetchTaskDetailsForAdminServiceCard(this.state.profileId, this.state.serviceId, {});
     serviceTask.serviceTaskDetails = resp;
     if (this.state.serviceId && serviceDeatails) {
       service = serviceDeatails;
       tasks = [];
-      let { state, city, community } = service;
+      const { state, city, community } = service;
       finalAmount = service.finalAmount || 0;
       prevFinalAmount = service.finalAmount || 0;
       serviceBasicInfo = {
@@ -155,12 +156,12 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
       tasks = _.cloneDeep(service.tasks) || [];
       tasks.sessions = _.cloneDeep(service.tasks.sessions) || [];
       serviceTask.serviceOptionTasks = [];
-      let attachmentDetails = [];
+      const attachmentDetails = [];
       serviceTask.tasks = service.tasks || [];
       if (serviceTask.serviceTaskDetails && serviceTask.serviceTaskDetails.length > 0) {
         serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, service.tasks, 'id');
         serviceTask.serviceTaskDetails.forEach((task, key) => {
-          if (service.tasks.map((data) => data.id).indexOf(task.id) === -1) {
+          if (service.tasks.map(data => data.id).indexOf(task.id) === -1) {
             serviceTask.serviceOptionTasks.push(task);
           }
         });
@@ -180,55 +181,54 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
       }
       if (service.payment) {
         servicePayment = _.cloneDeep(service.payment);
-        servicePayment.isTaxInclusive = servicePayment.isTaxInclusive ? true : false;
+        servicePayment.isTaxInclusive = !!servicePayment.isTaxInclusive;
         taxStatus = servicePayment.isTaxInclusive ? 'taxinclusive' : 'taxexclusive';
       }
       attachments = _.cloneDeep(attachmentDetails);
       if (state && state.length > 0) {
-        let states = [];
+        const states = [];
         state.forEach((data) => {
           states.push(data.id);
         });
         clusterData.state = states;
       }
       if (city && city.length > 0) {
-        let cities = [];
+        const cities = [];
         city.forEach((data) => {
           cities.push(data.id);
         });
         clusterData.chapters = cities;
       }
       if (community && community.length > 0) {
-        let communities = [];
+        const communities = [];
         community.forEach((data) => {
           communities.push(data.id);
         });
         clusterData.community = communities;
       }
     }
-    var validTillDate = Date.parse(serviceBasicInfo.validTill);
-    var currentDate = new Date();
+    const validTillDate = Date.parse(serviceBasicInfo.validTill);
+    const currentDate = new Date();
     let remainingDate = Math.floor((validTillDate - currentDate) / (1000 * 60 * 60 * 24));
     remainingDate = isNaN(remainingDate) ? '' : remainingDate;
     data = {
-      serviceBasicInfo: serviceBasicInfo,
+      serviceBasicInfo,
       daysRemaining: remainingDate,
-      clusterData: clusterData,
-      serviceTask: serviceTask,
-      serviceTermAndCondition: serviceTermAndCondition,
-      attachments: attachments,
-      service: service,
-      tasks: tasks,
-      facilitationCharge: facilitationCharge,
-      servicePayment: servicePayment,
-      taxStatus: taxStatus,
+      clusterData,
+      serviceTask,
+      serviceTermAndCondition,
+      attachments,
+      service,
+      tasks,
+      facilitationCharge,
+      servicePayment,
+      taxStatus,
       isLoding: true,
-      finalAmount: finalAmount,
-      prevFinalAmount: prevFinalAmount,
+      finalAmount,
+      prevFinalAmount,
       userDetails: {}
     };
-    this.setState({ data: data });
-    return;
+    this.setState({ data });
   }
 
   /**
@@ -238,17 +238,16 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
   render() {
-    let that = this;
+    const that = this;
     if (!this.state.data.isLoding) {
       return null;
     }
     return (
-      <MlServiceManageSchedule data={this.state.data}
+      <MlServiceManageSchedule
+        data={this.state.data}
         profileId={this.state.profileId}
         serviceId={this.state.serviceId} />
     );
   }
 }
-
-
 

@@ -3,33 +3,34 @@
  */
 import React from 'react';
 export default class MlConnectionRequestPresentation extends React.Component {
-
   componentDidMount() {
     $('.float-label').jvFloat();
   }
 
   render() {
-    console.log('MlPre: ',this.props);
-    const { userDetails, activityLog, canAccept, canReject } = this.props;
-    let transId = Math.random().toString(36).slice(2); //userDetails.userId;
+    console.log('MlPre: ', this.props);
+    const {
+      userDetails, activityLog, canAccept, canReject
+    } = this.props;
+    const transId = Math.random().toString(36).slice(2); // userDetails.userId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href={"#1a"+transId} data-toggle="tab">Details</a>
+            <a href={`#1a${transId}`} data-toggle="tab">Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} data-toggle="tab">Activity Log</a>
+            <a href={`#2a${transId}`} data-toggle="tab">Activity Log</a>
           </li>
-          {/*<li>*/}
-            {/*<a href={"#3a"+transId} data-toggle="tab">Device Details</a>*/}
-          {/*</li>*/}
+          {/* <li> */}
+          {/* <a href={"#3a"+transId} data-toggle="tab">Device Details</a> */}
+          {/* </li> */}
           <li>
-            <a href={"#4a"+transId} data-toggle="tab">History</a>
+            <a href={`#4a${transId}`} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id={"1a"+transId}>
+          <div className="tab-pane active" id={`1a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -67,7 +68,7 @@ export default class MlConnectionRequestPresentation extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"2a"+transId}>
+          <div className="tab-pane" id={`2a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -85,13 +86,13 @@ export default class MlConnectionRequestPresentation extends React.Component {
               </div>
               <div className="col-md-6">
                 <div className="ml_btn">
-                  {canAccept&&<a href="" className="save_btn" onClick={this.props.acceptConnectionHandler.bind(this)}>Accept</a>}
-                  {canReject&&<a href="" className="cancel_btn" onClick={this.props.rejectConnectionHandler.bind(this)}>Reject</a>}
+                  {canAccept && <a href="" className="save_btn" onClick={this.props.acceptConnectionHandler.bind(this)}>Accept</a>}
+                  {canReject && <a href="" className="cancel_btn" onClick={this.props.rejectConnectionHandler.bind(this)}>Reject</a>}
                 </div>
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"3a"+transId}>
+          <div className="tab-pane" id={`3a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -111,7 +112,7 @@ export default class MlConnectionRequestPresentation extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"4a"+transId}>
+          <div className="tab-pane" id={`4a${transId}`}>
             <div className="row">
               <div className="col-md-12">
                 <b>No data available.</b>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addAddressTypeActionHandler} from '../actions/addAddressTypeAction'
+import { addAddressTypeActionHandler } from '../actions/addAddressTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../utils/formElemUtil';
 
 
-class MlAddAddressType extends React.Component{
+class MlAddAddressType extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -18,50 +18,49 @@ class MlAddAddressType extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
-    var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    OnToggleSwitch(true, true);
+    const WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
-    const resp=await this.createAddressType();
+    const resp = await this.createAddressType();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
+    FlowRouter.go('/admin/settings/addressTypeList');
+  }
 
-    FlowRouter.go("/admin/settings/addressTypeList");
-  };
-
-  async  createAddressType() {
-    let Details = {
+  async createAddressType() {
+    const Details = {
       addressName: this.refs.name.value,
       addressDisplayName: this.refs.displayName.value,
       aboutAddress: this.refs.about.value,
       // addressUploadIcon : this.refs.upload.value,
-      isActive: this.refs.status.checked,
+      isActive: this.refs.status.checked
     }
     const response = await addAddressTypeActionHandler(Details);
     return response;
   }
 
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/addressTypeList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/addressTypeList')
         }
       }
     ]
@@ -95,12 +94,12 @@ class MlAddAddressType extends React.Component{
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
                   </div>
                   <br className="brclear"/>
-                  {/*<div className="form-group ">*/}
-                    {/*<div className="fileUpload mlUpload_btn">*/}
-                      {/*<span>Upload Icon</span>*/}
-                      {/*<input type="file" className="upload" ref="upload"/>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
+                  {/* <div className="form-group "> */}
+                  {/* <div className="fileUpload mlUpload_btn"> */}
+                  {/* <span>Upload Icon</span> */}
+                  {/* <input type="file" className="upload" ref="upload"/> */}
+                  {/* </div> */}
+                  {/* </div> */}
                   <br className="brclear"/>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">
@@ -119,6 +118,6 @@ class MlAddAddressType extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddAddressType = formHandler()(MlAddAddressType);

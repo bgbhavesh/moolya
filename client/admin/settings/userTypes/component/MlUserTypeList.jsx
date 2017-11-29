@@ -1,9 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlUserTypeTableConfig} from "../config/mlUserTypeConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlUserTypeTableConfig } from '../config/mlUserTypeConfig';
 export default class MlUserTypeList extends Component {
-
   componentDidMount() {
   }
 

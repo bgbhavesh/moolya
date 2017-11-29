@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlAddressTypeTableConfig} from "../config/mlAddressTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlAddressTypeTableConfig } from '../config/mlAddressTypeConfig';
 export default class MlAddressTypeList extends Component {
-
   componentDidMount() {
   }
 

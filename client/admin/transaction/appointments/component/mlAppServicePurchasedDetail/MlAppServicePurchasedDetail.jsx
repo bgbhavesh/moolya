@@ -4,11 +4,10 @@
 
 import React from 'react';
 import AppointmentSes from './appointmentSession';
-import { fetchAdminServiceAppointment } from "../../action/fetchAdminServiceAppointment";
+import { fetchAdminServiceAppointment } from '../../action/fetchAdminServiceAppointment';
 import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCardsDetailsComponent';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -33,10 +32,10 @@ export default class MlAppServicePurchasedDetail extends React.Component {
   }
 
   async fetchAdminServiceAppointment() {
-    let orderId = this.state.orderId;
+    const orderId = this.state.orderId;
     const that = this;
     if (orderId) {
-      let response = await fetchAdminServiceAppointment(orderId);
+      const response = await fetchAdminServiceAppointment(orderId);
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
@@ -45,14 +44,13 @@ export default class MlAppServicePurchasedDetail extends React.Component {
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
         data.service = data.service ? data.service : {};
         that.setState({
-          data: data
+          data
         });
       }
     }
   }
 
   render() {
-
     const { data } = this.state;
 
     return (
@@ -119,7 +117,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
 
             </div>
           </div>
-          {/*second tab*/}
+          {/* second tab */}
           <div className="tab-pane" id={`${data.orderId}2a`}>
             <div className="row">
               <div className="col-md-6">
@@ -162,22 +160,22 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="form-group">
                   <input type="text" placeholder="Gender" value={data.owner.gender} defaultValue="" className="form-control float-label" id="" />
                 </div>
-                {/*<a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>*/}
+                {/* <a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a> */}
               </div>
 
             </div>
           </div>
-          {/*third tab*/}
+          {/* third tab */}
           <div className="tab-pane" id={`${data.orderId}3a`}>
             <AppointmentSes appointment={this.state.data} />
           </div>
 
-          {/*fourth tab*/}
+          {/* fourth tab */}
           <div className="tab-pane" id={`${data.orderId}4a`}>
             {/* <p>Take from this page "appFunderMyAppointment"</p> */}
             <MlServiceCardsDetailsComponent data={{ profileId: this.state.data.service.profileId, _id: this.state.data.service._id, userDetails: {} }} />
           </div>
-          {/*fivth tab*/}
+          {/* fivth tab */}
           <div className="tab-pane" id={`${data.orderId}5a`}>
             <h3>Total Amount: 25,000 INR</h3>
             <div className="panel panel-default">

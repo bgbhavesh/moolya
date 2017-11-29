@@ -2,25 +2,25 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
-import {findBackendUserActionHandler} from '../actions/findUserAction'
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
-import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction';
+const Select = require('react-select');
+const FontAwesome = require('react-fontawesome');
+import { findBackendUserActionHandler } from '../actions/findUserAction'
+import { initalizeFloatLabel } from '../../../utils/formElemUtil'
+import { updateStusForTransactionActionHandler } from '../actions/updateStatusRequestsAction';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlInternalRequestDetailsComponent extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      role:'',
-      departmentName:'',
-      subDepartmentName:'',
-      profileImage:'',
-      firstName: " ",
-      status:props.data.status,
-      dispalyStatus:false
+    this.state = {
+      role: '',
+      departmentName: '',
+      subDepartmentName: '',
+      profileImage: '',
+      firstName: ' ',
+      status: props.data.status,
+      dispalyStatus: false
     }
     return this;
   }
@@ -29,40 +29,37 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     initalizeFloatLabel();
   }
 
-  componentWillReceiveProps(newProps){
-    let userId=newProps.data.userId
-    var isDisabled = false
-    if (newProps.data.status === "Approved") {
+  componentWillReceiveProps(newProps) {
+    const userId = newProps.data.userId
+    let isDisabled = false
+    if (newProps.data.status === 'Approved') {
       isDisabled = true
     }
-    this.setState({"status": newProps.data.status, isStatusDisabled: isDisabled})
-    if(userId){
-      const resp=this.findBackendUser()
+    this.setState({ status: newProps.data.status, isStatusDisabled: isDisabled })
+    if (userId) {
+      const resp = this.findBackendUser()
       return resp;
     }
   }
 
   async findBackendUser() {
-    let userTypeId = this.props.data.userId
+    const userTypeId = this.props.data.userId
     const response = await findBackendUserActionHandler(userTypeId);
-    if(response){
-      this.setState({userDetais:response, role:response.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleName, firstName:response.profile.InternalUprofile.moolyaProfile.firstName})
-      let userDetails=this.state.userDetais
-      if(userDetails.profile.isInternaluser){
-        let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
-        if(userInternalProfile){
-          let roleIds=[]
-          let hirarichyLevel=[]
-          userInternalProfile.map(function (doc,index) {
-            if(doc.isDefault) {
-              let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-              userRoles.map(function (doc, index) {
+    if (response) {
+      this.setState({ userDetais: response, role: response.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleName, firstName: response.profile.InternalUprofile.moolyaProfile.firstName })
+      const userDetails = this.state.userDetais
+      if (userDetails.profile.isInternaluser) {
+        const userInternalProfile = userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
+        if (userInternalProfile) {
+          const roleIds = []
+          const hirarichyLevel = []
+          userInternalProfile.map((doc, index) => {
+            if (doc.isDefault) {
+              const userRoles = doc && doc.userRoles ? doc.userRoles : [];
+              userRoles.map((doc, index) => {
                 hirarichyLevel.push(doc.hierarchyLevel)
-
               });
-              hirarichyLevel.sort(function (a, b) {
-                return b - a
-              });
+              hirarichyLevel.sort((a, b) => b - a);
               for (let i = 0; i < userRoles.length; i++) {
                 if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
                   roleIds.push(userRoles[i]);
@@ -72,53 +69,52 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
             }
           });
 
-          if(roleIds.length==1){
-            this.setState({"role":roleIds[0].roleName})
-            this.setState({"departmentName":roleIds[0].departmentName})
-            this.setState({"subDepartmentName":roleIds[0].subDepartmentName})
+          if (roleIds.length == 1) {
+            this.setState({ role: roleIds[0].roleName })
+            this.setState({ departmentName: roleIds[0].departmentName })
+            this.setState({ subDepartmentName: roleIds[0].subDepartmentName })
           }
         }
-        this.setState({profileImage:userDetails.profile.profileImage})
+        this.setState({ profileImage: userDetails.profile.profileImage })
       }
     }
   }
 
-  async  onStatusSelect(val){
-    //this.setState({"status":val.value})
-    //let status=val.value;
-    let status=this.state.status;
-    let requestId=this.props.data.requestId
-    let response = await updateStusForTransactionActionHandler(requestId,status);
-    if(response.success){
-      toastr.success("Internal request status updated successfully")
-      if(status=="Approved"){
-        FlowRouter.go("/admin/transactions/approvedList");
-      }
-      else{
+  async onStatusSelect(val) {
+    // this.setState({"status":val.value})
+    // let status=val.value;
+    const status = this.state.status;
+    const requestId = this.props.data.requestId
+    const response = await updateStusForTransactionActionHandler(requestId, status);
+    if (response.success) {
+      toastr.success('Internal request status updated successfully')
+      if (status == 'Approved') {
+        FlowRouter.go('/admin/transactions/approvedList');
+      } else {
         FlowRouter.reload();
-        //FlowRouter.go("/admin/transactions/requestedList");
+        // FlowRouter.go("/admin/transactions/requestedList");
       }
-    }else{
+    } else {
       toastr.error("You don't have permission to act on this request")
       FlowRouter.reload();
     }
   }
 
-  async  onStatusChange(val){
-    this.setState({"status":val.value});
+  async onStatusChange(val) {
+    this.setState({ status: val.value });
   }
 
   render() {
-    let statusOptions = [
-      {value: 'WIP', label: 'WIP' , clearableValue: true},
-      {value: 'Approved', label: 'Approved',clearableValue: true},
-      {value: 'Rejected', label: 'Rejected',clearableValue: true}
+    const statusOptions = [
+      { value: 'WIP', label: 'WIP', clearableValue: true },
+      { value: 'Approved', label: 'Approved', clearableValue: true },
+      { value: 'Rejected', label: 'Rejected', clearableValue: true }
     ];
     return (
       <div className="ml_tabs">
-        <ul  className="nav nav-pills">
+        <ul className="nav nav-pills">
           <li className="active">
-            <a  href={`#details${this.props.data.requestId}`} data-toggle="tab">Details</a>
+            <a href={`#details${this.props.data.requestId}`} data-toggle="tab">Details</a>
           </li>
           <li><a href={`#notes${this.props.data.requestId}`} data-toggle="tab">Notes</a>
           </li>
@@ -144,16 +140,16 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device name" defaultValue={this.props&&this.props.data&&this.props.data.deviceName?this.props.data.deviceName:""} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Device name" defaultValue={this.props && this.props.data && this.props.data.deviceName ? this.props.data.deviceName : ''} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Device ID" defaultValue={this.props&&this.props.data&&this.props.data.deviceId?this.props.data.deviceId:""} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Device ID" defaultValue={this.props && this.props.data && this.props.data.deviceId ? this.props.data.deviceId : ''} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status} disabled={this.state.isStatusDisabled}  onChange={this.onStatusChange.bind(this)} />
+                  <Select name="form-field-name" placeholder="Actions" className="float-label" options={statusOptions} value={this.state.status} disabled={this.state.isStatusDisabled} onChange={this.onStatusChange.bind(this)} />
                 </div>
                 <br className="brclear" />
-                {!this.state.isStatusDisabled===true&&
+                {!this.state.isStatusDisabled === true &&
                 <div className="ml_btn">
                   <a href="" className="save_btn" onClick={this.onStatusSelect.bind(this)}>save</a>
                 </div>}
@@ -176,7 +172,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
                   <img src={generateAbsolutePath(this.state.profileImage)} />
                   <span>
                     {this.state.firstName}<br />{this.state.role}
-                </span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -188,6 +184,4 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     );
   }
 }
-
-
 

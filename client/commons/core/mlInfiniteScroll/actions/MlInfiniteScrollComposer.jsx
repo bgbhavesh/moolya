@@ -12,17 +12,16 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo';
 import MlInfiniteScrollContainer from '../components/MlInfiniteScrollContainer';
 import _ from 'lodash';
-const DataComposerType='graphQl';
+const DataComposerType = 'graphQl';
 import gql from 'graphql-tag'
 
 
 export default class MlInfiniteScrollComposer extends Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
@@ -31,66 +30,63 @@ export default class MlInfiniteScrollComposer extends Component {
    * Desc   :: Render the HTML for this component
    * @returns {HTML}
    */
-  render(){
-
-    if(DataComposerType==='graphQl') {
-      let config=this.props;
+  render() {
+    if (DataComposerType === 'graphQl') {
+      const config = this.props;
       config.perPageLimit = config.perPageLimit || 10;
-      console.log('config',config);
-      //note: params are mandatory,if not data will not be fetched
-      let queryOptions={
+      console.log('config', config);
+      // note: params are mandatory,if not data will not be fetched
+      const queryOptions = {
         forceFetch: true,
         variables: {
-          module:config.moduleName,
+          module: config.moduleName,
           queryProperty: {
-            limit : config.perPageLimit,
-            sortBy : '_id',
-            skip : 0,
-            query : JSON.stringify({})
+            limit: config.perPageLimit,
+            sortBy: '_id',
+            skip: 0,
+            query: JSON.stringify({})
           }
         }
       };
-      if(config.sort) {
-        options.variables.queryProperty['sortBy'] = props.defaultSortBy;
+      if (config.sort) {
+        options.variables.queryProperty.sortBy = props.defaultSortBy;
       }
-      let hasQueryOptions=config.queryOptions?true:false;
-      if(hasQueryOptions){
-        let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};
+      const hasQueryOptions = !!config.queryOptions;
+      if (hasQueryOptions) {
+        const dynamicQueryOptions = config.buildQueryOptions ? config.buildQueryOptions(config) : {};
 
-        let extendedQueryVar=_.extend(queryOptions.variables,dynamicQueryOptions);
-        queryOptions["variables"]=extendedQueryVar;
+        const extendedQueryVar = _.extend(queryOptions.variables, dynamicQueryOptions);
+        queryOptions.variables = extendedQueryVar;
       }
       const Composer = graphql(config.graphQlQuery, {
         options: props => (queryOptions),
-        props: ({data: {loading, data, fetchMore}}) => ({
+        props: ({ data: { loading, data, fetchMore } }) => ({
           loading,
           data,
           fetchMore: (variables, pagination) => fetchMore({
-            variables: variables?variables:{
-              module: "activity"
+            variables: variables || {
+              module: 'activity'
             },
-            updateQuery: (prev, {fetchMoreResult}) => {
+            updateQuery: (prev, { fetchMoreResult }) => {
               // console.log(fetchMoreResult, prev);
               if (!fetchMoreResult.data) {
                 return prev;
               }
-              let response = {
+              const response = {
                 count: fetchMoreResult.data.data.count,
-                data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
+                data: pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
               };
               // console.log(response);
               return {
                 data: response
               }
-            },
-          }),
+            }
+          })
         })
       })(MlInfiniteScrollContainer);
 
       return <Composer {...config} />;
-
-    } else {
-      return null;
     }
+    return null;
   }
 }

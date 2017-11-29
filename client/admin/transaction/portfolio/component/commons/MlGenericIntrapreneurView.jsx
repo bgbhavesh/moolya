@@ -3,20 +3,20 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
-import ScrollArea from "react-scrollbar";
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlGenericIntrapreneurView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       viewCurDetail: {},
-      clusterId:''
+      clusterId: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.showDetails.bind(this)
@@ -28,24 +28,25 @@ export default class MlGenericIntrapreneurView extends React.Component {
   //   return resp
   // }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     initalizeFloatLabel();
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    const className = this.props.isAdmin ? 'admin_header' : 'app_header'
+    $('.tab_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.tab_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+    $('.main_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.main_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
+    }
   }
 
   showDetails(id) {
-    $("#details-div").show();
-    var $frame = $('#forcecentered');
-    var $wrap = $frame.parent();
+    $('#details-div').show();
+    const $frame = $('#forcecentered');
+    const $wrap = $frame.parent();
 
     // Call Sly on frame
     $frame.sly({
@@ -64,38 +65,38 @@ export default class MlGenericIntrapreneurView extends React.Component {
       easing: 'easeOutExpo',
       dragHandle: 1,
       dynamicHandle: 1,
-      clickBar: 1,
+      clickBar: 1
 
     });
-    $("#show").hide();
+    $('#show').hide();
     this.viewDetails(id)
   }
 
 
   viewDetails(id, e) {
-    let data = this.props.intrapreneurList;
-    var getData = data[id]
-    this.setState({viewCurDetail: getData});
+    const data = this.props.intrapreneurList;
+    const getData = data[id]
+    this.setState({ viewCurDetail: getData });
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
 
-    _.each(getData.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(getData.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   handleChange() {
-    //this handler prevents the waring in the console
+    // this handler prevents the waring in the console
   }
 
   render() {
-    var _this = this
+    const _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.intrapreneurList ? _this.props.intrapreneurList : []
+    const arrayList = _this.props.intrapreneurList ? _this.props.intrapreneurList : []
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="col-md-12">
             <div className="requested_input" id="show">
               <ScrollArea
@@ -106,40 +107,37 @@ export default class MlGenericIntrapreneurView extends React.Component {
               >
                 <div className="col-lg-12 nopadding">
                   <div className="row">
-                    {arrayList && arrayList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
-                             key={idx}>
-                          <div className="list_block notrans funding_list">
-                            <div>
-                              <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
-                              <h3>{details.intrapreneurName?details.intrapreneurName:""}</h3>
-                            </div>
+                    {arrayList && arrayList.map((details, idx) => (
+                      <div
+                        className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
+                        key={idx}>
+                        <div className="list_block notrans funding_list">
+                          <div>
+                            <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'}/>
+                            <h3>{details.intrapreneurName ? details.intrapreneurName : ''}</h3>
                           </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>
             </div>
 
-            <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
+            <div className="sub_wrap_scroll" id="details-div" style={{ display: 'none' }}>
 
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
-                  {arrayList && arrayList.map(function (details, idx) {
-                    return (
-                      <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
-                        <div className="team-block" name="funding_01">
-                          <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} className="team_img"/>
-                          <h3>
-                            {details.intrapreneurName?details.intrapreneurName:""} <br />
-                          </h3>
-                        </div>
-                      </li>
-                    )
-                  })}
+                  {arrayList && arrayList.map((details, idx) => (
+                    <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
+                      <div className="team-block" name="funding_01">
+                        <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'} className="team_img"/>
+                        <h3>
+                          {details.intrapreneurName ? details.intrapreneurName : ''} <br />
+                        </h3>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -153,18 +151,20 @@ export default class MlGenericIntrapreneurView extends React.Component {
                             <div className="form_bg">
                               <form>
                                 <div className="form-group">
-                                  <input type="text" placeholder="Intrapreneur Name"
-                                         value={this.state.viewCurDetail.intrapreneurName ? this.state.viewCurDetail.intrapreneurName : ""}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Intrapreneur Name"
+                                    value={this.state.viewCurDetail.intrapreneurName ? this.state.viewCurDetail.intrapreneurName : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Year"
-                                         value={this.state.viewCurDetail.year ? this.state.viewCurDetail.year : ""}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Year"
+                                    value={this.state.viewCurDetail.year ? this.state.viewCurDetail.year : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
                               </form>
@@ -174,10 +174,11 @@ export default class MlGenericIntrapreneurView extends React.Component {
                             <div className="form_bg">
                               <form>
                                 <div className="form-group">
-                                  <input type="text" placeholder="Intrapreneur Description"
-                                         value={this.state.viewCurDetail.intrapreneurDescription ? this.state.viewCurDetail.intrapreneurDescription : ''}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Intrapreneur Description"
+                                    value={this.state.viewCurDetail.intrapreneurDescription ? this.state.viewCurDetail.intrapreneurDescription : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
                               </form>

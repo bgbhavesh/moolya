@@ -46,7 +46,7 @@ export default class MlAppNotifications extends Component {
     if (xmlhttp) {
       const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
       const serverEndPoint = `${Meteor.settings.public.conversationsBaseURL}/clearAllNotifications`;
-    // const serverEndPoint = 'http://localhost:8081/clearAllNotifications';
+      // const serverEndPoint = 'http://localhost:8081/clearAllNotifications';
 
       xmlhttp.open('POST', serverEndPoint, true);
       xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -83,9 +83,9 @@ export default class MlAppNotifications extends Component {
     const notificationAry = notifications && notifications.length ? notifications : [];
     const notificationsList2 = <p> No Unread Notifications </p>;
     let notificationsList1 = notificationAry.map((options, key) => (
-        <li key={key}>
-          <a href="/app/calendar/notification"><span className={this.getsubNotificationIcon(options.subNotificationType)}/>{options.message}</a>
-        </li>));
+      <li key={key}>
+        <a href="/app/calendar/notification"><span className={this.getsubNotificationIcon(options.subNotificationType)}/>{options.message}</a>
+      </li>));
     let counter = 0;
     for (let i = 0; i < notificationAry.length; i++) {
       if (notificationAry[i].isRead === false) {
@@ -98,6 +98,6 @@ export default class MlAppNotifications extends Component {
 
 
     return <div className="ml_app_notification"> <ul className="unstyled"> <span className="clear_all" onClick={this.clearAllNotifications}>Clear All</span>
-{this.state.notificationCount ? notificationsList1 : notificationsList2 }</ul></div>;
+      {this.state.notificationCount ? notificationsList1 : notificationsList2 }</ul></div>;
   }
 }

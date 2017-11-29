@@ -3,20 +3,20 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
-import ScrollArea from "react-scrollbar";
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil';
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlGenericPartnersView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       viewCurDetail: {},
-      clusterId:''
+      clusterId: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.showDetails.bind(this)
@@ -28,24 +28,25 @@ export default class MlGenericPartnersView extends React.Component {
   //   return resp
   // }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     initalizeFloatLabel();
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    const className = this.props.isAdmin ? 'admin_header' : 'app_header'
+    $('.tab_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.tab_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+    $('.main_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.main_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
+    }
   }
 
   showDetails(id) {
-    $("#details-div").show();
-    var $frame = $('#forcecentered');
-    var $wrap = $frame.parent();
+    $('#details-div').show();
+    const $frame = $('#forcecentered');
+    const $wrap = $frame.parent();
 
     // Call Sly on frame
     $frame.sly({
@@ -64,38 +65,38 @@ export default class MlGenericPartnersView extends React.Component {
       easing: 'easeOutExpo',
       dragHandle: 1,
       dynamicHandle: 1,
-      clickBar: 1,
+      clickBar: 1
 
     });
-    $("#show").hide();
+    $('#show').hide();
     this.viewDetails(id)
   }
 
 
   viewDetails(id, e) {
-    let data = this.props.partnersList;
-    var getData = data[id]
-    this.setState({viewCurDetail: getData});
+    const data = this.props.partnersList;
+    const getData = data[id]
+    this.setState({ viewCurDetail: getData });
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
 
-    _.each(getData.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(getData.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   handleChange() {
-    //this handler prevents the waring in the console
+    // this handler prevents the waring in the console
   }
 
   render() {
-    var _this = this
+    const _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.partnersList ? _this.props.partnersList : []
+    const arrayList = _this.props.partnersList ? _this.props.partnersList : []
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="col-md-12">
             <div className="requested_input" id="show">
               <ScrollArea
@@ -106,40 +107,37 @@ export default class MlGenericPartnersView extends React.Component {
               >
                 <div className="col-lg-12 nopadding">
                   <div className="row">
-                    {arrayList && arrayList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
-                             key={idx}>
-                          <div className="list_block notrans funding_list">
-                            <div>
-                              <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
-                              <h3>{details.firstName?details.firstName:""}</h3>
-                            </div>
+                    {arrayList && arrayList.map((details, idx) => (
+                      <div
+                        className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
+                        key={idx}>
+                        <div className="list_block notrans funding_list">
+                          <div>
+                            <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'}/>
+                            <h3>{details.firstName ? details.firstName : ''}</h3>
                           </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>
             </div>
 
-            <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
+            <div className="sub_wrap_scroll" id="details-div" style={{ display: 'none' }}>
 
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
-                  {arrayList && arrayList.map(function (details, idx) {
-                    return (
-                      <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
-                        <div className="team-block" name="funding_01">
-                          <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} className="team_img"/>
-                          <h3>
-                            {details.firstName?details.firstName:""} <br />
-                          </h3>
-                        </div>
-                      </li>
-                    )
-                  })}
+                  {arrayList && arrayList.map((details, idx) => (
+                    <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
+                      <div className="team-block" name="funding_01">
+                        <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'} className="team_img"/>
+                        <h3>
+                          {details.firstName ? details.firstName : ''} <br />
+                        </h3>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -152,44 +150,48 @@ export default class MlGenericPartnersView extends React.Component {
                           <div className="col-md-6 nopadding-left">
                             <div className="form_bg">
                               <form>
-                                {/*<div className="form-group">*/}
-                                  {/*<Moolyaselect multiSelect={false} placeholder="Title"*/}
-                                                {/*className="form-control float-label" valueKey={'value'}*/}
-                                                {/*labelKey={'label'}*/}
-                                                {/*selectedValue={this.state.viewCurDetail.title} queryType={"graphql"}*/}
-                                                {/*query={titleQuery} queryOptions={titleOption}*/}
-                                                {/*onSelect={function () {}} isDynamic={true} isDisabled={true}/>*/}
-                                  {/*<FontAwesome name='unlock' className="password_icon"/>*/}
-                                {/*</div>*/}
+                                {/* <div className="form-group"> */}
+                                {/* <Moolyaselect multiSelect={false} placeholder="Title" */}
+                                {/* className="form-control float-label" valueKey={'value'} */}
+                                {/* labelKey={'label'} */}
+                                {/* selectedValue={this.state.viewCurDetail.title} queryType={"graphql"} */}
+                                {/* query={titleQuery} queryOptions={titleOption} */}
+                                {/* onSelect={function () {}} isDynamic={true} isDisabled={true}/> */}
+                                {/* <FontAwesome name='unlock' className="password_icon"/> */}
+                                {/* </div> */}
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="First name"
-                                         value={this.state.viewCurDetail.firstName ? this.state.viewCurDetail.firstName : ''}
-                                         className="form-control float-label" onChange={_this.handleChange}/>
+                                  <input
+                                    type="text" placeholder="First name"
+                                    value={this.state.viewCurDetail.firstName ? this.state.viewCurDetail.firstName : ''}
+                                    className="form-control float-label" onChange={_this.handleChange}/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Last Name"
-                                         value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Last Name"
+                                    value={this.state.viewCurDetail.lastName ? this.state.viewCurDetail.lastName : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Designation"
-                                         value={this.state.viewCurDetail.designation ? this.state.viewCurDetail.designation : ""}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Designation"
+                                    value={this.state.viewCurDetail.designation ? this.state.viewCurDetail.designation : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Company Name"
-                                         value={this.state.viewCurDetail.partnerCompanyName ?this.state.viewCurDetail.partnerCompanyName : ''}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Company Name"
+                                    value={this.state.viewCurDetail.partnerCompanyName ? this.state.viewCurDetail.partnerCompanyName : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
                               </form>
@@ -200,25 +202,28 @@ export default class MlGenericPartnersView extends React.Component {
                               <form>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Years of Experience"
-                                         value={this.state.viewCurDetail.yearsOfExperience ? this.state.viewCurDetail.yearsOfExperience : ''}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Years of Experience"
+                                    value={this.state.viewCurDetail.yearsOfExperience ? this.state.viewCurDetail.yearsOfExperience : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="Qualification"
-                                         value={this.state.viewCurDetail.qualification ? this.state.viewCurDetail.qualification : ''}
-                                         onChange={_this.handleChange}
-                                         className="form-control float-label"/>
+                                  <input
+                                    type="text" placeholder="Qualification"
+                                    value={this.state.viewCurDetail.qualification ? this.state.viewCurDetail.qualification : ''}
+                                    onChange={_this.handleChange}
+                                    className="form-control float-label"/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
 
                                 <div className="form-group">
-                                  <input type="text" placeholder="About" className="form-control float-label"
-                                         value={this.state.viewCurDetail.aboutPartner ? this.state.viewCurDetail.aboutPartner : ''}
-                                         onChange={_this.handleChange}/>
+                                  <input
+                                    type="text" placeholder="About" className="form-control float-label"
+                                    value={this.state.viewCurDetail.aboutPartner ? this.state.viewCurDetail.aboutPartner : ''}
+                                    onChange={_this.handleChange}/>
                                   <FontAwesome name='unlock' className="password_icon"/>
                                 </div>
                               </form>

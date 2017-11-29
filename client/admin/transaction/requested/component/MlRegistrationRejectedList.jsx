@@ -1,15 +1,15 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlUserTypeTableConfig} from "../config/mlRegistrationApprovedConfig";
-import  MlAssignComponent from "./MlAssignComponent"
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlUserTypeTableConfig } from '../config/mlRegistrationApprovedConfig';
+import MlAssignComponent from './MlAssignComponent'
 import _ from 'lodash';
-import {mlRegistrationRejectedTableConfig} from '../config/mlRegistrationRejectedConfig'
+import { mlRegistrationRejectedTableConfig } from '../config/mlRegistrationRejectedConfig'
 export default class MlRegistrationRejectedList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={show:false,requestId:null};
-    //this.assignActionHandler.bind(this);
+    this.state = { show: false, requestId: null };
+    // this.assignActionHandler.bind(this);
   }
   componentDidMount() {
   }

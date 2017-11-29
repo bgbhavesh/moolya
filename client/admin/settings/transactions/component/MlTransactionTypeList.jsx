@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlTransactionTypeTableConfig} from "../config/MlTransactionTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlTransactionTypeTableConfig } from '../config/MlTransactionTypeConfig';
 export default class MlTransactionTypeList extends Component {
-
   componentDidMount() {
   }
 

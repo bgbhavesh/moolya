@@ -14,49 +14,50 @@ export default class MlAdminProcessDocTabVew extends Component {
     return this;
   }
 
-  componentDidMount(){
-    var mySwiper = new Swiper('.swiper-menu',{
+  componentDidMount() {
+    const mySwiper = new Swiper('.swiper-menu', {
       speed: 400,
-      spaceBetween:30,
-      slidesPerView:'auto',
+      spaceBetween: 30,
+      slidesPerView: 'auto'
     });
 
-    $(document).ready(()=>{
-      $('.moolya_btn_in').click(function(e){
+    $(document).ready(() => {
+      $('.moolya_btn_in').click((e) => {
         let transaction = $('.swiping_filters').css('transform');
-        if($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]){
-          transaction = JSON.stringify({transaction:transaction,name:$('.swiping_filters')[0].childNodes[0].innerText});
-          localStorage.setItem('transaction',transaction);
+        if ($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]) {
+          transaction = JSON.stringify({ transaction, name: $('.swiping_filters')[0].childNodes[0].innerText });
+          localStorage.setItem('transaction', transaction);
         }
       });
     });
 
-    let transaction =localStorage.getItem('transaction');
-    if(transaction) {
+    let transaction = localStorage.getItem('transaction');
+    if (transaction) {
       transaction = JSON.parse(transaction);
-      localStorage.setItem('transaction','');
+      localStorage.setItem('transaction', '');
 
-      if(transaction.name === $('.swiping_filters')[0].childNodes[0].innerText){
-        setTimeout(function () {
-          $('.swiping_filters').css("transform",transaction.transaction);
+      if (transaction.name === $('.swiping_filters')[0].childNodes[0].innerText) {
+        setTimeout(() => {
+          $('.swiping_filters').css('transform', transaction.transaction);
         }, 500);
       }
-
     }
   }
 
   render() {
-    let path = FlowRouter.current().route.name;
-    let link = FlowRouter.current().path;
-    let params = FlowRouter.current().params;
-    let queryParams = FlowRouter.current().queryParams;
-    let menuConfig = this.props.tabOptions||[];
-    let menu, tabOptions;
+    const path = FlowRouter.current().route.name;
+    const link = FlowRouter.current().path;
+    const params = FlowRouter.current().params;
+    const queryParams = FlowRouter.current().queryParams;
+    const menuConfig = this.props.tabOptions || [];
+    let menu,
+      tabOptions;
 
     menu = find(path, menuConfig);
 
     function find(uniqueId, menus) {
-      var i = 0, found;
+      let i = 0,
+        found;
 
       for (; i < menus.length; i++) {
         if (menus[i].uniqueId === uniqueId) {
@@ -71,60 +72,63 @@ export default class MlAdminProcessDocTabVew extends Component {
     }
 
 
-
     if (menu != undefined) {
-      let subMenuHide=menu.hideSubMenu;
+      const subMenuHide = menu.hideSubMenu;
       console.log(menu.subMenu)
-      //if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
-      const subMenusId=menu.subMenusId;
-      const subMenuMappingId=menu.subMenuMappingId;
-      if (subMenusId){
+      // if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
+      const subMenusId = menu.subMenusId;
+      const subMenuMappingId = menu.subMenuMappingId;
+      if (subMenusId) {
         menu = find(menu.subMenusId, menuConfig);
       }
 
       let tabMenu = [];
-      if(!subMenuHide){
-        tabMenu= menu.subMenu;
+      if (!subMenuHide) {
+        tabMenu = menu.subMenu;
       }
 
 
-      tabOptions = tabMenu.map(function (option,index) {
-        let activeClass="";
-        if(option.uniqueId===path){
+      tabOptions = tabMenu.map(function (option, index) {
+        let activeClass = '';
+        if (option.uniqueId === path) {
           activeClass = 'active_btn'
         }
 
-        if(subMenuMappingId&&subMenuMappingId===option.uniqueId){
+        if (subMenuMappingId && subMenuMappingId === option.uniqueId) {
           activeClass = 'active_btn'
         }
 
-        let isDynamicLink=option.dynamicLink||false;
-        let menuLink=option.link;
-        if(isDynamicLink){
-          menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
+        const isDynamicLink = option.dynamicLink || false;
+        let menuLink = option.link;
+        if (isDynamicLink) {
+          menuLink = dynamicLinkHandler(option.uniqueId, params, queryParams);
         }
         return (
           <li key={option.name} className="swiper-slide">
-            <div className={`moolya_btn ${activeClass} `}
-                 onClick={this.subMenuClick}><a href={menuLink}
-                                                className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+            <div
+              className={`moolya_btn ${activeClass} `}
+              onClick={this.subMenuClick}><a
+                href={menuLink}
+                className={'moolya_btn moolya_btn_in'}>  {option.name} </a></div>
           </li>
         )
       });
     }
-    let subProcessOPtion=this.props.subProcessOPtion
-    if(subProcessOPtion!=undefined){
-      tabOptions = subProcessOPtion.map(function (option,index) {
-        let activeClass="";
-        if(option.link===link){
+    const subProcessOPtion = this.props.subProcessOPtion
+    if (subProcessOPtion != undefined) {
+      tabOptions = subProcessOPtion.map(function (option, index) {
+        let activeClass = '';
+        if (option.link === link) {
           activeClass = 'active_btn'
         }
 
         return (
           <li key={option.name} className="swiper-slide">
-            <div className={`moolya_btn ${activeClass} `}
-                 onClick={this.subMenuClick}><a href={option.link}
-                                                className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+            <div
+              className={`moolya_btn ${activeClass} `}
+              onClick={this.subMenuClick}><a
+                href={option.link}
+                className={'moolya_btn moolya_btn_in'}>  {option.name} </a></div>
           </li>
         )
       })
@@ -140,6 +144,5 @@ export default class MlAdminProcessDocTabVew extends Component {
 
     )
   }
-
 }
 

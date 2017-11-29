@@ -2,16 +2,16 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
+const FontAwesome = require('react-fontawesome');
+const Select = require('react-select');
+import { findIdeatorIntellectualPlanningTrademarkActionHandler } from '../../actions/findPortfolioIdeatorDetails'
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { initializeMlAnnotator } from '../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../commons/annotator/findAnnotations'
+import { validateUserForAnnotation } from '../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../commons/components/loader/loader";
+import MlLoader from '../../../../../commons/components/loader/loader';
 
 export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Component {
   constructor(props) {
@@ -23,39 +23,36 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     }
     this.fetchPortfolioInfo.bind(this);
     this.createAnnotations.bind(this);
-    //this.fetchAnnotations.bind(this);
+    // this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#trademarkContent").annotator();
+    this.state.content = jQuery('#trademarkContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
-
-
   }
 
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
       }
@@ -63,34 +60,34 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"intellectualTrademark", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'intellectualTrademark', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "intellectualTrademark");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'intellectualTrademark');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -98,81 +95,80 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     return response;
   }
   componentWillMount() {
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     $('.actions_switch').click();
 
-    $("#timeLine").popover({
-      'title' : 'Timeline',
-      'html' : true,
-      'placement' : 'top',
-      'container' : '.admin_main_wrap',
-      'content' : $(".ml_timeline").html()
+    $('#timeLine').popover({
+      title: 'Timeline',
+      html: true,
+      placement: 'top',
+      container: '.admin_main_wrap',
+      content: $('.ml_timeline').html()
     });
-    $(document).on('click', '.add_comment', function(e){
+    $(document).on('click', '.add_comment', (e) => {
       $('.comment-input-box').slideToggle();
     });
 
     this.fetchPortfolioInfo();
-  /*  if(this.state.isUserValidForAnnotation){
+    /*  if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor()
     }
-    this.fetchAnnotations();*/
+    this.fetchAnnotations(); */
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
       this.initalizeAnnotaor()
       this.fetchAnnotations();
     }
   }
 
-  async fetchPortfolioInfo(){
+  async fetchPortfolioInfo() {
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(this.props.portfolioDetailsId);
-    if(response){
-      this.setState({portfolioIdeatorInfo : response, loading : false});
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    if (response) {
+      this.setState({ portfolioIdeatorInfo: response, loading: false });
+      _.each(response.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }
   }
 
-  render(){
-    let loading = this.state.loading ? this.state.loading : false;
+  render() {
+    const loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
 
-          <div className="requested_input">
+        <div className="requested_input">
 
-              <div className="col-lg-12 col-sm-12">
-                <div className="row">
-                  <h2>Intellectual Property And Trademark</h2>
-                  <div id="trademarkContent" className="panel-form-view hide_unlock">
-                    <div className="panel panel-default">
-                      <div className="panel-heading">
+          <div className="col-lg-12 col-sm-12">
+            <div className="row">
+              <h2>Intellectual Property And Trademark</h2>
+              <div id="trademarkContent" className="panel-form-view hide_unlock">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
                         Audience
-                        <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
-                      </div>
-                    <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.IPdescription}
-                      {loading === true ? ( <MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? this.state.portfolioIdeatorInfo.IPdescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
-                        </div>
-                      </div>
+                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
                   </div>
-
+                  <div className="panel-body">
+                    {this.state.portfolioIdeatorInfo.IPdescription}
+                    {loading === true ? (<MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? this.state.portfolioIdeatorInfo.IPdescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
+                  </div>
                 </div>
               </div>
 
+            </div>
           </div>
 
         </div>
+
+      </div>
     )
   }
 }

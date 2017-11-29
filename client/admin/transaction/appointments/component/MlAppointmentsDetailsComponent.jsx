@@ -8,19 +8,17 @@ import MlAppServiceSessionAppointment from './mlAppServiceSessionAppointment/MlA
 export default class MlAppointmentsDetailsComponent extends Component {
   render() {
     const { data } = this.props;
-    let appointmentId = data.appointmentId;
-    let appointmentType = data.transactionType;
-    if (appointmentType === "Service-Purchased") {
+    const appointmentId = data.appointmentId;
+    const appointmentType = data.transactionType;
+    if (appointmentType === 'Service-Purchased') {
       return (
         <MlAppServicePurchasedDetail orderId={appointmentId} />
       )
-    } else {
-      // return (<h1>Comming Soon</h1>);
-      return (
-        <MlAppServiceSessionAppointment orderId={appointmentId} />
-      );
     }
-
+    // return (<h1>Comming Soon</h1>);
+    return (
+      <MlAppServiceSessionAppointment orderId={appointmentId} />
+    );
   }
 }
 

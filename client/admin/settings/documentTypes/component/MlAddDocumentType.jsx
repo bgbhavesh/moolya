@@ -1,13 +1,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addDocumentTypeActionHandler} from '../actions/addDocumentTypeAction'
+import { addDocumentTypeActionHandler } from '../actions/addDocumentTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
 
-class MlAddDocumentType extends React.Component{
+class MlAddDocumentType extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -16,38 +16,34 @@ class MlAddDocumentType extends React.Component{
   }
 
   componentDidMount() {
-    OnToggleSwitch(false,true);
+    OnToggleSwitch(false, true);
     initalizeFloatLabel();
   }
 
   async addEventHandler() {
-    const resp=await this.createDocumentType();
+    const resp = await this.createDocumentType();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/documentProcess/documentTypeList");
-      else
-        toastr.error(response.result);
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/documentProcess/documentTypeList'); } else { toastr.error(response.result); }
     }
-  };
+  }
 
-  async  createDocumentType() {
-    let DocTypeDetails = {
+  async createDocumentType() {
+    const DocTypeDetails = {
       docTypeName: this.refs.docTypeName.value,
       docTypeDisplayName: this.refs.displayName.value,
       about: this.refs.about.value,
-      isActive: this.refs.documentTypeStatus.checked,
+      isActive: this.refs.documentTypeStatus.checked
     }
     const response = await addDocumentTypeActionHandler(DocTypeDetails);
     return response;
-
   }
 
   // getSubDepartmentAvailability(details){
@@ -55,18 +51,18 @@ class MlAddDocumentType extends React.Component{
   //   this.setState({'subdepartmentAvailability':details})
   // }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createDocumentType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createDocumentType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/documentProcess/documentTypeList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/documentProcess/documentTypeList')
         }
       }
     ]
@@ -90,19 +86,19 @@ class MlAddDocumentType extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
 
-                <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>Status</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="documentTypeStatus" />
-                      <div className="slider"></div>
-                    </label>
-                  </div>
+              <form>
+                <div className="form-group">
+                  <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
+                  <label className="switch">
+                    <input type="checkbox" ref="documentTypeStatus" />
+                    <div className="slider"></div>
+                  </label>
+                </div>
 
-                </form>
+              </form>
 
             </div>
           </div>
@@ -111,6 +107,6 @@ class MlAddDocumentType extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddDocumentType = formHandler()(MlAddDocumentType);

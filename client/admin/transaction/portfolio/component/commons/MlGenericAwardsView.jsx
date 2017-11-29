@@ -3,21 +3,21 @@
  */
 
 import React from 'react';
-import {render} from 'react-dom';
-import ScrollArea from "react-scrollbar";
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../../../commons/utils/formElemUtil'
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlGenericAwardsView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       viewCurDetail: {},
-      clusterId:''
+      clusterId: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.showDetails.bind(this)
@@ -29,24 +29,25 @@ export default class MlGenericAwardsView extends React.Component {
   //   return resp
   // }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     initalizeFloatLabel();
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    const className = this.props.isAdmin ? 'admin_header' : 'app_header'
+    $('.tab_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.tab_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+    $('.main_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.main_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
+    }
   }
 
   showDetails(id) {
-    $("#details-div").show();
-    var $frame = $('#forcecentered');
-    var $wrap = $frame.parent();
+    $('#details-div').show();
+    const $frame = $('#forcecentered');
+    const $wrap = $frame.parent();
 
     // Call Sly on frame
     $frame.sly({
@@ -65,38 +66,38 @@ export default class MlGenericAwardsView extends React.Component {
       easing: 'easeOutExpo',
       dragHandle: 1,
       dynamicHandle: 1,
-      clickBar: 1,
+      clickBar: 1
 
     });
-    $("#show").hide();
+    $('#show').hide();
     this.viewDetails(id)
   }
 
 
   viewDetails(id, e) {
-    let data = this.props.awardsList;
-    var getData = data[id]
-    this.setState({viewCurDetail: getData});
+    const data = this.props.awardsList;
+    const getData = data[id]
+    this.setState({ viewCurDetail: getData });
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
 
-    _.each(getData.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(getData.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   handleChange() {
-    //this handler prevents the waring in the console
+    // this handler prevents the waring in the console
   }
 
   render() {
-    var _this = this
+    const _this = this
     console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
-    var arrayList = _this.props.awardsList ? _this.props.awardsList : []
+    const arrayList = _this.props.awardsList ? _this.props.awardsList : []
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="col-md-12">
             <div className="requested_input" id="show">
               <ScrollArea
@@ -107,40 +108,37 @@ export default class MlGenericAwardsView extends React.Component {
               >
                 <div className="col-lg-12 nopadding">
                   <div className="row">
-                    {arrayList && arrayList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
-                             key={idx}>
-                          <div className="list_block notrans funding_list">
-                            <div>
-                              <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"}/>
-                              <h3>{details.awardName?details.awardName:""}</h3>
-                            </div>
+                    {arrayList && arrayList.map((details, idx) => (
+                      <div
+                        className="col-lg-2 col-md-4 col-sm-4" onClick={_this.showDetails.bind(_this, idx)}
+                        key={idx}>
+                        <div className="list_block notrans funding_list">
+                          <div>
+                            <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'}/>
+                            <h3>{details.awardName ? details.awardName : ''}</h3>
                           </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>
             </div>
 
-            <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
+            <div className="sub_wrap_scroll" id="details-div" style={{ display: 'none' }}>
 
               <div className="top_block_scroller" id="forcecentered">
                 <ul>
-                  {arrayList && arrayList.map(function (details, idx) {
-                    return (
-                      <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
-                        <div className="team-block" name="funding_01">
-                          <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} className="team_img"/>
-                          <h3>
-                            {details.awardName?details.awardName:""} <br />
-                          </h3>
-                        </div>
-                      </li>
-                    )
-                  })}
+                  {arrayList && arrayList.map((details, idx) => (
+                    <li key={idx} onClick={_this.viewDetails.bind(_this, idx)}>
+                      <div className="team-block" name="funding_01">
+                        <img src={details.logo ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'} className="team_img"/>
+                        <h3>
+                          {details.awardName ? details.awardName : ''} <br />
+                        </h3>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -151,7 +149,7 @@ export default class MlGenericAwardsView extends React.Component {
                       <div className="investement-view-content">
                         <div className="panel panel-default panel-form-view">
                           <div className="panel-body">
-                            <textarea name="awardsDescription" placeholder="About" className="form-control float-label" value={this.state.viewCurDetail.awardsDescription?this.state.viewCurDetail.awardsDescription: ''} />
+                            <textarea name="awardsDescription" placeholder="About" className="form-control float-label" value={this.state.viewCurDetail.awardsDescription ? this.state.viewCurDetail.awardsDescription : ''} />
                             <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.viewCurDetail.isDescriptionPrivate}/>
                           </div>
                         </div>

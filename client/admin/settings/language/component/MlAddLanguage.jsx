@@ -1,14 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addLanguageActionHandler} from '../actions/addLanguageAction'
+import { addLanguageActionHandler } from '../actions/addLanguageAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../utils/formElemUtil';
 
 
-class MlAddLanguage extends React.Component{
+class MlAddLanguage extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -18,35 +18,33 @@ class MlAddLanguage extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
-    var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    OnToggleSwitch(true, true);
+    const WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
-    const resp=await this.createLanguage();
+    const resp = await this.createLanguage();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
+    FlowRouter.go('/admin/settings/languagesList');
+  }
 
-    FlowRouter.go("/admin/settings/languagesList");
-  };
-
-  async  createLanguage() {
-    let Details = {
+  async createLanguage() {
+    const Details = {
       languageName: this.refs.docTypeName.value,
       languageDisplayName: this.refs.displayName.value,
       aboutLanguage: this.refs.about.value,
-      isActive: this.refs.status.checked,
+      isActive: this.refs.status.checked
     }
     const response = await addLanguageActionHandler(Details);
     return response;
-
   }
 
   // getSubDepartmentAvailability(details){
@@ -54,18 +52,18 @@ class MlAddLanguage extends React.Component{
   //   this.setState({'subdepartmentAvailability':details})
   // }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/languagesList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/languagesList')
         }
       }
     ]
@@ -115,6 +113,6 @@ class MlAddLanguage extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddLanguage = formHandler()(MlAddLanguage);

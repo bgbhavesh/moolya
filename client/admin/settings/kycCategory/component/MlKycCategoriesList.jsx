@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlKycCategoryTableConfig} from "../config/mlKycCategoryConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlKycCategoryTableConfig } from '../config/mlKycCategoryConfig';
 export default class MlKycCategoriesList extends Component {
-
   componentDidMount() {
   }
 

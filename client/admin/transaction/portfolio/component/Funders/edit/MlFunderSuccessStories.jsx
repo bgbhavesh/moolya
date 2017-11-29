@@ -1,16 +1,16 @@
-import React, { Component, PropTypes } from "react";
-import ScrollArea from "react-scrollbar";
-import Datetime from "react-datetime";
-import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
-import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
-import { fetchfunderPortfolioSuccess } from "../../../actions/findPortfolioFunderDetails";
+import React, { Component, PropTypes } from 'react';
+import ScrollArea from 'react-scrollbar';
+import Datetime from 'react-datetime';
+import { Popover, PopoverContent, PopoverTitle } from 'reactstrap';
+import _ from 'lodash';
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../../../../client/admin/utils/formElemUtil';
+import { multipartASyncFormHandler } from '../../../../../../../client/commons/MlMultipartFormAction';
+import { fetchfunderPortfolioSuccess } from '../../../actions/findPortfolioFunderDetails';
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import CropperModal from '../../../../../../commons/components/cropperModal';
-import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import { mlFieldValidations } from '../../../../../../commons/validations/mlfieldValidation';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
 
@@ -20,18 +20,18 @@ export default class MlFunderSuccessStories extends Component {
     this.state = {
       loading: false,
       data: {},
-      fileName:"",
+      fileName: '',
       funderSuccess: [],
       popoverOpen: false,
       selectedIndex: -1,
       funderSuccessList: [],
-      selectedObject: "default",
+      selectedObject: 'default',
       privateKey: {},
       uploadingAvatar: false,
-      showProfileModal: false,
+      showProfileModal: false
     }
     this.curSelectLogo = {};
-    this.tabName = this.props.tabName || ""
+    this.tabName = this.props.tabName || ''
     this.handleBlur = this.handleBlur.bind(this);
     this.onSaveAction = this.onSaveAction.bind(this);
     this.dateChange.bind(this)
@@ -47,15 +47,12 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.successStories)
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.successStories)
     const response = await fetchfunderPortfolioSuccess(portfolioDetailsId);
     if (empty) {
-      if (response && response.length)
-        this.setState({ loading: false, funderSuccess: response, funderSuccessList: response });
-      else
-        this.setState({ loading: false })
+      if (response && response.length) { this.setState({ loading: false, funderSuccess: response, funderSuccessList: response }); } else { this.setState({ loading: false }) }
     } else {
       this.setState({
         loading: false,
@@ -68,31 +65,31 @@ export default class MlFunderSuccessStories extends Component {
 
   handleBlur(e) {
     let details = this.state.data;
-    let name = e.target.name;
+    const name = e.target.name;
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: e.target.value });
-    this.setState({ data: details }, function () {
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
 
   dateChange(e) {
     let details = this.state.data;
-    let name = 'date';
+    const name = 'date';
     details = _.omit(details, [name]);
     details = _.extend(details, { [name]: this.refs.date.state.inputValue });
-    this.setState({ data: details }, function () {
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
 
   onTileClick(index, uiIndex, e) {
-    let cloneArray = _.cloneDeep(this.state.funderSuccess);
+    const cloneArray = _.cloneDeep(this.state.funderSuccess);
     // let details = cloneArray[index]
-    var details = _.find(cloneArray, {index: index});
-    details = _.omit(details, "__typename");
+    let details = _.find(cloneArray, { index });
+    details = _.omit(details, '__typename');
     if (details && details.logo) {
-      delete details.logo['__typename'];
+      delete details.logo.__typename;
     }
     this.curSelectLogo = details.logo
     this.setState({
@@ -104,36 +101,36 @@ export default class MlFunderSuccessStories extends Component {
       this.lockPrivateKeys(index)
     });
 
-    /*setTimeout(function () {
+    /* setTimeout(function () {
      _.each(details.privateFields, function (pf) {
      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
      })
-     }, 10)*/
+     }, 10) */
   }
 
-  //todo:// context data connection first time is not coming have to fix
+  // todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
-    var privateValues = this.funderSuccessStoryServer && this.funderSuccessStoryServer[selIndex] ? this.funderSuccessStoryServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
-    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const privateValues = this.funderSuccessStoryServer && this.funderSuccessStoryServer[selIndex] ? this.funderSuccessStoryServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   onStatusChangeNotify(e) {
     let updatedData = this.state.data || {};
-    let key = e.target.id;
+    const key = e.target.id;
     updatedData = _.omit(updatedData, [key]);
     if (e.currentTarget.checked) {
       updatedData = _.extend(updatedData, { [key]: true });
     } else {
       updatedData = _.extend(updatedData, { [key]: false });
     }
-    this.setState({ data: updatedData }, function () {
+    this.setState({ data: updatedData }, () => {
       // this.sendDataToParent()
     })
   }
@@ -150,7 +147,7 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   addSuccess() {
-    this.setState({ selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {} })
+    this.setState({ selectedObject: 'default', popoverOpen: !(this.state.popoverOpen), data: {} })
     if (this.state.funderSuccess) {
       this.setState({ selectedIndex: this.state.funderSuccess.length })
     } else {
@@ -159,13 +156,15 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   onLockChange(fieldName, field, e) {
-    var isPrivate = false;
-    let className = e.target.className;
-    if (className.indexOf("fa-lock") != -1) {
+    let isPrivate = false;
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
       isPrivate = true;
     }
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName }
-    this.setState({privateKey: privateKey }, function () {
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName
+    }
+    this.setState({ privateKey }, () => {
       // this.sendDataToParent()
     })
   }
@@ -174,43 +173,42 @@ export default class MlFunderSuccessStories extends Component {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
       this.sendDataToParent(true)
-    }else {
+    } else {
       toastr.error(requiredFields.errorMessage);
       return
     }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.successStories) {
       this.setState({ funderSuccessList: this.context.funderPortfolio.successStories, popoverOpen: false });
-    }
-    else {
+    } else {
       this.setState({ funderSuccessList: this.state.funderSuccess, popoverOpen: false });
     }
     this.curSelectLogo = {}
   }
 
   onLogoFileUpload(fileInfo, image) {
-    let file = image;
-    let fileName = fileInfo.name;
-    this.setState({ fileName: fileInfo.name})
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
+    const file = image;
+    const fileName = fileInfo.name;
+    this.setState({ fileName: fileInfo.name })
+    const data = {
+      moduleName: 'PORTFOLIO',
+      actionName: 'UPLOAD',
       portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: { successStories: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] }
+      portfolio: { successStories: [{ logo: { fileUrl: '', fileName }, index: this.state.selectedIndex }] }
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
   }
 
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp)
+      const result = JSON.parse(resp)
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
+      Confirm('', 'Do you want to add the file into the library', 'Ok', 'Cancel', (ifConfirm) => {
+        if (ifConfirm) {
+          const fileObjectStructure = {
             fileName: this.state.fileName,
             fileType: file.type,
             fileUrl: result.result,
-            libraryType: "image"
+            libraryType: 'image'
           }
           this.libraryAction(fileObjectStructure)
         }
@@ -218,7 +216,7 @@ export default class MlFunderSuccessStories extends Component {
 
       if (result.success) {
         this.curSelectLogo = {
-          fileName: file && file.name ? file.name : "",
+          fileName: file && file.name ? file.name : '',
           fileUrl: result.result
         }
         // this.setState({ loading: true })
@@ -230,9 +228,9 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   async libraryAction(file) {
-    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    if(resp.code === 404) {
+    if (resp.code === 404) {
       toastr.error(resp.result)
     } else {
       toastr.success(resp.result)
@@ -247,13 +245,13 @@ export default class MlFunderSuccessStories extends Component {
   async fetchOnlyImages() {
     const response = await fetchfunderPortfolioSuccess(this.props.portfolioDetailsId);
     if (response) {
-      let thisState = this.state.selectedIndex;
-      let dataDetails = this.state.funderSuccess
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      const thisState = this.state.selectedIndex;
+      const dataDetails = this.state.funderSuccess
+      const cloneBackUp = _.cloneDeep(dataDetails);
+      const specificData = cloneBackUp[thisState];
       if (specificData) {
-        let curUpload = response[thisState]
-        specificData['logo'] = curUpload['logo']
+        const curUpload = response[thisState]
+        specificData.logo = curUpload.logo
         this.setState({ loading: false, funderSuccess: cloneBackUp });
       } else {
         this.setState({ loading: false })
@@ -263,45 +261,45 @@ export default class MlFunderSuccessStories extends Component {
 
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+    return { tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex }
   }
 
-  getActualIndex(dataArray, checkIndex){
-    var response = _.findIndex(dataArray, {index: checkIndex});
+  getActualIndex(dataArray, checkIndex) {
+    let response = _.findIndex(dataArray, { index: checkIndex });
     response = response >= 0 ? response : checkIndex;
     return response;
   }
 
   sendDataToParent(isSaveClicked) {
-    let data = this.state.data;
-    let success = this.state.funderSuccess;
+    const data = this.state.data;
+    const success = this.state.funderSuccess;
     let funderSuccess = _.cloneDeep(success);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    if(isSaveClicked){
+    if (isSaveClicked) {
       const actualIndex = this.getActualIndex(funderSuccess, this.state.selectedIndex);
       funderSuccess[actualIndex] = data;
     }
 
-    let arr = [];
-    _.each(funderSuccess, function (item) {
-      for (var propName in item) {
+    const arr = [];
+    _.each(funderSuccess, (item) => {
+      for (const propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename");
-      newItem = _.omit(newItem, "privateFields");
+      let newItem = _.omit(item, '__typename');
+      newItem = _.omit(newItem, 'privateFields');
       arr.push(newItem)
     })
     funderSuccess = arr;
-    this.setState({ funderSuccess: funderSuccess })
+    this.setState({ funderSuccess })
     this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey);
   }
 
   handleUploadAvatar(image, e) {
     this.setState({
-      //uploadingAvatar: true,,
+      // uploadingAvatar: true,,
     });
     this.onLogoFileUpload(e, image);
   }
@@ -309,18 +307,18 @@ export default class MlFunderSuccessStories extends Component {
   toggleModal() {
     const that = this;
     this.setState({
-      showProfileModal: !that.state.showProfileModal,
+      showProfileModal: !that.state.showProfileModal
     });
   }
 
   render() {
-    var yesterday = Datetime.moment().subtract(0, 'day');
-    var valid = function (current) {
+    const yesterday = Datetime.moment().subtract(0, 'day');
+    const valid = function (current) {
       return current.isBefore(yesterday);
     };
-    let that = this;
+    const that = this;
     const showLoader = that.state.loading;
-    let funderSuccessList = that.state.funderSuccessList || [];
+    const funderSuccessList = that.state.funderSuccessList || [];
     return (
       <div>
         {showLoader === true ? (<MlLoader />) : (
@@ -339,31 +337,30 @@ export default class MlFunderSuccessStories extends Component {
                       </a>
                     </div>
 
-                    {/*list of stories*/}
-                    {funderSuccessList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="" id={"team_list" + idx}>
-                            <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, details.index, idx)}>
-                              <div>
-                                <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
-                                <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
-                              </div>
-                                <img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} />
-                              <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
-                              <h3>{details.date ? details.date : "Date : "}</h3>
+                    {/* list of stories */}
+                    {funderSuccessList.map((details, idx) => (
+                      <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                        <a href="" id={`team_list${idx}`}>
+                          <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, details.index, idx)}>
+                            <div>
+                              <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate} />
+                              <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate} />
                             </div>
-                          </a>
-                        </div>
-                      )
-                    })}
+                            <img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'} />
+                            <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
+                            <h3>{details.date ? details.date : 'Date : '}</h3>
+                          </div>
+                        </a>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>
 
-              {/*popover view*/}
-              <Popover placement="right" isOpen={this.state.popoverOpen}
-                target={"team_list" + this.state.selectedObject} toggle={this.toggle}>
+              {/* popover view */}
+              <Popover
+                placement="right" isOpen={this.state.popoverOpen}
+                target={`team_list${this.state.selectedObject}`} toggle={this.toggle}>
                 <PopoverTitle>Add New Success Story </PopoverTitle>
                 <PopoverContent>
                   <div className="team_list-main">
@@ -371,14 +368,16 @@ export default class MlFunderSuccessStories extends Component {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group mandatory">
-                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                              inputProps={{ placeholder: "Select Date", className: "float-label form-control",readOnly:true }} ref="date"
+                            <Datetime
+                              dateFormat="DD-MM-YYYY" timeFormat={false}
+                              inputProps={{ placeholder: 'Select Date', className: 'float-label form-control', readOnly: true }} ref="date"
                               defaultValue={this.state.data.date ? this.state.data.date : ''}
                               onBlur={this.dateChange.bind(this)}
                               isValidDate={valid} data-required={true}
-                                      data-errMsg="Date is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isDatePrivate"
-                              onClick={this.onLockChange.bind(this, "date", "isDatePrivate")} />
+                              data-errMsg="Date is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isDatePrivate"
+                              onClick={this.onLockChange.bind(this, 'date', 'isDatePrivate')} />
                           </div>
                           <div className="clearfix"></div>
                           <CropperModal
@@ -388,42 +387,46 @@ export default class MlFunderSuccessStories extends Component {
                             show={this.state.showProfileModal}
                             toggleShow={this.toggleModal}
                           />
-                          {this.state.selectedObject != "default" ?
+                          {this.state.selectedObject != 'default' ?
                             <div className="form-group" onClick={this.toggleModal}>
                               <div className="fileUpload mlUpload_btn">
                                 <span>Upload Pic</span>
                                 {/* <input type="file" className="upload" name="logo" id="logo" accept="image/*"
                                   onChange={this.onLogoFileUpload.bind(this)} /> */}
                               </div>
-                              {/*<div className="previewImg ProfileImg">*/}
-                              {/*<img src="/images/ideator_01.png"/>*/}
-                              {/*</div>*/}
+                              {/* <div className="previewImg ProfileImg"> */}
+                              {/* <img src="/images/ideator_01.png"/> */}
+                              {/* </div> */}
                             </div> : <div></div>
                           }
                           <br />
                           <br className="brclear" />
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Enter title of Story" className="form-control float-label" ref={"storyTitle"}
+                            <input
+                              type="text" placeholder="Enter title of Story" className="form-control float-label" ref={'storyTitle'}
                               name="storyTitle" defaultValue={this.state.data.storyTitle}
                               onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Story title is required"/>
-                            <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
-                              onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")} />
+                              data-errMsg="Story title is required"/>
+                            <FontAwesome
+                              id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
+                              onClick={this.onLockChange.bind(this, 'storyTitle', 'isStoryTitlePrivate')} />
 
                           </div>
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Description" className="form-control float-label" ref={"description"}
+                            <input
+                              type="text" placeholder="Description" className="form-control float-label" ref={'description'}
                               name="description" defaultValue={this.state.data.description}
                               onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Description is required"/>
-                            <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
-                              onClick={this.onLockChange.bind(this, "description", "isDescPrivate")} />
+                              data-errMsg="Description is required"/>
+                            <FontAwesome
+                              id="isDescPrivate" name='unlock' className="input_icon un_lock"
+                              onClick={this.onLockChange.bind(this, 'description', 'isDescPrivate')} />
 
                           </div>
                           <div className="form-group">
                             <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate && this.state.data.makePrivate} name="checkbox" onChange={this.onStatusChangeNotify.bind(this)} /><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           </div>
-                          <div className="ml_btn" style={{ 'textAlign': 'center' }}>
+                          <div className="ml_btn" style={{ textAlign: 'center' }}>
                             <a className="save_btn" href="" onClick={this.onSaveAction}>Save</a>
                           </div>
                         </div>
@@ -437,8 +440,8 @@ export default class MlFunderSuccessStories extends Component {
       </div>
     )
   }
-};
+}
 MlFunderSuccessStories.contextTypes = {
   funderPortfolio: PropTypes.object,
-  portfolioKeys: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
-import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
+import MlTabComponent from '../../../commons/components/tabcomponent/MlTabComponent';
 import MlAppInternalPendingTask from './MlAppInternalPendingTask';
 import MlAppInternalCurrentTask from './MlAppInternalCurrentTask';
 import MlAppInternalCompleteTask from './MlAppInternalCompleteTask';
@@ -12,37 +12,36 @@ import MlAppInternalRejectTask from './MlAppInternalRejectTask';
 import MlAppInternalMyTask from './myTask/MlAppInternalMyTask';
 import 'react-responsive-tabs/styles.css';
 
-import MlInfiniteScroll from "../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll";
-import {mlMyAppPendingInternalTaskConfig} from './../config/MlAppPendingTasksConfig';
-import {mlMyAppCurrentInternalTaskConfig} from './../config/MlAppCurrentTasksConfig';
-import {mlMyAppCompletedInternalTaskConfig} from './../config/mlAppCompletedTasksConfig';
-import {mlMyAppRejectedInternalTaskConfig} from './../config/mlAppRejectedTasksConfig';
-import {mlMyAppSelfInternalTaskConfig} from './../config/MlAppSelfTasksConfig';
+import MlInfiniteScroll from '../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
+import { mlMyAppPendingInternalTaskConfig } from './../config/MlAppPendingTasksConfig';
+import { mlMyAppCurrentInternalTaskConfig } from './../config/MlAppCurrentTasksConfig';
+import { mlMyAppCompletedInternalTaskConfig } from './../config/mlAppCompletedTasksConfig';
+import { mlMyAppRejectedInternalTaskConfig } from './../config/mlAppRejectedTasksConfig';
+import { mlMyAppSelfInternalTaskConfig } from './../config/MlAppSelfTasksConfig';
 
-export default class MlAppInternalTask extends React.Component{
-
-  constructor(props){
+export default class MlAppInternalTask extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      activeTab:'My Tasks',
+    this.state = {
+      activeTab: 'My Tasks'
     }
-    this.updateTab=this.updateTab.bind(this);
+    this.updateTab = this.updateTab.bind(this);
   }
   componentDidMount() {
   }
-  componentWillMount(){
-    let activeTab = FlowRouter.getQueryParam('tab');
-    if(activeTab){
-      this.setState({activeTab});
+  componentWillMount() {
+    const activeTab = FlowRouter.getQueryParam('tab');
+    if (activeTab) {
+      this.setState({ activeTab });
     }
   }
-  updateTab(index){
-    let tab =  this.state.tabs[index].name;
-    FlowRouter.setQueryParams({ tab: tab,add: null });
+  updateTab(index) {
+    const tab = this.state.tabs[index].name;
+    FlowRouter.setQueryParams({ tab, add: null });
   }
 
-  render(){
-    let MlTabs = [
+  render() {
+    const MlTabs = [
       {
         name: 'My Tasks',
         tabContent: <MlAppInternalMyTask />
@@ -70,8 +69,8 @@ export default class MlAppInternalTask extends React.Component{
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
-        key:MlTab.name,
-        getContent: () => MlTab.tabContent,
+        key: MlTab.name,
+        getContent: () => MlTab.tabContent
       }));
     }
 
@@ -85,5 +84,5 @@ export default class MlAppInternalTask extends React.Component{
       </div>
     )
   }
-};
+}
 

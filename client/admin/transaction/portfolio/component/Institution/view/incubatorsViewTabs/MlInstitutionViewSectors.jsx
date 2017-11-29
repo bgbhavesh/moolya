@@ -1,25 +1,25 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import MlLoader from "../../../../../../../commons/components/loader/loader";
-import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../../utils/formElemUtil';
+import MlLoader from '../../../../../../../commons/components/loader/loader';
+import { fetchInstitutionDetailsHandler } from '../../../../actions/findPortfolioInstitutionDetails';
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { initalizeFloatLabel } from '../../../../../../utils/formElemUtil';
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
+import { validateUserForAnnotation } from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
-const KEY = "sectorsAndServices"
+const KEY = 'sectorsAndServices'
 
-export default class MlInstitutionSectors extends React.Component{
-  constructor(props, context){
+export default class MlInstitutionSectors extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
-      sectorsAndServices:{},
-      content:{},
+    this.state = {
+      sectorsAndServices: {},
+      content: {},
       loading: true
     }
     this.fetchPortfolioDetails.bind(this);
@@ -30,9 +30,9 @@ export default class MlInstitutionSectors extends React.Component{
     this.validateUserForAnnotation(this)
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.fetchPortfolioDetails();
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
 
@@ -40,74 +40,71 @@ export default class MlInstitutionSectors extends React.Component{
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
       this.fetchAnnotations();
     }
   }
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionSectors", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'institutionSectors', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'institutionSectors');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionSectors");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -116,38 +113,38 @@ export default class MlInstitutionSectors extends React.Component{
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId=that.props.portfolioDetailsId;
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.sectorsAndServices) {
-        var object = response.sectorsAndServices;
-        this.setState({loading: false,sectorsAndServices: object});
-      }else{
-        this.setState({loading:false})
-      }
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+    if (response && response.sectorsAndServices) {
+      const object = response.sectorsAndServices;
+      this.setState({ loading: false, sectorsAndServices: object });
+    } else {
+      this.setState({ loading: false })
+    }
   }
 
-  render(){
+  render() {
     const showLoader = this.state.loading;
     return (
 
 
-          <div className="col-lg-12 col-sm-12">
-            <div className="row">
-              <h2>Sectors And Services</h2>
-              <div className="panel panel-default panel-form-view" id="annotatorContent">
+      <div className="col-lg-12 col-sm-12">
+        <div className="row">
+          <h2>Sectors And Services</h2>
+          <div className="panel panel-default panel-form-view" id="annotatorContent">
 
-                <div className="panel-body">
-                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
-                    :  <div className="portfolio-main-wrap">
-                      <NoData tabName={this.props.tabName}/>
-                    </div>
-                }</p>)}
-
+            <div className="panel-body">
+              {showLoader === true ? (<MlLoader/>) : (<p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
+                : <div className="portfolio-main-wrap">
+                  <NoData tabName={this.props.tabName}/>
                 </div>
-              </div>
+              }</p>)}
+
             </div>
           </div>
+        </div>
+      </div>
 
     )
   }

@@ -1,9 +1,9 @@
 /**
  * Created by vishwadeep on 10/6/17.
  */
-import React, {Component} from "react";
-import {findProcessSetupActionHandler} from "../actions/findProcessSetupAction";
-import {fetchLikePortfolioActionHandler} from '../actions/fetchLikePortfolio';
+import React, { Component } from 'react';
+import { findProcessSetupActionHandler } from '../actions/findProcessSetupAction';
+import { fetchLikePortfolioActionHandler } from '../actions/fetchLikePortfolio';
 import Tabs from 'react-responsive-tabs';
 import MlAppInvestmentItem from './MlAppInvestmentItem';
 import NoDataList from '../../../commons/components/noData/noDataList';
@@ -15,7 +15,7 @@ export default class MlAppInvestment extends Component {
     this.state = {
       loading: true,
       data: {},
-      portfolio:[]
+      portfolio: []
     };
     this.findProcessSetup.bind(this);
     this.fetchPortfolio = this.fetchPortfolio.bind(this);
@@ -28,36 +28,33 @@ export default class MlAppInvestment extends Component {
     return resp;
   }
 
-  async fetchPortfolio(){
+  async fetchPortfolio() {
     const response = await fetchLikePortfolioActionHandler('portfolio');
-    if(response){
-      let result = JSON.parse(response);
+    if (response) {
+      const result = JSON.parse(response);
       // console.log(result);
       this.setState({
         portfolio: result
       });
     }
-
   }
 
   async findProcessSetup() {
     const response = await findProcessSetupActionHandler();
-    this.setState({loading: false, data: response});
+    this.setState({ loading: false, data: response });
   }
 
   render() {
     const that = this;
 
-    let data = this.state.data && this.state.data.processSteps && this.state.data.processSteps.length > 0 ? this.state.data.processSteps : [];
-    const MlTabs = data.filter(function (stage) {
-      return stage.isActive;
-    }).map(function (stage, id) {
+    const data = this.state.data && this.state.data.processSteps && this.state.data.processSteps.length > 0 ? this.state.data.processSteps : [];
+    const MlTabs = data.filter(stage => stage.isActive).map((stage, id) => {
       console.log(stage, 'stage');
       return {
-          name: stage.stageName,
-          stage: stage.stage,
-          tabContent: <MlAppInvestmentItem fetchPortfolio={that.fetchPortfolio}  stages={data} portfolio={that.state.portfolio} currentStage={stage} />
-        }
+        name: stage.stageName,
+        stage: stage.stage,
+        tabContent: <MlAppInvestmentItem fetchPortfolio={that.fetchPortfolio} stages={data} portfolio={that.state.portfolio} currentStage={stage} />
+      }
     });
 
     function getTabs() {
@@ -65,12 +62,12 @@ export default class MlAppInvestment extends Component {
         tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
-        getContent: () => MlTab.tabContent,
+        getContent: () => MlTab.tabContent
       }));
     }
 
     const App = () => <Tabs items={getTabs()} />;
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
@@ -82,7 +79,7 @@ export default class MlAppInvestment extends Component {
             </div>
           </div>)
         }
-        </div>
+      </div>
     )
   }
 }

@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default class MlFunderNews extends React.Component{
-
-  render(){
+export default class MlFunderNews extends React.Component {
+  render() {
     return (
       <div>
         <h2>News</h2>
@@ -14,4 +13,4 @@ export default class MlFunderNews extends React.Component{
       </div>
     )
   }
-};
+}

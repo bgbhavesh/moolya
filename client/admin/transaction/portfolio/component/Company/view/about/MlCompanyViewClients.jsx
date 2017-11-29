@@ -3,29 +3,27 @@
  */
 import React from 'react';
 // import {fetchInstitutionDetailsHandler} from '../../actions/findPortfolioInstitutionDetails'
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 const KEY = 'clients'
 
 export default class MlCompanyViewClients extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {branchesList: []};
+    this.state = { branchesList: [] };
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
   }
 
   componentDidMount() {
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
-
   }
 
   // componentDidMount() {
@@ -51,19 +49,18 @@ export default class MlCompanyViewClients extends React.Component {
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -75,16 +72,15 @@ export default class MlCompanyViewClients extends React.Component {
         } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
   async createAnnotations(annotation) {
-    let details = {
+    const details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "clients",
+      docId: 'clients',
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -96,23 +92,23 @@ export default class MlCompanyViewClients extends React.Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "clients");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'clients');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName": value.roleName,
-        "profileImage": value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -130,25 +126,23 @@ export default class MlCompanyViewClients extends React.Component {
   // }
 
   render() {
-    let that = this;
-    let clientsArray = that.props.clientsDetails || [];
+    const that = this;
+    const clientsArray = that.props.clientsDetails || [];
     return (
       <div id="annotatorContent">
         <h2>Clients</h2>
-        {clientsArray && clientsArray.length?( <div className="col-lg-12">
+        {clientsArray && clientsArray.length ? (<div className="col-lg-12">
           <div className="row">
-            {clientsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo && details.logo.fileUrl} className="team_img"/>
-                  <h3>
-                    {details.clientName && details.clientName} <br />
-                  </h3>
-                </div>
-              </div>)
-            })}
+            {clientsArray.map((details, idx) => (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+              <div className="team-block">
+                <img src={details.logo && details.logo.fileUrl} className="team_img"/>
+                <h3>
+                  {details.clientName && details.clientName} <br />
+                </h3>
+              </div>
+            </div>))}
           </div>
-        </div>):(<NoData tabName={this.props.tabName}/>)}
+        </div>) : (<NoData tabName={this.props.tabName}/>)}
       </div>
     )
   }

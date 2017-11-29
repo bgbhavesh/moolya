@@ -1,13 +1,12 @@
-var React = require('react');
-var PropTypes = require('prop-types');
-var { Button, Modal } = require('react-bootstrap');
+const React = require('react');
+const PropTypes = require('prop-types');
+const { Button, Modal } = require('react-bootstrap');
 
 class Confirm extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      isOpened : props.visible
+      isOpened: props.visible
     };
     this.onButtonClick = this.onButtonClick.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -16,28 +15,28 @@ class Confirm extends React.Component {
 
   onButtonClick() {
     this.setState({
-      isOpened: true,
+      isOpened: true
     });
   }
 
   onClose() {
     this.setState({
-      isOpened: false,
+      isOpened: false
     });
     this.props.onCancel();
   }
 
   onConfim() {
     this.setState({
-      isOpened: false,
+      isOpened: false
     });
     this.props.onConfirm();
   }
 
   render() {
-    var cancelButton = this.props.showCancelButton ?
+    const cancelButton = this.props.showCancelButton ?
       (<Button bsStyle="default" onClick={this.onClose}>{this.props.cancelText}</Button>) : null;
-    var modal = (
+    const modal = (
       <Modal show={this.state.isOpened} onHide={this.onClose}>
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>
@@ -51,10 +50,11 @@ class Confirm extends React.Component {
         </Modal.Footer>
       </Modal>
     );
-    var content;
+    let content;
     if (this.props.children) {
-      var btn = React.Children.only(this.props.children);
-      content = React.cloneElement(btn, {
+      const btn = React.Children.only(this.props.children);
+      content = React.cloneElement(
+        btn, {
           onClick: this.onButtonClick,
           style: this.props.style
         },
@@ -80,7 +80,7 @@ Confirm.propTypes = {
   confirmBSStyle: PropTypes.string,
   confirmText: PropTypes.node,
   onConfirm: PropTypes.func.isRequired,
-  onCancel:PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
   showCancelButton: PropTypes.bool.isRequired,
   title: PropTypes.node.isRequired,
   visible: PropTypes.bool

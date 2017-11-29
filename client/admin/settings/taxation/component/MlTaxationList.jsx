@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlTaxationTableConfig} from "../config/MlTaxationConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlTaxationTableConfig } from '../config/MlTaxationConfig';
 export default class MlTaxationList extends Component {
-
   render() {
     return (
       <div className="admin_main_wrap">

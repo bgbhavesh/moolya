@@ -1,27 +1,27 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { findIdeatorAudienceActionHandler } from '../../actions/findPortfolioIdeatorDetails'
+import { multipartASyncFormHandler } from '../../../../../commons/MlMultipartFormAction'
+import { initializeMlAnnotator } from '../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
+import { validateUserForAnnotation } from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 
-export default class MlIdeatorAudience extends React.Component{
-  constructor(props, context){
+export default class MlIdeatorAudience extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      data:{},
-      privateKey:{}
+      data: {},
+      privateKey: {}
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -34,38 +34,36 @@ export default class MlIdeatorAudience extends React.Component{
   }
 
 
-
-  componentWillMount(){
+  componentWillMount() {
     this.fetchPortfolioInfo();
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
     // OnLockSwitch();
     // dataVisibilityHandler();
     initalizeFloatLabel();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // OnLockSwitch();
     // dataVisibilityHandler();
   }
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#psContent").annotator();
+    this.state.content = jQuery('#psContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -82,7 +80,7 @@ export default class MlIdeatorAudience extends React.Component{
     }
   }
   async createAnnotations(annotation) {
-    let details = {portfolioId: this.props.portfolioDetailsId, docId: "audience", quote: JSON.stringify(annotation)}
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'audience', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
     if (response && response.success) {
       this.fetchAnnotations(true);
@@ -91,23 +89,23 @@ export default class MlIdeatorAudience extends React.Component{
   }
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "audience");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'audience');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -118,165 +116,137 @@ export default class MlIdeatorAudience extends React.Component{
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
       this.initalizeAnnotaor()
       this.fetchAnnotations()
     }
   }
 
-  onClick(fieldName, field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    var isPrivate = false;
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onClick(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    details = _.omit(details, [key]);
+    let isPrivate = false;
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate }
+    this.setState({ privateKey })
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  sendDataToParent() {
     let data = this.state.data;
     data = _.omit(data, 'audienceImages')
-    for (var propName in data) {
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
         delete data[propName];
       }
     }
-    data=_.omit(data,["privateFields"]);
+    data = _.omit(data, ['privateFields']);
 
     this.props.getAudience(data, this.state.privateKey)
   }
   async fetchPortfolioInfo() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
-    if(empty){
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
+    if (empty) {
       const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
       if (response) {
-        this.setState({loading: false, data: response});
-          _.each(response.privateFields, function (pf) {
-              $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-          })
+        this.setState({ loading: false, data: response });
+        _.each(response.privateFields, (pf) => {
+          $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
       }
-    }else{
+    } else {
       this.fetchOnlyImages();
-      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
+      this.setState({ loading: true, data: that.context.ideatorPortfolio.audience });
     }
   }
-  onAudienceImageFileUpload(e){
-    if(e.target.files[0].length ==  0)
-      return;
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  onAudienceImageFileUpload(e) {
+    if (e.target.files[0].length == 0) { return; }
+    const file = e.target.files[0];
+    const name = e.target.name;
+    const fileName = e.target.files[0].name;
+    const data = {
+      moduleName: 'PORTFOLIO', actionName: 'UPLOAD', portfolioDetailsId: this.props.portfolioDetailsId, portfolio: { audience: { audienceImages: [{ fileUrl: '', fileName }] } }
+    };
+    const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, name, fileName));
   }
 
-  async fetchOnlyImages(){
+  async fetchOnlyImages() {
     const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
     if (response) {
-        let dataDetails =this.state.data
-        dataDetails['audienceImages'] = response.audienceImages
-        this.setState({loading: false, data: dataDetails});
+      const dataDetails = this.state.data
+      dataDetails.audienceImages = response.audienceImages
+      this.setState({ loading: false, data: dataDetails });
     }
   }
 
-  onFileUploadCallBack(name,fileName, resp){
-    if(resp){
-      let result = JSON.parse(resp)
-      if(result.success){
+  onFileUploadCallBack(name, fileName, resp) {
+    if (resp) {
+      const result = JSON.parse(resp)
+      if (result.success) {
         this.fetchOnlyImages();
       }
     }
   }
 
-  render(){
+  render() {
     const showLoader = this.state.loading;
     const audienceImageArray = this.state.data.audienceImages && this.state.data.audienceImages.length > 0 ? this.state.data.audienceImages : [];
-    const audienceImages = audienceImageArray.map(function (m, id) {
-      return (
-        <div className="upload-image" key={id}>
-          <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
-        </div>
-      )
-    });
-    let description =this.state.data.audienceDescription?this.state.data.audienceDescription:'';
-    let loading = this.state.loading ? this.state.loading : false;
+    const audienceImages = audienceImageArray.map((m, id) => (
+      <div className="upload-image" key={id}>
+        <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
+      </div>
+    ));
+    const description = this.state.data.audienceDescription ? this.state.data.audienceDescription : '';
+    const loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
-          <div className="requested_input">
+        <div className="requested_input">
 
-                <div className="col-lg-12 col-sm-12">
-                    <div className="row">
-                        <h2>Audience</h2>
-                        <div id="psContent" className="panel-form-view hide_unlock">
-                            <div className="panel panel-default">
-                                <div className="panel-heading">
+          <div className="col-lg-12 col-sm-12">
+            <div className="row">
+              <h2>Audience</h2>
+              <div id="psContent" className="panel-form-view hide_unlock">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
                                     Audience
-                                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" />
-                                </div>
-                                <div className="panel-body">
-                                  {loading === true ? ( <MlLoader/>) : (<p>{description?description:(<NoData tabName={this.props.tabName}/>)}</p>)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" />
+                  </div>
+                  <div className="panel-body">
+                    {loading === true ? (<MlLoader/>) : (<p>{description || (<NoData tabName={this.props.tabName}/>)}</p>)}
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
+        </div>
       </div>
     )
   }
-};
+}
 MlIdeatorAudience.contextTypes = {
-  ideatorPortfolio: PropTypes.object,
+  ideatorPortfolio: PropTypes.object
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // import React from 'react';

@@ -2,17 +2,17 @@
  * Created by Birendra on 21/8/17.
  */
 import React from 'react';
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { validateUserForAnnotation } from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 
 export default class MlInstitutionViewAbout extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data : {}
+      data: {}
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -20,8 +20,8 @@ export default class MlInstitutionViewAbout extends React.Component {
     this.annotatorEvents.bind(this);
   }
 
-  componentWillMount(){
-    let resp = this.validateUserForAnnotation();
+  componentWillMount() {
+    const resp = this.validateUserForAnnotation();
     return resp
   }
 
@@ -30,7 +30,7 @@ export default class MlInstitutionViewAbout extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -38,67 +38,64 @@ export default class MlInstitutionViewAbout extends React.Component {
     }
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionAbout", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'institutionAbout', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'institutionAbout');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionAbout");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -109,7 +106,7 @@ export default class MlInstitutionViewAbout extends React.Component {
   render() {
     return (
       <div className="col-lg-12 col-sm-12">
-        <div className="row"  id="annotatorContent">
+        <div className="row" id="annotatorContent">
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
@@ -120,4 +117,4 @@ export default class MlInstitutionViewAbout extends React.Component {
       </div>
     )
   }
-};
+}

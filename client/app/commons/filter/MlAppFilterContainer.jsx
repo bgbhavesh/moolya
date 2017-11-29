@@ -3,12 +3,11 @@
  */
 import React, { Component, PropTypes } from 'react';
 import MlAppFilterPresentation from './MlAppFilterPresentation';
-import {initalizeFloatLabel} from '../../../../client/commons/utils/formElemUtil';
-import gql from "graphql-tag";
-import {appClient} from '../../core/appConnection';
+import { initalizeFloatLabel } from '../../../../client/commons/utils/formElemUtil';
+import gql from 'graphql-tag';
+import { appClient } from '../../core/appConnection';
 
 export default class MlAppFilterContainer extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -19,32 +18,32 @@ export default class MlAppFilterContainer extends Component {
   }
 
   componentDidMount() {
-    $('.filter_btn').click(function(){
+    $('.filter_btn').click(() => {
       $('.filter_table').toggleClass('filter_hide');
     });
-    setTimeout(function(){
+    setTimeout(() => {
       $('[data-toggle="tooltip"]').tooltip({
-        container:'body',
-        trigger:"hover"
+        container: 'body',
+        trigger: 'hover'
       });
       $('[data-toggle="tooltip').on('click', function () {
         $(this).tooltip('hide');
       });
-    },1000);
+    }, 1000);
 
-    $('.filter_btn').click(function(){
+    $('.filter_btn').click(() => {
       $('.filter_overlay').toggle();
-      });
+    });
 
-    $('.filter_overlay').click(function(){
+    $('.filter_overlay').click(function () {
       $('.filter_table').addClass('filter_hide');
       $(this).hide();
     });
-    $('.save_btn').click(function(){
+    $('.save_btn').click(() => {
       $('.filter_table').addClass('filter_hide');
       $('.filter_overlay').toggle();
     });
-    $('.cancel_btn').click(function(){
+    $('.cancel_btn').click(() => {
       $('.filter_table').addClass('filter_hide');
       $('.filter_overlay').toggle();
     });
@@ -52,20 +51,20 @@ export default class MlAppFilterContainer extends Component {
     initalizeFloatLabel();
   }
 
-  updateFilterQuery(value, filter){
-    let filterQuery = this.state.filterQuery;
-    if(value){
+  updateFilterQuery(value, filter) {
+    const filterQuery = this.state.filterQuery;
+    if (value) {
       filterQuery[filter] = value;
     } else {
       delete filterQuery[filter];
     }
 
     this.setState({
-      filterQuery: filterQuery
+      filterQuery
     });
   }
 
-  onApplyFilter () {
+  onApplyFilter() {
     console.log(this.state.filterQuery);
     this.props.submit(this.state.filterQuery);
     $('.filter_table').addClass('filter_hide');
@@ -78,23 +77,23 @@ export default class MlAppFilterContainer extends Component {
   render() {
     const that = this;
     const propsFilterData = this.props.filterData;
-    let filterData = JSON.parse(JSON.stringify(propsFilterData));
-    let filters = filterData.map(function (filter) {
-      if(filter.graphQLOption && filter.graphQLOption.options && filter.graphQLOption.options.variables && typeof filter.graphQLOption.options.variables == "object"){
-        let variables = filter.graphQLOption.options.variables;
-        for(let variable in variables){
-          let objectValue = variables[variable];
-          console.log('objectValue', objectValue, " adf ",variables, " adf ",variable);
-          if(objectValue.substr(0,2) === "$$"){
-            let value = that.state.filterQuery[objectValue.substr(2)];
+    const filterData = JSON.parse(JSON.stringify(propsFilterData));
+    const filters = filterData.map((filter) => {
+      if (filter.graphQLOption && filter.graphQLOption.options && filter.graphQLOption.options.variables && typeof filter.graphQLOption.options.variables === 'object') {
+        const variables = filter.graphQLOption.options.variables;
+        for (const variable in variables) {
+          const objectValue = variables[variable];
+          console.log('objectValue', objectValue, ' adf ', variables, ' adf ', variable);
+          if (objectValue.substr(0, 2) === '$$') {
+            const value = that.state.filterQuery[objectValue.substr(2)];
             console.log('value', value);
-            filter.graphQLOption.options.variables[variable] = value ? value : "";
+            filter.graphQLOption.options.variables[variable] = value || '';
           }
         }
       }
       return filter;
     });
-    console.log(filters, that.state.filterQuery, filterData );
+    console.log(filters, that.state.filterQuery, filterData);
     return (
       <div className="filter_table filter_hide">
         <div className="panel panel-default">
@@ -105,7 +104,7 @@ export default class MlAppFilterContainer extends Component {
             updateFilterQuery={this.updateFilterQuery}
           />
           <div className="ml_icon_btn">
-            <a href=""  className="save_btn" onClick={that.onApplyFilter.bind(this)} >
+            <a href="" className="save_btn" onClick={that.onApplyFilter.bind(this)} >
               <span className="ml my-ml-save"></span>
             </a>
             <a href="" id="cancel_contact" className="cancel_btn" onClick={that.onCancelFilter.bind(this)}>
@@ -113,7 +112,7 @@ export default class MlAppFilterContainer extends Component {
             </a>
           </div>
         </div>
-        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
+        <div className="filter_btn" data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
       </div>
     );
   }

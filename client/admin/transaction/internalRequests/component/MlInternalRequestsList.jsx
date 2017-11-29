@@ -1,14 +1,14 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlInternalRequestsTableConfig} from "../../internalRequests/config/MlInternalRequestsConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlInternalRequestsTableConfig } from '../../internalRequests/config/MlInternalRequestsConfig';
 import CreateRequestComponent from './CreateRequestComponent'
 import _ from 'lodash';
 
 export default class MlInternalRequestsList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={ time: new Date()};
+    this.state = { time: new Date() };
   }
 
   render() {

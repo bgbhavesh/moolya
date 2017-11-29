@@ -1,17 +1,16 @@
 /**
  * Created by vishwadeep on 4/7/17.
  */
-import React, {Component} from "react";
-import {render} from "react-dom";
-import StepZilla from "../../../../client/commons/components/stepzilla/StepZilla";
-import _ from "lodash";
-import MlLoader from "../../../../client/commons/components/loader/loader";
-import {findRegistrationActionHandler, documentTypesActionHandler} from "../actions/findRegistration";
-import {fetchTemplateHandler} from "../../../../client/commons/containers/templates/mltemplateActionHandler";
-import _underscore from "underscore";
-import {appClient} from '../../core/appConnection';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import StepZilla from '../../../../client/commons/components/stepzilla/StepZilla';
+import _ from 'lodash';
+import MlLoader from '../../../../client/commons/components/loader/loader';
+import { findRegistrationActionHandler, documentTypesActionHandler } from '../actions/findRegistration';
+import { fetchTemplateHandler } from '../../../../client/commons/containers/templates/mltemplateActionHandler';
+import _underscore from 'underscore';
+import { appClient } from '../../core/appConnection';
 export default class MlAppRegistrationWizard extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -45,21 +44,20 @@ export default class MlAppRegistrationWizard extends Component {
 
   async getRegistrationContactDetails(details) {
     const resp = await this.findRegistration();
-    this.setState({'registrationDetails': resp})
+    this.setState({ registrationDetails: resp })
   }
 
   async getRegistrationSocialLinks(details) {
-    //refer proper object
+    // refer proper object
     const resp = await this.findRegistration();
-    this.setState({'registrationDetails': resp})
+    this.setState({ registrationDetails: resp })
   }
 
   async getRegistrationKYCDetails(details) {
-    //refer proper object
-    //this.setState({'registrationDetails': data})
+    // refer proper object
+    // this.setState({'registrationDetails': data})
     const resp = await this.findRegistration();
-    this.setState({'registrationDetails': resp})
-
+    this.setState({ registrationDetails: resp })
   }
 
   async componentWillMount() {
@@ -71,11 +69,11 @@ export default class MlAppRegistrationWizard extends Component {
 
   async findRegistration() {
     const response = await findRegistrationActionHandler(this.props.config);
-    let kycDocumentsArray = [];
+    const kycDocumentsArray = [];
     if (response) {
       const result = await documentTypesActionHandler();
-      let docTypeArray = _underscore.pluck(result, '_id') || [];
-      let kycDocuments = response && response.kycDocuments ? response.kycDocuments : [];
+      const docTypeArray = _underscore.pluck(result, '_id') || [];
+      const kycDocuments = response && response.kycDocuments ? response.kycDocuments : [];
       for (let k = 0; k < docTypeArray.length; k++) {
         kycDocumentsArray[docTypeArray[k]] = []
       }
@@ -88,62 +86,59 @@ export default class MlAppRegistrationWizard extends Component {
               if (kycDocumentsArray && kycDocumentsArray[kycDocuments[i].docTypeId]) {
                 kycDocumentsArray[kycDocuments[i].docTypeId].push(kycDocuments[i])
               }
-
             }
           }
         }
       }
     }
-    this.setState({loading: false, kycDocumentList: kycDocumentsArray, registrationDetails: response});
+    this.setState({ loading: false, kycDocumentList: kycDocumentsArray, registrationDetails: response });
     return response;
   }
 
   async fetchSoftRegistrationTemplate(regDetails) {
-    let userType = this.context.userType;
+    const userType = this.context.userType;
     const reg = await fetchTemplateHandler({
-      process: "Registration",
-      subProcess: "Registration",
-      stepCode: "SOFT",
-      userType: userType,
+      process: 'Registration',
+      subProcess: 'Registration',
+      stepCode: 'SOFT',
+      userType,
       recordId: regDetails._id,
-      connection:appClient
+      connection: appClient
     });
-    this.setState({softRegComponent: reg && reg.component ? reg.component : null});
+    this.setState({ softRegComponent: reg && reg.component ? reg.component : null });
     if (!reg || !reg.component) {
-      this.setState({"softRegSteps": []})
+      this.setState({ softRegSteps: [] })
     }
-    ;
   }
 
   async fetchHardRegistrationTemplate(regDetails) {
-    let userType = this.context.userType;
+    const userType = this.context.userType;
     const reg = await fetchTemplateHandler({
-      process: "Registration",
-      subProcess: "Registration",
-      stepCode: "HARD",
-      userType: userType,
+      process: 'Registration',
+      subProcess: 'Registration',
+      stepCode: 'HARD',
+      userType,
       recordId: regDetails._id,
-      connection:appClient
+      connection: appClient
     });
-    this.setState({hardRegComponent: reg && reg.component ? reg.component : null});
+    this.setState({ hardRegComponent: reg && reg.component ? reg.component : null });
     if (!reg || !reg.component) {
-      this.setState({"hardRegSteps": []})
+      this.setState({ hardRegSteps: [] })
     }
-    ;
   }
 
   setHardRegistrationSteps(steps) {
-    this.setState({hardRegSteps: steps || []});
+    this.setState({ hardRegSteps: steps || [] });
   }
 
   setSoftRegistrationSteps(steps) {
-    this.setState({softRegSteps: steps || []});
+    this.setState({ softRegSteps: steps || [] });
   }
 
   render() {
-    let registrationId = this.props.config;
-    let registrationConfig = {
-      registrationId: registrationId,
+    const registrationId = this.props.config;
+    const registrationConfig = {
+      registrationId,
       userType: this.context.userType,
       getRegistrationDetails: this.getRegistrationDetails.bind(this),
       registrationInfo: this.state.registrationDetails.registrationInfo,
@@ -170,8 +165,8 @@ export default class MlAppRegistrationWizard extends Component {
 
     const steps = _.concat(this.state.softRegSteps, this.state.hardRegSteps);
     const hasSteps = _.concat(this.state.softRegSteps, this.state.hardRegSteps).length > 0;
-    let SoftRegComponent = this.state.softRegComponent;
-    let HardRegComponent = this.state.hardRegComponent;
+    const SoftRegComponent = this.state.softRegComponent;
+    const HardRegComponent = this.state.hardRegComponent;
     let hasSoftRegTemplate = true;
     let hasHardRegTemplate = true;
     if (!SoftRegComponent) {
@@ -184,23 +179,23 @@ export default class MlAppRegistrationWizard extends Component {
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
-         <div className={this.props.isAccodion?'':"app_main_wrap"}>
-          <div className={this.props.isAccodion?'':"app_padding_wrap"}>
-            {/*<h2>Registration Process</h2>*/}
-            <div className='step-progress'>
-              <div >
-                {hasSoftRegTemplate && <SoftRegComponent {...registrationConfig}/>}
-                {hasHardRegTemplate && <HardRegComponent {...registrationConfig}/>}
-                {hasSteps && <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} dontValidate={false} showConfirm={true}/>}
+          <div className={this.props.isAccodion ? '' : 'app_main_wrap'}>
+            <div className={this.props.isAccodion ? '' : 'app_padding_wrap'}>
+              {/* <h2>Registration Process</h2> */}
+              <div className='step-progress'>
+                <div >
+                  {hasSoftRegTemplate && <SoftRegComponent {...registrationConfig}/>}
+                  {hasHardRegTemplate && <HardRegComponent {...registrationConfig}/>}
+                  {hasSteps && <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} dontValidate={false} showConfirm={true}/>}
+                </div>
               </div>
             </div>
           </div>
-         </div>
         )}
       </div>
     )
   }
-};
+}
 
 MlAppRegistrationWizard.contextTypes = {
   userType: React.PropTypes.string

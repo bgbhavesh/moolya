@@ -1,22 +1,22 @@
-import React, { Component, PropTypes }  from "react";
-import ScrollArea from "react-scrollbar";
-import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
-import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
-import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import React, { Component, PropTypes } from 'react';
+import ScrollArea from 'react-scrollbar';
+import { fetchCompanyDetailsHandler } from '../../../../actions/findCompanyPortfolioDetails';
+import { initalizeFloatLabel } from '../../../../../../utils/formElemUtil';
+import { validateUserForAnnotation } from '../../../../actions/findPortfolioIdeatorDetails'
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../../../commons/components/loader/loader";
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = "sectorsAndServices"
+const KEY = 'sectorsAndServices'
 
-export default class MlCompanyViewSectors extends Component{
-  constructor(props, context){
+export default class MlCompanyViewSectors extends Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       // sectorsAndServices:{},
-      content:{},
+      content: {},
       loading: true
     }
     this.fetchPortfolioDetails.bind(this);
@@ -30,44 +30,44 @@ export default class MlCompanyViewSectors extends Component{
     return this;
   }
 
-  componentWillMount(){
-    let res = this.validateUserForAnnotation();
-    let resp = this.fetchPortfolioDetails();
+  componentWillMount() {
+    const res = this.validateUserForAnnotation();
+    const resp = this.fetchPortfolioDetails();
     return resp
   }
 
-  componentDidMount(){
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  componentDidMount() {
+    const WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
     initalizeFloatLabel();
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId=that.props.portfolioDetailsId;
-      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.sectorsAndServices) {
-        var object = response.sectorsAndServices;
-        this.setState({loading: false,sectorsAndServicesList: object});
-      }else{
-        this.setState({loading:false})
-      }
-    const privateFields = response && response.privateFields&&response.privateFields.length?response.privateFields:[]
-    _.each(privateFields, function (pf) {
-      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+    if (response && response.sectorsAndServices) {
+      const object = response.sectorsAndServices;
+      this.setState({ loading: false, sectorsAndServicesList: object });
+    } else {
+      this.setState({ loading: false })
+    }
+    const privateFields = response && response.privateFields && response.privateFields.length ? response.privateFields : []
+    _.each(privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
   viewDetails(id, e) {
-    this.setState({loading: true})
-    let data = this.state.sectorsAndServicesList;
-    let getData = data[id];
-    let subDomain =getData.subDomainName
-    this.setState({loading: false, viewCurDetail: subDomain});
+    this.setState({ loading: true })
+    const data = this.state.sectorsAndServicesList;
+    const getData = data[id];
+    const subDomain = getData.subDomainName
+    this.setState({ loading: false, viewCurDetail: subDomain });
   }
-  showDetails(id){
-    $("#details-div").show();
-    var $frame = $('#forcecentered');
-    var $wrap = $frame.parent();
+  showDetails(id) {
+    $('#details-div').show();
+    const $frame = $('#forcecentered');
+    const $wrap = $frame.parent();
     // Call Sly on frame
     $frame.sly({
       horizontal: 1,
@@ -85,48 +85,46 @@ export default class MlCompanyViewSectors extends Component{
       easing: 'easeOutExpo',
       dragHandle: 1,
       dynamicHandle: 1,
-      clickBar: 1,
+      clickBar: 1
     });
-    $("#show").hide();
+    $('#show').hide();
     this.viewDetails(id)
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"companySectorsAndServices", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'companySectorsAndServices', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
@@ -136,7 +134,7 @@ export default class MlCompanyViewSectors extends Component{
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -144,24 +142,24 @@ export default class MlCompanyViewSectors extends Component{
     }
   }
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "companySectorsAndServices");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'companySectorsAndServices');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -169,99 +167,95 @@ export default class MlCompanyViewSectors extends Component{
     return response;
   }
 
-  render(){
-    let that = this;
+  render() {
+    const that = this;
     const showLoader = that.state.loading;
-    let sectorsAndServicesArray = that.state.sectorsAndServicesList || [];
-    if(_.isEmpty(sectorsAndServicesArray)){
+    const sectorsAndServicesArray = that.state.sectorsAndServicesList || [];
+    if (_.isEmpty(sectorsAndServicesArray)) {
       return (
         showLoader === true ? (<MlLoader/>) :
           <div className="portfolio-main-wrap">
             <NoData tabName={this.props.tabName} />
           </div>
       )
-    } else {
-      return (
-        <div>
-          {showLoader === true ? (<MlLoader/>) : (
-            <div className="admin_padding_wrap">
-              <h2>Area of Interest</h2>
-              <div className="requested_input main_wrap_scroll">
+    }
+    return (
+      <div>
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="admin_padding_wrap">
+            <h2>Area of Interest</h2>
+            <div className="requested_input main_wrap_scroll">
 
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
+                <div className="col-lg-12" id="show">
+                  <div className="row">
+
+                    {sectorsAndServicesArray && sectorsAndServicesArray.map((say, value) => (<div className="col-lg-2 col-md-3 col-sm-4" key={value} onClick={that.showDetails.bind(that, value)}>
+                      <div className="list_block list_block_intrests notrans">
+                        <div className="hex_outer">
+                          <img src={say.logo && say.logo.fileUrl ? generateAbsolutePath(say.logo.fileUrl) : '/images/def_profile.png'} />
+                        </div>
+                        <h3>{say.industryTypeName}</h3>
+                      </div>
+                    </div>))}
+                  </div>
+                </div>
+
+              </ScrollArea>
+
+            </div>
+            <div id="details-div" style={{ display: 'none' }}>
+              <div className="col-lg-12">
+                <div className="row">
+
+                  <div className="top_block_scroller" id="forcecentered">
+                    <ul className="topscroll_listblock">
+                      {sectorsAndServicesArray && sectorsAndServicesArray.map((say, value) => (<li key={value} className="active">
+                        <div
+                          className="list_block list_block_intrests notrans"
+                          onClick={that.viewDetails.bind(that, value)}>
+                          <div className="hex_outer">
+                            <img src={say.logo && say.logo.fileUrl ? generateAbsolutePath(say.logo.fileUrl) : '/images/def_profile.png'}/>
+                          </div>
+                          <h3>{say.industryTypeName}</h3>
+                        </div>
+                      </li>))}
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+              <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}
                   className="main_wrap_scroll"
                   smoothScrolling={true}
                   default={true}
                 >
-                  <div className="col-lg-12" id="show">
+
+                  <div className="col-lg-12">
                     <div className="row">
-
-                      {sectorsAndServicesArray && sectorsAndServicesArray.map(function (say, value) {
-                        return (<div className="col-lg-2 col-md-3 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
-                          <div className="list_block list_block_intrests notrans">
-                            <div className="hex_outer">
-                              <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"} />
-                            </div>
-                            <h3>{say.industryTypeName}</h3>
+                      <div className="investement-view-content">
+                        <div className="panel panel-default panel-form-view">
+                          <div className="panel-body">
+                            <p>Domain : {this.state.viewCurDetail}</p>
                           </div>
-                        </div>)
-                      })}
-                    </div>
-                  </div>
-
-                </ScrollArea>
-
-              </div>
-              <div id="details-div" style={{display: 'none'}}>
-                <div className="col-lg-12">
-                  <div className="row">
-
-                    <div className="top_block_scroller" id="forcecentered">
-                      <ul className="topscroll_listblock">
-                        {sectorsAndServicesArray && sectorsAndServicesArray.map(function (say, value) {
-                          return (<li key={value} className="active">
-                            <div className="list_block list_block_intrests notrans"
-                                 onClick={that.viewDetails.bind(that, value)}>
-                              <div className="hex_outer">
-                                <img src={say.logo && say.logo.fileUrl? generateAbsolutePath(say.logo.fileUrl) : "/images/def_profile.png"}/>
-                              </div>
-                              <h3>{say.industryTypeName}</h3>
-                            </div>
-                          </li>)
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-
-                </div>
-                <div className="main_wrap_scroll">
-                  <ScrollArea
-                    speed={0.8}
-                    className="main_wrap_scroll"
-                    smoothScrolling={true}
-                    default={true}
-                  >
-
-                    <div className="col-lg-12">
-                      <div className="row">
-                        <div className="investement-view-content">
-                          <div className="panel panel-default panel-form-view">
-                            <div className="panel-body">
-                              <p>Domain : {this.state.viewCurDetail}</p>
-                            </div>
-                          </div>
-
                         </div>
+
                       </div>
                     </div>
-                  </ScrollArea>
-                </div>
+                  </div>
+                </ScrollArea>
               </div>
-            </div>)}
-        </div>
-      )
-    }
+            </div>
+          </div>)}
+      </div>
+    )
   }
 }
 // const showLoader = this.state.loading;

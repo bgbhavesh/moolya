@@ -1,24 +1,26 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import _ from "lodash";
+import _ from 'lodash';
 import omitDeep from 'omit-deep-lodash';
-import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import MlStartupManagement from "./MlStartupManagement";
-import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
-import MlStartupInvestor from "./MlStartupInvestor";
-import MlStartupData from "./MlStartupData";
-import MlStartupAwards from "./MlStartupAwards";
-import MlStartupMCL from "./MlStartupMCL";
-import MlStartupLookingFor from "./MlStartupLookingFor";
+import MlTabComponent from '../../../../../../commons/components/tabcomponent/MlTabComponent';
+import MlStartupManagement from './MlStartupManagement';
+import MlStartupAboutUs from './aboutUs/MlStartupAboutUsLandingPage';
+import MlStartupInvestor from './MlStartupInvestor';
+import MlStartupData from './MlStartupData';
+import MlStartupAwards from './MlStartupAwards';
+import MlStartupMCL from './MlStartupMCL';
+import MlStartupLookingFor from './MlStartupLookingFor';
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
-import {client} from '../../../../../core/apolloConnection'
+import MlStartupCharts from './MlStartupCharts/MlStartupCharts';
+import { client } from '../../../../../core/apolloConnection'
 
 
 class MlStartupEditTemplate extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
+    this.state = {
+      tabs: [], aboutUs: {}, startupPortfolio: {}, portfolioKeys: { privateKeys: [], removePrivateKeys: [] }
+    };
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -34,11 +36,11 @@ class MlStartupEditTemplate extends Component {
   }
 
   componentDidMount() {
-    setTimeout(function () {
+    setTimeout(() => {
       $('div[role="tab"]').each(function (index) {
-        var test = $(this).text();
+        const test = $(this).text();
         $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+        $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
@@ -47,78 +49,87 @@ class MlStartupEditTemplate extends Component {
   }
 
   backClickHandler() {
-    let tabs = this.state.tabs;
-    this.setState({tabs: tabs})
+    const tabs = this.state.tabs;
+    this.setState({ tabs })
   }
 
   getTabComponents() {
-    let tabs = [
+    const tabs = [
 
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "About",
-        component: <MlStartupAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
-                                     portfolioDetailsId={this.props.portfolioDetailsId}
-                                     backClickHandler={this.backClickHandler.bind(this)}/>
+        title: 'About',
+        component: <MlStartupAboutUs
+          key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          backClickHandler={this.backClickHandler.bind(this)}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Management",
-        component: <MlStartupManagement client={client} isAdmin={true} key="2" tabName={"management"}
-                                        getManagementDetails={this.getManagementDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Management',
+        component: <MlStartupManagement
+          client={client} isAdmin={true} key="2" tabName={'management'}
+          getManagementDetails={this.getManagementDetails.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Investor",
-        component: <MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
-                                      portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
+        title: 'Investor',
+        component: <MlStartupInvestor
+          key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Data",
-        component: <MlStartupData key="4" isApp={false} isAdmin={true} client={client} getDataDetails={this.getDataDetails.bind(this)}
-                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Data',
+        component: <MlStartupData
+          key="4" isApp={false} isAdmin={true} client={client} getDataDetails={this.getDataDetails.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Charts",
-        component: <MlStartupCharts key="5" getChartDetails={this.getChartDetails.bind(this)} isAdmin={true}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Charts',
+        component: <MlStartupCharts
+          key="5" getChartDetails={this.getChartDetails.bind(this)} isAdmin={true}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Awards",
-        component: <MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
+        title: 'Awards',
+        component: <MlStartupAwards
+          key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Library",
-        component: <PortfolioLibrary key="7" client={client} isAdmin={false}
-                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Library',
+        component: <PortfolioLibrary
+          key="7" client={client} isAdmin={false}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "M C & L",
-        component: <MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)}
-                                 portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'M C & L',
+        component: <MlStartupMCL
+          key="8" getStartupMCL={this.getStartupMCL.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Looking For",
-        component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
-      },
+        title: 'Looking For',
+        component: <MlStartupLookingFor
+          key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
+      }
 
 
     ]
@@ -126,93 +137,93 @@ class MlStartupEditTemplate extends Component {
   }
 
   getAboutus(details, tabName, privateKey, requiredFields) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, 'logo');
     // this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
-    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
+    this.props.getPortfolioDetails({ startupPortfolio: object }, privateKey, requiredFields);
   }
 
   getDataDetails(details, tabName) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data});
+    this.props.getPortfolioDetails({ startupPortfolio: data });
   }
 
   getManagementDetails(details, privateKey, requiredFields) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     // if (data && !data.management) {
     //   data['management'] = [];
     // }
-    data['management'] = details;
-    this.setState({startupPortfolio: data})
-    var object = omitDeep(data, 'logo');
-    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
+    data.management = details;
+    this.setState({ startupPortfolio: data })
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({ startupPortfolio: object }, privateKey, requiredFields);
   }
 
   getInvestorDetails(details, privateKey, requiredFields) {
-    let data = this.state.startupPortfolio;
-    data['investor'] = details;
-    this.setState({startupPortfolio: data})
-    var object = omitDeep(data, 'logo');
-    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
+    const data = this.state.startupPortfolio;
+    data.investor = details;
+    this.setState({ startupPortfolio: data })
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({ startupPortfolio: object }, privateKey, requiredFields);
   }
 
   getAwardsDetails(details, privateKey, requiredFields) {
-    let data = this.state.startupPortfolio;
-    data['awardsRecognition'] = details;
-    this.setState({startupPortfolio: data})
-    var object = omitDeep(data, 'logo');
-    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
+    const data = this.state.startupPortfolio;
+    data.awardsRecognition = details;
+    this.setState({ startupPortfolio: data })
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({ startupPortfolio: object }, privateKey, requiredFields);
   }
 
   getLookingForDetails(details, privateKey, requiredFields) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     if (data && !data.lookingFor) {
-      data['lookingFor'] = [];
+      data.lookingFor = [];
     }
-    data['lookingFor'] = details;
-    this.setState({startupPortfolio: data});
+    data.lookingFor = details;
+    this.setState({ startupPortfolio: data });
     this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey, requiredFields);
     // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey, requiredFields);
   }
 
   getStartupMCL(details, privateKey) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     if (details.memberships) {
-      data['memberships'] = details.memberships;
+      data.memberships = details.memberships;
     }
     if (details.compliances) {
-      data['compliances'] = details.compliances;
+      data.compliances = details.compliances;
     }
     if (details.licenses) {
-      data['licenses'] = details.licenses;
+      data.licenses = details.licenses;
     }
-    this.setState({startupPortfolio: data});
+    this.setState({ startupPortfolio: data });
     this.sendDataToParentPortfolio(this.state.startupPortfolio, privateKey);
     // this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, privateKey);
   }
 
   getChartDetails(details, tabName) {
-    let data = this.state.startupPortfolio;
+    const data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio: data});
+    this.props.getPortfolioDetails({ startupPortfolio: data });
   }
 
   /**
    * @Note: send data to parent portfolio
    * */
-  sendDataToParentPortfolio(data, privateKey, requiredFields){
-    var object = omitDeep(data, 'logo');
-    this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
+  sendDataToParentPortfolio(data, privateKey, requiredFields) {
+    const object = omitDeep(data, 'logo');
+    this.props.getPortfolioDetails({ startupPortfolio: object }, privateKey, requiredFields);
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys:privateKeys,
-      removePrivateKeys:removePrivateKeys
+    const obj = {
+      privateKeys,
+      removePrivateKeys
     }
-    this.setState({portfolioKeys: obj}, () => {
+    this.setState({ portfolioKeys: obj }, () => {
       this.props.onChangePrivateKeys(obj)
     });
     return obj
@@ -227,7 +238,7 @@ class MlStartupEditTemplate extends Component {
   }
 
   componentWillMount() {
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
@@ -237,11 +248,11 @@ class MlStartupEditTemplate extends Component {
       }));
     }
 
-    this.setState({tabs: getTabs() || []});
+    this.setState({ tabs: getTabs() || [] });
   }
 
   render() {
-    let tabs = this.state.tabs;
+    const tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
   }
 }
@@ -250,19 +261,15 @@ MlStartupEditTemplate.childContextTypes = {
   portfolioKeys: PropTypes.object
 };
 
-const mapStateToProps = (state) => {
-  return {
-    mlStartupEditTemplate: state,
-  };
-}
+const mapStateToProps = state => ({
+  mlStartupEditTemplate: state
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onChangePrivateKeys: (keys) => dispatch({
-      type: 'CHANGE_PRIVATE_KEYS',
-      payload: keys,
-    }),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  onChangePrivateKeys: keys => dispatch({
+    type: 'CHANGE_PRIVATE_KEYS',
+    payload: keys
+  })
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);

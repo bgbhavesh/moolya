@@ -1,52 +1,51 @@
-import React from "react";
-import {render} from "react-dom";
-import MlAppIdeatorIndividualComponent from "./MlAppIdeatorIndividualComponent";
-import MlAppRegStep3 from "./MlAppRegStep3";
-import MlAppRegStep4 from "./MlAppRegStep4";
-import MlAppRegStep5 from "./MlAppRegStep5";
-import MlAppRegStep6 from "./MlAppRegStep6";
+import React from 'react';
+import { render } from 'react-dom';
+import MlAppIdeatorIndividualComponent from './MlAppIdeatorIndividualComponent';
+import MlAppRegStep3 from './MlAppRegStep3';
+import MlAppRegStep4 from './MlAppRegStep4';
+import MlAppRegStep5 from './MlAppRegStep5';
+import MlAppRegStep6 from './MlAppRegStep6';
 // import MlAppRegStep7 from "./MlAppRegStep7";
 
 export default class MlAppIdeatorIndividualHardReg extends React.Component {
-
   constructor(props) {
     super(props);
     this.getRegistrationSteps.bind(this);
   }
 
   getRegistrationSteps(props) {
-    let hardRegSteps = [
+    const hardRegSteps = [
       {
         name: 'Additional Info',
-        'icon': <span className="ml ml-additional-Information"></span>,
+        icon: <span className="ml ml-additional-Information"></span>,
         component: <MlAppIdeatorIndividualComponent {...props} />
       },
       {
         name: 'Contact Details',
-        'icon': <span className="ml flaticon-ml-agenda"></span>,
+        icon: <span className="ml flaticon-ml-agenda"></span>,
         component: <MlAppRegStep3 {...props} />
       },
       {
         name: 'Social Links',
-        'icon': <span className="ml ml-social-Links"></span>,
+        icon: <span className="ml ml-social-Links"></span>,
         component: <MlAppRegStep4 {...props} />
       },
       {
         name: 'KYC\'s Documents',
-        'icon': <span className="ml ml-kyc-document"></span>,
+        icon: <span className="ml ml-kyc-document"></span>,
         component: <MlAppRegStep5 {...props} />
       },
       {
         name: 'Payment Gateway',
-        'icon': <span className="ml ml-payments"></span>,
+        icon: <span className="ml ml-payments"></span>,
         component: <MlAppRegStep6 {...props} />
-      },
+      }
       // {
       //   name: 'History',
       //   'icon': <span className="ml my-ml-history"></span>,
       //   component: <MlAppRegStep7 {...props} />
       // }
-      ];
+    ];
     return hardRegSteps;
   }
 
@@ -56,7 +55,7 @@ export default class MlAppIdeatorIndividualHardReg extends React.Component {
 
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
-  };
+  }
 
   componentWillUpdate(nextProps) {
     if (!this.compareQueryOptions(this.props, nextProps)) {
@@ -67,4 +66,4 @@ export default class MlAppIdeatorIndividualHardReg extends React.Component {
   render() {
     return null;
   }
-};
+}

@@ -10,16 +10,15 @@
  */
 
 import React from 'react';
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-import { Modal, ModalHeader, ModalBody} from 'reactstrap';
+const FontAwesome = require('react-fontawesome');
+const Select = require('react-select');
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import _ from 'lodash'
-import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer';
+import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 
-export default class  SharedLibrary extends React.Component {
-
+export default class SharedLibrary extends React.Component {
   /**
    * Constructor
    * @param props :: Object - Parents data
@@ -29,10 +28,10 @@ export default class  SharedLibrary extends React.Component {
     super(props);
     this.state = {
       modal: false,
-      previewImage: "",
-      previewDocument:"",
-      previewTemplate:"",
-      previewVideo:"",
+      previewImage: '',
+      previewDocument: '',
+      previewTemplate: '',
+      previewVideo: '',
       templateDetails: [],
       documentDetails: [],
       imageDetails: [],
@@ -51,54 +50,56 @@ export default class  SharedLibrary extends React.Component {
    */
 
   componentWillMount() {
-    let data = this.props.data || [];
-    let that = this;
-    let Image = [];
-    let Video = [];
-    let Template = [];
-    let Document = [];
-    data.map(function(fileInfo){
-      let type = fileInfo.file.fileType;
-      if(type === 'image') {
+    const data = this.props.data || [];
+    const that = this;
+    const Image = [];
+    const Video = [];
+    const Template = [];
+    const Document = [];
+    data.map((fileInfo) => {
+      const type = fileInfo.file.fileType;
+      if (type === 'image') {
         Image.push(fileInfo)
-        that.setState({imageDetails: Image})
-      } else if(type === 'video') {
+        that.setState({ imageDetails: Image })
+      } else if (type === 'video') {
         Video.push(fileInfo)
-        that.setState({videoDetails: Video})
-      } else if(type === 'document') {
+        that.setState({ videoDetails: Video })
+      } else if (type === 'document') {
         Document.push(fileInfo)
-        that.setState({documentDetails: Document})
+        that.setState({ documentDetails: Document })
       } else {
         Template.push(fileInfo)
-        that.setState({templateDetails: Template})
+        that.setState({ templateDetails: Template })
       }
     })
   }
 
   componentWillReceiveProps(newProps) {
-    let data = newProps && newProps.data ? newProps.data : [] ;
-    let that = this;
-    let Image = [];
-    let Video = [];
-    let Template = [];
-    let Document = [];
-    if(_.isEmpty(data)){
-      this.setState({imageDetails: [], videoDetails:[],documentDetails:[], templateDetails:[]  })
-    } else{
-      data.map(function(fileInfo){
-        let type = fileInfo.file.fileType;
-        if(type === 'image') {
+    const data = newProps && newProps.data ? newProps.data : [];
+    const that = this;
+    const Image = [];
+    const Video = [];
+    const Template = [];
+    const Document = [];
+    if (_.isEmpty(data)) {
+      this.setState({
+        imageDetails: [], videoDetails: [], documentDetails: [], templateDetails: []
+      })
+    } else {
+      data.map((fileInfo) => {
+        const type = fileInfo.file.fileType;
+        if (type === 'image') {
           Image.push(fileInfo)
-          that.setState({imageDetails: Image})
-        } else if(type === 'video') {
+          that.setState({ imageDetails: Image })
+        } else if (type === 'video') {
           Video.push(fileInfo)
-          that.setState({videoDetails: Video})
-        } else if(type === 'document') {
+          that.setState({ videoDetails: Video })
+        } else if (type === 'document') {
           Document.push(fileInfo)
-          that.setState({documentDetails: Document})
+          that.setState({ documentDetails: Document })
         } else {
           Template.push(fileInfo)
-          that.setState({templateDetails: Template})
+          that.setState({ templateDetails: Template })
         }
       })
     }
@@ -118,31 +119,31 @@ export default class  SharedLibrary extends React.Component {
 
 
   randomVideo(link, index) {
-    let data = this.state.videoDetails|| [];
+    const data = this.state.videoDetails || [];
     let videoPreviewUrl;
     videoPreviewUrl = generateAbsolutePath(data[index].file.url);
-    this.setState({previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl});
+    this.setState({ previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl });
   }
 
   random(link, index) {
-    let data = this.state.imageDetails || [];
+    const data = this.state.imageDetails || [];
     let imagePreviewUrl;
     imagePreviewUrl = data[index].file.url;
-    this.setState({previewImage: imagePreviewUrl});
+    this.setState({ previewImage: imagePreviewUrl });
   }
 
   randomDocument(link, index) {
-    let data = this.state.documentDetails|| [];
+    const data = this.state.documentDetails || [];
     let documentPreviewUrl;
     documentPreviewUrl = data[index].file.url;
-    this.setState({previewDocument: documentPreviewUrl});
+    this.setState({ previewDocument: documentPreviewUrl });
   }
 
   randomTemplate(link, index) {
-    let data = this.state.templateDetails|| [];
+    const data = this.state.templateDetails || [];
     let templatePreviewUrl;
     templatePreviewUrl = data[index].file.url;
-    this.setState({previewTemplate: templatePreviewUrl});
+    this.setState({ previewTemplate: templatePreviewUrl });
   }
 
 
@@ -153,21 +154,20 @@ export default class  SharedLibrary extends React.Component {
    */
 
   images() {
-    let that = this;
-    let imageData = that.state.imageDetails ||  [] ;
-    const Images = imageData.map(function (show, id) {
-      return (
-        <div className="thumbnail" key={id}>
-          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-            <a href="" data-toggle="modal" data-target=".imagespop"
-                                                 onClick={that.random.bind(that, generateAbsolutePath(show.file.url), id)}>
-              <img src={generateAbsolutePath(show.file.url)} /></a>
-          <div id="images" className="title">{show.file.fileName}</div>
+    const that = this;
+    const imageData = that.state.imageDetails || [];
+    const Images = imageData.map((show, id) => (
+      <div className="thumbnail" key={id}>
+        <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
+        {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome name='download'/></a> : <div></div>}
+        <a
+          href="" data-toggle="modal" data-target=".imagespop"
+          onClick={that.random.bind(that, generateAbsolutePath(show.file.url), id)}>
+          <img src={generateAbsolutePath(show.file.url)} /></a>
+        <div id="images" className="title">{show.file.fileName}</div>
 
-        </div>
-      )
-    });
+      </div>
+    ));
     return Images
   }
 
@@ -178,20 +178,19 @@ export default class  SharedLibrary extends React.Component {
    */
 
   templates() {
-    let that = this;
-    let templateData = that.state.templateDetails  || [];
-    const Templates = templateData.map(function (show, id) {
-      return (
-        <div className="thumbnail" key={id}>
-          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-          <a href="" data-toggle="modal" data-target=".templatespop"
-             onClick={that.randomTemplate.bind(that, generateAbsolutePath(show.file.url), id)}>
-            <img src={generateAbsolutePath(show.file.url)} /></a>
-          <div id="templates" className="title">{show.file.fileName}</div>
-        </div>
-      )
-    });
+    const that = this;
+    const templateData = that.state.templateDetails || [];
+    const Templates = templateData.map((show, id) => (
+      <div className="thumbnail" key={id}>
+        <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
+        {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome name='download'/></a> : <div></div>}
+        <a
+          href="" data-toggle="modal" data-target=".templatespop"
+          onClick={that.randomTemplate.bind(that, generateAbsolutePath(show.file.url), id)}>
+          <img src={generateAbsolutePath(show.file.url)} /></a>
+        <div id="templates" className="title">{show.file.fileName}</div>
+      </div>
+    ));
     return Templates
   }
 
@@ -203,24 +202,23 @@ export default class  SharedLibrary extends React.Component {
    */
 
   videos() {
-    let that = this;
-    let videodata = that.state.videoDetails || [];
-    const videos = videodata.map(function (show, id) {
-      return (
-        <div className="thumbnail" key={id}>
-          <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download' /></a>:<div></div>}
-          <br/>
-          <a href="" data-toggle="modal" data-target=".videospop"
-             onClick={that.randomVideo.bind(that, generateAbsolutePath(show.file.url), id)}>
-            <video width="120" height="100" controls>
-              <source src={generateAbsolutePath(show.file.url)} type="video/mp4"></source>
-            </video>
-          </a>
-          <div className="title">{show.file.fileName}</div>
-        </div>
-      )
-    });
+    const that = this;
+    const videodata = that.state.videoDetails || [];
+    const videos = videodata.map((show, id) => (
+      <div className="thumbnail" key={id}>
+        <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
+        {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome name='download' /></a> : <div></div>}
+        <br/>
+        <a
+          href="" data-toggle="modal" data-target=".videospop"
+          onClick={that.randomVideo.bind(that, generateAbsolutePath(show.file.url), id)}>
+          <video width="120" height="100" controls>
+            <source src={generateAbsolutePath(show.file.url)} type="video/mp4"></source>
+          </video>
+        </a>
+        <div className="title">{show.file.fileName}</div>
+      </div>
+    ));
     return videos;
   }
 
@@ -231,26 +229,27 @@ export default class  SharedLibrary extends React.Component {
    */
 
   documents() {
-    let that = this;
-    let documentData = that.state.documentDetails || [];
-    const Documents = documentData.map(function (show, id) {
-      var docType = 'doc';
-      if(show.fileName && show.fileName.split('.')[1]) {
-        let type = show.fileName.split('.')[1];
-        if(type === 'pdf'){
+    const that = this;
+    const documentData = that.state.documentDetails || [];
+    const Documents = documentData.map((show, id) => {
+      let docType = 'doc';
+      if (show.fileName && show.fileName.split('.')[1]) {
+        const type = show.fileName.split('.')[1];
+        if (type === 'pdf') {
           docType = type;
-        }else if(type === 'xls' ||type === 'xlsx' ){
+        } else if (type === 'xls' || type === 'xlsx') {
           docType = 'xls';
-        }else if(type === 'ppt'){
+        } else if (type === 'ppt') {
           docType = type;
         }
       }
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-          <a href="" data-toggle="modal" data-target=".documentspop"
-             onClick={that.randomDocument.bind(that, generateAbsolutePath(show.file.url), id)}>
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome name='download'/></a> : <div></div>}
+          <a
+            href="" data-toggle="modal" data-target=".documentspop"
+            onClick={that.randomDocument.bind(that, generateAbsolutePath(show.file.url), id)}>
             <img src={`/images/${docType}.png`}/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
@@ -263,30 +262,30 @@ export default class  SharedLibrary extends React.Component {
   componentDidMount() {
     (function (a) {
       a.createModal = function (b) {
-        defaults = {scrollable: false};
+        defaults = { scrollable: false };
         var b = a.extend({}, defaults, b);
-        var c = (b.scrollable === true) ? 'style="max-height: 420px;overflow-y: auto;"' : "";
+        const c = (b.scrollable === true) ? 'style="max-height: 420px;overflow-y: auto;"' : '';
         html = '<div class="modal fade library-popup" id="myModal">';
         html += '<div class="modal-dialog">';
         html += '<div class="modal-content">';
         html += '<div class="modal-header">';
         html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>';
         if (b.title.length > 0) {
-          html += '<h4 class="modal-title">' + b.title + "</h4>"
+          html += `<h4 class="modal-title">${b.title}</h4>`
         }
-        html += "</div>";
-        html += '<div class="modal-body" ' + c + ">";
+        html += '</div>';
+        html += `<div class="modal-body" ${c}>`;
         html += b.message;
-        html += "</div>";
-        a("body").prepend(html);
-        a("#myModal").modal().on("hidden.bs.modal", function () {
+        html += '</div>';
+        a('body').prepend(html);
+        a('#myModal').modal().on('hidden.bs.modal', function () {
           a(this).remove()
         })
       }
-    })(jQuery);
+    }(jQuery));
     $('.view-pdf').on('click', function () {
-      var pdf_link = $(this).attr('href');
-      var iframe = '<div class="iframe-container"><iframe src="' + pdf_link + '"></iframe></div>'
+      const pdf_link = $(this).attr('href');
+      const iframe = `<div class="iframe-container"><iframe src="${pdf_link}"></iframe></div>`
       $.createModal({
         title: 'My Title',
         message: iframe,
@@ -302,25 +301,26 @@ export default class  SharedLibrary extends React.Component {
   }
 
   render() {
-    var videoJsOptions = [{
+    const videoJsOptions = [{
       autoplay: true,
       controls: true,
-      sources: [{src: this.state.previewVideo, type: 'video/mp4'}]
+      sources: [{ src: this.state.previewVideo, type: 'video/mp4' }]
     }]
 
 
     return (
       <div>
-        {/*<h2>Library</h2>*/}
+        {/* <h2>Library</h2> */}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
             <img src="/images/video_1.jpg"/>
           </ModalBody>
         </Modal>
-        <div className="modal fade bs-example-modal-sm library-popup imagespop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup imagespop"
+          onContextMenu={e => e.preventDefault()} tabIndex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -333,9 +333,10 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup templatespop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup templatespop"
+          onContextMenu={e => e.preventDefault()} tabIndex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -348,18 +349,20 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup documentspop"
-             onContextMenu={(e) => e.preventDefault()}
-             tabindex="-1"
-             role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup documentspop"
+          onContextMenu={e => e.preventDefault()}
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button"
-                        className="close"
-                        data-dismiss="modal"
-                        aria-label="Close">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -369,18 +372,20 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-        <div className="modal fade bs-example-modal-sm library-popup videospop"
-             onContextMenu={(e) => e.preventDefault()}
-             tabindex="-1"
-             role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup videospop"
+          onContextMenu={e => e.preventDefault()}
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button"
-                        className="close"
-                        data-dismiss="modal"
-                        aria-label="Close">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -390,59 +395,57 @@ export default class  SharedLibrary extends React.Component {
             </div>
           </div>
         </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
-              <div className="panel-heading">
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+          <div className="panel panel-default">
+            <div className="panel-heading">
                 Images
-                <div className="fileUpload upload_file_mask pull-right" id="create_client">
-                </div>
-              </div>
-              <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-                {this.images()}
+              <div className="fileUpload upload_file_mask pull-right" id="create_client">
               </div>
             </div>
-          </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                Videos
-                <div className="fileUpload upload_file_mask pull-right" id="create_video">
-                </div>
-              </div>
-              <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-                {this.videos()}
-              </div>
-            </div>
-          </div>
-          <br className="brclear"/>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                Templates
-                <div className="fileUpload upload_file_mask pull-right" id="create_template">
-                </div>
-              </div>
-              <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-                {this.templates()}
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                Documents
-                <div className="fileUpload upload_file_mask pull-right" id="create_document">
-                </div>
-              </div>
-              <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-                {this.documents()}
-              </div>
+            <div className="panel-body" onContextMenu={e => e.preventDefault()}>
+              {this.images()}
             </div>
           </div>
         </div>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+                Videos
+              <div className="fileUpload upload_file_mask pull-right" id="create_video">
+              </div>
+            </div>
+            <div className="panel-body" onContextMenu={e => e.preventDefault()}>
+              {this.videos()}
+            </div>
+          </div>
+        </div>
+        <br className="brclear"/>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+                Templates
+              <div className="fileUpload upload_file_mask pull-right" id="create_template">
+              </div>
+            </div>
+            <div className="panel-body" onContextMenu={e => e.preventDefault()}>
+              {this.templates()}
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+                Documents
+              <div className="fileUpload upload_file_mask pull-right" id="create_document">
+              </div>
+            </div>
+            <div className="panel-body" onContextMenu={e => e.preventDefault()}>
+              {this.documents()}
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }
-
-
 

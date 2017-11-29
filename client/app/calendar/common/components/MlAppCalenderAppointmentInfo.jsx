@@ -8,10 +8,9 @@ import MlAppCalendarTaskAppointment from './mlAppInternalTaskAppointment/MlAppCa
 import MlAppCalendarSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppCalendarSelfTaskMyAppointment';
 
 export default class MlAppCalenderAppointmentInfo extends React.Component {
-
-  render () {
-    const {selectedAppointment} = this.props;
-    let status = "Completed";
+  render() {
+    const { selectedAppointment } = this.props;
+    const status = 'Completed';
     console.log(selectedAppointment);
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':

@@ -13,19 +13,16 @@ import MlInfiniteScrollComposer from '../actions/MlInfiniteScrollComposer';
 import _ from 'lodash';
 
 export default class MlInfiniteScroll extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-
   }
 
   render() {
-    let config=this.props.config;
+    const config = this.props.config;
     config.params = this.props.params;
 
     return (
       <MlInfiniteScrollComposer {...config}/>
     );
   }
-
 }

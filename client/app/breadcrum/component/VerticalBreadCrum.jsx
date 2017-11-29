@@ -4,14 +4,14 @@ import { getTeamUsersActionHandler } from '../../internalTask/actions/fetchOffic
 import { fetchInternalTaskInfo } from '../../internalTask/actions/fetchInternalTaskInfo';
 import { findRegistrationActionHandler } from '../../registrations/actions/findRegistration';
 import { fetchAllOfficeMembers } from '../../investment/actions/fetchAllTeamMember';
-import {fetchActivitiesActionHandler} from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
+import { fetchActivitiesActionHandler } from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
 import ScrollArea from 'react-scrollbar'
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
     this.state = {
       toggle: 1,
-      list: [],
+      list: []
     };
     this.setDefaultName = this.setDefaultName.bind(this);
     this.fetchNameToDisplay.bind(this);
@@ -58,25 +58,25 @@ export default class VerticalBreadCrum extends Component {
     if (FlowRouter.getParam('portfolioId')) {
       var response = await fetchPortfolioImageHandler(FlowRouter.getParam('portfolioId'));
       if (response) {
-        object['portfolioId'] = response.portfolioUserName;
+        object.portfolioId = response.portfolioUserName;
         this.setState(object);
       } else this.setDefaultName('portfolioId');
-    }else if ( FlowRouter.getParam('profileId')) {
+    } else if (FlowRouter.getParam('profileId')) {
       var response = await fetchActivitiesActionHandler(FlowRouter.getParam('profileId'));
       if (response) {
-        object['profileId'] = response.name;
+        object.profileId = response.name;
         this.setState(object);
       } else this.setDefaultName('profileId');
-    } else if ( FlowRouter.getParam('taskId')) {
+    } else if (FlowRouter.getParam('taskId')) {
       var response = await fetchInternalTaskInfo(FlowRouter.getParam('taskId'));
       if (response) {
-        object['taskId'] = response.name;
+        object.taskId = response.name;
         this.setState(object);
       } else this.setDefaultName('taskId');
     } else if (FlowRouter.getParam('officeId')) {
       var response = await getTeamUsersActionHandler(FlowRouter.getParam('officeId'));
       if (response) {
-        object['officeId'] = response.name;
+        object.officeId = response.name;
         this.setState(object);
       } else this.setDefaultName('officeId');
     } else if (FlowRouter.getParam('memberId')) {
@@ -85,7 +85,7 @@ export default class VerticalBreadCrum extends Component {
       if (response) {
         response.map((obj) => {
           if (obj._id === id) {
-            object['memberId'] = obj.name;
+            object.memberId = obj.name;
             this.setState(object);
           }
         });
@@ -94,11 +94,11 @@ export default class VerticalBreadCrum extends Component {
       var response = await findRegistrationActionHandler(FlowRouter.getParam('id'));
       if (response && response.registrationInfo && response.registrationInfo.registrationType) {
         const resType = response.registrationInfo.communityName;
-        object['id'] = resType;
+        object.id = resType;
         this.setState(object);
       } else this.setDefaultName('id');
     } else if (FlowRouter.getParam('communityType')) {
-      object['communityType'] = properName(id);
+      object.communityType = properName(id);
       this.setState(object);
     } else {
       this.setDefaultName('communityType');
@@ -129,76 +129,67 @@ export default class VerticalBreadCrum extends Component {
       // const name = this.state[cname];
     }
 
-    if(routePath.includes('/calendar/manageSchedule')&&FlowRouter.getParam('profileId')){
-      if(routePath.endsWith('createTask')){
-        list.push({name: 'Task Master', link: path.replace('createTask','taskList')});
-        list.push({name: 'Create', link: path});
-
-      }else if(routePath.endsWith('activityList')){
-        list.push({name: 'Activity', link: path});
-
-      }else if(routePath.endsWith('createActivity')){
-        list.push({name: 'Activity', link: path.replace('createActivity','activityList')});
-        list.push({name: 'Create', link: path});
-
-      }else if(routePath.endsWith('createService')){
-        list.push({name: 'Services', link: path.replace('createService','serviceList')});
-        list.push({name: 'Create', link: path});
-
-      }else if(routePath.endsWith('editService')){
-        list.push({name: 'Services', link: path.split('editService')[0]+'serviceList'});
-        list.push({name: 'Edit', link: path});
-
-      }else if(routePath.endsWith('editActivity')){
-        list.push({name: 'Activity', link: path.split('editActivity')[0]+'activityList'});
-        list.push({name: 'Edit', link: path});
-
-      }else if(routePath.endsWith('taskList')){
-        list.push({name: 'Task Master', link: path});
-
-      }else if(routePath.endsWith('serviceList')){
-        list.push({name: 'Services', link: path});
-
-      }else if(routePath.endsWith('setCalendar')){
-        list.push({name: 'Calendar', link: path});
-
-      }else if(routePath.endsWith('editTask/:taskId')){
-        list.push({name: 'Task Master', link: path.split('editTask')[0]+'taskList'});
-        list.push({name: 'Edit', link: path});
+    if (routePath.includes('/calendar/manageSchedule') && FlowRouter.getParam('profileId')) {
+      if (routePath.endsWith('createTask')) {
+        list.push({ name: 'Task Master', link: path.replace('createTask', 'taskList') });
+        list.push({ name: 'Create', link: path });
+      } else if (routePath.endsWith('activityList')) {
+        list.push({ name: 'Activity', link: path });
+      } else if (routePath.endsWith('createActivity')) {
+        list.push({ name: 'Activity', link: path.replace('createActivity', 'activityList') });
+        list.push({ name: 'Create', link: path });
+      } else if (routePath.endsWith('createService')) {
+        list.push({ name: 'Services', link: path.replace('createService', 'serviceList') });
+        list.push({ name: 'Create', link: path });
+      } else if (routePath.endsWith('editService')) {
+        list.push({ name: 'Services', link: `${path.split('editService')[0]}serviceList` });
+        list.push({ name: 'Edit', link: path });
+      } else if (routePath.endsWith('editActivity')) {
+        list.push({ name: 'Activity', link: `${path.split('editActivity')[0]}activityList` });
+        list.push({ name: 'Edit', link: path });
+      } else if (routePath.endsWith('taskList')) {
+        list.push({ name: 'Task Master', link: path });
+      } else if (routePath.endsWith('serviceList')) {
+        list.push({ name: 'Services', link: path });
+      } else if (routePath.endsWith('setCalendar')) {
+        list.push({ name: 'Calendar', link: path });
+      } else if (routePath.endsWith('editTask/:taskId')) {
+        list.push({ name: 'Task Master', link: `${path.split('editTask')[0]}taskList` });
+        list.push({ name: 'Edit', link: path });
       }
-    }else if(routePath.includes('/portfolio/edit/')){
-      list.push({name: 'Edit Portfolio', link: path.split('/portfolio')[0]+'/portfolio'});
+    } else if (routePath.includes('/portfolio/edit/')) {
+      list.push({ name: 'Edit Portfolio', link: `${path.split('/portfolio')[0]}/portfolio` });
       if (tab) {
         list.push({
           name: properName(tab),
-          link: path.split('&')[0],
+          link: path.split('&')[0]
         });
         if (subtab) {
           // if(tab === 'About'){
           //   FlowRouter.setQueryParams({'subtab':null});
           // }else
           list.push({
-            name: properName(subtab),
+            name: properName(subtab)
           });
         }
       }
-    }else if(routePath.includes('/portfolio/view/')){
-      list.push({name: 'View Portfolio', link: path.split('/portfolio')[0]+'/portfolio'});
+    } else if (routePath.includes('/portfolio/view/')) {
+      list.push({ name: 'View Portfolio', link: `${path.split('/portfolio')[0]}/portfolio` });
       if (tab) {
         list.push({
           name: properName(tab),
-          link: path.split('&')[0],
+          link: path.split('&')[0]
         });
         if (subtab) {
           // if(tab === 'About'){
           //   FlowRouter.setQueryParams({'subtab':null});
           // }else
-            list.push({
-              name: properName(subtab),
-            });
+          list.push({
+            name: properName(subtab)
+          });
         }
       }
-    }else{
+    } else {
       for (const index in routePathHierarchy) {
         if (routePathHierarchy[index] === ':communityType') {
           const tempList = list;
@@ -208,9 +199,9 @@ export default class VerticalBreadCrum extends Component {
         if (routePathHierarchy[index] === 'manageSchedule') {
           list.push({
             name: properName(routePathHierarchy[index]),
-            link: '/app/calendar/manageSchedule/all/activityList',
+            link: '/app/calendar/manageSchedule/all/activityList'
           });
-        } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' ||routePathHierarchy[index] === ':isFirst'
+        } else if (!routePathHierarchy[index] || routePathHierarchy[index] === '' || routePathHierarchy[index] === ':isFirst'
           || routePathHierarchy[index - 1] === 'manageSchedule') {
           // do nothing
         } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')
@@ -221,7 +212,7 @@ export default class VerticalBreadCrum extends Component {
             list[list.length - 1].link = path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0];
           } else {
             const cname = routePathHierarchy[index].split(':')[1];
-            const name = this.state[cname];    // get name from DATABASE using ID and set here
+            const name = this.state[cname]; // get name from DATABASE using ID and set here
             // if (routePathHierarchy[index-2] === 'view' || routePathHierarchy[index-2] === 'edit'){
             //   name += ' ('+routePathHierarchy[index-2] +')';
             // }
@@ -230,13 +221,13 @@ export default class VerticalBreadCrum extends Component {
             // }
             list.push({
               name,
-              link: path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0],
+              link: path.split(pathHierarchy[index])[0] + pathHierarchy[index].split('?')[0]
             });
           }
         } else if ((routePathHierarchy[index] === 'view' || routePathHierarchy[index] === 'edit')) {
           list.push({
             name: properName(routePathHierarchy[index]),
-            link: path,
+            link: path
           });
           break;
         } else if (routePathHierarchy[index] === 'all' && routePathHierarchy[index - 1] !== 'manageSchedule') {
@@ -245,16 +236,16 @@ export default class VerticalBreadCrum extends Component {
         } else if (routePathHierarchy[index] === 'addOffice' || routePathHierarchy[index] === 'editOffice') {
           list.push({
             name: properName('myOffice'),
-            link: `${path.split(routePathHierarchy[index])[0]}myOffice`,
+            link: `${path.split(routePathHierarchy[index])[0]}myOffice`
           });
           list.push({
             name: properName(routePathHierarchy[index]),
-            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
+            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index]
           });
         } else {
           list.push({
             name: properName(routePathHierarchy[index]),
-            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
+            link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index]
           });
         }
       }
@@ -262,20 +253,20 @@ export default class VerticalBreadCrum extends Component {
       if (tab) {
         list.push({
           name: properName(tab),
-          link: path.split('&')[0],
+          link: path.split('&')[0]
         });
         if (subtab && tab !== 'about') {
           list.push({
-            name: properName(subtab),
+            name: properName(subtab)
           });
         }
 
         const add = FlowRouter.getQueryParam('add');
-        list[list.length-1].link=path.split('?')[0];
-        if(add){
+        list[list.length - 1].link = path.split('?')[0];
+        if (add) {
           list.push({
             name: 'Add Task',
-            link: '',
+            link: ''
           });
         }
       }
@@ -290,8 +281,8 @@ export default class VerticalBreadCrum extends Component {
     let currentClassName = '';
     const mlist = list.map((obj, index) => {
       if (index + 1 === list.length) currentClassName = 'current';
-      var link = obj.link;
-      if(index === list.length-1) link ='';
+      let link = obj.link;
+      if (index === list.length - 1) link = '';
       return (<li key={index} className={currentClassName} onClick={ this.onLinkClicked.bind(this)}><a href={link} >{obj.name}</a></li>);
     });
 
@@ -312,5 +303,5 @@ function properName(name) {
 }
 
 VerticalBreadCrum.contextTypes = {
-  breadCrum: PropTypes.object,
+  breadCrum: PropTypes.object
 };

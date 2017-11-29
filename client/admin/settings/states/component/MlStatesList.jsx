@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlStatesTableConfig} from "../config/mlStatesConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlStatesTableConfig } from '../config/mlStatesConfig';
 export default class MlStatesList extends Component {
-
   componentDidMount() {
   }
 

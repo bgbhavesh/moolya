@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlLanguageTableConfig} from "../config/mlLanguageConfig";
-import { OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlLanguageTableConfig } from '../config/mlLanguageConfig';
+import { OnToggleSwitch } from '../../../utils/formElemUtil';
 
 export default class MlLanguagesList extends Component {
-
   componentDidMount() {
-    OnToggleSwitch(true,true);
+    OnToggleSwitch(true, true);
   }
 
   render() {

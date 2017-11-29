@@ -11,26 +11,25 @@ import MlAppPendingMyAppointment from './MlAppPendingMyAppointment';
 import MlAppRejectedMyAppointment from './MlAppRejectedMyAppointment';
 import MlAppCurrentMyAppointment from './MlAppCurrentMyAppointment';
 
-import MlInfiniteScroll from "../../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll";
-import {mlAppPendingAppointmentConfig} from "./../config/mlAppPendingAppointmentsConfig";
-import {mlAppCurrentAppointmentConfig} from "./../config/mlAppCurrentAppointmentsConfig";
-import {mlAppRejectedAppointmentConfig} from "./../config/mlAppRejectedAppointmentsConfig";
-import {mlAppCompletedAppointmentConfig} from "./../config/mlAppCompletedAppointments";
-import {mlAppMyRequestedBespokeServiceConfig} from "./../config/mlAppRequestedAppointmentsConfig";
+import MlInfiniteScroll from '../../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
+import { mlAppPendingAppointmentConfig } from './../config/mlAppPendingAppointmentsConfig';
+import { mlAppCurrentAppointmentConfig } from './../config/mlAppCurrentAppointmentsConfig';
+import { mlAppRejectedAppointmentConfig } from './../config/mlAppRejectedAppointmentsConfig';
+import { mlAppCompletedAppointmentConfig } from './../config/mlAppCompletedAppointments';
+import { mlAppMyRequestedBespokeServiceConfig } from './../config/mlAppRequestedAppointmentsConfig';
 
 import MlAppOngoingSelectedMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingSelectedMyAppointment';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppSelectedSelfTaskMyAppointment';
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
+import MlTabComponent from '../../../../commons/components/tabcomponent/MlTabComponent';
 
 // console.log("mlAppPendingAppointmentConfig", mlAppPendingAppointmentConfig);
 
 export default class MlAppMyAppointment extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      activeTab: FlowRouter.getQueryParam('tab')? FlowRouter.getQueryParam('tab') : 'pending',
+      activeTab: FlowRouter.getQueryParam('tab') ? FlowRouter.getQueryParam('tab') : 'pending',
       selectedAppointment: FlowRouter.getQueryParam('appointment')
     }
   }
@@ -47,13 +46,13 @@ export default class MlAppMyAppointment extends React.Component {
   //     appointment: null
   //   });
   // }
-  onChange(index){
-    let tab =  this.state.tabs[index].title;
-    FlowRouter.setQueryParams({ tab: tab ,  appointment: null});
+  onChange(index) {
+    const tab = this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab, appointment: null });
   }
 
   getAppointmentComponentToLoad(status) {
-    const {selectedAppointment} = this.state;
+    const { selectedAppointment } = this.state;
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':
         return (<MlAppOngoingSelectedMyAppointment isCancelled={this.state.selectedAppointment.isCancelled} resetSelectedAppointment={this.resetSelectedAppointment} status={status} appointment={selectedAppointment} />)
@@ -69,12 +68,12 @@ export default class MlAppMyAppointment extends React.Component {
     }
   }
 
-  render(){
+  render() {
     const that = this;
-    let activeTab = this.state.activeTab;
-    let appointment = this.state.selectedAppointment;
-    let status = activeTab.substr( 0, 1 ).toUpperCase() + activeTab.substr( 1 );
-    let MlTabs = [
+    const activeTab = this.state.activeTab;
+    const appointment = this.state.selectedAppointment;
+    const status = activeTab.substr(0, 1).toUpperCase() + activeTab.substr(1);
+    const MlTabs = [
       {
         name: 'Pending',
         tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppPendingAppointmentConfig} />
@@ -104,12 +103,13 @@ export default class MlAppMyAppointment extends React.Component {
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
         key: MlTab.name.toLowerCase(),
-        getContent: () => MlTab.tabContent,
+        getContent: () => MlTab.tabContent
       }));
     }
 
-    const App = () => <MlTabComponent tabs={getTabs()} selectedTabKey={ this.state.activeTab || 'Pending'}  onChange={that.onChange}
-    type="tab" mkey="name"/>;
+    const App = () => <MlTabComponent
+      tabs={getTabs()} selectedTabKey={ this.state.activeTab || 'Pending'} onChange={that.onChange}
+      type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -120,4 +120,4 @@ export default class MlAppMyAppointment extends React.Component {
       </div>
     )
   }
-};
+}

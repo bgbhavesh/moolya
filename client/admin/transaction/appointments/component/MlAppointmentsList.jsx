@@ -2,9 +2,9 @@
  * Created by pankaj on 13/9/17.
  */
 
-import React, {Component, PropTypes} from 'react';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlAppointmentsTableConfig} from "../config/MlAppointmentsConfig";
+import React, { Component, PropTypes } from 'react';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlAppointmentsTableConfig } from '../config/MlAppointmentsConfig';
 
 export default class MlAppointmentsList extends Component {
   render() {

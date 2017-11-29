@@ -3,10 +3,10 @@
  */
 
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import { client } from '../../../core/apolloConnection';
 
 export async function findActionAndStatusActionHandler(statusAndStatusId) {
-  let did = statusAndStatusId;
+  const did = statusAndStatusId;
   console.log(statusAndStatusId);
   const result = await client.query({
     query: gql`
@@ -42,9 +42,9 @@ export async function findActionAndStatusActionHandler(statusAndStatusId) {
       }
     }`,
     variables: {
-      _id:did
+      _id: did
     },
-    forceFetch:true
+    forceFetch: true
   });
   const id = result.data.findActionsAndStatus;
   console.log(id);

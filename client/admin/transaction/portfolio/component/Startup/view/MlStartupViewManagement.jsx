@@ -1,7 +1,7 @@
 import React from 'react';
 // import ScrollArea from 'react-scrollbar';
 // var FontAwesome = require('react-fontawesome');
-import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
+import { fetchStartupDetailsHandler } from '../../../actions/findPortfolioStartupDetails'
 // import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 // import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 // import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
@@ -9,11 +9,11 @@ import MlGenericManagementView from '../../commons/MlGenericManagementView'
 import NoData from '../../../../../../commons/components/noData/noData'
 
 const KEY = 'management'
-//todo:// view complete details screen need to integrate and ["company, institution, startup"]
+// todo:// view complete details screen need to integrate and ["company, institution, startup"]
 export default class MlStartupViewManagement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupManagementList: []};
+    this.state = { startupManagementList: [] };
     this.fetchPortfolioStartupDetails.bind(this);
     // this.createAnnotations.bind(this);
     // this.fetchAnnotations.bind(this);
@@ -26,7 +26,7 @@ export default class MlStartupViewManagement extends React.Component {
   //   this.fetchAnnotations();
   // }
 
-  componentWillMount(){
+  componentWillMount() {
     const resp = this.fetchPortfolioStartupDetails();
     return resp
   }
@@ -100,31 +100,31 @@ export default class MlStartupViewManagement extends React.Component {
   // }
 
   async fetchPortfolioStartupDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.management) {
-      this.setState({startupManagementList: response.management});
+      this.setState({ startupManagementList: response.management });
     }
-    this.setState({loading:false})
+    this.setState({ loading: false })
   }
 
-  render(){
-    let that = this;
-    let managementArray = that.state.startupManagementList || [];
-    if(_.isEmpty(managementArray)){
+  render() {
+    const that = this;
+    const managementArray = that.state.startupManagementList || [];
+    if (_.isEmpty(managementArray)) {
       return (
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName} />
+        </div>
       )
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Management</h2>
-          <div className="col-lg-12">
-            <MlGenericManagementView data={managementArray} isAdmin={this.props.isAdmin} portfolioDetailsId={this.props.portfolioDetailsId}/>
-            {/*<div className="row">
+    }
+    return (
+      <div id="annotatorContent">
+        <h2>Management</h2>
+        <div className="col-lg-12">
+          <MlGenericManagementView data={managementArray} isAdmin={this.props.isAdmin} portfolioDetailsId={this.props.portfolioDetailsId}/>
+          {/* <div className="row">
               {managementArray && managementArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                   <div className="team-block">
@@ -135,10 +135,9 @@ export default class MlStartupViewManagement extends React.Component {
                   </div>
                 </div>)
               })}
-            </div>*/}
-          </div>
+            </div> */}
         </div>
-      )
-    }
+      </div>
+    )
   }
 }

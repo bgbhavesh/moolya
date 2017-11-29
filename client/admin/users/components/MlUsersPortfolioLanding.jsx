@@ -4,12 +4,12 @@
 /**
  * import of libs and routes
  * */
-import React, {Component} from "react";
-import MlUsersIdeatorIdeas from "../components/MlUsersIdeatorIdeas";
-import MlLoader from "../../../commons/components/loader/loader";
-import {fetchPortfolioActionHandler} from "../../transaction/portfolio/actions/findClusterIdForPortfolio";
-import MlPortfolio from "../../transaction/portfolio/component/commons/MlPortfolio";
-import {isEmpty} from "lodash";
+import React, { Component } from 'react';
+import MlUsersIdeatorIdeas from '../components/MlUsersIdeatorIdeas';
+import MlLoader from '../../../commons/components/loader/loader';
+import { fetchPortfolioActionHandler } from '../../transaction/portfolio/actions/findClusterIdForPortfolio';
+import MlPortfolio from '../../transaction/portfolio/component/commons/MlPortfolio';
+import { isEmpty } from 'lodash';
 
 /**
  * Export of default Component "MlUsersPortfolioLanding"
@@ -34,15 +34,14 @@ export default class MlUsersPortfolioLanding extends Component {
    * getting user portfolio details
    * */
   async fetchPortfolioDetails() {
-    let portfolioId = this.props.config ? this.props.config.portfolioId : ''
+    const portfolioId = this.props.config ? this.props.config.portfolioId : ''
     const response = await fetchPortfolioActionHandler(portfolioId);
     if (response && response.communityCode) {
-      if (response.communityCode != 'IDE')
-        $('.swiper-menu').addClass('hide');
-      this.setState({loading: false, data: response})
+      if (response.communityCode != 'IDE') { $('.swiper-menu').addClass('hide'); }
+      this.setState({ loading: false, data: response })
     } else {
       toastr.error('Portfolio not available');
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -51,18 +50,18 @@ export default class MlUsersPortfolioLanding extends Component {
    * */
   render() {
     const showLoader = this.state.loading;
-    let userCommunityName = this.state.data ? this.state.data.communityType : ''
-    let portfolioId = this.props.config ? this.props.config.portfolioId : ''
-    let userCommunityCode = this.state.data ? this.state.data.communityCode : ''
+    const userCommunityName = this.state.data ? this.state.data.communityType : ''
+    const portfolioId = this.props.config ? this.props.config.portfolioId : ''
+    const userCommunityCode = this.state.data ? this.state.data.communityCode : ''
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (<div>
-            {(userCommunityCode == "IDE") ?
-              <MlUsersIdeatorIdeas portfolioId={portfolioId}/> :
-              <div>{userCommunityCode ?
-                <MlPortfolio viewMode={true} config={portfolioId} communityType={userCommunityName} isHideAction={true}/> : "Portfolio not available"}</div>
-            }
-          </div>
+          {(userCommunityCode == 'IDE') ?
+            <MlUsersIdeatorIdeas portfolioId={portfolioId}/> :
+            <div>{userCommunityCode ?
+              <MlPortfolio viewMode={true} config={portfolioId} communityType={userCommunityName} isHideAction={true}/> : 'Portfolio not available'}</div>
+          }
+        </div>
         )}
       </div>
 

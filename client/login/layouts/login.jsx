@@ -1,66 +1,63 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {mlValidations} from "../../commons/validations/formValidation";
-import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
-import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { mlValidations } from '../../commons/validations/formValidation';
+import { initalizeFloatLabel } from '../../admin/utils/formElemUtil';
+import { validatedEmailId } from '../../commons/validations/mlfieldValidation';
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 MlLoginLayout = React.createClass({
-  render(){
+  render() {
     return <main>{this.props.content}</main>
   }
 })
 
 MlLoginContent = React.createClass({
 
-  getInitialState(props){
-    this.state = {username: "", password: "", userNameErr: "", passwordErr: ""};
-    this.validationMessage = "";
+  getInitialState(props) {
+    this.state = {
+      username: '', password: '', userNameErr: '', passwordErr: ''
+    };
+    this.validationMessage = '';
     return this;
   },
 
-  loginSubmit(){
-    let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
+  loginSubmit() {
+    const errMessages = { userName: 'A valid username is required', Password: 'A Password is required' };
     this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
     if (!this.validationMessage) {
-      let emailId=this.refs.username.value
-      let passwordValid = this.refs.password.value
-      let validate = passwordSAS_validate(passwordValid)
-      let isValidEmail = validatedEmailId(emailId);
+      const emailId = this.refs.username.value
+      const passwordValid = this.refs.password.value
+      const validate = passwordSAS_validate(passwordValid)
+      const isValidEmail = validatedEmailId(emailId);
       if (emailId && !isValidEmail) {
         toastr.error('Please enter a valid EmailId');
-      }else
-      if (!validate.isValid && typeof (validate) == 'object') {
-        toastr.error('Password '+ validate.errorMsg);
-      }
-      else {
+      } else
+      if (!validate.isValid && typeof (validate) === 'object') {
+        toastr.error(`Password ${validate.errorMsg}`);
+      } else {
         this.props.formSubmit({
           username: this.refs.username.value,
           password: this.refs.password.value
-        }, function (result) {
+        }, (result) => {
           toastr.error(result);
         })
       }
-    }
-    else {
-      if (this.validationMessage.userName == true)
-        toastr.error(this.validationMessage.errMsg);
-        // this.setState(Object.assign({userNameErr: this.validationMessage.errMsg}))
-      else if (this.validationMessage.Password == true)
-        toastr.error(this.validationMessage.errMsg);
-        // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
+    } else {
+      if (this.validationMessage.userName == true) { toastr.error(this.validationMessage.errMsg); }
+      // this.setState(Object.assign({userNameErr: this.validationMessage.errMsg}))
+      else if (this.validationMessage.Password == true) { toastr.error(this.validationMessage.errMsg); }
+      // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
     }
   },
   componentDidMount() {
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.login_bg').height(WinHeight);
     initalizeFloatLabel();
   },
-  onValueChange(event){
+  onValueChange(event) {
     if (event.target.name == 'userName') {
       event.target.value = event.target.value.trim()
-      this.setState(Object.assign({userNameErr: ""}))
-    } else if (event.target.name == 'Password')
-      this.setState(Object.assign({passwordErr: ""}))
+      this.setState(Object.assign({ userNameErr: '' }))
+    } else if (event.target.name == 'Password') { this.setState(Object.assign({ passwordErr: '' })) }
   },
 
   handleKeyPress(target) {
@@ -68,22 +65,21 @@ MlLoginContent = React.createClass({
       this.loginSubmit()
     }
   },
-  redirectRegister(){
-      if(!Meteor.isCordova){
-        window.location.href = "https://www.moolya.global/register";
-      } else{
-        window.open('https://www.moolya.global/register', '_system');
-      }
+  redirectRegister() {
+    if (!Meteor.isCordova) {
+      window.location.href = 'https://www.moolya.global/register';
+    } else {
+      window.open('https://www.moolya.global/register', '_system');
+    }
   },
   render() {
-
     return (
       <div>
         <div>
-          <div className="login_bg" style={{textAlign: "center"}}>
-            {/*<video poster="" id="bgvid" autoPlay muted loop playsInline>
+          <div className="login_bg" style={{ textAlign: 'center' }}>
+            {/* <video poster="" id="bgvid" autoPlay muted loop playsInline>
               <source src="/images/bg_video.mp4"/>
-            </video>*/}
+            </video> */}
             <div className="video_bg"></div>
             <img className="login_logo" src="/images/login_logo.png"/>
             <div className="login_top">
@@ -93,12 +89,14 @@ MlLoginContent = React.createClass({
               <div className="login_block login_block_in">
                 <form className="form-signin" onChange={this.onValueChange} onKeyPress={this.handleKeyPress}>
                   <span ref="userName">{this.state.userNameErr}</span>
-                  <input name="userName" ref="username" type="text" className="form-control float-label" placeholder="Email"
-                         required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
+                  <input
+                    name="userName" ref="username" type="text" className="form-control float-label" placeholder="Email"
+                    required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
                   <span ref="Password">{this.state.passwordErr}</span>
-                  <input name="Password" ref="password" type="password" className="form-control float-label"
-                         placeholder="Password" required defaultValue={this.state.password}
-                         onBlur={this.validationCheck}/>
+                  <input
+                    name="Password" ref="password" type="password" className="form-control float-label"
+                    placeholder="Password" required defaultValue={this.state.password}
+                    onBlur={this.validationCheck}/>
 
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit}>Sign in</button>
@@ -119,5 +117,5 @@ MlLoginContent = React.createClass({
 
 
 MlLoginContent.propTypes = {
-  formSubmit: React.PropTypes.func,
+  formSubmit: React.PropTypes.func
 }

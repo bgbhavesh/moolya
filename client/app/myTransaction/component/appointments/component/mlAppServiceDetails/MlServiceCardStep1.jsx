@@ -10,12 +10,12 @@
  */
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-var FontAwesome = require('react-fontawesome');
-import Datetime from "react-datetime";
-import moment from "moment";
+const FontAwesome = require('react-fontawesome');
+import Datetime from 'react-datetime';
+import moment from 'moment';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-var Select = require('react-select');
+const Select = require('react-select');
 import Moolyaselect from '../../../../../commons/components/MlAppSelectWrapper';
 
 
@@ -24,7 +24,7 @@ import Moolyaselect from '../../../../../commons/components/MlAppSelectWrapper';
  * Description :: Used in <Select/> tag to select the frequency
  */
 
-var options = [
+const options = [
   { value: 'Weekly', label: 'Weekly' },
   { value: 'Daily', label: 'Daily' },
   { value: 'Monthly', label: 'Monthly' }
@@ -48,7 +48,7 @@ export default class MlServiceCardStep1 extends React.Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
   }
 
@@ -60,15 +60,9 @@ export default class MlServiceCardStep1 extends React.Component {
 
   render() {
     const { serviceBasicInfo, userDetails, daysRemaining } = this.props.data;
-    const stateOptions = serviceBasicInfo.state && serviceBasicInfo.state.reduce((result, data) => {
-      return result.concat({ value: data.id, label: data.name });
-    }, []);
-    const cityOptions = serviceBasicInfo.city && serviceBasicInfo.city.reduce((result, data) => {
-      return result.concat({ value: data.id, label: data.name });
-    }, []);
-    const communityOptions = serviceBasicInfo.community && serviceBasicInfo.community.reduce((result, data) => {
-      return result.concat({ value: data.id, label: data.name });
-    }, []);
+    const stateOptions = serviceBasicInfo.state && serviceBasicInfo.state.reduce((result, data) => result.concat({ value: data.id, label: data.name }), []);
+    const cityOptions = serviceBasicInfo.city && serviceBasicInfo.city.reduce((result, data) => result.concat({ value: data.id, label: data.name }), []);
+    const communityOptions = serviceBasicInfo.community && serviceBasicInfo.community.reduce((result, data) => result.concat({ value: data.id, label: data.name }), []);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
@@ -85,7 +79,7 @@ export default class MlServiceCardStep1 extends React.Component {
                   <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={serviceBasicInfo.duration.hours} disabled /> Hours <input type="text" className="form-control inline_input" value={serviceBasicInfo.duration.minutes} disabled /> Mins </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{ placeholder: "Valid Till", readOnly: true }} value={serviceBasicInfo.validTill ? moment(serviceBasicInfo.validTill).format('DD-MM-YY') : ''} />
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{ placeholder: 'Valid Till', readOnly: true }} value={serviceBasicInfo.validTill ? moment(serviceBasicInfo.validTill).format('DD-MM-YY') : ''} />
                   <FontAwesome name="calendar" className="password_icon" />
                 </div>
               </form>
@@ -105,14 +99,16 @@ export default class MlServiceCardStep1 extends React.Component {
                   <input type="text" placeholder="Cluster" className="form-control float-label" value={userDetails.clusterName} disabled />
                 </div>
                 <div className="form-group">
-                  <Select multi={true}
+                  <Select
+                    multi={true}
                     placeholder="States"
                     className="form-control float-label"
                     options={stateOptions}
                     value={stateOptions} disabled />
                 </div>
                 <div className="form-group">
-                  <Select multi={true}
+                  <Select
+                    multi={true}
                     type="text"
                     placeholder="Cities"
                     className="form-control float-label"
@@ -120,7 +116,8 @@ export default class MlServiceCardStep1 extends React.Component {
                     value={cityOptions} disabled />
                 </div>
                 <div className="form-group">
-                  <Select multi={true}
+                  <Select
+                    multi={true}
                     type="text"
                     placeholder="Communities"
                     className="form-control float-label"
@@ -145,4 +142,4 @@ export default class MlServiceCardStep1 extends React.Component {
       </div>
     )
   }
-};
+}

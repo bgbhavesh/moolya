@@ -8,15 +8,14 @@
 /**
  * Imports libs and components
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export default class MlInfiniteScrollFooter extends Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
@@ -24,8 +23,8 @@ export default class MlInfiniteScrollFooter extends Component {
     const that = this;
     const props = that.props;
     return (
-      <div className="ml_btn" style={{textAlign: "center"}}>
-        <button className="ml_submit_btn" style={{float: "none"}} hidden={!props.hasMore} disabled={!props.hasMore} onClick={()=>props.loadMore()}>Load More</button>
+      <div className="ml_btn" style={{ textAlign: 'center' }}>
+        <button className="ml_submit_btn" style={{ float: 'none' }} hidden={!props.hasMore} disabled={!props.hasMore} onClick={() => props.loadMore()}>Load More</button>
       </div>
     )
   }

@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlSocialLinksTypeTableConfig} from "../config/mlSocialLinkConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlSocialLinksTypeTableConfig } from '../config/mlSocialLinkConfig';
 export default class MlSocialLinksTypeList extends Component {
-
   componentDidMount() {
   }
 

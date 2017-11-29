@@ -6,13 +6,13 @@ import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import MlAnchorList from './MlAnchorList';
 import MlAnchorObjective from './MlAnchorObjective';
 import MlAnchorContact from './MlAnchorContact';
-import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import { updateSubChapterActionHandler } from '../../actions/updateSubChapter'
 import { updateBackendUserActionHandler } from '../../../settings/backendUsers/actions/updateBackendUserAction'
 import { findSubChapterActionHandler } from '../../actions/findSubChapter';
 
-import moment from "moment";
+import moment from 'moment';
 
 class MlAnchorTabsContainer extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class MlAnchorTabsContainer extends React.Component {
     this.state = {
       objective: [],
       subChapter: {
-        contactDetails: [],
+        contactDetails: []
       },
       contactDetailsFormData: {
         selectedIndex: -1,
@@ -40,9 +40,9 @@ class MlAnchorTabsContainer extends React.Component {
           pincode: '',
           latitude: '',
           longitude: '',
-          status: false,
-        },
-      },
+          status: false
+        }
+      }
     };
     this.getObjectiveDetails = this.getObjectiveDetails.bind(this);
     this.getContactDetails = this.getContactDetails.bind(this);
@@ -60,10 +60,7 @@ class MlAnchorTabsContainer extends React.Component {
 
   async handleSuccess(response) {
     console.log(response)
-    if (response && response.success)
-      toastr.success(response.result)
-    else if (response && !response.success)
-      toastr.error(response.result)
+    if (response && response.success) { toastr.success(response.result) } else if (response && !response.success) { toastr.error(response.result) }
   }
 
   async updateAnchorDetails() {
@@ -79,7 +76,7 @@ class MlAnchorTabsContainer extends React.Component {
         } else if (this.state.contactDetailsFormData.selectedIndex > -1) {
           stateContactDetails[this.state.contactDetailsFormData.selectedIndex] = this.state.contactDetailsFormData.formData;
         }
-        if (this.state.contactDetailsFormData.formData.contactPersonRole && ! this.state.contactDetailsFormData.formData.addressTypeId) {
+        if (this.state.contactDetailsFormData.formData.contactPersonRole && !this.state.contactDetailsFormData.formData.addressTypeId) {
           toastr.error('Address type is required in contact form');
           return
         }
@@ -93,7 +90,7 @@ class MlAnchorTabsContainer extends React.Component {
         response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, {
           subChapterId,
           objective,
-          contactDetails,
+          contactDetails
         });
         const resp = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
         this.setState({
@@ -116,9 +113,9 @@ class MlAnchorTabsContainer extends React.Component {
               pincode: '',
               latitude: '',
               longitude: '',
-              status: false,
-            },
-          },
+              status: false
+            }
+          }
         });
         return response;
       case 'users':
@@ -127,12 +124,12 @@ class MlAnchorTabsContainer extends React.Component {
         profile.dateOfBirth = profile.dateOfBirth ? moment(profile.dateOfBirth).format(Meteor.settings.public.dateFormat) : null;
         const updateUserObject = {
           userId: this.state.contact._id,
-          userObject: { profile, username: profile.email },
+          userObject: { profile, username: profile.email }
         }
 
         var updateDetails = this.props;
         response = await updateBackendUserActionHandler(updateUserObject, updateDetails)
-        this.setState({isUserUpdated: true});
+        this.setState({ isUserUpdated: true });
         return response
         break
       default:
@@ -141,25 +138,25 @@ class MlAnchorTabsContainer extends React.Component {
   }
 
   getUserDetails(details) {
-    //get tab details
+    // get tab details
     if (details.socialLinksInfo && details.socialLinksInfo[0]) {
       details.profile.InternalUprofile.moolyaProfile.socialLinksInfo = details.socialLinksInfo;
       // details.socialLinksInfo = undefined;
     }
-    this.setState({ contact: details, module: "users", isUserUpdated: false })
+    this.setState({ contact: details, module: 'users', isUserUpdated: false })
   }
   getObjectiveDetails(details) {
-    //get tab details
+    // get tab details
     this.setState({
       objective: details,
-      module: "subchapter"
+      module: 'subchapter'
     });
   }
 
   getContactDetails(details) {
     this.setState({
       contactDetailsFormData: details,
-      module: "subchapter"
+      module: 'subchapter'
     });
   }
 
@@ -174,7 +171,7 @@ class MlAnchorTabsContainer extends React.Component {
       {
         actionName: 'save',
         showAction: true,
-        handler: async (event) => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
+        handler: async event => this.props.handler(this.updateAnchorDetails.bind(this), this.handleSuccess.bind(this))
       }, {
         showAction: true,
         actionName: 'cancel',
@@ -221,5 +218,5 @@ class MlAnchorTabsContainer extends React.Component {
     )
   }
 }
-;
+
 export default MlAnchorTabsContainer = formHandler()(MlAnchorTabsContainer);

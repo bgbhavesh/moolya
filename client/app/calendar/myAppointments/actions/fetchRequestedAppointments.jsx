@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 25/7/17.
  */
-import gql from "graphql-tag";
-import {appClient} from "../../../core/appConnection";
+import gql from 'graphql-tag';
+import { appClient } from '../../../core/appConnection';
 
 export async function requestedAppointmentActionHandler() {
   const result = await appClient.query({
@@ -20,7 +20,7 @@ export async function requestedAppointmentActionHandler() {
   return data;
 }
 
-export async function getBeSpokeForAppointments (serviceId) {
+export async function getBeSpokeForAppointments(serviceId) {
   const result = await appClient.query({
     query: gql`
     query($serviceId:String){
@@ -89,5 +89,4 @@ export async function servicesForAppointmentsActionHandler() {
   const data = result.data.fetchServicesForAppointments;
   return data;
 }
-
 

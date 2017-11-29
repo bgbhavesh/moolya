@@ -1,9 +1,9 @@
 /**
  * Created by Birendra on 21/8/17.
  */
-import React, {Component}  from "react";
-import {render} from 'react-dom';
-var Rating = require('react-rating');
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+const Rating = require('react-rating');
 
 export default class MlInstitutionViewRating extends Component {
   constructor(props, context) {
@@ -15,7 +15,7 @@ export default class MlInstitutionViewRating extends Component {
 
   render() {
     console.log(this.props)
-    let rating = parseInt(this.props.ratingDetails && this.props.ratingDetails.rating ? this.props.ratingDetails.rating : 4);
+    const rating = parseInt(this.props.ratingDetails && this.props.ratingDetails.rating ? this.props.ratingDetails.rating : 4);
     return (
       <div className="requested_input">
         <div className="col-lg-12">

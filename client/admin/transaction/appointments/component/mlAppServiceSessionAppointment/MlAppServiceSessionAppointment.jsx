@@ -30,7 +30,7 @@ export default class MlAppServiceSessionAppointment extends Component {
 
   async fetchServiceSessionAppointments() {
     if (this.state.orderId) {
-      let response = await fetchAdminSessionAppointment(this.state.orderId);
+      const response = await fetchAdminSessionAppointment(this.state.orderId);
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
@@ -98,7 +98,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                 <div className="form-group">
                   <input type="text" placeholder="Community" value={this.state.data.client.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
-                <div className="panel panel-default cancel_app" style={{ 'display': 'none' }}>
+                <div className="panel panel-default cancel_app" style={{ display: 'none' }}>
                   <div className="panel-heading">Cancel an appointment</div>
                   <div className="panel-body">
                     <h4 className="text-center">Ae you sure do you want to cancel an<br /> appointment?</h4>
@@ -114,7 +114,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                     <a href="#" className="fileUpload mlUpload_btn cancel_send">Send</a> <a href="#" className="fileUpload mlUpload_btn cancel_cancel">Cancel</a>
                   </div>
                 </div>
-                <div className="panel panel-default release_pay" style={{ 'display': 'none' }}>
+                <div className="panel panel-default release_pay" style={{ display: 'none' }}>
                   <div className="panel-heading">Release Payment</div>
                   <div className="panel-body">
                     <h4>Total amount paid : <b>5,700 INR</b></h4>
@@ -196,11 +196,12 @@ export default class MlAppServiceSessionAppointment extends Component {
           </div>
           <div className="tab-pane" id={`${this.state.orderId}3a`}>
             {/* <p>Take from this page "appFunderMyAppointment"</p> */}
-            <MlAppSelectedTaskMyAppointment appointment={{
-              appointmentId: this.state.orderId,
-              resourceId: this.state.data.appointmentInfo.taskId,
-              sessionId: this.state.data.appointmentInfo.sessionId
-            }} />
+            <MlAppSelectedTaskMyAppointment
+              appointment={{
+                appointmentId: this.state.orderId,
+                resourceId: this.state.data.appointmentInfo.taskId,
+                sessionId: this.state.data.appointmentInfo.sessionId
+              }} />
           </div>
           <div className="tab-pane" id={`${this.state.orderId}4a`}>
             <div className="row">

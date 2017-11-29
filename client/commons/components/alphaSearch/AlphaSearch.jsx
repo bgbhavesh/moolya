@@ -1,28 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class AlphaSearch extends Component {
-
   constructor(props) {
     super(props);
     return this;
   }
 
   componentDidMount() {
-    $('.alfa_pagination').click(function(){
-        $(this).toggleClass('alfa_pagination_open');
+    $('.alfa_pagination').click(function () {
+      $(this).toggleClass('alfa_pagination_open');
     });
   }
 
 
   render() {
-
-    const alphabets=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-    var that=this;
-    let alphabetsList = alphabets.map(function(alpha) {
-     return ( <li key={alpha} id={alpha} onClick={that.props.onAlphaSearchChange.bind(that,alpha)}><a href="">{alpha}</a></li>)
-    });
+    const alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    const that = this;
+    const alphabetsList = alphabets.map(alpha => (<li key={alpha} id={alpha} onClick={that.props.onAlphaSearchChange.bind(that, alpha)}><a href="">{alpha}</a></li>));
 
     return (
       <div className="alfa_pagination">
@@ -38,6 +34,6 @@ export default class AlphaSearch extends Component {
   }
 }
 
-AlphaSearch.PropTypes={
-  onAlphaSearchChange:React.PropTypes.function
+AlphaSearch.PropTypes = {
+  onAlphaSearchChange: React.PropTypes.function
 }

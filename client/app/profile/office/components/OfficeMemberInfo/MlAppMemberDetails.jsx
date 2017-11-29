@@ -3,78 +3,78 @@
  */
 
 import React from 'react';
-import {fetchOfficeMember} from '../../actions/findOfficeMember';
-import {updateOfficeMemberActionHandler} from '../../actions/updateOfficeMember'
-import {fetchOfficeMemberById} from '../../actions/findOfficeById';
+import { fetchOfficeMember } from '../../actions/findOfficeMember';
+import { updateOfficeMemberActionHandler } from '../../actions/updateOfficeMember'
+import { fetchOfficeMemberById } from '../../actions/findOfficeById';
 import moment from 'moment';
-import gql from "graphql-tag";
-import Moolyaselect from  '../../../../../commons/containers/select/MlSelectComposer';
-import {appClient} from '../../../../core/appConnection';
-import {setOfficeMemberIndependent} from '../../actions/setOfficeMemberIndependent';
-import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import gql from 'graphql-tag';
+import Moolyaselect from '../../../../../commons/containers/select/MlSelectComposer';
+import { appClient } from '../../../../core/appConnection';
+import { setOfficeMemberIndependent } from '../../actions/setOfficeMemberIndependent';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-export default class MlAppMemberDetails extends React.Component{
-  constructor(props){
+export default class MlAppMemberDetails extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       memberInfo: {},
-      office:{
-        availableCommunities:[]
+      office: {
+        availableCommunities: []
       },
-      communityCode:'',
+      communityCode: '',
       showCommunityBlock: false
     };
     this.onCommunitySelect = this.onCommunitySelect.bind(this);
   }
 
   componentDidMount() {
-    $(function() {
+    $(() => {
       $('.float-label').jvFloat();
     });
 
-    $('.switch input').change(function() {
+    $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
-      }else{
+      } else {
         $(this).parent('.switch').removeClass('on');
       }
     });
     this.getOffice();
     this.getMemberDetail();
   }
-  async getOffice(){
-    let id = FlowRouter.getParam('officeId');
-    let office = await fetchOfficeMemberById(id);
+  async getOffice() {
+    const id = FlowRouter.getParam('officeId');
+    const office = await fetchOfficeMemberById(id);
     this.setState({
-      office: office
+      office
     })
   }
-  async getMemberDetail(){
-    let id = FlowRouter.getParam('memberId');
-    let response = await fetchOfficeMember(id);
+  async getMemberDetail() {
+    const id = FlowRouter.getParam('memberId');
+    const response = await fetchOfficeMember(id);
     console.log(response);
-    if(response) {
+    if (response) {
       this.setState({
         memberInfo: response
       });
     }
   }
 
-  async updateMemberFlags(type){
+  async updateMemberFlags(type) {
     const that = this;
-    if(that.state.memberInfo.isRetire){
+    if (that.state.memberInfo.isRetire) {
       return false;
     }
     const isView = that.state.memberInfo.isFreeze || that.state.memberInfo.isRetire || that.state.memberInfo.isPrincipal;
-    if(type == "isPrincipal" && isView ){
+    if (type == 'isPrincipal' && isView) {
       return false;
     }
-    let update = {};
+    const update = {};
     update[type] = true;
-    let id = FlowRouter.getParam('memberId');
-    let officeId = FlowRouter.getParam('officeId');
-    let response = await updateOfficeMemberActionHandler(officeId, id, update);
-    if(response.success){
+    const id = FlowRouter.getParam('memberId');
+    const officeId = FlowRouter.getParam('officeId');
+    const response = await updateOfficeMemberActionHandler(officeId, id, update);
+    if (response.success) {
       toastr.success(response.result);
       this.getMemberDetail();
     } else {
@@ -82,16 +82,16 @@ export default class MlAppMemberDetails extends React.Component{
     }
   }
 
-  async unFreezeUser(){
-    if(this.state.memberInfo.isRetire){
+  async unFreezeUser() {
+    if (this.state.memberInfo.isRetire) {
       return false;
     }
-    let update = {};
-    update["isFreeze"] = false;
-    let id = FlowRouter.getParam('memberId');
-    let officeId = FlowRouter.getParam('officeId');
-    let response = await updateOfficeMemberActionHandler(officeId, id, update);
-    if(response.success){
+    const update = {};
+    update.isFreeze = false;
+    const id = FlowRouter.getParam('memberId');
+    const officeId = FlowRouter.getParam('officeId');
+    const response = await updateOfficeMemberActionHandler(officeId, id, update);
+    if (response.success) {
       toastr.success(response.result);
       this.getMemberDetail();
     } else {
@@ -99,12 +99,12 @@ export default class MlAppMemberDetails extends React.Component{
     }
   }
 
-  async updateIsIndependent(e){
-    let update = {
-      isIndependent:e.target.checked
+  async updateIsIndependent(e) {
+    const update = {
+      isIndependent: e.target.checked
     };
-    let id = FlowRouter.getParam('memberId');
-    let officeId = FlowRouter.getParam('officeId');
+    const id = FlowRouter.getParam('memberId');
+    const officeId = FlowRouter.getParam('officeId');
     console.log(id, officeId);
 
     this.setState({
@@ -124,11 +124,11 @@ export default class MlAppMemberDetails extends React.Component{
     });
   }
 
-  async makeIndependent(){
-    let id = FlowRouter.getParam('memberId');
-    let communityCode = this.state.communityCode;
-    let response = await setOfficeMemberIndependent(id, communityCode);
-    if(response.success){
+  async makeIndependent() {
+    const id = FlowRouter.getParam('memberId');
+    const communityCode = this.state.communityCode;
+    const response = await setOfficeMemberIndependent(id, communityCode);
+    if (response.success) {
       toastr.success(response.result);
       this.getMemberDetail();
     } else {
@@ -139,9 +139,7 @@ export default class MlAppMemberDetails extends React.Component{
   render() {
     const that = this;
     const isView = that.state.memberInfo.isFreeze || that.state.memberInfo.isRetire;
-    let community = this.state.office.availableCommunities.find(function (item) {
-      return item.communityId == that.state.memberInfo.communityType;
-    });
+    const community = this.state.office.availableCommunities.find(item => item.communityId == that.state.memberInfo.communityType);
 
     let query = gql`{
                 data:fetchCommunitiesSelect {
@@ -150,9 +148,9 @@ export default class MlAppMemberDetails extends React.Component{
                   }
                 }
               `,
-    communityName = community ?  community.communityName : ' ';
-    //communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
-    communityName =  this.state.memberInfo.isPrincipal ? 'Principal': communityName ;
+      communityName = community ? community.communityName : ' ';
+    // communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
+    communityName = this.state.memberInfo.isPrincipal ? 'Principal' : communityName;
     return (
       <div>
         <div className="investement-view-content">
@@ -179,19 +177,19 @@ export default class MlAppMemberDetails extends React.Component{
                     <input type="text" placeholder="Role" defaultValue=" " value={communityName} className="form-control float-label" id="cluster_name" />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Status" value={this.state.memberInfo.isActive ? 'Active' : 'Not Active'} disabled={true}  className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Status" value={this.state.memberInfo.isActive ? 'Active' : 'Not Active'} disabled={true} className="form-control float-label" id="cluster_name" />
                   </div>
                 </form>
               </div>
             </div>
             <div className="col-md-6">
-              <div className="text-center"><img src={this.state.memberInfo.profileImage ? this.state.memberInfo.profileImage : "/images/ideator_01.png"}/></div>
+              <div className="text-center"><img src={this.state.memberInfo.profileImage ? this.state.memberInfo.profileImage : '/images/ideator_01.png'}/></div>
               <br />
               <div className="clearfix"></div>
               <div className="form-group switch_wrap inline_switch">
                 <label>Show Independent</label>
                 <label className="switch">
-                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} disabled={this.state.memberInfo.isIndependent || !this.state.memberInfo.isActive || isView ? true : false } />
+                  <input type="checkbox" onClick={e => this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} disabled={!!(this.state.memberInfo.isIndependent || !this.state.memberInfo.isActive || isView) } />
                   <div className="slider"></div>
                 </label>
               </div>
@@ -206,12 +204,12 @@ export default class MlAppMemberDetails extends React.Component{
                         className="form-control float-label"
                         valueKey={'value'}
                         labelKey={'label'}
-                        queryType={"graphql"}
+                        queryType={'graphql'}
                         placeholder="Select Community"
                         selectedValue={this.state.communityCode}
                         connection={appClient}
                         query={query}
-                        id={"communityType"}
+                        id={'communityType'}
                         isDynamic={true}
                         onSelect={this.onCommunitySelect.bind(this)}
                         ref="listSelect"
@@ -221,11 +219,11 @@ export default class MlAppMemberDetails extends React.Component{
                     </div>
                     <div className="clearfix"></div>
                     <div className="form-group text-right padding10">
-                      <a href="" onClick={()=> that.makeIndependent() } className="mlUpload_btn">Make Independent</a>
+                      <a href="" onClick={() => that.makeIndependent() } className="mlUpload_btn">Make Independent</a>
                     </div>
                   </div>
                   :
-                  ""
+                  ''
               }
               <div className="clearfix"></div>
               <div className="form_bg">
@@ -251,18 +249,19 @@ export default class MlAppMemberDetails extends React.Component{
           {
             !that.state.memberInfo.isFreeze
               ?
-                <a href="" onClick={()=>this.updateMemberFlags('isFreeze')} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Freeze</a>
+              <a href="" onClick={() => this.updateMemberFlags('isFreeze')} className={ that.state.memberInfo.isRetire ? 'disabled mlUpload_btn' : 'mlUpload_btn' }>Freeze</a>
               :
-                <a href="" onClick={()=>this.unFreezeUser()} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Unfreeze</a>
+              <a href="" onClick={() => this.unFreezeUser()} className={ that.state.memberInfo.isRetire ? 'disabled mlUpload_btn' : 'mlUpload_btn' }>Unfreeze</a>
           }
 
           {
             that.state.memberInfo.isPrincipal ? ''
-              : <a href="" onClick={() => this.updateMemberFlags('isPrincipal')}
-                 className={isView || that.state.memberInfo.isPrincipal ? "disabled mlUpload_btn" : "mlUpload_btn"}>Make
+              : <a
+                href="" onClick={() => this.updateMemberFlags('isPrincipal')}
+                className={isView || that.state.memberInfo.isPrincipal ? 'disabled mlUpload_btn' : 'mlUpload_btn'}>Make
                 Principal</a>
           }
-          <a href="" onClick={()=>that.setState({modalOpen:true})} className={ that.state.memberInfo.isRetire ? "disabled mlUpload_btn" : "mlUpload_btn" }>Retire</a>
+          <a href="" onClick={() => that.setState({ modalOpen: true })} className={ that.state.memberInfo.isRetire ? 'disabled mlUpload_btn' : 'mlUpload_btn' }>Retire</a>
         </div>
 
         <Modal isOpen={that.state.modalOpen && !that.state.memberInfo.isRetire} onHide={this.onClose}>
@@ -272,11 +271,11 @@ export default class MlAppMemberDetails extends React.Component{
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={ () => this.updateMemberFlags('isRetire') }>Ok</Button>{' '}
-            <Button color="secondary" onClick={() => that.setState({modalOpen:false}) }>Cancel</Button>
+            <Button color="secondary" onClick={() => that.setState({ modalOpen: false }) }>Cancel</Button>
           </ModalFooter>
         </Modal>
 
       </div>
     )
   }
-};
+}

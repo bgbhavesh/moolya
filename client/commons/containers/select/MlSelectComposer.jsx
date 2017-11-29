@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MlSelectComponent from '../../components/select/Select';
 export default class MoolyaSelect extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     return this;
   }
@@ -13,27 +13,27 @@ export default class MoolyaSelect extends Component {
    * @param queryCallbackHandler :: Function :: Callback function executed once data is fetched
    * @returns Void
    */
-  retrieveSelectOptions(options,queryCallbackHandler){
-    let connection=this.props.connection;
-    if(connection){
-      const selectionOptionsPromise =  connection.query({
+  retrieveSelectOptions(options, queryCallbackHandler) {
+    const connection = this.props.connection;
+    if (connection) {
+      const selectionOptionsPromise = connection.query({
         query: this.props.query,
-        forceFetch:typeof this.props.forceFetch !== 'undefined'?options.forceFetch:true,
-        variables:options.queryOptions
+        forceFetch: typeof this.props.forceFetch !== 'undefined' ? options.forceFetch : true,
+        variables: options.queryOptions
       })
-      selectionOptionsPromise.then(data =>{
-        if(queryCallbackHandler){
+      selectionOptionsPromise.then((data) => {
+        if (queryCallbackHandler) {
           queryCallbackHandler(data.data.data);
         }
       })
     }
-  };
+  }
 
-  render(){
+  render() {
     /**
      * returning the Generic Select Component
      */
-    return(
+    return (
       <MlSelectComponent {...this.props} retrieveSelectOptions={this.retrieveSelectOptions.bind(this)}></MlSelectComponent>
     )
   }

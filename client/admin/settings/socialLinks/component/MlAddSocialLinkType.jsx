@@ -1,14 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addSocialLinkTypeActionHandler} from '../actions/addSocialLinkTypeAction'
+import { addSocialLinkTypeActionHandler } from '../actions/addSocialLinkTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../utils/formElemUtil';
 
 
-class MlAddSocialLinkType extends React.Component{
+class MlAddSocialLinkType extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -18,48 +18,48 @@ class MlAddSocialLinkType extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
-    var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    OnToggleSwitch(true, true);
+    const WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
-    const resp=await this.createSocialLinks();
+    const resp = await this.createSocialLinks();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/socialLinkTypeList");
-  };
+    FlowRouter.go('/admin/settings/socialLinkTypeList');
+  }
 
-  async  createSocialLinks() {
-    let Details = {
+  async createSocialLinks() {
+    const Details = {
       socialName: this.refs.name.value,
       socialDisplayName: this.refs.displayName.value,
       aboutSocial: this.refs.about.value,
       // socialUploadIcon : this.refs.upload.value,
-      isActive: this.refs.status.checked,
+      isActive: this.refs.status.checked
     }
     const response = await addSocialLinkTypeActionHandler(Details);
     return response;
   }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createSocialLinks.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createSocialLinks.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/socialLinkTypeList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/socialLinkTypeList')
         }
       }
     ]
@@ -93,12 +93,12 @@ class MlAddSocialLinkType extends React.Component{
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <br className="brclear"/>
-                  {/*<div className="form-group ">*/}
-                    {/*<div className="fileUpload mlUpload_btn">*/}
-                      {/*<span>Upload Icon</span>*/}
-                      {/*<input type="file" className="upload" ref="upload"/>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
+                  {/* <div className="form-group "> */}
+                  {/* <div className="fileUpload mlUpload_btn"> */}
+                  {/* <span>Upload Icon</span> */}
+                  {/* <input type="file" className="upload" ref="upload"/> */}
+                  {/* </div> */}
+                  {/* </div> */}
                   <br className="brclear"/>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">
@@ -117,6 +117,6 @@ class MlAddSocialLinkType extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddSocialLinkType = formHandler()(MlAddSocialLinkType);

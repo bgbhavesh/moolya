@@ -10,10 +10,10 @@ export default class MlNoDataContainer extends React.Component {
   }
 
   render() {
-    var data = this.props.data;
-    var dataType = this.props.dataType || null;
-    var skipCheck = this.props.skipCheck || false;
-    var isEmpty = skipCheck ? true : false;
+    const data = this.props.data;
+    const dataType = this.props.dataType || null;
+    const skipCheck = this.props.skipCheck || false;
+    let isEmpty = !!skipCheck;
     if (!skipCheck) {
       switch (dataType) {
         case 'String':
@@ -28,10 +28,10 @@ export default class MlNoDataContainer extends React.Component {
       }
     }
 
-    if ( !isEmpty) return null;
+    if (!isEmpty) return null;
 
     return (
-    /** returning the Generic NoData Component*/
+    /** returning the Generic NoData Component */
       <MlNoData {...this.props}/>
     )
   }

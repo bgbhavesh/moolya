@@ -4,16 +4,16 @@
 /**
  * import of the files to be used
  * */
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {fetchPortfolioActionHandler} from '../actions/ideatorActionHandler'
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { fetchPortfolioActionHandler } from '../actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 /**
  * export of the default component
  * */
-import MlLoader from "../../../../commons/components/loader/loader";
+import MlLoader from '../../../../commons/components/loader/loader';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 export default class MlAppIdeatorListView extends Component {
   /**
@@ -23,33 +23,27 @@ export default class MlAppIdeatorListView extends Component {
    * */
   async viewDetails(portfolioId, e) {
     const response = await fetchPortfolioActionHandler(portfolioId);
-    if (this.props.config.isExplore && response && response.canAccess)
-      FlowRouter.go('/app/explore/ideator/' + portfolioId)
-    else if (response && response.canAccess)
-      FlowRouter.go('/app/ideator/' + portfolioId)
-    else if(response && !response.canAccess)
-      toastr.error('Portfolio not available for view')
+    if (this.props.config.isExplore && response && response.canAccess) { FlowRouter.go(`/app/explore/ideator/${portfolioId}`) } else if (response && response.canAccess) { FlowRouter.go(`/app/ideator/${portfolioId}`) } else if (response && !response.canAccess) { toastr.error('Portfolio not available for view') }
   }
 
   /**
    * UI to be render where getting the data through the props from th3e config file
    * */
   render() {
-    let that = this
+    const that = this
     const data = this.props.data || [];
-    let loading=this.props.config&&this.props.config.loading;
+    const loading = this.props.config && this.props.config.loading;
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
+        {loading === true ? (<MlLoader/>) : (
           <div className="ideators_list">
-          <div className="col-md-12">
-            <h2>Ideators</h2>
-          </div>
-          {data && !data.length?
-            (<NoDataList moduleName="Portfolios" />):(
-              <div>
-                  {data.map(function (ideator, idx) {
-                  return (
+            <div className="col-md-12">
+              <h2>Ideators</h2>
+            </div>
+            {data && !data.length ?
+              (<NoDataList moduleName="Portfolios" />) : (
+                <div>
+                  {data.map((ideator, idx) => (
                     <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
                       <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
                         <div className="ideators_list_block">
@@ -68,13 +62,12 @@ export default class MlAppIdeatorListView extends Component {
                         </div>
                       </a>
                     </div>
-                  )
-                })}
-              </div>)
-          }
+                  ))}
+                </div>)
+            }
 
 
-        </div>
+          </div>
         )}
       </div>
     )
@@ -102,6 +95,5 @@ export default class MlAppIdeatorListView extends Component {
   //   return (<div className="row funders_list">{list}</div>);
   //
   // }
-
 }
 

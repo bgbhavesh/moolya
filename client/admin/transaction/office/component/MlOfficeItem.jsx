@@ -3,32 +3,32 @@
  */
 
 import React from 'react'
-import{initalizeFloatLabel} from '../../../utils/formElemUtil'
-import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
-import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
-import {updateOfficeStatus} from '../actions/updateOfficeStatus'
+import { initalizeFloatLabel } from '../../../utils/formElemUtil'
+import { findOfficeTransactionHandler } from '../actions/findOfficeTranscation'
+import { updateSubcriptionDetail } from '../actions/updateSubscriptionDetail'
+import { updateOfficeStatus } from '../actions/updateOfficeStatus'
 import moment from 'moment'
-import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
-var Select = require('react-select');
+import { getAdminUserContext } from '../../../../commons/getAdminUserContext'
+const Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      transId:props.data.id,
-      transInfo:{},
-      currentSlideIndex:0,
-      userInfo:{},
-      officeInfo:{},
-      officeSC:{
+    this.state = {
+      transId: props.data.id,
+      transInfo: {},
+      currentSlideIndex: 0,
+      userInfo: {},
+      officeInfo: {},
+      officeSC: {
         availableCommunities: []
       },
-      officeSCDef:{},
+      officeSCDef: {},
       cost: 0,
-      tax:false,
-      about:'',
+      tax: false,
+      about: '',
       isGenerateLinkDisable: false,
-      duration : ' '
+      duration: ' '
     }
     this.getTransaction.bind(this);
     this.initializeSwiper.bind(this);
@@ -36,143 +36,143 @@ export default class MlOfficeItem extends React.Component {
     return this;
   }
 
-  onSlideIndexChange(swiper){
-    if(this.state.currentSlideIndex!==swiper.activeIndex){
-      this.setState({'currentSlideIndex':swiper.activeIndex});
+  onSlideIndexChange(swiper) {
+    if (this.state.currentSlideIndex !== swiper.activeIndex) {
+      this.setState({ currentSlideIndex: swiper.activeIndex });
     }
   }
 
   componentDidMount() {
     initalizeFloatLabel();
-    $(function() {
+    $(() => {
       $('.float-label').jvFloat();
     });
 
-    $('.switch input').change(function() {
+    $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
-      }else{
+      } else {
         $(this).parent('.switch').removeClass('on');
       }
     });
     this.initializeSwiper();
   }
 
-  initializeSwiper(){
+  initializeSwiper() {
     const transId = this.state.transId;
-      setTimeout(function () {
-        let swiper =  new Swiper('#office_item'+transId, {
-          effect: 'coverflow',
-          slidesPerView: 3,
-          grabCursor: true,
-          centeredSlides: true,
-          initialSlide: 0
-        });
-      },100);
-  };
+    setTimeout(() => {
+      const swiper = new Swiper(`#office_item${transId}`, {
+        effect: 'coverflow',
+        slidesPerView: 3,
+        grabCursor: true,
+        centeredSlides: true,
+        initialSlide: 0
+      });
+    }, 100);
+  }
 
   async componentWillMount() {
-    this.loggedUserDetails = getAdminUserContext();                                      /*getting user context*/
+    this.loggedUserDetails = getAdminUserContext(); /* getting user context */
     await this.getTransaction(this.state.transId);
   }
 
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
 
- }
+  }
 
-  async getTransaction(id){
-    let response = await findOfficeTransactionHandler(id, this.loggedUserDetails);           /*adding user context fro auth*/
-    if(response){
+  async getTransaction(id) {
+    const response = await findOfficeTransactionHandler(id, this.loggedUserDetails); /* adding user context fro auth */
+    if (response) {
       let duration = ' ';
-      let result = JSON.parse(response.result)[0];
-      if(result){
+      const result = JSON.parse(response.result)[0];
+      if (result) {
         // console.log(result);
-        if(result.trans.duration){
-          let dbDuration = result.trans.duration;
-            duration = dbDuration.years+' Year'; // To do for month and all
+        if (result.trans.duration) {
+          const dbDuration = result.trans.duration;
+          duration = `${dbDuration.years} Year`; // To do for month and all
         }
         result.officeSC.availableCommunities = result.officeSC.availableCommunities && result.officeSC.availableCommunities.length ? result.officeSC.availableCommunities : [];
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
-          duration: duration,
+          duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
           officeSC: result.officeSC,
           officeSCDef: result.officeSCDef ? result.officeSCDef : {},
-          currentSlideIndex:0,
+          currentSlideIndex: 0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
           about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
-          isGenerateLinkDisable: result.trans.orderSubscriptionDetails ? true : false
+          isGenerateLinkDisable: !!result.trans.orderSubscriptionDetails
         });
       }
     }
   }
 
-  updateCost(e){
-    if(e.currentTarget.value >= 0) {
-      this.setState({"cost":e.currentTarget.value});
+  updateCost(e) {
+    if (e.currentTarget.value >= 0) {
+      this.setState({ cost: e.currentTarget.value });
     } else {
-      this.setState({"cost":0});
+      this.setState({ cost: 0 });
     }
   }
 
-  updateTax(e){
-    this.setState({"tax":e.currentTarget.checked});
+  updateTax(e) {
+    this.setState({ tax: e.currentTarget.checked });
   }
 
-  updateAbout(e){
-    this.setState({"about":e.currentTarget.value});
+  updateAbout(e) {
+    this.setState({ about: e.currentTarget.value });
   }
 
-  async generateLink(){
-    if(this.state.isGenerateLinkDisable){
+  async generateLink() {
+    if (this.state.isGenerateLinkDisable) {
       toastr.error('Payment Link is already generated');
       return false;
     }
     this.setState({
-      isGenerateLinkDisable:true
+      isGenerateLinkDisable: true
     })
-    if(!this.state.cost){
+    if (!this.state.cost) {
       toastr.error("'Cost' field is mandatory");
       this.setState({
-        isGenerateLinkDisable:false
+        isGenerateLinkDisable: false
       })
       return false;
     }
-    if(this.state.cost < 1){
+    if (this.state.cost < 1) {
       toastr.error('Enter a valid cost');
       this.setState({
-        isGenerateLinkDisable:false
+        isGenerateLinkDisable: false
       })
       return false;
     }
-    let generateLinkInfo = {
-      SubscriptionName: this.state.officeInfo && this.state.officeInfo.subscriptionName ? this.state.officeInfo.subscriptionName : '' ,
+    const generateLinkInfo = {
+      SubscriptionName: this.state.officeInfo && this.state.officeInfo.subscriptionName ? this.state.officeInfo.subscriptionName : '',
       cost: this.state.cost,
       isTaxInclusive: this.state.tax,
       about: this.state.about
     }
-    let id = this.state.transId;
-    let response = await updateSubcriptionDetail(id ,generateLinkInfo);
-    if(response.success){
+    const id = this.state.transId;
+    const response = await updateSubcriptionDetail(id, generateLinkInfo);
+    if (response.success) {
       toastr.success(response.result);
     } else {
       toastr.error(response.result);
       this.setState({
-        isGenerateLinkDisable:false
+        isGenerateLinkDisable: false
       })
     }
   }
 
-  async acitvateOffice(){
-    if(this.state.officeInfo.isActive){
+  async acitvateOffice() {
+    if (this.state.officeInfo.isActive) {
       toastr.error('Office already activated');
       return false;
     }
-    let response = await updateOfficeStatus(this.state.officeInfo._id, this.loggedUserDetails);
-    if(response.success){
+    const response = await updateOfficeStatus(this.state.officeInfo._id, this.loggedUserDetails);
+    if (response.success) {
       toastr.success(response.result);
     } else {
       toastr.error(response.result);
@@ -180,37 +180,37 @@ export default class MlOfficeItem extends React.Component {
   }
 
   render() {
-    let statusOptions = [
-      {value: 'WIP', label: 'WIP' , clearableValue: true},
-      {value: 'Approved', label: 'Approved',clearableValue: true}
+    const statusOptions = [
+      { value: 'WIP', label: 'WIP', clearableValue: true },
+      { value: 'Approved', label: 'Approved', clearableValue: true }
     ];
-    let transId = this.state.transId;
+    const transId = this.state.transId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
+            <a href={`#1a${transId}`} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
+            <a href={`#2a${transId}`} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
           </li>
           <li>
-            <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
+            <a href={`#3a${transId}`} data-toggle="tab">Payment Details</a>
           </li>
           <li>
-            <a href={"#4a"+transId} data-toggle="tab">Device Details</a>
+            <a href={`#4a${transId}`} data-toggle="tab">Device Details</a>
           </li>
           <li>
-            <a href={"#5a"+transId} data-toggle="tab">History</a>
+            <a href={`#5a${transId}`} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id={"1a"+transId}>
+          <div className="tab-pane active" id={`1a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  {/*<input type="text" placeholder="User Id" defaultValue=' ' value={this.state.transInfo.userId} className="form-control float-label"/>*/}
-                  <input type="text" placeholder="User Id" defaultValue=' ' value={ this.state.officeSCDef && this.state.officeSCDef.profileId?this.state.officeSCDef.profileId:''} className="form-control float-label"/>
+                  {/* <input type="text" placeholder="User Id" defaultValue=' ' value={this.state.transInfo.userId} className="form-control float-label"/> */}
+                  <input type="text" placeholder="User Id" defaultValue=' ' value={ this.state.officeSCDef && this.state.officeSCDef.profileId ? this.state.officeSCDef.profileId : ''} className="form-control float-label"/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" />
@@ -244,7 +244,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"2a"+transId}>
+          <div className="tab-pane" id={`2a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -264,9 +264,9 @@ export default class MlOfficeItem extends React.Component {
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
-                  <input type="checkbox" checked={this.state.officeSC.availableCommunities.length > 2 ? true : false} />
-                  <div className="slider"></div>
-                </label>
+                    <input type="checkbox" checked={this.state.officeSC.availableCommunities.length > 2} />
+                    <div className="slider"></div>
+                  </label>
                   <span className="state_label">All Communities</span>
                   <div className="clearfix" />
                 </div>
@@ -274,10 +274,9 @@ export default class MlOfficeItem extends React.Component {
                 <br className="clearfix" />
                 <div className="clearfix" />
 
-                <div className="swiper-container office_item" id={'office_item'+transId}>
+                <div className="swiper-container office_item" id={`office_item${transId}`}>
                   <div className="swiper-wrapper">
-                    {this.state.officeSC.availableCommunities.map(function (item, i) {
-                      return(
+                    {this.state.officeSC.availableCommunities.map((item, i) => (
                       <div className="swiper-slide" key={i}>
                         <div className="team-block marb0">
                           <span className="ml ml-moolya-symbol"></span>
@@ -289,8 +288,7 @@ export default class MlOfficeItem extends React.Component {
                           <input type="text" value={item.userCount} placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
                         </div>
                       </div>
-                      )
-                    })}
+                    ))}
 
                   </div>
                 </div>
@@ -332,28 +330,28 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label"  />
+                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label" />
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
-                      <input type="number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
-                      <div className="email_notify" style={{right:'20px'}}>
+                      <input type="number" onChange={e => this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
+                      <div className="email_notify" style={{ right: '20px' }}>
                         <div className="input_types">
-                          <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
+                          <input id="checkbox1" onChange={e => this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
                         </div>
                       </div>
                     </div>
                     <div className="form-group">
-                      <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" ></textarea>
+                      <textarea defaultValue=" " onChange={e => this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" ></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={() => this.generateLink()}>Genrate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={() => this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"3a"+transId}>
+          <div className="tab-pane" id={`3a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -391,7 +389,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"4a"+transId}>
+          <div className="tab-pane" id={`4a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -411,7 +409,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"5a"+transId}>
+          <div className="tab-pane" id={`5a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 One

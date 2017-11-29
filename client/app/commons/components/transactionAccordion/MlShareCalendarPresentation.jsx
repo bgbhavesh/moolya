@@ -1,9 +1,7 @@
 import React from 'react';
 export default class MlShareCalendarPresentation extends React.Component {
-
   componentDidMount() {
     $('.float-label').jvFloat();
-
   }
   componentWillMount() {
     this.setState({ data: this.props.propsData });
@@ -11,32 +9,32 @@ export default class MlShareCalendarPresentation extends React.Component {
   }
 
   render() {
-    let that = this;
+    const that = this;
     const { propsData, deactivateLink } = this.props || {
       propsData: {
         ownerInfo: {}
       }
     };
     const userDetails = propsData.ownerInfo ? propsData.ownerInfo : {};
-    let transId = Math.random().toString(36).slice(2); //userDetails.userId;
+    const transId = Math.random().toString(36).slice(2); // userDetails.userId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href={"#1a" + transId} data-toggle="tab">Details</a>
+            <a href={`#1a${transId}`} data-toggle="tab">Details</a>
           </li>
           <li>
-            <a href={"#2a" + transId} data-toggle="tab">Activity Log</a>
+            <a href={`#2a${transId}`} data-toggle="tab">Activity Log</a>
           </li>
-          {/*<li>*/}
-            {/*<a href={"#3a" + transId} data-toggle="tab">Device Details</a>*/}
-          {/*</li>*/}
+          {/* <li> */}
+          {/* <a href={"#3a" + transId} data-toggle="tab">Device Details</a> */}
+          {/* </li> */}
           <li>
-            <a href={"#4a" + transId} data-toggle="tab">History</a>
+            <a href={`#4a${transId}`} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id={"1a" + transId}>
+          <div className="tab-pane active" id={`1a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -83,15 +81,13 @@ export default class MlShareCalendarPresentation extends React.Component {
                 <h5>Shared with :</h5>
                 <ul>
                   {
-                    propsData.users && propsData.users.map(function (user, index) {
-                      return (
-                        <li key={index}>
-                          {/*<FontAwesome name='minus'/>*/}
-                          <img src={user.profilePic ? user.profilePic : "/images/data_balance.jpg"} />
-                          <span>{user.displayName}</span>
-                        </li>
-                      )
-                    })
+                    propsData.users && propsData.users.map((user, index) => (
+                      <li key={index}>
+                        {/* <FontAwesome name='minus'/> */}
+                        <img src={user.profilePic ? user.profilePic : '/images/data_balance.jpg'} />
+                        <span>{user.displayName}</span>
+                      </li>
+                    ))
                   }
                 </ul>
                 <div className="clearfix" />
@@ -101,11 +97,11 @@ export default class MlShareCalendarPresentation extends React.Component {
                 </div>
               </div>
               <div className="col-md-6">
-                {propsData.isActive ? <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={()=>deactivateLink(propsData)}>Deactivate</a> : <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={()=>deactivateLink(propsData)}>Activate</a> }
+                {propsData.isActive ? <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={() => deactivateLink(propsData)}>Deactivate</a> : <a href="#" className="fileUpload mlUpload_btn release_cancel" onClick={() => deactivateLink(propsData)}>Activate</a> }
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"3a" + transId}>
+          <div className="tab-pane" id={`3a${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -125,7 +121,7 @@ export default class MlShareCalendarPresentation extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={"4a" + transId}>
+          <div className="tab-pane" id={`4a${transId}`}>
             <div className="row">
               <div className="col-md-12">
                 <b>No data available.</b>

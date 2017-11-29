@@ -2,17 +2,17 @@
  * Created by vishwadeep on 21/8/17.
  */
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 // import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import { initializeMlAnnotator } from '../../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 export default class MlStartupViewAssets extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {startupBranchesList: []};
+    this.state = { startupBranchesList: [] };
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -30,19 +30,18 @@ export default class MlStartupViewAssets extends React.Component {
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -54,16 +53,15 @@ export default class MlStartupViewAssets extends React.Component {
         } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
   async createAnnotations(annotation) {
-    let details = {
+    const details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "startupAssets",
+      docId: 'startupAssets',
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -75,23 +73,23 @@ export default class MlStartupViewAssets extends React.Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupAssets");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'startupAssets');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName": value.roleName,
-        "profileImage": value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -112,27 +110,25 @@ export default class MlStartupViewAssets extends React.Component {
 
   render() {
     console.log(this.props)
-    let that = this;
+    const that = this;
     // let branchesArray = that.state.startupBranchesList || [];
-    let branchesArray = this.props.assetsDetails || [];
+    const branchesArray = this.props.assetsDetails || [];
     return (
       <div id="annotatorContent">
         <h2>Assets</h2>
         <div>
-          {branchesArray && branchesArray.length?(<div className="col-lg-12">
+          {branchesArray && branchesArray.length ? (<div className="col-lg-12">
             <div className="row">
-              {branchesArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo && generateAbsolutePath(details.logo.fileUrl)} className="team_img"/>
-                    <h3>
-                      {details.assetTypeName && details.assetTypeName} <br />
-                    </h3>
-                  </div>
-                </div>)
-              })}
+              {branchesArray.map((details, idx) => (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                <div className="team-block">
+                  <img src={details.logo && generateAbsolutePath(details.logo.fileUrl)} className="team_img"/>
+                  <h3>
+                    {details.assetTypeName && details.assetTypeName} <br />
+                  </h3>
+                </div>
+              </div>))}
             </div>
-          </div>):(<NoData tabName={this.props.tabName}/>)}
+          </div>) : (<NoData tabName={this.props.tabName}/>)}
         </div>
 
       </div>

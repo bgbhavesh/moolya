@@ -3,56 +3,54 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import MlRoleAssignComponent from './MlRoleAssignComponent'
-export default class MlAsignInternalUsers extends React.Component{
-  constructor(props){
+export default class MlAsignInternalUsers extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      mlroleDetails:[]
+    this.state = {
+      mlroleDetails: []
     }
     return this;
   }
-  componentDidMount()
-  {
-    $(function() {
+  componentDidMount() {
+    $(() => {
       $('.float-label').jvFloat();
     });
-    $('.switch input').change(function() {
+    $('.switch input').change(function () {
       if ($(this).is(':checked')) {
-        //$(this).parent('.switch').addClass('on');
+        // $(this).parent('.switch').addClass('on');
         $(this).parent('.switch').val('true');
-      }else{
-        //$(this).parent('.switch').removeClass('on');
+      } else {
+        // $(this).parent('.switch').removeClass('on');
         $(this).parent('.switch').val('false');
       }
     });
 
-    var mySwiper = new Swiper('.blocks_in_form', {
+    const mySwiper = new Swiper('.blocks_in_form', {
       // speed: 400,
       pagination: '.swiper-pagination',
       spaceBetween: 0,
-      slidesPerView:2,
-      freeMode:true,
+      slidesPerView: 2,
+      freeMode: true,
       paginationClickable: false
     });
   }
-  getAssignedRoles(roles){
+  getAssignedRoles(roles) {
     console.log(roles)
-    this.setState({'mlroleDetails':roles})
+    this.setState({ mlroleDetails: roles })
   }
-  onSubmit(){
+  onSubmit() {
     console.log(this.state.mlroleDetails)
   }
-  render(){
+  render() {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Assign internal user to Community</h2>
 
 
-
           <div className="col-md-6">
             <div className="row">
-              {/*<h3>Users List</h3>*/}
+              {/* <h3>Users List</h3> */}
               <div className="left_wrap left_user_blocks">
 
                 <ScrollArea
@@ -122,7 +120,7 @@ export default class MlAsignInternalUsers extends React.Component{
 
           <div className="col-md-6">
 
-            {/*<h3>User Details</h3>*/}
+            {/* <h3>User Details</h3> */}
             <div className="left_wrap">
               <ScrollArea
                 speed={0.8}
@@ -173,9 +171,6 @@ export default class MlAsignInternalUsers extends React.Component{
       </div>
 
 
-
-
-
     )
   }
-};
+}

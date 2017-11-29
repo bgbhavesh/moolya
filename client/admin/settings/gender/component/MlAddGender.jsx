@@ -1,14 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addGenderActionHandler} from '../actions/addGenderAction'
+import { addGenderActionHandler } from '../actions/addGenderAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../utils/formElemUtil';
 
 
-class MlAddGender extends React.Component{
+class MlAddGender extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -18,50 +18,48 @@ class MlAddGender extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
-    var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    OnToggleSwitch(true, true);
+    const WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
-    const resp=await this.createLanguage();
+    const resp = await this.createLanguage();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
+    FlowRouter.go('/admin/settings/gendersList');
+  }
 
-    FlowRouter.go("/admin/settings/gendersList");
-  };
-
-  async  createLanguage() {
-    let Details = {
+  async createLanguage() {
+    const Details = {
       genderName: this.refs.name.value,
       genderDisplayName: this.refs.displayName.value,
       aboutGender: this.refs.about.value,
-      genderUploadIcon : this.refs.upload.value,
-      isActive: this.refs.status.checked,
+      genderUploadIcon: this.refs.upload.value,
+      isActive: this.refs.status.checked
     }
     const response = await addGenderActionHandler(Details);
     return response;
-
   }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/gendersList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/gendersList')
         }
       }
     ]
@@ -119,6 +117,6 @@ class MlAddGender extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddGender = formHandler()(MlAddGender);

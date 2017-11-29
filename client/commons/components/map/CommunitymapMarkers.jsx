@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import _ from 'lodash';
 
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 
 const K_SIZE = 80;
 
@@ -37,29 +37,29 @@ const mapMarkerStyleHover = {
 export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: {}, isHover: false};
+    this.state = { loading: true, data: {}, isHover: false };
     this.onMouseEnterHandlerCallback.bind(this);
   }
 
-  onMouseEnterHandlerCallback(data){
-   this.setState({loading: false, data: data});
-  };
+  onMouseEnterHandlerCallback(data) {
+    this.setState({ loading: false, data });
+  }
 
   onMouseEnterContent(customHoverHandler) {
-    this.setState({isHover: true});
-    let resp=[];
-    if(customHoverHandler){
-      customHoverHandler(this.props,this.onMouseEnterHandlerCallback.bind(this));
+    this.setState({ isHover: true });
+    const resp = [];
+    if (customHoverHandler) {
+      customHoverHandler(this.props, this.onMouseEnterHandlerCallback.bind(this));
     }
-      return resp;
+    return resp;
   }
 
   onMouseLeaveContent() {
-    this.setState({isHover: false});
+    this.setState({ isHover: false });
   }
 
 
-  /*async findModuleDetails() {
+  /* async findModuleDetails() {
     let json = {
       moduleName: this.props.module,
       id: this.props.markerId
@@ -67,55 +67,55 @@ export default class MapMarkers extends Component {
     const response = await findMapDetailsTypeActionHandler(json);
     this.setState({loading: false, data: response});
     return response;
-  }*/
+  } */
 
   render() {
     const style = this.props.hover ? mapMarkerStyleHover : mapMarkerStyle;
 
-    let actionConfig = this.props.actionConfiguration|| [];
-    let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
-    let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
-    let markerClickConfig = _.find(actionConfig, {actionName: 'onMarkerClick'});
-    let markerClickActionHandler=markerClickConfig&&markerClickConfig.handler?markerClickConfig.handler:null;
-    let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
-    let data = this.state.data && this.state.data ? this.state.data : [];
-    let HoverComponent = React.cloneElement(hoverComp, {data: data});
+    const actionConfig = this.props.actionConfiguration || [];
+    const hoverInConfig = _.find(actionConfig, { actionName: 'onMouseEnter' });
+    const hoverActionHandler = hoverInConfig && hoverInConfig.handler ? hoverInConfig.handler : null;
+    const markerClickConfig = _.find(actionConfig, { actionName: 'onMarkerClick' });
+    const markerClickActionHandler = markerClickConfig && markerClickConfig.handler ? markerClickConfig.handler : null;
+    const hoverComp = hoverInConfig && hoverInConfig.hoverComponent ? hoverInConfig.hoverComponent : '';
+    const data = this.state.data && this.state.data ? this.state.data : [];
+    const HoverComponent = React.cloneElement(hoverComp, { data });
 
-    let status = "";
-    if(this.props.status && (this.props.status.code == 100)){
-      status = "tobeassign"
+    let status = '';
+    if (this.props.status && (this.props.status.code == 100)) {
+      status = 'tobeassign'
     }
-    if(this.props.status && (this.props.status.code == 101)){
-      status = "workinprogress"
+    if (this.props.status && (this.props.status.code == 101)) {
+      status = 'workinprogress'
     }
-    if(this.props.status && (this.props.status.code == 110)){
-      status = "inactive"
+    if (this.props.status && (this.props.status.code == 110)) {
+      status = 'inactive'
     }
-    if(this.props.status && (this.props.status.code == 111)){
-      status = "active"
+    if (this.props.status && (this.props.status.code == 111)) {
+      status = 'active'
     }
 
     let className = ''
-    if(this.props.text == "IDE"){
-      className = "community_icon"+" id"
-    }else if(this.props.text == "FUN"){
-      className = "community_icon"+" fu"
-    }else if(this.props.text == "STU"){
-      className = "community_icon"+" st"
-    }else if(this.props.text == "INS"){
-      className = "community_icon"+" br"
-    }else if(this.props.text == "CMP"){
-      className = "community_icon"+" co"
-    }else if(this.props.text == "SPS"){
-      className = "community_icon"+" pr"
-    }else{
-      className = "community_icon"+" ot"
+    if (this.props.text == 'IDE') {
+      className = 'community_icon' + ' id'
+    } else if (this.props.text == 'FUN') {
+      className = 'community_icon' + ' fu'
+    } else if (this.props.text == 'STU') {
+      className = 'community_icon' + ' st'
+    } else if (this.props.text == 'INS') {
+      className = 'community_icon' + ' br'
+    } else if (this.props.text == 'CMP') {
+      className = 'community_icon' + ' co'
+    } else if (this.props.text == 'SPS') {
+      className = 'community_icon' + ' pr'
+    } else {
+      className = 'community_icon' + ' ot'
     }
 
     return (
       <div>
         <div className={className}></div>
-        </div>
+      </div>
     );
   }
 }

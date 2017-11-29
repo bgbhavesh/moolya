@@ -1,13 +1,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addKycCategoryActionHandler} from '../actions/addKycCtegoryAction'
+import { addKycCategoryActionHandler } from '../actions/addKycCtegoryAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
-class MlAddKycCategory extends React.Component{
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
+import { mlFieldValidations } from '../../../../commons/validations/mlfieldValidation';
+class MlAddKycCategory extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -16,45 +16,42 @@ class MlAddKycCategory extends React.Component{
   }
 
   componentDidMount() {
-    OnToggleSwitch(false,true);
+    OnToggleSwitch(false, true);
     initalizeFloatLabel();
   }
 
   async addEventHandler() {
-    const resp=await this.createKycCategory();
+    const resp = await this.createKycCategory();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/documentProcess/kycCategoryList");
-      else
-        toastr.error(response.result);
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/documentProcess/kycCategoryList'); } else { toastr.error(response.result); }
     }
-  };
+  }
 
-  async  createKycCategory() {
-    let ret = mlFieldValidations(this.refs)
+  async createKycCategory() {
+    const ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
     } else {
-      let Details = {
+      const Details = {
         docCategoryName: this.refs.docCategoryName.value,
         docCategoryDisplayName: this.refs.displayName.value,
         about: this.refs.about.value,
-        isActive: this.refs.documentTypeStatus.checked,
+        isActive: this.refs.documentTypeStatus.checked
       }
       const response = await addKycCategoryActionHandler(Details);
       if (!response.success) {
-        toastr.error("KYC category already exists")
-      } else if(response.success) {
+        toastr.error('KYC category already exists')
+      } else if (response.success) {
         toastr.success("'KYC category' added successfully");
-        FlowRouter.go("/admin/settings/documentProcess/kycCategoryList");
+        FlowRouter.go('/admin/settings/documentProcess/kycCategoryList');
       }
     }
 
@@ -63,8 +60,8 @@ class MlAddKycCategory extends React.Component{
     //   this.setState({'subdepartmentAvailability':details})
     // }
   }
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       // {
       //   actionName: 'edit',
       //   showAction: true,
@@ -73,13 +70,13 @@ class MlAddKycCategory extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createKycCategory.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createKycCategory.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/documentProcess/kycCategoryList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/documentProcess/kycCategoryList')
         }
       }
     ]
@@ -103,19 +100,19 @@ class MlAddKycCategory extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
 
-                <form>
-                  <div className="form-group mandatory">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""data-required={true} data-errMsg="  Display Name is Required"/>
-                  </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>Status</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="documentTypeStatus" />
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                  <br className="brclear"/>
-                </form>
+              <form>
+                <div className="form-group mandatory">
+                  <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""data-required={true} data-errMsg="  Display Name is Required"/>
+                </div>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
+                  <label className="switch">
+                    <input type="checkbox" ref="documentTypeStatus" />
+                    <div className="slider"></div>
+                  </label>
+                </div>
+                <br className="brclear"/>
+              </form>
 
             </div>
           </div>
@@ -124,6 +121,6 @@ class MlAddKycCategory extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlAddKycCategory = formHandler()(MlAddKycCategory);

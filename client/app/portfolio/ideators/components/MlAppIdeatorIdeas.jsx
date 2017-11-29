@@ -1,25 +1,25 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import 'react-responsive-tabs/styles.css'
-import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
+import { fetchIdeaActionHandler } from '../actions/ideatorActionHandler'
 import MlLoader from '../../../../commons/components/loader/loader'
 
 export default class MlAppIdeatorIdeas extends React.Component {
   constructor(props, context) {
     super(props);
-    this.state = {loading: true, userIdeas: [], initialSlide: 1},
-      this.fetchIdeas.bind(this)
+    this.state = { loading: true, userIdeas: [], initialSlide: 1 },
+    this.fetchIdeas.bind(this)
     return this;
   }
 
   componentDidMount() {
-    const resp =this.fetchIdeas();
+    const resp = this.fetchIdeas();
     return resp
   }
 
   componentDidUpdate() {
-    let swiper = new Swiper('.ideas_swiper', {
+    const swiper = new Swiper('.ideas_swiper', {
       pagination: '.swiper-pagination',
       effect: 'coverflow',
       grabCursor: true,
@@ -37,26 +37,26 @@ export default class MlAppIdeatorIdeas extends React.Component {
     $('.idea_details .ideas_block').click(function () {
       GetIdeaId = $(this).attr('name');
       $('.idea_details .portfolio-main-wrap .panel').slideUp();
-      $('#' + GetIdeaId).slideDown();
+      $(`#${GetIdeaId}`).slideDown();
     });
-    $('#' + this.state.initialSlide).slideDown();
+    $(`#${this.state.initialSlide}`).slideDown();
   }
 
   async fetchIdeas() {
     const response = await fetchIdeaActionHandler();
     if (response) {
-      this.setState({loading: false, userIdeas: response});
-    }else {
-      this.setState({loading:false});
+      this.setState({ loading: false, userIdeas: response });
+    } else {
+      this.setState({ loading: false });
     }
   }
 
   viewIdea(portfolioId, community, e) {
-    FlowRouter.go("/app/portfolio/view/" + portfolioId + "/" + community);
+    FlowRouter.go(`/app/portfolio/view/${portfolioId}/${community}`);
   }
 
   editIdea(portfolioId, community, e) {
-    FlowRouter.go("/app/portfolio/edit/" + portfolioId + "/" + community);
+    FlowRouter.go(`/app/portfolio/edit/${portfolioId}/${community}`);
   }
 
   addNewIdea(e) {
@@ -64,58 +64,59 @@ export default class MlAppIdeatorIdeas extends React.Component {
   }
 
   render() {
-    let that = this
+    const that = this
     const showLoader = this.state.loading;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-        <h2>Ideas</h2>
-        {showLoader === true ? (<MlLoader/>) : (
-          <div className="main_wrap_scroll idea_details">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="col-md-2"></div>
-              <div className="col-md-8">
-                <div className="swiper-container ideas_swiper">
-                  <div className="swiper-wrapper">
-                    {this.state.userIdeas.map(function (idea, idx) {
-                      let url = idea && idea.ideaImage && idea.ideaImage.fileUrl ? idea.ideaImage.fileUrl : '/images/no_image.png';
-                      return (
-                        <div className="swiper-slide ideas_block" name={idx}
-                             style={{'backgroundImage': 'url(' +url+ ')'}} key={idx}>
-                          <h3 className="rating_xs"> {idea && idea.title?idea.title:''}<br/></h3>
-                        </div>
-                      )
-                    })}
+          <h2>Ideas</h2>
+          {showLoader === true ? (<MlLoader/>) : (
+            <div className="main_wrap_scroll idea_details">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
+                <div className="col-md-2"></div>
+                <div className="col-md-8">
+                  <div className="swiper-container ideas_swiper">
+                    <div className="swiper-wrapper">
+                      {this.state.userIdeas.map((idea, idx) => {
+                        const url = idea && idea.ideaImage && idea.ideaImage.fileUrl ? idea.ideaImage.fileUrl : '/images/no_image.png';
+                        return (
+                          <div
+                            className="swiper-slide ideas_block" name={idx}
+                            style={{ backgroundImage: `url(${url})` }} key={idx}>
+                            <h3 className="rating_xs"> {idea && idea.title ? idea.title : ''}<br/></h3>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <div className="swiper-pagination"></div>
                   </div>
-                  <div className="swiper-pagination"></div>
                 </div>
-              </div>
-              <div className="col-md-2"></div>
-              <br/>
-              {(!this.state.userIdeas || this.state.userIdeas.length < 1) ?
-                <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas">
-                  <div className="col-md-4">
-                    <img src="/images/ideas2.png"/>
-                  </div>
-                  <div className="col-md-8">
-                    <h3>Get Started With Your Ideas</h3>
-                    <p>With wings to your dreams<br />
+                <div className="col-md-2"></div>
+                <br/>
+                {(!this.state.userIdeas || this.state.userIdeas.length < 1) ?
+                  <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas">
+                    <div className="col-md-4">
+                      <img src="/images/ideas2.png"/>
+                    </div>
+                    <div className="col-md-8">
+                      <h3>Get Started With Your Ideas</h3>
+                      <p>With wings to your dreams<br />
                       and make them happen here
-                    </p>
-                    <a href="" className="ideabtn" onClick={this.addNewIdea.bind(this)}>pen down your idea</a>
+                      </p>
+                      <a href="" className="ideabtn" onClick={this.addNewIdea.bind(this)}>pen down your idea</a>
+                    </div>
                   </div>
-                </div>
-                :
-                <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
-                  {this.state.userIdeas.map(function (idea, idx) {
-                    return (
-                      <div className="panel panel-default panel-form-view" id={idx} style={{'display': 'none'}}
-                           key={idx}>
+                  :
+                  <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
+                    {this.state.userIdeas.map((idea, idx) => (
+                      <div
+                        className="panel panel-default panel-form-view" id={idx} style={{ display: 'none' }}
+                        key={idx}>
                         <div className="panel-heading">
                           <div className="row">
                             <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {idea.title}</div>
@@ -127,21 +128,22 @@ export default class MlAppIdeatorIdeas extends React.Component {
                         </div>
                         <div className="panel-body">
                           <p>{idea.ideaDescription}</p>
-                          <a className="mlUpload_btn pull-left"
-                             onClick={that.viewIdea.bind(that, idea.portfolioId, "Ideators")}>View</a>
-                          <a className="mlUpload_btn pull-left"
-                             onClick={that.editIdea.bind(that, idea.portfolioId, "Ideators")}>Edit</a>
+                          <a
+                            className="mlUpload_btn pull-left"
+                            onClick={that.viewIdea.bind(that, idea.portfolioId, 'Ideators')}>View</a>
+                          <a
+                            className="mlUpload_btn pull-left"
+                            onClick={that.editIdea.bind(that, idea.portfolioId, 'Ideators')}>Edit</a>
                           <a className="mlUpload_btn pull-left" onClick={that.addNewIdea.bind(that)}>Add New Idea</a>
                         </div>
                       </div>
-                    )
-                  })}
-                </div>
-              }
-            </ScrollArea>
-          </div>)}
-      </div>
+                    ))}
+                  </div>
+                }
+              </ScrollArea>
+            </div>)}
+        </div>
       </div>
     )
   }
-};
+}

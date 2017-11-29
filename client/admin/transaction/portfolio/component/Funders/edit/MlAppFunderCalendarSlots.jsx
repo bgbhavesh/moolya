@@ -1,61 +1,59 @@
 /**
  * Created by pankaj on 31/7/17.
  */
-import React, {Component} from "react";
+import React, { Component } from 'react';
 import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
-let FontAwesome = require('react-fontawesome');
-import Days from "./Days.jsx";
-import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+const FontAwesome = require('react-fontawesome');
+import Days from './Days.jsx';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class MlAppFunderCalendarSlots extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      shift:'morning',
+      shift: 'morning',
       modalOpen: false,
-      slotDetails:[],
+      slotDetails: [],
       date: props.date ? props.date : new Date()
     };
     this.handleDateSelect = this.handleDateSelect.bind(this);
   }
 
-  bookSlot(timeSlot, index){
-    let orderId=this.props.orderId;
-    let sessionId=this.props.sessionId[0];
-    let time = timeSlot.split('-');
-    let firstHour = time[1].split(':')
-    let secondHour = time[0].split(':')
-    let hours = secondHour[0]
-    let minutes = secondHour[1];
-    let tempObject={
-      orderId: orderId,
-      sessionId: sessionId,
-      hours: hours,
-      minutes: minutes,
+  bookSlot(timeSlot, index) {
+    const orderId = this.props.orderId;
+    const sessionId = this.props.sessionId[0];
+    const time = timeSlot.split('-');
+    const firstHour = time[1].split(':')
+    const secondHour = time[0].split(':')
+    const hours = secondHour[0]
+    const minutes = secondHour[1];
+    const tempObject = {
+      orderId,
+      sessionId,
+      hours,
+      minutes,
       day: this.props.date.getDate(),
       month: this.props.date.getMonth(),
       year: this.props.date.getFullYear()
     };
-   this.setState({
-     tempObject,
-     modalOpen:true
-   })
-
+    this.setState({
+      tempObject,
+      modalOpen: true
+    })
   }
-  onCancelAppointment(){
-    this.setState({tempObject:{},modalOpen:false});
+  onCancelAppointment() {
+    this.setState({ tempObject: {}, modalOpen: false });
   }
 
-  onConfirmAppointment(){
-    let tempObject= this.state.tempObject;
-    this.setState({tempObject:{},modalOpen:false});
+  onConfirmAppointment() {
+    const tempObject = this.state.tempObject;
+    this.setState({ tempObject: {}, modalOpen: false });
     this.bookAppointment(tempObject).bind(this);
   }
 
-  async bookAppointment(userServiceCardAppointmentInfo){
+  async bookAppointment(userServiceCardAppointmentInfo) {
     const resp = await bookUserServiceCardAppointmentActionHandler(userServiceCardAppointmentInfo)
-    if(resp && resp.success){
+    if (resp && resp.success) {
       toastr.success('Appointment Booked Successfully')
       this.props.componentToView('landingPage')
     } else {
@@ -68,15 +66,15 @@ export default class MlAppFunderCalendarSlots extends Component {
     this.getSessionDetails(this.state.date);
   }
 
-  async getSessionDetails(currentDate){
-    let dates =new Date(currentDate);
-    let orderId= this.props.orderId;
-    let sessionId= this.props.sessionId[0];
-    let date = dates.getDate();
-    let month= dates.getMonth();
-    let year=  dates.getFullYear();
-    const response = await fetchSessionDayActionHandler(orderId,sessionId, date, month, year)
-    if(response){
+  async getSessionDetails(currentDate) {
+    const dates = new Date(currentDate);
+    const orderId = this.props.orderId;
+    const sessionId = this.props.sessionId[0];
+    const date = dates.getDate();
+    const month = dates.getMonth();
+    const year = dates.getFullYear();
+    const response = await fetchSessionDayActionHandler(orderId, sessionId, date, month, year)
+    if (response) {
       this.setState({
         slotDetails: response
       })
@@ -85,36 +83,34 @@ export default class MlAppFunderCalendarSlots extends Component {
 
   handleDateSelect(date) {
     this.setState({
-      date: date
-    }, function () {
+      date
+    }, () => {
       this.getSessionDetails(date);
-    }.bind(this));
+    });
   }
 
-  updateShift(shift){
+  updateShift(shift) {
     this.setState({
-      shift: shift
+      shift
     })
   }
 
   render() {
     const that = this;
     // const slots = this.state.slotDetails;
-    let slots = that.state.slotDetails.filter( (slot) => {
-      return slot.shift === that.state.shift;
-    });
-    const slotTimings = slots.map(function(slot, index){
+    const slots = that.state.slotDetails.filter(slot => slot.shift === that.state.shift);
+    const slotTimings = slots.map((slot, index) => {
       let date = new Date();
-      if(slot && slot.slotTime){
+      if (slot && slot.slotTime) {
         date = new Date(that.state.date);
-        let startDate =  slot.slotTime.split('-')[0];
-        let hours = startDate.split(':')[0];
-        let minutes = startDate.split(':')[1];
+        const startDate = slot.slotTime.split('-')[0];
+        const hours = startDate.split(':')[0];
+        const minutes = startDate.split(':')[1];
         date.setHours(hours);
         date.setMinutes(minutes);
       }
 
-      if(date.getTime() >(new Date).getTime()) {
+      if (date.getTime() > (new Date()).getTime()) {
         return (
           <div className="col-md-4 col-sm-4 col-lg-3" key={index}>
             <a href="">
@@ -122,31 +118,30 @@ export default class MlAppFunderCalendarSlots extends Component {
                 <h3>{slot.slotTime}</h3>
                 <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
                 <div className="block_footer">
-                  <span>{slot.status === 0 ? "Available" : slot.status === 1 ? "Filling Fast" : slot.status === 2 ? "Busy" : ""}</span>
+                  <span>{slot.status === 0 ? 'Available' : slot.status === 1 ? 'Filling Fast' : slot.status === 2 ? 'Busy' : ''}</span>
                 </div>
               </div>
             </a>
           </div>
         )
-      } else {
-        return (
-          <div className="col-md-4 col-sm-4 col-lg-3" key={index}>
-            <a href="">
-              <div className="funders_list_block" onClick={() => toastr.error("Slot not available") }>
-                <h3>{slot.slotTime}</h3>
-                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
-                <div className="block_footer">
-                  <span> Not Available </span>
-                </div>
-              </div>
-            </a>
-          </div>
-        );
       }
+      return (
+        <div className="col-md-4 col-sm-4 col-lg-3" key={index}>
+          <a href="">
+            <div className="funders_list_block" onClick={() => toastr.error('Slot not available') }>
+              <h3>{slot.slotTime}</h3>
+              <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+              <div className="block_footer">
+                <span> Not Available </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      );
     });
 
     return (
-      <div className="main_wrap_scroll" style={{"overflow": "hidden"}}>
+      <div className="main_wrap_scroll" style={{ overflow: 'hidden' }}>
         <div>
           <Modal isOpen={this.state.modalOpen} onHide={this.onClose}>
             <ModalHeader>Title</ModalHeader>
@@ -162,20 +157,20 @@ export default class MlAppFunderCalendarSlots extends Component {
         </div>
         <div className="row funders_list">
           <ul className="cal_tabs act_tab">
-            <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >
-                  <span className={ that.state.shift === "morning" ? "act_tab" : ''} >
-                    <img src="/images/mor_icon.png"/> Morning
-                  </span>
+            <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{ cursor: 'pointer' }} >
+              <span className={ that.state.shift === 'morning' ? 'act_tab' : ''} >
+                <img src="/images/mor_icon.png"/> Morning
+              </span>
             </li>
-            <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{cursor: "pointer"}} >
-                  <span className={ that.state.shift === "afternoon" ? "act_tab" : ''} >
-                    <img src="/images/aft_icon.png"/> Afternoon
-                  </span>
+            <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{ cursor: 'pointer' }} >
+              <span className={ that.state.shift === 'afternoon' ? 'act_tab' : ''} >
+                <img src="/images/aft_icon.png"/> Afternoon
+              </span>
             </li>
-            <li className="col-md-4 nopadding-right"  onClick={() => that.updateShift('evening') } style={{cursor: "pointer"}} >
-                  <span className={ that.state.shift === "evening" ? "act_tab" : ''} >
-                    <img src="/images/eve_icon.png"/> Evening
-                  </span>
+            <li className="col-md-4 nopadding-right" onClick={() => that.updateShift('evening') } style={{ cursor: 'pointer' }} >
+              <span className={ that.state.shift === 'evening' ? 'act_tab' : ''} >
+                <img src="/images/eve_icon.png"/> Evening
+              </span>
             </li>
           </ul>
           <br className="brclear"/>

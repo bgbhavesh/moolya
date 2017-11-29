@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import MlTableViewContainer from '../../core/containers/MlTableViewContainer';
-import {mltemplatesassignmetConfig} from '../config/MlTemplatesAssignmentConfig';
+import { mltemplatesassignmetConfig } from '../config/MlTemplatesAssignmentConfig';
 export default class MlTemplateTypeList extends Component {
-
   componentDidMount() {
   }
 

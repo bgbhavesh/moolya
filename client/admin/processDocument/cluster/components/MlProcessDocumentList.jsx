@@ -1,9 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlProcessTableConfig} from "../config/mlProcessDocumentTableConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlProcessTableConfig } from '../config/mlProcessDocumentTableConfig';
 export default class MlProcessDocumentList extends Component {
-
   componentDidMount() {
     console.log(this.props.config)
   }

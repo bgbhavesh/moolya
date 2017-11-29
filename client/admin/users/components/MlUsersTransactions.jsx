@@ -126,22 +126,21 @@
  */
 
 import React from 'react';
-import MlTableViewContainer from "../../core/containers/MlTableViewContainer";
-import {mlUserTransactions} from "../config/mlUsersTransactionConfig";
+import MlTableViewContainer from '../../core/containers/MlTableViewContainer';
+import { mlUserTransactions } from '../config/mlUsersTransactionConfig';
 
 export default class MlUsersTransactions extends React.Component {
-
   render() {
-    var config = mlUserTransactions;
+    const config = mlUserTransactions;
     config.registrationId = this.props.config.registrationId;
     config.portfolioId = this.props.config.portfolioId;
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          {/*<h2>Office List</h2>*/}
+          {/* <h2>Office List</h2> */}
           <MlTableViewContainer {...config}/>
         </div>
       </div>
     );
   }
-};
+}

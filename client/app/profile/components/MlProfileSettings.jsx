@@ -5,14 +5,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
-export default class MlProfileSettings extends React.Component{
-  componentDidMount()
-  {
+export default class MlProfileSettings extends React.Component {
+  componentDidMount() {
 
   }
-  render(){
+  render() {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -49,4 +48,4 @@ export default class MlProfileSettings extends React.Component{
       </div>
     )
   }
-};
+}

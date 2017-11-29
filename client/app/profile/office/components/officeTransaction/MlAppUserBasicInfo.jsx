@@ -1,48 +1,48 @@
-import React from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
+import React from 'react';
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
+const Select = require('react-select');
+const FontAwesome = require('react-fontawesome');
 
-var options = [
-  {value: 'select', label: 'Select Country'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options = [
+  { value: 'select', label: 'Select Country' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options1 = [
-  {value: 'select', label: 'Choose registration type'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options1 = [
+  { value: 'select', label: 'Choose registration type' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options2 = [
-  {value: 'select', label: 'Subscription type'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options2 = [
+  { value: 'select', label: 'Subscription type' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options3 = [
-  {value: 'select', label: 'Do you want to associate to any institution'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options3 = [
+  { value: 'select', label: 'Do you want to associate to any institution' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options4 = [
-  {value: 'select', label: 'How did you know about us'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options4 = [
+  { value: 'select', label: 'How did you know about us' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options5 = [
-  {value: 'select', label: 'Select Cluster'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options5 = [
+  { value: 'select', label: 'Select Cluster' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
-var options6 = [
-  {value: 'select', label: 'Select Chapter'},
-  {value: 'one', label: 'One'},
-  {value: 'two', label: 'Two'}
+const options6 = [
+  { value: 'select', label: 'Select Chapter' },
+  { value: 'one', label: 'One' },
+  { value: 'two', label: 'Two' }
 ];
 
 export default class MlAppUserBasicInfo extends React.Component {
   componentDidMount() {
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
   }
 
@@ -160,4 +160,4 @@ export default class MlAppUserBasicInfo extends React.Component {
       </div>
     )
   }
-};
+}

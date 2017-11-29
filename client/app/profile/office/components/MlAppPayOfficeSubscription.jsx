@@ -1,20 +1,22 @@
 /**
  * Created by pankaj on 6/6/17.
  */
-import React, {Component} from "react";
-import {findOfficeAction} from "../actions/findOfficeAction";
-import MlLoader from "../../../../commons/components/loader/loader";
-import {getOfficeTransactionPaymentLinkActionHandler} from './../actions/getOfficeTransactionPaymentLink';
+import React, { Component } from 'react';
+import { findOfficeAction } from '../actions/findOfficeAction';
+import MlLoader from '../../../../commons/components/loader/loader';
+import { getOfficeTransactionPaymentLinkActionHandler } from './../actions/getOfficeTransactionPaymentLink';
 export default class MlAppPayOfficeSubscription extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, office: {}, transaction:{},"data":""};
+    this.state = {
+      loading: true, office: {}, transaction: {}, data: ''
+    };
     this.officeDetails.bind(this);
     this.getPaymentData = this.getPaymentData.bind(this);
     return this;
   }
   componentDidMount() {
-    var swiper = new Swiper('.profile_container', {
+    const swiper = new Swiper('.profile_container', {
       pagination: '.swiper-pagination',
       effect: 'coverflow',
       grabCursor: true,
@@ -28,58 +30,56 @@ export default class MlAppPayOfficeSubscription extends Component {
         modifier: 1,
         slideShadows: true
       },
-      paymentObject:{},
-      paymentObjectLoading:true,
-      paymentError:false
+      paymentObject: {},
+      paymentObjectLoading: true,
+      paymentError: false
     });
-    let status = FlowRouter.getQueryParam('status');
-    if(status.toLowerCase() == "canceled"){
-      toastr.error("Payment was cancelled");
-    }else if(status.toLowerCase() == "success"){
-      toastr.success("Payment was processed successfully");
+    const status = FlowRouter.getQueryParam('status');
+    if (status.toLowerCase() == 'canceled') {
+      toastr.error('Payment was cancelled');
+    } else if (status.toLowerCase() == 'success') {
+      toastr.success('Payment was processed successfully');
     }
-    //this.payClick();
+    // this.payClick();
   }
 
   componentWillMount() {
     const resp = this.officeDetails();
 
     return resp;
-
   }
 
   async officeDetails() {
-    let officeId = this.props.config
-    let response = await findOfficeAction(officeId);
+    const officeId = this.props.config
+    const response = await findOfficeAction(officeId);
     if (response && response.success) {
-      let data = JSON.parse(response.result)
+      const data = JSON.parse(response.result)
       console.log(data)
-      let obj = data [0];
-      this.setState({loading: false, office: obj.office, transaction: obj.officeTransaction})
+      const obj = data[0];
+      this.setState({ loading: false, office: obj.office, transaction: obj.officeTransaction })
       this.getPaymentData();
     } else {
-      this.setState({loading: false})
+      this.setState({ loading: false })
     }
   }
 
-  async getPaymentData(){
-    let transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
-    if(transactionId){
-      let resposne = await getOfficeTransactionPaymentLinkActionHandler(transactionId);
-      if(resposne.success){
-        this.setState({"paymentObjectLoading":false})
+  async getPaymentData() {
+    const transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
+    if (transactionId) {
+      const resposne = await getOfficeTransactionPaymentLinkActionHandler(transactionId);
+      if (resposne.success) {
+        this.setState({ paymentObjectLoading: false })
 
-        let result = JSON.parse(resposne.result);
+        const result = JSON.parse(resposne.result);
         console.log(result);
-        this.setState({"paymentObject":result});
-      }else{
-        this.setState({"paymentError":true})
+        this.setState({ paymentObject: result });
+      } else {
+        this.setState({ paymentError: true })
       }
     }
   }
 
   payClick() {
-
     // let transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
     // if(transactionId){
     //   let resposne = await getOfficeTransactionPaymentLinkActionHandler(transactionId);
@@ -107,9 +107,9 @@ export default class MlAppPayOfficeSubscription extends Component {
     //   // TransactionId is missing
     //   toastr.error('Unable to proceed payment.');
     // }
-    if(!this.state.paymentError){
-       $("#paymentForm").trigger("submit");
-    }else{
+    if (!this.state.paymentError) {
+      $('#paymentForm').trigger('submit');
+    } else {
       toastr.error('Unable to process payment');
     }
 
@@ -143,52 +143,52 @@ export default class MlAppPayOfficeSubscription extends Component {
     const showLoader = this.state.loading;
     return (
       <div className="app_main_wrap">
-        {showLoader === true ? ( <MlLoader/>) : (
-        <div className="app_padding_wrap no_padding">
-          <div className="list_view_block">
-            <div className="col-md-12 text-center">
-              <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas3">
-                <div className="col-md-6">
-                </div>
-                <div className="col-md-6 subscription">
-                  <h3>Subscription</h3>
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="app_padding_wrap no_padding">
+            <div className="list_view_block">
+              <div className="col-md-12 text-center">
+                <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas3">
+                  <div className="col-md-6">
+                  </div>
+                  <div className="col-md-6 subscription">
+                    <h3>Subscription</h3>
 
-                  <ul>
-                    <li>Validity</li>
-                    <li>: 1Year</li>
-                    <li>Includes</li>
-                    <li>:</li>
-                    <li>Principal</li>
-                    <li>: {this.state.office && this.state.office.principalcount?this.state.office.principalcount:"00"}</li>
-                    <li>Team</li>
-                    <li>: {this.state.office && this.state.office.teamMembercount?this.state.office.teamMembercount:"00"}</li>
-                    <li>Cost</li>
-                    <li>
-                      : {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"}
-                      {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.isTaxInclusive?<b> tax inclusive</b>:<b> tax exclusive</b>}
-                    </li>
-                  </ul>
+                    <ul>
+                      <li>Validity</li>
+                      <li>: 1Year</li>
+                      <li>Includes</li>
+                      <li>:</li>
+                      <li>Principal</li>
+                      <li>: {this.state.office && this.state.office.principalcount ? this.state.office.principalcount : '00'}</li>
+                      <li>Team</li>
+                      <li>: {this.state.office && this.state.office.teamMembercount ? this.state.office.teamMembercount : '00'}</li>
+                      <li>Cost</li>
+                      <li>
+                      : {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : '00'}
+                        {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.isTaxInclusive ? <b> tax inclusive</b> : <b> tax exclusive</b>}
+                      </li>
+                    </ul>
 
-                  <br />
-                  <a className="ideabtn" onClick={this.payClick.bind(this)}>Pay</a>
-                  <form id="paymentForm" method="post" action={this.state.paymentObject ? this.state.paymentObject.paymentUrl : ""}>
-                    <input type="hidden" id="merchantTxnId" name="merchantTxnId" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.merchantTxnId : ""} />
-                    <input type="hidden" id="orderAmount" name="orderAmount" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.orderAmount : ""} />
-                    <input type="hidden" id="currency" name="currency" value="INR" />
-                      <input type="hidden" id="email" name="email" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.email : ""} />
-                    <input type="hidden" id="phoneNumber" name="phoneNumber" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.phoneNumber : ""} />
-                    <input type="hidden" name="returnUrl" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.returnUrl : ""} />
-                    <input type="hidden" id="notifyUrl" name="notifyUrl" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.returnUrl: ""} />
-                    <input type="hidden" id="secSignature" name="secSignature" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.secSignature : ""} />
-                    <input type="hidden" id="mode" name="mode" value="LIVE" />
+                    <br />
+                    <a className="ideabtn" onClick={this.payClick.bind(this)}>Pay</a>
+                    <form id="paymentForm" method="post" action={this.state.paymentObject ? this.state.paymentObject.paymentUrl : ''}>
+                      <input type="hidden" id="merchantTxnId" name="merchantTxnId" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.merchantTxnId : ''} />
+                      <input type="hidden" id="orderAmount" name="orderAmount" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.orderAmount : ''} />
+                      <input type="hidden" id="currency" name="currency" value="INR" />
+                      <input type="hidden" id="email" name="email" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.email : ''} />
+                      <input type="hidden" id="phoneNumber" name="phoneNumber" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.phoneNumber : ''} />
+                      <input type="hidden" name="returnUrl" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.returnUrl : ''} />
+                      <input type="hidden" id="notifyUrl" name="notifyUrl" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.returnUrl : ''} />
+                      <input type="hidden" id="secSignature" name="secSignature" value={this.state.paymentObject && this.state.paymentObject.paymentInfo ? this.state.paymentObject.paymentInfo.secSignature : ''} />
+                      <input type="hidden" id="mode" name="mode" value="LIVE" />
 
-     </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>)}
+          </div>)}
       </div>
     )
   }
-};
+}

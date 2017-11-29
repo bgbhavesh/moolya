@@ -3,61 +3,57 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findCityActionHandler} from '../actions/findCityAction'
-import {updateCityActionHandler} from '../actions/updateCityAction'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import { findCityActionHandler } from '../actions/findCityAction'
+import { updateCityActionHandler } from '../actions/updateCityAction'
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
-class MlEditCity extends React.Component{
+class MlEditCity extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = { loading: true, data: {} };
     this.editCity.bind(this);
     this.findCity.bind(this);
     return this;
   }
   componentDidMount() {
-    if(this.state.data.isAcive){
+    if (this.state.data.isAcive) {
       $('#status').prop('checked', true);
     }
   }
 
-  componentDidUpdate(){
-    OnToggleSwitch(true,true);
+  componentDidUpdate() {
+    OnToggleSwitch(true, true);
     initalizeFloatLabel();
   }
 
   componentWillMount() {
-    const resp=this.findCity();
+    const resp = this.findCity();
     return resp;
   }
 
   async addEventHandler() {
-    const resp=await this.editCity();
+    const resp = await this.editCity();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
-
-  async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/citiesList");
-      else
-        toastr.error(response.result);
-    }
-  };
-
-  async  findCity() {
-    let id = this.props.config
-    const response = await findCityActionHandler(id);
-    this.setState({loading:false,data:response});
-
   }
 
-  async  editCity() {
-    let CountryDetails = {
+  async handleSuccess(response) {
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/citiesList'); } else { toastr.error(response.result); }
+    }
+  }
+
+  async findCity() {
+    const id = this.props.config
+    const response = await findCityActionHandler(id);
+    this.setState({ loading: false, data: response });
+  }
+
+  async editCity() {
+    const CountryDetails = {
       id: this.refs.id.value,
       // name: this.refs.name.value,
       // countryCode: this.refs.countryName.value,
@@ -68,23 +64,22 @@ class MlEditCity extends React.Component{
     };
     const response = await updateCityActionHandler(CountryDetails)
     return response;
-
   }
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
+  onStatusChange(e) {
+    const data = this.state.data;
+    if (e.currentTarget.checked) {
+      this.setState({ data: { isActive: true } });
+    } else {
+      this.setState({ data: { isActive: false } });
     }
   }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.editCity.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.editCity.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       // {
       //   showAction: true,
@@ -94,17 +89,17 @@ class MlEditCity extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/citiesList")
+        handler: async (event) => {
+          this.props.handler(' ');
+          FlowRouter.go('/admin/settings/citiesList')
         }
       }
     ]
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
 
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?(<MlLoader/>):(
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <h2>Edit City</h2>
             <div className="col-md-6 nopadding-left">
@@ -151,12 +146,13 @@ class MlEditCity extends React.Component{
               </div>
             </div>
 
-          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-          />
-        </div>)}
+            <MlActionComponent
+              ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+            />
+          </div>)}
       </div>
     )
   }
-};
+}
 
 export default MlEditCity = formHandler()(MlEditCity);

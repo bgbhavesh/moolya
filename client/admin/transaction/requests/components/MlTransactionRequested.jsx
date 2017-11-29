@@ -1,100 +1,99 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import MlDetailsNotesComponent from './MlDetailsNotesComponent'
-import {findTransactionRequestActionHandler} from '../actions/findRequests'
+import { findTransactionRequestActionHandler } from '../actions/findRequests'
 import moment from 'moment'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
-import {addReqgistrationRequestInfo} from '../../requested/actions/addRegistrationRequestAction'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
+import { addReqgistrationRequestInfo } from '../../requested/actions/addRegistrationRequestAction'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import {createRequestsActionHandler} from '../actions/createRequests'
-import {findRequestssActionHandler} from '../actions/findRequests'
+import { createRequestsActionHandler } from '../actions/createRequests'
+import { findRequestssActionHandler } from '../actions/findRequests'
 
 export default class sMlTransactionRequested extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      requetsInfo:[],
+    this.state = {
+      requetsInfo: [],
       requestType: null,
-      createRequest:false,
+      createRequest: false,
       popoverOpen: false,
-      requestTypeId: " ",
-      cluster:null,
-      chapter:null,
-      subChapter:null,
-      community:null
+      requestTypeId: ' ',
+      cluster: null,
+      chapter: null,
+      subChapter: null,
+      community: null
     }
     this.toggle = this.toggle.bind(this);
     this.findRequestDetails.bind(this);
     return this;
   }
   componentWillMount() {
-   // this.setState({requetsInfo:[{transactionCreatedDate:'',transactionTypeId:'',transactionTypeName:'',status:''}]})
+    // this.setState({requetsInfo:[{transactionCreatedDate:'',transactionTypeId:'',transactionTypeName:'',status:''}]})
     const resp = this.findRequestDetails();
     return resp;
   }
- async  optionsBySelectRequestType(value){
-    this.setState({requestTypeId:value})
- //   console.log(this.state.requestType)
+  async optionsBySelectRequestType(value) {
+    this.setState({ requestTypeId: value })
+    //   console.log(this.state.requestType)
   }
-  async createRequest(){
-    let requests={
-      requestTypeId:this.state.requestTypeId,
-      requestDescription:this.refs.about.value,
-      cluster:this.state.cluster,
-      chapter:this.state.chapter,
-      subChapter:this.state.subChapter,
-      community:this.state.community,
-      communityName: " ",
-      requestsStatus:{
-        code: "1",
-        description:"requested"
+  async createRequest() {
+    const requests = {
+      requestTypeId: this.state.requestTypeId,
+      requestDescription: this.refs.about.value,
+      cluster: this.state.cluster,
+      chapter: this.state.chapter,
+      subChapter: this.state.subChapter,
+      community: this.state.community,
+      communityName: ' ',
+      requestsStatus: {
+        code: '1',
+        description: 'requested'
       },
-      requestId: " ",
-      status:"Pending",
+      requestId: ' ',
+      status: 'Pending',
       transactionCreatedDate: new Date()
     }
     const response = await createRequestsActionHandler(requests);
-    if(response.success){
-      this.setState({requestType:null})
+    if (response.success) {
+      this.setState({ requestType: null })
       this.toggle();
       this.findRequestDetails();
-      toastr.success("Request is created successfully");
-    }else{
+      toastr.success('Request is created successfully');
+    } else {
       toastr.error(response.result);
       this.toggle();
-      this.setState({requestType:null})
-      FlowRouter.go("/admin/transactions/requestedList");
+      this.setState({ requestType: null })
+      FlowRouter.go('/admin/transactions/requestedList');
     }
-
   }
 
-  optionsBySelectCluster(index, selectedIndex){
-    this.setState({cluster:index})
+  optionsBySelectCluster(index, selectedIndex) {
+    this.setState({ cluster: index })
   }
 
-  optionsBySelectChapter(index, selectedIndex){
-    this.setState({chapter:index})
+  optionsBySelectChapter(index, selectedIndex) {
+    this.setState({ chapter: index })
   }
 
-  optionsBySelectSubChapter(index, selectedIndex){
-    this.setState({subChapter:index})
+  optionsBySelectSubChapter(index, selectedIndex) {
+    this.setState({ subChapter: index })
   }
 
-  optionsBySelectCommunity(index, selectedIndex){
-    this.setState({community:index})
+  optionsBySelectCommunity(index, selectedIndex) {
+    this.setState({ community: index })
   }
 
 
-  cancel(){
-    this.setState({requestType:null})
+  cancel() {
+    this.setState({ requestType: null })
     this.toggle();
-    /*FlowRouter.go("/admin/transactions/requestedList");*/
+    /* FlowRouter.go("/admin/transactions/requestedList"); */
   }
 
   toggle() {
@@ -103,131 +102,132 @@ export default class sMlTransactionRequested extends Component {
     });
   }
 
-    async findRequestDetails(){
-      let requestDetails = await findRequestssActionHandler();
-      let requestInfo = []
-      for (let i = 0; i < requestDetails.length; i++) {
-        let json = {
-          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY hh:mm:ss'),
-          requestDescription:requestDetails[i].requestDescription,
-          requestTypeName:requestDetails[i].requestTypeName,
-          requestId: requestDetails[i].requestId,
-          userId: requestDetails[i].userId,
-          transactionTypeName: requestDetails[i].transactionTypeName,
-          status:requestDetails[i].status,
-          transactionId:requestDetails[i]._id,
-          clusterName:requestDetails[i].clusterName,
-          chapterName:requestDetails[i].chapterName,
-          subChapterName:requestDetails[i].subChapterName,
-          communityName:requestDetails[i].communityName
-        }
-        requestInfo.push(json)
+  async findRequestDetails() {
+    const requestDetails = await findRequestssActionHandler();
+    const requestInfo = []
+    for (let i = 0; i < requestDetails.length; i++) {
+      const json = {
+        transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY hh:mm:ss'),
+        requestDescription: requestDetails[i].requestDescription,
+        requestTypeName: requestDetails[i].requestTypeName,
+        requestId: requestDetails[i].requestId,
+        userId: requestDetails[i].userId,
+        transactionTypeName: requestDetails[i].transactionTypeName,
+        status: requestDetails[i].status,
+        transactionId: requestDetails[i]._id,
+        clusterName: requestDetails[i].clusterName,
+        chapterName: requestDetails[i].chapterName,
+        subChapterName: requestDetails[i].subChapterName,
+        communityName: requestDetails[i].communityName
       }
-      this.setState({'requetsInfo':requestInfo})
+      requestInfo.push(json)
     }
+    this.setState({ requetsInfo: requestInfo })
+  }
 
   isExpandableRow(row) {
-    if (row.transactionCreatedDate!=undefined) return true;
-    else return false;
+    if (row.transactionCreatedDate != undefined) return true;
+    return false;
   }
 
 
   expandComponent(row) {
-   return (
-     <MlDetailsNotesComponent id={ row.requestId } transaction={row}/>
+    return (
+      <MlDetailsNotesComponent id={ row.requestId } transaction={row}/>
     )
   }
-  async creatRequestType(){
-    this.setState({createRequest:true});
-    if(!this.state.popoverOpen){
+  async creatRequestType() {
+    this.setState({ createRequest: true });
+    if (!this.state.popoverOpen) {
       this.toggle();
     }
-
   }
 
   render() {
-    let MlActionConfig = [
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'add',
-        iconID:'createRegistrationRequest',
+        iconID: 'createRegistrationRequest',
         handler: this.creatRequestType.bind(this)
       }
     ];
-   /* const options = {
+    /* const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
-    };*/
+    }; */
     const selectRow = {
       mode: 'checkbox',
       bgColor: '#feeebf',
-      clickToSelect: true,  // click to select, default is false
-      clickToExpand: true , // click to expand row, default is false// click to expand row, default is false
+      clickToSelect: true, // click to select, default is false
+      clickToExpand: true // click to expand row, default is false// click to expand row, default is false
     }
-    let requestTypeQuery=gql`query{
+    const requestTypeQuery = gql`query{
   data:FetchRequestType {
     label:requestName
     value:_id
   }
 }`;
-    var WinHeight = $(window).height();
-    var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    const WinHeight = $(window).height();
+    const tblHeight = WinHeight - (125 + $('.admin_header').outerHeight(true));
     const config = {
-      maxHeight: tblHeight+'px',
-      striped:true,
-      hover:true,
+      maxHeight: `${tblHeight}px`,
+      striped: true,
+      hover: true
     };
-   config['options']={
-      sizePerPage:10,
-      sizePerPageList: [10,20,50,100],
+    config.options = {
+      sizePerPage: 10,
+      sizePerPageList: [10, 20, 50, 100],
       clearSearch: false,
-     expandRowBgColor: 'rgb(242, 255, 163)'}
-    let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
+      expandRowBgColor: 'rgb(242, 255, 163)'
+    }
+    const clusterquery = gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
 
-    let chapterquery=gql`query($id:String){
+    const chapterquery = gql`query($id:String){
     data:fetchChapters(id:$id) {
         value:_id,
         label:chapterName
       }
     }`;
 
-    let subDepartmentquery=gql`query($id:String){
+    const subDepartmentquery = gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
         value:_id
         label:subDepartmentName
       }
     }`;
 
-    let subChapterquery=gql`query($chapterId:String,$clusterId:String){
+    const subChapterquery = gql`query($chapterId:String,$clusterId:String){
         data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
           value:_id
           label:subChapterName
         }
     }`;
 
-    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){
+    const communityQuery = gql`query($clusterId:String, $chapterId:String, $subChapterId:String){
       data:fetchCommunitiesForRolesSelect(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId) {
           value:code
           label:name
       }
     }`;
 
-    let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};
-    let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
+    const chapterOption = { options: { variables: { id: this.state.cluster } } };
+    const subchapterOption = { options: { variables: { chapterId: this.state.chapter, clusterId: this.state.cluster } } };
+    const communityOption = { options: { variables: { clusterId: this.state.cluster, chapterId: this.state.chapter, subChapterId: this.state.subChapter } } };
     return (
       <div className="admin_main_wrap" >
         <div className="admin_padding_wrap">
           <h2>Requests</h2>
           <div className="main_wrap_scroll">
-            <BootstrapTable {...config} data={ this.state.requetsInfo }
-                             expandableRow={ this.isExpandableRow }
-                             expandComponent={ this.expandComponent.bind(this) }
-                             selectRow= { selectRow }
-                            pagination
-                            bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}
->
+            <BootstrapTable
+              {...config} data={ this.state.requetsInfo }
+              expandableRow={ this.isExpandableRow }
+              expandComponent={ this.expandComponent.bind(this) }
+              selectRow= { selectRow }
+              pagination
+              bodyStyle={{ overflow: 'overlay', overflowX: 'hidden' }}
+            >
               <TableHeaderColumn dataField="requestId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="transactionCreatedDate"   >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
               <TableHeaderColumn dataField="clusterName">Cluster</TableHeaderColumn>
@@ -238,37 +238,37 @@ export default class sMlTransactionRequested extends Component {
             </BootstrapTable>
 
           </div>
-          {/*{this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}*/}
-          {/*<div className="overlay"></div>*/}
+          {/* {this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""} */}
+          {/* <div className="overlay"></div> */}
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="createRegistrationRequest" toggle={this.toggle}>
             <PopoverTitle>Create Request </PopoverTitle>
             <PopoverContent>
-              <div  className="ml_create_client">
+              <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Request type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.requestTypeId} queryType={"graphql"} query={requestTypeQuery} onSelect={this.optionsBySelectRequestType.bind(this)} isDynamic={true}/>
+                      <Moolyaselect multiSelect={false} placeholder="Request type" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.requestTypeId} queryType={'graphql'} query={requestTypeQuery} onSelect={this.optionsBySelectRequestType.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
+                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={'graphql'} query={clusterquery} isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
                     </div>
 
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={'graphql'} query={chapterquery} isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={'graphql'} query={subChapterquery} isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(this)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={'graphql'} query={communityQuery} isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(this)} />
                       </div>
                     </div>
                     <div className="assign-popup">
@@ -290,5 +290,5 @@ export default class sMlTransactionRequested extends Component {
 
     )
   }
-};
+}
 

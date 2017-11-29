@@ -1,38 +1,37 @@
-import React from "react";
-import MlCompanyEvolution from "./MlCompanyEvolution";
-import MlCompanyPolicy from "./MlCompanyPolicy";
-import MlCompanyAchivements from "./MlCompanyAchivements";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../../app/core/appConnection'
+import React from 'react';
+import MlCompanyEvolution from './MlCompanyEvolution';
+import MlCompanyPolicy from './MlCompanyPolicy';
+import MlCompanyAchivements from './MlCompanyAchivements';
+import MlTabComponent from '../../../../../../../commons/components/tabcomponent/MlTabComponent';
+import { client } from '../../../../../../core/apolloConnection'
+import { appClient } from '../../../../../../../app/core/appConnection'
 import MlCompanyCSRReports from './MlCompanyCSRReports'
 
-export default class MlCompanyCSREditTabs extends React.Component{
-  constructor(props){
+export default class MlCompanyCSREditTabs extends React.Component {
+  constructor(props) {
     super(props)
-    this.state =  {
+    this.state = {
       tabs: [],
-      portfolioCSR:{},
-      evolution:{},
-      achivements:[],
-      policy:{},
+      portfolioCSR: {},
+      evolution: {},
+      achivements: [],
+      policy: {},
       admin: true,
-      activeTab:'Evolution'
-    }
-    ;
+      activeTab: 'Evolution'
+    };
   }
 
   /**
    * handling different condition for app and admin
    * */
-  componentDidMount(){
-    var props = this.props
-    setTimeout(function(){
-      if(!props.isApp) {
+  componentDidMount() {
+    const props = this.props
+    setTimeout(() => {
+      if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
-          var test = $(this).text();
+          const test = $(this).text();
           $(this).empty();
-          $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+          $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
         });
         $('.initialized').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
@@ -40,11 +39,11 @@ export default class MlCompanyCSREditTabs extends React.Component{
         $('.RRT__panel').addClass('nomargintop');
         $('.RRT__panel .RRT__panel').removeClass('nomargintop');
         $('.horizon-swiper').horizonSwiper();
-      }else {
+      } else {
         $('.RRT__tabs').addClass('menunone');
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
-    },10);
+    }, 10);
     // let path = FlowRouter._current.path;
     // if (path.indexOf("app") != -1){
     //   this.setState({admin: false, client: appClient})
@@ -58,97 +57,101 @@ export default class MlCompanyCSREditTabs extends React.Component{
     $('.RRT__tabs div:first-of-type').click();
   }
 
-  getTabComponents(){
-    let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlCompanyEvolution client={client} isAdmin={true} key="1"  getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
+  getTabComponents() {
+    const tabs = [
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Evolution', component: <MlCompanyEvolution client={client} isAdmin={true} key="1" getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Achivements",
-        component: <MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} tabName={"achievements"} client={client}
-                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: 'Achivements',
+        component: <MlCompanyAchivements
+          key="2" getAchivements={this.getAchivements.bind(this)} tabName={'achievements'} client={client}
+          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Reports", component:<MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlCompanyPolicy client={client} isAdmin={true} key="3" getPolicy={this.getPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Reports', component: <MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Our Policy', component: <MlCompanyPolicy client={client} isAdmin={true} key="3" getPolicy={this.getPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />
+      }
     ]
     return tabs;
   }
 
-  getEvolution(details, privateKey){
+  getEvolution(details, privateKey) {
     let data = this.state.evolution;
     data = details;
-    this.setState({evolution : data})
-    this.props.getCSRDetails(data,"evolution", privateKey);
-
+    this.setState({ evolution: data })
+    this.props.getCSRDetails(data, 'evolution', privateKey);
   }
-  getAchivements(details, privateKey, requiredFields){
+  getAchivements(details, privateKey, requiredFields) {
     let data = this.state.achivements;
-    data=details;
-    this.setState({achivements : data})
-    this.props.getCSRDetails(data,"achievements", privateKey, requiredFields);
+    data = details;
+    this.setState({ achivements: data })
+    this.props.getCSRDetails(data, 'achievements', privateKey, requiredFields);
   }
-  getPolicy(details, privateKey){
+  getPolicy(details, privateKey) {
     let data = this.state.listOfIncubators;
     data = details;
-    this.setState({policy : data})
-    this.props.getCSRDetails(data,"policy", privateKey);
+    this.setState({ policy: data })
+    this.props.getCSRDetails(data, 'policy', privateKey);
   }
-  getReports(details){
+  getReports(details) {
     let data = this.state.reports;
     data = details;
-    this.setState({reports : data})
-    this.props.getCSRDetails(data,"reports",null);
+    this.setState({ reports: data })
+    this.props.getCSRDetails(data, 'reports', null);
   }
 
-  componentWillMount()
-  {
-    let admin=true;
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
+  componentWillMount() {
+    let admin = true;
+    const path = FlowRouter._current.path;
+    if (path.indexOf('app') != -1) {
       admin = false;
     }
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
-    let AllTabs =getTabs() ||[];
-    if(admin){
-      AllTabs.forEach(function(v){ delete v.key });
+    const AllTabs = getTabs() || [];
+    if (admin) {
+      AllTabs.forEach((v) => { delete v.key });
     }
-    let activeTab = FlowRouter.getQueryParam('subtab');
-    if(activeTab){
-      this.setState({activeTab:activeTab,tabs:AllTabs, admin: admin});
-    }else
-    this.setState({tabs:AllTabs, admin: admin});
+    const activeTab = FlowRouter.getQueryParam('subtab');
+    if (activeTab) {
+      this.setState({ activeTab, tabs: AllTabs, admin });
+    } else { this.setState({ tabs: AllTabs, admin }); }
 
-    /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    /** UI changes for back button */ // +tab.tabClassName?tab.tabClassName:""
     this.setBackTab()
   }
 
-  updateTab(index){
-    let subtab =  this.state.tabs[index].title;
+  updateTab(index) {
+    const subtab = this.state.tabs[index].title;
     FlowRouter.setQueryParams({ subtab });
   }
 
-  render(){
-    let tabs = this.state.tabs;
-    if(this.state.admin){
+  render() {
+    const tabs = this.state.tabs;
+    if (this.state.admin) {
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
     }
-    else{
-      return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
-                             onChange={this.updateTab}
-                             backClickHandler={this.props.backClickHandler}
-                             type="subtab" mkey="title"
-      />
-    }
+
+    return <MlTabComponent
+      tabs={tabs}
+      selectedTabKey={this.state.activeTab}
+      onChange={this.updateTab}
+      backClickHandler={this.props.backClickHandler}
+      type="subtab" mkey="title"
+    />
   }
 }
 

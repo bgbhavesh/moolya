@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlRequestTypeTableConfig} from "../config/MlRequestTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlRequestTypeTableConfig } from '../config/MlRequestTypeConfig';
 export default class MlRequestTypeList extends Component {
-
   componentDidMount() {
   }
 

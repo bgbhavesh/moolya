@@ -3,8 +3,8 @@ import { fetchAppAppointmentByTransactionId } from '../../action/fetchAppointmen
 import MlAppSelectedTaskMyAppointment from '../../../../../calendar/myAppointments/components/mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
 import { getSessionDayAvailable } from './../../action/getSessionDayAvailable';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import moment from "moment";
+import Datetime from 'react-datetime';
+import moment from 'moment';
 import { rescheduleUserServiceCardAppointment } from '../../action/rescheduleSessionAppointment';
 import SessionTable from './SessionTable';
 import { cancelUserServiceCardAppointment } from '../../action/cancelSessionAppointment';
@@ -48,7 +48,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     const startTime = slot.slotTime.split('-')[0];
     const startHour = Number(startTime.split(':')[0]);
     const startMinutes = Number(startTime.split(':')[1]);
-    let response = await rescheduleUserServiceCardAppointment(this.state.docId, {
+    const response = await rescheduleUserServiceCardAppointment(this.state.docId, {
       orderId: this.state.data.appointmentInfo.serviceOrderId,
       sessionId: this.state.data.appointmentInfo.sessionId,
       hours: startHour,
@@ -68,7 +68,7 @@ export default class MlAppServiceSessionAppointment extends Component {
   }
 
   async cancelSession() {
-    let response = await cancelUserServiceCardAppointment(this.state.docId);
+    const response = await cancelUserServiceCardAppointment(this.state.docId);
     if (response && response.success) {
       toastr.success(response.result);
     } else {
@@ -79,7 +79,7 @@ export default class MlAppServiceSessionAppointment extends Component {
   async changeDate(event) {
     const that = this;
     if (event._d) {
-      let value = new moment(event._d);
+      const value = new moment(event._d);
       this.setState({ selectedDate: value, loadingSlots: true });
       const availableSlots = await getSessionDayAvailable(
         this.state.data.appointmentInfo.serviceOrderId,
@@ -88,8 +88,8 @@ export default class MlAppServiceSessionAppointment extends Component {
         value.get('month'),
         value.get('year')
       );
-      let stateCopy = this.state;
-      stateCopy.data.availableSlots = availableSlots ? availableSlots : [];
+      const stateCopy = this.state;
+      stateCopy.data.availableSlots = availableSlots || [];
       stateCopy.loadingSlots = false;
       this.setState(stateCopy);
     }
@@ -97,7 +97,7 @@ export default class MlAppServiceSessionAppointment extends Component {
 
   async fetchServiceSessionAppointments() {
     if (this.state.orderId) {
-      let response = await fetchAppAppointmentByTransactionId(this.state.orderId);
+      const response = await fetchAppAppointmentByTransactionId(this.state.orderId);
 
       if (response && response.success) {
         let data = JSON.parse(response.result);
@@ -107,14 +107,14 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
         data.service = data.service ? data.service : {};
         data.appointmentInfo = data.appointmentInfo || {};
-        let availableSlots = await getSessionDayAvailable(
+        const availableSlots = await getSessionDayAvailable(
           data.appointmentInfo.serviceOrderId,
           data.appointmentInfo.sessionId,
           new Date().getDate(),
           new Date().getMonth(),
           new Date().getFullYear()
         )
-        data.availableSlots = availableSlots ? availableSlots : [];
+        data.availableSlots = availableSlots || [];
         this.setState({
           data,
           loadingSlots: false
@@ -138,9 +138,9 @@ export default class MlAppServiceSessionAppointment extends Component {
               <li>
                 <a href={`#${this.state.orderId}3a`} data-toggle="tab">Service Details</a>
               </li>
-              {/*<li>*/}
-              {/*<a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a>*/}
-              {/*</li>*/}
+              {/* <li> */}
+              {/* <a href={`#${this.state.orderId}4a`} data-toggle="tab">Device Details</a> */}
+              {/* </li> */}
             </ul>
             <div className="tab-content clearfix">
               <div className="tab-pane active" id={`${this.state.orderId}1a`}>
@@ -178,7 +178,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                     <div className="form-group">
                       <input type="text" placeholder="Community" value={this.state.data.client.community} defaultValue="" className="form-control float-label" id="" />
                     </div>
-                    <div className="panel panel-default cancel_app" style={{ 'display': 'none' }}>
+                    <div className="panel panel-default cancel_app" style={{ display: 'none' }}>
                       <div className="panel-heading">Cancel an appointment</div>
                       <div className="panel-body">
                         <h4 className="text-center">Ae you sure do you want to cancel an<br /> appointment?</h4>
@@ -194,7 +194,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                         <a href="#" className="fileUpload mlUpload_btn cancel_send">Send</a> <a href="#" className="fileUpload mlUpload_btn cancel_cancel">Cancel</a>
                       </div>
                     </div>
-                    <div className="panel panel-default release_pay" style={{ 'display': 'none' }}>
+                    <div className="panel panel-default release_pay" style={{ display: 'none' }}>
                       <div className="panel-heading">Release Payment</div>
                       <div className="panel-body">
                         <h4>Total amount paid : <b>5,700 INR</b></h4>
@@ -283,11 +283,12 @@ export default class MlAppServiceSessionAppointment extends Component {
               </div>
               <div className="tab-pane" id={`${this.state.orderId}3a`}>
                 {/* <p>Take from this page "appFunderMyAppointment"</p> */}
-                <MlAppSelectedTaskMyAppointment appointment={{
-                  appointmentId: this.state.orderId,
-                  resourceId: this.state.data.appointmentInfo.taskId,
-                  sessionId: this.state.data.appointmentInfo.sessionId
-                }} />
+                <MlAppSelectedTaskMyAppointment
+                  appointment={{
+                    appointmentId: this.state.orderId,
+                    resourceId: this.state.data.appointmentInfo.taskId,
+                    sessionId: this.state.data.appointmentInfo.sessionId
+                  }} />
               </div>
               <div className="tab-pane" id={`${this.state.orderId}4a`}>
                 <div className="row">
@@ -320,15 +321,16 @@ export default class MlAppServiceSessionAppointment extends Component {
               <Datetime
                 dateFormat="DD-MM-YYYY"
                 timeFormat={false}
-                inputProps={{ placeholder: "Selected date", readOnly: true }}
+                inputProps={{ placeholder: 'Selected date', readOnly: true }}
                 value={this.state.selectedDate
                   ? moment(this.state.selectedDate).format('DD-MM-YY')
                   : ''}
-                onChange={(event) => this.changeDate(event)}
+                onChange={event => this.changeDate(event)}
               />
               <FontAwesome name="calendar" className="password_icon" />
             </div>
-            <a onClick={() => { this.setState({ showSession: false }) }}
+            <a
+              onClick={() => { this.setState({ showSession: false }) }}
               className="fileUpload mlUpload_btn cancel_send">
               Cancel</a>
             <SessionTable

@@ -1,22 +1,22 @@
-import React from "react";
+import React from 'react';
 import MlShareCalendarPresentation from './MlShareCalendarPresentation';
-import MlShareDetailsComponent from "../../../../admin/transaction/share/component/MlShareDetailsComponent";
+import MlShareDetailsComponent from '../../../../admin/transaction/share/component/MlShareDetailsComponent';
 // import {render} from "react-dom";
 // import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 // // import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 // import {graphql} from "react-apollo";
-import {fetchSharedCalendarDetails, deactivateSharedDetailsHandler} from '../../../../admin/transaction/share/actions/MlShareUserActionHandler'
+import { fetchSharedCalendarDetails, deactivateSharedDetailsHandler } from '../../../../admin/transaction/share/actions/MlShareUserActionHandler'
 // import moment from "moment";
 // import gql from "graphql-tag";
 // import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 // import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 // import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlShareCalendar extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       sharedData: {}
     }
     this.getShareDetails.bind(this);
@@ -35,18 +35,18 @@ export default class MlShareCalendar extends React.Component {
   //
   componentWillMount() {
     console.log('The props recieved are: ', this.props);
-    let shareId= this.props && this.props.data ? this.props.data.transactionTypeId : '';
-    if(shareId){
-      this.setState({shareId: shareId}, function () {
+    const shareId = this.props && this.props.data ? this.props.data.transactionTypeId : '';
+    if (shareId) {
+      this.setState({ shareId }, () => {
         const resp = this.getShareDetails()
         return resp;
-      }.bind(this));
+      });
     }
   }
 
   async getShareDetails() {
-    const response  = await fetchSharedCalendarDetails(this.state.shareId)
-    this.setState({sharedData: response})
+    const response = await fetchSharedCalendarDetails(this.state.shareId)
+    this.setState({ sharedData: response })
     return response;
   }
 
@@ -56,19 +56,19 @@ export default class MlShareCalendar extends React.Component {
 
   async deactivateCalendar(sharedId) {
     const resp = await deactivateSharedDetailsHandler(sharedId)
-    if(resp) {
-    if(resp.success) {
-      toastr.success(resp.result)
-    } else {
-      toastr.error('Error Deactivating')
-    }
+    if (resp) {
+      if (resp.success) {
+        toastr.success(resp.result)
+      } else {
+        toastr.error('Error Deactivating')
+      }
     }
   }
 
 
   render() {
-    let that = this;
-    let data = that.state && that.state.sharedData? that.state.sharedData : {};
+    const that = this;
+    const data = that.state && that.state.sharedData ? that.state.sharedData : {};
     return (
       <div>
         <MlShareCalendarPresentation
@@ -78,6 +78,4 @@ export default class MlShareCalendar extends React.Component {
     );
   }
 }
-
-
 

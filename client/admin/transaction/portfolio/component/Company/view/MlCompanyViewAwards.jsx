@@ -1,17 +1,17 @@
 import React from 'react';
-import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import { fetchCompanyDetailsHandler } from '../../../actions/findCompanyPortfolioDetails';
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlGenericAwardsView from "../../commons/MlGenericAwardsView";
+import MlGenericAwardsView from '../../commons/MlGenericAwardsView';
 
 const KEY = 'awardsRecognition'
 
 export default class MlCompanyViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {awardsList: [], loading: true};
+    this.state = { awardsList: [], loading: true };
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -20,76 +20,73 @@ export default class MlCompanyViewAwards extends React.Component {
   }
 
 
-  componentDidMount(){
+  componentDidMount() {
     this.initalizeAnnotaor()
     this.fetchAnnotations();
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.fetchPortfolioDetails();
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"awards", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'awards', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'awards');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "awards");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -98,18 +95,18 @@ export default class MlCompanyViewAwards extends React.Component {
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.awardsRecognition) {
-      this.setState({awardsList: response.awardsRecognition});
+      this.setState({ awardsList: response.awardsRecognition });
     }
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
-  render(){
-    let that = this;
-    let awardsArray = that.state.awardsList || [];
+  render() {
+    const that = this;
+    const awardsArray = that.state.awardsList || [];
     if (!this.state.loading && awardsArray && awardsArray.length === 0) {
       return (<NoData tabName="Awards" />);
     }
@@ -119,19 +116,19 @@ export default class MlCompanyViewAwards extends React.Component {
         <h2>Awards</h2>
         <div className="col-lg-12">
           <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}/>
-          {/*<div className="row">*/}
-            {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
-              {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
-                {/*<div className="team-block">*/}
-                  {/*<img src={details.logo&&details.logo.fileUrl} className="team_img" />*/}
-                  {/*<h3>*/}
-                    {/*{details&&details.awardName}*/}
-                  {/*</h3>*/}
-                {/*</div>*/}
-              {/*</div>)*/}
-            {/*})}*/}
+          {/* <div className="row"> */}
+          {/* {awardsArray && awardsArray.map(function (details, idx) { */}
+          {/* return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}> */}
+          {/* <div className="team-block"> */}
+          {/* <img src={details.logo&&details.logo.fileUrl} className="team_img" /> */}
+          {/* <h3> */}
+          {/* {details&&details.awardName} */}
+          {/* </h3> */}
+          {/* </div> */}
+          {/* </div>) */}
+          {/* })} */}
 
-          {/*</div>*/}
+          {/* </div> */}
         </div>
       </div>
     )

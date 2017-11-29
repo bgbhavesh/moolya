@@ -1,18 +1,18 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component, PropTypes } from 'react';
 import gql from 'graphql-tag'
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-import ScrollArea from "react-scrollbar";
-import { Popover, PopoverContent, PopoverTitle } from "reactstrap";
-import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from "../../../../../../../client/admin/utils/formElemUtil";
-import { multipartASyncFormHandler } from "../../../../../../../client/commons/MlMultipartFormAction";
-import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from "../../../actions/findPortfolioFunderDetails";
+import _ from 'lodash';
+const FontAwesome = require('react-fontawesome');
+import ScrollArea from 'react-scrollbar';
+import { Popover, PopoverContent, PopoverTitle } from 'reactstrap';
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../../../../client/admin/utils/formElemUtil';
+import { multipartASyncFormHandler } from '../../../../../../../client/commons/MlMultipartFormAction';
+import { fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam } from '../../../actions/findPortfolioFunderDetails';
 import { fetchPortfolioActionHandler } from '../../../actions/findClusterIdForPortfolio'
 import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler';
 import MlLoader from '../../../../../../commons/components/loader/loader'
 import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper'
 import CropperModal from '../../../../../../commons/components/cropperModal';
-import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import { mlFieldValidations } from '../../../../../../commons/validations/mlfieldValidation';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
 
@@ -22,7 +22,7 @@ export default class MlFunderPrincipalTeam extends Component {
     this.state = {
       loading: false,
       data: {},
-      fileName:"",
+      fileName: '',
       funderPrincipal: [],
       funderTeam: [],
       popoverOpenP: false,
@@ -30,7 +30,7 @@ export default class MlFunderPrincipalTeam extends Component {
       selectedIndex: -1,
       funderPrincipalList: [],
       funderTeamList: [],
-      selectedObject: "default",
+      selectedObject: 'default',
       title: '',
       selectedTab: 'principal',
       clusterId: '',
@@ -42,7 +42,7 @@ export default class MlFunderPrincipalTeam extends Component {
       showProfileModal: false,
       uploadingAvatar1: false,
       showProfileModal1: false,
-      teamAvatar :false
+      teamAvatar: false
     }
     this.handleBlur = this.handleBlur.bind(this);
     this.onSavePrincipalAction = this.onSavePrincipalAction.bind(this);
@@ -81,15 +81,12 @@ export default class MlFunderPrincipalTeam extends Component {
     }
   }
   async fetchPrincipalDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.principal)
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.principal)
     const response = await fetchfunderPortfolioPrincipal(portfolioDetailsId);
     if (empty) {
-      if (response && response.length)
-        this.setState({ loading: false, funderPrincipal: response, funderPrincipalList: response });
-      else
-        this.setState({ loading: false })
+      if (response && response.length) { this.setState({ loading: false, funderPrincipal: response, funderPrincipalList: response }); } else { this.setState({ loading: false }) }
     } else {
       this.setState({
         loading: false,
@@ -100,13 +97,12 @@ export default class MlFunderPrincipalTeam extends Component {
     this.funderPrincipalServer = response
   }
   async fetchTeamDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.team)
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.team)
     const response = await fetchfunderPortfolioTeam(portfolioDetailsId);
     if (empty) {
-      if (response)
-        this.setState({ loading: false, funderTeam: response, funderTeamList: response });
+      if (response) { this.setState({ loading: false, funderTeam: response, funderTeamList: response }); }
     } else {
       this.setState({
         loading: false,
@@ -115,26 +111,27 @@ export default class MlFunderPrincipalTeam extends Component {
       });
     }
     this.funderTeamServer = response
-
   }
 
   onLockChange(fieldName, field, tabName, e) {
-    var isPrivate = false;
+    let isPrivate = false;
     const className = e.target.className;
-    if (className.indexOf("fa-lock") != -1) {
+    if (className.indexOf('fa-lock') != -1) {
       isPrivate = true;
     }
-    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, index: this.state.selectedIndex, tabName: tabName }
-    this.setState({privateKey: privateKey }, function () {
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, index: this.state.selectedIndex, tabName
+    }
+    this.setState({ privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
   handleYearsOfExperience(value) {
-    let blankSpace = value.indexOf(' ') >= 0;
+    const blankSpace = value.indexOf(' ') >= 0;
     let experience = parseInt(value);
-    let valuesArray = value.split(".");
-    let decimalExperience = valuesArray.length > 0 ? valuesArray[0] : "";
+    const valuesArray = value.split('.');
+    const decimalExperience = valuesArray.length > 0 ? valuesArray[0] : '';
     if (decimalExperience) {
       experience = parseInt(decimalExperience);
       if (experience > 75) {
@@ -151,26 +148,26 @@ export default class MlFunderPrincipalTeam extends Component {
     } else if (!experience) {
       toastr.error('Experience not valid')
       return false
-    } else { return true }
+    } return true
   }
 
   handleBlur(e) {
     let details = this.state.data;
-    let name = e.target.name;
+    const name = e.target.name;
     let validExperience;
-    if (name === "yearsOfExperience") {
+    if (name === 'yearsOfExperience') {
       validExperience = this.handleYearsOfExperience(e.target.value)
       if (validExperience) {
         details = _.omit(details, [name]);
         details = _.extend(details, { [name]: e.target.value });
-        this.setState({ data: details }, function () {
+        this.setState({ data: details }, () => {
           // this.sendDataToParent()
         })
       }
     } else {
       details = _.omit(details, [name]);
       details = _.extend(details, { [name]: e.target.value });
-      this.setState({ data: details }, function () {
+      this.setState({ data: details }, () => {
         // this.sendDataToParent()
       })
     }
@@ -179,15 +176,14 @@ export default class MlFunderPrincipalTeam extends Component {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
       this.sendDataToParent(true)
-    }else {
+    } else {
       toastr.error(requiredFields.errorMessage);
       return
     }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.principal) {
-      this.setState({funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false, selectLogo: {}});
-    }
-    else {
-      this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false, selectLogo: {}});
+      this.setState({ funderPrincipalList: this.context.funderPortfolio.principal, popoverOpenP: false, selectLogo: {} });
+    } else {
+      this.setState({ funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false, selectLogo: {} });
     }
   }
 
@@ -195,20 +191,19 @@ export default class MlFunderPrincipalTeam extends Component {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
       this.sendDataToParent(true)
-    }else {
+    } else {
       toastr.error(requiredFields.errorMessage);
       return
     }
     if (this.context && this.context.funderPortfolio && this.context.funderPortfolio.team) {
-      this.setState({funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false, selectLogoTeam: {}});
-    }
-    else {
-      this.setState({funderTeamList: this.state.funderTeam, popoverOpenT: false, selectLogoTeam: {}});
+      this.setState({ funderTeamList: this.context.funderPortfolio.team, popoverOpenT: false, selectLogoTeam: {} });
+    } else {
+      this.setState({ funderTeamList: this.state.funderTeam, popoverOpenT: false, selectLogoTeam: {} });
     }
   }
 
   addPrincipal() {
-    this.setState({ selectedObject: "default", popoverOpenP: !(this.state.popoverOpenP), data: {} })
+    this.setState({ selectedObject: 'default', popoverOpenP: !(this.state.popoverOpenP), data: {} })
     if (this.state.funderPrincipal) {
       this.setState({ selectedIndex: this.state.funderPrincipal.length })
     } else {
@@ -217,7 +212,7 @@ export default class MlFunderPrincipalTeam extends Component {
   }
 
   addTeam() {
-    this.setState({ selectedObject: "default", popoverOpenT: !(this.state.popoverOpenT), data: {} })
+    this.setState({ selectedObject: 'default', popoverOpenT: !(this.state.popoverOpenT), data: {} })
     if (this.state.funderTeam) {
       this.setState({ selectedIndex: this.state.funderTeam.length })
     } else {
@@ -225,33 +220,33 @@ export default class MlFunderPrincipalTeam extends Component {
     }
   }
   optionsBySelectTitle(val) {
-    let data = _.cloneDeep(this.state.data);
+    const data = _.cloneDeep(this.state.data);
     data.title = val;
-    this.setState({ data: data }, function () {
+    this.setState({ data }, () => {
       // this.sendDataToParent();
     })
   }
 
   onStatusChangeNotify(e) {
     let updatedData = this.state.data || {};
-    let key = e.target.id;
+    const key = e.target.id;
     updatedData = _.omit(updatedData, [key]);
     if (e.currentTarget.checked) {
       updatedData = _.extend(updatedData, { [key]: true });
     } else {
       updatedData = _.extend(updatedData, { [key]: false });
     }
-    this.setState({ data: updatedData }, function () {
+    this.setState({ data: updatedData }, () => {
       // this.sendDataToParent()
     })
   }
 
   onPrincipalTileClick(index, uiIndex, e) {
-    let cloneArray = _.cloneDeep(this.state.funderPrincipal);
+    const cloneArray = _.cloneDeep(this.state.funderPrincipal);
     // let details = cloneArray[index]
-    var details = _.find(cloneArray, {index: index});
-    details = _.omit(details, "__typename");
-    let imgLogo = details.logo? details.logo : {};
+    let details = _.find(cloneArray, { index });
+    details = _.omit(details, '__typename');
+    const imgLogo = details.logo ? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
@@ -259,38 +254,35 @@ export default class MlFunderPrincipalTeam extends Component {
       selectLogo: imgLogo,
       popoverOpenP: !(this.state.popoverOpenP)
     }, () => {
-      this.lockPrivateKeys(index, true, "principal")
+      this.lockPrivateKeys(index, true, 'principal')
     });
 
     /* setTimeout(function () {
        _.each(details.privateFields, function (pf) {
          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
        })
-     }, 10)*/
-
-
+     }, 10) */
   }
-  //todo:// context data connection first time is not coming have to fix
+  // todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex, isPrincipal, tabName) {
-    var privateValues = this.funderPrincipalServer && this.funderPrincipalServer[selIndex] ? this.funderPrincipalServer[selIndex].privateFields : []
-    if (!isPrincipal)
-      privateValues = this.funderTeamServer && this.funderTeamServer[selIndex] ? this.funderTeamServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: tabName, index: selIndex })
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: tabName, index: selIndex })
-    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    let privateValues = this.funderPrincipalServer && this.funderPrincipalServer[selIndex] ? this.funderPrincipalServer[selIndex].privateFields : []
+    if (!isPrincipal) { privateValues = this.funderTeamServer && this.funderTeamServer[selIndex] ? this.funderTeamServer[selIndex].privateFields : [] }
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName, index: selIndex })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName, index: selIndex })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keyssssssssssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   onTeamTileClick(index, uiIndex, e) {
-    let cloneArray = _.cloneDeep(this.state.funderTeam);
+    const cloneArray = _.cloneDeep(this.state.funderTeam);
     // let details = cloneArray[index]
-    var details = _.find(cloneArray, {index: index});
-    details = _.omit(details, "__typename");
-    let imgLogo = details.logo? details.logo : {};
+    let details = _.find(cloneArray, { index });
+    details = _.omit(details, '__typename');
+    const imgLogo = details.logo ? details.logo : {};
     this.setState({
       selectedIndex: index,
       data: details,
@@ -298,7 +290,7 @@ export default class MlFunderPrincipalTeam extends Component {
       selectedObject: uiIndex,
       popoverOpenT: !(this.state.popoverOpenT)
     }, () => {
-      this.lockPrivateKeys(index, false, "team")
+      this.lockPrivateKeys(index, false, 'team')
     });
 
 
@@ -310,64 +302,64 @@ export default class MlFunderPrincipalTeam extends Component {
   }
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.state.selectedTab, errorMessage: ret, index: this.state.selectedIndex}
+    return { tabName: this.state.selectedTab, errorMessage: ret, index: this.state.selectedIndex }
   }
 
-  getActualIndex(dataArray, checkIndex){
-    var response = _.findIndex(dataArray, {index: checkIndex});
+  getActualIndex(dataArray, checkIndex) {
+    let response = _.findIndex(dataArray, { index: checkIndex });
     response = response >= 0 ? response : checkIndex;
     return response;
   }
 
   sendDataToParent(isSaveClicked) {
-    var data = this.state.data;
-    var selectedTab = this.state.selectedTab;
-    if (selectedTab == "principal") {
-      let fun = this.state.funderPrincipal;
+    const data = this.state.data;
+    const selectedTab = this.state.selectedTab;
+    if (selectedTab == 'principal') {
+      const fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogo;
-      if (isSaveClicked){
+      if (isSaveClicked) {
         const actualIndex = this.getActualIndex(funderPrincipal, this.state.selectedIndex);
         funderPrincipal[actualIndex] = data;
       }
-      let arr = [];
-      _.each(funderPrincipal, function (item) {
-        for (var propName in item) {
+      const arr = [];
+      _.each(funderPrincipal, (item) => {
+        for (const propName in item) {
           if (item[propName] === null || item[propName] === undefined) {
             delete item[propName];
           }
         }
-        let newItem = _.omit(item, "__typename");
-        newItem = _.omit(newItem, "privateFields");
+        let newItem = _.omit(item, '__typename');
+        newItem = _.omit(newItem, 'privateFields');
         arr.push(newItem)
       })
       funderPrincipal = arr;
-      this.setState({ funderPrincipal: funderPrincipal })
+      this.setState({ funderPrincipal })
       this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
-    } else if (selectedTab == "team") {
-      let fun = this.state.funderTeam;
+    } else if (selectedTab == 'team') {
+      const fun = this.state.funderTeam;
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
       data.logo = this.state.selectLogoTeam;
-      if (isSaveClicked){
+      if (isSaveClicked) {
         const actualIndex = this.getActualIndex(funderTeam, this.state.selectedIndex);
         funderTeam[actualIndex] = data;
       }
 
-      let arr = [];
-      _.each(funderTeam, function (item) {
-        for (var propName in item) {
+      const arr = [];
+      _.each(funderTeam, (item) => {
+        for (const propName in item) {
           if (item[propName] === null || item[propName] === undefined) {
             delete item[propName];
           }
         }
-        let newItem = _.omit(item, "__typename");
-        newItem = _.omit(newItem, "privateFields");
+        let newItem = _.omit(item, '__typename');
+        newItem = _.omit(newItem, 'privateFields');
         arr.push(newItem)
       })
       funderTeam = arr;
-      this.setState({ funderTeam: funderTeam })
+      this.setState({ funderTeam })
       this.props.getTeamDetails(funderTeam, this.state.privateKey);
     }
   }
@@ -376,67 +368,65 @@ export default class MlFunderPrincipalTeam extends Component {
     this.setState({
       selectedTab: tab,
       popoverOpenP: false,
-      popoverOpenT: false,
+      popoverOpenT: false
     });
   }
-  onPrincipalLogoFileUpload(image,fileInfo) {
-    if (fileInfo.length == 0)
-      return;
-    let file = image;
-    let fileName = fileInfo.name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
+  onPrincipalLogoFileUpload(image, fileInfo) {
+    if (fileInfo.length == 0) { return; }
+    const file = image;
+    const fileName = fileInfo.name;
+    const data = {
+      moduleName: 'PORTFOLIO',
+      actionName: 'UPLOAD',
       portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: { principal: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] }
+      portfolio: { principal: [{ logo: { fileUrl: '', fileName }, index: this.state.selectedIndex }] }
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file, 'principal'));
+    const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file, 'principal'));
   }
   onTeamLogoFileUpload(image, fileInfo) {
-    let file = image;
-    let fileName = fileInfo.name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
+    const file = image;
+    const fileName = fileInfo.name;
+    const data = {
+      moduleName: 'PORTFOLIO',
+      actionName: 'UPLOAD',
       portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: { team: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] }
+      portfolio: { team: [{ logo: { fileUrl: '', fileName }, index: this.state.selectedIndex }] }
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file, 'team'));
+    const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file, 'team'));
   }
 
-  onFileUploadCallBack(file,type, resp) {
+  onFileUploadCallBack(file, type, resp) {
     if (resp) {
-      let result = JSON.parse(resp);
+      const result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
+      Confirm('', 'Do you want to add the file into the library', 'Ok', 'Cancel', (ifConfirm) => {
+        if (ifConfirm) {
+          const fileObjectStructure = {
             fileName: this.state.fileName,
-            fileType: file && file.type ? file.type : "",
+            fileType: file && file.type ? file.type : '',
             fileUrl: result.result,
-            libraryType: "image"
+            libraryType: 'image'
           }
           this.libraryAction(fileObjectStructure)
         }
       });
 
       if (result.success) {
-        toastr.success("Photo Updated Successfully");
+        toastr.success('Photo Updated Successfully');
         // this.setState({
         //   loading: true
         // })
         // this.fetchOnlyImages();
       }
-      let logoObj = {
-        fileName: file && file.name ? file.name : "",
+      const logoObj = {
+        fileName: file && file.name ? file.name : '',
         fileUrl: result.result
       }
       if (type === 'principal') {
         this.setState({
           selectLogo: logoObj
         })
-      }
-      else {
+      } else {
         this.setState({
           selectLogoTeam: logoObj
         })
@@ -445,15 +435,15 @@ export default class MlFunderPrincipalTeam extends Component {
         uploadingAvatar: false,
         uploadingAvatar1: false,
         showProfileModal: false,
-        showProfileModal1: false,
+        showProfileModal1: false
       })
     }
   }
 
   async libraryAction(file) {
-    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
-    if(resp.code === 404) {
+    if (resp.code === 404) {
       toastr.error(resp.result)
     } else {
       toastr.success(resp.result)
@@ -466,34 +456,38 @@ export default class MlFunderPrincipalTeam extends Component {
    * @handling logo view on client only
    * */
   async fetchOnlyImages() {
-    if (this.state.selectedTab == "principal") {
+    if (this.state.selectedTab == 'principal') {
       const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
       if (response && !_.isEmpty(response)) {
-        let thisState = this.state.selectedIndex;
-        let dataDetails = this.state.funderPrincipal
-        let cloneBackUp = _.cloneDeep(dataDetails);
-        let specificData = cloneBackUp[thisState];
+        const thisState = this.state.selectedIndex;
+        const dataDetails = this.state.funderPrincipal
+        const cloneBackUp = _.cloneDeep(dataDetails);
+        const specificData = cloneBackUp[thisState];
         if (specificData) {
-          let curUpload = response[thisState]
-          specificData['logo'] = curUpload['logo']
-          this.setState({ loading: false, funderPrincipal: cloneBackUp, principalContext: "active", teamContext: "" });
+          const curUpload = response[thisState]
+          specificData.logo = curUpload.logo
+          this.setState({
+            loading: false, funderPrincipal: cloneBackUp, principalContext: 'active', teamContext: ''
+          });
         } else {
-          this.setState({ loading: false, principalContext: "active", teamContext: "" })
+          this.setState({ loading: false, principalContext: 'active', teamContext: '' })
         }
       }
-    } else if (this.state.selectedTab == "team") {
+    } else if (this.state.selectedTab == 'team') {
       const response = await fetchfunderPortfolioTeam(this.props.portfolioDetailsId);
       if (response && !_.isEmpty(response)) {
-        let thisState = this.state.selectedIndex;
-        let dataDetails = this.state.funderTeam
-        let cloneBackUp = _.cloneDeep(dataDetails);
-        let specificData = cloneBackUp[thisState];
+        const thisState = this.state.selectedIndex;
+        const dataDetails = this.state.funderTeam
+        const cloneBackUp = _.cloneDeep(dataDetails);
+        const specificData = cloneBackUp[thisState];
         if (specificData) {
-          let curUpload = response[thisState]
-          specificData['logo'] = curUpload['logo']
-          this.setState({ loading: false, funderTeam: cloneBackUp, teamContext: "active", principalContext: "" });
+          const curUpload = response[thisState]
+          specificData.logo = curUpload.logo
+          this.setState({
+            loading: false, funderTeam: cloneBackUp, teamContext: 'active', principalContext: ''
+          });
         } else {
-          this.setState({ loading: false, teamContext: "active", principalContext: "" })
+          this.setState({ loading: false, teamContext: 'active', principalContext: '' })
         }
       }
     }
@@ -515,7 +509,7 @@ export default class MlFunderPrincipalTeam extends Component {
 
   handleTeamAvatar(image, file) {
     this.setState({
-      uploadingAvatar1: true,
+      uploadingAvatar1: true
     });
     this.setState({ fileName: file.name })
     this.onTeamLogoFileUpload(image, file);
@@ -523,24 +517,24 @@ export default class MlFunderPrincipalTeam extends Component {
 
   handleUploadAvatar(image, file) {
     this.setState({
-      //uploadingAvatar: true,,
+      // uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
     this.onPrincipalLogoFileUpload(image, file);
   }
 
   render() {
-    let titlequery = gql`query($type:String,$hierarchyRefId:String){
+    const titlequery = gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
      label
      value
      }
      }
      `;
-    let titleOption = { options: { variables: { type: "TITLE", hierarchyRefId: this.state.clusterId } } };
-    let that = this;
+    const titleOption = { options: { variables: { type: 'TITLE', hierarchyRefId: this.state.clusterId } } };
+    const that = this;
     const showLoader = that.state.loading;
-    let funderPrincipalList = that.state.funderPrincipal || [];
+    const funderPrincipalList = that.state.funderPrincipal || [];
     return (
       <div>
         {showLoader === true ? (<MlLoader />) : (
@@ -549,18 +543,19 @@ export default class MlFunderPrincipalTeam extends Component {
               <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
                 <div className="ml_tabs ml_tabs_large">
                   <ul className="nav nav-pills" id="myTabs">
-                    <li id="principal" className={that.state.principalContext}
-                        onClick={this.onTabSelect.bind(this, "principal")}>
+                    <li
+                      id="principal" className={that.state.principalContext}
+                      onClick={this.onTabSelect.bind(this, 'principal')}>
                       <a href="#1a" data-toggle="tab">Principal</a>
                     </li>
-                    <li id="team" className={that.state.teamContext} onClick={this.onTabSelect.bind(this, "team")}>
+                    <li id="team" className={that.state.teamContext} onClick={this.onTabSelect.bind(this, 'team')}>
                       <a href="#2a" data-toggle="tab">Team</a>
                     </li>
                   </ul>
 
-                  {/*principle list*/}
+                  {/* principle list */}
                   <div className="tab-content clearfix requested_input">
-                    {/*<div className="tab-pane active" id="1a">*/}
+                    {/* <div className="tab-pane active" id="1a"> */}
                     <div id="1a" className={`tab-pane ${that.state.principalContext}`}>
                       <div className="col-lg-12">
                         <div className="row">
@@ -572,35 +567,34 @@ export default class MlFunderPrincipalTeam extends Component {
                               </div>
                             </a>
                           </div>
-                          {funderPrincipalList.map(function (principal, idx) {
-                            return (
-                              <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="" id={"create_clientP" + idx}>
-                                  <div className="list_block notrans funding_list"
-                                       onClick={that.onPrincipalTileClick.bind(that, principal.index, idx )}>
-                                    <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
-                                    {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={principal.logo && principal.logo.fileUrl ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} />
-                                    <div>
-                                      <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
-                                    </div>
-                                    {/*<div className="ml_icon_btn">*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
-                                    {/*</div>*/}
+                          {funderPrincipalList.map((principal, idx) => (
+                            <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                              <a href="" id={`create_clientP${idx}`}>
+                                <div
+                                  className="list_block notrans funding_list"
+                                  onClick={that.onPrincipalTileClick.bind(that, principal.index, idx)}>
+                                  <FontAwesome name='unlock' id="makePrivate" defaultValue={principal.makePrivate} /><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate} />
+                                  {/* <div className="cluster_status"><FontAwesome name='trash-o' /></div> */}
+                                  <img src={principal.logo && principal.logo.fileUrl ? generateAbsolutePath(principal.logo.fileUrl) : '/images/def_profile.png'} />
+                                  <div>
+                                    <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                   </div>
-                                </a>
-                              </div>
-                            )
-                          })}
+                                  {/* <div className="ml_icon_btn"> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='facebook'/></a> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='twitter'/></a> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='linkedin'/></a> */}
+                                  {/* </div> */}
+                                </div>
+                              </a>
+                            </div>
+                          ))}
 
                         </div>
                       </div>
                     </div>
 
-                    {/*team list view*/}
-                    {/*<div className="tab-pane" id="2a">*/}
+                    {/* team list view */}
+                    {/* <div className="tab-pane" id="2a"> */}
                     <div id="2a" className={`tab-pane ${that.state.teamContext}`}>
                       <div className="col-lg-12">
                         <div className="row">
@@ -612,28 +606,27 @@ export default class MlFunderPrincipalTeam extends Component {
                               </div>
                             </a>
                           </div>
-                          {that.state.funderTeamList.map(function (team, idx) {
-                            return (
-                              <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="" id={"create_clientT" + idx}>
-                                  <div className="list_block notrans funding_list"
-                                       onClick={that.onTeamTileClick.bind(that, team.index, idx)}>
-                                    <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} />
-                                    <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
-                                    {/*<div className="cluster_status"><FontAwesome name='trash-o' /></div>*/}
-                                    <img src={team.logo && team.logo.fileUrl ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"} />
-                                    <div><p>{team.firstName}</p><p
-                                      className="small">{team.designation}</p></div>
-                                    {/*<div className="ml_icon_btn">*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                    {/*<a href="" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
-                                    {/*</div>*/}
-                                  </div>
-                                </a>
-                              </div>
-                            )
-                          })}
+                          {that.state.funderTeamList.map((team, idx) => (
+                            <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                              <a href="" id={`create_clientT${idx}`}>
+                                <div
+                                  className="list_block notrans funding_list"
+                                  onClick={that.onTeamTileClick.bind(that, team.index, idx)}>
+                                  <FontAwesome name='unlock' id="makePrivate" defaultValue={team.makePrivate} />
+                                  <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate} />
+                                  {/* <div className="cluster_status"><FontAwesome name='trash-o' /></div> */}
+                                  <img src={team.logo && team.logo.fileUrl ? generateAbsolutePath(team.logo.fileUrl) : '/images/def_profile.png'} />
+                                  <div><p>{team.firstName}</p><p
+                                    className="small">{team.designation}</p></div>
+                                  {/* <div className="ml_icon_btn"> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='facebook'/></a> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='twitter'/></a> */}
+                                  {/* <a href="" className="save_btn"><FontAwesome name='linkedin'/></a> */}
+                                  {/* </div> */}
+                                </div>
+                              </a>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -648,17 +641,18 @@ export default class MlFunderPrincipalTeam extends Component {
                 show={this.state.showProfileModal}
                 toggleShow={this.toggleModal}
               />
-              {/*principle popover*/}
-              <Popover placement="right" isOpen={this.state.popoverOpenP}
-                       target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>
+              {/* principle popover */}
+              <Popover
+                placement="right" isOpen={this.state.popoverOpenP}
+                target={`create_clientP${this.state.selectedObject}`} toggle={this.toggle}>
                 <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          {this.state.selectedObject != "default" ?
-                            <div className="form-group"  onClick={this.toggleModal.bind(this)}>
+                          {this.state.selectedObject != 'default' ?
+                            <div className="form-group" onClick={this.toggleModal.bind(this)}>
                               <div className="fileUpload mlUpload_btn">
                                 <span>Upload Pic</span>
                                 {/* <input type="file" className="upload"
@@ -671,121 +665,141 @@ export default class MlFunderPrincipalTeam extends Component {
                             </div> : <div></div>
                           }
 
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Title" name="title"*/}
-                          {/*defaultValue={this.state.data.title}*/}
-                          {/*className="form-control float-label" onBlur={this.handleBlur}/>*/}
-                          {/*/!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/*/}
-                          {/*/!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/*/}
-                          {/*/!*<input type="checkbox" className="lock_input"*!/*/}
-                          {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
-                          {/*</div>*/}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Title" name="title" */}
+                          {/* defaultValue={this.state.data.title} */}
+                          {/* className="form-control float-label" onBlur={this.handleBlur}/> */}
+                          {/* /!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/ */}
+                          {/* /!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/ */}
+                          {/* /!*<input type="checkbox" className="lock_input"*!/ */}
+                          {/* /!*checked={this.state.data.isCompanyNamePrivate}/>*!/ */}
+                          {/* </div> */}
                           <div className="clearfix"></div>
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
-                                          valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
-                                          queryType={"graphql"} query={titlequery} queryOptions={titleOption}
-                                          onSelect={that.optionsBySelectTitle} isDynamic={true} />
+                            <Moolyaselect
+                              multiSelect={false} placeholder="Title" className="form-control float-label"
+                              valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
+                              queryType={'graphql'} query={titlequery} queryOptions={titleOption}
+                              onSelect={that.optionsBySelectTitle} isDynamic={true} />
 
                           </div>
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="First Name" name="firstName" ref={"firstName"}
-                                   defaultValue={this.state.data.firstName} className="form-control float-label"
-                                   onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="First name is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "principal")} />
+                            <input
+                              type="text" placeholder="First Name" name="firstName" ref={'firstName'}
+                              defaultValue={this.state.data.firstName} className="form-control float-label"
+                              onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="First name is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'firstName', 'isFirstNamePrivate', 'principal')} />
                           </div>
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Last Name" name="lastName" ref={"lastName"}
-                                   defaultValue={this.state.data.lastName} className="form-control float-label"
-                                   onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Last name is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Last Name" name="lastName" ref={'lastName'}
+                              defaultValue={this.state.data.lastName} className="form-control float-label"
+                              onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="Last name is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'lastName', 'isLastNamePrivate', 'principal')} />
                           </div>
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Designation" name="designation"
-                                   defaultValue={this.state.data.designation} ref={"designation"}
-                                   className="form-control float-label" onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Designation is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"
-                                         onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Designation" name="designation"
+                              defaultValue={this.state.data.designation} ref={'designation'}
+                              className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="Designation is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isDesignationPrivate"
+                              onClick={this.onLockChange.bind(this, 'designation', 'isDesignationPrivate', 'principal')} />
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Company Name" name="principalcompanyName"
-                                   defaultValue={this.state.data.principalcompanyName}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "principalcompanyName", "isCompanyNamePrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Company Name" name="principalcompanyName"
+                              defaultValue={this.state.data.principalcompanyName}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'principalcompanyName', 'isCompanyNamePrivate', 'principal')} />
 
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Duration" name="duration"
-                                   defaultValue={this.state.data.duration}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                         onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Duration" name="duration"
+                              defaultValue={this.state.data.duration}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isDurationPrivate"
+                              onClick={this.onLockChange.bind(this, 'duration', 'isDurationPrivate', 'principal')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
-                                   defaultValue={this.state.data.yearsOfExperience}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"
-                                         onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Years of Experience" name="yearsOfExperience"
+                              defaultValue={this.state.data.yearsOfExperience}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"
+                              onClick={this.onLockChange.bind(this, 'yearsOfExperience', 'isYearsOfExperiencePrivate', 'principal')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Qualification" name="qualification"
-                                   defaultValue={this.state.data.qualification}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"
-                                         onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate", "principal")} />
+                            <input
+                              type="text" placeholder="Qualification" name="qualification"
+                              defaultValue={this.state.data.qualification}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isQualificationPrivate"
+                              onClick={this.onLockChange.bind(this, 'qualification', 'isQualificationPrivate', 'principal')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="About" name="aboutPrincipal"
-                                   defaultValue={this.state.data.aboutPrincipal}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"
-                                         onClick={this.onLockChange.bind(this, "aboutPrincipal", "isAboutPrincipalPrivate", "principal")} />
+                            <input
+                              type="text" placeholder="About" name="aboutPrincipal"
+                              defaultValue={this.state.data.aboutPrincipal}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"
+                              onClick={this.onLockChange.bind(this, 'aboutPrincipal', 'isAboutPrincipalPrivate', 'principal')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="LinkedIn" name="linkedinUrl"
-                                   defaultValue={this.state.data.linkedinUrl}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
-                                         onClick={this.onLockChange.bind(this, "linkedinUrl", "isLinkedinUrlPrivate", "principal")} />
+                            <input
+                              type="text" placeholder="LinkedIn" name="linkedinUrl"
+                              defaultValue={this.state.data.linkedinUrl}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
+                              onClick={this.onLockChange.bind(this, 'linkedinUrl', 'isLinkedinUrlPrivate', 'principal')} />
 
                           </div>
 
                           <div className="input_types">
-                            <input id="makePrivate" type="checkbox"
-                                   checked={this.state.data.makePrivate && this.state.data.makePrivate}
-                                   name="checkbox"
-                                   onChange={this.onStatusChangeNotify} />
+                            <input
+                              id="makePrivate" type="checkbox"
+                              checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                              name="checkbox"
+                              onChange={this.onStatusChangeNotify} />
                             <label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          <div className="ml_btn" style={{ 'textAlign': 'center' }}>
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Facebook" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="facebook-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="twitter" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="twitter-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Youtube" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="youtube-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Google plus" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="google-plus-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          <div className="ml_btn" style={{ textAlign: 'center' }}>
                             <a className="save_btn" onClick={this.onSavePrincipalAction}>Save</a>
                           </div>
                         </div>
@@ -801,17 +815,18 @@ export default class MlFunderPrincipalTeam extends Component {
                 show={this.state.showProfileModal1}
                 toggleShow={this.toggleModal1}
               />
-              {/*team popover*/}
-              <Popover placement="right" isOpen={this.state.popoverOpenT}
-                       target={"create_clientT" + this.state.selectedObject} toggle={this.toggle}>
+              {/* team popover */}
+              <Popover
+                placement="right" isOpen={this.state.popoverOpenT}
+                target={`create_clientT${this.state.selectedObject}`} toggle={this.toggle}>
                 <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          {this.state.selectedObject != "default" ?
-                            <div className="form-group"  onClick={this.toggleModal1}>
+                          {this.state.selectedObject != 'default' ?
+                            <div className="form-group" onClick={this.toggleModal1}>
                               <div className="fileUpload mlUpload_btn">
                                 <span>Upload Pic</span>
                                 {/* <input type="file" className="upload"
@@ -825,120 +840,140 @@ export default class MlFunderPrincipalTeam extends Component {
                           }
                           <div className="clearfix"></div>
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
-                                          valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
-                                          queryType={"graphql"} query={titlequery} queryOptions={titleOption}
-                                          onSelect={that.optionsBySelectTitle} isDynamic={true} />
+                            <Moolyaselect
+                              multiSelect={false} placeholder="Title" className="form-control float-label"
+                              valueKey={'value'} labelKey={'label'} selectedValue={this.state.data.title}
+                              queryType={'graphql'} query={titlequery} queryOptions={titleOption}
+                              onSelect={that.optionsBySelectTitle} isDynamic={true} />
 
                           </div>
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Title" name="title"*/}
-                          {/*defaultValue={this.state.data.title}*/}
-                          {/*className="form-control float-label" onBlur={this.handleBlur}/>*/}
-                          {/*/!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/*/}
-                          {/*/!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/*/}
-                          {/*/!*<input type="checkbox" className="lock_input"*!/*/}
-                          {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
-                          {/*</div>*/}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Title" name="title" */}
+                          {/* defaultValue={this.state.data.title} */}
+                          {/* className="form-control float-label" onBlur={this.handleBlur}/> */}
+                          {/* /!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/ */}
+                          {/* /!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/ */}
+                          {/* /!*<input type="checkbox" className="lock_input"*!/ */}
+                          {/* /!*checked={this.state.data.isCompanyNamePrivate}/>*!/ */}
+                          {/* </div> */}
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="First Name" name="firstName" ref={"firstName"}
-                                   defaultValue={this.state.data.firstName} className="form-control float-label"
-                                   onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="First name is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "firstName", "isFirstNamePrivate", "team")} />
-                          </div>
-
-                          <div className="form-group mandatory">
-                            <input type="text" placeholder="Last Name" name="lastName" ref={"lastName"}
-                                   defaultValue={this.state.data.lastName} className="form-control float-label"
-                                   onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Last name is required"/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "lastName", "isLastNamePrivate", "team")} />
+                            <input
+                              type="text" placeholder="First Name" name="firstName" ref={'firstName'}
+                              defaultValue={this.state.data.firstName} className="form-control float-label"
+                              onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="First name is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'firstName', 'isFirstNamePrivate', 'team')} />
                           </div>
 
                           <div className="form-group mandatory">
-                            <input type="text" placeholder="Designation" name="designation" ref={"designation"}
-                                   defaultValue={this.state.data.designation}
-                                   className="form-control float-label" onBlur={this.handleBlur} data-required={true}
-                                   data-errMsg="Designation is required"/>
-                            <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
-                                         onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate", "team")} />
+                            <input
+                              type="text" placeholder="Last Name" name="lastName" ref={'lastName'}
+                              defaultValue={this.state.data.lastName} className="form-control float-label"
+                              onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="Last name is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'lastName', 'isLastNamePrivate', 'team')} />
+                          </div>
+
+                          <div className="form-group mandatory">
+                            <input
+                              type="text" placeholder="Designation" name="designation" ref={'designation'}
+                              defaultValue={this.state.data.designation}
+                              className="form-control float-label" onBlur={this.handleBlur} data-required={true}
+                              data-errMsg="Designation is required"/>
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isDesignationPrivate"
+                              onClick={this.onLockChange.bind(this, 'designation', 'isDesignationPrivate', 'team')} />
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Company Name" name="teamcompanyName"
-                                   defaultValue={this.state.data.teamcompanyName}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                         onClick={this.onLockChange.bind(this, "teamcompanyName", "isCompanyNamePrivate", "team")} />
+                            <input
+                              type="text" placeholder="Company Name" name="teamcompanyName"
+                              defaultValue={this.state.data.teamcompanyName}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isCompanyNamePrivate"
+                              onClick={this.onLockChange.bind(this, 'teamcompanyName', 'isCompanyNamePrivate', 'team')} />
 
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Duration" name="duration"
-                                   defaultValue={this.state.data.duration}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                         onClick={this.onLockChange.bind(this, "duration", "isDurationPrivate", "team")} />
+                            <input
+                              type="text" placeholder="Duration" name="duration"
+                              defaultValue={this.state.data.duration}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isDurationPrivate"
+                              onClick={this.onLockChange.bind(this, 'duration', 'isDurationPrivate', 'team')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
-                                   defaultValue={this.state.data.yearsOfExperience}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
-                                         onClick={this.onLockChange.bind(this, "yearsOfExperience", "isYearsOfExperiencePrivate", "team")} />
+                            <input
+                              type="text" placeholder="Years of Experience" name="yearsOfExperience"
+                              defaultValue={this.state.data.yearsOfExperience}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
+                              onClick={this.onLockChange.bind(this, 'yearsOfExperience', 'isYearsOfExperiencePrivate', 'team')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Qualification" name="qualification"
-                                   defaultValue={this.state.data.qualification}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
-                                         onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate", "team")} />
+                            <input
+                              type="text" placeholder="Qualification" name="qualification"
+                              defaultValue={this.state.data.qualification}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isQualificationPrivate"
+                              onClick={this.onLockChange.bind(this, 'qualification', 'isQualificationPrivate', 'team')} />
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="About" name="aboutTeam"
-                                   defaultValue={this.state.data.aboutTeam}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
-                                         onClick={this.onLockChange.bind(this, "aboutTeam", "isAboutTeamPrivate", "team")} />
+                            <input
+                              type="text" placeholder="About" name="aboutTeam"
+                              defaultValue={this.state.data.aboutTeam}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon" id="isAboutTeamPrivate"
+                              onClick={this.onLockChange.bind(this, 'aboutTeam', 'isAboutTeamPrivate', 'team')} />
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="LinkedIn" name="linkedinUrl"
-                                   defaultValue={this.state.data.linkedinUrl}
-                                   className="form-control float-label" onBlur={this.handleBlur} />
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
-                                         onClick={this.onLockChange.bind(this, "linkedinUrl", "isLinkedinUrlPrivate", "team")} />
+                            <input
+                              type="text" placeholder="LinkedIn" name="linkedinUrl"
+                              defaultValue={this.state.data.linkedinUrl}
+                              className="form-control float-label" onBlur={this.handleBlur} />
+                            <FontAwesome
+                              name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate"
+                              onClick={this.onLockChange.bind(this, 'linkedinUrl', 'isLinkedinUrlPrivate', 'team')} />
 
                           </div>
 
                           <div className="input_types">
-                            <input id="makePrivate" type="checkbox"
-                                   checked={this.state.data.makePrivate && this.state.data.makePrivate}
-                                   name="checkbox"
-                                   onChange={this.onStatusChangeNotify} />
+                            <input
+                              id="makePrivate" type="checkbox"
+                              checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                              name="checkbox"
+                              onChange={this.onStatusChangeNotify} />
                             <label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
-                          {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                          {/*</div>*/}
-                          <div className="ml_btn" style={{ 'textAlign': 'center' }}>
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Facebook" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="facebook-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="twitter" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="twitter-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Youtube" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="youtube-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          {/* <div className="form-group"> */}
+                          {/* <input type="text" placeholder="Google plus" className="form-control float-label"  /> */}
+                          {/* <FontAwesome name="google-plus-square" className="password_icon"/> */}
+                          {/* </div> */}
+                          <div className="ml_btn" style={{ textAlign: 'center' }}>
                             <a className="save_btn" onClick={this.onSaveTeamAction}>Save</a>
                           </div>
                         </div>
@@ -952,7 +987,7 @@ export default class MlFunderPrincipalTeam extends Component {
       </div>
     )
   }
-};
+}
 MlFunderPrincipalTeam.contextTypes = {
   funderPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object

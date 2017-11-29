@@ -1,36 +1,33 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import CalenderHead from './calendarHead';
-export default class CalCreateAppointment extends React.Component{
-  componentDidMount()
-  {
+export default class CalCreateAppointment extends React.Component {
+  componentDidMount() {
     $('.float-label').jvFloat();
 
-    $('.switch input').change(function() {
-      if($(this).parent().hasClass('nocolor-switch')){
+    $('.switch input').change(function () {
+      if ($(this).parent().hasClass('nocolor-switch')) {
         if ($(this).is(':checked')) {
           $('.state_label:nth-of-type(1)').removeClass('acLabel');
           $('.state_label:nth-of-type(2)').addClass('acLabel');
-        }else{
+        } else {
           $('.state_label:nth-of-type(2)').removeClass('acLabel');
           $('.state_label:nth-of-type(1)').addClass('acLabel');
         }
-      }else{
-        if ($(this).is(':checked')) {
-          $(this).parent('.switch').addClass('on');
-        }else{
-          $(this).parent('.switch').removeClass('on');
-        }
+      } else if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      } else {
+        $(this).parent('.switch').removeClass('on');
       }
     });
-    var WinWidth = $(window).width();
-    if(WinWidth > 768){
-      $(".app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
+    const WinWidth = $(window).width();
+    if (WinWidth > 768) {
+      $('.app_main_wrap').mCustomScrollbar({ theme: 'minimal-dark' });
     }
   }
-  render(){
+  render() {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -96,10 +93,10 @@ export default class CalCreateAppointment extends React.Component{
               <div className="panel panel-default library-wrap">
                 <div className="panel-heading">
                   Attachments <span className="pull-right">
-                 <div className="fileUpload upload_file_mask">
-                     <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                     <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div></span>
+                    <div className="fileUpload upload_file_mask">
+                      <a href="javascript:void(0);"><span className="ml ml-upload"></span>
+                        <input type="file" className="upload_file upload" name="file_source" /></a>
+                    </div></span>
                 </div>
                 <div className="panel-body">
                   <div className="thumbnail"><FontAwesome name='trash-o'/><img src="/images/ppt.png"/><div className="title">Document</div></div>
@@ -197,7 +194,7 @@ export default class CalCreateAppointment extends React.Component{
             </div>
             <div className="pull-right">
               <div className="ml_btn large_btn">
-                <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.18,950.00/-</a>
+                <a href="" className="save_btn" style={{ width: 'auto' }}>Total Amount Rs.18,950.00/-</a>
               </div>
             </div>
             <br className="brclear"/>
@@ -209,4 +206,4 @@ export default class CalCreateAppointment extends React.Component{
       </div>
     )
   }
-};
+}

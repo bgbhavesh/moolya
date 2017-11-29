@@ -1,39 +1,41 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
-import  Select from 'react-select';
+import Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
-import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
-import {findUserRegistartionActionHandler} from '../actions/findUserRegistrationDocument'
-import {findRegistrationActionHandler} from '../actions/findRegistration';
-import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
+import { addRegistrationStep3Details } from '../actions/addRegistrationStep3DetailsAction';
+import { findUserRegistartionActionHandler } from '../actions/findUserRegistrationDocument'
+import { findRegistrationActionHandler } from '../actions/findRegistration';
+import { updateRegistrationInfoDetails } from '../actions/updateRegistration';
 import update from 'immutability-helper';
-import {findCountryCode} from '../actions/findRegistration'
+import { findCountryCode } from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel } from '../../../utils/formElemUtil';
 import _ from 'lodash'
-import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
+import { mlFieldValidations, validatedPhoneNumber } from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
-var diff = require('deep-diff').diff;
+const diff = require('deep-diff').diff;
 
 
-export default class ContactDetails extends React.Component{
-  constructor(props){
+export default class ContactDetails extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      selectedNumberTypeValue : null,
+    this.state = {
+      selectedNumberTypeValue: null,
       selectedContactTab: null,
       selectedNumberTypeLabel: null,
-      contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""},
-      contactNumberArray : this.props.registrationInfo.contactInfo|| [],
-      activeTab : "active",
-      countryDetails : null,
-      loading:true,
-      changedData : []
+      contactNumberObject: {
+        numberType: '', numberTypeName: '', countryCode: '', contactNumber: ''
+      },
+      contactNumberArray: this.props.registrationInfo.contactInfo || [],
+      activeTab: 'active',
+      countryDetails: null,
+      loading: true,
+      changedData: []
 
     }
 
@@ -44,184 +46,174 @@ export default class ContactDetails extends React.Component{
   }
 
 
-  componentDidUpdate(){
+  componentDidUpdate() {
 
   }
 
   componentWillUpdate(nextProps, nextState) {
 
   }
-  componentDidMount(){
-    setTimeout(function(){
+  componentDidMount() {
+    setTimeout(() => {
       initalizeFloatLabel();
-    },1000);
+    }, 1000);
     this.findRegistration.bind(this);
     this.fetchCountryCode();
   }
 
-  updateContactOptions(index, did, selectedValue, selObject,callback){
+  updateContactOptions(index, did, selectedValue, selObject, callback) {
     if (index !== -1) {
       // do your stuff here
-      let updatedComment = update(this.state.contactNumberArray[index], {
-        numberTypeName : {$set: selObject.label},
-        numberType :   {$set: did},
-        countryCode : {$set: this.refs["countryCode"+index].value},
-        contactNumber : {$set: this.refs["contactNumber"+index].value}});
+      const updatedComment = update(this.state.contactNumberArray[index], {
+        numberTypeName: { $set: selObject.label },
+        numberType: { $set: did },
+        countryCode: { $set: this.refs[`countryCode${index}`].value },
+        contactNumber: { $set: this.refs[`contactNumber${index}`].value }
+      });
 
-      let newData = update(this.state.contactNumberArray, {
+      const newData = update(this.state.contactNumberArray, {
         $splice: [[index, 1, updatedComment]]
       });
-      this.setState({contactNumberArray : newData,selectedNumberTypeValue : did,selectedNumberTypeLabel : selObject.label});
+      this.setState({ contactNumberArray: newData, selectedNumberTypeValue: did, selectedNumberTypeLabel: selObject.label });
+    }
+  }
 
+  async onSavingContact(index, value) {
+    const detailsType = 'CONTACTTYPE';
+    const registerid = this.props.registerId;
+
+    const refs = []
+    refs.push(this.refs.numberType)
+    refs.push(this.refs.contactNumber)
+    const ret = mlFieldValidations(refs)
+    const countrycode = this.state.countryDetails && this.state.countryDetails.countryCode ? this.state.countryDetails.countryCode : '';
+    const contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
+    const isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
+    if (ret) {
+      toastr.error(ret);
+    } else if (countrycode && !isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
+    } else {
+      const contactList = this.state.contactNumberObject;
+      contactList.numberType = this.state.selectedNumberTypeValue,
+      contactList.numberTypeName = this.state.selectedNumberTypeLabel,
+      contactList.countryCode = this.refs.countryCode.value,
+      contactList.contactNumber = this.refs.contactNumber.value;
+
+
+      const response = await addRegistrationStep3Details(contactList, detailsType, registerid);
+      if (response) {
+        if (!response.success) {
+          toastr.error(response.result);
+          this.findRegistration();
+          this.props.registrationDetails();
+        } else {
+          this.findRegistration();
+          this.props.registrationDetails();
+          // this.refs.countryCode.value = "";
+          this.refs.contactNumber.value = '';
+          this.setState({ selectedNumberTypeValue: '', selectedNumberTypeLabel: '' });
+          toastr.success('Contact details added successfully');
+        }
+      }
+    }
+  }
+  async onEditingContact(index, value) {
+    const detailsType = 'CONTACTTYPE';
+    const registerid = this.props.registerId;
+
+    const registrationDetails = this.props.registrationInfo.contactInfo
+    const dbData = _underscore.pluck(registrationDetails, 'numberType') || [];
+    let contactExist = null;
+    if (this.state.selectedNumberTypeValue) {
+      contactExist = _underscore.contains(dbData, this.state.selectedNumberTypeValue);
     }
 
-  }
-
-   async onSavingContact(index,value){
-     let detailsType = "CONTACTTYPE";
-     let registerid = this.props.registerId;
-
-     let refs = []
-     refs.push(this.refs["numberType"])
-     refs.push(this.refs["contactNumber"])
-     let ret = mlFieldValidations(refs)
-     let countrycode=this.state.countryDetails&&this.state.countryDetails.countryCode?this.state.countryDetails.countryCode:"";
-     let contactNumber = this.refs["contactNumber"] && this.refs["contactNumber"].value;
-     let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
-     if (ret) {
-       toastr.error(ret);
-     }else if (countrycode && !isValidPhoneNumber) {
-         toastr.error('Please enter a valid contact number');
-     }else{
-       let contactList = this.state.contactNumberObject;
-       contactList.numberType = this.state.selectedNumberTypeValue,
-         contactList.numberTypeName = this.state.selectedNumberTypeLabel,
-         contactList.countryCode = this.refs["countryCode"].value,
-         contactList.contactNumber = this.refs["contactNumber"].value;
-
-
-       const response = await addRegistrationStep3Details(contactList, detailsType, registerid);
-       if (response) {
-         if (!response.success) {
-           toastr.error(response.result);
-           this.findRegistration();
-           this.props.registrationDetails();
-         } else {
-           this.findRegistration();
-           this.props.registrationDetails();
-           // this.refs.countryCode.value = "";
-           this.refs["contactNumber"].value = "";
-           this.setState({selectedNumberTypeValue: "", selectedNumberTypeLabel: ""});
-           toastr.success("Contact details added successfully");
-         }
-
-       }
-     }
-
-  }
-  async onEditingContact(index,value){
-    let detailsType = "CONTACTTYPE";
-    let registerid = this.props.registerId;
-
-      let registrationDetails = this.props.registrationInfo.contactInfo
-      let dbData = _underscore.pluck(registrationDetails, 'numberType') || [];
-      let contactExist = null;
-      if (this.state.selectedNumberTypeValue) {
-        contactExist = _underscore.contains(dbData, this.state.selectedNumberTypeValue);
-      }
-
-      if (contactExist) {
-        toastr.error("Contact TypeAlready Exists!!!!!");
-        this.findRegistration();
-        this.props.registrationDetails();
+    if (contactExist) {
+      toastr.error('Contact TypeAlready Exists!!!!!');
+      this.findRegistration();
+      this.props.registrationDetails();
+    } else {
+      const refs = []
+      refs.push(this.refs[`contactNumber${index}`])
+      refs.push(this.refs[`numberType${index}`])
+      const ret = mlFieldValidations(refs)
+      const countrycode = this.state.countryDetails && this.state.countryDetails.countryCode ? this.state.countryDetails.countryCode : '';
+      const contactNumber = this.refs[`contactNumber${index}`] && this.refs[`contactNumber${index}`].value;
+      const isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
+      if (ret) {
+        toastr.error(ret);
+      } else if (countrycode && !isValidPhoneNumber) {
+        toastr.error('Please enter a valid contact number');
       } else {
-        let refs = []
-        refs.push(this.refs["contactNumber" + index])
-        refs.push(this.refs["numberType" + index])
-        let ret = mlFieldValidations(refs)
-        let countrycode=this.state.countryDetails&&this.state.countryDetails.countryCode?this.state.countryDetails.countryCode:"";
-        let contactNumber =this.refs["contactNumber" + index] && this.refs["contactNumber" + index].value;
-        let isValidPhoneNumber = validatedPhoneNumber(countrycode, contactNumber);
-        if (ret) {
-          toastr.error(ret);
-        }else if (countrycode && !isValidPhoneNumber) {
-          toastr.error('Please enter a valid contact number');
-        }else{
-          let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
-          let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
-          let updatedComment = update(this.state.contactNumberArray[index], {
-            numberTypeName: {$set: labelValue},
-            numberType: {$set: valueSelected},
-            countryCode: {$set: this.refs["countryCode" + index].value},
-            contactNumber: {$set: this.refs["contactNumber" + index].value}
-          });
+        const labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
+        const valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
+        const updatedComment = update(this.state.contactNumberArray[index], {
+          numberTypeName: { $set: labelValue },
+          numberType: { $set: valueSelected },
+          countryCode: { $set: this.refs[`countryCode${index}`].value },
+          contactNumber: { $set: this.refs[`contactNumber${index}`].value }
+        });
 
-          let newData = update(this.state.contactNumberArray, {
-            $splice: [[index, 1, updatedComment]]
-          });
-          const response = await updateRegistrationInfoDetails(newData, detailsType, registerid);
-          if (response) {
-            if (!response.success) {
-              toastr.error(response.result);
-            } else {
-              toastr.success("Contact details updated successfully");
-            }
-            this.findRegistration();
-            this.props.registrationDetails();
+        const newData = update(this.state.contactNumberArray, {
+          $splice: [[index, 1, updatedComment]]
+        });
+        const response = await updateRegistrationInfoDetails(newData, detailsType, registerid);
+        if (response) {
+          if (!response.success) {
+            toastr.error(response.result);
+          } else {
+            toastr.success('Contact details updated successfully');
           }
+          this.findRegistration();
+          this.props.registrationDetails();
         }
-
       }
-
-
-
+    }
   }
-  async findRegistration(){
-    let registrationId=this.props.registerId;
+  async findRegistration() {
+    const registrationId = this.props.registerId;
     const response = await findRegistrationActionHandler(registrationId);
-    this.setState({loading:false,contactNumberArray:response.contactInfo});
-    //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
-    //return response;
+    this.setState({ loading: false, contactNumberArray: response.contactInfo });
+    // this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
+    // return response;
   }
-  tabSelected(index,value){
-    this.setState({selectedContactTab : true});
-    this.setState({activeTab : ""});
+  tabSelected(index, value) {
+    this.setState({ selectedContactTab: true });
+    this.setState({ activeTab: '' });
     this.findRegistration();
     this.props.registrationDetails();
   }
 
-  async fetchCountryCode(){
+  async fetchCountryCode() {
     const response = await findCountryCode(this.props.clusterId);
-    this.setState({"countryDetails" : response,loading:false});
+    this.setState({ countryDetails: response, loading: false });
   }
 
 
-
-  optionsBySelectNumberType(selectedIndex,handler,selectedObj){
-    this.setState({selectedNumberTypeValue : selectedIndex,selectedNumberTypeLabel:selectedObj.label});
+  optionsBySelectNumberType(selectedIndex, handler, selectedObj) {
+    this.setState({ selectedNumberTypeValue: selectedIndex, selectedNumberTypeLabel: selectedObj.label });
   }
-  async onDeleteContact(index,value){
-
-    let listArray = update(this.state.contactNumberArray, {
+  async onDeleteContact(index, value) {
+    const listArray = update(this.state.contactNumberArray, {
       $splice: [[index, 1]]
     });
 
-    let detailsType = "CONTACTTYPE";
-    let registerid = this.props.registerId;
-    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    if(response){
-      this.setState({loading:false,contactNumberArray:response.contactInfo});
+    const detailsType = 'CONTACTTYPE';
+    const registerid = this.props.registerId;
+    const response = await updateRegistrationInfoDetails(listArray, detailsType, registerid);
+    if (response) {
+      this.setState({ loading: false, contactNumberArray: response.contactInfo });
       this.findRegistration();
       this.props.registrationDetails();
-      this.setState({activeTab : "active"});
-      toastr.success("Contact details removed successfully");
+      this.setState({ activeTab: 'active' });
+      toastr.success('Contact details removed successfully');
     }
   }
 
-  async onClear(index,value){
-
-    this.refs["contactNumber"+index].value = "";
-/*
+  async onClear(index, value) {
+    this.refs[`contactNumber${index}`].value = '';
+    /*
     let updatedComment = update(this.state.contactNumberArray[index], {
       numberType :   {$set: ""}
     });
@@ -233,42 +225,38 @@ export default class ContactDetails extends React.Component{
     let registrationDetails = _.cloneDeep(this.state.defaultData);
     let omitData = _.omit(registrationDetails["contactInfo"][index], 'numberType') || [];
     registrationDetails["contactInfo"][index] = omitData
-    this.setState({defaultData : registrationDetails});*/
-
+    this.setState({defaultData : registrationDetails}); */
   }
 
 
+  isValidate() {
+    if (this.refs.contactNumber.value) {
+      return false
+    } else if (this.state.selectedNumberTypeLabel) {
+      return false
+    }
+    const newArray = this.state.contactNumberArray || []
+    for (let i = 0, len = newArray.length; i < len; i++) {
+      const newObject = {
+        contactNumber: this.refs[`contactNumber${i}`].value
+      }
+      const oldObject = {
+        contactNumber: newArray[i] && newArray[i].contactNumber
+      }
+      const differences = diff(oldObject, newObject);
+      const filteredObject = _underscore.where(differences, { kind: 'E' });
+      if (filteredObject && filteredObject.length > 0) {
+        return false
+      }
+    }
 
-  isValidate(){
-   if(this.refs["contactNumber"].value){
-     return false
-   }else if(this.state.selectedNumberTypeLabel){
-     return false
-   }else{
-     let newArray = this.state.contactNumberArray || []
-     for (var i = 0, len = newArray.length; i < len; i++) {
-       let newObject = {
-         contactNumber : this.refs["contactNumber" + i].value,
-       }
-       let oldObject = {
-         contactNumber : newArray[i]&&newArray[i].contactNumber,
-       }
-       var differences = diff(oldObject, newObject);
-       var filteredObject = _underscore.where(differences, {kind: "E"});
-       if(filteredObject && filteredObject.length>0){
-         return false
-       }
-     }
-   }
-   return true
+    return true
   }
 
 
-
-
-  render(){
-    let that=this;
-    let numberTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+  render() {
+    const that = this;
+    const numberTypeQuery = gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
      label
      value
@@ -276,85 +264,84 @@ export default class ContactDetails extends React.Component{
      }
      `;
 
-     let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:this.props.clusterId}}};
-      let countryPhoneCode =  that.state.countryDetails&&that.state.countryDetails.phoneNumberCode?that.state.countryDetails.phoneNumberCode:"";
-    let defaultCountryCode = this.state.countryDetails&&this.state.countryDetails.phoneNumberCode?this.state.countryDetails.phoneNumberCode:"";
-    const showLoader=this.state.loading;
+    const numberTypeOption = { options: { variables: { type: 'CONTACTTYPE', hierarchyRefId: this.props.clusterId } } };
+    const countryPhoneCode = that.state.countryDetails && that.state.countryDetails.phoneNumberCode ? that.state.countryDetails.phoneNumberCode : '';
+    const defaultCountryCode = this.state.countryDetails && this.state.countryDetails.phoneNumberCode ? this.state.countryDetails.phoneNumberCode : '';
+    const showLoader = this.state.loading;
 
     return (
 
       <div className="panel-body">
-        {showLoader===true?(<MlLoader/>):(
-        <div className="ml_tabs">
-          <ul  className="nav nav-pills">
-            <li className={this.state.activeTab}>
-              <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
-            </li>
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="ml_tabs">
+            <ul className="nav nav-pills">
+              <li className={this.state.activeTab}>
+                <a href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
+              </li>
 
-            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key){
+              {that.state.contactNumberArray && (that.state.contactNumberArray.map((options, key) => (
+                <li key={key} onClick={that.tabSelected.bind(that, key)}>
+                  <a data-toggle="pill" href={`#numberType${key}`} className="add-contact" >
+                    <FontAwesome name='minus-square' onClick={that.onDeleteContact.bind(that, key)}/>{options.numberTypeName}</a>
+                </li>)))}
+            </ul>
 
-              return(
-                <li key={key} onClick={that.tabSelected.bind(that,key)}>
-                  <a data-toggle="pill" href={'#numberType'+key} className="add-contact" >
-                    <FontAwesome name='minus-square' onClick={that.onDeleteContact.bind(that,key)}/>{options.numberTypeName}</a>
-                </li>)
-
-
-            }))}
-          </ul>
-
-          <div className="tab-content clearfix">
-            <div className={"tab-pane"+this.state.activeTab} id="contactA">
-              <div className="form-group">
-                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType" mandatory={true}
-                              className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
-                              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
-                              queryOptions={numberTypeOption} onSelect={this.optionsBySelectNumberType.bind(this)}
-                              isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
-              </div>
-              <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode} ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
-              </div>
-              <div className="form-group mandatory">
-                <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber"
-                      className="form-control float-label"data-required={true}
-                      data-errMsg="Phone Number is required"/>
-              </div>
-              <div className="ml_icon_btn">
-                <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
-                  className="ml ml-save"></span></a>
-                {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
-              </div>
-            </div>
-            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
-              return(<div className="tab-pane" id={'numberType'+key} key={key} >
+            <div className="tab-content clearfix">
+              <div className={`tab-pane${this.state.activeTab}`} id="contactA">
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType" mandatory={true}
-                                className="form-control float-label" selectedValue={options.numberType}
-                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
-                                queryOptions={numberTypeOption} onSelect={that.updateContactOptions.bind(that,key)}
-                                isDynamic={true} data-required={true} data-errMsg="Number Type is required"
-                                />
+                  <Moolyaselect
+                    multiSelect={false} ref="numberType" placeholder="Select NumberType" mandatory={true}
+                    className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
+                    valueKey={'value'} labelKey={'label'} queryType={'graphql'} query={numberTypeQuery}
+                    queryOptions={numberTypeOption} onSelect={this.optionsBySelectNumberType.bind(this)}
+                    isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
-                         className="form-control float-label" id="" disabled={true} />
+                  <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode} ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref={'contactNumber'+key} placeholder="Enter Number"  id="phoneNumber" defaultValue={options.contactNumber}
-                         className="form-control float-label" data-required={true} data-errMsg="Number is required" />
+                  <input
+                    type="text" ref={'contactNumber'} placeholder="Enter Number" id="phoneNumber"
+                    className="form-control float-label"data-required={true}
+                    data-errMsg="Phone Number is required"/>
                 </div>
                 <div className="ml_icon_btn">
-                  <a href="#" onClick={that.onEditingContact.bind(that,key)} className="save_btn"><span
+                  <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn" ><span
                     className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that,key)} ><span className="ml ml-delete"></span></a>
+                  {/* <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a> */}
                 </div>
-              </div>)
-            }))}
+              </div>
+              {that.state.contactNumberArray && (that.state.contactNumberArray.map((options, key) => (<div className="tab-pane" id={`numberType${key}`} key={key} >
+                <div className="form-group">
+                  <Moolyaselect
+                    multiSelect={false} ref={`numberType${key}`} placeholder="Select NumberType" mandatory={true}
+                    className="form-control float-label" selectedValue={options.numberType}
+                    valueKey={'value'} labelKey={'label'} queryType={'graphql'} query={numberTypeQuery}
+                    queryOptions={numberTypeOption} onSelect={that.updateContactOptions.bind(that, key)}
+                    isDynamic={true} data-required={true} data-errMsg="Number Type is required"
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text" placeholder="Enter Country Code" ref={`countryCode${key}`} defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
+                    className="form-control float-label" id="" disabled={true} />
+                </div>
+                <div className="form-group mandatory">
+                  <input
+                    type="text" ref={`contactNumber${key}`} placeholder="Enter Number" id="phoneNumber" defaultValue={options.contactNumber}
+                    className="form-control float-label" data-required={true} data-errMsg="Number is required" />
+                </div>
+                <div className="ml_icon_btn">
+                  <a href="#" onClick={that.onEditingContact.bind(that, key)} className="save_btn"><span
+                    className="ml ml-save"></span></a>
+                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that, key)} ><span className="ml ml-delete"></span></a>
+                </div>
+              </div>)))}
 
+            </div>
           </div>
-        </div>
         )}
       </div>
-    )}
+    )
+  }
 }

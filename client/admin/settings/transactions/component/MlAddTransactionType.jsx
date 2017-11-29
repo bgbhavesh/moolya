@@ -3,10 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addTransactionActionHandler} from '../actions/addTransactionTypeAction'
-let FontAwesome = require('react-fontawesome');
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-class MlAddTransaction extends React.Component{
+import { addTransactionActionHandler } from '../actions/addTransactionTypeAction'
+const FontAwesome = require('react-fontawesome');
+import { OnToggleSwitch, initalizeFloatLabel } from '../../../utils/formElemUtil';
+class MlAddTransaction extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -14,30 +14,27 @@ class MlAddTransaction extends React.Component{
     return this;
   }
   componentDidMount() {
-    OnToggleSwitch(false,true);
+    OnToggleSwitch(false, true);
     initalizeFloatLabel();
   }
 
   async addEventHandler() {
-    const resp=await this.createTransaction();
+    const resp = await this.createTransaction();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
+  }
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/settings/transactionTypeList");
-      else
-        toastr.error(response.result);
+    if (response) {
+      if (response.success) { FlowRouter.go('/admin/settings/transactionTypeList'); } else { toastr.error(response.result); }
     }
-  };
+  }
 
-  async  createTransaction() {
-    let TransactionDetails = {
+  async createTransaction() {
+    const TransactionDetails = {
       transactionName: this.refs.transactionName.value,
       transactionDisplayName: this.refs.transactionDisplayName.value,
       transactionDescription: this.refs.transactionDescription.value,
@@ -46,20 +43,19 @@ class MlAddTransaction extends React.Component{
     }
     const response = await addTransactionActionHandler(TransactionDetails)
     return response;
-
   }
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createTransaction.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.createTransaction.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/settings/transactionTypeList")
+        handler: async (event) => {
+          FlowRouter.go('/admin/settings/transactionTypeList')
         }
       }
     ]
@@ -72,13 +68,13 @@ class MlAddTransaction extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-              <div className="form-group">
+                <div className="form-group">
                   <input type="text" ref="transactionName" placeholder="Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <textarea  ref="transactionDescription" placeholder="About" className="form-control float-label" id=""></textarea>
+                  <textarea ref="transactionDescription" placeholder="About" className="form-control float-label" id=""></textarea>
                 </div>
-                </form>
+              </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
@@ -96,16 +92,17 @@ class MlAddTransaction extends React.Component{
                     <div className="slider"></div>
                   </label>
                 </div>
-                </form>
+              </form>
             </div>
           </div>
 
         </div>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+        <MlActionComponent
+          ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />
 
       </div>
     )
   }
-};
+}
 export default MlAddTransaction = formHandler()(MlAddTransaction);

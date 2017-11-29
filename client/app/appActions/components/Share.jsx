@@ -1,11 +1,10 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 export default class SharePopOver extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -18,7 +17,6 @@ export default class SharePopOver extends React.Component {
   }
 
   toggle() {
-
     this.setState({
       popoverOpen: !this.state.popoverOpen
     });
@@ -26,14 +24,13 @@ export default class SharePopOver extends React.Component {
 
 
   toggleButton() {
-
     this.setState({
       popoverTwoOpen: !this.state.popoverTwoOpen
     });
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <Popover placement="top" className="popover-lg" isOpen={this.state.popoverTwoOpen} target="pop_share" toggle={this.toggle}>
         <PopoverTitle>Share</PopoverTitle>
         <PopoverContent>

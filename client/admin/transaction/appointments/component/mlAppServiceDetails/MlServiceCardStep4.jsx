@@ -14,7 +14,6 @@ import ScrollArea from 'react-scrollbar';
 import { MoolyaToggleSwitch } from '../../../../utils/formElemUtil';
 
 export default class MlServiceCardStep4 extends React.Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
@@ -31,7 +30,7 @@ export default class MlServiceCardStep4 extends React.Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
   }
 
@@ -55,7 +54,8 @@ export default class MlServiceCardStep4 extends React.Component {
       servicePayment,
       facilitationCharge,
       taxStatus,
-      finalAmount } = this.props.data;
+      finalAmount
+    } = this.props.data;
     const { checkChargeStatus, calculateCharges, saveServicePaymentDetails } = this.props;
     return (
       <div className="step_form_wrap step1">
@@ -83,7 +83,8 @@ export default class MlServiceCardStep4 extends React.Component {
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label htmlFor="discount">Is Eligible for discount</label>
                 <span className={servicePayment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="discount" className="switch nocolor-switch">
-                  <input type="checkbox" id="discount"
+                  <input
+                    type="checkbox" id="discount"
                     checked={!servicePayment.isDiscount}
                     value={servicePayment.isDiscount} disabled />
                   <div className="slider"></div>
@@ -93,23 +94,27 @@ export default class MlServiceCardStep4 extends React.Component {
               <br className="brclear" />
               <div className="form-group">
                 <div className="input_types">
-                  <input id="amount" type="radio" name="amount"
-                    value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
+                  <input
+                    id="amount" type="radio" name="amount"
+                    value="Amount" checked={servicePayment.discountType === 'amount'}
                     disabled />
                   <label htmlFor="amount"><span><span></span></span>Amount
                     {servicePayment.discountType === 'amount' ?
-                      <input className="form-control inline_input"
+                      <input
+                        className="form-control inline_input"
                         disabled
                         value={servicePayment.discountValue} /> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percent" type="radio" name="percent"
-                    value="Percentage" checked={servicePayment.discountType === 'percent' ? true : false}
+                  <input
+                    id="percent" type="radio" name="percent"
+                    value="Percentage" checked={servicePayment.discountType === 'percent'}
                     disabled />
                   <label htmlFor="percent"><span><span></span></span>
                     Percentage{servicePayment.discountType === 'percent' ?
-                      <input className="form-control inline_input" disabled
+                      <input
+                        className="form-control inline_input" disabled
                         value={servicePayment.discountValue} /> : <div></div>}
                   </label>
                 </div>
@@ -117,14 +122,16 @@ export default class MlServiceCardStep4 extends React.Component {
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="taxinclusive" type="radio" name="taxinclusive"
-                    value="taxinclusive" checked={taxStatus === 'taxinclusive' ? true : false}
+                  <input
+                    id="taxinclusive" type="radio" name="taxinclusive"
+                    value="taxinclusive" checked={taxStatus === 'taxinclusive'}
                     disabled />
                   <label htmlFor="taxinclusive"><span><span></span></span>Tax Inclusive</label>
                 </div>
                 <div className="input_types">
-                  <input id="taxexclusive" type="radio" name="taxexclusive"
-                    value="taxexclusive" checked={taxStatus === 'taxexclusive' ? true : false}
+                  <input
+                    id="taxexclusive" type="radio" name="taxexclusive"
+                    value="taxexclusive" checked={taxStatus === 'taxexclusive'}
                     disabled />
                   <label htmlFor="taxexclusive"><span><span></span></span>Tax Exclusive </label>
                 </div>
@@ -133,7 +140,8 @@ export default class MlServiceCardStep4 extends React.Component {
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label htmlFor="promo">Is Applicable for PROMOCODE</label>
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="promo" className="switch nocolor-switch">
-                  <input id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
+                  <input
+                    id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
                     value={servicePayment.isPromoCodeApplicable} disabled />
                   <div className="slider"></div>
                 </label>
@@ -143,40 +151,45 @@ export default class MlServiceCardStep4 extends React.Component {
               <div className="form-group">
                 <label>Enter facilitation charges &nbsp; &nbsp;</label>
                 <div className="input_types">
-                  <input id="amount" type="radio"
+                  <input
+                    id="amount" type="radio"
                     name="facilitationamount"
-                    checked={facilitationCharge.type === 'amount' ? true : false}
-                    onChange={(event) => checkChargeStatus(event)}
+                    checked={facilitationCharge.type === 'amount'}
+                    onChange={event => checkChargeStatus(event)}
                     disabled={true}
                     value="amount" />
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount
                     {facilitationCharge.type === 'amount' ?
-                      <input className="form-control inline_input"
+                      <input
+                        className="form-control inline_input"
                         disabled={true}
                         defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
-                        onChange={(event) => calculateCharges(event)} /> : <div></div>
+                        onChange={event => calculateCharges(event)} /> : <div></div>
                     }
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percent" type="radio" disabled={true}
+                  <input
+                    id="percent" type="radio" disabled={true}
                     name="facilitationpercent"
-                    checked={facilitationCharge.type === 'percent' ? true : false}
-                    onChange={(event) => checkChargeStatus(event)}
+                    checked={facilitationCharge.type === 'percent'}
+                    onChange={event => checkChargeStatus(event)}
                     value="percent" />
                   <label htmlFor="radio2"><span><span></span></span>Percentage
                     {facilitationCharge.type === 'percent' ?
-                      <input className="form-control inline_input" disabled={true}
+                      <input
+                        className="form-control inline_input" disabled={true}
                         disabled={true}
                         defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
-                        onChange={(event) => calculateCharges(event)}
+                        onChange={event => calculateCharges(event)}
                       /> : <div></div>
                     }
                   </label>
                 </div>
               </div>
               <div className="form-group">
-                <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
+                <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input
+                  className="form-control inline_input medium_in"
                   value={finalAmount} disabled />
                 </label>
               </div>
@@ -191,4 +204,4 @@ export default class MlServiceCardStep4 extends React.Component {
       </div>
     )
   }
-};
+}

@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PortfolioLibrary from './PortfolioLibrary';
-import SharedLibrary from  './sharedLibrary';
+import SharedLibrary from './sharedLibrary';
 import { fetchSharedLibraryHandler } from '../../actions/mlLibraryActionHandler';
 import MlConnectionHeader from './connectionHeader'
 // import MlFilePreview from '../../../app/commons/components/MlFilePreview';
@@ -11,11 +11,11 @@ import MlVideoPlayer from '../../videoPlayer/MlVideoPlayer'
 export default class LibraryParentContainer extends Component {
   constructor(props) {
     super(props)
-    this.state ={
+    this.state = {
       // componentToLoad: props.componentToLoad ? props.componentToLoad : "",
-      data:[],
-      sharedFiles:[],
-      currentState:""
+      data: [],
+      sharedFiles: [],
+      currentState: ''
     }
 
     // this.previewClicked = this.previewClicked.bind(this);
@@ -40,11 +40,11 @@ export default class LibraryParentContainer extends Component {
   }
 
   sharedData(data) {
-    this.setState({data: data})
+    this.setState({ data })
   }
 
   showLibrary(response) {
-    this.setState({ componentToLoad: "MainLibrary" })
+    this.setState({ componentToLoad: 'MainLibrary' })
   }
 
   connectionManagement(userId) {
@@ -55,15 +55,19 @@ export default class LibraryParentContainer extends Component {
   async getSharedFiles(userId) {
     const resp = await fetchSharedLibraryHandler(userId)
     this.setState({ sharedFiles: resp, showSharedFiles: true })
-    this.setState({componentToLoad: "ShareLibrary" , data: resp})
+    this.setState({ componentToLoad: 'ShareLibrary', data: resp })
   }
 
   seeMoreData(toView, data, current, type) {
-    this.setState({ componentToLoad: toView, data: data, currentState: current, type: type})
+    this.setState({
+      componentToLoad: toView, data, currentState: current, type
+    })
   }
 
   seeMoreDataInShare(toView, data, current, type) {
-    this.setState({ componentToLoad: toView, data: data, currentState: current, type: type})
+    this.setState({
+      componentToLoad: toView, data, currentState: current, type
+    })
   }
 
   // closePreview(){
@@ -80,28 +84,26 @@ export default class LibraryParentContainer extends Component {
 
 
   render() {
-
-    switch(this.state.componentToLoad){
-
-      case "PortfolioLibrary":
+    switch (this.state.componentToLoad) {
+      case 'PortfolioLibrary':
         return (
-        <PortfolioLibrary
-          isAdmin={this.props.isAdmin}
-          tabName="Library"
-          client={this.props.client}
-          // previewClicked = {this.props.previewClicked}
-          key="7"
-          portfolioDetailsId={this.props.portfolioDetailsId}
-          getSelectedAnnotations={this.props.getSelectedAnnotations}
-          viewComponent={this.viewComponent.bind(this)}
-          seeMoreData={this.seeMoreData.bind(this)}
-        />
-  )
-      break;
+          <PortfolioLibrary
+            isAdmin={this.props.isAdmin}
+            tabName="Library"
+            client={this.props.client}
+            // previewClicked = {this.props.previewClicked}
+            key="7"
+            portfolioDetailsId={this.props.portfolioDetailsId}
+            getSelectedAnnotations={this.props.getSelectedAnnotations}
+            viewComponent={this.viewComponent.bind(this)}
+            seeMoreData={this.seeMoreData.bind(this)}
+          />
+        )
+        break;
 
 
-      case "MainLibrary":
-        return(
+      case 'MainLibrary':
+        return (
           <div className="app_main_wrap">
             <div className="app_padding_wrap">
               <PortfolioLibrary
@@ -117,7 +119,7 @@ export default class LibraryParentContainer extends Component {
         break;
 
 
-      case "ShareLibrary":
+      case 'ShareLibrary':
         return (
           <div className="app_main_wrap">
             <div className="app_padding_wrap">
@@ -151,11 +153,12 @@ export default class LibraryParentContainer extends Component {
       //   break;
 
 
-      case "preview":
+      case 'preview':
         return (
-          <div className={`modal fade bs-example-modal-sm library-popup ${this.props.fileType}pop`}
-               onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
-               aria-labelledby="mySmallModalLabel">
+          <div
+            className={`modal fade bs-example-modal-sm library-popup ${this.props.fileType}pop`}
+            onContextMenu={e => e.preventDefault()} tabIndex="-1" role="dialog"
+            aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -164,24 +167,25 @@ export default class LibraryParentContainer extends Component {
                 </div>
                 <div className="modal-body">
 
-                  {(this.props.fileType === 'image' || this.props.fileType === 'template')?<div className="img_scroll"><img src={this.props.filePath} /></div>:<div></div>}
+                  {(this.props.fileType === 'image' || this.props.fileType === 'template') ? <div className="img_scroll"><img src={this.props.filePath} /></div> : <div></div>}
 
-                  {this.props.fileType === 'video' ? <MlVideoPlayer videoAttributes={
-                    [{
-                      autoplay: true,
-                      controls: true,
-                      sources: [{ src: this.props.filePath, type: 'video/mp4' }]
-                    }]
-                  } /> : <div></div>}
+                  {this.props.fileType === 'video' ? <MlVideoPlayer
+                    videoAttributes={
+                      [{
+                        autoplay: true,
+                        controls: true,
+                        sources: [{ src: this.props.filePath, type: 'video/mp4' }]
+                      }]
+                    } /> : <div></div>}
 
-                  {this.props.fileType === 'document'? <iframe src={`https://docs.google.com/gview?url=${this.props.filePath}&embedded=true`} />:<div></div>}
+                  {this.props.fileType === 'document' ? <iframe src={`https://docs.google.com/gview?url=${this.props.filePath}&embedded=true`} /> : <div></div>}
 
                 </div>
               </div>
             </div>
           </div>
           // <MlFilePreview fileType = {this.state.fileType} filePath = {this.state.filePath}
-    // closePreview={this.closePreview}/>
+        // closePreview={this.closePreview}/>
         )
         break;
     }

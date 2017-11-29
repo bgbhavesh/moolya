@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlFilterTableConfig} from "../config/mlFilterConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlFilterTableConfig } from '../config/mlFilterConfig';
 
 export default class MlFiltersList extends Component {
-
   componentDidMount() {
   }
 

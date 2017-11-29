@@ -1,7 +1,7 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
-import _ from "lodash";
-import ScrollArea from "react-scrollbar";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import _ from 'lodash';
+import ScrollArea from 'react-scrollbar';
 
 export default class MlAppTermsAndConditions extends Component {
   constructor(props) {
@@ -9,12 +9,12 @@ export default class MlAppTermsAndConditions extends Component {
     return this;
   }
   componentDidUpdate() {
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.app_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.app_header').outerHeight(true)));
   }
 
   render() {
-    let that = this
+    const that = this
 
     return (
       <div className="app_main_wrap">
@@ -865,8 +865,8 @@ export default class MlAppTermsAndConditions extends Component {
                 </div>
               </div>
             </ScrollArea></div>
-          </div>
         </div>
+      </div>
     )
   }
-};
+}

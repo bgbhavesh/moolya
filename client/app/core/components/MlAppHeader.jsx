@@ -1,49 +1,51 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
-import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { logout } from '../../../../client/admin/layouts/header/actions/logoutAction';
+import { fetchUserDetailsHandler } from '../../commons/actions/fetchUserDetails';
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
-import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
-import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
+import VerticalBreadCrum from '../../breadcrum/component/VerticalBreadCrum';
+import DynamicBreadcrum from '../../breadcrum/component/DynamicBreadcrum';
 import _ from 'lodash';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 const today = new Date();
 const dd = today.getDate().toString();
-const mm = (today.getMonth()+1).toString(); //January is 0!
+const mm = (today.getMonth() + 1).toString(); // January is 0!
 const yy = today.getFullYear().toString().substr(-2)
-const curDate = dd+mm+yy;
+const curDate = dd + mm + yy;
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state={profilePic:"", profileProgress:0 }
+    this.state = { profilePic: '', profileProgress: 0 }
     this.regStatus = false;
-    this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
+    this.state = {
+      loading: false, data: {}, notifications: [], isAllowRegisterAs: true
+    }
 
     return this;
   }
 
   componentDidMount() {
-      var WinHeight = $(window).height();
-      var WinWidth = $(window).width();
-      $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
+    const WinHeight = $(window).height();
+    const WinWidth = $(window).width();
+    $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
 
 
-      $('.ml_app_profile h1').click(function () {
-          $(this).parent('.ml_app_profile').toggleClass('profile_open');
-        $('.overlay').toggle();
-      });
+    $('.ml_app_profile h1').click(function () {
+      $(this).parent('.ml_app_profile').toggleClass('profile_open');
+      $('.overlay').toggle();
+    });
 
 
-    $('.overlay').click(function(){
+    $('.overlay').click(function () {
       $('.ml_app_profile').removeClass('profile_open');
       $(this).hide();
     });
-    $('.ml_app_profile ol a').click(function(){
+    $('.ml_app_profile ol a').click(function () {
       $('.ml_app_profile ol a').removeClass('active');
       $(this).addClass('active');
     });
@@ -52,61 +54,60 @@ class MlAppProfileHeader extends Component {
       selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',
       trigger: 'hover',
       container: 'body'
-    }).on('click mousedown mouseup', '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])', function () {
+    }).on('click mousedown mouseup', '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])', () => {
       $('[data-toggle="tooltip"], [title]:not([data-toggle="popover"])').tooltip('destroy');
     });
-
   }
 
-  /**fetching user details from registration*/
-  componentWillMount(){
-    let user = Meteor.user();
-    let gImg = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
-    if( user && user.profile && user.profile.profileImage) {
+  /** fetching user details from registration */
+  componentWillMount() {
+    const user = Meteor.user();
+    const gImg = user && user.profile && user.profile.genderType === 'female' ? '/images/female.jpg' : '/images/def_profile.png';
+    if (user && user.profile && user.profile.profileImage) {
       this.setState({
-        profilePic:user.profile.profileImage == " "?gImg:generateAbsolutePath(user.profile.profileImage)
+        profilePic: user.profile.profileImage == ' ' ? gImg : generateAbsolutePath(user.profile.profileImage)
       });
-    }
-    else {
-      this.setState({profilePic:gImg});
+    } else {
+      this.setState({ profilePic: gImg });
     }
     const resp = this.fetchUserDetails();
     return resp
   }
 
-  /**this is having issues*/
+  /** this is having issues */
   async fetchUserDetails() {
     let profileProgress = 0;
-    let response = await fetchUserDetailsHandler()
-    let profileStatus = response.status;
-    if (response){
-      if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
+    const response = await fetchUserDetailsHandler()
+    const profileStatus = response.status;
+    if (response) {
+      if (response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB') {
         this.setState({
-          isAllowRegisterAs:false
+          isAllowRegisterAs: false
         });
       }
-      if(response && response.status) {
-        profileProgress = ((profileStatus ===  "REG_EMAIL_P") || (profileStatus === "REG_EMAIL_V") || (profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_ADM_REJ") )? 25 : ((profileStatus === "REG_SOFT_APR") || (profileStatus === "REG_KYC_U_KOFF") || (profileStatus === "REG_KYC_U_PEND") || (profileStatus === "REG_KYC_A_APR") || (profileStatus === "REG_KYC_U_KOFF" ) || (profileStatus === "REG_USER_APR")  ) ? 50 : ( (profileStatus === "PORT_LIVE_NOW") )? 100 : 0;
+      if (response && response.status) {
+        profileProgress = ((profileStatus === 'REG_EMAIL_P') || (profileStatus === 'REG_EMAIL_V') || (profileStatus === 'REG_SOFT_APR') || (profileStatus === 'REG_ADM_REJ')) ? 25 : ((profileStatus === 'REG_SOFT_APR') || (profileStatus === 'REG_KYC_U_KOFF') || (profileStatus === 'REG_KYC_U_PEND') || (profileStatus === 'REG_KYC_A_APR') || (profileStatus === 'REG_KYC_U_KOFF') || (profileStatus === 'REG_USER_APR')) ? 50 : ((profileStatus === 'PORT_LIVE_NOW')) ? 100 : 0;
       }
       console.log('profileProgress', profileProgress)
-      this.setState({data: response, loading:false, isCalendar: response.isCalendar, profileProgress: profileProgress })
+      this.setState({
+        data: response, loading: false, isCalendar: response.isCalendar, profileProgress
+      })
     }
   }
 
-  /**user logout function*/
+  /** user logout function */
   logoutUser() {
     logout();
   }
 
-  componentWillReceiveProps(user){
-    let gImg = user && user.user && user.user.profile && user.user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
-    if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
+  componentWillReceiveProps(user) {
+    const gImg = user && user.user && user.user.profile && user.user.profile.genderType === 'female' ? '/images/female.jpg' : '/images/def_profile.png';
+    if (user && user.user && user.user.profile && user.user.profile.profileImage) {
       this.setState({
-        profilePic:user.user.profile.profileImage == " "?gImg:generateAbsolutePath(user.user.profile.profileImage)
+        profilePic: user.user.profile.profileImage == ' ' ? gImg : generateAbsolutePath(user.user.profile.profileImage)
       });
-    }
-    else {
-      this.setState({profilePic:gImg});
+    } else {
+      this.setState({ profilePic: gImg });
     }
   }
 
@@ -114,20 +115,19 @@ class MlAppProfileHeader extends Component {
    * redirect to registration page
    * */
   registrationRedirect() {
-    if (this.state.data && !this.state.data.isAllowRegisterAs)
-      FlowRouter.go("/app/register/");
+    if (this.state.data && !this.state.data.isAllowRegisterAs) { FlowRouter.go('/app/register/'); }
   }
 
 
-  breadcrumbClicked(){
+  breadcrumbClicked() {
     this.props.breadcrumbClicked();
   }
 
   render() {
-    const {data} = this.state
-    let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
-    let path = Object.assign(FlowRouter._current.path);
-    let breadcrumType= path.includes('dashboard');
+    const { data } = this.state
+    const isDisabled = !!((!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs)));
+    const path = Object.assign(FlowRouter._current.path);
+    const breadcrumType = path.includes('dashboard');
 
     return (
       <div>
@@ -143,7 +143,7 @@ class MlAppProfileHeader extends Component {
         }
 
 
-        {/*{showLoader===true?(<MlLoader/>):(*/}
+        {/* {showLoader===true?(<MlLoader/>):( */}
 
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
@@ -154,31 +154,31 @@ class MlAppProfileHeader extends Component {
 
 
           <div className="ml_app_profile" role="navigation">
-          <div className="progress-circle" data-progress={this.state.profileProgress}></div>
-            <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
-          <ol>
+            <div className="progress-circle" data-progress={this.state.profileProgress}></div>
+            <h1 id="NavLbl" data-toggle="tooltip" title={`Welcome ${data && data.firstName ? data.firstName : 'User'}`} data-placement="left" style={{ backgroundImage: `url(${this.state.profilePic})`, backgroundPosition: 'center center' }}>{/* <span className="profile_context ml ml-ideator"></span> */}</h1>
+            <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile" className={activeProfileArcClass('myprofile')}>
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"Pending Registration":"Registration"} data-placement="right">
-                  <a href="" className={isDisabled?"disable":activeProfileArcClass('register')} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
-                  </span></a>
-                </li>
+              <li data-toggle={isDisabled ? '' : 'tooltip'} title={isDisabled ? 'Pending Registration' : 'Registration'} data-placement="right">
+                <a href="" className={isDisabled ? 'disable' : activeProfileArcClass('register')} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-pending_registrations">
+                </span></a>
+              </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile"  className={activeProfileArcClass('appSwitchProfile')}>
+                <a href="/app/appSwitchProfile" className={activeProfileArcClass('appSwitchProfile')}>
                   <span className="ml my-ml-switch_profile"></span>
                 </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""} className={activeProfileArcClass('registerAs')}><span className="ml my-ml-register_as"></span></a>
+                <a href={this.state.isAllowRegisterAs ? '/app/myProfile/registerAs' : ''} className={activeProfileArcClass('registerAs')}><span className="ml my-ml-register_as"></span></a>
               </li>
-              {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
-              {/*<a href=""><span className="ml my-ml-themes_10-01"></span></a>*/}
-              {/*</li>*/}
-              <li data-toggle={!this.state.isCalendar ?"":"tooltip"} title={!this.state.isCalendar ?"Pending Registration":"Calendar"} data-placement="top">
-                <a href={ !this.state.isCalendar ? "" : "/app/calendar"} className={!this.state.isCalendar ?"disable": activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
+              {/* <li data-toggle="tooltip" title="Themes" data-placement="top"> */}
+              {/* <a href=""><span className="ml my-ml-themes_10-01"></span></a> */}
+              {/* </li> */}
+              <li data-toggle={!this.state.isCalendar ? '' : 'tooltip'} title={!this.state.isCalendar ? 'Pending Registration' : 'Calendar'} data-placement="top">
+                <a href={ !this.state.isCalendar ? '' : '/app/calendar'} className={!this.state.isCalendar ? 'disable' : activeProfileArcClass('calendar')}><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
                 <a href="/app/task?tab=My Tasks" className={activeProfileArcClass('task')}><img className="profile-img" src="/images/7.png" /></a>
@@ -190,44 +190,60 @@ class MlAppProfileHeader extends Component {
           </div>
           <div className="clearfix"></div>
           <span className="pull-right context_name">
-          {data && data.headerCommunityDisplay?data.headerCommunityDisplay:''}
+            {data && data.headerCommunityDisplay ? data.headerCommunityDisplay : ''}
           </span>
         </div>
-          {/*)}*/}
+        {/* )} */}
       </div>
     )
   }
 }
 
-export default MlAppHeader = createContainer(props => {
-  return {
-    user: Meteor.user(),
-    breadcrumbClicked : props.breadcrumbClicked
-  };
-}, MlAppProfileHeader);
+export default MlAppHeader = createContainer(props => ({
+  user: Meteor.user(),
+  breadcrumbClicked: props.breadcrumbClicked
+}), MlAppProfileHeader);
 
 /**
  * This method returns the className if the option is active
  * @param type(String: type of profile option.myProfile/registerAs,calendar,myTask)
  * returns result of className as active or null
  */
-var activeProfileArcClass=function(type,params){
-  var currentPath = Object.assign(FlowRouter._current.path);
-  var path = (currentPath.split('?')[0]).split('/');
-  path=_.compact(path);//remove empty strings
-  _.pull(path, 'app');//pull 'app' route
-  var className='';
-  var profileLinkMapObject={'portfolio':'myprofile','myprofile':'myprofile','addressBook':'myprofile','myConnections':'myprofile','myOffice':'myprofile','addOffice':'myprofile','editOffice':'myprofile','library':'myprofile','myAppointment':'myprofile','termsConditions':'myprofile','privacy':'myprofile','previewProfile':'myprofile',
-                            'register':'register',
-                            'appSwitchProfile':'appSwitchProfile',
-                            'registerAs':'registerAs',
-                            'calendar':'calendar','shareCalendar':'calendar','officeCalendar':'calendar','notification':'calendar','manageSchedule':'calendar','settings':'calendar',
-                            'task':'task'};
-   _.every(path,function(i){
-     var profilePath=profileLinkMapObject[i];
-     if(profilePath===type){className='active'; return false;};
-     return true;
-    });
+var activeProfileArcClass = function (type, params) {
+  const currentPath = Object.assign(FlowRouter._current.path);
+  let path = (currentPath.split('?')[0]).split('/');
+  path = _.compact(path);// remove empty strings
+  _.pull(path, 'app');// pull 'app' route
+  let className = '';
+  const profileLinkMapObject = {
+    portfolio: 'myprofile',
+    myprofile: 'myprofile',
+    addressBook: 'myprofile',
+    myConnections: 'myprofile',
+    myOffice: 'myprofile',
+    addOffice: 'myprofile',
+    editOffice: 'myprofile',
+    library: 'myprofile',
+    myAppointment: 'myprofile',
+    termsConditions: 'myprofile',
+    privacy: 'myprofile',
+    previewProfile: 'myprofile',
+    register: 'register',
+    appSwitchProfile: 'appSwitchProfile',
+    registerAs: 'registerAs',
+    calendar: 'calendar',
+    shareCalendar: 'calendar',
+    officeCalendar: 'calendar',
+    notification: 'calendar',
+    manageSchedule: 'calendar',
+    settings: 'calendar',
+    task: 'task'
+  };
+  _.every(path, (i) => {
+    const profilePath = profileLinkMapObject[i];
+    if (profilePath === type) { className = 'active'; return false; }
+    return true;
+  });
   return className;
 }
 

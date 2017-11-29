@@ -6,17 +6,16 @@
 
 // import NPM module(s)
 import React, { Component } from 'react';
-import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
+import Moolyaselect from '../../../commons/components/MlAppSelectWrapper';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag';
-import moment from "moment";
-var Select = require('react-select');
+import moment from 'moment';
+const Select = require('react-select');
 import { graphql } from 'react-apollo';
- import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount'
+import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount'
 import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
-
 
 
 // import custom method(s) and component(s)
@@ -27,10 +26,11 @@ import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/m
 // import Moolyaselect from '../../../../commons/components/MlAppSelectWrapper';
 
 class Step1 extends Component {
-
   constructor(props) {
     super(props);
-    this.state={service:"", serviceSeeker:[], seeker: this.props.seviceSeeker, orderId:""};
+    this.state = {
+      service: '', serviceSeeker: [], seeker: this.props.seviceSeeker, orderId: ''
+    };
     this.testQuery.bind(this);
     this.saveData.bind(this);
   }
@@ -61,32 +61,31 @@ class Step1 extends Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.app_header').outerHeight(true)));
     this.testQuery();
   }
 
   saveData() {
-    let date = this.props.appointmentDate;
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let data = {
-        orderId: this.state.orderId,
-        sessionId: "ddd ",
-        hours: hours,
-        minutes: minutes,
-        day: day,
-        month: month,
-        year: year
-}
-this.bookDetails(data)
-
+    const date = this.props.appointmentDate;
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const data = {
+      orderId: this.state.orderId,
+      sessionId: 'ddd ',
+      hours,
+      minutes,
+      day,
+      month,
+      year
+    }
+    this.bookDetails(data)
   }
 
-   bookDetails(data) {
+  bookDetails(data) {
     this.props.bookDetails(data)
 
 
@@ -114,70 +113,68 @@ this.bookDetails(data)
    */
 
   componentWillReceiveProps(newProps) {
-    this.setState({serviceId: newProps.serviceId})
-    if(newProps.serviceId) {
+    this.setState({ serviceId: newProps.serviceId })
+    if (newProps.serviceId) {
       this.testQuery()
     }
   }
 
- async testQuery() {
-    if(this.props.serviceId) {
+  async testQuery() {
+    if (this.props.serviceId) {
       const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId);
-      this.setState({ serviceSeeker: resp})
+      this.setState({ serviceSeeker: resp })
     } else {
       const resp = await fetchServiceSeekerHandler(this.props.profileId);
-      this.setState({ serviceSeeker: resp})
+      this.setState({ serviceSeeker: resp })
     }
   }
 
   serviceSeeker() {
-    let seekers =  this.state.serviceSeeker || []
-    let seekerList = [];
-    seekers.map(function(data){
-      seekerList.push({value: data.orderId, label: data.name + ' ' + data.transId })
-      })
+    const seekers = this.state.serviceSeeker || []
+    const seekerList = [];
+    seekers.map((data) => {
+      seekerList.push({ value: data.orderId, label: `${data.name} ${data.transId}` })
+    })
     return seekerList;
   }
 
-  onSelectSeeker (selectedSeeker) {
-    let that = this;
-    let seekers =  this.state.serviceSeeker || [];
-    let currentSeeker = seekers.find(function (data) {
-      return data.orderId == selectedSeeker.value;
-    });
+  onSelectSeeker(selectedSeeker) {
+    const that = this;
+    const seekers = this.state.serviceSeeker || [];
+    const currentSeeker = seekers.find(data => data.orderId == selectedSeeker.value);
     // seekers.map(function(data, index) {
     //   if(selectedSeeker.value === data.transId){
 
-      // }
+    // }
     // })
     that.setState({
-      orderId:  selectedSeeker.value,
+      orderId: selectedSeeker.value,
       seeker: selectedSeeker,
       service: currentSeeker ? currentSeeker.serviceId : ''
-    }, function () {
-      let date = this.props.appointmentDate;
-      let day = date.getDate();
-      let month = date.getMonth();
-      let year = date.getFullYear();
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let data = {
+    }, () => {
+      const date = this.props.appointmentDate;
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const data = {
         orderId: this.state.orderId,
-        sessionId: "",
-        hours: hours,
-        minutes: minutes,
-        day: day,
-        month: month,
-        year: year
+        sessionId: '',
+        hours,
+        minutes,
+        day,
+        month,
+        year
       };
-      console.log('Data :',data);
+      console.log('Data :', data);
       this.bookDetails(data);
       this.props.selectedServiceSeeker(selectedSeeker);
       this.props.setSessionId('');
-      if(currentSeeker.serviceId){
+      if (currentSeeker.serviceId) {
         this.props.selectedService(currentSeeker.serviceId);
       }
-    }.bind(this));
+    });
 
     // this.saveData()
   }
@@ -185,14 +182,14 @@ this.bookDetails(data)
   selectedService(value) {
     this.setState({
       service: value,
-      seeker:''
+      seeker: ''
     });
     this.props.selectedService(value)
   }
 
 
-  render(){
-    let getServiceQuery = gql`
+  render() {
+    const getServiceQuery = gql`
       query($profileId:String) {
         data:fetchServicesForAppointments(profileId: $profileId) {
           value:_id
@@ -200,7 +197,7 @@ this.bookDetails(data)
         }
       }
     `;
-    let serviceOption = {
+    const serviceOption = {
       options: {
         variables: {
           profileId: this.props.profileId
@@ -208,7 +205,7 @@ this.bookDetails(data)
       }
     };
 
-    const {onChangeSteps, isTaskComponent} = this.props;
+    const { onChangeSteps, isTaskComponent } = this.props;
     return (
       <div className="step_form_wrap step1">
         <Scrollbars
@@ -222,10 +219,11 @@ this.bookDetails(data)
                   <div className="form-group switch_wrap switch_names">
                     <span className="state_label">Service Card</span>
                     <label className="switch nocolor-switch">
-                      <input type="checkbox"
-                             value="1"
-                             checked={isTaskComponent}
-                             onChange={() => onChangeSteps()} />
+                      <input
+                        type="checkbox"
+                        value="1"
+                        checked={isTaskComponent}
+                        onChange={() => onChangeSteps()} />
                       <div className="slider"></div>
                     </label>
                     <span className="state_label acLabel">Task</span>
@@ -240,35 +238,37 @@ this.bookDetails(data)
                     </label>
                   </div>
                   <div className="form-group" id="date-time">
-                    <input  type="text" className="form-control" placeholder= "Valid Till" value={moment(this.props.serviceBasicInfo.validTill).format('DD-MM-YYYY')}/>
+                    <input type="text" className="form-control" placeholder= "Valid Till" value={moment(this.props.serviceBasicInfo.validTill).format('DD-MM-YYYY')}/>
                     <FontAwesome name="calendar" className="password_icon"/>
                   </div>
                   <div className="form-group">
                     <label>Duration: &nbsp;
-                      <input type="text"
-                             className="form-control inline_input" value={this.props.serviceBasicInfo.duration.hours}
-                             disabled={true}/> Hours
-                      <input type="text"
-                             className="form-control inline_input" value={this.props.serviceBasicInfo.duration.minutes}
-                             disabled={true}/> Mins
+                      <input
+                        type="text"
+                        className="form-control inline_input" value={this.props.serviceBasicInfo.duration.hours}
+                        disabled={true}/> Hours
+                      <input
+                        type="text"
+                        className="form-control inline_input" value={this.props.serviceBasicInfo.duration.minutes}
+                        disabled={true}/> Mins
                     </label>
                   </div>
 
-                  {/*<div className="form-group">*/}
-                    {/*<input className="form-control float-label" placeholder="Task name"/>*/}
-                  {/*</div>*/}
-                  {/*<div className="form-group">*/}
-                    {/*<select className="form-control"><option>Select the task to be done</option></select>*/}
-                  {/*</div>*/}
-                  {/*<div className="form-group">*/}
-                    {/*<div className="input_types">*/}
-                      {/*<input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>Offline</label>*/}
-                    {/*</div>*/}
-                    {/*<div className="input_types">*/}
-                      {/*<input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Online</label>*/}
-                    {/*</div>*/}
-                    {/*<br className="brclear"/>*/}
-                  {/*</div>*/}
+                  {/* <div className="form-group"> */}
+                  {/* <input className="form-control float-label" placeholder="Task name"/> */}
+                  {/* </div> */}
+                  {/* <div className="form-group"> */}
+                  {/* <select className="form-control"><option>Select the task to be done</option></select> */}
+                  {/* </div> */}
+                  {/* <div className="form-group"> */}
+                  {/* <div className="input_types"> */}
+                  {/* <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>Offline</label> */}
+                  {/* </div> */}
+                  {/* <div className="input_types"> */}
+                  {/* <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Online</label> */}
+                  {/* </div> */}
+                  {/* <br className="brclear"/> */}
+                  {/* </div> */}
 
 
                 </div>
@@ -297,21 +297,21 @@ this.bookDetails(data)
                     />
                   </div>
                   <div className="form-group">
-                    <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
+                    <input type="text" className="form-control" placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
                   </div>
-                  {/*<div className="form-group">*/}
-                    {/*<div className="input_types">*/}
-                      {/*<label>Set Priority</label>*/}
-                      {/*<input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label>*/}
-                    {/*</div>*/}
-                    {/*<div className="input_types">*/}
-                      {/*<input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label>*/}
-                    {/*</div>*/}
-                    {/*<div className="input_types">*/}
-                      {/*<input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label>*/}
-                    {/*</div>*/}
-                    {/*<br className="brclear"/>*/}
-                  {/*</div>*/}
+                  {/* <div className="form-group"> */}
+                  {/* <div className="input_types"> */}
+                  {/* <label>Set Priority</label> */}
+                  {/* <input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label> */}
+                  {/* </div> */}
+                  {/* <div className="input_types"> */}
+                  {/* <input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label> */}
+                  {/* </div> */}
+                  {/* <div className="input_types"> */}
+                  {/* <input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label> */}
+                  {/* </div> */}
+                  {/* <br className="brclear"/> */}
+                  {/* </div> */}
                   <div className="form-group">
                     <label>
                       Service expires &nbsp;
@@ -321,67 +321,67 @@ this.bookDetails(data)
                   </div>
                 </div>
                 <br className="brclear"/>
-                {/*<div className="panel panel-default library-wrap">*/}
-                  {/*<div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div>*/}
-                  {/*<div className="panel-body nopadding">*/}
-                    {/*<div className="col-md-4 att_groups nopadding">*/}
-                    {/*</div>*/}
-                    {/*<div className="col-md-8 att_members">*/}
-                      {/*<ul className="users_list">*/}
-                        {/*<li>*/}
-                          {/*<a href="">*/}
-                            {/*<img src="/images/p_3.jpg" /><br />*/}
-                            {/*<div className="tooltiprefer">*/}
-                              {/*<span>Venu<br/>Rs.3000</span>*/}
-                            {/*</div>*/}
-                          {/*</a>*/}
-                        {/*</li>*/}
-                        {/*<li>*/}
-                          {/*<a href="">*/}
-                            {/*<img src="/images/p_34.jpg" /><br />*/}
-                            {/*<div className="tooltiprefer">*/}
-                              {/*<span>Ramya<br/>Rs.5000</span>*/}
-                            {/*</div>*/}
-                          {/*</a>*/}
-                        {/*</li>*/}
-                        {/*<li>*/}
-                          {/*<a href="">*/}
-                            {/*<img src="/images/p_13.jpg" /><br />*/}
-                            {/*<div className="tooltiprefer">*/}
-                              {/*<span>Sameer<br/>Rs.8000</span>*/}
-                            {/*</div>*/}
-                          {/*</a>*/}
-                        {/*</li>*/}
-                        {/*<li>*/}
-                          {/*<a href="">*/}
-                            {/*<img src="/images/p_1.jpg" /><br />*/}
-                            {/*<div className="tooltiprefer">*/}
-                              {/*<span>Usha<br/>Rs.6000</span>*/}
-                            {/*</div>*/}
-                          {/*</a>*/}
-                        {/*</li>*/}
-                      {/*</ul>*/}
-                    {/*</div>*/}
-                  {/*</div>*/}
-                {/*</div>*/}
-                {/*<div className="form-group pull-left">*/}
-                  {/*<div className="input_types">*/}
-                    {/*<input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>*/}
-                  {/*</div>*/}
-                  {/*<div className="input_types">*/}
-                    {/*<input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label>*/}
-                  {/*</div>*/}
-                  {/*<br className="brclear"/>*/}
-                {/*</div>*/}
+                {/* <div className="panel panel-default library-wrap"> */}
+                {/* <div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div> */}
+                {/* <div className="panel-body nopadding"> */}
+                {/* <div className="col-md-4 att_groups nopadding"> */}
+                {/* </div> */}
+                {/* <div className="col-md-8 att_members"> */}
+                {/* <ul className="users_list"> */}
+                {/* <li> */}
+                {/* <a href=""> */}
+                {/* <img src="/images/p_3.jpg" /><br /> */}
+                {/* <div className="tooltiprefer"> */}
+                {/* <span>Venu<br/>Rs.3000</span> */}
+                {/* </div> */}
+                {/* </a> */}
+                {/* </li> */}
+                {/* <li> */}
+                {/* <a href=""> */}
+                {/* <img src="/images/p_34.jpg" /><br /> */}
+                {/* <div className="tooltiprefer"> */}
+                {/* <span>Ramya<br/>Rs.5000</span> */}
+                {/* </div> */}
+                {/* </a> */}
+                {/* </li> */}
+                {/* <li> */}
+                {/* <a href=""> */}
+                {/* <img src="/images/p_13.jpg" /><br /> */}
+                {/* <div className="tooltiprefer"> */}
+                {/* <span>Sameer<br/>Rs.8000</span> */}
+                {/* </div> */}
+                {/* </a> */}
+                {/* </li> */}
+                {/* <li> */}
+                {/* <a href=""> */}
+                {/* <img src="/images/p_1.jpg" /><br /> */}
+                {/* <div className="tooltiprefer"> */}
+                {/* <span>Usha<br/>Rs.6000</span> */}
+                {/* </div> */}
+                {/* </a> */}
+                {/* </li> */}
+                {/* </ul> */}
+                {/* </div> */}
+                {/* </div> */}
+                {/* </div> */}
+                {/* <div className="form-group pull-left"> */}
+                {/* <div className="input_types"> */}
+                {/* <input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label> */}
+                {/* </div> */}
+                {/* <div className="input_types"> */}
+                {/* <input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label> */}
+                {/* </div> */}
+                {/* <br className="brclear"/> */}
+                {/* </div> */}
                 <div className="pull-right">
                   <div className="ml_btn large_btn">
-                    <a href="" className="save_btn" style={{'width': 'auto'}}>Total Amount {this.props.serviceBasicInfo.payment && this.props.serviceBasicInfo.payment.currencyType ? this.props.serviceBasicInfo.payment.currencyType: "Rs."}{this.props.serviceBasicInfo.totalAmount}/-</a>
+                    <a href="" className="save_btn" style={{ width: 'auto' }}>Total Amount {this.props.serviceBasicInfo.payment && this.props.serviceBasicInfo.payment.currencyType ? this.props.serviceBasicInfo.payment.currencyType : 'Rs.'}{this.props.serviceBasicInfo.totalAmount}/-</a>
                   </div>
                 </div>
                 <br className="brclear"/><br className="brclear"/>
-                {/*<div className="ml_btn btn_wrap">*/}
-                  {/*<div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a>*/}
-                {/*</div>*/}
+                {/* <div className="ml_btn btn_wrap"> */}
+                {/* <div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a> */}
+                {/* </div> */}
               </div>
             </div>
           </div>
@@ -389,6 +389,6 @@ this.bookDetails(data)
       </div>
     )
   }
-};
+}
 
 export default Step1;

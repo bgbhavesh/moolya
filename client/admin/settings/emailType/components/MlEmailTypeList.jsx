@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlEmailTypeTableConfig} from "../config/mlEmailTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlEmailTypeTableConfig } from '../config/mlEmailTypeConfig';
 export default class MlEmailTypesList extends Component {
-
   componentDidMount() {
   }
 

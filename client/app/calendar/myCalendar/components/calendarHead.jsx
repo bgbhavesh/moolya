@@ -2,17 +2,16 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
-export default class CalenderHead extends React.Component{
-  componentDidMount()
-  {
-    $('.users_list li').click(function(){
-      if($(this).next('li').hasClass('sub_list_wrap')) {
+export default class CalenderHead extends React.Component {
+  componentDidMount() {
+    $('.users_list li').click(function () {
+      if ($(this).next('li').hasClass('sub_list_wrap')) {
         $(this).toggleClass('active_user')
         $(this).next('.sub_list_wrap').toggleClass('hidden_list');
       }
     });
   }
-  render(){
+  render() {
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
@@ -108,4 +107,4 @@ export default class CalenderHead extends React.Component{
       </div>
     )
   }
-};
+}

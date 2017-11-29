@@ -1,19 +1,19 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
-import {findServiceProviderServicesActionHandler} from "../../../actions/findPortfolioServiceProviderDetails";
-import _ from "lodash";
-import MlLoader from "../../../../../../commons/components/loader/loader";
-import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
-import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
-import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../utils/formElemUtil';
+import { findServiceProviderServicesActionHandler } from '../../../actions/findPortfolioServiceProviderDetails';
+import _ from 'lodash';
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails';
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations';
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator';
+import { validateUserForAnnotation } from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
 
-import MlFunderServicesList from "../../Funders/edit/Services/Container/MlFunderServicesList";
+import MlFunderServicesList from '../../Funders/edit/Services/Container/MlFunderServicesList';
 
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 export default class MlServiceProviderViewServices extends Component {
   constructor(props, context) {
@@ -21,7 +21,7 @@ export default class MlServiceProviderViewServices extends Component {
     this.state = {
       data: {},
       privateKey: {},
-      isUserValidForAnnotation:false,
+      isUserValidForAnnotation: false,
       loading: true
     }
     this.fetchPortfolioDetails.bind(this);
@@ -39,8 +39,8 @@ export default class MlServiceProviderViewServices extends Component {
   componentDidMount() {
     // OnLockSwitch();
     // dataVisibilityHandler();
-    //this.initalizeAnnotaor()
-    var WinHeight = $(window).height();
+    // this.initalizeAnnotaor()
+    const WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
     this.fetchPortfolioDetails();
     this.validateUserForAnnotation();
@@ -55,94 +55,90 @@ export default class MlServiceProviderViewServices extends Component {
    * fetch data handler
    * */
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
     const response = await findServiceProviderServicesActionHandler(portfolioDetailsId);
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({ loading: false, data: response });
       this.fetchAnnotations();
     }
-    _.each(response.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(response.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"serviceProviderServices", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'serviceProviderServices', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'serviceProviderServices');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "serviceProviderServices");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(resp||[], function (value) {
+    _.each(resp || [], (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
-    if(quotes && quotes.length>0){
+    if (quotes && quotes.length > 0) {
       this.state.content.annotator('loadAnnotations', quotes);
       return response
-    }else {
-      return response
     }
+    return response
   }
 
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -154,8 +150,8 @@ export default class MlServiceProviderViewServices extends Component {
    * UI to be render
    * */
   render() {
-    let description = this.state.data.servicesDescription ? this.state.data.servicesDescription : ''
-    let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
+    const description = this.state.data.servicesDescription ? this.state.data.servicesDescription : ''
+    const isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
     const showLoader = this.state.loading;
     console.log(this.props);
     return (
@@ -163,9 +159,9 @@ export default class MlServiceProviderViewServices extends Component {
         <div className="clearfix"/>
         <MlFunderServicesList
           myPortfolio={this.props.myPortfolio}
-          createServiceMode={this.props.createServiceMode ? this.props.createServiceMode : ""}
+          createServiceMode={this.props.createServiceMode ? this.props.createServiceMode : ''}
           portfolioDetailsId={this.props.portfolioDetailsId} />
       </div>
     )
   }
-};
+}

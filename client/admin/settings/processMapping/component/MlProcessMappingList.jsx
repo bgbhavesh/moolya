@@ -1,9 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlProcessTableConfig} from "../config/mlProcessTableConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlProcessTableConfig } from '../config/mlProcessTableConfig';
 export default class MlProcessMappingList extends Component {
-
   componentDidMount() {
   }
 

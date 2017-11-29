@@ -1,80 +1,81 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-var BarTooltip = require('react-d3-tooltip').BarTooltip;
-var BarGroupTooltip = require('react-d3-tooltip').BarGroupTooltip;
-var LineTooltip = require('react-d3-tooltip').LineTooltip;
-var PieTooltip = require('react-d3-tooltip').PieTooltip;
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
+import _ from 'lodash';
+const FontAwesome = require('react-fontawesome');
+const BarTooltip = require('react-d3-tooltip').BarTooltip;
+const BarGroupTooltip = require('react-d3-tooltip').BarGroupTooltip;
+const LineTooltip = require('react-d3-tooltip').LineTooltip;
+const PieTooltip = require('react-d3-tooltip').PieTooltip;
 import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
-import {fetchDetailsCompanyChartsActionHandler} from '../../../actions/findCompanyPortfolioDetails'
+import { fetchDetailsCompanyChartsActionHandler } from '../../../actions/findCompanyPortfolioDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 import MlNoDataContainer from '../../../../../../commons/containers/MlNoDataContainer.jsx';
 
-export default class MlCompanyViewChart extends React.Component{
-  constructor(props, context){
+export default class MlCompanyViewChart extends React.Component {
+  constructor(props, context) {
     super(props)
-    this.state = {companyPortfolio:{},
-      startupCharts:[],startupChartsList:[]}
+    this.state = {
+      companyPortfolio: {},
+      startupCharts: [],
+      startupChartsList: []
+    }
     this.fetchPortfolioChartDetails.bind(this)
     this.getEmploymentOfCompany.bind(this)
     this.getProfitRevenueLiability.bind(this)
     this.getReviewOfCompany.bind(this)
     this.getEmployeeBreakUpDepartment.bind(this)
-
   }
 
-  componentWillMount(){
+  componentWillMount() {
     const resp = this.fetchPortfolioChartDetails();
     return resp
   }
 
-  componentDidUpdate(){
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    var className = this.props.isAdmin?"admin_header":"app_header"
+  componentDidUpdate() {
+    const WinWidth = $(window).width();
+    const WinHeight = $(window).height();
+    const className = this.props.isAdmin ? 'admin_header' : 'app_header'
     // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    $('.tab_wrap_scroll').height(WinHeight - ($(`.${className}`).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $('.tab_wrap_scroll').mCustomScrollbar({ theme: 'minimal-dark' });
     }
   }
 
   async fetchPortfolioChartDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchDetailsCompanyChartsActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, startupCharts: response, startupChartsList: response});
+      this.setState({ loading: false, startupCharts: response, startupChartsList: response });
       this.getEmploymentOfCompany(response);
       this.getProfitRevenueLiability(response);
       this.getReviewOfCompany(response);
       this.getEmployeeBreakUpDepartment(response);
     }
-
   }
 
 
-  getEmploymentOfCompany(response){
-    let emplymentData = response&&response.employmentOfCompanyChart?response.employmentOfCompanyChart:[]
-    var actualData = emplymentData&&emplymentData.length>0?emplymentData:[]
-    var barChartData = [];
-    actualData&&actualData.map(function (data) {
-      var cData = {}
-      let fromYear = data&&data.eofFromYear?data.eofFromYear:0
-      let toYear = data&&data.eofToYear?data.eofToYear:0
-      cData['year'] = Number(fromYear)+'-'+Number(toYear)
-      cData['number'] = data.eofNumberOfEmployment?data.eofNumberOfEmployment:0;
+  getEmploymentOfCompany(response) {
+    const emplymentData = response && response.employmentOfCompanyChart ? response.employmentOfCompanyChart : []
+    const actualData = emplymentData && emplymentData.length > 0 ? emplymentData : []
+    const barChartData = [];
+    actualData && actualData.map((data) => {
+      const cData = {}
+      const fromYear = data && data.eofFromYear ? data.eofFromYear : 0
+      const toYear = data && data.eofToYear ? data.eofToYear : 0
+      cData.year = `${Number(fromYear)}-${Number(toYear)}`
+      cData.number = data.eofNumberOfEmployment ? data.eofNumberOfEmployment : 0;
       barChartData.push(cData)
     })
 
-    this.setState({employmentData:barChartData})
+    this.setState({ employmentData: barChartData })
   }
 
-  getProfitRevenueLiability(response){
-    let revenueData = response&&response.profitRevenueLiabilityChart?response.profitRevenueLiabilityChart:[]
-    var actualData = revenueData&&revenueData.length>0?revenueData:[]
+  getProfitRevenueLiability(response) {
+    const revenueData = response && response.profitRevenueLiabilityChart ? response.profitRevenueLiabilityChart : []
+    const actualData = revenueData && revenueData.length > 0 ? revenueData : []
     /*  var actualData = [
      {
      entity:"Profit",
@@ -158,23 +159,23 @@ export default class MlCompanyViewChart extends React.Component{
      valueType:"Percentage",
      value:50
      }
-     ]*/
+     ] */
 
-    var barChartData = [];
-    actualData&&actualData.map(function (data) {
-      var cData = {}
-      cData['value'] = data.prlValue?data.prlValue:null
+    const barChartData = [];
+    actualData && actualData.map((data) => {
+      const cData = {}
+      cData.value = data.prlValue ? data.prlValue : null
       cData[data.prlEntityType] = data.prlValue
-      let fromYear = data&&data.prlFromYear?data.prlFromYear:0
-      let toYear = data&&data.prlToYear?data.prlToYear:0
-      cData['year'] = Number(fromYear)+'-'+Number(toYear)
+      const fromYear = data && data.prlFromYear ? data.prlFromYear : 0
+      const toYear = data && data.prlToYear ? data.prlToYear : 0
+      cData.year = `${Number(fromYear)}-${Number(toYear)}`
       barChartData.push(cData)
     })
-    this.setState({prlData:barChartData})
+    this.setState({ prlData: barChartData })
   }
 
-  getReviewOfCompany(response){
-    /*var actualData = [
+  getReviewOfCompany(response) {
+    /* var actualData = [
      {
      year:"2012",
      rating:2.0
@@ -195,23 +196,23 @@ export default class MlCompanyViewChart extends React.Component{
      year:"2018",
      rating:6.5
      }
-     ]*/
+     ] */
 
-    let reviewData = response&&response.reviewOfCompanyChart?response.reviewOfCompanyChart:[]
-    var actualData = reviewData&&reviewData.length>0?reviewData:[]
+    const reviewData = response && response.reviewOfCompanyChart ? response.reviewOfCompanyChart : []
+    const actualData = reviewData && reviewData.length > 0 ? reviewData : []
 
-    var barChartData = [];
-    actualData&&actualData.map(function (data) {
-      var cData = {}
-      cData['rating'] = data.rofValue
-      cData['year'] = data.rofYear
+    const barChartData = [];
+    actualData && actualData.map((data) => {
+      const cData = {}
+      cData.rating = data.rofValue
+      cData.year = data.rofYear
       barChartData.push(cData)
     })
-    this.setState({reviewData:barChartData})
+    this.setState({ reviewData: barChartData })
   }
 
-  getEmployeeBreakUpDepartment(response){
-    /*var actualData = [
+  getEmployeeBreakUpDepartment(response) {
+    /* var actualData = [
      {
      department:"Management",
      fromYear:2012,
@@ -246,83 +247,84 @@ export default class MlCompanyViewChart extends React.Component{
      }
      ]
      */
-    let companyData = response&&response.employeeBreakupDepartmentChart?response.employeeBreakupDepartmentChart:[]
+    const companyData = response && response.employeeBreakupDepartmentChart ? response.employeeBreakupDepartmentChart : []
     console.log("''''''''''''''''''''''''''''''''''");
     console.log(companyData);
-    var actualData = companyData&&companyData.length>0?companyData:[]
-    var barChartData = [];
-    actualData&&actualData.map(function (data) {
-      var cData = {}
-      cData['department'] = data&&data.ebdDepartmentName?data.ebdDepartmentName:""
-      cData['employmentNumber'] = data&&data.ebdNumberOfEmployment?data.ebdNumberOfEmployment:""
+    const actualData = companyData && companyData.length > 0 ? companyData : []
+    const barChartData = [];
+    actualData && actualData.map((data) => {
+      const cData = {}
+      cData.department = data && data.ebdDepartmentName ? data.ebdDepartmentName : ''
+      cData.employmentNumber = data && data.ebdNumberOfEmployment ? data.ebdNumberOfEmployment : ''
       barChartData.push(cData)
     })
-    this.setState({empBreakUpData:barChartData})
+    this.setState({ empBreakUpData: barChartData })
   }
 
-  selectedGraph(){
-    this.setState({"graphSelected" :  true})
+  selectedGraph() {
+    this.setState({ graphSelected: true })
     $('.last-item').removeClass('menunone');
-    //this.props.backClickHandler()
+    // this.props.backClickHandler()
   }
 
-  getPortfolioStartupChartDetails(details,tabName){
-    let data = this.state.companyPortfolio;
+  getPortfolioStartupChartDetails(details, tabName) {
+    const data = this.state.companyPortfolio;
     data[tabName] = details;
-    this.props.getChartDetails(details,tabName);
+    this.props.getChartDetails(details, tabName);
   }
 
 
-
-  render(){
-    var width = 450,
+  render() {
+    let width = 450,
       height = 400,
-      margins = {left: 100, right: 100, top: 50, bottom: 50},
-      employmentDataTitle = "Bar Chart with tooltip",
+      margins = {
+        left: 100, right: 100, top: 50, bottom: 50
+      },
+      employmentDataTitle = 'Bar Chart with tooltip',
       showXAxis = true,
       showYAxis = true,
       employmentDataChartSeries = [
         {
           field: 'number',
-          name: 'Employment Of Company',
+          name: 'Employment Of Company'
 
 
         }
       ],
-      employmentDataX = function(d) {
+      employmentDataX = function (d) {
         return d.year;
       },
-      employmentDataXLabel = "Year",
-      employmentDataYLabel = "Value",
+      employmentDataXLabel = 'Year',
+      employmentDataYLabel = 'Value',
 
-      prlTitle = "Bar Group Chart with Tooltip",
+      prlTitle = 'Bar Group Chart with Tooltip',
       prlChartSeries = [
         {
-          field:"Profit",
-          name:"Profit"
+          field: 'Profit',
+          name: 'Profit'
         },
         {
-          field:"Revenue",
-          name:"Revenue"
+          field: 'Revenue',
+          name: 'Revenue'
         },
         {
-          field:"Liability",
-          name:"Liability"
+          field: 'Liability',
+          name: 'Liability'
         }
       ],
-      prlX = function(d) {
+      prlX = function (d) {
         return d.year;
       },
-      prlY = function(d) {
+      prlY = function (d) {
         return d / 100;
       },
 
       xScale = 'ordinal',
-      yTicks = [1, "%"],
-      prlXLabel = "Profit, Revenue & Liability",
-      prlYLabel = "Value",
+      yTicks = [1, '%'],
+      prlXLabel = 'Profit, Revenue & Liability',
+      prlYLabel = 'Value',
 
-      reviewTitle = "Review of Company",
+      reviewTitle = 'Review of Company',
       reviewChartSeries = [
         {
           field: 'rating',
@@ -330,29 +332,29 @@ export default class MlCompanyViewChart extends React.Component{
           color: '#ff7f0e'
         }
       ],
-      reviewXLabel = "Year",
-      reviewYLabel = "Value",
-      reviewX = function(d) {
+      reviewXLabel = 'Year',
+      reviewYLabel = 'Value',
+      reviewX = function (d) {
         return d.year;
       },
-      reviewY = function(d) {
+      reviewY = function (d) {
         return d;
       },
 
-      title = "Pie Chart With Tooltip",
+      title = 'Pie Chart With Tooltip',
       // value accessor
-      value = function(d) {
+      value = function (d) {
         return d && +d.employmentNumber;
       },
       // name accessor
-      name = function(d) {
+      name = function (d) {
         return d && d.department;
       };
-    let chartSeries = []
-    let breakupData = this.state.empBreakUpData?this.state.empBreakUpData:[]
-    if(breakupData&&breakupData.length>0){
-      _.each(this.state.empBreakUpData, function (details,idx) {
-        chartSeries.push({"field" : details.department, "name":details.department})
+    const chartSeries = []
+    const breakupData = this.state.empBreakUpData ? this.state.empBreakUpData : []
+    if (breakupData && breakupData.length > 0) {
+      _.each(this.state.empBreakUpData, (details, idx) => {
+        chartSeries.push({ field: details.department, name: details.department })
       });
     }
 
@@ -374,8 +376,8 @@ export default class MlCompanyViewChart extends React.Component{
      "field":"Support",
      "name":"Support"
      }
-     ]*/
-    return(
+     ] */
+    return (
       <div>
 
 
@@ -396,7 +398,7 @@ export default class MlCompanyViewChart extends React.Component{
                 showXAxis= {showXAxis}
                 showYAxis= {showYAxis}
               />
-              <MlNoDataContainer dataType={'Array'} data={this.state.employmentData||[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+              <MlNoDataContainer dataType={'Array'} data={this.state.employmentData || []} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div>
           </div>
 
@@ -404,7 +406,7 @@ export default class MlCompanyViewChart extends React.Component{
             <div className="chart_bg">
               <BarGroupTooltip
                 title= {prlTitle}
-                data= {this.state.prlData?this.state.prlData:[]}
+                data= {this.state.prlData ? this.state.prlData : []}
                 width= {width}
                 height= {height}
                 chartSeries = {prlChartSeries}
@@ -416,7 +418,7 @@ export default class MlCompanyViewChart extends React.Component{
                 showXAxis= {showXAxis}
                 showYAxis= {showYAxis}
               />
-              <MlNoDataContainer dataType={'Array'} data={this.state.prlData?this.state.prlData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+              <MlNoDataContainer dataType={'Array'} data={this.state.prlData ? this.state.prlData : []} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div>
           </div>
           <br className="brclear"/>
@@ -424,7 +426,7 @@ export default class MlCompanyViewChart extends React.Component{
             <div className="chart_bg">
               <LineTooltip
                 title= {reviewTitle}
-                data= {this.state.reviewData?this.state.reviewData:[]}
+                data= {this.state.reviewData ? this.state.reviewData : []}
                 width= {width}
                 height= {height}
                 margins= {margins}
@@ -435,7 +437,7 @@ export default class MlCompanyViewChart extends React.Component{
                 xLabel = {reviewXLabel}
                 yLabel = {reviewYLabel}
               />
-              <MlNoDataContainer dataType={'Array'} data={this.state.reviewData?this.state.reviewData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+              <MlNoDataContainer dataType={'Array'} data={this.state.reviewData ? this.state.reviewData : []} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div></div>
 
           <div className="col-md-6">
@@ -443,14 +445,14 @@ export default class MlCompanyViewChart extends React.Component{
               <p className="text-center">Employee breakup at Department level</p>
               <PieTooltip
                 title= {title}
-                data= {this.state.empBreakUpData?this.state.empBreakUpData:[]}
+                data= {this.state.empBreakUpData ? this.state.empBreakUpData : []}
                 width= {width}
                 height= {height}
                 chartSeries= {chartSeries}
                 value = {value}
                 name = {name}
               />
-              <MlNoDataContainer dataType={'Array'} data={this.state.empBreakUpData?this.state.empBreakUpData:[]} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
+              <MlNoDataContainer dataType={'Array'} data={this.state.empBreakUpData ? this.state.empBreakUpData : []} parentClassName="chart_msg" content={<span>There is no data to be <br />represented <br />here as of now</span>} />
             </div></div>
         </div>
       </div>
@@ -458,9 +460,8 @@ export default class MlCompanyViewChart extends React.Component{
 
     )
   }
-
 }
 
 MlChartSubTabs.contextTypes = {
-  companyPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object
 };

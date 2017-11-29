@@ -3,14 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import videojs from 'video.js'
 
 export default class MlVideoPlayer extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      videoUrl: ""
+    this.state = {
+      videoUrl: ''
     }
   }
   componentDidMount() {
-      console.log(this.videoNode);
+    console.log(this.videoNode);
     this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
       console.log('onPlayerReady', this)
     });
@@ -20,10 +20,10 @@ export default class MlVideoPlayer extends React.Component {
       this.player.dispose()
     }
   }
-  componentWillReceiveProps(nextProps){
-      let temp = nextProps.videoAttributes[0].sources[0].src;
-    this.setState({videoUrl: temp })
-    }
+  componentWillReceiveProps(nextProps) {
+    const temp = nextProps.videoAttributes[0].sources[0].src;
+    this.setState({ videoUrl: temp })
+  }
   render() {
     return (
       <div data-vjs-player>

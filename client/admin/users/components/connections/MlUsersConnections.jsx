@@ -1,13 +1,13 @@
 /**
  * Created by vishwadeep on 26/7/17.
  */
-import React, {Component} from "react";
-import {fetchConnectionHandler} from "../../actions/findUsersConnectionsHandlers";
+import React, { Component } from 'react';
+import { fetchConnectionHandler } from '../../actions/findUsersConnectionsHandlers';
 
 export default class MlUsersConnections extends Component {
   constructor(props, context) {
     super(props);
-    this.state = {data: []}
+    this.state = { data: [] }
     return this;
   }
 
@@ -17,34 +17,31 @@ export default class MlUsersConnections extends Component {
   }
 
   async getAllConnections() {
-    let communityCode = this.props.communityCode
-    let registrationId = this.props.data.config.registrationId
-    var response = await fetchConnectionHandler(registrationId, communityCode)
+    const communityCode = this.props.communityCode
+    const registrationId = this.props.data.config.registrationId
+    const response = await fetchConnectionHandler(registrationId, communityCode)
     console.log(response)
-    if (response && response.length > 0)
-      this.setState({data: response})
-    else
-      toastr.error('No connection Available')
+    if (response && response.length > 0) { this.setState({ data: response }) } else { toastr.error('No connection Available') }
   }
 
   render() {
-    let config = this.props
+    const config = this.props
     const data = this.state.data && this.state.data.length > 0 ? this.state.data : []
-    const list = data.map(function (prop, idx) {
+    const list = data.map((prop, idx) => {
       let icon;
 
-      if (config.communityCode == "IDE") {
-        icon = "ml my-ml-Ideator";
-      } else if (config.communityCode == "FUN") {
-        icon = "ml my-ml-Investors";
-      } else if (config.communityCode == "SPS") {
-        icon = "ml my-ml-Service-Providers";
-      } else if (config.communityCode == "STU") {
-        icon = "ml my-ml-Startups";
-      } else if (config.communityCode == "INS") {
-        icon = "ml my-ml-Institutions";
-      } else if (config.communityCode == "CMP") {
-        icon = "ml my-ml-Company";
+      if (config.communityCode == 'IDE') {
+        icon = 'ml my-ml-Ideator';
+      } else if (config.communityCode == 'FUN') {
+        icon = 'ml my-ml-Investors';
+      } else if (config.communityCode == 'SPS') {
+        icon = 'ml my-ml-Service-Providers';
+      } else if (config.communityCode == 'STU') {
+        icon = 'ml my-ml-Startups';
+      } else if (config.communityCode == 'INS') {
+        icon = 'ml my-ml-Institutions';
+      } else if (config.communityCode == 'CMP') {
+        icon = 'ml my-ml-Company';
       }
       return (
         <div className="col-lg-3 col-md-3 col-sm-3" key={idx}>

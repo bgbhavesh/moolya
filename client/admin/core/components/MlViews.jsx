@@ -1,7 +1,7 @@
 import React from 'react';
-import MlInfinity from "../../dashboard/component/MlInfinity";
-import MlListViewContainer from "../containers/MlListViewContainer";
-import MlMapViewContainer from "../containers/MlMapViewContainer"
+import MlInfinity from '../../dashboard/component/MlInfinity';
+import MlListViewContainer from '../containers/MlListViewContainer';
+import MlMapViewContainer from '../containers/MlMapViewContainer'
 
 /*
  Created by mohammed.mohasin on 01/03/17.
@@ -13,16 +13,16 @@ export default class MlViews extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewMode:true,
+      viewMode: true
     }
     this.viewModeChange.bind(this);
     this.getBound = this.getBound.bind(this);
   }
 
   viewModeChange(mode) {
-    this.setState({'viewMode': mode});
+    this.setState({ viewMode: mode });
   }
-  getBound(obj){
+  getBound(obj) {
     // let variables={};
     // let hasQueryOptions = this.props&&this.props.queryOptions ? true : false;
     //   if (hasQueryOptions) {
@@ -43,7 +43,7 @@ export default class MlViews extends React.Component {
   }
 
   render() {
-    let specificViewMode = _.has(this.props, 'viewMode');
+    const specificViewMode = _.has(this.props, 'viewMode');
     let viewMode = null;
     if (specificViewMode) {
       if (this.props.viewMode == true && this.state.viewMode == true) {
@@ -54,16 +54,17 @@ export default class MlViews extends React.Component {
         viewMode = false;
       } else if (this.props.viewMode == false && this.state.viewMode == false) {
         viewMode = true;
-      }   // viewMode=this.props.viewMode; 
+      }
+      // viewMode=this.props.viewMode;
     } else {
       viewMode = this.state.viewMode;
     }
-    //let viewMode = this.state.viewMode;
-    let showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
-    let infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
-    let config = this.props;
-    let listConfig = this.props.listConfig;
-    let params = this.props.params ? this.props.params : null;
+    // let viewMode = this.state.viewMode;
+    const showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
+    const infinityViewProps = { viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this) };
+    const config = this.props;
+    const listConfig = this.props.listConfig;
+    const params = this.props.params ? this.props.params : null;
     return (
       <div className="admin_main_wrap">
         {viewMode ? <MlMapViewContainer params={params} bounds={this.getBound.bind(this)} {...config.mapConfig} /> :
@@ -72,6 +73,5 @@ export default class MlViews extends React.Component {
       </div>
 
     )
-
   }
 }

@@ -5,23 +5,20 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
+const Select = require('react-select');
+const FontAwesome = require('react-fontawesome');
 
 
-
-
-export default class MlUpgradeOffice extends React.Component{
-  componentDidMount()
-  {
-    $(function() {
+export default class MlUpgradeOffice extends React.Component {
+  componentDidMount() {
+    $(() => {
       $('.float-label').jvFloat();
     });
-    $('.list_block').click(function(){
+    $('.list_block').click(() => {
       $('#details-div').show();
       $('.requested_input').hide();
-      var $frame = $('#forcecentered');
-      var $wrap  = $frame.parent();
+      const $frame = $('#forcecentered');
+      const $wrap = $frame.parent();
 
       // Call Sly on frame
       $frame.sly({
@@ -32,7 +29,7 @@ export default class MlUpgradeOffice extends React.Component{
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
-        startAt:0,
+        startAt: 0,
         scrollBar: $wrap.find('.scrollbar'),
         scrollBy: 1,
         speed: 300,
@@ -40,14 +37,12 @@ export default class MlUpgradeOffice extends React.Component{
         easing: 'easeOutExpo',
         dragHandle: 1,
         dynamicHandle: 1,
-        clickBar: 1,
+        clickBar: 1
 
       });
     });
-
-
   }
-  render(){
+  render() {
     return (
       <div>
 
@@ -107,12 +102,8 @@ export default class MlUpgradeOffice extends React.Component{
           </ScrollArea>
 
 
-
-
-
-
         </div>
-        <div id="details-div" style={{'display':'none'}}>
+        <div id="details-div" style={{ display: 'none' }}>
           <div className="col-lg-12">
             <div className="row">
 
@@ -279,7 +270,6 @@ export default class MlUpgradeOffice extends React.Component{
                 </div>
 
 
-
               </div>
             </div>
           </div>
@@ -289,4 +279,4 @@ export default class MlUpgradeOffice extends React.Component{
       </div>
     )
   }
-};
+}

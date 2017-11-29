@@ -1,54 +1,54 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { findIdeatorStrategyPlansActionHandler } from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
-export default class MlIdeatorStrategyAndPlanning extends React.Component{
-  constructor(props, context){
+export default class MlIdeatorStrategyAndPlanning extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
-      loading:true,
-      data:{},
-      privateKey:{},
-      privateValues:[]
+    this.state = {
+      loading: true,
+      data: {},
+      privateKey: {},
+      privateValues: []
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
   }
-  componentWillMount(){
+  componentWillMount() {
     const resp = this.fetchPortfolioDetails();
     return resp
   }
 
-  componentDidMount(){
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
-    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.strategyAndPlanning)
-    if(empty && response){
-        this.setState({loading: false, data: response});
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    const empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.strategyAndPlanning)
+    if (empty && response) {
+      this.setState({ loading: false, data: response });
+      _.each(response.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }else{
-      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning, privateValues: response.privateFields}, () => {
+    } else {
+      this.setState({ loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning, privateValues: response.privateFields }, () => {
         this.lockPrivateKeys()
       });
     }
@@ -58,61 +58,63 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
    * UI creating lock function
    * */
   lockPrivateKeys() {
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
-    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  onClick(fieldName, field,e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onClick(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    let isPrivate = false
+    details = _.omit(details, [key]);
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
 
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, tabName: this.props.tabName
+    }
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey: privateKey}, function () {
+    this.setState({ data: details, privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  sendDataToParent() {
     let data = this.state.data;
-    for (var propName in data) {
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
         delete data[propName];
       }
     }
 
-    data=_.omit(data,["privateFields"]);
+    data = _.omit(data, ['privateFields']);
     this.props.getStrategyAndPlanning(data, this.state.privateKey)
   }
 
-  render(){
-    let description =this.state.data.spDescription?this.state.data.spDescription:''
-    let isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate?this.state.data.isStrategyPlansPrivate:false
+  render() {
+    const description = this.state.data.spDescription ? this.state.data.spDescription : ''
+    const isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate ? this.state.data.isStrategyPlansPrivate : false
     const showLoader = this.state.loading;
     return (
       <div>
@@ -130,7 +132,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Strategy and Planning
-                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "spDescription", "isStrategyPlansPrivate")}/>
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, 'spDescription', 'isStrategyPlansPrivate')}/>
                     </div>
                     <div className="panel-body">
 
@@ -150,8 +152,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
       </div>
     )
   }
-};
+}
 MlIdeatorStrategyAndPlanning.contextTypes = {
   ideatorPortfolio: PropTypes.object,
-  portfolioKeys: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

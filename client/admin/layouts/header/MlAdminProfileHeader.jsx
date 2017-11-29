@@ -1,47 +1,47 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import  MlAdminProfile from './MlAdminProfile'
-import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
-import MlAdminProfileTabView from "./MlAdminProfileTabView";
+import MlAdminProfile from './MlAdminProfile'
+import VerticalBreadCrum from '../breadcrum/VerticalBreadCrum';
+import MlAdminProfileTabView from './MlAdminProfileTabView';
 export default class MlAdminProfileHeader extends Component {
-  constructor(props,context){
-    super(props,context);
-    this.state={
-      tabOptions:props.tabOptions,
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      tabOptions: props.tabOptions
     }
     return this;
   }
-  componentWillMount(){
-    const resp=this.findProcess();
+  componentWillMount() {
+    const resp = this.findProcess();
     return resp;
   }
 
   async findProcess() {
-    let documentsList=[]
-      let response = [{"tabName":"personalInfo","tabCode":"Personal Info"},{"tabName":"AddressBook","tabCode":"Address Book"},{"tabName":"Settings","tabCode":"Settings"}]
-      if(response){
-        let documents=response
-        for(let i=0;i<documents.length;i++){
-          let json={
-            "link": "/admin/myprofile/"+documents[i].tabName,
-            "name":documents[i].tabCode ,
-            "uniqueId": this.props.module === documents[i].tabName ? "myprofile" :"myprofile_tabs",
-            "isLink": true,
-            "isMenu": false,
-            "image": ""
-          }
-          documentsList.push(json)
+    const documentsList = []
+    const response = [{ tabName: 'personalInfo', tabCode: 'Personal Info' }, { tabName: 'AddressBook', tabCode: 'Address Book' }, { tabName: 'Settings', tabCode: 'Settings' }]
+    if (response) {
+      const documents = response
+      for (let i = 0; i < documents.length; i++) {
+        const json = {
+          link: `/admin/myprofile/${documents[i].tabName}`,
+          name: documents[i].tabCode,
+          uniqueId: this.props.module === documents[i].tabName ? 'myprofile' : 'myprofile_tabs',
+          isLink: true,
+          isMenu: false,
+          image: ''
         }
-        this.setState({"processMenus":documentsList})
+        documentsList.push(json)
       }
-    //}
+      this.setState({ processMenus: documentsList })
+    }
+    // }
   }
-  render(){
-    let subMenu = this.context.menu.menu||[];
+  render() {
+    const subMenu = this.context.menu.menu || [];
     let tabsubMenu;
-    if(subMenu){
-      tabsubMenu=subMenu;
+    if (subMenu) {
+      tabsubMenu = subMenu;
     }
 
     return (
@@ -50,7 +50,7 @@ export default class MlAdminProfileHeader extends Component {
 
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
-          <MlAdminProfileTabView  hierarchyOption={this.state.processMenus} linkField="link" nameField="name"/>
+          <MlAdminProfileTabView hierarchyOption={this.state.processMenus} linkField="link" nameField="name"/>
         </div>
       </div>
 

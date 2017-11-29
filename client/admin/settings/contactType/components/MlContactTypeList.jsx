@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlContactTypeTableConfig} from "../config/mlContactTypeConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlContactTypeTableConfig } from '../config/mlContactTypeConfig';
 export default class MlContactTypesList extends Component {
-
   componentDidMount() {
   }
 

@@ -4,18 +4,18 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import omitDeep from 'omit-deep-lodash';
 import { findAnchorUserActionHandler } from '../../actions/fetchAnchorUsers'
 import { findBackendUserActionHandler } from '../../../transaction/internalRequests/actions/findUserAction'
-import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
 import MlAnchorUserGrid from '../../../../commons/components/anchorInfo/MlAnchorUserGrid';
 import CropperModal from '../../../../commons/components/cropperModal';
-import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
+import { multipartASyncFormHandler } from '../../../../commons/MlMultipartFormAction';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
-//todo:// floatlabel initialize
+// todo:// floatlabel initialize
 export default class MlAnchorList extends React.Component {
   constructor(props) {
     super(props)
@@ -26,20 +26,20 @@ export default class MlAnchorList extends React.Component {
         profile: {
           internalProfile: {
             moolyaProfile: {
-              socialLinksInfo: [],
+              socialLinksInfo: []
             }
           }
         },
-        socialLinksInfo: [],
+        socialLinksInfo: []
       },
       socialLinkForm: {
         socialLinkType: '',
         socialLinkTypeName: '',
-        socialLinkUrl: '',
+        socialLinkUrl: ''
       },
       selectedSocialTab: 0,
       showUploadPicModal: false,
-      uploadingPic: false,
+      uploadingPic: false
     };
     this.selectedUser = null;
     this.getAnchorUserDetails = this.getAnchorUserDetails.bind(this);
@@ -58,9 +58,9 @@ export default class MlAnchorList extends React.Component {
     this.onFileUpload = this.onFileUpload.bind(this);
     return this
   }
-  componentDidMount(){
-    var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+  componentDidMount() {
+    const WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
   }
 
   componentWillMount() {
@@ -68,8 +68,8 @@ export default class MlAnchorList extends React.Component {
     return resp
   }
 
-  componentWillReceiveProps(newProps){
-    if(newProps && newProps.isUserUpdated){
+  componentWillReceiveProps(newProps) {
+    if (newProps && newProps.isUserUpdated) {
       const resp = this.getAnchorUsers()
       return resp
     }
@@ -82,9 +82,9 @@ export default class MlAnchorList extends React.Component {
       socialLinkForm: {
         socialLinkType: '',
         socialLinkTypeName: '',
-        socialLinkUrl: '',
+        socialLinkUrl: ''
       },
-      selectedSocialTab: 0,
+      selectedSocialTab: 0
     });
     this.selectedUser = id;
     return resp;
@@ -122,16 +122,14 @@ export default class MlAnchorList extends React.Component {
     if (objType === 'number' || objType === 'string') { // add your immutables here
       return obj;
     }
-    let result = Array.isArray(obj) ? [] : !obj.constructor ? {} : new obj.constructor();
+    const result = Array.isArray(obj) ? [] : !obj.constructor ? {} : new obj.constructor();
     if (obj instanceof Map) {
-      for (let key of obj.keys())
-        result.set(key, this.deepClone(obj.get(key)));
+      for (const key of obj.keys()) { result.set(key, this.deepClone(obj.get(key))); }
     }
-    for (let key in obj) {
+    for (const key in obj) {
       if (obj.hasOwnProperty(key) && key !== '__typename'
       && key !== 'clusterName' && key !== 'chapterName'
-     && key !== 'communityName' && key !== 'subChapterName')
-        result[key] = this.deepClone(obj[key]);
+     && key !== 'communityName' && key !== 'subChapterName') { result[key] = this.deepClone(obj[key]); }
     }
     return result;
   }
@@ -149,16 +147,16 @@ export default class MlAnchorList extends React.Component {
   // }
 
   async getAnchorUserDetails(id) {
-    var response = await findBackendUserActionHandler(id);
+    let response = await findBackendUserActionHandler(id);
     response = this.deepClone(response);
     this.setState({ userData: omitDeep(response, '__typename') });
     return response;
   }
 
   async getAnchorUsers() {
-    var data = this.props.data
-    var response = await findAnchorUserActionHandler(data)
-    const userDetails = response.userDetails && response.userDetails.map && response.userDetails.map((d) => omitDeep(d, '__typename'));
+    const data = this.props.data
+    const response = await findAnchorUserActionHandler(data)
+    const userDetails = response.userDetails && response.userDetails.map && response.userDetails.map(d => omitDeep(d, '__typename'));
     this.setState({ data: userDetails })
     return response
   }
@@ -168,7 +166,7 @@ export default class MlAnchorList extends React.Component {
   }
 
   removeSocialLink(index) {
-    let userData = this.state.userData;
+    const userData = this.state.userData;
     userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.splice(index, 1);
     this.setState({
       userData,
@@ -176,8 +174,8 @@ export default class MlAnchorList extends React.Component {
       socialLinkForm: {
         socialLinkType: '',
         socialLinkTypeName: '',
-        socialLinkUrl: '',
-      },
+        socialLinkUrl: ''
+      }
     }, () => this.sendDatatoParent(this.state.userData));
   }
 
@@ -194,7 +192,7 @@ export default class MlAnchorList extends React.Component {
     const linkTabs = socialLinks.map((link, i) => {
       const { socialLinkTypeName, socialLinkType, socialLinkUrl } = link;
       return (
-        <li onClick={() => this.onChangeSocialLinkTab(i+1, i)} className={i + 1 === this.state.selectedSocialTab ? "active": ""} key={i}>
+        <li onClick={() => this.onChangeSocialLinkTab(i + 1, i)} className={i + 1 === this.state.selectedSocialTab ? 'active' : ''} key={i}>
           <a>{socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick={(evt) => { evt.stopPropagation(); this.removeSocialLink(i) }} /></b></a>
         </li>
       )
@@ -205,7 +203,7 @@ export default class MlAnchorList extends React.Component {
       length = userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.length || 1;
     }
     addSocialLinkTab = (
-      <li onClick={() => this.onChangeSocialLinkTab(0, length)} className={this.state.selectedSocialTab === 0 ? "active": ""}>
+      <li onClick={() => this.onChangeSocialLinkTab(0, length)} className={this.state.selectedSocialTab === 0 ? 'active' : ''}>
         <a> <FontAwesome name='plus-square' /> Add Social Links </a>
       </li>
     )
@@ -226,38 +224,37 @@ export default class MlAnchorList extends React.Component {
           userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo = [this.state.socialLinkForm];
         }
       }
-    } else {
-      if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
-        if (userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.length) {
-          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.push(this.state.socialLinkForm);
-        } else {
-          userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo = [this.state.socialLinkForm];
-        }
+    } else if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
+      if (userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.length) {
+        userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo.push(this.state.socialLinkForm);
+      } else {
+        userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo = [this.state.socialLinkForm];
       }
     }
     this.setState({
       userData,
-      socialLinkForm: selectedIndex ? this.state.socialLinkForm : { },
+      socialLinkForm: selectedIndex ? this.state.socialLinkForm : { }
     }, () => this.sendDatatoParent(this.state.userData));
   }
 
   onSocialFormChange(key, value, label) {
     let socialLinkForm = { ...this.state.socialLinkForm };
     socialLinkForm[key] = value;
-    if (key === 'socialLinkType' && label )
-      if(label) {
+    if (key === 'socialLinkType' && label) {
+      if (label) {
         socialLinkForm.socialLinkTypeName = label;
       }
+    }
     let currentInfo = [];
     const { userData } = this.state;
     if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
       currentInfo = this.state.userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo || [];
     }
     if (currentInfo && currentInfo.length) {
-      for (let i=0; i<currentInfo.length; i++) {
+      for (let i = 0; i < currentInfo.length; i++) {
         if (currentInfo[i] && currentInfo[i].socialLinkType === value) {
           this.setState({
-            selectedSocialTab: i+1,
+            selectedSocialTab: i + 1
           });
           socialLinkForm = userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile && userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo ? userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo[i] : {};
           break;
@@ -265,7 +262,7 @@ export default class MlAnchorList extends React.Component {
       }
     }
     this.setState({
-      socialLinkForm,
+      socialLinkForm
     });
   }
 
@@ -274,51 +271,53 @@ export default class MlAnchorList extends React.Component {
       const socialLinkForm = this.state.socialLinkForm;
       socialLinkForm.socialLinkUrl = ''
       return this.setState({
-        socialLinkForm,
+        socialLinkForm
       })
     }
     this.setState({
       socialLinkForm: {
         socialLinkType: '',
         socialLinkTypeName: '',
-        socialLinkUrl: '',
-      },
+        socialLinkUrl: ''
+      }
     });
   }
 
-  renderSocialForm(){
-    const socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+  renderSocialForm() {
+    const socialLinkTypeQuery = gql`query($type:String,$hierarchyRefId:String){
       data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
         label
         value
       }
     }`;
-    const socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS", hierarchyRefId: this.props.data.clusterId } } };
+    const socialLinkTypeOption = { options: { variables: { type: 'SOCIALLINKS', hierarchyRefId: this.props.data.clusterId } } };
     return (
       <div className="tab-content clearfix">
         <div className="tab-pane active">
           <div className="form-group">
-            <Moolyaselect multiSelect={false} ref={'socialLinkType'}
+            <Moolyaselect
+              multiSelect={false} ref={'socialLinkType'}
               placeholder="Select Social Link" disabled={this.state.selectedSocialTab !== 0}
-              className="form-control float-label" onSelect={(value, cb, socialOption) => {this.onSocialFormChange('socialLinkType', value, socialOption ? socialOption.label : '');} }
-              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
+              className="form-control float-label" onSelect={(value, cb, socialOption) => { this.onSocialFormChange('socialLinkType', value, socialOption ? socialOption.label : ''); } }
+              valueKey={'value'} labelKey={'label'} queryType={'graphql'} query={socialLinkTypeQuery}
               queryOptions={socialLinkTypeOption} selectedValue={this.state.socialLinkForm.socialLinkType}
               isDynamic={true} />
           </div>
           <div className="form-group">
-            <input type="text" value={this.state.socialLinkForm.socialLinkUrl || ''} onChange={(evt) => this.onSocialFormChange('socialLinkUrl', evt.target.value)} placeholder="Enter URL" className="form-control float-label"/>
+            <input type="text" value={this.state.socialLinkForm.socialLinkUrl || ''} onChange={evt => this.onSocialFormChange('socialLinkUrl', evt.target.value)} placeholder="Enter URL" className="form-control float-label"/>
           </div>
           <div className="ml_icon_btn">
-            <a onClick={this.onSaveSocialLink}
-               className="save_btn">
+            <a
+              onClick={this.onSaveSocialLink}
+              className="save_btn">
               <span className="ml ml-save"></span>
             </a>
             <a className="cancel_btn" onClick={this.onClearSocialLink}><span className="ml ml-delete"></span></a>
           </div>
-          {/*<div className="form-group">*/}
-            {/*<button onClick={this.onSaveSocialLink} type="button">Save</button>*/}
-            {/*<button type="button" onClick={this.onClearSocialLink}>Clear</button>*/}
-          {/*</div>*/}
+          {/* <div className="form-group"> */}
+          {/* <button onClick={this.onSaveSocialLink} type="button">Save</button> */}
+          {/* <button type="button" onClick={this.onClearSocialLink}>Clear</button> */}
+          {/* </div> */}
         </div>
       </div>
     );
@@ -341,68 +340,68 @@ export default class MlAnchorList extends React.Component {
     })
   }
 
-  async onFileUpload(imageFile){
-    let user = {
+  async onFileUpload(imageFile) {
+    const user = {
       profile: {
-        InternalUprofile: {moolyaProfile: {profileImage:" " }}
+        InternalUprofile: { moolyaProfile: { profileImage: ' ' } }
       }
     }
-    let file=imageFile || document.getElementById("profilePic").files[0];
-    if(file) {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.userData._id, user: user}
-      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+    const file = imageFile || document.getElementById('profilePic').files[0];
+    if (file) {
+      const data = {
+        moduleName: 'PROFILE', actionName: 'UPDATE', userId: this.state.userData._id, user
+      }
+      const response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
       // this.storeImage();
       return response;
     }
-    else{
-      this.storeImage();
-      this.setState({
-        uploadingPic: false,
-      });
-    }
+
+    this.storeImage();
+    this.setState({
+      uploadingPic: false
+    });
   }
 
   onFileUploadCallBack(output) {
     console.log(output);
     const { userData } = this.state;
-    if ( userData && userData.profile ) {
+    if (userData && userData.profile) {
       userData.profile.profileImage = JSON.parse(output).result;
     }
     this.setState({
       userData,
       uploadingPic: false,
-      showUploadPicModal: false,
+      showUploadPicModal: false
     })
   }
 
   onUploadPic(pic) {
     this.onFileUpload(pic);
     this.setState({
-      uploadingPic: true,
+      uploadingPic: true
     });
   }
 
   render() {
-    const socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+    const socialLinkTypeQuery = gql`query($type:String,$hierarchyRefId:String){
       data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
         label
         value
       }
     }`;
-    const socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS", hierarchyRefId: this.props.data.clusterId } } };
+    const socialLinkTypeOption = { options: { variables: { type: 'SOCIALLINKS', hierarchyRefId: this.props.data.clusterId } } };
     const { userData } = this.state;
     let socialLinks = [];
     if (userData && userData.profile && userData.profile.InternalUprofile && userData.profile.InternalUprofile.moolyaProfile) {
       socialLinks = this.state.userData.profile.InternalUprofile.moolyaProfile.socialLinksInfo || [];
     }
     const _this = this
-    let profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
-    let Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
+    const profilePic = this.state.userData && this.state.userData.profile && this.state.userData.profile.genderType == 'female' ? '/images/female.jpg' : '/images/def_profile.png';
+    const Img = this.state.userData && this.state.userData.profile && this.state.userData.profile.profileImage ? this.state.userData.profile.profileImage : profilePic;
     const isActive = this.state.userData && this.state.userData.profile && this.state.userData.profile.isActive;
-    var urlCreator = window.URL || window.webkitURL;
+    const urlCreator = window.URL || window.webkitURL;
     let imageUrl = '';
-    if (this.state.croppedPic)
-      imageUrl = urlCreator.createObjectURL(this.state.croppedPic);
+    if (this.state.croppedPic) { imageUrl = urlCreator.createObjectURL(this.state.croppedPic); }
     return (
       <div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
@@ -414,7 +413,7 @@ export default class MlAnchorList extends React.Component {
         </div>
         <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
 
-          {/*<h3>User Details</h3>*/}
+          {/* <h3>User Details</h3> */}
           <div className="left_wrap">
             <ScrollArea
               speed={0.8}
@@ -427,50 +426,57 @@ export default class MlAnchorList extends React.Component {
                   </div>
                   <div className="previewImg ProfileImg">
                     <img
-                      src={this.state.userData.profile.profileImage ? generateAbsolutePath(this.state.userData.profile.profileImage) : "/images/def_profile.png"}/>
+                      src={this.state.userData.profile.profileImage ? generateAbsolutePath(this.state.userData.profile.profileImage) : '/images/def_profile.png'}/>
                   </div>
                 </div>
                 <br className="brclear" />
                 <div className="form-group">
-                  <input type="text" placeholder="First Name" className="form-control float-label"
+                  <input
+                    type="text" placeholder="First Name" className="form-control float-label"
                     value={this.state.userData && this.state.userData.profile && this.state.userData.profile.firstName}
                     onChange={event => this.updateProfileData('firstName', event.target.value)} />
 
                 </div>
                 <div>
                   <div className="form-group">
-                    <input type="text" placeholder="Middle Name" className="form-control float-label"
+                    <input
+                      type="text" placeholder="Middle Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.middleName}
                       onChange={event => this.updateProfileData('middleName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Last Name" className="form-control float-label"
+                    <input
+                      type="text" placeholder="Last Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.lastName}
                       onChange={event => this.updateProfileData('lastName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Display Name" className="form-control float-label"
+                    <input
+                      type="text" placeholder="Display Name" className="form-control float-label"
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
                         this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.displayName ?
-                        this.state.userData.profile.InternalUprofile.moolyaProfile.displayName : ""}
+                        this.state.userData.profile.InternalUprofile.moolyaProfile.displayName : ''}
                       onChange={event => this.updateInternalUprofileData('displayName', event.target.value)} />
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" className="form-control float-label"
-                              value={this.state.userData && this.state.userData.profile && this.state.userData.profile.about ? this.state.userData.profile.about : ''}
-                              onChange={event => this.updateProfileData('about', event.target.value)}></textarea>
+                    <textarea
+                      placeholder="About" className="form-control float-label"
+                      value={this.state.userData && this.state.userData.profile && this.state.userData.profile.about ? this.state.userData.profile.about : ''}
+                      onChange={event => this.updateProfileData('about', event.target.value)}></textarea>
                   </div>
                   <div className="form-group">
-                    <input disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly
+                    <input
+                      disabled type="text" placeholder="Contact Number" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.InternalUprofile &&
                         this.state.userData.profile.InternalUprofile.moolyaProfile && this.state.userData.profile.InternalUprofile.moolyaProfile.contact
                         && this.state.userData.profile.InternalUprofile.moolyaProfile.contact.length ?
-                        this.state.userData.profile.InternalUprofile.moolyaProfile.contact[0].number : ""} />
+                        this.state.userData.profile.InternalUprofile.moolyaProfile.contact[0].number : ''} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email Id" className="form-control float-label" readOnly
+                    <input
+                      type="text" placeholder="Email Id" className="form-control float-label" readOnly
                       value={this.state.userData && this.state.userData.profile && this.state.userData.profile.email}
-                       />
+                    />
                   </div>
 
                   <div className="panel panel-default new_profile_tabs">
@@ -504,5 +510,5 @@ export default class MlAnchorList extends React.Component {
       </div>
     )
   }
-};
+}
 

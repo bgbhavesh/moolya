@@ -8,21 +8,20 @@
 /**
  * Imports libs and components
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MlInfiniteScrollHeader from './MlInfiniteScrollHeader';
-import MlInfiniteScrollFooter from "./MlInfiniteScrollFooter";
-import MlInfiniteScrollView from "./MlInfiniteScrollView";
-import MlAppFilterContainer from "../../../../app/commons/filter/MlAppFilterContainer";
+import MlInfiniteScrollFooter from './MlInfiniteScrollFooter';
+import MlInfiniteScrollView from './MlInfiniteScrollView';
+import MlAppFilterContainer from '../../../../app/commons/filter/MlAppFilterContainer';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 export default class MlInfiniteScrollContainer extends Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
-  constructor(props){
+  constructor(props) {
     super(props);
     this.filterQuery = {};
     this.searchText = '';
@@ -35,37 +34,37 @@ export default class MlInfiniteScrollContainer extends Component {
   }
 
   componentWillMount() {
-    let WinHeight = $(window).height();
-    $('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.infinite_scroll').height(WinHeight - (210 + $('.app_header').outerHeight(true)));
   }
 
 
   componentWillReceiveProps(props) {
-    console.log('props',props);
+    console.log('props', props);
   }
 
-  updateSearchValue(searchText, searchFields){
+  updateSearchValue(searchText, searchFields) {
     this.searchText = searchText;
     this.searchFields = searchFields;
     this.loadMore(true);
   }
 
-  loadMore(isReset){
+  loadMore(isReset) {
     const props = this.props;
-    let data = this.props.data && this.props.data.data ? this.props.data.data : [];
-    let options = {
+    const data = this.props.data && this.props.data.data ? this.props.data.data : [];
+    const options = {
       module: props.moduleName,
       queryProperty: {
-        limit : props.perPageLimit,
-        skip : data.length && !isReset ? this.props.data.data.length : 0,
+        limit: props.perPageLimit,
+        skip: data.length && !isReset ? this.props.data.data.length : 0,
         filterQuery: JSON.stringify(this.filterQuery),
         searchText: this.searchText,
         searchFields: this.searchFields,
         alphabeticSearch: JSON.stringify(this.alphabeticSearch)
       }
     };
-    if(props.sort) {
-      options.queryProperty['sortBy'] = props.sortBy;
+    if (props.sort) {
+      options.queryProperty.sortBy = props.sortBy;
     }
     console.log(options);
     this.props.fetchMore(options, isReset);
@@ -77,8 +76,8 @@ export default class MlInfiniteScrollContainer extends Component {
   }
 
   onAlphaSearchChange(alphabet) {
-    let alphabeticSearchField = this.props && this.props.headerComponents && this.props.headerComponents.alphabeticSearchField ? this.props.headerComponents.alphabeticSearchField : '';
-    if(alphabeticSearchField) {
+    const alphabeticSearchField = this.props && this.props.headerComponents && this.props.headerComponents.alphabeticSearchField ? this.props.headerComponents.alphabeticSearchField : '';
+    if (alphabeticSearchField) {
       this.alphabeticSearch[alphabeticSearchField] = alphabet;
       this.loadMore(true);
     }
@@ -87,27 +86,26 @@ export default class MlInfiniteScrollContainer extends Component {
   render() {
     const that = this;
     const props = that.props;
-    let viewComponent = this.props.viewComponent;
-    let data = this.props.data && this.props.data.data ? this.props.data.data : [];
-    let count = this.props.data && this.props.data.count ? this.props.data.count : 0;
+    const viewComponent = this.props.viewComponent;
+    const data = this.props.data && this.props.data.data ? this.props.data.data : [];
+    const count = this.props.data && this.props.data.count ? this.props.data.count : 0;
     console.log('count', count);
-    let hasMore = data.length == count ? false : true;
+    const hasMore = data.length != count;
 
     return (
-      <div className={props && props.isApp?'':"admin_main_wrap"}>
-        <div className={props && props.isApp?'app_padding_wrap':"admin_padding_wrap"}>
-          {/*<MlAppFilterContainer  submit={this.updateFilterQuery} />*/}
+      <div className={props && props.isApp ? '' : 'admin_main_wrap'}>
+        <div className={props && props.isApp ? 'app_padding_wrap' : 'admin_padding_wrap'}>
+          {/* <MlAppFilterContainer  submit={this.updateFilterQuery} /> */}
           { props.header ? <MlInfiniteScrollHeader
-                              config={props.headerComponents}
-                              updateSearchValue={this.updateSearchValue}
-                              updateFilterQuery={this.updateFilterQuery}
-                              onAlphaSearchChange={that.onAlphaSearchChange}
-            /> : '' }
+            config={props.headerComponents}
+            updateSearchValue={this.updateSearchValue}
+            updateFilterQuery={this.updateFilterQuery}
+            onAlphaSearchChange={that.onAlphaSearchChange}
+          /> : '' }
           <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
           <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
         </div>
       </div>
-      )
-
+    )
   }
 }

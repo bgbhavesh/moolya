@@ -1,27 +1,27 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { findIdeatorIdeasActionHandler } from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
-import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
+import { multipartASyncFormHandler } from '../../../../../commons/MlMultipartFormAction'
+import { putDataIntoTheLibrary } from '../../../../../commons/actions/mlLibraryActionHandler';
 import CropperModal from '../../../../../commons/components/cropperModal';
-import {mlFieldValidations} from "../../../../../commons/validations/mlfieldValidation";
+import { mlFieldValidations } from '../../../../../commons/validations/mlfieldValidation';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../commons/utils/confirm';
 
-export default class MlIdeatorIdeas extends Component{
-  constructor(props, context){
+export default class MlIdeatorIdeas extends Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      data:{},
-      fileName:"",
-      privateKey:{},
-      privateValues:[],
+      data: {},
+      fileName: '',
+      privateKey: {},
+      privateValues: [],
       showProfileModal: false,
-      uploadingAvatar: false,
+      uploadingAvatar: false
     }
     this.tabName = this.props.tabName || ''
     this.onClick.bind(this);
@@ -33,69 +33,65 @@ export default class MlIdeatorIdeas extends Component{
     return this;
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-    $('#upload_hex').change(function(){
+    $('#upload_hex').change(function () {
       document.getElementById('blah').src = window.URL.createObjectURL(this.files[0]);
     });
   }
-  componentDidUpdate()
-  {
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
   }
-  componentWillMount(){
+  componentWillMount() {
     const resp = this.fetchPortfolioDetails();
     return resp
   }
-  onClick(fieldName, field,e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onClick(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    let isPrivate = false;
+    details = _.omit(details, [key]);
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, tabName: this.props.tabName
+    }
     // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey: privateKey}, function () {
+    this.setState({ data: details, privateKey }, function () {
       this.sendDataToParent()
     })
-
   }
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
   async fetchPortfolioDetails() {
-    let that = this;
-    let ideaId=that.props.ideaId;
-    let empty = _.isEmpty(that.context.idea)
+    const that = this;
+    const ideaId = that.props.ideaId;
+    const empty = _.isEmpty(that.context.idea)
     const response = await findIdeatorIdeasActionHandler(ideaId);
-    if(empty && response){
-
-        this.setState({loading: false, data: response});
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    if (empty && response) {
+      this.setState({ loading: false, data: response });
+      _.each(response.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
-    }else{
-      this.setState({loading: false, data: that.context.idea, privateValues: response.privateFields}, () => {
+    } else {
+      this.setState({ loading: false, data: that.context.idea, privateValues: response.privateFields }, () => {
         this.lockPrivateKeys()
       })
-
     }
   }
 
@@ -103,37 +99,37 @@ export default class MlIdeatorIdeas extends Component{
    * UI creating lock function
    * */
   lockPrivateKeys() {
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
-    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  sendDataToParent(){
+  sendDataToParent() {
     const requiredFields = this.getFieldValidations();
     let data = this.state.data;
-    for (var propName in data) {
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'privateFields') {
         delete data[propName];
       }
     }
-    data=_.omit(data,["privateFields"]);
+    data = _.omit(data, ['privateFields']);
     this.props.getIdeas(data, this.state.privateKey, requiredFields)
   }
 
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret, index: 0}
+    return { tabName: this.tabName, errorMessage: ret, index: 0 }
   }
 
   async libraryAction(file) {
-    let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    if(resp.code === 404) {
+    const portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
+    if (resp.code === 404) {
       toastr.error(resp.result)
     } else {
       toastr.success(resp.result)
@@ -141,111 +137,115 @@ export default class MlIdeatorIdeas extends Component{
     }
   }
 
-  onLogoFileUpload(image, fileInfo){
+  onLogoFileUpload(image, fileInfo) {
     // if(e.target.files[0].length ==  0)
     //   return;
     // let fileName = this.state.fileName;
-    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
-    let file=image;
-    if(file){
-      let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:"", fileName : fileName}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
-    }this.setState({
-      uploadingAvatar: false,
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : 'fileName';
+    const file = image;
+    if (file) {
+      const data = {
+        moduleName: 'PORTFOLIO_IDEA_IMG', actionName: 'UPDATE', portfolioId: this.props.portfolioDetailsId, ideaId: this.props.ideaId, communityType: 'IDE', portfolio: { ideaImage: { fileUrl: '', fileName } }
+      };
+      const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    } this.setState({
+      uploadingAvatar: false
     });
-
   }
-  onFileUploadCallBack(file,resp){
+  onFileUploadCallBack(file, resp) {
     this.setState({
       uploadingAvatar: false,
       showProfileModal: false
     });
-    if(resp){
-      let result = JSON.parse(resp);
+    if (resp) {
+      const result = JSON.parse(resp);
 
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
+      Confirm('', 'Do you want to add the file into the library', 'Ok', 'Cancel', (ifConfirm) => {
+        if (ifConfirm) {
+          const fileObjectStructure = {
             fileName: this.state.fileName,
             fileType: file.type,
             fileUrl: result.result,
-            libraryType: "image"
+            libraryType: 'image'
           }
           this.libraryAction(fileObjectStructure)
         }
       });
 
-      if(result.success){
-        this.setState({loading:true})
+      if (result.success) {
+        this.setState({ loading: true })
         this.fetchPortfolioDetails();
       }
     }
   }
   toggleModal() {
     const that = this;
-    var status = that.state.showProfileModal
+    const status = that.state.showProfileModal
     this.setState({
       showProfileModal: !status
     });
   }
-  handleUploadAvatar(image,file) {
+  handleUploadAvatar(image, file) {
     this.setState({
-      //uploadingAvatar: true,,
+      // uploadingAvatar: true,,
     });
-    this.setState({ fileName: file.name})
+    this.setState({ fileName: file.name })
     this.onLogoFileUpload(image, file);
   }
-  render(){
-    let that = this;
+  render() {
+    const that = this;
     const showLoader = this.state.loading;
-    let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
-    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
+    const ideaDescription = this.state.data.ideaDescription ? this.state.data.ideaDescription : ''
+    const image = that.state.data && that.state.data.ideaImage && that.state.data.ideaImage.fileUrl ? that.state.data.ideaImage.fileUrl : '/images/images.png';
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
-      <div>
-        <h2>Ideas</h2>
-        <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
-          {/*<a href="" >*/}
-            <div className="upload_hex">
-              {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
-              <img src={generateAbsolutePath(image)} id="blah" width="105" height="auto"/>
-              {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>*/}
+          <div>
+            <h2>Ideas</h2>
+            <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
+              {/* <a href="" > */}
+              <div className="upload_hex">
+                {/* <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/> */}
+                <img src={generateAbsolutePath(image)} id="blah" width="105" height="auto"/>
+                {/* <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/> */}
+              </div>
+              {/* </a> */}
+              <div className="fileUpload mlUpload_btn" style={{ margin: '10px 0px 0 26px' }}>
+                <span onClick={this.toggleModal}>Upload Pic</span>
+              </div>
             </div>
-          {/*</a>*/}
-          <div className="fileUpload mlUpload_btn" style={{'margin':'10px 0px 0 26px'}}>
-            <span onClick={this.toggleModal}>Upload Pic</span>
-          </div>
-        </div>
-        <CropperModal
-          uploadingImage={this.state.uploadingAvatar}
-          handleImageUpload={this.handleUploadAvatar}
-          cropperStyle="square"
-          show={this.state.showProfileModal}
-          toggleShow={this.toggleModal}
-        />
-        <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-          <form>
-            <div className="form-group mandatory">
-              <input type="text" placeholder="Title" className="form-control float-label" ref="title"
-                     defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur}
-                     data-required={true} data-errMsg="Idea Title is required"/>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeaTitlePrivate")}/>
+            <CropperModal
+              uploadingImage={this.state.uploadingAvatar}
+              handleImageUpload={this.handleUploadAvatar}
+              cropperStyle="square"
+              show={this.state.showProfileModal}
+              toggleShow={this.toggleModal}
+            />
+            <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+              <form>
+                <div className="form-group mandatory">
+                  <input
+                    type="text" placeholder="Title" className="form-control float-label" ref="title"
+                    defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur}
+                    data-required={true} data-errMsg="Idea Title is required"/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, 'title', 'isIdeaTitlePrivate')}/>
+                </div>
+                <div className="form-group mandatory">
+                  <textarea
+                    placeholder="Describe..." className="form-control float-label" ref="ideaDescription"
+                    defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur}
+                    data-required={true} data-errMsg="Idea Description is required"></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, 'ideaDescription', 'isIdeaPrivate')}/>
+                </div>
+              </form>
             </div>
-            <div className="form-group mandatory">
-              <textarea placeholder="Describe..." className="form-control float-label" ref="ideaDescription"
-                        defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur}
-                        data-required={true} data-errMsg="Idea Description is required"></textarea>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, "ideaDescription", "isIdeaPrivate")}/>
-            </div>
-          </form>
-        </div>
-      </div>)}
+          </div>)}
       </div>
-    )}
-};
+    )
+  }
+}
 MlIdeatorIdeas.contextTypes = {
   idea: PropTypes.object,
-  portfolioKeys: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

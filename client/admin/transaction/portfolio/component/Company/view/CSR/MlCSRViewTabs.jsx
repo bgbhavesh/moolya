@@ -1,26 +1,26 @@
-import React, { Component, PropTypes }  from "react";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
+import React, { Component, PropTypes } from 'react';
+import MlTabComponent from '../../../../../../../commons/components/tabcomponent/MlTabComponent';
 // import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import {client} from '../../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../../app/core/appConnection'
+import { client } from '../../../../../../core/apolloConnection'
+import { appClient } from '../../../../../../../app/core/appConnection'
 import MlCompanyViewEvolution from './MlCompanyViewEvolution'
 import MlCompanyViewPolicy from './MlCompanyViewPolicy'
 import MlCompanyViewAchievements from './MlCompanyViewAchievements'
 import MlCompanyCSRReports from '../../edit/CSR/MlCompanyCSRReports'
 
 export default class MlCSRViewTabs extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state =  {tabs: [], activeTab: 'Achievements',admin:true};
+    this.state = { tabs: [], activeTab: 'Achievements', admin: true };
   }
-  componentDidMount(){
-    var props = this.props
-    setTimeout(function () {
+  componentDidMount() {
+    const props = this.props
+    setTimeout(() => {
       if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
-          var test = $(this).text();
+          const test = $(this).text();
           $(this).empty();
-          $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+          $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
         });
         $('.last-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
@@ -38,34 +38,32 @@ export default class MlCSRViewTabs extends Component {
     //   this.setState({admin: false, client: appClient})
     // }
   }
-  componentWillMount()
-  {
-    let admin=true;
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
+  componentWillMount() {
+    let admin = true;
+    const path = FlowRouter._current.path;
+    if (path.indexOf('app') != -1) {
       admin = false;
     }
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
 
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
-        key:tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
 
-    let AllTabs =getTabs() ||[];
-    if(admin){
-      AllTabs.forEach(function(v){ delete v.key });
+    const AllTabs = getTabs() || [];
+    if (admin) {
+      AllTabs.forEach((v) => { delete v.key });
     }
-    let activeTab = FlowRouter.getQueryParam('subtab');
-    if(activeTab){
-      this.setState({activeTab,tabs:AllTabs,admin});
-    }else
-    this.setState({tabs:AllTabs,admin});
+    const activeTab = FlowRouter.getQueryParam('subtab');
+    if (activeTab) {
+      this.setState({ activeTab, tabs: AllTabs, admin });
+    } else { this.setState({ tabs: AllTabs, admin }); }
     this.setBackTab()
   }
   setBackTab(e) {
@@ -77,38 +75,46 @@ export default class MlCSRViewTabs extends Component {
     $('.RRT__tab--first').click();
   }
 
-  backClickHandler(){
-    let tabs = this.state.tabs;
-    this.setState({tabs: tabs})
+  backClickHandler() {
+    const tabs = this.state.tabs;
+    this.setState({ tabs })
   }
 
-  getTabComponents(){
-    let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Achievements" , component:<MlCompanyViewAchievements key="1" isAdmin={true} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution" , component:<MlCompanyViewEvolution key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} tabName={"evolution"}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Reports" , component:<MlCompanyCSRReports key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Policy" , component:<MlCompanyViewPolicy key="4" client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}  tabName={"policy"}/>},
+  getTabComponents() {
+    const tabs = [
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Achievements', component: <MlCompanyViewAchievements key="1" isAdmin={true} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Evolution', component: <MlCompanyViewEvolution key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} tabName={'evolution'}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Reports', component: <MlCompanyCSRReports key="3" portfolioDetailsId={this.props.portfolioDetailsId} />
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Policy', component: <MlCompanyViewPolicy key="4" client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} tabName={'policy'}/>
+      }
     ]
     return tabs;
   }
 
-  updateTab(index){
-    let subtab =  this.state.tabs[index].title;
+  updateTab(index) {
+    const subtab = this.state.tabs[index].title;
     FlowRouter.setQueryParams({ subtab });
   }
 
-  render(){
-    let tabs = this.state.tabs;
-    if(this.state.admin){
+  render() {
+    const tabs = this.state.tabs;
+    if (this.state.admin) {
       return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
     }
-    else{
-      return <MlTabComponent tabs={tabs}
-                             selectedTabKey={this.state.activeTab}
-                             onChange={this.updateTab}
-                             backClickHandler={this.props.backClickHandler}
-                             type="subtab" mkey="title"
-      />
-    }
+
+    return <MlTabComponent
+      tabs={tabs}
+      selectedTabKey={this.state.activeTab}
+      onChange={this.updateTab}
+      backClickHandler={this.props.backClickHandler}
+      type="subtab" mkey="title"
+    />
   }
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import MlTableViewContainer from '../../core/containers/MlTableViewContainer';
 import { mlHistoryTableConfig } from '../config/MlHistoryConfig';
 export default class MlHistoryList extends Component {
-
   componentDidMount() {
   }
 

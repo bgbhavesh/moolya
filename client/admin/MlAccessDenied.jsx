@@ -1,15 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
-export default class MlAccessDenied extends React.Component{
-  componentDidMount()
-  {
+const FontAwesome = require('react-fontawesome');
+export default class MlAccessDenied extends React.Component {
+  componentDidMount() {
   }
   goBack() {
     window.history.back();
   }
-  render(){
+  render() {
     return (
       <div className="app_main_wrap">
         <div className="otp">
@@ -25,4 +24,4 @@ export default class MlAccessDenied extends React.Component{
       </div>
     )
   }
-};
+}

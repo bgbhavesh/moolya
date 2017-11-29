@@ -1,50 +1,45 @@
 /**
  * Created by vishwadeep on 5/9/17.
  */
-import React, {Component} from "react";
-import {render} from "react-dom";
-import {mlValidations} from "../../commons/validations/formValidation";
-import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
-import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { mlValidations } from '../../commons/validations/formValidation';
+import { initalizeFloatLabel } from '../../admin/utils/formElemUtil';
+import { validatedEmailId } from '../../commons/validations/mlfieldValidation';
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
 export default class MlLogout extends Component {
   constructor(props) {
     super(props)
-    this.state = {username: "", password: "", userNameErr: "", passwordErr: ""};
-    this.validationMessage = "";
+    this.state = {
+      username: '', password: '', userNameErr: '', passwordErr: ''
+    };
+    this.validationMessage = '';
     this.loginSubmit.bind(this)
     return this;
   }
 
   loginSubmit() {
-    let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
+    const errMessages = { userName: 'A valid username is required', Password: 'A Password is required' };
     this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
     if (!this.validationMessage) {
-      let emailId=this.refs.username.value
-      let passwordValid = this.refs.password.value
-      let validate = passwordSAS_validate(passwordValid)
-      let isValidEmail = validatedEmailId(emailId);
+      const emailId = this.refs.username.value
+      const passwordValid = this.refs.password.value
+      const validate = passwordSAS_validate(passwordValid)
+      const isValidEmail = validatedEmailId(emailId);
       if (emailId && !isValidEmail) {
         toastr.error('Please enter a valid EmailId');
-      }else
-      if (!validate.isValid && typeof (validate) == 'object') {
-        toastr.error('Password '+ validate.errorMsg);
-      }
-      else {
+      } else
+      if (!validate.isValid && typeof (validate) === 'object') {
+        toastr.error(`Password ${validate.errorMsg}`);
+      } else {
         this.props.formSubmit({
           username: this.refs.username.value,
           password: this.refs.password.value
-        }, function (result) {
+        }, (result) => {
           toastr.error(result);
         })
       }
-    }
-    else {
-      if (this.validationMessage.userName == true)
-        toastr.error(this.validationMessage.errMsg);
-      else if (this.validationMessage.Password == true)
-        toastr.error(this.validationMessage.errMsg);
-    }
+    } else if (this.validationMessage.userName == true) { toastr.error(this.validationMessage.errMsg); } else if (this.validationMessage.Password == true) { toastr.error(this.validationMessage.errMsg); }
   }
 
   componentDidMount() {
@@ -54,9 +49,8 @@ export default class MlLogout extends Component {
   onValueChange(event) {
     if (event.target.name == 'userName') {
       event.target.value = event.target.value.trim()
-      this.setState({userNameErr: ""})
-    } else if (event.target.name == 'Password')
-      this.setState({passwordErr: ""})
+      this.setState({ userNameErr: '' })
+    } else if (event.target.name == 'Password') { this.setState({ passwordErr: '' }) }
   }
 
   handleKeyPress(target) {
@@ -64,18 +58,18 @@ export default class MlLogout extends Component {
       this.loginSubmit()
     }
   }
-  redirectRegister(e){
+  redirectRegister(e) {
     e.preventDefault();
-    if(!Meteor.isCordova){
-      window.location.href = "https://www.moolya.global/register";
-    } else{
+    if (!Meteor.isCordova) {
+      window.location.href = 'https://www.moolya.global/register';
+    } else {
       window.open('https://www.moolya.global/register', '_system');
     }
-}
+  }
   render() {
     return (
       <div className="logout">
-        <div className="login_bg" style={{textAlign: "center"}}>
+        <div className="login_bg" style={{ textAlign: 'center' }}>
           <img className="logout_logo" src="/images/moolya_logo.png"/>
           <div className="clearfix"/>
           <div className="logout_message">
@@ -93,16 +87,18 @@ export default class MlLogout extends Component {
               <div className="login_block login_block_in" id="login">
                 <form className="form-signin" onChange={this.onValueChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
                   <span ref="userName">{this.state.userNameErr}</span>
-                  <input type="text" name="userName" ref="username" className="form-control float-label" placeholder="Email"
-                         required autoFocus defaultValue={this.state.username} />
+                  <input
+                    type="text" name="userName" ref="username" className="form-control float-label" placeholder="Email"
+                    required autoFocus defaultValue={this.state.username} />
                   <span ref="Password">{this.state.passwordErr}</span>
-                  <input type="password" name="Password" className="form-control float-label" ref="password"
-                         placeholder="Password" required defaultValue={this.state.password}/>
+                  <input
+                    type="password" name="Password" className="form-control float-label" ref="password"
+                    placeholder="Password" required defaultValue={this.state.password}/>
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a
-                    href="#" onClick={(e) => {this.redirectRegister(e)}}>Register</a></p>
+                    href="#" onClick={(e) => { this.redirectRegister(e) }}>Register</a></p>
                 </form>
               </div>
             </div>
@@ -113,5 +109,5 @@ export default class MlLogout extends Component {
   }
 }
 MlLogout.propTypes = {
-  formSubmit: React.PropTypes.func,
+  formSubmit: React.PropTypes.func
 }

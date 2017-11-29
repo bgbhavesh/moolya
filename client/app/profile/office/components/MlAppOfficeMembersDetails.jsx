@@ -1,33 +1,33 @@
 /**
  * Created by vishwadeep on 12/5/17.
  */
-import React from "react";
-import {render} from "react-dom";
-var Select = require('react-select');
-var options = [
-  {value: 'role', label: 'User Type 1'},
-  {value: 'role', label: 'User Type 2'}
+import React from 'react';
+import { render } from 'react-dom';
+const Select = require('react-select');
+const options = [
+  { value: 'role', label: 'User Type 1' },
+  { value: 'role', label: 'User Type 2' }
 ];
 function logChange(val) {
-  console.log("Selected: " + val);
+  console.log(`Selected: ${val}`);
 }
 
 
 export default class MlAppOfficeMembersDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: {}};
+    this.state = { loading: true, data: {} };
     this.findMyOffice.bind(this);
     return this;
   }
 
   componentDidMount() {
-    $(function () {
+    $(() => {
       $('.float-label').jvFloat();
     });
 
-    var $frame = $('#forcecentered');
-    var $wrap = $frame.parent();
+    const $frame = $('#forcecentered');
+    const $wrap = $frame.parent();
 
     // Call Sly on frame
     $frame.sly({
@@ -46,7 +46,7 @@ export default class MlAppOfficeMembersDetails extends React.Component {
       easing: 'easeOutExpo',
       dragHandle: 1,
       dynamicHandle: 1,
-      clickBar: 1,
+      clickBar: 1
 
     });
   }
@@ -57,7 +57,7 @@ export default class MlAppOfficeMembersDetails extends React.Component {
   }
 
   async findMyOffice() {
-    let myOfficeId = this.props.config
+    const myOfficeId = this.props.config
     // const response = await findOfficeActionHandler(myOfficeId);
     // this.setState({loading:false,data:response});
     console.log(myOfficeId)
@@ -198,4 +198,4 @@ export default class MlAppOfficeMembersDetails extends React.Component {
       </div>
     )
   }
-};
+}

@@ -1,22 +1,22 @@
 /**
  * import of libs and routes
  * */
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { fetchPortfolioActionHandler } from '../../ideators/actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
-import MlLoader from "../../../../commons/components/loader/loader";
+import MlLoader from '../../../../commons/components/loader/loader';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlAppStartupListView extends Component {
-  componentDidUpdate(){
+  componentDidUpdate() {
     $('.pie-passion').pieChart({
       barColor: '#ef4647',
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 2,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
@@ -25,7 +25,7 @@ export default class MlAppStartupListView extends Component {
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 2,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
@@ -34,7 +34,7 @@ export default class MlAppStartupListView extends Component {
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 2,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
@@ -46,30 +46,25 @@ export default class MlAppStartupListView extends Component {
    * */
   async viewDetails(portfolioId, e) {
     const response = await fetchPortfolioActionHandler(portfolioId);
-    if (this.props.config.isExplore && response && response.canAccess)
-      FlowRouter.go('/app/explore/startup/' + portfolioId)
-    else if (response && response.canAccess)
-      FlowRouter.go('/app/startup/' + portfolioId)
-    else if(response && !response.canAccess)
-      toastr.error('Portfolio not available for view')
+    if (this.props.config.isExplore && response && response.canAccess) { FlowRouter.go(`/app/explore/startup/${portfolioId}`) } else if (response && response.canAccess) { FlowRouter.go(`/app/startup/${portfolioId}`) } else if (response && !response.canAccess) { toastr.error('Portfolio not available for view') }
   }
 
-  render(){
-    let that = this
-    const data=this.props.data||[];
-    let loading=this.props.config&&this.props.config.loading;
-    const list=  data.map((startup, idx) =>
+  render() {
+    const that = this
+    const data = this.props.data || [];
+    const loading = this.props.config && this.props.config.loading;
+    const list = data.map((startup, idx) =>
       <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
           <div className="company_block">
             <div className="regular"><span>{startup.accountType}</span></div>
-           <div className="company_header">
-             {startup.aboutUs && startup.aboutUs.logo && startup.aboutUs.logo.length ?
-               <CDNImage src={generateAbsolutePath(startup.aboutUs.logo[0].fileUrl)} className="c_image"/> :
-               <CDNImage src="/images/no_image.png" />}
+            <div className="company_header">
+              {startup.aboutUs && startup.aboutUs.logo && startup.aboutUs.logo.length ?
+                <CDNImage src={generateAbsolutePath(startup.aboutUs.logo[0].fileUrl)} className="c_image"/> :
+                <CDNImage src="/images/no_image.png" />}
             </div>
             <h3><span>{startup.firstName}</span><br/>
-              {startup.chapterName}{!startup.isDefaultSubChapter?"-" +startup.subChapterName:""}
+              {startup.chapterName}{!startup.isDefaultSubChapter ? `-${startup.subChapterName}` : ''}
             </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
@@ -101,24 +96,21 @@ export default class MlAppStartupListView extends Component {
             </div>
           </div>
         </a>
-      </div>
-    );
+      </div>);
 
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
+        {loading === true ? (<MlLoader/>) : (
           <div className="ideators_list">
-          <div className="col-md-12"> <h2>Startups</h2></div>
-            {data && !data.length?(
+            <div className="col-md-12"> <h2>Startups</h2></div>
+            {data && !data.length ? (
               <NoDataList moduleName="Portfolios" />
-            ):(<div>{list}</div>)
+            ) : (<div>{list}</div>)
             }
           </div>
         )}
       </div>
     );
-
   }
-
 }
 

@@ -1,135 +1,133 @@
 import React from 'react';
-import {verifyEmailHandler,verifyMobileNumberHandler, resendSmsOtpHandler} from '../../commons/verificationActionHandler';
+import { verifyEmailHandler, verifyMobileNumberHandler, resendSmsOtpHandler } from '../../commons/verificationActionHandler';
 import MlLoader from '../../commons/components/loader/loader'
-import {appClient} from '../core/appConnection';
-export default class EmailVerification extends React.Component{
-
-  constructor(props){
+import { appClient } from '../core/appConnection';
+export default class EmailVerification extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      emailVerificationSuccess:false,
-      email:"",
-      mobileNumber:"",
-      mobileNumberVerified:false,
-      loading:true,
-      canResend:false
+    this.state = {
+      emailVerificationSuccess: false,
+      email: '',
+      mobileNumber: '',
+      mobileNumberVerified: false,
+      loading: true,
+      canResend: false
     }
-    //this.verifyEmail.bind(this);
+    // this.verifyEmail.bind(this);
     this.verifyMobileNumber.bind(this);
     this.resendSmsOTP.bind(this);
   }
 
-   /*
+  /*
     verify-email flow changed.
    */
-  async componentWillMount()
-  {
-    //const resp=await this.verifyEmail(this.props.token);
-    let token = FlowRouter.getParam('token');
-    let data={token:token};
-    var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+  async componentWillMount() {
+    // const resp=await this.verifyEmail(this.props.token);
+    const token = FlowRouter.getParam('token');
+    const data = { token };
+    const header = { apiKey: '741432fd-8c10-404b-b65c-a4c4e9928d32' };
     $.ajax({
       type: 'POST',
       dataType: 'json',
       url: Meteor.absoluteUrl('verifyEmail'),
-      data :JSON.stringify(data),
+      data: JSON.stringify(data),
       headers: header,
-      contentType: "application/json; charset=utf-8",
-      success:function(response){
+      contentType: 'application/json; charset=utf-8',
+      success: function (response) {
         // console.log(response);
-        if(response.success){
+        if (response.success) {
           resp = JSON.parse(response.result);
-          this.setState({loading:false,emailVerificationSuccess:resp.emailVerified,email:resp.email,mobileNumber:resp.mobileNumber});
+          this.setState({
+            loading: false, emailVerificationSuccess: resp.emailVerified, email: resp.email, mobileNumber: resp.mobileNumber
+          });
         } else {
-          this.setState({loading:false,emailVerificationSuccess:false,emailVerificationMessage:response.result});
+          this.setState({ loading: false, emailVerificationSuccess: false, emailVerificationMessage: response.result });
         }
       }.bind(this)
     });
   }
 
 
-  async resendSmsOTP(mobileNumber){
-
-    if(this.state.canResend) {
-      let mobileNumber = this.state.mobileNumber;
-      let data = {mobileNumber: mobileNumber};
+  async resendSmsOTP(mobileNumber) {
+    if (this.state.canResend) {
+      const mobileNumber = this.state.mobileNumber;
+      const data = { mobileNumber };
       $.ajax({
         type: 'POST',
         dataType: 'json',
         url: Meteor.absoluteUrl('resendOTP'),
         data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
+        contentType: 'application/json; charset=utf-8',
         success: function (response) {
           if (response.success) {
-            toastr.success("OTP sent successfuly");
-            this.setState({canResend:false})
-            setTimeout(function(){
-              this.setState({canResend:true})
-            }.bind(this),30000)
+            toastr.success('OTP sent successfuly');
+            this.setState({ canResend: false })
+            setTimeout(() => {
+              this.setState({ canResend: true })
+            }, 30000)
           } else {
-            toastr.error("Resend OTP failed");
+            toastr.error('Resend OTP failed');
           }
         }.bind(this)
       });
     }
     // For timer countdown
-    var timeleft = 30;
-    var downloadTimer = setInterval(function(){
+    let timeleft = 30;
+    var downloadTimer = setInterval(() => {
       timeleft--;
-      document.getElementById("countdowntimer").textContent = timeleft;
-      if(timeleft <= 0)
-        clearInterval(downloadTimer);
-    },1000);
+      document.getElementById('countdowntimer').textContent = timeleft;
+      if (timeleft <= 0) { clearInterval(downloadTimer); }
+    }, 1000);
   }
 
-  async verifyMobileNumber(){
-      let mobileNumber=this.state.mobileNumber;
-      let otp=this.refs.otpValue.value;
-      let isTermsChecked= this.refs.isTermsChecked.checked;
-      let data = {mobileNumber: mobileNumber, otp:otp};
-      if(isTermsChecked && otp) {
-        $.ajax({
-          type: 'POST',
-          dataType: 'json',
-          url: Meteor.absoluteUrl('verifyMobileNumber'),
-          data: JSON.stringify(data),
-          contentType: "application/json; charset=utf-8",
-          success: function (response) {
-            if (response.success) {
-              this.setState({mobileNumberVerified:true});
-            } else {
-              toastr.error(response.result);
-              this.setState({mobileNumberVerified:false});
-            }
-          }.bind(this)
-        });
-      }else{
-        if(!isTermsChecked){
-          toastr.error("Please agree to 'Terms and Conditions' and 'Privacy Policy'");
-        }
-        if(!otp){
-          toastr.error("Please enter OTP");
-        }
+  async verifyMobileNumber() {
+    const mobileNumber = this.state.mobileNumber;
+    const otp = this.refs.otpValue.value;
+    const isTermsChecked = this.refs.isTermsChecked.checked;
+    const data = { mobileNumber, otp };
+    if (isTermsChecked && otp) {
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('verifyMobileNumber'),
+        data: JSON.stringify(data),
+        contentType: 'application/json; charset=utf-8',
+        success: function (response) {
+          if (response.success) {
+            this.setState({ mobileNumberVerified: true });
+          } else {
+            toastr.error(response.result);
+            this.setState({ mobileNumberVerified: false });
+          }
+        }.bind(this)
+      });
+    } else {
+      if (!isTermsChecked) {
+        toastr.error("Please agree to 'Terms and Conditions' and 'Privacy Policy'");
       }
+      if (!otp) {
+        toastr.error('Please enter OTP');
+      }
+    }
   }
-  verifyLater(){
-    let mobileNumber=this.state.mobileNumber;
-    let data = {mobileNumber: mobileNumber};
+  verifyLater() {
+    const mobileNumber = this.state.mobileNumber;
+    const data = { mobileNumber };
     $.ajax({
       type: 'POST',
       dataType: 'json',
       url: Meteor.absoluteUrl('verifyLaterUserMobileNumber'),
       data: JSON.stringify(data),
-      contentType: "application/json; charset=utf-8",
-      success: function (response) {
+      contentType: 'application/json; charset=utf-8',
+      success(response) {
         if (response.success) {
           toastr.success("Please verify your mobile number mentioned in 'My Profile' option");
         }
-      }.bind(this)
+      }
     });
   }
 
- /* async verifyEmail(token){
+  /* async verifyEmail(token){
     const response=await verifyEmailHandler(token,appClient);
     let resp=null;
     if(response.success){
@@ -139,20 +137,19 @@ export default class EmailVerification extends React.Component{
       this.setState({loading:false,emailVerificationSuccess:false,emailVerificationMessage:response.result});
     }
     return response;
-  }*/
- componentDidMount(){
-     setTimeout(() => {
-       this.setState({canResend:true})
-     },30000)
+  } */
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ canResend: true })
+    }, 30000)
 
-     var timeleft = 30;
-     var downloadTimer = setInterval(() => {
-       timeleft--;
-       document.getElementById("countdowntimer").textContent = timeleft;
-       if(timeleft <= 0)
-         clearInterval(downloadTimer);
-     },1000);
- }
+    let timeleft = 30;
+    var downloadTimer = setInterval(() => {
+      timeleft--;
+      document.getElementById('countdowntimer').textContent = timeleft;
+      if (timeleft <= 0) { clearInterval(downloadTimer); }
+    }, 1000);
+  }
 
   // async verifyMobileNumber(){
   //   let mobileNumber=this.state.mobileNumber;
@@ -178,7 +175,7 @@ export default class EmailVerification extends React.Component{
   //     }
   //   }
   // }
-  /*async resendSmsOTP(){
+  /* async resendSmsOTP(){
     if(this.state.canResend){
       let mobileNumber=this.state.mobileNumber;
       const response=await resendSmsOtpHandler(mobileNumber, appClient);
@@ -189,94 +186,89 @@ export default class EmailVerification extends React.Component{
       }
       return response;
     }
-  }*/
+  } */
 
-  render(){
-
-     let mobileNumber=this.state.mobileNumber||"";
-     let emailVerificationSuccess=this.state.emailVerificationSuccess;
-     let linkInactive = null;
-     let emailAlreadyVerified= null;
-     let regExpired = null;
-     if(!emailVerificationSuccess){
-       if(this.state.emailVerificationMessage === "REGISTRATION INACTIVATED")
-         linkInactive = true;
-       else if(this.state.emailVerificationMessage === "LINK EXPIRED")
-         regExpired = true
-       else if(this.state.emailVerificationMessage === "EMAIL ALREADY VERIFIED")
-         emailAlreadyVerified = true
-     }
-     let mobileNumberVerificationSuccess=this.state.mobileNumberVerified;
-     const showLoader=this.state.loading;
+  render() {
+    const mobileNumber = this.state.mobileNumber || '';
+    const emailVerificationSuccess = this.state.emailVerificationSuccess;
+    let linkInactive = null;
+    let emailAlreadyVerified = null;
+    let regExpired = null;
+    if (!emailVerificationSuccess) {
+      if (this.state.emailVerificationMessage === 'REGISTRATION INACTIVATED') { linkInactive = true; } else if (this.state.emailVerificationMessage === 'LINK EXPIRED') { regExpired = true } else if (this.state.emailVerificationMessage === 'EMAIL ALREADY VERIFIED') { emailAlreadyVerified = true }
+    }
+    const mobileNumberVerificationSuccess = this.state.mobileNumberVerified;
+    const showLoader = this.state.loading;
     return (
       <div>
-      {showLoader===true?( <MlLoader/>):(
-      <div className="app_main_wrap email-bg">
-        <div className="" style={{'width': '600px','marginLeft': '132px'}}>
-          <div className="email-body">
-            {!mobileNumberVerificationSuccess&&emailVerificationSuccess&&
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="app_main_wrap email-bg">
+            <div className="" style={{ width: '600px', marginLeft: '132px' }}>
+              <div className="email-body">
+                {!mobileNumberVerificationSuccess && emailVerificationSuccess &&
               <div>
-              <img src="../images/success_icon.png" /><br />
-              <h3 style={{'marginBottom':'20px'}}>Congratulations!!</h3>
-             {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
-                Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
+                <img src="../images/success_icon.png" /><br />
+                <h3 style={{ marginBottom: '20px' }}>Congratulations!!</h3>
+                {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
+                Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a> */}
 
-                {/* Old Email Text*/}
-               {/* <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
+                {/* Old Email Text */}
+                {/* <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
                 We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
-                  Good day and God speed to all your efforts.</p>*/}
+                  Good day and God speed to all your efforts.</p> */}
 
                 <p>Your email Id has been successfully verified. <br/>If you are from India, you can verify your mobile number below to receive SMS notifications. <br/>
                   <b>If you are outside India</b>, please click the '<b>Verify Later</b>' Button below. We are working on SMS notifications for all countries. This will be available in the upcoming versions.
                   Email notifications will be sent to users from all countries.<br /><br /></p>
-              <div className="form-group">
-                <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
-              </div>
-              <div className="form-group sendotp">
-                <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
-                {this.state.canResend?<span><a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a></span>:<p className="resendotp"> 00 : <span id="countdowntimer">30</span> </p>}
-                {/*<a href="" className="resendotp" onClick={this.verifyLater.bind(this)}>Verify Later</a>*/}
-              </div><br />
+                <div className="form-group">
+                  <input type="text" value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
+                </div>
+                <div className="form-group sendotp">
+                  <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
+                  {this.state.canResend ? <span><a href="" className="resendotp" onClick={this.resendSmsOTP.bind(this)}>Resend OTP</a></span> : <p className="resendotp"> 00 : <span id="countdowntimer">30</span> </p>}
+                  {/* <a href="" className="resendotp" onClick={this.verifyLater.bind(this)}>Verify Later</a> */}
+                </div><br />
                 <div className="terms">
                   <label><input type="checkbox" ref="isTermsChecked"/>&nbsp; I have read and agree to the <a data-toggle="modal" data-target=".termsConditionsPop">Terms and Conditions</a> and <a data-toggle="modal" data-target=".privacyPop"> 'Privacy Policy'</a></label>
                 </div>
-                <div className="ml_btn" style={{'textAlign':'center'}}>
-                <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
-                <a href="" className="cancel_btn" onClick={this.verifyLater.bind(this)}>Verify Later</a>
+                <div className="ml_btn" style={{ textAlign: 'center' }}>
+                  <a href="" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
+                  <a href="" className="cancel_btn" onClick={this.verifyLater.bind(this)}>Verify Later</a>
                 </div>
               </div>
-            }
-            {linkInactive&&<div>
-              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Inactive!</h2>
-              <p style={{'fontSize':'24px'}}>This email link has been rendered inactive, due to admin action.<br/>Please contact us at <a style={{'color':'#ef4647'}} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
-              {/*<a href="/login" className="save_btn" >Login</a>*/}
-             </div>}
-            {regExpired&&<div>
-              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
-              <p style={{'fontSize':'24px'}}>We have already sent you email with new activation link.<br/> We request you to click and verify this new email verification link before 72 hrs</p>
-              {/*<a href="/login" className="save_btn" >Login</a>*/}
-            </div>}
-            {emailAlreadyVerified&&<div>
-              <img src="../images/success_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Already Verified!</h2>
-              <p style={{'fontSize':'24px'}}>Thank you, you have already verified your email earlier</p>
-              {/*<a href="/login" className="save_btn" >Login</a>*/}
-            </div>}
+                }
+                {linkInactive && <div>
+                  <img src="../images/fail_icon.png" /><br /> <h2 style={{ marginBottom: '20px' }}>Inactive!</h2>
+                  <p style={{ fontSize: '24px' }}>This email link has been rendered inactive, due to admin action.<br/>Please contact us at <a style={{ color: '#ef4647' }} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
+                  {/* <a href="/login" className="save_btn" >Login</a> */}
+                </div>}
+                {regExpired && <div>
+                  <img src="../images/fail_icon.png" /><br /> <h2 style={{ marginBottom: '20px' }}>Expired!</h2>
+                  <p style={{ fontSize: '24px' }}>We have already sent you email with new activation link.<br/> We request you to click and verify this new email verification link before 72 hrs</p>
+                  {/* <a href="/login" className="save_btn" >Login</a> */}
+                </div>}
+                {emailAlreadyVerified && <div>
+                  <img src="../images/success_icon.png" /><br /> <h2 style={{ marginBottom: '20px' }}>Already Verified!</h2>
+                  <p style={{ fontSize: '24px' }}>Thank you, you have already verified your email earlier</p>
+                  {/* <a href="/login" className="save_btn" >Login</a> */}
+                </div>}
 
-            {mobileNumberVerificationSuccess&&
+                {mobileNumberVerificationSuccess &&
               <div>
                 <img src="../images/success_icon.png" /><br />
                 <h2>Congratulations</h2>
                 You have successfully verified your account. You will be notified once your profile is activated<br /><br />
                 <a href="/login" className="save_btn" >Login</a>
               </div>
-            }
-          </div>
-        </div>
-      </div>)}
+                }
+              </div>
+            </div>
+          </div>)}
 
-        <div className="modal fade bs-example-modal-sm library-popup termsConditionsPop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup termsConditionsPop"
+          onContextMenu={e => e.preventDefault()} tabIndex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -286,11 +278,11 @@ export default class EmailVerification extends React.Component{
               </div>
               <div className="modal-body">
 
-                  <div className="blank_content" style={{'height':'400px','overflow':'auto','padding':'0px 5px'}}>
-                    <h5>Introduction</h5>
+                <div className="blank_content" style={{ height: '400px', overflow: 'auto', padding: '0px 5px' }}>
+                  <h5>Introduction</h5>
 
 
-                    <p>
+                  <p>
 
 
                       These Standard Terms and Conditions (hereinafter referred to as “Terms and Conditions”) written on
@@ -299,7 +291,7 @@ export default class EmailVerification extends React.Component{
                       entire course of the document). These Terms and Conditions will be applied fully and affect your
                       use of this Website.</p>
 
-                    <p>
+                  <p>
 
 
                       By using this Website, you agree to abide by all terms and conditions written in here as well as
@@ -309,17 +301,17 @@ export default class EmailVerification extends React.Component{
                       or “us”). This document is an electronic record generated by a computer system and does not
                       require any physical or digital signatures.</p>
 
-                    <p>
+                  <p>
 
 
                       This ‘Terms and Conditions’ document also includes the ‘Disclaimer’ document. Please read and
                       accept the points completely, before you proceed further.</p>
 
 
-                    <h5>Eligibility</h5>
+                  <h5>Eligibility</h5>
 
 
-                    <p>
+                  <p>
 
 
                       User Registrations and Transactions on the application are allowed for persons who have attained
@@ -335,12 +327,12 @@ export default class EmailVerification extends React.Component{
                       a manner that does not violate moolya’s legal rights or those of any third party(ies).
 
 
-                    </p>
+                  </p>
 
-                    <h5>Amendments</h5>
+                  <h5>Amendments</h5>
 
 
-                    <p>
+                  <p>
 
 
                       Amendments to this agreement can be made and effected by us from time to time at our sole
@@ -351,13 +343,13 @@ export default class EmailVerification extends React.Component{
                       continued use of the Website after such changes signifies your acceptance of such changes.
 
 
-                    </p>
+                  </p>
 
 
-                    <h5>Intellectual Property Rights </h5>
+                  <h5>Intellectual Property Rights </h5>
 
 
-                    <p>
+                  <p>
 
 
                       Other than the content you own, under these Terms, moolya) and/or its partners and/or affiliates
@@ -370,7 +362,7 @@ export default class EmailVerification extends React.Component{
                       prescribed terms and conditions at all times. </p>
 
 
-                    <p>
+                  <p>
 
 
                       moolya owns the copyright and proprietary right in all text, graphics, user interfaces, visual
@@ -383,14 +375,14 @@ export default class EmailVerification extends React.Component{
                       validity of your subscription. </p>
 
 
-                    <p>
+                  <p>
 
 
                       Access or use to the Website does not confer and shall not be considered as conferring upon anyone
                       any license to moolya’s or any third party's Intellectual Property Rights. </p>
 
 
-                    <p>
+                  <p>
 
 
                       You shall have no rights to use, receive or copy any source code and look and feel of the Website
@@ -398,88 +390,88 @@ export default class EmailVerification extends React.Component{
                       code for the Website for any purpose. </p>
 
 
-                    <h5>Specific Restrictions: </h5>
+                  <h5>Specific Restrictions: </h5>
 
 
-                    <p>
+                  <p>
 
                       The User agrees and acknowledges that he/she is prohibited from carrying out the following
                       activities
 
 
-                    </p>
+                  </p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>publishing any Website or application material in any other media;</li>
+                    <li>publishing any Website or application material in any other media;</li>
 
 
-                      <li>selling, sublicensing and/or otherwise commercializing any Website material;</li>
+                    <li>selling, sublicensing and/or otherwise commercializing any Website material;</li>
 
 
-                      <li>publicly performing and/or showing any Website material;</li>
+                    <li>publicly performing and/or showing any Website material;</li>
 
 
-                      <li>using this Website in any way that is or may be damaging to this Website or detrimental to the
+                    <li>using this Website in any way that is or may be damaging to this Website or detrimental to the
                         best interst of moolya;
-                      </li>
+                    </li>
 
 
-                      <li>using this Website in any way that impacts user access to this Website;</li>
+                    <li>using this Website in any way that impacts user access to this Website;</li>
 
 
-                      <li>using this Website contrary to applicable laws and regulations, or in any way may cause harm
+                    <li>using this Website contrary to applicable laws and regulations, or in any way may cause harm
                         to the Website, or to any person or business entity;
-                      </li>
+                    </li>
 
 
-                      <li>engaging in any data mining, data harvesting, data extracting or any other similar activity in
+                    <li>engaging in any data mining, data harvesting, data extracting or any other similar activity in
                         relation to this Website;
-                      </li>
+                    </li>
 
 
-                      <li>using this Website to engage in any advertising or marketing.</li>
+                    <li>using this Website to engage in any advertising or marketing.</li>
 
 
-                      <li>using the Website after the validity of the subscription has expired.</li>
+                    <li>using the Website after the validity of the subscription has expired.</li>
 
 
-                    </ul>
+                  </ul>
 
 
-                    <p>Certain areas of this Website are restricted from being accessed by you. ‘moolya Business
+                  <p>Certain areas of this Website are restricted from being accessed by you. ‘moolya Business
                       Services Private Limited, Hyderabad, India’ may further restrict access to you to any areas or
                       sections of this Website, at any time, at its own absolute discretion. Any user ID and/or password
                       you may have for this Website are confidential and you must always maintain confidentiality.</p>
 
 
-                    <h5>Registration to Use the Website </h5>
+                  <h5>Registration to Use the Website </h5>
 
 
-                    <p>You shall be entitled to use the Website by registering as a User on the Website after furnishing
+                  <p>You shall be entitled to use the Website by registering as a User on the Website after furnishing
                       all relevant information as sought on the Website in the following respective categories:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>Investors</li>
+                    <li>Investors</li>
 
-                      <li>Startups and their Founders</li>
+                    <li>Startups and their Founders</li>
 
-                      <li>Service Providers</li>
+                    <li>Service Providers</li>
 
-                      <li>Students</li>
+                    <li>Students</li>
 
-                      <li>Institutions and Colleges</li>
-
-
-                    </ul>
+                    <li>Institutions and Colleges</li>
 
 
-                    <p>If you choose to register on the Website, and provide your registration data in the respective
+                  </ul>
+
+
+                  <p>If you choose to register on the Website, and provide your registration data in the respective
                       category, you shall be solely responsible for maintaining the confidentiality of your user id and
                       password.
 
@@ -487,57 +479,57 @@ export default class EmailVerification extends React.Component{
                       Further, you agree, inter alia, to: </p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>Provide true, accurate, current and complete information about yourself as prompted by the
+                    <li>Provide true, accurate, current and complete information about yourself as prompted by the
                         Website’s registration form while registering (such information being the "Registration Data");
-                      </li>
+                    </li>
 
-                      <li>Maintain and promptly update the Registration Data to keep it true, accurate, current and
+                    <li>Maintain and promptly update the Registration Data to keep it true, accurate, current and
                         complete at all times;
-                      </li>
+                    </li>
 
-                      <li>You must immediately notify moolya of any unauthorized use of your password or account or any
+                    <li>You must immediately notify moolya of any unauthorized use of your password or account or any
                         other breach of security; and
-                      </li>
+                    </li>
 
-                      <li>ensure that you exit from your account at the end of each session</li>
+                    <li>ensure that you exit from your account at the end of each session</li>
 
 
-                    </ul>
+                  </ul>
 
-                    <p>
+                  <p>
 
 
                       As a part of the registration process, moolya may require you to provide the following Personally
                       Identifiable Information about you including without limitation:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>Name</li>
+                    <li>Name</li>
 
-                      <li>Address</li>
+                    <li>Address</li>
 
-                      <li>E-mail address</li>
+                    <li>E-mail address</li>
 
-                      <li>Mobile number</li>
+                    <li>Mobile number</li>
 
-                      <li>KYC Documents including but not limited to ID proof, address proof, company proof</li>
+                    <li>KYC Documents including but not limited to ID proof, address proof, company proof</li>
 
-                      <li>Intended category of registration</li>
+                    <li>Intended category of registration</li>
 
-                      <li>Service card/information indicating your requirements/services being offered by you and the
+                    <li>Service card/information indicating your requirements/services being offered by you and the
                         applicable fees
-                      </li>
+                    </li>
 
 
-                    </ul>
+                  </ul>
 
 
-                    <p>
+                  <p>
 
 
                       During the course of use of the Website, moolya may also require you to give other information
@@ -545,13 +537,13 @@ export default class EmailVerification extends React.Component{
                       the Website, payments made by one user to another user through moolya.</p>
 
 
-                    <p>Such information collected shall be subject to the Privacy Policy.
+                  <p>Such information collected shall be subject to the Privacy Policy.
 
                       Each User may register once only and create only one user profile. Each User may create several
                       company profiles. </p>
 
 
-                    <p>You shall be solely responsible for the accuracy and correctness of all such details/information
+                  <p>You shall be solely responsible for the accuracy and correctness of all such details/information
                       given by you during registration on and use of the Website. If moolya has reason to doubt the
                       correctness of any details/information furnished by you or in case any information furnished by
                       you is found incorrect, false or misleading or otherwise not in accordance with these Terms and
@@ -559,7 +551,7 @@ export default class EmailVerification extends React.Component{
                       Website and refuse to provide access permanently or for such period as moolya deems fit.</p>
 
 
-                    <p>You agree that moolya cannot technically determine whether a registered User of moolya de factor
+                  <p>You agree that moolya cannot technically determine whether a registered User of moolya de factor
                       represents the person/company that person/company purports to be, and therefore, moolya shall not
                       assume any liability whatsoever for the actual identity of a user. You are solely responsible for
                       personally verifying the authenticity of other Users.
@@ -569,10 +561,10 @@ export default class EmailVerification extends React.Component{
                       leakage or any misuse of your PII.</p>
 
 
-                    <h5>Your Content</h5>
+                  <h5>Your Content</h5>
 
 
-                    <p>
+                  <p>
 
 
                       In these Terms and Conditions, “Your Content” shall mean any audio, video text, images or other
@@ -582,7 +574,7 @@ export default class EmailVerification extends React.Component{
                       distribute it in any and all media.</p>
 
 
-                    <p>
+                  <p>
 
 
                       In order for us to provide services to you, we require that you grant us certain rights with
@@ -601,39 +593,39 @@ export default class EmailVerification extends React.Component{
                       arising from such claim of third party, including reasonable attorney fees.</p>
 
 
-                    <p>moolya reserves the right to remove any of Your Content from this Website at any time without
+                  <p>moolya reserves the right to remove any of Your Content from this Website at any time without
                       notice.</p>
 
 
-                    <h5>Use of the Website:</h5>
+                  <h5>Use of the Website:</h5>
 
 
-                    <p>moolya grants you the right to use the Website through various operating systems including but
+                  <p>moolya grants you the right to use the Website through various operating systems including but
                       not limited to Android, Apple iOS, and Microsoft Windows, and as permitted by the terms of
                       services of the respective operating systems.</p>
 
 
-                    <p>moolya will make commercially reasonable efforts to ensure that all facilities used to store and
+                  <p>moolya will make commercially reasonable efforts to ensure that all facilities used to store and
                       process Your Content meet a high standard for security.</p>
 
 
-                    <h5>Services on moolya:</h5>
+                  <h5>Services on moolya:</h5>
 
 
-                    <p>You agree that if services are discovered by Users on moolya, then moolya reserves the right to
+                  <p>You agree that if services are discovered by Users on moolya, then moolya reserves the right to
                       facilitate such provision of services through moolya.</p>
 
 
-                    <p>Users who are providing services (hereinafter referred to as “Service Providers”) to other Users
+                  <p>Users who are providing services (hereinafter referred to as “Service Providers”) to other Users
                       on moolya shall charge to service seekers such fees which are charged by them in the ordinary
                       course of their respective businesses as per applicable industry standard.</p>
 
 
-                    <p>moolya reserves the right to contact Service Providers on the basis of information, contact
+                  <p>moolya reserves the right to contact Service Providers on the basis of information, contact
                       details, business cards which are provided by them on moolya.</p>
 
 
-                    <p>You agree and acknowledge that moolya is a self-discovery platform for Users to find and/or seek
+                  <p>You agree and acknowledge that moolya is a self-discovery platform for Users to find and/or seek
                       services, and that moolya is not responsible for the quality, validity, accuracy, completeness or
                       correctness of services and data exchanged on moolya. Under no circumstances will moolya be
                       responsible for any loss or damage resulting from any User’s reliance on any services provided by
@@ -645,34 +637,34 @@ export default class EmailVerification extends React.Component{
                       verifying the particulars of any particular User is not on moolya.</p>
 
 
-                    <p>Any dispute which may arise between Users with respect to the services facilitated by them on
+                  <p>Any dispute which may arise between Users with respect to the services facilitated by them on
                       moolya shall be mutually discussed and resolved between the Users, without the involvement of
                       moolya. </p>
 
 
-                    <p>You shall release and indemnify moolya and or any of its officers and representatives from any
+                  <p>You shall release and indemnify moolya and or any of its officers and representatives from any
                       cost, damage, liability or any other consequence arising from contract between you and other Users
                       or Service providers.</p>
 
 
-                    <h5>Claims against Objectionable Content:</h5>
+                  <h5>Claims against Objectionable Content:</h5>
 
 
-                    <p>If you believe that any content on the website is illegal, offensive, abusive, indecent,
+                  <p>If you believe that any content on the website is illegal, offensive, abusive, indecent,
                       harassing, blasphemous, or is otherwise injurious to third parties; or impersonates another
                       person; or objectionable or otherwise unlawful in any manner whatsoever; or infringes your or any
                       third-party rights or which consists of or contains software viruses, ("Objectionable Content"),
                       please notify us immediately using the contact details at our contact page.</p>
 
 
-                    <p>moolya will take whatever action, in its sole discretion, it deems appropriate, including removal
+                  <p>moolya will take whatever action, in its sole discretion, it deems appropriate, including removal
                       of such Objectionable Content from the website.</p>
 
 
-                    <h5>Disclaimer of warranties:</h5>
+                  <h5>Disclaimer of warranties:</h5>
 
 
-                    <p>
+                  <p>
 
 
                       You acknowledge and agree that this Website is provided “as is” and “as available”, and moolya
@@ -700,10 +692,10 @@ export default class EmailVerification extends React.Component{
                       any such material. </p>
 
 
-                    <h5>Limitation of liability:</h5>
+                  <h5>Limitation of liability:</h5>
 
 
-                    <p>
+                  <p>
 
 
                       To the fullest extent permitted by applicable law, in no event shall moolya, nor any of its
@@ -714,17 +706,17 @@ export default class EmailVerification extends React.Component{
                       Website. </p>
 
 
-                    <p>In no event shall moolya be liable to you for any indirect, incidental, special, punitive,
+                  <p>In no event shall moolya be liable to you for any indirect, incidental, special, punitive,
                       exemplary or consequential damages whatsoever, however caused and under any theory of liability,
                       including but not limited to, any loss of profit (whether incurred directly or indirectly), any
                       loss of goodwill or business reputation, any loss of data suffered, cost of procurement of
                       substitute goods or services, or other intangible loss.</p>
 
 
-                    <h5>Breach: </h5>
+                  <h5>Breach: </h5>
 
 
-                    <p>
+                  <p>
 
                       Without limiting other remedies, moolya may, at moolya’s sole discretion, limit your activity,
                       immediately remove your information, warn other users of your actions, immediately
@@ -732,20 +724,20 @@ export default class EmailVerification extends React.Component{
                       you with access to the Website in the event, but not limited to: </p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>a. If you breach the Terms and Conditions or Privacy Policy or any other rules and policies as
+                    <li>a. If you breach the Terms and Conditions or Privacy Policy or any other rules and policies as
                         displayed on the Website;
-                      </li>
+                    </li>
 
-                      <li>b. If moolya is unable to verify or authenticate any information you provide;</li>
-
-
-                    </ul>
+                    <li>b. If moolya is unable to verify or authenticate any information you provide;</li>
 
 
-                    <p>You also agree that any breach by you of these Terms and Conditions or any other rules or policy
+                  </ul>
+
+
+                  <p>You also agree that any breach by you of these Terms and Conditions or any other rules or policy
                       as displayed on the Website will constitute an unlawful and unfair business practice, and will
                       cause irreparable harm to moolya, for which monetary damages would be inadequate and you consent
                       to pay the same to moolya, which shall not forestall the obtaining of any injunctive or equitable
@@ -753,31 +745,31 @@ export default class EmailVerification extends React.Component{
                       in addition to any other remedies moolya may have in law or in equity.</p>
 
 
-                    <p>If moolya initiates any legal action against you as a result of your violation of these Terms and
+                  <p>If moolya initiates any legal action against you as a result of your violation of these Terms and
                       Conditions or any other rules or policy as displayed over the Website, moolya shall be entitled to
                       recover from you, and you agree to pay, all reasonable attorneys’ fees and costs of such action,
                       in addition to any other relief granted to us.</p>
 
 
-                    <h5>Indemnification:</h5>
+                  <h5>Indemnification:</h5>
 
 
-                    <p>You hereby indemnify to the fullest extent moolya and its other offices and businesses, from and
+                  <p>You hereby indemnify to the fullest extent moolya and its other offices and businesses, from and
                       against any and/or all liabilities, costs, demands, causes of action, damages and expenses arising
                       in any way related to your breach of any of the provisions of these Terms.</p>
 
 
-                    <h5> Severability </h5>
+                  <h5> Severability </h5>
 
 
-                    <p>If any provision of these Terms is found to be invalid under any applicable law, such provisions
+                  <p>If any provision of these Terms is found to be invalid under any applicable law, such provisions
                       shall be deleted without affecting the remaining provisions herein.</p>
 
 
-                    <h5> Payment: </h5>
+                  <h5> Payment: </h5>
 
 
-                    <p>moolya may decide at its own discretion, to either make any of its services, products or
+                  <p>moolya may decide at its own discretion, to either make any of its services, products or
                       subscriptions (hereby referred to as ‘services’ for the entire course of this document)
                       complimentary or chargeable at any point of time without any notice. For users who have already
                       paid for the services or the products on the website, the charged amount will continue to be under
@@ -786,43 +778,43 @@ export default class EmailVerification extends React.Component{
                       the website.</p>
 
 
-                    <p>You understand and agree that moolya reserves the right to advertise and rank Service Providers
+                  <p>You understand and agree that moolya reserves the right to advertise and rank Service Providers
                       on the basis of the subscription availed by them or at the sole discretion of moolya.
 
-                    </p>
+                  </p>
 
 
-                    <p>You agree and acknowledge that Users who have availed services of Service Providers on moolya
+                  <p>You agree and acknowledge that Users who have availed services of Service Providers on moolya
                       shall make online payment within __ days of receipt of services to moolya and moolya shall,
                       thereafter, remit payment to the concerned Service Provider after deducting service charge of
                       moolya within 7 days from receipt of payment. </p>
 
 
-                    <p>
+                  <p>
 
 
                       The amount paid by the User who has sought services of a Service Provider will be remitted to such
                       Service Provider contingent upon the following events:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>a. User confirms receipt of services</li>
+                    <li>a. User confirms receipt of services</li>
 
-                      <li>b. User does not claim refund of the amount paid within a period of 7days from the date of
+                    <li>b. User does not claim refund of the amount paid within a period of 7days from the date of
                         delivery of service
-                      </li>
+                    </li>
 
 
-                    </ul>
+                  </ul>
 
 
-                    <p>You agree and acknowledge that the User is responsible for deduction and payment of applicable
+                  <p>You agree and acknowledge that the User is responsible for deduction and payment of applicable
                       taxes to the concerned authority. </p>
 
 
-                    <p>You understand, accept and agree that the payment facility provided by moolya is neither a
+                  <p>You understand, accept and agree that the payment facility provided by moolya is neither a
                       banking nor financial service but is merely a facilitator providing an electronic, automated
                       online electronic payment, receiving payment on delivery, collection and remittance facility for
                       the transactions on the Website using the existing authorized banking infrastructure and payment
@@ -830,34 +822,34 @@ export default class EmailVerification extends React.Component{
                       acting in a fiduciary capacity with respect to the transaction or the transaction price.</p>
 
 
-                    <h5>Refund Policy:</h5>
+                  <h5>Refund Policy:</h5>
 
 
-                    <p>We do not provide any refunds of fees related to services availed on moolya by Users, unless
+                  <p>We do not provide any refunds of fees related to services availed on moolya by Users, unless
                       agreed by both Service Provider and User who has availed service from such Service Provider.</p>
 
 
-                    <p>In the event that a refund is made to User, then moolya reserves the right to withhold service
+                  <p>In the event that a refund is made to User, then moolya reserves the right to withhold service
                       charge of moolya, on case to case basis.</p>
 
 
-                    <h5>User Testimonial</h5>
+                  <h5>User Testimonial</h5>
 
 
-                    <p>Users can transmit to moolya a testimonial statement depicting your review of using any moolya
+                  <p>Users can transmit to moolya a testimonial statement depicting your review of using any moolya
                       service or subscription.</p>
 
 
-                    <p>By sending any testimonials of your review, you represent that the testimonial statement is true,
+                  <p>By sending any testimonials of your review, you represent that the testimonial statement is true,
                       and that the testimonial accurately depicts your experience of using the moolya or service
                       provided on moolya.</p>
 
 
-                    <p>moolya reserves the right to post or not to post such testimonials based on the Terms and
+                  <p>moolya reserves the right to post or not to post such testimonials based on the Terms and
                       Conditions of moolya from time to time.</p>
 
 
-                    <p>moolya has the right, but not the obligation to monitor and edit or remove any testimonial or
+                  <p>moolya has the right, but not the obligation to monitor and edit or remove any testimonial or
                       Content posted by you. moolya cannot review all communications made on and through any of the
                       mediums of moolya. However, moolya reserves the right, but has no obligation, to monitor and edit,
                       modify or delete any communications (or portions thereof) which moolya in its sole discretion
@@ -865,25 +857,25 @@ export default class EmailVerification extends React.Component{
                       Conditions.</p>
 
 
-                    <h5>Assignment:</h5>
+                  <h5>Assignment:</h5>
 
 
-                    <p>moolya is allowed to assign, transfer, and subcontract its rights and/or obligations under these
+                  <p>moolya is allowed to assign, transfer, and subcontract its rights and/or obligations under these
                       Terms and Conditions without any notification. However, you are not allowed to assign, transfer,
                       or subcontract any of your rights and/or obligations under these Terms and Conditions.</p>
 
 
-                    <h5>Entire Agreement:</h5>
+                  <h5>Entire Agreement:</h5>
 
 
-                    <p>These Terms constitute the entire agreement between ‘moolya Business Services Private Limited,
+                  <p>These Terms constitute the entire agreement between ‘moolya Business Services Private Limited,
                       Hyderabad, India and/or its other global offices, and you in relation to your use of this Website,
                       and supersede all prior agreements and understandings. Any new terms and conditions prescribed
                       from time to time, will be shared with the existing users for them to read, understand and accept
                       before they continue the use of the services on the website.</p>
 
 
-                    <p>Even though you may or may not be registered with some form of DND (‘DO NOT DISTURB’ or ‘DO NOT
+                  <p>Even though you may or may not be registered with some form of DND (‘DO NOT DISTURB’ or ‘DO NOT
                       CALL’ registry or similar in various countries and jurisdictions) or other similar records
                       maintained by various governmental, public or private entities, you expressly and continuously
                       permit moolya authorized representatives/staff members to contact you over email, phone, mobile
@@ -893,16 +885,16 @@ export default class EmailVerification extends React.Component{
                       to be contacted at appropriate times for the same.</p>
 
 
-                    <h5>Governing Law & Jurisdiction:</h5>
+                  <h5>Governing Law & Jurisdiction:</h5>
 
 
-                    <p>These Terms will be governed by and interpreted in accordance with the laws of the State of
+                  <p>These Terms will be governed by and interpreted in accordance with the laws of the State of
                       Telangana, India. The High-court of ‘Hyderabad, Telangana, India’ or only the appropriate courts
                       of ‘Hyderabad, Telangana, India’, will have exclusive jurisdiction to adjudicate any dispute
                       arising under or in connection with this Agreement and ‘Terms and Conditions’ document.</p>
 
 
-                    <p>‘moolya’ confirms to the Information Technology Act, 2000 of India and users are alerted to read,
+                  <p>‘moolya’ confirms to the Information Technology Act, 2000 of India and users are alerted to read,
                       understand and abide by the laws listed in the act. ‘moolya’ also conforms to the ‘Information
                       Technology (Intermediaries guidelines) Rules, 2011’. Users are encouraged to understand and abide
                       by the rules and regulations of this act and other accompanying acts in their entirety, before
@@ -910,42 +902,42 @@ export default class EmailVerification extends React.Component{
                       http://www.dot.gov.in/sites/default/files/itbill2000_0.pdf</p>
 
 
-                    <h5>Mediation and Arbitration:</h5>
+                  <h5>Mediation and Arbitration:</h5>
 
 
-                    <p>In the event of a dispute arising out of or relating to this contract, including any question
+                  <p>In the event of a dispute arising out of or relating to this contract, including any question
                       regarding its existence, validity or termination, the parties shall first seek settlement of that
                       dispute by mediation in accordance with ‘The Arbitration and Conciliation Act, 1996’, which Rules
                       are deemed to be incorporated by reference into this clause.</p>
 
 
-                    <p>If the dispute is not settled by mediation within 30 days of the appointment of the mediator, or
+                  <p>If the dispute is not settled by mediation within 30 days of the appointment of the mediator, or
                       such further period as the parties shall agree in writing, the dispute shall be referred to and
                       finally resolved by arbitration under the ‘The Arbitration and Conciliation Act, 1996’, which
                       Rules are deemed to be incorporated by reference into this clause.</p>
 
 
-                    <p>The language to be used in the mediation and in the arbitration, shall be ‘English’.
+                  <p>The language to be used in the mediation and in the arbitration, shall be ‘English’.
 
                       The governing law of the contract shall be the substantive law of INDIA. In any arbitration
                       commenced pursuant to this clause,</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>a. the number of arbitrators shall be three; and</li>
+                    <li>a. the number of arbitrators shall be three; and</li>
 
-                      <li>b. the seat, or legal place, of the arbitration shall be ‘Hyderabad, Telangana, India’</li>
-
-
-                    </ul>
+                    <li>b. the seat, or legal place, of the arbitration shall be ‘Hyderabad, Telangana, India’</li>
 
 
-                    <h5>Conformance to Consumer Protection Acts: </h5>
+                  </ul>
 
 
-                    <p>‘moolya’ seeks to be a self-discovery platform and hence services may be rendered by users for
+                  <h5>Conformance to Consumer Protection Acts: </h5>
+
+
+                  <p>‘moolya’ seeks to be a self-discovery platform and hence services may be rendered by users for
                       other users on the platform as well as in offline mode. Out of the various laws that have been
                       enforced to protect the consumer rights in India, the most important is the Consumer Protection
                       Act, 1986. Each of the user who wishes to operate on ‘moolya’ for rendering any services,
@@ -959,55 +951,55 @@ export default class EmailVerification extends React.Component{
                       or making any purchases.</p>
 
 
-                    <h5>Exceptions: </h5>
+                  <h5>Exceptions: </h5>
 
 
-                    <p>Nothing in this website disclaimer will exclude or limit any warranty implied by law that it
+                  <p>Nothing in this website disclaimer will exclude or limit any warranty implied by law that it
                       would be unlawful to exclude or limit; and nothing in this website disclaimer will exclude or
                       limit moolya’s liability in respect of any:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li> death or personal injury caused by moolya’s negligence;</li>
+                    <li> death or personal injury caused by moolya’s negligence;</li>
 
-                      <li> fraud or fraudulent misrepresentation on the part of ‘moolya’; or</li>
+                    <li> fraud or fraudulent misrepresentation on the part of ‘moolya’; or</li>
 
-                      <li> matter which it would be illegal or unlawful for ‘moolya’ to exclude or limit, or to attempt
+                    <li> matter which it would be illegal or unlawful for ‘moolya’ to exclude or limit, or to attempt
                         or purport to exclude or limit, its liability
-                      </li>
+                    </li>
 
 
-                    </ul>
+                  </ul>
 
 
-                    <h5>Other parties: </h5>
+                  <h5>Other parties: </h5>
 
 
-                    <p>You accept that, as a limited liability entity, moolya has an interest in limiting the personal
+                  <p>You accept that, as a limited liability entity, moolya has an interest in limiting the personal
                       liability of its officers and employees. You agree that you will not bring any claim personally
                       against moolya’s officers or employees in respect of any losses you suffer in connection with the
                       website.</p>
 
 
-                    <p>Without prejudice to the foregoing paragraph, you agree that the limitations of warranties and
+                  <p>Without prejudice to the foregoing paragraph, you agree that the limitations of warranties and
                       liability set out in this website disclaimer will protect moolya’s officers, employees, agents,
                       subsidiaries, successors, assigns and sub-contractors as well as ‘moolya’, at all times.</p>
 
 
-                    <h5>Reasonableness:</h5>
+                  <h5>Reasonableness:</h5>
 
 
-                    <p>By using this website, you agree that the exclusions and limitations of liability set out in this
+                  <p>By using this website, you agree that the exclusions and limitations of liability set out in this
                       website disclaimer are reasonable. If you do not think they are reasonable, you must not use this
                       website.</p>
 
 
-                    <h5>Force Majeure:</h5>
+                  <h5>Force Majeure:</h5>
 
 
-                    <p>In no event shall ‘moolya’ or any of its agents, staff or officers, be responsible or liable for
+                  <p>In no event shall ‘moolya’ or any of its agents, staff or officers, be responsible or liable for
                       any failure or delay in the performance of its obligations here under arising out of or caused by,
                       directly or indirectly, forces beyond its control, including, without limitation, strikes, work
                       stoppages, accidents, acts of war or terrorism, civil or military disturbances, nuclear or natural
@@ -1017,10 +1009,10 @@ export default class EmailVerification extends React.Component{
                       industry to resume performance as soon as practicable under the circumstances.</p>
 
 
-                    <h5>Guidance on transferring personal data to external organisations:</h5>
+                  <h5>Guidance on transferring personal data to external organisations:</h5>
 
 
-                    <p>Personal Data is defined under the Data Protection Acts or similar ones for various countries. It
+                  <p>Personal Data is defined under the Data Protection Acts or similar ones for various countries. It
                       is generally defined as data which relates to a living individual who can either be identified
                       from that data; or identified from that data and other data which may be in the possession of or
                       likely to come into the possession of the data controller. This will include any expression of
@@ -1038,95 +1030,96 @@ export default class EmailVerification extends React.Component{
                       consent, where, for example, it is required for:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li> Protecting the vital interests of the data subject (i.e. release of medical data in
+                    <li> Protecting the vital interests of the data subject (i.e. release of medical data in
                         emergency), or
-                      </li>
+                    </li>
 
-                      <li> The prevention or detection of crime</li>
-
-
-                    </ul>
+                    <li> The prevention or detection of crime</li>
 
 
-                    <p>Personal Data can be transferred to another third party if the data subject has given their
+                  </ul>
+
+
+                  <p>Personal Data can be transferred to another third party if the data subject has given their
                       consent. ‘moolya’ maybe/is frequently required to disclose information in accordance with
                       legislation which it is subject to. Legal services can be availed by the prospective users of
                       ‘moolya’ for advice on whether India offers adequate protection and to assist with any risk
                       assessments which may be necessary.</p>
 
 
-                    <h5>e-Commerce compliances:</h5>
+                  <h5>e-Commerce compliances:</h5>
 
 
-                    <p>‘moolya’ endeavours to host the application, website and all related systems on vendors of
+                  <p>‘moolya’ endeavours to host the application, website and all related systems on vendors of
                       adequate repute at all times, which ensures adequate security or user data and transactions. Some
                       of the security checks which are put in place by the hosting service provider, include:</p>
 
 
-                    <ul>
+                  <ul>
 
 
-                      <li>Use a firewall and keep the firewall updated</li>
+                    <li>Use a firewall and keep the firewall updated</li>
 
 
-                      <li>Non-storage of cardholder data in any form</li>
+                    <li>Non-storage of cardholder data in any form</li>
 
 
-                      <li>Use sufficient encryption to protect all transmission of cardholder data over any public
+                    <li>Use sufficient encryption to protect all transmission of cardholder data over any public
                         network
-                      </li>
+                    </li>
 
 
-                      <li>Use antivirus software on all machines in the cardholder data environment and ensure that the
+                    <li>Use antivirus software on all machines in the cardholder data environment and ensure that the
                         software is regularly updated
-                      </li>
+                    </li>
 
 
-                      <li>Ensure only reputed Card processing systems are utilized to process payments</li>
+                    <li>Ensure only reputed Card processing systems are utilized to process payments</li>
 
 
-                      <li>Limit access to cardholder data to as few people as possible</li>
+                    <li>Limit access to cardholder data to as few people as possible</li>
 
 
-                      <li>Assign a unique ID number to each user so that everyone is accountable for his own actions
-                      </li>
+                    <li>Assign a unique ID number to each user so that everyone is accountable for his own actions
+                    </li>
 
 
-                      <li>Restrict physical access to the cardholder data environment</li>
+                    <li>Restrict physical access to the cardholder data environment</li>
 
 
-                      <li>Monitor all access to the network and cardholder data environment</li>
+                    <li>Monitor all access to the network and cardholder data environment</li>
 
 
-                      <li>Regularly test security systems and network environment</li>
+                    <li>Regularly test security systems and network environment</li>
 
 
-                      <li>Maintain a security policy and ensure that all personnel are aware of it</li>
+                    <li>Maintain a security policy and ensure that all personnel are aware of it</li>
 
 
-                    </ul>
-                    <p>moolya shall endeavour to use the best efforts to preserve the sanctity and security of data
+                  </ul>
+                  <p>moolya shall endeavour to use the best efforts to preserve the sanctity and security of data
                       provided by Users. However, you agree and acknowledge that we have no control over, and assume no
                       responsibility for the privacy policies or practices of any third party third-party service
                       providers engaged for the operation and administration of the Website.</p>
-                    <p>moolya undertakes to adhere to and comply with legal obligations of the country in which moolya
+                  <p>moolya undertakes to adhere to and comply with legal obligations of the country in which moolya
                       operates.</p>
-                    <p>If you have any questions regarding these Terms and Conditions or if you wish to discuss the
+                  <p>If you have any questions regarding these Terms and Conditions or if you wish to discuss the
                       terms of service contained herein please contact moolya using the contact details at our contact
                       page.</p>
-                  </div>
+                </div>
 
               </div>
             </div>
           </div>
         </div>
 
-        <div className="modal fade bs-example-modal-sm library-popup privacyPop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel">
+        <div
+          className="modal fade bs-example-modal-sm library-popup privacyPop"
+          onContextMenu={e => e.preventDefault()} tabIndex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -1136,18 +1129,18 @@ export default class EmailVerification extends React.Component{
               </div>
               <div className="modal-body">
 
-                  <div className="blank_content" style={{'height':'400px','overflow':'auto','padding':'0px 5px'}}>
-                    <h5>Welcome to our Privacy Policy.</h5>
+                <div className="blank_content" style={{ height: '400px', overflow: 'auto', padding: '0px 5px' }}>
+                  <h5>Welcome to our Privacy Policy.</h5>
 
 
-                    <p>Your privacy is critically important to us.</p>
+                  <p>Your privacy is critically important to us.</p>
 
 
-                    <p>moolya’s office is located at:<br/> #1002, 10th Floor, The Platina, Gachibowli Road, Gachibowli,
+                  <p>moolya’s office is located at:<br/> #1002, 10th Floor, The Platina, Gachibowli Road, Gachibowli,
                       Hyderabad, Telangana, IN - 500032<br/> Mobile: 91-99664 08213</p>
 
 
-                    <p>It is moolya’s (hereinafter referred to as “we” or “our” or “us”) policy to respect the user’s
+                  <p>It is moolya’s (hereinafter referred to as “we” or “our” or “us”) policy to respect the user’s
                       (hereinafter referred to as “you” or “your” or “user”) privacy regarding any information we may
                       collect while operating our website. This Privacy Policy applies to all domains, applications and
                       pages hosted and made available for ‘moolya.global’ and other related domains and pages (hereafter
@@ -1159,21 +1152,21 @@ export default class EmailVerification extends React.Component{
                       the Website and does not apply to our collection of information from other sources.</p>
 
 
-                    <p>This Privacy Policy, together with the Terms and conditions posted on our Website, set forth the
+                  <p>This Privacy Policy, together with the Terms and conditions posted on our Website, set forth the
                       general rules and policies governing your use of our Website. Depending on your activities when
                       visiting our Website, you may be required to agree to additional terms and conditions.</p>
 
 
-                    <p>This Privacy Policy is embedded in an electronic format formed under the Information Technology
+                  <p>This Privacy Policy is embedded in an electronic format formed under the Information Technology
                       Act, 2000 and the Rules made thereunder and the amendments regarding electronic documents as amended
                       by the said Act. There is no requirement of any physical, electronic or digital signature on this
                       Privacy Policy.</p>
 
 
-                    <h5>- Website Visitors:</h5>
+                  <h5>- Website Visitors:</h5>
 
 
-                    <p>Like most website operators, ‘moolya’ collects non-personally-identifying information of the sort
+                  <p>Like most website operators, ‘moolya’ collects non-personally-identifying information of the sort
                       that web browsers and servers typically make available, such as the browser type, language
                       preference, referring site, and the date and time of each visitor request. ‘moolya’s purpose in
                       collecting non-personally identifying information is to better understand how ‘moolya’s visitors use
@@ -1181,30 +1174,30 @@ export default class EmailVerification extends React.Component{
                       aggregate, e.g., by publishing a report on trends in the usage of its website.</p>
 
 
-                    <p>‘moolya’ also collects potentially personally-identifying information like Internet Protocol (IP)
+                  <p>‘moolya’ also collects potentially personally-identifying information like Internet Protocol (IP)
                       addresses for logged in users and for users leaving comments on http://moolya.global blog posts.
                       ‘moolya’ only discloses logged in user and commenter IP addresses under the same circumstances that
                       it uses and discloses personally-identifying information as described below:</p>
 
 
-                    <h5>- Gathering of Personally-Identifying Information:</h5>
+                  <h5>- Gathering of Personally-Identifying Information:</h5>
 
 
-                    <p>Certain visitors to ‘moolya’s websites choose to interact with ‘moolya’ in ways that require
+                  <p>Certain visitors to ‘moolya’s websites choose to interact with ‘moolya’ in ways that require
                       ‘moolya’ to gather personally-identifying information. The amount and type of information that
                       ‘moolya’ gathers depends on the nature of the interaction. For example, we ask visitors who sign up
                       for a blog at http://’moolya.global to provide a username and email address.</p>
 
 
-                    <h5>- Security</h5>
+                  <h5>- Security</h5>
 
 
-                    <p>We strive to ensure the security, integrity and privacy of your Personal Information and to protect
+                  <p>We strive to ensure the security, integrity and privacy of your Personal Information and to protect
                       your Personal Information against unauthorized access or unauthorized alteration, disclosure or
                       destruction.</p>
 
 
-                    <p>The security of your Personal Information is important to us, but remember that no method of
+                  <p>The security of your Personal Information is important to us, but remember that no method of
                       transmission over the Internet, or method of electronic storage is 100% secure. While we strive to
                       use commercially acceptable means to protect your Personal Information and all information gathered
                       on the website is stored and maintained in secure facilities that limit and restrict access to
@@ -1215,14 +1208,14 @@ export default class EmailVerification extends React.Component{
                       TO ASSUME THESE RISKS.</p>
 
 
-                    <p>You are responsible for all uses of our website by any person using your password. Please contact
+                  <p>You are responsible for all uses of our website by any person using your password. Please contact
                       us immediately if you believe your password has been misused.</p>
 
 
-                    <h5>- Advertisements</h5>
+                  <h5>- Advertisements</h5>
 
 
-                    <p>Ads appearing on our website may be delivered to users by advertising partners, who may set
+                  <p>Ads appearing on our website may be delivered to users by advertising partners, who may set
                       cookies. These cookies allow the ad server to recognize your computer each time they send you an
                       online advertisement to compile information about you or others who use your computer. This
                       information allows ad networks to, among other things, deliver targeted advertisements that they
@@ -1230,7 +1223,7 @@ export default class EmailVerification extends React.Component{
                       and does not cover the use of cookies by any advertisers.</p>
 
 
-                    <p>Advertisers may use technology to send the advertisements directly to your browser. In such cases,
+                  <p>Advertisers may use technology to send the advertisements directly to your browser. In such cases,
                       the advertisers automatically receive your IP address. They may also use cookies and other
                       technologies to measure the effectiveness of their advertisements and to personalize advertising
                       content. We do not have access to or control over cookies or other features that such advertisers
@@ -1238,21 +1231,21 @@ export default class EmailVerification extends React.Component{
                       Policy. </p>
 
 
-                    <p>We do not make any representations concerning the privacy practices or policies of such third
+                  <p>We do not make any representations concerning the privacy practices or policies of such third
                       parties or terms of use of such websites or apps, nor do we control or guarantee the accuracy,
                       integrity, or quality of the information, data, text, software, music, sound, photographs, graphics,
                       videos, messages or other materials available on such websites or apps.</p>
 
 
-                    <h5>- Links To External Sites</h5>
+                  <h5>- Links To External Sites</h5>
 
 
-                    <p>Our Service may contain links to external sites that are not operated by us. If you click on a
+                  <p>Our Service may contain links to external sites that are not operated by us. If you click on a
                       third party link, you will be directed to that third party's site. We strongly advise you to review
                       the Privacy Policy and terms and conditions of every site you visit.</p>
 
 
-                    <p>We have no control over, and assume no responsibility for the content, privacy policies or
+                  <p>We have no control over, and assume no responsibility for the content, privacy policies or
                       practices of any third-party sites, products or services.
 
                       - ‘moolya.global uses Google AdWords and other tools for remarketing: ‘moolya.global’ uses the
@@ -1265,15 +1258,15 @@ export default class EmailVerification extends React.Component{
                       privacy policy.</p>
 
 
-                    <p>You can set preferences for how Google advertises to you using the Google Ad Preferences page, and
+                  <p>You can set preferences for how Google advertises to you using the Google Ad Preferences page, and
                       if you want to you can opt out of interest-based advertising entirely by cookie settings or
                       permanently using a browser plugin.</p>
 
 
-                    <h5>- Protection of Certain Personally-Identifying Information:</h5>
+                  <h5>- Protection of Certain Personally-Identifying Information:</h5>
 
 
-                    <p>moolya discloses potentially personally-identifying and personally-identifying information only to
+                  <p>moolya discloses potentially personally-identifying and personally-identifying information only to
                       those of its employees, contractors and affiliated organizations that (i) need to know that
                       information in order to process it on moolya’s behalf or to provide services available at moolya’s
                       website, and (ii) that have agreed not to disclose it to others. Some of those employees,
@@ -1287,7 +1280,7 @@ export default class EmailVerification extends React.Component{
                       public at large.</p>
 
 
-                    <p>If you are a registered user of http://moolya.global and have supplied your email address, moolya
+                  <p>If you are a registered user of http://moolya.global and have supplied your email address, moolya
                       may occasionally send you an email to tell you about new features, solicit your feedback, or just
                       keep you up to date with what’s going on with moolya and our products. We primarily use our blog to
                       communicate this type of information, so we expect to keep this type of email to a minimum. If you
@@ -1298,30 +1291,30 @@ export default class EmailVerification extends React.Component{
                       personally-identifying information.</p>
 
 
-                    <p>moolya requests the Users to abstain from sending private communication to moolya by email as email
+                  <p>moolya requests the Users to abstain from sending private communication to moolya by email as email
                       is not recognised as a secure medium of communication. Users must be aware that there are inherent
                       risks associated with the transmissions of Personal Information via the Internet.</p>
 
 
-                    <h5>- Aggregated Statistics</h5>
+                  <h5>- Aggregated Statistics</h5>
 
 
-                    <p>moolya may collect statistics about the behavior of visitors to its website. moolya may display
+                  <p>moolya may collect statistics about the behavior of visitors to its website. moolya may display
                       this information publicly or provide it to others. However, moolya does not disclose your
                       personally-identifying information.</p>
 
 
-                    <h5>- Affiliate Disclosure</h5>
+                  <h5>- Affiliate Disclosure</h5>
 
 
-                    <p>This site uses affiliate links and does earn a commission from certain links. This does not affect
+                  <p>This site uses affiliate links and does earn a commission from certain links. This does not affect
                       your purchases or the price you may pay.</p>
 
 
-                    <h5>- Cookies</h5>
+                  <h5>- Cookies</h5>
 
 
-                    <p>To enrich and perfect your online experience, ‘moolya’ uses "Cookies", similar technologies and
+                  <p>To enrich and perfect your online experience, ‘moolya’ uses "Cookies", similar technologies and
                       services provided by others to display personalized content, appropriate advertising and store your
                       preferences on your computer. A cookie is a string of information that a website stores on a
                       visitor’s computer, and that the visitor’s browser provides to the website each time the visitor
@@ -1332,11 +1325,11 @@ export default class EmailVerification extends React.Component{
                       properly without the aid of cookies.</p>
 
 
-                    <p>By continuing to navigate our website without changing your cookie settings, you hereby acknowledge
+                  <p>By continuing to navigate our website without changing your cookie settings, you hereby acknowledge
                       and agree to moolya's use of cookies.</p>
 
 
-                    <p>The information we collect with cookies is not sold, rented, or shared with any outside parties. We
+                  <p>The information we collect with cookies is not sold, rented, or shared with any outside parties. We
                       use both session ID cookies and persistent cookies. A session ID cookie expires when you close your
                       browser. A persistent cookie remains on your hard drive for an extended period of time. You can
                       remove persistent cookies by following directions provided in your Internet browser’s “help” file.
@@ -1344,10 +1337,10 @@ export default class EmailVerification extends React.Component{
                       experience on our site .</p>
 
 
-                    <h5>- E-commerce</h5>
+                  <h5>- E-commerce</h5>
 
 
-                    <p>Those who engage in transactions with moolya – by purchasing moolya's services or products, are
+                  <p>Those who engage in transactions with moolya – by purchasing moolya's services or products, are
                       asked to provide additional information, including as necessary the personal and financial
                       information required to process those transactions. In each case, moolya collects such information
                       only insofar as is necessary or appropriate to fulfill the purpose of the visitor’s interaction with
@@ -1356,53 +1349,53 @@ export default class EmailVerification extends React.Component{
                       may prevent them from engaging in certain website-related activities.</p>
 
 
-                    <h5>- Business Transfers</h5>
+                  <h5>- Business Transfers</h5>
 
 
-                    <p>If moolya, or substantially all of its assets, were acquired, or in the unlikely event that moolya
+                  <p>If moolya, or substantially all of its assets, were acquired, or in the unlikely event that moolya
                       goes out of business or enters bankruptcy, user information would be one of the assets that is
                       transferred or acquired by a third party. You acknowledge that such transfers may occur, and that
                       any acquirer of moolya may continue to use your personal information as set forth in this
                       policy.</p>
 
 
-                    <h5>- Privacy Policy Changes:</h5>
+                  <h5>- Privacy Policy Changes:</h5>
 
 
-                    <p>Although most changes are likely to be minor, moolya may change its Privacy Policy from time to
+                  <p>Although most changes are likely to be minor, moolya may change its Privacy Policy from time to
                       time, and in moolya’s sole discretion. moolya encourages visitors to frequently check this page for
                       any changes to its Privacy Policy. Your continued use of this site after any change in this Privacy
                       Policy will constitute your acceptance of such change.</p>
 
 
-                    <h5>- Violation of Privacy Policy: </h5>
+                  <h5>- Violation of Privacy Policy: </h5>
 
 
-                    <p>Upon becoming aware of an alleged violation of this Privacy Policy or Terms and Conditions moolya
+                  <p>Upon becoming aware of an alleged violation of this Privacy Policy or Terms and Conditions moolya
                       may initiate an investigation. During the investigation, the User's access to the website may be
                       restricted or limited in order to prevent further unauthorized activities. Depending on the severity
                       of the violation, moolya may, at its sole discretion, restrict, suspend, or terminate User’s account
                       and pursue other civil remedies.</p>
 
 
-                    <h5>- Retention of Information </h5>
+                  <h5>- Retention of Information </h5>
 
 
-                    <p>Personal information of users and activities saved and archived in moolya will be kept by moolya
+                  <p>Personal information of users and activities saved and archived in moolya will be kept by moolya
                       for as long as they are registered subscribers or users of our services, and for a reasonable time
                       thereafter subject to the applicable law of the country of the user. </p>
 
 
-                    <p>If you have any questions regarding this Privacy Policy or if you wish to discuss the terms
+                  <p>If you have any questions regarding this Privacy Policy or if you wish to discuss the terms
                       contained herein please contact moolya using the contact details at our contact page.</p>
 
 
-                    <h5>- Credit & Contact Information:</h5>
+                  <h5>- Credit & Contact Information:</h5>
 
 
-                    <p>This privacy policy was created at privacygen.com. If you have any questions about this Privacy
+                  <p>This privacy policy was created at privacygen.com. If you have any questions about this Privacy
                       Policy, please contact us via email or phone (details in CONTACT US of www.moolya.global)</p>
-                  </div>
+                </div>
 
               </div>
             </div>
@@ -1411,5 +1404,5 @@ export default class EmailVerification extends React.Component{
       </div>
     )
   }
-};
+}
 

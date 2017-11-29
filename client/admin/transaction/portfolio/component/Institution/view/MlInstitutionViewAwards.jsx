@@ -1,18 +1,18 @@
 import React from 'react';
-import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import { fetchInstitutionDetailsHandler } from '../../../actions/findPortfolioInstitutionDetails'
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../../commons/components/loader/loader";
-import MlGenericAwardsView from "../../commons/MlGenericAwardsView";
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import MlGenericAwardsView from '../../commons/MlGenericAwardsView';
 
 const KEY = 'awardsRecognition'
 
 export default class MlInstitutionViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionAwardsList: [],loading:true};
+    this.state = { institutionAwardsList: [], loading: true };
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -21,76 +21,73 @@ export default class MlInstitutionViewAwards extends React.Component {
   }
 
 
-/*  componentDidMount(){
+  /*  componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-  }*/
+  } */
 
-  componentWillMount(){
+  componentWillMount() {
     this.fetchPortfolioInstitutionDetails();
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionAwards", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'institutionAwards', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'institutionAwards');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionAwards");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -99,60 +96,59 @@ export default class MlInstitutionViewAwards extends React.Component {
   }
 
   async fetchPortfolioInstitutionDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.awardsRecognition) {
-      this.setState({institutionAwardsList: response.awardsRecognition,loading:false});
+      this.setState({ institutionAwardsList: response.awardsRecognition, loading: false });
     }
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
-  };
-
-  componentDidUpdate(prevProps, prevState){
-    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
-    var currentLoaded=this.state.loading;
-    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
   }
 
-  render(){
-    let that = this;
-    let awardsArray = that.state.institutionAwardsList || [];
-    let loading=this.state.loading?this.state.loading:false;
+  componentDidUpdate(prevProps, prevState) {
+    // var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+    const currentLoaded = this.state.loading;
+    if (!this.compareQueryOptions(prevState.loading, currentLoaded)) { this.initalizeAnnotaor(); this.fetchAnnotations(); }
+  }
+
+  render() {
+    const that = this;
+    const awardsArray = that.state.institutionAwardsList || [];
+    const loading = this.state.loading ? this.state.loading : false;
 
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
+        {loading === true ? (<MlLoader/>) : (
           <div>
-            {_.isEmpty(awardsArray)&& <div className="portfolio-main-wrap">
+            {_.isEmpty(awardsArray) && <div className="portfolio-main-wrap">
               <NoData tabName={this.props.tabName} />
             </div>}
 
-            {!_.isEmpty(awardsArray)&&  <div id="annotatorContent">
+            {!_.isEmpty(awardsArray) && <div id="annotatorContent">
               <h2>Awards</h2>
               <div className="col-lg-12">
                 <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}/>
-                {/*<div className="row">*/}
-                  {/*{awardsArray && awardsArray.map(function (details, idx) {*/}
-                    {/*return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>*/}
-                      {/*<div className="team-block">*/}
-                        {/*<img src={details.logo&&details.logo.fileUrl} className="team_img" />*/}
-                        {/*<h3>*/}
-                          {/*{details&&details.awardName}*/}
-                        {/*</h3>*/}
-                      {/*</div>*/}
-                    {/*</div>)*/}
-                  {/*})}*/}
+                {/* <div className="row"> */}
+                {/* {awardsArray && awardsArray.map(function (details, idx) { */}
+                {/* return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}> */}
+                {/* <div className="team-block"> */}
+                {/* <img src={details.logo&&details.logo.fileUrl} className="team_img" /> */}
+                {/* <h3> */}
+                {/* {details&&details.awardName} */}
+                {/* </h3> */}
+                {/* </div> */}
+                {/* </div>) */}
+                {/* })} */}
 
-                {/*</div>*/}
+                {/* </div> */}
               </div>
             </div> }
           </div>)}
       </div>
     )
-
   }
 }

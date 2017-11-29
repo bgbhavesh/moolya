@@ -7,14 +7,13 @@ import ScrollArea from 'react-scrollbar';
 import { findSubChapterActionHandler } from '../../actions/findSubChapter'
 
 export default class MlAnchorObjective extends React.PureComponent {
-
   constructor() {
     super();
     this.state = {
       objectiveFormArray: [{
         description: '',
-        status: false,
-      }],
+        status: false
+      }]
     };
     this.renderObjectiveFormArray = this.renderObjectiveFormArray.bind(this);
     this.changeForm = this.changeForm.bind(this);
@@ -26,33 +25,32 @@ export default class MlAnchorObjective extends React.PureComponent {
   async componentWillMount() {
     const { clusterId, chapterId, subChapterId } = this.props;
     const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
-    let objective = response && response.objective && response.objective.map((ob) => ({
+    let objective = response && response.objective && response.objective.map(ob => ({
       description: ob.description,
-      status: ob.status,
+      status: ob.status
     }));
     if (!objective || !objective.length) {
       objective = [{ description: '', status: false }]
     }
     this.updateObjectiveFormArray(objective);
-
   }
 
   componentDidMount() {
-    $(function () {
+    $(() => {
       $('.float-label').jvFloat();
     });
 
-    var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
   }
 
-  sendDataToParent(data){
+  sendDataToParent(data) {
     this.props.getObjectiveDetails(data)
   }
 
   updateObjectiveFormArray(objectiveFormArray) {
     this.setState({
-      objectiveFormArray,
+      objectiveFormArray
     }, () => {
       this.sendDataToParent(this.state.objectiveFormArray)
     });
@@ -67,7 +65,7 @@ export default class MlAnchorObjective extends React.PureComponent {
   addObjectiveForm() {
     const objectiveFormArray = [...this.state.objectiveFormArray, { description: '', status: false }];
     this.updateObjectiveFormArray(objectiveFormArray);
-    var WinHeight = $(window).height();
+    const WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (150 + $('.admin_header').outerHeight(true)));
   }
 
@@ -118,10 +116,10 @@ export default class MlAnchorObjective extends React.PureComponent {
             speed={0.8}
             className="left_wrap"
           >
-        {this.renderObjectiveFormArray()}
+            {this.renderObjectiveFormArray()}
           </ScrollArea>
         </div>
       </div>
     )
   }
-};
+}

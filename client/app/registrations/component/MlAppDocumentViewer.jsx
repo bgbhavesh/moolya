@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath'
 
 
@@ -8,59 +8,57 @@ export default class MlAppDocumentViewer extends Component {
     super(props);
     /*  this.state={
      popoverOpen:false,
-     }*/
+     } */
     return this;
   }
 
   componentDidMount() {
     $('[data-toggle="tooltip"]').tooltip({
       container: 'body',
-      trigger: "hover"
+      trigger: 'hover'
     });
-    $('.uploaded_files .upload_file').change(function () {
-      /*var FileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+    $('.uploaded_files .upload_file').change(() => {
+      /* var FileName = $(this).val().replace(/C:\\fakepath\\/i, '');
        $(this).parents('.uploaded_files').find(".panel-body ul").prepend('<li class="doc_card" data-toggle="tooltip" data-placement="bottom" title="'+FileName+'"><span class="ml ml-minus"></span><img id="preview_file" /></li>');
-       $(this).parents('.uploaded_files').find("#preview_file").attr("src", URL.createObjectURL(this.files[0]));*/
-      /*$('[data-toggle="tooltip"]').tooltip({
+       $(this).parents('.uploaded_files').find("#preview_file").attr("src", URL.createObjectURL(this.files[0])); */
+      /* $('[data-toggle="tooltip"]').tooltip({
        container:'body',
        trigger:"hover"
-       });*/
+       }); */
     });
-    $(".information").unbind("click").click(function () {
+    $('.information').unbind('click').click(function () {
       if ($(this).hasClass('ml-information')) {
         $(this).removeClass('ml-information').addClass('ml-delete');
       } else {
         $(this).removeClass('ml-delete').addClass('ml-information');
       }
-      $(this).parents('.panel').find(".show-information").toggle(200);
+      $(this).parents('.panel').find('.show-information').toggle(200);
     });
-
   }
 
   onFileUpload(documentId, docTypeId, status) {
     if (status != 'Approved') {
-      let file = document.getElementById(docTypeId + documentId).files[0];
+      const file = document.getElementById(docTypeId + documentId).files[0];
       this.props.onFileUpload(file, documentId, docTypeId);
     } else {
-      toastr.error("documents can not allowed to upload once approved!!!!")
+      toastr.error('documents can not allowed to upload once approved!!!!')
     }
-
   }
 
   onDocSelect(documentId, docTypeId, event) {
     if (event.target.checked) {
-      let selectedDocs = this.props.selectedDocuments
+      const selectedDocs = this.props.selectedDocuments
       selectedDocs.push(documentId);
-      let selectedDocType = this.props.selectedDocType
+      const selectedDocType = this.props.selectedDocType
       selectedDocType.push(docTypeId);
       this.props.onDocumentSelect(selectedDocs, selectedDocType);
     } else {
-      let selectedDocs = this.props.selectedDocuments
+      const selectedDocs = this.props.selectedDocuments
       var index = selectedDocs.indexOf(documentId);
       if (index > -1) {
         selectedDocs.splice(index, 1);
       }
-      let selectedDocType = this.props.selectedDocType
+      const selectedDocType = this.props.selectedDocType
       var index = selectedDocType.indexOf(docTypeId);
       if (index > -1) {
         selectedDocType.splice(index, 1);
@@ -74,35 +72,37 @@ export default class MlAppDocumentViewer extends Component {
   }
 
   render() {
-    let selectedDocs = this.props.selectedDocuments
+    const selectedDocs = this.props.selectedDocuments
     if (selectedDocs.length == 0) {
       $('.DocCheckBox').attr('checked', false)
     }
-    let doc = this.props.doc || {};
-    let docFiles = doc.docFiles || [];
+    const doc = this.props.doc || {};
+    const docFiles = doc.docFiles || [];
     let mandatory = '';
-    let isMandatory = doc.isMandatory || ''
+    const isMandatory = doc.isMandatory || ''
     if (isMandatory) {
       mandatory = '*'
     }
-    /*  let allowFormat  = doc&&doc.allowableFormat&&doc.allowableFormat.toString();*/
+    /*  let allowFormat  = doc&&doc.allowableFormat&&doc.allowableFormat.toString(); */
     return (
 
       <div className="col-lg-4">
         <div className="panel panel-default uploaded_files">
           <div className="panel-heading">
-            <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox"
-                                                name="checkbox" value="1"
-                                                onChange={this.onDocSelect.bind(this, doc.documentId, doc.docTypeId)}/><label
+            <div className="input_types"><input
+              id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox"
+              name="checkbox" value="1"
+              onChange={this.onDocSelect.bind(this, doc.documentId, doc.docTypeId)}/><label
               htmlFor="chapter_admin_check"><span></span>{doc.documentName}
-              <text style={{'color': 'red'}}>{mandatory}</text>
+              <text style={{ color: 'red' }}>{mandatory}</text>
             </label></div>
             <div className="pull-right block_action">
               <div className="fileUpload upload_file_mask">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  <input type="file" className="upload_file upload" name="file_source"
-                         id={doc.docTypeId + doc.documentId} ref={doc.documentId}
-                         onChange={this.onFileUpload.bind(this, doc.documentId, doc.docTypeId, doc.status)}/></a>
+                  <input
+                    type="file" className="upload_file upload" name="file_source"
+                    id={doc.docTypeId + doc.documentId} ref={doc.documentId}
+                    onChange={this.onFileUpload.bind(this, doc.documentId, doc.docTypeId, doc.status)}/></a>
               </div>
             </div>
             <div className="pull-right block_action">
@@ -114,23 +114,23 @@ export default class MlAppDocumentViewer extends Component {
             <ul className="swiper-wrapper">
               <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img
                 src="/images/sub_default.jpg"/></li>
-              {docFiles.map((file, fIndex)=> {
-                return (<li key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom"
-                            title={file.fileName}>
-                  <span className="ml ml-minus"
-                        onClick={this.OnFileRemove.bind(this, doc.docTypeId, doc.documentId, file.fileId)}></span>
-                  <img id={file.fileId} src={generateAbsolutePath(file.fileUrl)}/>
-                </li>);
-              })}
+              {docFiles.map((file, fIndex) => (<li
+                key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom"
+                title={file.fileName}>
+                <span
+                  className="ml ml-minus"
+                  onClick={this.OnFileRemove.bind(this, doc.docTypeId, doc.documentId, file.fileId)}></span>
+                <img id={file.fileId} src={generateAbsolutePath(file.fileUrl)}/>
+              </li>))}
 
             </ul>
             <div>
               <center>{doc.status}</center>
             </div>
-            <p className="show-information" style={{'display': 'none'}}>Document Format : {doc.allowableFormat[0]}<br />Document
+            <p className="show-information" style={{ display: 'none' }}>Document Format : {doc.allowableFormat[0]}<br />Document
               Size : {doc.allowableMaxSize}</p>
           </div>
         </div>
       </div>);
   }
-};
+}

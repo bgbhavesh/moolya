@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {render} from "react-dom";
-import {getSharedConnectionsActionHandler} from "../../actions/mlLibraryActionHandler";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { getSharedConnectionsActionHandler } from '../../actions/mlLibraryActionHandler';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlConnectionHeader extends Component {
@@ -8,8 +8,8 @@ export default class MlConnectionHeader extends Component {
     super(props)
     this.state = {
       profile: [],
-      profilePic: "",
-      displayName: "",
+      profilePic: '',
+      displayName: '',
       profileDisplay: false,
       subMenu: false,
       isAll: false
@@ -33,57 +33,55 @@ export default class MlConnectionHeader extends Component {
   }
 
   resetWithAll() {
-    this.setState({selectedProfileId: '', isAll: true, selectedProfile:""});
+    this.setState({ selectedProfileId: '', isAll: true, selectedProfile: '' });
     this.props.showLibrary(false)
     // this.props.componentToLoad('calendar');
     // this.props.getAppointmentCounts();
   }
 
-  changeProfile(userId, index){
-    this.setState({selectedProfile: index, isAll: false})
+  changeProfile(userId, index) {
+    this.setState({ selectedProfile: index, isAll: false })
     this.props.connectionManagement(userId);
-  };
+  }
 
 
   async getUserProfiles() {
     const resp = await getSharedConnectionsActionHandler();
-    this.setState({profile: resp})
+    this.setState({ profile: resp })
     return resp;
   }
 
 
   render() {
-    let profiles = this.state.profile || [];
-    let selectedProfileId = this.state.selectedProfileId || FlowRouter.getParam('profileId');
-    let that = this;
-    let type = this.props.type;
+    const profiles = this.state.profile || [];
+    const selectedProfileId = this.state.selectedProfileId || FlowRouter.getParam('profileId');
+    const that = this;
+    const type = this.props.type;
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="" onClick={()=>that.resetWithAll()}>
+            <a href="" onClick={() => that.resetWithAll()}>
               <img src="/images/def_profile.png"/><br />
               <div className="tooltiprefer">
                 <span>Me</span>
               </div>
             </a>
           </li>
-          {profiles.map(function (profile, idx) {
-            return (
-              <span key={idx}>
-                <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
-                  <a href="" onClick={()=>that.changeProfile(profile.userId, idx)}>
-                    <img src={profile.profilePic ? generateAbsolutePath(profile.profilePic) : "/images/def_profile.png"}/><br />
-                    <div className="tooltiprefer">
-                      <span>{profile.displayName ? profile.displayName : "All"}</span>
-                    </div>
-                  </a>
-                </li>
-              </span>
-            )
-          })}
+          {profiles.map((profile, idx) => (
+            <span key={idx}>
+              <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
+                <a href="" onClick={() => that.changeProfile(profile.userId, idx)}>
+                  <img src={profile.profilePic ? generateAbsolutePath(profile.profilePic) : '/images/def_profile.png'}/><br />
+                  <div className="tooltiprefer">
+                    <span>{profile.displayName ? profile.displayName : 'All'}</span>
+                  </div>
+                </a>
+              </li>
+            </span>
+          ))}
         </ul>
       </div>
     )
   }
-};
+}

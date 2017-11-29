@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import _ from 'lodash';
 
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 
 const K_SIZE = 80;
 
@@ -37,36 +37,35 @@ const mapMarkerStyleHover = {
 export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: {}, isHover: false};
-    //this.markerClickHandler.bind(this);
+    this.state = { loading: true, data: {}, isHover: false };
+    // this.markerClickHandler.bind(this);
     this.onMouseEnterHandlerCallback.bind(this);
   }
 
-  onMouseEnterHandlerCallback(data){
-   this.setState({loading: false, data: data});
-  };
+  onMouseEnterHandlerCallback(data) {
+    this.setState({ loading: false, data });
+  }
 
   onMouseEnterContent(customHoverHandler) {
-
-    var disableHover =this.props.disableHover?true:false;
-    if(!disableHover){
-    this.setState({isHover: true});
-    let resp=[];
-    if(customHoverHandler){
-      customHoverHandler(this.props,this.onMouseEnterHandlerCallback.bind(this));
-    }
+    const disableHover = !!this.props.disableHover;
+    if (!disableHover) {
+      this.setState({ isHover: true });
+      const resp = [];
+      if (customHoverHandler) {
+        customHoverHandler(this.props, this.onMouseEnterHandlerCallback.bind(this));
+      }
       return resp;
     }
   }
 
   onMouseLeaveContent() {
-    var disableHover =this.props.disableHover?true:false;
-    if(!disableHover) {
-      this.setState({isHover: false});
+    const disableHover = !!this.props.disableHover;
+    if (!disableHover) {
+      this.setState({ isHover: false });
     }
   }
 
- /* markerClickHandler(data)
+  /* markerClickHandler(data)
   {
     // console.log(data);
     if(data.module == 'cluster')
@@ -87,9 +86,9 @@ export default class MapMarkers extends Component {
 
     if(data.module == 'subChapter')
       FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
-  }*/
+  } */
 
-  /*async findModuleDetails() {
+  /* async findModuleDetails() {
     let json = {
       moduleName: this.props.module,
       id: this.props.markerId
@@ -97,38 +96,40 @@ export default class MapMarkers extends Component {
     const response = await findMapDetailsTypeActionHandler(json);
     this.setState({loading: false, data: response});
     return response;
-  }*/
+  } */
 
   render() {
     const style = this.props.hover ? mapMarkerStyleHover : mapMarkerStyle;
 
-    let actionConfig = this.props.actionConfiguration|| [];
-    let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
-    let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
-    let markerClickConfig = _.find(actionConfig, {actionName: 'onMarkerClick'});
-    let markerClickActionHandler=markerClickConfig&&markerClickConfig.handler?markerClickConfig.handler:null;
-    let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
-    let data = this.state.data && this.state.data ? this.state.data : [];
-    let HoverComponent = React.cloneElement(hoverComp, {data: data});
-    let mapMarkerComponent=null;
-    if(this.props.mapMarkerComponent){
-      mapMarkerComponent=React.cloneElement(this.props.mapMarkerComponent,
+    const actionConfig = this.props.actionConfiguration || [];
+    const hoverInConfig = _.find(actionConfig, { actionName: 'onMouseEnter' });
+    const hoverActionHandler = hoverInConfig && hoverInConfig.handler ? hoverInConfig.handler : null;
+    const markerClickConfig = _.find(actionConfig, { actionName: 'onMarkerClick' });
+    const markerClickActionHandler = markerClickConfig && markerClickConfig.handler ? markerClickConfig.handler : null;
+    const hoverComp = hoverInConfig && hoverInConfig.hoverComponent ? hoverInConfig.hoverComponent : '';
+    const data = this.state.data && this.state.data ? this.state.data : [];
+    const HoverComponent = React.cloneElement(hoverComp, { data });
+    let mapMarkerComponent = null;
+    if (this.props.mapMarkerComponent) {
+      mapMarkerComponent = React.cloneElement(
+        this.props.mapMarkerComponent,
         {
-          data:this.props,
-          status:this.props.status,
-          markerId:this.props.markerId,
-          showImage:this.props.showImage,
-          text:this.props.text,
-          isActive:this.props.isActive,
-          isHover:this.state.isHover,
-          hoverActionHandler:hoverActionHandler,
-          markerClickActionHandler:markerClickActionHandler,
-          HoverComponent:HoverComponent,
-          onMouseEnterContent:this.onMouseEnterContent.bind(this),
+          data: this.props,
+          status: this.props.status,
+          markerId: this.props.markerId,
+          showImage: this.props.showImage,
+          text: this.props.text,
+          isActive: this.props.isActive,
+          isHover: this.state.isHover,
+          hoverActionHandler,
+          markerClickActionHandler,
+          HoverComponent,
+          onMouseEnterContent: this.onMouseEnterContent.bind(this),
           // onMouseEnterHandlerCallback:this.onMouseEnterHandlerCallback.bind(this),
-          onMouseLeaveContent:this.onMouseLeaveContent.bind(this),
+          onMouseLeaveContent: this.onMouseLeaveContent.bind(this)
 
-        });
+        }
+      );
     }
     // console.log(this.props.flag);
     // console.log(this.props.text);

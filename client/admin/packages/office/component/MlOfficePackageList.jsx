@@ -1,19 +1,19 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
-import MlListViewContainer from "../../../core/containers/MlListViewContainer";
-import {mlOfficePackageListConfig} from "../config/mlOfficePackageConfig";
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
+import MlListViewContainer from '../../../core/containers/MlListViewContainer';
+import { mlOfficePackageListConfig } from '../config/mlOfficePackageConfig';
 
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 
 
-export default class MlOfficePackageList extends Component{
-  constructor(props){
-      super(props)
-      this.fetchOfficeCards.bind(this);
+export default class MlOfficePackageList extends Component {
+  constructor(props) {
+    super(props)
+    this.fetchOfficeCards.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // this.fetchOfficeCards();
   }
 
@@ -21,18 +21,18 @@ export default class MlOfficePackageList extends Component{
 
   }
 
-  async fetchOfficeCards(){
+  async fetchOfficeCards() {
   }
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createOfficeCard.bind(this))
+        handler: async event => this.props.handler(this.createOfficeCard.bind(this))
       }
     ]
-    return(
+    return (
       <div className="admin_main_wrap">
         <MlListViewContainer {...mlOfficePackageListConfig} />
       </div>

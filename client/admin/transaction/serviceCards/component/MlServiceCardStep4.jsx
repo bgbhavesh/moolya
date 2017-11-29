@@ -11,19 +11,18 @@
 import React from 'react';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
-import {MoolyaToggleSwitch} from '../../../../admin/utils/formElemUtil'
+import { MoolyaToggleSwitch } from '../../../../admin/utils/formElemUtil'
 import { fetchCurrencyTypeActionHandler } from '../../../../commons/actions/mlCurrencySymbolHandler'
 
-export default class MlServiceCardStep4 extends React.Component{
-
+export default class MlServiceCardStep4 extends React.Component {
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={currencySymbol:""}
+    this.state = { currencySymbol: '' }
   }
 
   /**
@@ -34,8 +33,8 @@ export default class MlServiceCardStep4 extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     this.getCurrencyType();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
   }
 
   /**
@@ -49,7 +48,7 @@ export default class MlServiceCardStep4 extends React.Component{
 
   async getCurrencyType() {
     const response = await fetchCurrencyTypeActionHandler(this.props.client, this.props.userId, null, this.props.profileId);
-    this.setState({currencySymbol: response.symbol})
+    this.setState({ currencySymbol: response.symbol })
     return response;
   }
   /**
@@ -58,16 +57,17 @@ export default class MlServiceCardStep4 extends React.Component{
    * @returns {HTML}
    */
 
-  render(){
+  render() {
     const {
       servicePayment,
       facilitationCharge,
       taxStatus,
-      finalAmount } = this.props.data;
-    const {currencySymbol} = this.state;
-    const {checkChargeStatus, calculateCharges, saveServicePaymentDetails} = this.props;
-    let isView = this.props.data && this.props.data.service && this.props.data.service.status &&  ["Rejected", "Admin Approved"].indexOf(this.props.data.service.status) >= 0 ? true : false ;
-    console.log('isView:',isView, this.props.data.service.status, this.props.data);
+      finalAmount
+    } = this.props.data;
+    const { currencySymbol } = this.state;
+    const { checkChargeStatus, calculateCharges, saveServicePaymentDetails } = this.props;
+    const isView = !!(this.props.data && this.props.data.service && this.props.data.service.status && ['Rejected', 'Admin Approved'].indexOf(this.props.data.service.status) >= 0);
+    console.log('isView:', isView, this.props.data.service.status, this.props.data);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -76,67 +76,74 @@ export default class MlServiceCardStep4 extends React.Component{
               <div className="form-group">
                 <label>
                   Tasks gross payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
-                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control inline_input medium_in" />
+                  <input type="number" disabled value={servicePayment.tasksAmount} className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task discount payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
-                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control inline_input medium_in" />
+                  <input type="number" disabled value={servicePayment.tasksDiscount} className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task net payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;
-                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control inline_input medium_in"/>
+                  <input type="number" disabled value={servicePayment.tasksDerived} className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label htmlFor="discount">Is Eligible for discount</label>
                 <span className={servicePayment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="discount" className="switch nocolor-switch">
-                <input type="checkbox" id="discount"
-                       checked={!servicePayment.isDiscount}
-                       value={servicePayment.isDiscount} disabled />
-                <div className="slider"></div>
-              </label>
+                  <input
+                    type="checkbox" id="discount"
+                    checked={!servicePayment.isDiscount}
+                    value={servicePayment.isDiscount} disabled />
+                  <div className="slider"></div>
+                </label>
                 <span className={servicePayment.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <br className="brclear"/>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="amount" type="radio" name="amount"
-                         value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
-                         disabled />
+                  <input
+                    id="amount" type="radio" name="amount"
+                    value="Amount" checked={servicePayment.discountType === 'amount'}
+                    disabled />
                   <label htmlFor="amount"><span><span></span></span>Amount
                     {servicePayment.discountType === 'amount' ?
-                      <input className="form-control inline_input"
-                             disabled
-                             value={servicePayment.discountValue}/> : <div></div>}
+                      <input
+                        className="form-control inline_input"
+                        disabled
+                        value={servicePayment.discountValue}/> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percent" type="radio" name="percent"
-                         value="Percentage" checked={servicePayment.discountType === 'percent' ? true : false}
-                         disabled />
+                  <input
+                    id="percent" type="radio" name="percent"
+                    value="Percentage" checked={servicePayment.discountType === 'percent'}
+                    disabled />
                   <label htmlFor="percent"><span><span></span></span>
-                    Percentage{servicePayment.discountType === 'percent'?
-                      <input className="form-control inline_input" disabled
-                             value={servicePayment.discountValue}/>:<div></div>}
+                    Percentage{servicePayment.discountType === 'percent' ?
+                      <input
+                        className="form-control inline_input" disabled
+                        value={servicePayment.discountValue}/> : <div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="taxinclusive" type="radio" name="taxinclusive"
-                         value="taxinclusive" checked={taxStatus === 'taxinclusive' ? true : false}
-                         disabled />
+                  <input
+                    id="taxinclusive" type="radio" name="taxinclusive"
+                    value="taxinclusive" checked={taxStatus === 'taxinclusive'}
+                    disabled />
                   <label htmlFor="taxinclusive"><span><span></span></span>Tax Inclusive</label>
                 </div>
                 <div className="input_types">
-                  <input id="taxexclusive" type="radio" name="taxexclusive"
-                         value="taxexclusive" checked={taxStatus === 'taxexclusive' ? true : false}
-                         disabled />
+                  <input
+                    id="taxexclusive" type="radio" name="taxexclusive"
+                    value="taxexclusive" checked={taxStatus === 'taxexclusive'}
+                    disabled />
                   <label htmlFor="taxexclusive"><span><span></span></span>Tax Exclusive </label>
                 </div>
                 <br className="brclear"/>
@@ -144,60 +151,66 @@ export default class MlServiceCardStep4 extends React.Component{
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label htmlFor="promo">Is Applicable for PROMOCODE</label>
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="promo" className="switch nocolor-switch">
-                <input id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
-                       value={servicePayment.isPromoCodeApplicable} disabled />
-                <div className="slider"></div>
-              </label>
+                  <input
+                    id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
+                    value={servicePayment.isPromoCodeApplicable} disabled />
+                  <div className="slider"></div>
+                </label>
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <br className="brclear"/>
               <div className="form-group">
                 <label>Enter facilitation charges &nbsp; &nbsp;</label>
                 <div className="input_types">
-                  <input id="amount" type="radio"
-                         name="facilitationamount"
-                         checked={facilitationCharge.type === 'amount' ? true : false}
-                         onChange={(event) => checkChargeStatus(event)}
-                         value="amount" />
+                  <input
+                    id="amount" type="radio"
+                    name="facilitationamount"
+                    checked={facilitationCharge.type === 'amount'}
+                    onChange={event => checkChargeStatus(event)}
+                    value="amount" />
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount
                     {facilitationCharge.type === 'amount' ?
-                      <input className="form-control inline_input"
-                             disabled={(facilitationCharge.type && facilitationCharge.type === 'amount') ? false : true}
-                             defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
-                             onChange={(event) => calculateCharges(event)} /> : <div></div>
+                      <input
+                        className="form-control inline_input"
+                        disabled={!((facilitationCharge.type && facilitationCharge.type === 'amount'))}
+                        defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
+                        onChange={event => calculateCharges(event)} /> : <div></div>
                     }
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percent" type="radio"
-                         name="facilitationpercent"
-                         checked={facilitationCharge.type === 'percent' ? true : false}
-                         onChange={(event) => checkChargeStatus(event)}
-                         value="percent"/>
+                  <input
+                    id="percent" type="radio"
+                    name="facilitationpercent"
+                    checked={facilitationCharge.type === 'percent'}
+                    onChange={event => checkChargeStatus(event)}
+                    value="percent"/>
                   <label htmlFor="radio2"><span><span></span></span>Percentage
                     {facilitationCharge.type === 'percent' ?
-                      <input className="form-control inline_input"
-                             disabled={(facilitationCharge.type && facilitationCharge.type === 'percent') ? false : true}
-                             defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
-                             onChange={(event) => calculateCharges(event)}/> : <div></div>
+                      <input
+                        className="form-control inline_input"
+                        disabled={!((facilitationCharge.type && facilitationCharge.type === 'percent'))}
+                        defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
+                        onChange={event => calculateCharges(event)}/> : <div></div>
                     }
                   </label>
                 </div>
               </div>
               <div className="form-group">
-                <label>Net payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;<input className="form-control inline_input medium_in"
-                                                 value={finalAmount} disabled />
+                <label>Net payable amount &nbsp;<label>{servicePayment.currencyType ? servicePayment.currencyType : currencySymbol}</label>&nbsp;<input
+                  className="form-control inline_input medium_in"
+                  value={finalAmount} disabled />
                 </label>
               </div>
             </form>
           </div>
-          <div className="ml_btn" style={{'textAlign':'center'}}>
-            <div className={ this.props.isView ? "save_btn disabled" : "save_btn" } onClick={() => saveServicePaymentDetails()} >Save</div>
-            <div className={ this.props.isView ? "save_btn disabled" : "save_btn" } onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
-            <div className={ this.props.isView ? "cancel_btn disabled" : "cancel_btn" } onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
+          <div className="ml_btn" style={{ textAlign: 'center' }}>
+            <div className={ this.props.isView ? 'save_btn disabled' : 'save_btn' } onClick={() => saveServicePaymentDetails()} >Save</div>
+            <div className={ this.props.isView ? 'save_btn disabled' : 'save_btn' } onClick={() => saveServicePaymentDetails('approved')}>Approve</div>
+            <div className={ this.props.isView ? 'cancel_btn disabled' : 'cancel_btn' } onClick={() => saveServicePaymentDetails('rejected')}>Reject</div>
           </div>
         </ScrollArea>
       </div>
     )
   }
-};
+}

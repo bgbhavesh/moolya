@@ -1,88 +1,88 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../../utils/formElemUtil';
 
 
-class MlStartupInformation extends React.Component{
-  constructor(props, context){
+class MlStartupInformation extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      data:this.props.informationDetails || {},
-      privateKey:{}
+      data: this.props.informationDetails || {},
+      privateKey: {}
     }
     this.handleBlur.bind(this);
     return this;
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
     this.updatePrivateKeys();
   }
-  componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
-    if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.information});
+  componentWillMount() {
+    const empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
+    if (!empty) {
+      this.setState({ loading: false, data: this.context.startupPortfolio.information });
     }
   }
 
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
-  sendDataToParent(){
-    let data = this.state.data;
-    for (var propName in data) {
+  sendDataToParent() {
+    const data = this.state.data;
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
         delete data[propName];
       }
     }
-    this.props.getStartupInfo(data,this.state.privateKey)
+    this.props.getStartupInfo(data, this.state.privateKey)
   }
 
-  onLockChange(fieldName,field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onLockChange(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    let isPrivate = false;
+    details = _.omit(details, [key]);
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate }
+    this.setState({ privateKey })
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
     /* this.setState({data:details}, function () {
      this.sendDataToParent()
-     })*/
+     }) */
   }
 
-  updatePrivateKeys(){
-    let response = this.props.informationDetails
-    _.each(response.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  updatePrivateKeys() {
+    const response = this.props.informationDetails
+    _.each(response.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-  render(){
+  render() {
     return (
 
 
@@ -95,8 +95,8 @@ class MlStartupInformation extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="informationDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.informationDescription}  onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this,"informationDescription","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <textarea placeholder="Describe..." name="informationDescription" className="form-control" id="cl_about" defaultValue={this.state.data && this.state.data.informationDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, 'informationDescription', 'isDescriptionPrivate')}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>
@@ -107,17 +107,11 @@ class MlStartupInformation extends React.Component{
       </div>
 
 
-
-
-
-
-
-
     )
   }
 }
 MlStartupInformation.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  startupPortfolio: PropTypes.object
 };
 
 // const mapStateToProps = (state, ownProps) => {

@@ -12,7 +12,6 @@ function getDisplayName(WrappedComponent) {
 export default function formHandler() {
   return (SourceComponent) => {
     class MlFormHandler extends Component {
-
       constructor(props) {
         super(props);
         this.state = {
@@ -23,49 +22,47 @@ export default function formHandler() {
         return this;
       }
 
-      async callBackHandler(){
+      async callBackHandler() {
         this.setState({ loading: false, error: '' });
       }
 
-      async handler(handleMethod,handleSuccess,handleError){
-        if(handleMethod){
-            this.setState({ loading: true, error: '' });
+      async handler(handleMethod, handleSuccess, handleError) {
+        if (handleMethod) {
+          this.setState({ loading: true, error: '' });
 
-            try{
-              let resp=await handleMethod();
-             this.setState({ loading: false, error: '' });
-              var that=this;
-              if(resp){
-                if(handleSuccess){
-                  handleSuccess(resp);
-                }
-              }
-
-            }catch(error){
-              console.log(error);
-              this.setState({ loading: false, error: '' });
-              if(handleError){
-                handleError(error);
+          try {
+            const resp = await handleMethod();
+            this.setState({ loading: false, error: '' });
+            const that = this;
+            if (resp) {
+              if (handleSuccess) {
+                handleSuccess(resp);
               }
             }
+          } catch (error) {
+            console.log(error);
+            this.setState({ loading: false, error: '' });
+            if (handleError) {
+              handleError(error);
+            }
+          }
         }
       }
 
 
-
       render() {
-        const showLoader=this.state.loading;
+        const showLoader = this.state.loading;
 
         return (
           <div>
-            {showLoader===true&&<MlLoader/>}
+            {showLoader === true && <MlLoader/>}
 
-              <SourceComponent {...this.props} handler={this.handler.bind(this)}/>
+            <SourceComponent {...this.props} handler={this.handler.bind(this)}/>
 
-        </div>
+          </div>
         )
 
-       // return <SourceComponent {...this.props} handler={this.handler}/>
+        // return <SourceComponent {...this.props} handler={this.handler}/>
       }
     }
 
@@ -73,4 +70,4 @@ export default function formHandler() {
     hoistNonReactStatic(this.MlFormHandler, SourceComponent);
     return MlFormHandler;
   }
-};
+}

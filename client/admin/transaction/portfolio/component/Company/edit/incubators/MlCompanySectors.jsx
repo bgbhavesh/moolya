@@ -1,41 +1,41 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import ScrollArea from 'react-scrollbar'
-import _ from "lodash";
-import gql from "graphql-tag";
-var FontAwesome = require('react-fontawesome');
-import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import MlLoader from "../../../../../../../commons/components/loader/loader";
-import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
+import _ from 'lodash';
+import gql from 'graphql-tag';
+const FontAwesome = require('react-fontawesome');
+import { Popover, PopoverContent, PopoverTitle } from 'reactstrap';
+import Moolyaselect from '../../../../../../commons/components/MlAdminSelectWrapper';
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../../utils/formElemUtil';
+import MlLoader from '../../../../../../../commons/components/loader/loader';
+import { fetchCompanyDetailsHandler } from '../../../../actions/findCompanyPortfolioDetails';
 import CropperModal from '../../../../../../../../client/commons/components/cropperModal';
 import { putDataIntoTheLibrary } from '../../../../../../../commons/actions/mlLibraryActionHandler'
-import { multipartASyncFormHandler } from "../../../../../../../../client/commons/MlMultipartFormAction";
-import {mlFieldValidations} from "../../../../../../../../client/commons/validations/mlfieldValidation";
+import { multipartASyncFormHandler } from '../../../../../../../../client/commons/MlMultipartFormAction';
+import { mlFieldValidations } from '../../../../../../../../client/commons/validations/mlfieldValidation';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../../commons/utils/confirm';
-const KEY = "sectorsAndServices"
+const KEY = 'sectorsAndServices'
 
-export default class MlCompanySectors extends React.Component{
-  constructor(props, context){
+export default class MlCompanySectors extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      data:{},
-      privateKey:{},
+      data: {},
+      privateKey: {},
       companysectorsAndServices: [],
       popoverOpen: false,
-      fileName:"",
+      fileName: '',
       selectedIndex: -1,
       sectorsAndServicesList: [],
-      selectedObject: "default",
+      selectedObject: 'default',
       uploadingAvatar: false,
-      showProfileModal: false,
+      showProfileModal: false
       // sectorsAndServices:{}
       // data:this.props.serviceProductsDetails || {},
     }
     this.curSelectLogo = {}
-    this.tabName = this.props.tabName || ""
+    this.tabName = this.props.tabName || ''
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.dateChange.bind(this);
@@ -44,12 +44,12 @@ export default class MlCompanySectors extends React.Component{
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
     // this.updatePrivateKeys();
@@ -60,25 +60,23 @@ export default class MlCompanySectors extends React.Component{
   //     this.setState({loading: false, data: this.context.companyPortfolio.serviceProducts});
   //   }
   // }
-  componentWillMount(){
-   const resp =  this.fetchPortfolioDetails();
-   return resp
+  componentWillMount() {
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.sectorsAndServices)
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.sectorsAndServices)
     const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if (empty) {
-      if (response && response.sectorsAndServices && response.sectorsAndServices.length>0) {
+      if (response && response.sectorsAndServices && response.sectorsAndServices.length > 0) {
         this.setState({
           loading: false,
           companysectorsAndServices: response.sectorsAndServices,
           sectorsAndServicesList: response.sectorsAndServices
         });
-      }
-      else
-        this.setState({loading: false})
+      } else { this.setState({ loading: false }) }
     } else {
       this.setState({
         loading: false,
@@ -86,7 +84,7 @@ export default class MlCompanySectors extends React.Component{
         sectorsAndServicesList: that.context.companyPortfolio.sectorsAndServices
       });
     }
-    this.companysectorsAndServicesServer = response&&response.sectorsAndServices?response.sectorsAndServices:[]
+    this.companysectorsAndServicesServer = response && response.sectorsAndServices ? response.sectorsAndServices : []
     // if(empty){
     //   if (response && response.sectorsAndServices) {
     //     var object = response.sectorsAndServices;
@@ -102,62 +100,62 @@ export default class MlCompanySectors extends React.Component{
   }
   dateChange(e) {
     let details = this.state.data;
-    let name = 'date';
+    const name = 'date';
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: this.refs.date.state.inputValue});
-    this.setState({data: details}, function () {
+    details = _.extend(details, { [name]: this.refs.date.state.inputValue });
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
   addAreaOfInterest() {
     this.setState({
-      selectedObject: "default",
+      selectedObject: 'default',
       popoverOpen: !(this.state.popoverOpen),
       data: {},
       industryTypeId: null,
       industryTypeName: null
     })
     if (this.state.companysectorsAndServices) {
-      this.setState({selectedIndex: this.state.companysectorsAndServices.length})
+      this.setState({ selectedIndex: this.state.companysectorsAndServices.length })
     } else {
-      this.setState({selectedIndex: 0})
+      this.setState({ selectedIndex: 0 })
     }
   }
   onStatusChangeNotify(e) {
     let updatedData = this.state.data || {};
-    let key = e.target.id;
+    const key = e.target.id;
     updatedData = _.omit(updatedData, [key]);
     if (e.currentTarget.checked) {
-      updatedData = _.extend(updatedData, {[key]: true});
+      updatedData = _.extend(updatedData, { [key]: true });
     } else {
-      updatedData = _.extend(updatedData, {[key]: false});
+      updatedData = _.extend(updatedData, { [key]: false });
     }
-    this.setState({data: updatedData}, function () {
+    this.setState({ data: updatedData }, () => {
       // this.sendDataToParent()
     })
   }
   onLogoFileUpload(fileInfo, image) {
-    let file = image;
-    let fileName = fileInfo.name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
+    const file = image;
+    const fileName = fileInfo.name;
+    const data = {
+      moduleName: 'PORTFOLIO',
+      actionName: 'UPLOAD',
       portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: { sectorsAndServices: [{ logo: { fileUrl: '', fileName: fileName }, index: this.state.selectedIndex }] }
+      portfolio: { sectorsAndServices: [{ logo: { fileUrl: '', fileName }, index: this.state.selectedIndex }] }
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
   }
 
   onFileUploadCallBack(file, resp) {
     if (resp) {
-      let result = JSON.parse(resp);
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
+      const result = JSON.parse(resp);
+      Confirm('', 'Do you want to add the file into the library', 'Ok', 'Cancel', (ifConfirm) => {
+        if (ifConfirm) {
+          const fileObjectStructure = {
             fileName: file.name,
             fileType: file.type,
             fileUrl: result.result,
-            libraryType: "image"
+            libraryType: 'image'
           }
           this.libraryAction(fileObjectStructure)
         }
@@ -165,7 +163,7 @@ export default class MlCompanySectors extends React.Component{
 
       if (result.success) {
         this.curSelectLogo = {
-          fileName: file && file.name ? file.name : "",
+          fileName: file && file.name ? file.name : '',
           fileUrl: result.result
         }
         // this.setState({ loading: true })
@@ -177,14 +175,13 @@ export default class MlCompanySectors extends React.Component{
   }
 
   async libraryAction(file) {
-    debugger;
-    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
     return resp;
   }
   handleUploadAvatar(image, e) {
     this.setState({
-      //uploadingAvatar: true,,
+      // uploadingAvatar: true,,
     });
     this.onLogoFileUpload(e, image);
   }
@@ -192,152 +189,152 @@ export default class MlCompanySectors extends React.Component{
   toggleModal() {
     const that = this;
     this.setState({
-      showProfileModal: !that.state.showProfileModal,
+      showProfileModal: !that.state.showProfileModal
     });
   }
 
   async fetchOnlyImages() {
-    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId,KEY);
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.sectorsAndServices) {
-      let thisState = this.state.selectedIndex;
-      let dataDetails = this.state.companysectorsAndServices
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      const thisState = this.state.selectedIndex;
+      const dataDetails = this.state.companysectorsAndServices
+      const cloneBackUp = _.cloneDeep(dataDetails);
+      const specificData = cloneBackUp[thisState];
       if (specificData) {
-        let curUpload = response.sectorsAndServices[this.state.selectedIndex]
-        specificData['logo'] = curUpload['logo']
+        const curUpload = response.sectorsAndServices[this.state.selectedIndex]
+        specificData.logo = curUpload.logo
         this.setState({ loading: false, companysectorsAndServices: cloneBackUp });
       } else {
         this.setState({ loading: false })
       }
     }
   }
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
 
-  getActualIndex(dataArray, checkIndex){
-    var response = _.findIndex(dataArray, {index: checkIndex});
+  getActualIndex(dataArray, checkIndex) {
+    let response = _.findIndex(dataArray, { index: checkIndex });
     response = response >= 0 ? response : checkIndex;
     return response;
   }
 
-  sendDataToParent(isSaveClicked){
-    let data = this.state.data;
-    let investment = this.state.companysectorsAndServices;
+  sendDataToParent(isSaveClicked) {
+    const data = this.state.data;
+    const investment = this.state.companysectorsAndServices;
     let companysectorsAndServices = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    if(isSaveClicked){
+    if (isSaveClicked) {
       const actualIndex = this.getActualIndex(companysectorsAndServices, this.state.selectedIndex);
       companysectorsAndServices[actualIndex] = data;
     }
-    let arr = [];
-    _.each(companysectorsAndServices, function (item) {
-      for (var propName in item) {
+    const arr = [];
+    _.each(companysectorsAndServices, (item) => {
+      for (const propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, "privateFields");
+      const newItem = _.omit(item, '__typename');
+      const updateItem = _.omit(newItem, 'privateFields');
       arr.push(updateItem)
     })
     companysectorsAndServices = arr;
-    this.setState({companysectorsAndServices: companysectorsAndServices})
+    this.setState({ companysectorsAndServices })
     this.props.getSectors(companysectorsAndServices, this.state.privateKey);
   }
 
-  updatePrivateKeys(selIndex){
-    var privateValues = this.companysectorsAndServicesServer && this.companysectorsAndServicesServer[selIndex]?this.companysectorsAndServicesServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
-    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+  updatePrivateKeys(selIndex) {
+    const privateValues = this.companysectorsAndServicesServer && this.companysectorsAndServicesServer[selIndex] ? this.companysectorsAndServicesServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
-  onTileClick(index,uiIndex, e) {
-    let cloneArray = _.cloneDeep(this.state.companysectorsAndServices);
+  onTileClick(index, uiIndex, e) {
+    const cloneArray = _.cloneDeep(this.state.companysectorsAndServices);
     // let details = cloneArray[index]
-    let details = _.find(cloneArray,{index:index});
-    details = _.omit(details, "__typename");
+    let details = _.find(cloneArray, { index });
+    details = _.omit(details, '__typename');
     this.curSelectLogo = details.logo
     this.setState({
       selectedIndex: index,
       data: details,
       selectedObject: uiIndex,
       popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.industryTypeId,
-      "selectedValDomain": details.subDomainId
+      selectedVal: details.industryTypeId,
+      selectedValDomain: details.subDomainId
     }, () => {
       this.updatePrivateKeys(index)
     });
   }
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+    return { tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex }
   }
 
   onSaveAction(e) {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
       this.sendDataToParent(true)
-    }else {
+    } else {
       toastr.error(requiredFields.errorMessage);
       return
     }
-    var setObject = this.state.companysectorsAndServices
-    if(this.context && this.context.companyPortfolio && this.context.companyPortfolio.sectorsAndServices ){
+    let setObject = this.state.companysectorsAndServices
+    if (this.context && this.context.companyPortfolio && this.context.companyPortfolio.sectorsAndServices) {
       setObject = this.context.companyPortfolio.sectorsAndServices
     }
-    this.setState({sectorsAndServicesList: setObject, popoverOpen: false})
+    this.setState({ sectorsAndServicesList: setObject, popoverOpen: false })
     this.curSelectLogo = {}
   }
 
   onOptionSelectedIndustry(selectedFunding, callback, selObject) {
     let details = this.state.data;
-    details = _.omit(details, ["industryTypeId"]);
-    details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
-    this.setState({data: details, "selectedVal": selectedFunding, "industryTypeName": selObject.label}, function () {
+    details = _.omit(details, ['industryTypeId']);
+    details = _.extend(details, { industryTypeId: selectedFunding, industryTypeName: selObject.label });
+    this.setState({ data: details, selectedVal: selectedFunding, industryTypeName: selObject.label }, () => {
       // this.sendDataToParent()
     })
   }
 
   onOptionSelectedSubDomain(selectedSubDomain) {
     let details = this.state.data;
-    details = _.omit(details, ["subDomainId"]);
-    details = _.extend(details, {["subDomainId"]: selectedSubDomain});
-    this.setState({data: details, "selectedValDomain": selectedSubDomain}, function () {
+    details = _.omit(details, ['subDomainId']);
+    details = _.extend(details, { subDomainId: selectedSubDomain });
+    this.setState({ data: details, selectedValDomain: selectedSubDomain }, () => {
       // this.sendDataToParent()
     })
   }
-  render(){
-    let that = this;
-    let industriesquery = gql` query{
+  render() {
+    const that = this;
+    const industriesquery = gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
   `;
-    let subDomainQuery = gql` query($industryId:String){
+    const subDomainQuery = gql` query($industryId:String){
     data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
     }
   `;
-    let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
+    const subDomainOption = { options: { variables: { industryId: this.state.data.industryTypeId } } };
     const showLoader = that.state.loading;
-    let sectorList = that.state.sectorsAndServicesList || [];
+    const sectorList = that.state.sectorsAndServicesList || [];
     // let that = this;
     // const showLoader = that.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="requested_input">
             <div className="col-lg-12">
               <div className="row">
@@ -353,8 +350,9 @@ export default class MlCompanySectors extends React.Component{
                       <div className="row">
                         <div className="col-lg-2 col-md-4 col-sm-4">
                           <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
-                            <div className="list_block list_block_intrests notrans"
-                                 onClick={this.addAreaOfInterest.bind(this)}>
+                            <div
+                              className="list_block list_block_intrests notrans"
+                              onClick={this.addAreaOfInterest.bind(this)}>
                               <div className="hex_outer">
                                 <span className="ml ml-plus "></span>
                               </div>
@@ -363,33 +361,33 @@ export default class MlCompanySectors extends React.Component{
                           </a>
                         </div>
 
-                        {/*list of interest*/}
-                        {sectorList&&sectorList.map(function (details, idx) {
-                          return (
-                            <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                              <a href="" id={"create_client" + idx}>
-                                <div className="list_block list_block_intrests notrans"
-                                     onClick={that.onTileClick.bind(that, details.index, idx)}>
-                                  <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
-                                  <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                                  {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                                  <div className="hex_outer">
-                                    {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
-                                    <div className="hex_outer"><img src={details.logo && details.logo.fileUrl? generateAbsolutePath(details.logo.fileUrl) : "/images/def_profile.png"} /></div>
-                                  </div>
-                                  <h3>{details.industryTypeName}</h3>
+                        {/* list of interest */}
+                        {sectorList && sectorList.map((details, idx) => (
+                          <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                            <a href="" id={`create_client${idx}`}>
+                              <div
+                                className="list_block list_block_intrests notrans"
+                                onClick={that.onTileClick.bind(that, details.index, idx)}>
+                                <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
+                                <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                                {/* <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div> */}
+                                <div className="hex_outer">
+                                  {/* <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div> */}
+                                  <div className="hex_outer"><img src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : '/images/def_profile.png'} /></div>
                                 </div>
-                              </a>
-                            </div>
-                          )
-                        })}
+                                <h3>{details.industryTypeName}</h3>
+                              </div>
+                            </a>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </ScrollArea>
 
-                  {/*popover */}
-                  <Popover placement="right" isOpen={this.state.popoverOpen}
-                           target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                  {/* popover */}
+                  <Popover
+                    placement="right" isOpen={this.state.popoverOpen}
+                    target={`create_client${this.state.selectedObject}`} toggle={this.toggle}>
                     <PopoverTitle>Add Sectors And Services</PopoverTitle>
                     <PopoverContent>
                       <div className="ml_create_client">
@@ -397,20 +395,22 @@ export default class MlCompanySectors extends React.Component{
                           <div className="row">
                             <div className="col-md-12">
                               <div className="form-group">
-                                <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'} ref={"industryTypeId"}
-                                              labelKey={'label'} queryType={"graphql"} query={industriesquery} mandatory={true}
-                                              isDynamic={true} placeholder="Select Industry.."
-                                              onSelect={this.onOptionSelectedIndustry.bind(this)}
-                                              selectedValue={this.state.selectedVal} data-required={true}
-                                              data-errMsg="Industry is required"/>
+                                <Moolyaselect
+                                  multiSelect={false} className="form-field-name" valueKey={'value'} ref={'industryTypeId'}
+                                  labelKey={'label'} queryType={'graphql'} query={industriesquery} mandatory={true}
+                                  isDynamic={true} placeholder="Select Industry.."
+                                  onSelect={this.onOptionSelectedIndustry.bind(this)}
+                                  selectedValue={this.state.selectedVal} data-required={true}
+                                  data-errMsg="Industry is required"/>
                               </div>
                               <div className="form-group">
-                                <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
-                                              labelKey={'label'} queryType={"graphql"} query={subDomainQuery}
-                                              queryOptions={subDomainOption}
-                                              isDynamic={true} placeholder="Select SubDomain.."
-                                              onSelect={this.onOptionSelectedSubDomain.bind(this)}
-                                              selectedValue={this.state.selectedValDomain}/>
+                                <Moolyaselect
+                                  multiSelect={false} className="form-field-name" valueKey={'value'}
+                                  labelKey={'label'} queryType={'graphql'} query={subDomainQuery}
+                                  queryOptions={subDomainOption}
+                                  isDynamic={true} placeholder="Select SubDomain.."
+                                  onSelect={this.onOptionSelectedSubDomain.bind(this)}
+                                  selectedValue={this.state.selectedValDomain}/>
                               </div>
                               <CropperModal
                                 uploadingImage={this.state.uploadingAvatar}
@@ -419,7 +419,7 @@ export default class MlCompanySectors extends React.Component{
                                 show={this.state.showProfileModal}
                                 toggleShow={this.toggleModal}
                               />
-                              {this.state.selectedObject != "default" ?
+                              {this.state.selectedObject != 'default' ?
                                 <div className="form-group" onClick={this.toggleModal}>
                                   <div className="fileUpload mlUpload_btn">
                                     <span>Upload Pic</span>
@@ -428,9 +428,9 @@ export default class MlCompanySectors extends React.Component{
                               }
                               <br className="brclear"/>
                               <div className="form-group">
-                                <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
+                                <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate && this.state.data.makePrivate} name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                               </div>
-                              <div className="ml_btn" style={{'textAlign': 'center'}}>
+                              <div className="ml_btn" style={{ textAlign: 'center' }}>
                                 <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                               </div>
                             </div>
@@ -449,20 +449,20 @@ export default class MlCompanySectors extends React.Component{
 }
 MlCompanySectors.contextTypes = {
   companyPortfolio: PropTypes.object,
-  portfolioKeys :PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
-{/*<div className="panel panel-default panel-form">*/}
+{ /* <div className="panel panel-default panel-form"> */ }
 
-{/*<div className="panel-body">*/}
+{ /* <div className="panel-body"> */ }
 
-{/*<div className="form-group nomargin-bottom">*/}
-{/*<textarea placeholder="Describe..." name="sectorsAndServicesDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.sectorsAndServicesDescription} onBlur={this.handleBlur.bind(this)}></textarea>*/}
-{/*<FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSectorsAndServicesPrivate" defaultValue={this.state.data&&this.state.data.isSectorsAndServicesPrivate} onClick={this.onLockChange.bind(this, "sectorsAndServicesDescription", "isSectorsAndServicesPrivate")}/>*/}
-{/*</div>*/}
+{ /* <div className="form-group nomargin-bottom"> */ }
+{ /* <textarea placeholder="Describe..." name="sectorsAndServicesDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.sectorsAndServicesDescription} onBlur={this.handleBlur.bind(this)}></textarea> */ }
+{ /* <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSectorsAndServicesPrivate" defaultValue={this.state.data&&this.state.data.isSectorsAndServicesPrivate} onClick={this.onLockChange.bind(this, "sectorsAndServicesDescription", "isSectorsAndServicesPrivate")}/> */ }
+{ /* </div> */ }
 
-{/*</div>*/}
-{/*</div>*/}
+{ /* </div> */ }
+{ /* </div> */ }
 
 
-{/*</div>*/}
-{/*</div>*/}
+{ /* </div> */ }
+{ /* </div> */ }

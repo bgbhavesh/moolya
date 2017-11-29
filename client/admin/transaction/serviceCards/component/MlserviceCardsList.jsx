@@ -9,21 +9,20 @@
  * Imports libs and components
  */
 
-import React, {Component, PropTypes} from 'react';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlProcessSetupRequestsTableConfig} from "../config/MlserviceCardsConfig";
+import React, { Component, PropTypes } from 'react';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlProcessSetupRequestsTableConfig } from '../config/MlserviceCardsConfig';
 import _ from 'lodash';
 
 export default class MlserviceCardsList extends Component {
-
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={showCreateRequestComponent:false, time: new Date()};
+    this.state = { showCreateRequestComponent: false, time: new Date() };
   }
 
   /**
@@ -31,8 +30,8 @@ export default class MlserviceCardsList extends Component {
    * Desc   :: showCreateRequestComponent state is set
    */
 
-  addRequestHandler(){
-    this.setState({showCreateRequestComponent:true});
+  addRequestHandler() {
+    this.setState({ showCreateRequestComponent: true });
   }
   /**
    * Render
@@ -41,14 +40,14 @@ export default class MlserviceCardsList extends Component {
    */
 
   render() {
-    let actions= mlProcessSetupRequestsTableConfig.actionConfiguration;
-    let action = _.find(actions, {"actionName": "add"});
-    action.handler=this.addRequestHandler.bind(this);
+    const actions = mlProcessSetupRequestsTableConfig.actionConfiguration;
+    const action = _.find(actions, { actionName: 'add' });
+    action.handler = this.addRequestHandler.bind(this);
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Service Cards </h2>
-            <MlTableViewContainer {...mlProcessSetupRequestsTableConfig} forceFetch={false}/>
+          <MlTableViewContainer {...mlProcessSetupRequestsTableConfig} forceFetch={false}/>
         </div>
       </div>
     )

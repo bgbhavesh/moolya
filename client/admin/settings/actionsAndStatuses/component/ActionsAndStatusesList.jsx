@@ -1,9 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlActionsAndStatueseTableConfig} from "../config/mlActionsAndStatusesTableConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlActionsAndStatueseTableConfig } from '../config/mlActionsAndStatusesTableConfig';
 export default class MlActionAndStatusList extends Component {
-
   render() {
     return (
       <div className="admin_main_wrap">

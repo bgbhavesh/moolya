@@ -1,21 +1,23 @@
-import React from "react";
-import {render} from "react-dom";
-import {fetchServiceProviderPortfolioClients} from "../../../actions/findPortfolioServiceProviderDetails";
-import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
-import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
-import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
+import React from 'react';
+import { render } from 'react-dom';
+import { fetchServiceProviderPortfolioClients } from '../../../actions/findPortfolioServiceProviderDetails';
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator';
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails';
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations';
+import { validateUserForAnnotation } from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
 import ScrollArea from 'react-scrollbar';
-import MlLoader from "../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
+import MlLoader from '../../../../../../commons/components/loader/loader';
+const FontAwesome = require('react-fontawesome');
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
 
 export default class MlServiceProviderViewClients extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {serviceProviderClientsList: [],selectedAbout:"",tabIndex:0,isUserValidForAnnotation:false,loading: true};
+    this.state = {
+      serviceProviderClientsList: [], selectedAbout: '', tabIndex: 0, isUserValidForAnnotation: false, loading: true
+    };
     this.fetchPortfolioStartupDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -26,16 +28,16 @@ export default class MlServiceProviderViewClients extends React.Component {
 
 
   componentDidMount() {
-    //this.initalizeAnnotaor()
-    var className = this.props.isAdmin?"admin_header":"app_header"
-    var WinHeight = $(window).height();
+    // this.initalizeAnnotaor()
+    const className = this.props.isAdmin ? 'admin_header' : 'app_header'
+    const WinHeight = $(window).height();
     // $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.'+className).outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight - (68 + $(`.${className}`).outerHeight(true)));
 
-    $("#show").click(function(){
-      $("#details-div").show();
-      var $frame = $('#centered');
-      var $wrap  = $frame.parent();
+    $('#show').click(() => {
+      $('#details-div').show();
+      const $frame = $('#centered');
+      const $wrap = $frame.parent();
 
 
       // Call Sly on frame
@@ -47,7 +49,7 @@ export default class MlServiceProviderViewClients extends React.Component {
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
-        startAt:0,
+        startAt: 0,
         scrollBar: $wrap.find('.scrollbar'),
         scrollBy: 1,
         speed: 300,
@@ -55,12 +57,12 @@ export default class MlServiceProviderViewClients extends React.Component {
         easing: 'easeOutExpo',
         dragHandle: 1,
         dynamicHandle: 1,
-        clickBar: 1,
+        clickBar: 1
 
       });
-      $("#show").hide();
+      $('#show').hide();
     });
-    $(function() {
+    $(() => {
       $('.float-label').jvFloat();
     });
     this.fetchPortfolioStartupDetails();
@@ -73,19 +75,18 @@ export default class MlServiceProviderViewClients extends React.Component {
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -97,16 +98,15 @@ export default class MlServiceProviderViewClients extends React.Component {
         } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
   async createAnnotations(annotation) {
-    let details = {
+    const details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "serviceProviderClients"+ this.state.tabIndex,
+      docId: `serviceProviderClients${this.state.tabIndex}`,
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -117,55 +117,53 @@ export default class MlServiceProviderViewClients extends React.Component {
   }
 
 
-  async fetchAnnotations(id,isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "serviceProviderClients"+id);
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+  async fetchAnnotations(id, isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, `serviceProviderClients${id}`);
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName": value.roleName,
-        "profileImage": value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
-    if(quotes && quotes.length>0){
+    if (quotes && quotes.length > 0) {
       this.state.content.annotator('loadAnnotations', quotes);
       return response
-    }else {
-      return response
     }
+    return response
   }
 
   async fetchPortfolioStartupDetails() {
-    let that = this;
-    let portfoliodetailsId = that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchServiceProviderPortfolioClients(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, serviceProviderClientsList: response});
-      if(response&&response.length>0){
-        let about = response&&response[0].clientDescription
-        let index = response&&response[0].index
-        this.setState({"selectedAbout" : about,"tabIndex":0})
+      this.setState({ loading: false, serviceProviderClientsList: response });
+      if (response && response.length > 0) {
+        const about = response && response[0].clientDescription
+        const index = response && response[0].index
+        this.setState({ selectedAbout: about, tabIndex: 0 })
       }
-    }else
-      this.setState({loading: false})
+    } else { this.setState({ loading: false }) }
   }
 
-  onChangeAbout(data,index,e){
-    this.setState({"selectedAbout" : data,"tabIndex":index})
+  onChangeAbout(data, index, e) {
+    this.setState({ selectedAbout: data, tabIndex: index })
     this.fetchAnnotations(index);
   }
 
-  onChangeIndex(e){
+  onChangeIndex(e) {
     this.fetchAnnotations(0);
   }
 
@@ -173,7 +171,7 @@ export default class MlServiceProviderViewClients extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -182,84 +180,83 @@ export default class MlServiceProviderViewClients extends React.Component {
   }
 
   render() {
-    let that = this;
-    let clientsArray = that.state.serviceProviderClientsList || [];
+    const that = this;
+    const clientsArray = that.state.serviceProviderClientsList || [];
     const showLoader = this.state.loading;
     return (
-        <div>
-          {showLoader === true ? ( <MlLoader/>) : (
-            <div>
-            {_.isEmpty(clientsArray)?(
+      <div>
+        {showLoader === true ? (<MlLoader/>) : (
+          <div>
+            {_.isEmpty(clientsArray) ? (
               <div className="portfolio-main-wrap">
                 <NoData tabName={this.props.tabName} />
-              </div>): (
+              </div>) : (
               <div className="" id="annotatorContent">
-              <div className="main_wrap_scroll">
-                <ScrollArea
-                  speed={0.8}
-                  className="main_wrap_scroll"
-                  smoothScrolling={true}
-                  default={true}>
-                  <div className="">
-                    <div className="col-lg-12" id="show">
-                      <div className="row">
-                        {clientsArray && clientsArray.map(function (details, idx) {
-                          return (
+                <div className="main_wrap_scroll">
+                  <ScrollArea
+                    speed={0.8}
+                    className="main_wrap_scroll"
+                    smoothScrolling={true}
+                    default={true}>
+                    <div className="">
+                      <div className="col-lg-12" id="show">
+                        <div className="row">
+                          {clientsArray && clientsArray.map((details, idx) => (
                             <div className="col-lg-2 col-md-4 col-sm-4" key={idx} onClick={that.onChangeIndex.bind(that)}>
                               <div className="list_block">
-                                <div className="hex_outer"><img src={details.logo&&generateAbsolutePath(details.logo.fileUrl)}/></div>
+                                <div className="hex_outer"><img src={details.logo && generateAbsolutePath(details.logo.fileUrl)}/></div>
                                 <h3>{details.companyName && details.companyName}</h3>
                               </div>
-                            </div>)
-                        })}
-                      </div>
-                    </div>
-                    <div id="details-div" style={{display:'none'}}>
-                      <div className="col-lg-12">
-                        <div className="row">
-                          <div className="top_block_scroller" id="centered">
-                            <ul className="topscroll_listblock">
-                              {clientsArray && clientsArray.map(function (details, idx) {
-                                let description = details.clientDescription ? details.clientDescription : ""
-                                let index = details.index ? details.index : ""
-                                return (<li key={idx}>
-                                  <div className="list_block list_block_intrests notrans"
-                                       onClick={that.onChangeAbout.bind(that,description,idx)}>
-                                    <div className="hex_outer"><img src={details.logo&&details.logo.fileUrl}/></div>
-                                    <h3>{details.companyName && details.companyName}</h3>
-                                  </div>
-                                </li>)
-                              })}
-
-                            </ul>
-                          </div>
+                            </div>))}
                         </div>
                       </div>
-                      <div className="">
+                      <div id="details-div" style={{ display: 'none' }}>
                         <div className="col-lg-12">
                           <div className="row">
-                            <div className="investement-view-content">
-                              <div className="panel panel-default panel-form-view">
-                                <div className="panel-body">
-                                  <p>{that.state.selectedAbout ? that.state.selectedAbout : ""}</p>
+                            <div className="top_block_scroller" id="centered">
+                              <ul className="topscroll_listblock">
+                                {clientsArray && clientsArray.map((details, idx) => {
+                                  const description = details.clientDescription ? details.clientDescription : ''
+                                  const index = details.index ? details.index : ''
+                                  return (<li key={idx}>
+                                    <div
+                                      className="list_block list_block_intrests notrans"
+                                      onClick={that.onChangeAbout.bind(that, description, idx)}>
+                                      <div className="hex_outer"><img src={details.logo && details.logo.fileUrl}/></div>
+                                      <h3>{details.companyName && details.companyName}</h3>
+                                    </div>
+                                  </li>)
+                                })}
+
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="">
+                          <div className="col-lg-12">
+                            <div className="row">
+                              <div className="investement-view-content">
+                                <div className="panel panel-default panel-form-view">
+                                  <div className="panel-body">
+                                    <p>{that.state.selectedAbout ? that.state.selectedAbout : ''}</p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <br className="brclear"/>
                     </div>
-                    <br className="brclear"/>
-                  </div>
-                </ScrollArea>
-              </div>
-            </div>)
-          }
-           </div>
-          )
-          }
-        </div>
+                  </ScrollArea>
+                </div>
+              </div>)
+            }
+          </div>
+        )
+        }
+      </div>
 
-      )
-    }
+    )
+  }
 }

@@ -2,18 +2,20 @@
  * Created by vishwadeep on 12/5/17.
  */
 
-import React, {Component} from "react";
-import _ from "lodash";
-import {findUserOfficeActionHandler} from "../actions/findUserOffice";
-import {findOfficeAction} from "../actions/findOfficeAction";
-import MlLoader from "../../../../commons/components/loader/loader";
-import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/switchUserProfilesActions";
-import {deActivateOfficeActionHandler} from "../actions/updateOfficeMember";
+import React, { Component } from 'react';
+import _ from 'lodash';
+import { findUserOfficeActionHandler } from '../actions/findUserOffice';
+import { findOfficeAction } from '../actions/findOfficeAction';
+import MlLoader from '../../../../commons/components/loader/loader';
+import { fetchExternalUserProfilesActionHandler } from '../../../profile/actions/switchUserProfilesActions';
+import { deActivateOfficeActionHandler } from '../actions/updateOfficeMember';
 
 export default class MlAppMyOffice extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: [], showButton: false, currentSlideIndex: 0};
+    this.state = {
+      loading: true, data: [], showButton: false, currentSlideIndex: 0
+    };
     this.onSlideIndexChange = this.onSlideIndexChange.bind(this);
     this.deactivateOffice = this.deactivateOffice.bind(this);
     this.enterOffice = this.enterOffice.bind(this);
@@ -23,7 +25,7 @@ export default class MlAppMyOffice extends Component {
 
   // componentDidUpdate() {
   initializeSwiper() {
-    var swiper = new Swiper('.profile_container', {
+    const swiper = new Swiper('.profile_container', {
       pagination: '.swiper-pagination',
       effect: 'coverflow',
       grabCursor: true,
@@ -45,7 +47,7 @@ export default class MlAppMyOffice extends Component {
 
   onSlideIndexChange(swiper) {
     if (this.state.currentSlideIndex !== swiper.activeIndex) {
-      this.setState({'currentSlideIndex': swiper.activeIndex});
+      this.setState({ currentSlideIndex: swiper.activeIndex });
     }
   }
 
@@ -58,38 +60,35 @@ export default class MlAppMyOffice extends Component {
   async findUserOffice() {
     const response = await findUserOfficeActionHandler();
     if (!_.isEmpty(response)) {
-      let isRegApp = _.find(response, {isRegistrationApproved: true})
-      let isOffice = _.find(response, {officeId: null})
+      const isRegApp = _.find(response, { isRegistrationApproved: true })
+      const isOffice = _.find(response, { officeId: null })
       if (isRegApp) {
         if (isOffice) {
-          this.setState({loading: false, data: [], isRegApp: true});
+          this.setState({ loading: false, data: [], isRegApp: true });
         } else {
-          this.setState({loading: false, data: response, isRegApp: true});
+          this.setState({ loading: false, data: response, isRegApp: true });
         }
-      }
-      else
-        this.setState({loading: false, data: response, isRegApp: false});
-    } else
-      this.setState({loading: false});
+      } else { this.setState({ loading: false, data: response, isRegApp: false }); }
+    } else { this.setState({ loading: false }); }
     this.initializeSwiper();
   }
 
   async fetchExternalUserProfiles() {
     const response = await fetchExternalUserProfilesActionHandler();
     if (response && response.length > 0) {
-      let default_User_Profile = _.find(response, {isDefault: true})
+      let default_User_Profile = _.find(response, { isDefault: true })
       if (!default_User_Profile) {
         default_User_Profile = response[0];
       }
-      let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
-      this.setState({showButton: isFunder})
+      const isFunder = _.isMatch(default_User_Profile, { communityDefCode: 'FUN' })
+      this.setState({ showButton: isFunder })
     }
   }
 
   addNewOffice() {
-    if (this.state.showButton){
-      FlowRouter.go("/app/addOffice")
-    }else{
+    if (this.state.showButton) {
+      FlowRouter.go('/app/addOffice')
+    } else {
       toastr.error('Not Authorised');
     }
   }
@@ -112,25 +111,23 @@ export default class MlAppMyOffice extends Component {
   //   }
   // }
 
-  async enterOffice(){
+  async enterOffice() {
     const offices = this.state.data && this.state.data.length > 0 ? this.state.data : [];
-    if(offices && offices.length){
+    if (offices && offices.length) {
       const specOffice = offices[this.state.currentSlideIndex];
       const officeId = specOffice.officeId;
-      let response = await findOfficeAction(officeId);
+      const response = await findOfficeAction(officeId);
       if (response && response.success) {
-        let data = JSON.parse(response.result)
+        const data = JSON.parse(response.result)
         if (data[0].office.isExpired) {
           toastr.error('Office Expired');
-        }
-        else if (data[0].office.isActivated) {
-          FlowRouter.go('/app/editOffice/' + officeId);
+        } else if (data[0].office.isActivated) {
+          FlowRouter.go(`/app/editOffice/${officeId}`);
         } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
           toastr.error('Office amount Paid wait for admin approval');
         } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
-          FlowRouter.go('/app/payOfficeSubscription/' + officeId)
-        } else
-          toastr.error('Waiting for admin approval');
+          FlowRouter.go(`/app/payOfficeSubscription/${officeId}`)
+        } else { toastr.error('Waiting for admin approval'); }
       }
     }
   }
@@ -141,17 +138,14 @@ export default class MlAppMyOffice extends Component {
       const specOffice = offices[this.state.currentSlideIndex];
       const officeId = specOffice.officeId;
       const response = await deActivateOfficeActionHandler(officeId);
-      if (response && response.success)
-        toastr.success(response.result);
-      else if (response && !response.success)
-        toastr.error(response.result);
+      if (response && response.success) { toastr.success(response.result); } else if (response && !response.success) { toastr.error(response.result); }
     }
     console.log('query for deactivate office')
   }
 
   render() {
     // let that = this
-    let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
+    const userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
     // const userOfficeList = userOffice.map(function (office, id) {
     //   return (
     //     <div className="swiper-slide office_accounts my-office-main" key={id}
@@ -167,7 +161,7 @@ export default class MlAppMyOffice extends Component {
     const showLoader = this.state.loading;
     return (
       <div className="app_main_wrap">
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="app_padding_wrap no_padding">
             <div className="list_view_block">
               {this.state.isRegApp ? <div>
@@ -185,18 +179,17 @@ export default class MlAppMyOffice extends Component {
                       <div className="swiper-container profile_container">
                         <div className="swiper-wrapper">
 
-                          {userOffice.map(function (office, id) {
-                            return (
-                              <div className="swiper-slide office_accounts my-office-main" key={id}
-                              /*     onClick={that.selectOffice.bind(that, office.officeId)}*/
-                              >
-                                <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
-                                <h2>Office Name: {office.officeName}</h2>
-                                <h2>Total Member(s): {office.totalusercount}</h2>
-                                <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
-                              </div>
-                            )
-                          })}
+                          {userOffice.map((office, id) => (
+                            <div
+                              className="swiper-slide office_accounts my-office-main" key={id}
+                              /*     onClick={that.selectOffice.bind(that, office.officeId)} */
+                            >
+                              <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
+                              <h2>Office Name: {office.officeName}</h2>
+                              <h2>Total Member(s): {office.totalusercount}</h2>
+                              <h3>Principal(s):{office.principalcount}&nbsp;&nbsp;Team Size:{office.teamMembercount}</h3>
+                            </div>
+                          ))}
 
                         </div>
                         <div className="swiper-pagination"></div>
@@ -226,4 +219,4 @@ export default class MlAppMyOffice extends Component {
       </div>
     )
   }
-};
+}

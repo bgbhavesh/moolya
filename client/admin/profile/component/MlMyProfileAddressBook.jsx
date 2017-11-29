@@ -2,74 +2,70 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
-import {initalizeFloatLabel} from '../../utils/formElemUtil';
-import {getContactDetails} from '../actions/getAddressBookAction'
+const FontAwesome = require('react-fontawesome');
+import { initalizeFloatLabel } from '../../utils/formElemUtil';
+import { getContactDetails } from '../actions/getAddressBookAction'
 
 import ScrollArea from 'react-scrollbar'
-import  ContactDetails from './MlMyProfileContactDetails';
+import ContactDetails from './MlMyProfileContactDetails';
 import AddressDetails from './mlRegistrationAddressDetails'
 import EmailDetails from './mlRegistrationEmailDetails';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import { getAdminUserContext } from '../../../commons/getAdminUserContext'
 import MlLoader from '../../../commons/components/loader/loader'
 
-export default class Step3 extends React.Component{
-
-  constructor(props){
+export default class Step3 extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      loading : true,
-      selectedValue : null,
-      contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
-      registerId : " ",
-      registrationDetails:" ",
-      clusterId : " "
+    this.state = {
+      loading: true,
+      selectedValue: null,
+      contactNumber: [{ numberType: '', countryCode: '', contactNumber: '' }, { numberType: 'Test', countryCode: '', contactNumber: '' }],
+      registerId: ' ',
+      registrationDetails: ' ',
+      clusterId: ' '
     }
     return this;
   }
-    componentWillMount(){
-      let res = getAdminUserContext();
-      this.setState({clusterId:res.clusterId})
+  componentWillMount() {
+    const res = getAdminUserContext();
+    this.setState({ clusterId: res.clusterId })
 
-      const response = this.getContents();
-      return response;
+    const response = this.getContents();
+    return response;
   }
 
 
-  async getRegistrationContactDetails(details){
-    const response=await getContactDetails();
-    this.setState({'registrationDetails':response})
+  async getRegistrationContactDetails(details) {
+    const response = await getContactDetails();
+    this.setState({ registrationDetails: response })
   }
 
-  async getContents(){
-      let response = await getContactDetails ();
-      this.setState({loading:false,registrationDetails:response});
-      //return response;
+  async getContents() {
+    const response = await getContactDetails();
+    this.setState({ loading: false, registrationDetails: response });
+    // return response;
   }
 
-  componentDidMount()
-  {
-    var WinHeight = $(window).height();
-    //$('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    $('.left_wrap').height(WinHeight-(84+$('.admin_header').outerHeight(true)));
-    //this.props.getRegistrationContactDetails();
+  componentDidMount() {
+    const WinHeight = $(window).height();
+    // $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    $('.left_wrap').height(WinHeight - (84 + $('.admin_header').outerHeight(true)));
+    // this.props.getRegistrationContactDetails();
     initalizeFloatLabel();
-
-
   }
 
-  async getRegistrationContactInfo(){
+  async getRegistrationContactInfo() {
     const resp = this.getContents();
     return resp;
   }
 
-  addressUpdated(){
-    this.setState({loading:true});
+  addressUpdated() {
+    this.setState({ loading: true });
     this.getContents();
   }
 
-  render(){
-    const showLoader=this.state.loading;
+  render() {
+    const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
@@ -83,23 +79,25 @@ export default class Step3 extends React.Component{
                   smoothScrolling={true}
                   default={true}
                 >
-                  {/*registrationDetails={this.getRegistrationContactDetails(this)}*/}
+                  {/* registrationDetails={this.getRegistrationContactDetails(this)} */}
                   <form>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Contact Numbers
                       </div>
 
-                      <ContactDetails registerId={this.state.registerId}
-                                      registrationInfo={this.state.registrationDetails}
-                                      clusterId={this.state.clusterId}/>
+                      <ContactDetails
+                        registerId={this.state.registerId}
+                        registrationInfo={this.state.registrationDetails}
+                        clusterId={this.state.clusterId}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email Id
                       </div>
-                      <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}
-                                    clusterId={this.state.clusterId}/>
+                      <EmailDetails
+                        registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}
+                        clusterId={this.state.clusterId}/>
                     </div>
                   </form>
                 </ScrollArea>
@@ -118,9 +116,10 @@ export default class Step3 extends React.Component{
                       <div className="panel-heading">
                         Addresses
                       </div>
-                      <AddressDetails registerId={this.state.registerId}
-                                      registrationInfo={this.state.registrationDetails} clusterId={this.state.clusterId}
-                                      addressUpdated={this.addressUpdated.bind(this)}/>
+                      <AddressDetails
+                        registerId={this.state.registerId}
+                        registrationInfo={this.state.registrationDetails} clusterId={this.state.clusterId}
+                        addressUpdated={this.addressUpdated.bind(this)}/>
                     </div>
                   </form>
                 </ScrollArea>
@@ -130,4 +129,4 @@ export default class Step3 extends React.Component{
       </div>
     )
   }
-};
+}

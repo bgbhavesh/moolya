@@ -1,8 +1,8 @@
 import React from 'react';
-import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import { fetchCompanyDetailsHandler } from '../../../actions/findCompanyPortfolioDetails';
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlGenericPartnersView from '../../commons/MlGenericPartnersView';
 
@@ -11,7 +11,7 @@ const KEY = 'partners'
 export default class MlCompanyViewPartners extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {partnersList: [], loading: true};
+    this.state = { partnersList: [], loading: true };
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -20,76 +20,73 @@ export default class MlCompanyViewPartners extends React.Component {
   }
 
 
-  componentDidMount(){
+  componentDidMount() {
     this.initalizeAnnotaor()
     this.fetchAnnotations();
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.fetchPortfolioDetails();
   }
 
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"partners", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'partners', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'partners');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "partners");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -98,18 +95,18 @@ export default class MlCompanyViewPartners extends React.Component {
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const that = this;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.partners) {
-      this.setState({partnersList: response.partners});
+      this.setState({ partnersList: response.partners });
     }
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
-  render(){
-    let that = this;
-    let partnersArray = that.state.partnersList || [];
+  render() {
+    const that = this;
+    const partnersArray = that.state.partnersList || [];
     if (!this.state.loading && partnersArray && partnersArray.length === 0) {
       return (<NoData tabName="Partner" />);
     }

@@ -1,6 +1,6 @@
 import MoolyaSelect from '../../../commons/containers/select/MlSelectComposer';
-import React, {Component} from 'react';
-import {client} from '../../core/apolloConnection';
+import React, { Component } from 'react';
+import { client } from '../../core/apolloConnection';
 
 /**
  * Method :: anonymous
@@ -8,17 +8,17 @@ import {client} from '../../core/apolloConnection';
  * @param queryOptions :: Object ::Query options containing variables/parameters
  * @returns  {<React.Component>}
  */
-/*export default (queryOptions)=>{
+/* export default (queryOptions)=>{
   return <MoolyaSelect {...queryOptions} connection={client}/>;
-}*/
+} */
 
 export default class Moolyaselect extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     return this;
   }
-  render(){
-    /** returning the Generic Select Component*/
+  render() {
+    /** returning the Generic Select Component */
     return <MoolyaSelect {...this.props} connection={client}/>;
   }
 }

@@ -1,39 +1,37 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
 // import {findBackendUserActionHandler} from '../actions/findUserAction'
-let Select = require('react-select');
-import {initalizeFloatLabel} from "../../utils/formElemUtil";
+const Select = require('react-select');
+import { initalizeFloatLabel } from '../../utils/formElemUtil';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlUsersTransactionDetailsComponent extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      role:'',
-      departmentName:'',
-      subDepartmentName:'',
-      profileImage:'',
-      firstName: " ",
-      status:null,
-      dispalyStatus:false
+    this.state = {
+      role: '',
+      departmentName: '',
+      subDepartmentName: '',
+      profileImage: '',
+      firstName: ' ',
+      status: null,
+      dispalyStatus: false
     }
     return this;
   }
-  componentDidUpdate()
-  {
+  componentDidUpdate() {
     initalizeFloatLabel();
   }
-  componentWillReceiveProps(newProps){
+  componentWillReceiveProps(newProps) {
 
   }
 
   render() {
-
     return (
       <div className="ml_tabs">
-        <ul  className="nav nav-pills">
+        <ul className="nav nav-pills">
           <li className="active">
-            <a  href={`#details${that.props.id}`} data-toggle="tab">Details</a>
+            <a href={`#details${that.props.id}`} data-toggle="tab">Details</a>
           </li>
           <li><a href={`#notes${that.props.id}`} data-toggle="tab">Notes</a>
           </li>
@@ -67,21 +65,21 @@ export default class MlUsersTransactionDetailsComponent extends React.Component 
                   </div>
                   <div className="form-group">
                     <span className={`placeHolder ${actionActive}`}>Actions</span>
-                    <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />
+                    <Select name="form-field-name" placeholder="Actions" className="float-label" options={statusOptions} value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />
                   </div>
                   <br className="clearfix" />
                   {/* <div className="ml_btn">
                    /!*<a href="#" className="save_btn">View</a>*!/
                    <a href="#" className="cancel_btn">Actions</a>
-                   </div>*/}
+                   </div> */}
                 </div>
               </div>
               <div className="col-md-3 text-center">
                 <div className="profile_block">
                   <img src={generateAbsolutePath(that.state.profileImage)} />
                   <span>
-                  {that.state.firstName}<br />{that.state.role}
-                </span>
+                    {that.state.firstName}<br />{that.state.role}
+                  </span>
                 </div>
               </div>
 
@@ -99,10 +97,9 @@ export default class MlUsersTransactionDetailsComponent extends React.Component 
                   <img src={generateAbsolutePath(that.state.profileImage)} />
                   <span>
                     {that.state.firstName}<br />{that.state.role}
-                </span>
+                  </span>
                 </div>
               </div>
-
 
 
             </div>

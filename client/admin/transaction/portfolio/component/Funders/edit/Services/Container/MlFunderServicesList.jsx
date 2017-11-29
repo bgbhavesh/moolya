@@ -1,59 +1,59 @@
-import React, {Component} from "react";
-import {fetchServicesActionHandler, checkServiceSubChapterAccessControl, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+import React, { Component } from 'react';
+import { fetchServicesActionHandler, checkServiceSubChapterAccessControl, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler } from '../../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 import MlFunderServicesListView from '../Presentation/MlFunderServicesListView'
 
-export default class  MlFunderServicesList extends Component {
+export default class MlFunderServicesList extends Component {
   constructor(props) {
     super(props)
-    this.state={
+    this.state = {
       createNewBeSpoke: false,
       showService: false,
-      services:[],
-      serviceDetails:{},
-      serviceId:"",
-      profileId:"",
-      beSpokeServices:[],
+      services: [],
+      serviceDetails: {},
+      serviceId: '',
+      profileId: '',
+      beSpokeServices: [],
       bookingStatus: false,
-      beSpokeIndex:0,
-      componentToView:'landingPage',
-      serviceIndex:"",
+      beSpokeIndex: 0,
+      componentToView: 'landingPage',
+      serviceIndex: '',
       data: {}
     };
     this.fetchServices = this.fetchServices.bind(this);
     // this.servicesListView.bind(this);
     this.getServiceDetails.bind(this);
   }
-  componentWillMount(){
+  componentWillMount() {
     this.getServiceDetails();
     this.getBeSpokeServiceDetails();
   }
 
-  fetchServices(){
+  fetchServices() {
     this.getServiceDetails();
     this.getBeSpokeServiceDetails();
   }
 
-  async getServiceDetails(){
-    const response  =  await fetchServicesActionHandler(this.props.portfolioDetailsId)
-    this.setState({services:response})
+  async getServiceDetails() {
+    const response = await fetchServicesActionHandler(this.props.portfolioDetailsId)
+    this.setState({ services: response })
     return response
   }
 
-  async getBeSpokeServiceDetails(){
-    const response  =  await fetchBeSpokeServicesActionHandler(this.props.portfolioDetailsId)
-    this.setState({beSpokeServices:response})
+  async getBeSpokeServiceDetails() {
+    const response = await fetchBeSpokeServicesActionHandler(this.props.portfolioDetailsId)
+    this.setState({ beSpokeServices: response })
     return response
   }
 
 
   async bookService(bookingStatus) {
-    let serviceId = this.state.serviceId;
-    if(!serviceId){
-      toastr.error("Please select a service");
+    const serviceId = this.state.serviceId;
+    if (!serviceId) {
+      toastr.error('Please select a service');
     }
-    let response = await checkServiceSubChapterAccessControl(serviceId);
-    if(response && response.success){
-      if(bookingStatus) {
+    const response = await checkServiceSubChapterAccessControl(serviceId);
+    if (response && response.success) {
+      if (bookingStatus) {
         this.setState({
           componentToView: 'bookService',
           createNewBeSpoke: true,
@@ -63,49 +63,53 @@ export default class  MlFunderServicesList extends Component {
           bookingStatus: true
         })
       }
+    } else if (!response) {
+      toastr.error('No response from server');
     } else {
-      if(!response) {
-        toastr.error("No response from server");
-      } else {
-        toastr.error(response.result);
-      }
+      toastr.error(response.result);
     }
   }
 
-  serviceInfo(details){
-    this.setState({serviceDetails:details})
+  serviceInfo(details) {
+    this.setState({ serviceDetails: details })
   }
 
-  addBeSpoke(){
-    this.setState({componentToView:'createBeSpoke',createNewBeSpoke: true, showBeSpoke:true, showService: false, showBeSpokeService: false})
+  addBeSpoke() {
+    this.setState({
+      componentToView: 'createBeSpoke', createNewBeSpoke: true, showBeSpoke: true, showService: false, showBeSpokeService: false
+    })
   }
 
-  viewMode(index,serviceId,profileId){
-    this.setState({serviceIndex:index,componentToView:'services',createNewBeSpoke: true, showBeSpoke:false,showService:true, serviceId:serviceId, profileId:profileId})
+  viewMode(index, serviceId, profileId) {
+    this.setState({
+      serviceIndex: index, componentToView: 'services', createNewBeSpoke: true, showBeSpoke: false, showService: true, serviceId, profileId
+    })
   }
 
-  viewModeBeSpoke(index,serviceId,profileId){
-    this.setState({componentToView:'updateBeSpoke',createNewBeSpoke: true, showBeSpoke:false,showService:false,showBeSpokeService:true, serviceId:serviceId, profileId:profileId, beSpokeIndex:index})
+  viewModeBeSpoke(index, serviceId, profileId) {
+    this.setState({
+      componentToView: 'updateBeSpoke', createNewBeSpoke: true, showBeSpoke: false, showService: false, showBeSpokeService: true, serviceId, profileId, beSpokeIndex: index
+    })
   }
 
-  componentView(view,index,serviceId, serviceProfileId){
-    this.setState({componentToView: view}, function () {
+  componentView(view, index, serviceId, serviceProfileId) {
+    this.setState({ componentToView: view }, () => {
       this.fetchServices();
-    }.bind(this));
-    if(index && serviceId && serviceProfileId){
-      let details = {
-        index: index,
-        serviceId: serviceId,
-        serviceProfileId: serviceProfileId
+    });
+    if (index && serviceId && serviceProfileId) {
+      const details = {
+        index,
+        serviceId,
+        serviceProfileId
       };
-      this.setState({data: details})
+      this.setState({ data: details })
     }
   }
 
 
   render() {
-    return(
-    <MlFunderServicesListView
+    return (
+      <MlFunderServicesListView
         viewComponent={this.state.componentToView}
         componentToView={this.componentView.bind(this)}
         data={this.state.data}
@@ -125,7 +129,7 @@ export default class  MlFunderServicesList extends Component {
         bookService={this.bookService.bind(this)}
         serviceDetails={this.state.serviceDetails}
         fetchServices={this.fetchServices.bind(this)}
-    />
+      />
     )
   }
 }

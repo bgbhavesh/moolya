@@ -5,22 +5,22 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
+const Select = require('react-select');
+const FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
-var options = [
+const options = [
   { value: 'role', label: 'Role' },
   { value: 'role', label: 'Role' }
 ];
 function logChange(val) {
-  console.log("Selected: " + val);
+  console.log(`Selected: ${val}`);
 }
 function ScheduledBtn(cell, row) {
   return '<a href="#" class="fileUpload mlUpload_btn">Rescheduled</a>';
-};
+}
 function Info(cell, row) {
   return '<a href="#" class="fileUpload mlUpload_btn">i</a>';
-};
+}
 
 
 const taxes = [{
@@ -127,7 +127,7 @@ export default class Appointments extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let sessions = [];
+    const sessions = [];
     nextProps.appointment.sessionInfo.forEach((session, index) => {
       sessions.push({
         id: index,
@@ -145,9 +145,8 @@ export default class Appointments extends React.Component {
   isExpandableRow(row) {
     if (row.id <= 1) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   expandComponent(row) {
@@ -169,7 +168,8 @@ export default class Appointments extends React.Component {
           default={true}
         >
 
-          <BootstrapTable data={this.state.sessions}
+          <BootstrapTable
+            data={this.state.sessions}
             options={options}
             expandableRow={false}
             expandComponent={this.expandComponent}
@@ -189,4 +189,4 @@ export default class Appointments extends React.Component {
     )
   }
 }
-;
+

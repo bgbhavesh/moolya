@@ -1,8 +1,8 @@
-import React, {Component, PropTypes}  from "react";
+import React, { Component, PropTypes } from 'react';
 import MlLoader from '../../../../../../commons/components/loader/loader'
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
-import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../utils/formElemUtil';
+import { fetchInstitutionDetailsHandler } from '../../../actions/findPortfolioInstitutionDetails'
 import _ from 'lodash';
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -33,25 +33,25 @@ export default class MlInstitutionEditMCL extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
-    //this.updateprivateFields();
+    // this.updateprivateFields();
   }
 
   updateprivateFields() {
-    var that = this
-    setTimeout(function () {
-      _.each(that.state.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    const that = this
+    setTimeout(() => {
+      _.each(that.state.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }, 10)
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
+    const that = this;
     let data = {};
-    let portfoliodetailsId = that.props.portfolioDetailsId;
-    var responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
-    var responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
-    var responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
+    const portfoliodetailsId = that.props.portfolioDetailsId;
+    const responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    const responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+    const responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
 
     if (that.context.institutionPortfolio && (that.context.institutionPortfolio.memberships || that.context.institutionPortfolio.compliances || that.context.institutionPortfolio.licenses)) {
       this.setState({
@@ -65,32 +65,32 @@ export default class MlInstitutionEditMCL extends React.Component {
         compliances: that.context.institutionPortfolio.compliances
       }
 
-      this.setState({loading: false,data:data}, () => {
-        var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
+      this.setState({ loading: false, data }, () => {
+        const MprivateKeys = responseM && responseM.memberships ? responseM.memberships.privateFields : [];
         this.lockPrivateKeys('memberships', MprivateKeys);
       });
 
-      this.setState({loading: false, data: data}, () => {
-        var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
+      this.setState({ loading: false, data }, () => {
+        const LprivateKeys = responseL && responseL.licenses ? responseL.licenses.privateFields : [];
         this.lockPrivateKeys('licenses', LprivateKeys);
       });
 
-      this.setState({loading: false, data: data}, () => {
-        var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
+      this.setState({ loading: false, data }, () => {
+        const CprivateKeys = responseC && responseC.compliances ? responseC.compliances.privateFields : [];
         this.lockPrivateKeys('compliances', CprivateKeys);
       });
     } else {
-      var pf;
+      let pf;
       if (responseM && responseM.memberships) {
         var object = responseM.memberships;
         object = _.omit(object, '__typename')
-        this.setState({memberships: object});
+        this.setState({ memberships: object });
         pf = object.privateFields;
       }
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
         object = _.omit(object, '__typename')
-        this.setState({compliances: object});
+        this.setState({ compliances: object });
 
         if (object.privateFields) {
           pf = pf.concat(object.privateFields)
@@ -99,19 +99,19 @@ export default class MlInstitutionEditMCL extends React.Component {
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
         object = _.omit(object, '__typename')
-        this.setState({licenses: object});
+        this.setState({ licenses: object });
         if (object.privateFields) {
           pf = pf.concat(object.privateFields)
         }
       }
-      this.setState({privateFields:pf});
+      this.setState({ privateFields: pf });
       data = {
         memberships: this.state.memberships,
         licenses: this.state.licenses,
         compliances: this.state.compliances
       }
 
-      this.setState({loading: false, data: data})
+      this.setState({ loading: false, data })
       this.updateprivateFields();
     }
   }
@@ -123,81 +123,76 @@ export default class MlInstitutionEditMCL extends React.Component {
 
   handleBlur(type, e) {
     let details = this.state.data;
-    let name = e.target.name;
-    let mcl = details[type];
+    const name = e.target.name;
+    const mcl = details[type];
     if (details && mcl) {
       mcl[name] = e.target.value
       details[type] = mcl;
     } else {
-      details = _.extend(details, {[type]: {[name]: e.target.value}});
+      details = _.extend(details, { [type]: { [name]: e.target.value } });
     }
-    this.setState({data: details}, function () {
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
 
   onLockChange(fieldName, type, tabName, e) {
-    var isPrivate = false;
+    let isPrivate = false;
     let details = this.state.data || {};
-    let key = e.target.id;
-    let className = e.target.className;
-    let mcl = details[type];
+    const key = e.target.id;
+    const className = e.target.className;
+    const mcl = details[type];
     if (details && mcl) {
-      if (className.indexOf("fa-lock") != -1) {
+      if (className.indexOf('fa-lock') != -1) {
         mcl[key] = true
         details[type] = mcl;
       } else {
         mcl[key] = false
         details[type] = mcl;
       }
+    } else if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [type]: { [key]: true } });
+      isPrivate = true;
     } else {
-      if (className.indexOf("fa-lock") != -1) {
-        details = _.extend(details, {[type]: {[key]: true}});
-        isPrivate = true;
-      } else {
-        details = _.extend(details, {[type]: {[key]: false}});
-      }
+      details = _.extend(details, { [type]: { [key]: false } });
     }
 
-    var privateKey = {
+    const privateKey = {
       keyName: fieldName,
       booleanKey: type,
-      isPrivate: isPrivate,
-      tabName: tabName
+      isPrivate,
+      tabName
     }
-    this.setState({privateKey: privateKey})
+    this.setState({ privateKey })
 
-    this.setState({data: details}, function () {
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
 
   sendDataToParent() {
-    let data = this.state.data;
+    const data = this.state.data;
     for (var propName in data.compliances) {
-      if (data['compliances'][propName] === null || data['compliances'][propName] === undefined) {
-        delete data['compliances'][propName];
+      if (data.compliances[propName] === null || data.compliances[propName] === undefined) {
+        delete data.compliances[propName];
       }
     }
     for (var propName in data.licenses) {
-      if (data['licenses'][propName] === null || data['licenses'][propName] === undefined) {
-        delete data['licenses'][propName];
+      if (data.licenses[propName] === null || data.licenses[propName] === undefined) {
+        delete data.licenses[propName];
       }
     }
     for (var propName in data.memberships) {
-      if (data['memberships'][propName] === null || data['memberships'][propName] === undefined) {
-        delete data['memberships'][propName];
+      if (data.memberships[propName] === null || data.memberships[propName] === undefined) {
+        delete data.memberships[propName];
       }
     }
 
-    if (data['memberships'])
-      data['memberships'] = _.omit(data['memberships'], ["privateFields"])
+    if (data.memberships) { data.memberships = _.omit(data.memberships, ['privateFields']) }
 
-    if (data['licenses'])
-      data['licenses'] = _.omit(data['licenses'], ["privateFields"])
+    if (data.licenses) { data.licenses = _.omit(data.licenses, ['privateFields']) }
 
-    if (data['compliances'])
-      data['compliances'] = _.omit(data['compliances'], ["privateFields"])
+    if (data.compliances) { data.compliances = _.omit(data.compliances, ['privateFields']) }
 
 
     this.props.getInstitutionMCL(data, this.state.privateKey)
@@ -207,14 +202,14 @@ export default class MlInstitutionEditMCL extends React.Component {
    * UI creating lock function
    * */
   lockPrivateKeys(tabname, privateValues) {
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: tabname});
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: tabname})
-    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: tabname });
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: tabname })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
     // setTimeout(function () {
-    _.each(keys, function (pf) {
-      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
     // }, 10)
   }
@@ -223,7 +218,7 @@ export default class MlInstitutionEditMCL extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>MCL</h2>
 
@@ -232,12 +227,14 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Membership</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="membershipDescription" className="form-control"
-                              id="cl_about"
-                              defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
-                    <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"
-                                 onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
+                    <textarea
+                      placeholder="Describe..." name="membershipDescription" className="form-control"
+                      id="cl_about"
+                      defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ''}
+                      onBlur={this.handleBlur.bind(this, 'memberships')}></textarea>
+                    <FontAwesome
+                      name='unlock' className="input_icon un_lock" id="isMDPrivate"
+                      onClick={this.onLockChange.bind(this, 'membershipDescription', 'isMDPrivate', MEMBERKEY)}/>
                   </div>
                 </div>
               </div>
@@ -250,12 +247,14 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Compliances</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="complianceDescription" className="form-control"
-                              id="cl_about"
-                              defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.complianceDescription ? this.state.data.compliances.complianceDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
-                    <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate"
-                                 onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
+                    <textarea
+                      placeholder="Describe..." name="complianceDescription" className="form-control"
+                      id="cl_about"
+                      defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.complianceDescription ? this.state.data.compliances.complianceDescription : ''}
+                      onBlur={this.handleBlur.bind(this, 'compliances')}></textarea>
+                    <FontAwesome
+                      name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate"
+                      onClick={this.onLockChange.bind(this, 'complianceDescription', 'isCDPrivate', COMPLIANCEKEY)}/>
                   </div>
                 </div>
               </div>
@@ -264,11 +263,13 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Licenses</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about"
-                              defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licenseDescription ? this.state.data.licenses.licenseDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
-                    <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate"
-                                 onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
+                    <textarea
+                      placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about"
+                      defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licenseDescription ? this.state.data.licenses.licenseDescription : ''}
+                      onBlur={this.handleBlur.bind(this, 'licenses')}></textarea>
+                    <FontAwesome
+                      name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate"
+                      onClick={this.onLockChange.bind(this, 'licenseDescription', 'isLDPrivate', LICENSEKEY)}/>
                   </div>
                 </div>
               </div>
@@ -279,8 +280,8 @@ export default class MlInstitutionEditMCL extends React.Component {
       </div>
     )
   }
-};
+}
 MlInstitutionEditMCL.contextTypes = {
   institutionPortfolio: PropTypes.object,
-  portfolioKeys: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

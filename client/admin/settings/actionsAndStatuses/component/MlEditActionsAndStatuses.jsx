@@ -5,42 +5,42 @@
 import React from 'react';
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import MlSearchDepartmentContainer from './MlSearchDepartmentContainer';
-import {editActionAndStatusActionHandler} from '../actions/editActionAndStatuses'
-import {findActionAndStatusActionHandler} from '../actions/findActionsAndStatuses'
+import { editActionAndStatusActionHandler } from '../actions/editActionAndStatuses'
+import { findActionAndStatusActionHandler } from '../actions/findActionsAndStatuses'
 
-class MlEditActionsAndStatuses extends React.Component{
-  constructor(props){
+class MlEditActionsAndStatuses extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      process         : '',
-      subProcess      : '',
-      clusters        : '',
-      chapters        : '',
-      subChapters     : '',
-      isMoolya        : false,
-      departmentsList : []
+    this.state = {
+      process: '',
+      subProcess: '',
+      clusters: '',
+      chapters: '',
+      subChapters: '',
+      isMoolya: false,
+      departmentsList: []
     }
   }
   async submit(DataToInsert) {
-    let Id = FlowRouter.getParam('id');
+    const Id = FlowRouter.getParam('id');
     const response = await editActionAndStatusActionHandler(Id, DataToInsert);
     return response;
   }
 
   componentWillMount() {
-    const resp=this.findActionAndStatus();
+    const resp = this.findActionAndStatus();
     return resp;
   }
 
-  async  findActionAndStatus() {
-    let id = FlowRouter.getParam('id');
-    let response = await findActionAndStatusActionHandler(id);
+  async findActionAndStatus() {
+    const id = FlowRouter.getParam('id');
+    const response = await findActionAndStatusActionHandler(id);
     if (response) {
-      this.setState({loading: false, data: response})
+      this.setState({ loading: false, data: response })
     }
   }
 
-  render(){
+  render() {
     const searchData = this.state.data;
     return (
       <div>
@@ -48,5 +48,5 @@ class MlEditActionsAndStatuses extends React.Component{
       </div>
     )
   }
-};
+}
 export default MlEditActionsAndStatuses = formHandler()(MlEditActionsAndStatuses);

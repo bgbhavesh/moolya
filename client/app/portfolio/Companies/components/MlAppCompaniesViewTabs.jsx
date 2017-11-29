@@ -2,10 +2,10 @@
 /**
  * Import of all the usable components
  * */
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {appClient} from '../../../core/appConnection'
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import { appClient } from '../../../core/appConnection'
+import MlTabComponent from '../../../../commons/components/tabcomponent/MlTabComponent';
 import MlCompanyViewManagement from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewManagement';
 import MlCompanyViewAwards from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewAwards';
 import MlCompanyViewMCL from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewMCL';
@@ -19,25 +19,25 @@ import MlCompanyViewRAndD from '../../../../admin/transaction/portfolio/componen
 import MlCompanyViewLookingFor from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewLookingFor'
 import MlCompanyIncubatorsViewTabs from '../../../../admin/transaction/portfolio/component/Company/view/incubators/MlCompanyIncubatorsViewTabs'
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
-import MlCompanyData from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyData"
+import MlCompanyData from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyData'
 
-//todo:import the View component of about screen//
+// todo:import the View component of about screen//
 
 export default class MlAppCompaniesViewTabs extends Component {
   constructor(props) {
     super(props)
     this.state = {
       tabs: [],
-      activeTab:'About'
+      activeTab: 'About'
     };
   }
 
   componentDidMount() {
-    setTimeout(function () {
+    setTimeout(() => {
       $('div[role="tab"]').each(function (index) {
-        var test = $(this).text();
+        const test = $(this).text();
         $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+        $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
@@ -45,12 +45,12 @@ export default class MlAppCompaniesViewTabs extends Component {
     }, 300);
   }
 
-  backClickHandler(){
-    let tabs = this.state.tabs;
-    this.setState({tabs: tabs})
+  backClickHandler() {
+    const tabs = this.state.tabs;
+    this.setState({ tabs })
   }
 
-  setBackHandler(backMethod){
+  setBackHandler(backMethod) {
     this.props.setBackHandler(backMethod);
     $('.RRT__tabs').removeClass('menunone');
   }
@@ -59,21 +59,47 @@ export default class MlAppCompaniesViewTabs extends Component {
    * Display of all tabs of service provider and passing the portfolioId
    * */
   getTabComponents() {
-    let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About" , component:<MlCompanyViewAboutLanding key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , name:"Management" , component:<MlCompanyViewManagement key="2" isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" ,  name:"Data" , component:<MlCompanyViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},*/
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , name:'Data', component:<MlCompanyData key="4"  isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Chart" , name:"Chart" , component:<MlCompanyViewChart key="5"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" ,  name:"Awards" , component:<MlCompanyViewAwards key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" ,name:"Library" ,  component:<PortfolioLibrary isAdmin={false} client={appClient}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , name:"M C And L" , component:<MlCompanyViewMCL isAdmin={false} key="8" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , name:"Incubators" , component:<MlCompanyIncubatorsViewTabs key="19"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Partners" , name:"Partners" , component:<MlCompanyViewPartners key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , name:"CSR" , component:<MlCSRViewTabs key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , name:"R And D" , component:<MlCompanyViewRAndD key="11" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" ,name:"Intrapreneur" , component:<MlCompanyViewIntrapreneur key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" ,name:"Looking For" , component:<MlCompanyViewLookingFor key="14"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+    const tabs = [
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'About', name: 'About', component: <MlCompanyViewAboutLanding key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Management', name: 'Management', component: <MlCompanyViewManagement key="2" isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      /* {tabClassName: 'tab', panelClassName: 'panel', title:"Data" ,  name:"Data" , component:<MlCompanyViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>}, */
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Data', name: 'Data', component: <MlCompanyData key="4" isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Chart', name: 'Chart', component: <MlCompanyViewChart key="5" portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Awards', name: 'Awards', component: <MlCompanyViewAwards key="6" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Library', name: 'Library', component: <PortfolioLibrary isAdmin={false} client={appClient} key="7" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'M C & L', name: 'M C And L', component: <MlCompanyViewMCL isAdmin={false} key="8" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Incubators', name: 'Incubators', component: <MlCompanyIncubatorsViewTabs key="19" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Partners', name: 'Partners', component: <MlCompanyViewPartners key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'CSR', name: 'CSR', component: <MlCSRViewTabs key="10" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'R&D', name: 'R And D', component: <MlCompanyViewRAndD key="11" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Intrapreneur', name: 'Intrapreneur', component: <MlCompanyViewIntrapreneur key="12" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab', panelClassName: 'panel', title: 'Looking For', name: 'Looking For', component: <MlCompanyViewLookingFor key="14" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      }
     ]
     return tabs;
   }
@@ -82,7 +108,7 @@ export default class MlAppCompaniesViewTabs extends Component {
    * tab mounting component
    * */
   componentWillMount() {
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'horizon-item', // Optional
@@ -92,21 +118,21 @@ export default class MlAppCompaniesViewTabs extends Component {
         getContent: () => tab.component
       }));
     }
-    let activeTab = FlowRouter.getQueryParam('tab');
-    if(activeTab){
-      this.setState({activeTab});
+    const activeTab = FlowRouter.getQueryParam('tab');
+    if (activeTab) {
+      this.setState({ activeTab });
     }
 
-    this.setState({tabs: getTabs() || []});
+    this.setState({ tabs: getTabs() || [] });
   }
 
-  updateTab(index){
-    let tab =  this.state.tabs[index].title;
-    FlowRouter.setQueryParams({ tab: tab });
+  updateTab(index) {
+    const tab = this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab });
   }
 
   render() {
-    let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title" />
+    const tabs = this.state.tabs;
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab} onChange={this.updateTab} type="tab" mkey="title" />
   }
 }

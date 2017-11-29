@@ -1,13 +1,13 @@
 import React from 'react';
-var FontAwesome = require('react-fontawesome');
-import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+const FontAwesome = require('react-fontawesome');
+import { fetchInstitutionDetailsHandler } from '../../../actions/findPortfolioInstitutionDetails'
+import { initializeMlAnnotator } from '../../../../../../commons/annotator/mlAnnotator'
+import { createAnnotationActionHandler } from '../../../actions/updatePortfolioDetails'
+import { findAnnotations } from '../../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
-import MlLoader from "../../../../../../commons/components/loader/loader";
-import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader';
+import { validateUserForAnnotation } from '../../../actions/findPortfolioIdeatorDetails'
 
 
 const MEMBERKEY = 'memberships'
@@ -17,14 +17,14 @@ const COMPLIANCEKEY = 'compliances'
 export default class MlInstitutionViewMCL extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
-      memberships:{},
-      compliances:{},
-      licenses:{},
-      data:{},
-      annotations:[],
-      content:{},
-      loading:true
+    this.state = {
+      memberships: {},
+      compliances: {},
+      licenses: {},
+      data: {},
+      annotations: [],
+      content: {},
+      loading: true
 
     }
     this.createAnnotations.bind(this);
@@ -34,23 +34,22 @@ export default class MlInstitutionViewMCL extends React.Component {
     this.validateUserForAnnotation(this)
   }
 
-  componentDidMount(){
-    /*this.initalizeAnnotaor()
-    this.fetchAnnotations();*/
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  componentDidMount() {
+    /* this.initalizeAnnotaor()
+    this.fetchAnnotations(); */
+    const WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
     this.fetchPortfolioInstitutionDetails();
-
   }
-  componentWillMount(){
-    let resp = this.validateUserForAnnotation();
+  componentWillMount() {
+    const resp = this.validateUserForAnnotation();
     return resp
   }
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -60,100 +59,96 @@ export default class MlInstitutionViewMCL extends React.Component {
 
 
   async fetchPortfolioInstitutionDetails() {
-    let that = this;
+    const that = this;
     let data = {};
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM.memberships, loading: true}, function () {
+      this.setState({ memberships: responseM.memberships, loading: true }, function () {
         this.fetchAnnotations();
-        this.setState({loading: false})
+        this.setState({ loading: false })
       });
     }
     const responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC.compliances,loading: true},function () {
+      this.setState({ compliances: responseC.compliances, loading: true }, function () {
         this.fetchAnnotations();
-        this.setState({loading: false})
+        this.setState({ loading: false })
       });
     }
     const responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL.licenses,loading: true},function () {
+      this.setState({ licenses: responseL.licenses, loading: true }, function () {
         this.fetchAnnotations();
-        this.setState({loading: false})
+        this.setState({ loading: false })
       });
     }
 
     data = {
-      memberships:this.state.memberships,
+      memberships: this.state.memberships,
       licenses: this.state.licenses,
-      compliances:this.state.compliances
+      compliances: this.state.compliances
     }
-    this.setState({data:data, loading: false})
-
+    this.setState({ data, loading: false })
   }
-  initalizeAnnotaor(){
+  initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#annotatorContent").annotator();
+    this.state.content = jQuery('#annotatorContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit:  function () {
+      pluginInit() {
       }
     });
   }
 
-  annotatorEvents(event, annotation, editor){
-    if(!annotation)
-      return;
-    switch (event){
-      case 'create':{
-        let response = this.createAnnotations(annotation);
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation) { return; }
+    switch (event) {
+      case 'create': {
+        const response = this.createAnnotations(annotation);
       }
         break;
-      case 'update':{
+      case 'update': {
       }
         break;
-      case 'annotationViewer':{
-        if(annotation[0].id){
+      case 'annotationViewer': {
+        if (annotation[0].id) {
           this.props.getSelectedAnnotations(annotation[0]);
-        }else{
+        } else {
           this.props.getSelectedAnnotations(annotation[1]);
         }
-
       }
         break;
     }
   }
 
-  async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionMCL", quote:JSON.stringify(annotation)}
+  async createAnnotations(annotation) {
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'institutionMCL', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
-    if(response && response.success){
+    if (response && response.success) {
       this.fetchAnnotations(true);
     }
     return response;
   }
 
 
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'institutionMCL');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-  async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionMCL");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations:JSON.parse(response.result)})
+    const quotes = [];
 
-    let quotes = [];
-
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id":value.annotatorId,
-        "text" : value.quote.text,
-        "quote" : value.quote.quote,
-        "ranges" : value.quote.ranges,
-        "userName" : value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt" : value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
@@ -163,59 +158,57 @@ export default class MlInstitutionViewMCL extends React.Component {
 
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
-  };
+  }
 
 
+  render() {
+    const { memberships, compliances, licenses } = this.state;
+    const loading = this.state.loading ? this.state.loading : false;
 
-  render(){
-    const {memberships, compliances, licenses} = this.state;
-    let loading=this.state.loading?this.state.loading:false;
 
+    return (
 
-      return (
+      <div className="portfolio-main-wrap" id="annotatorContent">
+        <h2>MCL</h2>
 
-       <div className="portfolio-main-wrap" id="annotatorContent">
-          <h2>MCL</h2>
+        <div className="col-md-6 col-sm-6 nopadding-left" >
+          <div className="panel panel-default panel-form-view">
+            <div className="panel-heading">Membership </div>
+            <div className="panel-body ">
 
-          <div className="col-md-6 col-sm-6 nopadding-left" >
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Membership </div>
-              <div className="panel-body ">
+              {loading === true ? (<MlLoader/>) : (<p>{memberships.membershipDescription ? (this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription : '') : (<NoData tabName="M C & L" />)}</p>)}
 
-                {loading === true ? ( <MlLoader/>) : (<p>{memberships.membershipDescription?(this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""):(<NoData tabName="M C & L" />)}</p>)}
-
-              </div>
             </div>
-            <div className="clearfix"></div>
-
-
           </div>
-         <div className="col-md-6 col-sm-6 nopadding-right" >
+          <div className="clearfix"></div>
 
 
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Compliances</div>
-              <div className="panel-body ">
-
-                {loading === true ? ( <MlLoader/>) : (<p>{compliances.complianceDescription?(this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""):(<NoData tabName="M C & L" />)}</p>)}
-
-              </div>
-            </div>
-            <div className="clearfix"></div>
-            <div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Licenses </div>
-              <div className="panel-body ">
-
-                {loading === true ? ( <MlLoader/>) : (<p>{licenses.licenseDescription?(this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""):(<NoData tabName="M C & L" />)}</p>)}
-
-              </div>
-            </div>
-
-
-          </div>
         </div>
+        <div className="col-md-6 col-sm-6 nopadding-right" >
 
-      )
 
+          <div className="panel panel-default panel-form-view">
+            <div className="panel-heading">Compliances</div>
+            <div className="panel-body ">
+
+              {loading === true ? (<MlLoader/>) : (<p>{compliances.complianceDescription ? (this.state.compliances && this.state.compliances.complianceDescription ? this.state.compliances.complianceDescription : '') : (<NoData tabName="M C & L" />)}</p>)}
+
+            </div>
+          </div>
+          <div className="clearfix"></div>
+          <div className="panel panel-default panel-form-view">
+            <div className="panel-heading">Licenses </div>
+            <div className="panel-body ">
+
+              {loading === true ? (<MlLoader/>) : (<p>{licenses.licenseDescription ? (this.state.licenses && this.state.licenses.licenseDescription ? this.state.licenses.licenseDescription : '') : (<NoData tabName="M C & L" />)}</p>)}
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+    )
   }
 }

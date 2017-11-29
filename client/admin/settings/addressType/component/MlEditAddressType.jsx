@@ -1,90 +1,89 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {updateAddressTypeActionHandler} from '../actions/updateAddressTypeAction'
-import {findAddressTypeActionHandler} from '../actions/findAddressTypeAction'
+import { updateAddressTypeActionHandler } from '../actions/updateAddressTypeAction'
+import { findAddressTypeActionHandler } from '../actions/findAddressTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import { initalizeFloatLabel, OnToggleSwitch } from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 
 
-class MlEditAddressType extends React.Component{
+class MlEditAddressType extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = { loading: true, data: {} };
     this.addEventHandler.bind(this);
     this.updateAddressType.bind(this);
     this.findAddressType.bind(this);
     return this;
   }
   componentDidMount() {
-    if(this.state.data.isAcive){
+    if (this.state.data.isAcive) {
       $('#status').prop('checked', true);
     }
   }
   componentWillMount() {
-    const resp=this.findAddressType();
+    const resp = this.findAddressType();
     return resp;
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
-    var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    OnToggleSwitch(true, true);
+    const WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
-    const resp=await this.updateAddressType();
+    const resp = await this.updateAddressType();
     return resp;
   }
 
   async handleError(response) {
     alert(response)
-  };
-
-  async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/addressTypeList");
-  };
-
-  async findAddressType(){
-    let Id=this.props.config;
-    const response = await findAddressTypeActionHandler(Id);
-    this.setState({loading:false,data:response});
   }
 
-  async  updateAddressType() {
-    let Details = {
-      id : this.props.config,
+  async handleSuccess(response) {
+    FlowRouter.go('/admin/settings/addressTypeList');
+  }
+
+  async findAddressType() {
+    const Id = this.props.config;
+    const response = await findAddressTypeActionHandler(Id);
+    this.setState({ loading: false, data: response });
+  }
+
+  async updateAddressType() {
+    const Details = {
+      id: this.props.config,
       addressName: this.refs.name.value,
       addressDisplayName: this.refs.displayName.value,
       aboutAddress: this.refs.about.value,
       // addressUploadIcon : this.refs.upload.value,
-      isActive: this.refs.status.checked,
+      isActive: this.refs.status.checked
     }
     const response = await updateAddressTypeActionHandler(Details);
     return response;
-
   }
 
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
+  onStatusChange(e) {
+    const data = this.state.data;
+    if (e.currentTarget.checked) {
+      this.setState({ data: { isActive: true } });
+    } else {
+      this.setState({ data: { isActive: false } });
     }
   }
 
 
-  render(){
-    let MlActionConfig = [
+  render() {
+    const MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async event => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       // {
       //   showAction: true,
@@ -94,16 +93,16 @@ class MlEditAddressType extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/addressTypeList")
+        handler: async (event) => {
+          this.props.handler(' ');
+          FlowRouter.go('/admin/settings/addressTypeList')
         }
       }
     ]
-    const showLoader=this.state.loading;
+    const showLoader = this.state.loading;
     return (
       <div>
-        {showLoader===true?( <MlLoader/>):(
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Address Type</h2>
@@ -111,10 +110,10 @@ class MlEditAddressType extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="name" defaultValue={this.state.data&&this.state.data.addressName} placeholder="Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="name" defaultValue={this.state.data && this.state.data.addressName} placeholder="Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <textarea ref="about" defaultValue={this.state.data&&this.state.data.aboutAddress} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea ref="about" defaultValue={this.state.data && this.state.data.aboutAddress} placeholder="About" className="form-control float-label" id=""></textarea>
                     </div>
                   </form>
                 </div>
@@ -129,21 +128,21 @@ class MlEditAddressType extends React.Component{
                   >
                     <form>
                       <div className="form-group">
-                        <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.addressDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                        <input type="text" ref="displayName" defaultValue={this.state.data && this.state.data.addressDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
                       </div>
                       <br className="brclear"/>
-                      {/*<div className="form-group ">*/}
-                        {/*<div className="fileUpload mlUpload_btn">*/}
-                          {/*<span>Upload Icon</span>*/}
-                          {/*<input type="file" className="upload" ref="upload"/>*/}
-                        {/*</div>*/}
-                      {/*</div>*/}
+                      {/* <div className="form-group "> */}
+                      {/* <div className="fileUpload mlUpload_btn"> */}
+                      {/* <span>Upload Icon</span> */}
+                      {/* <input type="file" className="upload" ref="upload"/> */}
+                      {/* </div> */}
+                      {/* </div> */}
                       <br className="brclear"/>
                       <br className="brclear"/>
                       <div className="form-group switch_wrap inline_switch">
                         <label>Status</label>
                         <label className="switch">
-                          <input type="checkbox" ref="status" id="status" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                          <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                           <div className="slider"></div>
                         </label>
                       </div>
@@ -157,6 +156,6 @@ class MlEditAddressType extends React.Component{
       </div>
     )
   }
-};
+}
 
 export default MlEditAddressType = formHandler()(MlEditAddressType);

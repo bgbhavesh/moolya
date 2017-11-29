@@ -16,64 +16,60 @@ export default class VerticalBreadCrum extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    let porfolioId = FlowRouter.getParam('registrationId');
-    let backendUserId= FlowRouter.getParam('backendUserId');
-    let processId =FlowRouter.getParam('id');
-    if(porfolioId)
-      this.getUserName(porfolioId,1);
-    else if(backendUserId)
-      this.getUserName(backendUserId,0);
-    else if(processId){
+    const porfolioId = FlowRouter.getParam('registrationId');
+    const backendUserId = FlowRouter.getParam('backendUserId');
+    const processId = FlowRouter.getParam('id');
+    if (porfolioId) { this.getUserName(porfolioId, 1); } else if (backendUserId) { this.getUserName(backendUserId, 0); } else if (processId) {
       this.getProcessId(processId);
-    }
-    else
-      this.getHierarchyDetails();
+    } else { this.getHierarchyDetails(); }
   }
 
   componentDidUpdate() {
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll').height(WinHeight-(500+$('.admin_header').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight - (500 + $('.admin_header').outerHeight(true)));
   }
 
-  async getProcessId(id){
-    var response = await findStepTemplatesAssignmentActionHandler(id);
+  async getProcessId(id) {
+    const response = await findStepTemplatesAssignmentActionHandler(id);
     if (response && response.templateProcessName && response.templateSubProcessName) {
-      this.setState({process : response.templateProcessName + ' / '+response.templateSubProcessName},
-        ()=>{
+      this.setState(
+        { process: `${response.templateProcessName} / ${response.templateSubProcessName}` },
+        () => {
           this.getHierarchyDetails();
-        });
-    }else  this.getHierarchyDetails();
+        }
+      );
+    } else this.getHierarchyDetails();
   }
 
 
-  async getUserName(porfolioId,isPortfolio){
-    var response = null;
-    if(isPortfolio) {
+  async getUserName(porfolioId, isPortfolio) {
+    let response = null;
+    if (isPortfolio) {
       response = await findUserRegistrationActionHandler(porfolioId);
       if (response && response.registrationInfo) {
-        this.setState({user:response.registrationInfo.firstName || 'User',cluster:response.registrationInfo.clusterName || 'Cluster'},
-          ()=>{
+        this.setState(
+          { user: response.registrationInfo.firstName || 'User', cluster: response.registrationInfo.clusterName || 'Cluster' },
+          () => {
             this.getHierarchyDetails();
-          });
-      }else  this.getHierarchyDetails();
-    }
-    else{
+          }
+        );
+      } else this.getHierarchyDetails();
+    } else {
       response = await findBackendUserActionHandler(porfolioId);
       if (response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
         && response.profile.InternalUprofile.moolyaProfile.firstName) {
-        this.setState({user:response.profile.InternalUprofile.moolyaProfile.firstName || 'Backend User'},
-          ()=>{
+        this.setState(
+          { user: response.profile.InternalUprofile.moolyaProfile.firstName || 'Backend User' },
+          () => {
             this.getHierarchyDetails();
-          });
-      }else  this.getHierarchyDetails();
+          }
+        );
+      } else this.getHierarchyDetails();
     }
-
-
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-
   }
 
   setBreadCrumHierarchyCallback(list) {
@@ -95,121 +91,106 @@ export default class VerticalBreadCrum extends Component {
 
       if (breadCrum.type === 'hierarchy') {
         const params = FlowRouter.current().params;
-        getBreadCrumListBasedOnhierarchy( breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
+        getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
       } else if (breadCrum.type) {
         let module = properName(breadCrum.module);
 
         if (module === 'Roles') module = 'Roles & Permissions';
 
-        if(breadCrum.type === 'documents' && breadCrum.document){
-          let breadCrumObject=[];
+        if (breadCrum.type === 'documents' && breadCrum.document) {
+          const breadCrumObject = [];
           breadCrumObject.push({
             linkName: 'Cluster',
-            linkUrl :path.split('/documents')[0]+'/documents/clusterList',
+            linkUrl: `${path.split('/documents')[0]}/documents/clusterList`
           });
 
           breadCrumObject.push({
             linkName: properName(FlowRouter.getParam('docid')), linkUrl: ''
           });
 
-          this.setBreadCrumHierarchyCallback(
-            breadCrumObject
-          );
+          this.setBreadCrumHierarchyCallback(breadCrumObject);
           return;
         }
         let breadCrumObject = [];
 
-        if(breadCrum.type === 'transaction'&&breadCrum.module === 'portfolio' &&(breadCrum.subModule ==='edit'||breadCrum.subModule ==='view')){
+        if (breadCrum.type === 'transaction' && breadCrum.module === 'portfolio' && (breadCrum.subModule === 'edit' || breadCrum.subModule === 'view')) {
           breadCrumObject = [
-            { linkName: properName(breadCrum.module), linkId: breadCrum.type , linkUrl:path.split('portfolio')[0]+'portfolio/requestedPortfolioList'}
+            { linkName: properName(breadCrum.module), linkId: breadCrum.type, linkUrl: `${path.split('portfolio')[0]}portfolio/requestedPortfolioList` }
           ];
 
-          if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path){
+          if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.path) {
             breadCrumObject.push({
-              linkName: properName((FlowRouter._current.oldRoute.path.split('portfolio/')[1]).split('PortfolioList')[0]),linkUrl :FlowRouter._current.oldRoute.path
+              linkName: properName((FlowRouter._current.oldRoute.path.split('portfolio/')[1]).split('PortfolioList')[0]), linkUrl: FlowRouter._current.oldRoute.path
             });
           }
 
           breadCrumObject.push({
-            linkName:properName(breadCrum.subModule)
+            linkName: properName(breadCrum.subModule)
           });
 
-          this.setBreadCrumHierarchyCallback(
-            breadCrumObject
-          );
+          this.setBreadCrumHierarchyCallback(breadCrumObject);
           return;
         }
 
-        if(breadCrum.type === 'users' && breadCrum.module ==='clusters' && breadCrum.subModule){
+        if (breadCrum.type === 'users' && breadCrum.module === 'clusters' && breadCrum.subModule) {
           breadCrumObject = [
-            { linkName: properName(this.state.cluster)||'Cluster',  linkUrl:path.split('users')[0]+'users/clusters'},
-            { linkName: properName(this.state.user || 'User'),  linkUrl:path.split(breadCrum.subModule)[0]+'aboutuser'},
-            { linkName: properName(fixName(breadCrum.subModule)),  linkUrl:path},
+            { linkName: properName(this.state.cluster) || 'Cluster', linkUrl: `${path.split('users')[0]}users/clusters` },
+            { linkName: properName(this.state.user || 'User'), linkUrl: `${path.split(breadCrum.subModule)[0]}aboutuser` },
+            { linkName: properName(fixName(breadCrum.subModule)), linkUrl: path }
           ];
 
-          this.setBreadCrumHierarchyCallback(
-            breadCrumObject
-          );
+          this.setBreadCrumHierarchyCallback(breadCrumObject);
           return;
         }
 
 
         breadCrumObject = [
           { linkName: properName(breadCrum.type), linkId: breadCrum.type },
-          { linkName: module, linkId: 'module' },
+          { linkName: module, linkId: 'module' }
         ];
         if (breadCrum.subModule) {
-          if(breadCrum.subModule ==='stepCode'){
+          if (breadCrum.subModule === 'stepCode') {
             breadCrum.subModule = (FlowRouter.getParam('stepCode')).toLowerCase() || breadCrum.subModule;
           }
 
           breadCrumObject.push({
-            linkName: breadCrum.subModuleName || properName(breadCrum.subModule),
+            linkName: breadCrum.subModuleName || properName(breadCrum.subModule)
             // linkId: 'subModule',
           });
         }
 
-        if(breadCrum.subSubModule){
+        if (breadCrum.subSubModule) {
           breadCrumObject.push({
             linkName: properName(breadCrum.subSubModule)
           });
         }
-        if(breadCrum.subModule !=='stepCode')
-          breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig,this.state.process);
-        else{
-          let modulePath = path.split('settings')[0] + 'settings/templatesList';
+        if (breadCrum.subModule !== 'stepCode') { breadCrumObject = StaticBreadCrumListHandler(breadCrumObject, breadCrum, menuConfig, this.state.process); } else {
+          const modulePath = `${path.split('settings')[0]}settings/templatesList`;
           breadCrumObject[1].linkUrl = modulePath;
           breadCrumObject[2].linkUrl = path;
 
-          breadCrumObject.slice(0,1);
+          breadCrumObject.slice(0, 1);
         }
 
-        if(breadCrum.dynamic){
+        if (breadCrum.dynamic) {
           const params = FlowRouter.current().params;
-          getBreadCrumListBasedOnhierarchy( breadCrum.subModule, params, (list)=>{
-
-            list.map(name=>{
-              breadCrumObject.push({linkName : name.linkName});
+          getBreadCrumListBasedOnhierarchy(breadCrum.subModule, params, (list) => {
+            list.map((name) => {
+              breadCrumObject.push({ linkName: name.linkName });
             });
 
-            breadCrumObject[1].linkUrl = path.split( breadCrum.subModule.toLowerCase())[0] +  breadCrum.subModule.toLowerCase();
-            breadCrumObject[2].linkUrl = path.split( breadCrum.subModule.toLowerCase())[0] +  breadCrum.subModule.toLowerCase() + '/' + params['clusterId'] +"/chapters";
+            breadCrumObject[1].linkUrl = path.split(breadCrum.subModule.toLowerCase())[0] + breadCrum.subModule.toLowerCase();
+            breadCrumObject[2].linkUrl = `${path.split(breadCrum.subModule.toLowerCase())[0] + breadCrum.subModule.toLowerCase()}/${params.clusterId}/chapters`;
 
-            this.setBreadCrumHierarchyCallback(
-              breadCrumObject
-            );
+            this.setBreadCrumHierarchyCallback(breadCrumObject);
           });
+        } else {
+          this.setBreadCrumHierarchyCallback(breadCrumObject);
         }
-        else
-          this.setBreadCrumHierarchyCallback(
-            breadCrumObject
-          );
       }
     } else {
       const breadCrumObject = StaticBreadCrumListHandlerWithNoBredcum();
-      this.setBreadCrumHierarchyCallback(
-        breadCrumObject
-      );
+      this.setBreadCrumHierarchyCallback(breadCrumObject);
     }
   }
 
@@ -221,8 +202,8 @@ export default class VerticalBreadCrum extends Component {
       let lastLinkClass = '';
       const linkUrl = prop.linkUrl;
       let name = prop.linkName;
-      if(name === 'Backend User Details'){
-        name = this.state.user||'Backend User Details';
+      if (name === 'Backend User Details') {
+        name = this.state.user || 'Backend User Details';
       }
       if (counter === linksLength) {
         lastLinkClass = 'current';
@@ -243,7 +224,7 @@ export default class VerticalBreadCrum extends Component {
   }
 }
 
-function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
+function StaticBreadCrumListHandler(list, breadCrum, menu, process) {
   let currentModule = {};
   const path = Object.assign(FlowRouter._current.path);
   const module = breadCrum.subModule || breadCrum.module;
@@ -263,14 +244,14 @@ function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
     });
     if (breadCrum.subModule) {
       currentModule.subMenu.map((object) => {
-        if ((object.uniqueId).includes(breadCrum.module)&&object.uniqueId !== 'templates_History') {
+        if ((object.uniqueId).includes(breadCrum.module) && object.uniqueId !== 'templates_History') {
           list[1].linkUrl = object.link;
         }
       });
     }
 
-    if (breadCrum.type === 'templates' && breadCrum.subModule && breadCrum.subModule==='Edit') {
-      list[list.length-1].linkName = process|| list[list.length-1].linkName;
+    if (breadCrum.type === 'templates' && breadCrum.subModule && breadCrum.subModule === 'Edit') {
+      list[list.length - 1].linkName = process || list[list.length - 1].linkName;
     }
 
 
@@ -278,39 +259,38 @@ function StaticBreadCrumListHandler(list, breadCrum, menu,process) {
       if (each.startsWith('edit')) {
         const link = `${path.split('edit')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
-        if(breadCrum.transactionsRegistrations)
-          list[list.length - 1].linkUrl=  path.split('transactions')[0] +'transactions/'+   breadCrum.transactionsRegistrations;
+        if (breadCrum.transactionsRegistrations) { list[list.length - 1].linkUrl = `${path.split('transactions')[0]}transactions/${breadCrum.transactionsRegistrations}`; }
 
         list.push({
           linkName: 'Edit',
-          linkUrl: '',
+          linkUrl: ''
         });
       } else if (each.startsWith('add') && !each.startsWith('address')) {
         const link = `${path.split('add')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
         list.push({
           linkName: 'Add',
-          linkUrl: '',
+          linkUrl: ''
         });
       } else if (each.startsWith('create')) {
         const link = `${path.split('create')[0] + module}List`;
         list[list.length - 1].linkUrl = link;
         list.push({
           linkName: 'Create',
-          linkUrl: '',
+          linkUrl: ''
         });
       }
     }
   }
-  if (list[0].linkName === 'Packages' && list[1].linkName === 'Office') {   //  for name correction
+  if (list[0].linkName === 'Packages' && list[1].linkName === 'Office') { //  for name correction
     list[1].linkName = 'Office Packages';
   }
 
-  list.splice(0, 1);                                         // removing menu level from breadcrumb
+  list.splice(0, 1); // removing menu level from breadcrumb
   if (!list || !list.length) return [];
 
   for (let i = 1; i < list.length; i++) {
-    if (list[i - 1].linkName === 'Registration') {          //  for name correction
+    if (list[i - 1].linkName === 'Registration') { //  for name correction
       if (list[i].linkName === 'Stage Of Company') {
         list[i].linkName = 'Company Stages';
       } else if (list[i].linkName === 'Business') {
@@ -344,12 +324,12 @@ function StaticBreadCrumListHandlerWithNoBredcum() {
         if (name) {
           list.push({
             linkName: name,
-            linkUrl: `${path.split(cname)[0] + cname}/communityDetails`,
+            linkUrl: `${path.split(cname)[0] + cname}/communityDetails`
           });
         } else if (cname) {
           list.push({
             linkName: properName(cname),
-            linkUrl: path.split(cname)[0] + cname,
+            linkUrl: path.split(cname)[0] + cname
           });
         }
       }
@@ -365,11 +345,10 @@ function properName(name) {
 }
 
 function fixName(name) {
-  if(name === 'aboutuser')
-    return  'about';
+  if (name === 'aboutuser') { return 'about'; }
   return name;
 }
 
 VerticalBreadCrum.contextTypes = {
-  menu: React.PropTypes.object,
+  menu: React.PropTypes.object
 };

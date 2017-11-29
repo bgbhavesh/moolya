@@ -1,19 +1,17 @@
 /**
  * Created by mohammed.mohasin on 9/6/17.
  */
-import React from "react";
-import {render} from "react-dom";
+import React from 'react';
+import { render } from 'react-dom';
 
 export default class Conversation extends React.Component {
-
   constructor(props) {
     super(props);
-    //this.conversationActionHandler.bind(this);
+    // this.conversationActionHandler.bind(this);
     return this;
   }
 
   render() {
-
     return (
       <div>
 
@@ -60,5 +58,4 @@ export default class Conversation extends React.Component {
 
     );
   }
-
 }

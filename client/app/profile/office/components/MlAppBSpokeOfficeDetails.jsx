@@ -4,23 +4,22 @@
 /**
  * import of libs and routes
  * */
-import React, {Component} from "react";
+import React, { Component } from 'react';
 // import {render} from "react-dom";
 import gql from 'graphql-tag'
-import {pick, extend} from 'lodash'
+import { pick, extend } from 'lodash'
 import omitDeep from 'omit-deep-lodash';
-import {createOfficeActionHandler} from "../actions/createOfficeAction";
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation'
-import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
+import { createOfficeActionHandler } from '../actions/createOfficeAction';
+import { mlFieldValidations } from '../../../../commons/validations/mlfieldValidation'
+import { initalizeFloatLabel } from '../../../../../client/commons/utils/formElemUtil';
 import Moolyaselect from '../../../commons/components/MlAppSelectWrapper'
-import {findDefaultProfile} from '../../../commons/actions/fetchUserDetails'
+import { findDefaultProfile } from '../../../commons/actions/fetchUserDetails'
 
 export default class MlAppBSpokeOfficeDetails extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
-      branchType: "",
+      branchType: '',
       selectedCountry: null
     }
     this.isSubmitDetails = false
@@ -51,42 +50,42 @@ export default class MlAppBSpokeOfficeDetails extends Component {
   }
 
   async findUserDetails() {
-    var user = await findDefaultProfile();
+    const user = await findDefaultProfile();
     if (user) {
-      this.setState({selectedCountry: user.countryId})
+      this.setState({ selectedCountry: user.countryId })
     }
   }
 
   optionsBySelectBranchAddress(index, cb, selectedItem) {
-    this.setState({branchAddress: index})
+    this.setState({ branchAddress: index })
     this.setDefaultValues(selectedItem)
   }
 
   setDefaultValues(selectedItem) {
-    this.refs.officeLocation.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
-    this.refs.streetLocality.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
-    this.refs.landmark.value = selectedItem && selectedItem.addressLandmark ? selectedItem.addressLandmark : ""
-    this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : ""
-    this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity : ""
-    this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState : ""
-    this.refs.zipCode.value = selectedItem && selectedItem.addressPinCode ? selectedItem.addressPinCode : ""
+    this.refs.officeLocation.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ''
+    this.refs.streetLocality.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ''
+    this.refs.landmark.value = selectedItem && selectedItem.addressLandmark ? selectedItem.addressLandmark : ''
+    this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : ''
+    this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity : ''
+    this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState : ''
+    this.refs.zipCode.value = selectedItem && selectedItem.addressPinCode ? selectedItem.addressPinCode : ''
   }
 
   submitDetails() {
-    var ret = mlFieldValidations(this.refs);
-    if(ret){
+    const ret = mlFieldValidations(this.refs);
+    if (ret) {
       toastr.error(ret)
       return;
     }
-    var officeData = omitDeep(this.props.officeData, '__typename')
-    var preData = pick(officeData, ['totalCount', 'principalUserCount', 'teamUserCount', 'availableCommunities'])
-    var extendObj = {
+    const officeData = omitDeep(this.props.officeData, '__typename')
+    const preData = pick(officeData, ['totalCount', 'principalUserCount', 'teamUserCount', 'availableCommunities'])
+    const extendObj = {
       isBeSpoke: true,
       officeName: this.refs.officeName.value,
       country: this.state.selectedCountry,
-      about: this.refs.about.value,
+      about: this.refs.about.value
     }
-    var toInsert = extend(preData, extendObj)
+    const toInsert = extend(preData, extendObj)
     console.log(toInsert)
     this.createMyOfficeAction(toInsert)
   }
@@ -107,8 +106,8 @@ export default class MlAppBSpokeOfficeDetails extends Component {
   }
 
   optionsBySelectOfficeType(val) {
-    this.setState({branchType: val})
-    if(index != 'BRANCH'){
+    this.setState({ branchType: val })
+    if (index != 'BRANCH') {
       this.setDefaultValues()
     }
   }
@@ -117,18 +116,18 @@ export default class MlAppBSpokeOfficeDetails extends Component {
    * UI to be render
    * */
   render() {
-    let countryQuery = gql`query{
+    const countryQuery = gql`query{
      data:fetchCountries {
         value:_id
         label:country
         code: countryCode
       }
     }`;
-    let query = gql`query{
+    const query = gql`query{
         data
         : getOfficeType{label:displayName, value:code}
       }`;
-    let addressQuery = gql`query{
+    const addressQuery = gql`query{
      data:findBranchAddressInfo{
         value:addressType
         label:name,
@@ -144,8 +143,8 @@ export default class MlAppBSpokeOfficeDetails extends Component {
       }
     }`;
 
-    var props = this.props.officeData ? this.props.officeData : {}
-    var that = this
+    const props = this.props.officeData ? this.props.officeData : {}
+    const that = this
     return (
       <div className="col-lg-12">
         <div className="row">
@@ -174,22 +173,21 @@ export default class MlAppBSpokeOfficeDetails extends Component {
                     <div className="panel-heading"> User Type</div>
 
                     <div className="panel-body">
-                      {props.availableCommunities.map(function (item, say) {
-                        return (
-                          <div className="col-lg-4 col-md-4 col-sm-4" key={say}>
-                            <div className="team-block marb0">
-                              <span className="ml ml-moolya-symbol"></span>
-                              <h3>
-                                {item.communityName}
-                              </h3>
-                            </div>
-                            <div className="form-group mart20">
-                              <input type="text" placeholder="User Count" defaultValue={item.userCount}
-                                     className="form-control float-label" disabled={true}/>
-                            </div>
+                      {props.availableCommunities.map((item, say) => (
+                        <div className="col-lg-4 col-md-4 col-sm-4" key={say}>
+                          <div className="team-block marb0">
+                            <span className="ml ml-moolya-symbol"></span>
+                            <h3>
+                              {item.communityName}
+                            </h3>
                           </div>
-                        )
-                      })}
+                          <div className="form-group mart20">
+                            <input
+                              type="text" placeholder="User Count" defaultValue={item.userCount}
+                              className="form-control float-label" disabled={true}/>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="clearfix"></div>
@@ -204,67 +202,78 @@ export default class MlAppBSpokeOfficeDetails extends Component {
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"
-                           data-required={true} data-errMsg="Office Name is required"/>
+                    <input
+                      type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"
+                      data-required={true} data-errMsg="Office Name is required"/>
                   </div>
                   <div className="form-group">
-                    {/*<input type="text" placeholder="Office Type" className="form-control float-label"*/}
-                    {/*defaultValue={props.branchType}/>*/}
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                  labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true}
-                                  onSelect={that.optionsBySelectOfficeType}
-                                  selectedValue={that.state.branchType} data-required={true}
-                                  data-errMsg="Office Type is required"/>
+                    {/* <input type="text" placeholder="Office Type" className="form-control float-label" */}
+                    {/* defaultValue={props.branchType}/> */}
+                    <Moolyaselect
+                      multiSelect={false} className="form-control float-label" valueKey={'value'}
+                      labelKey={'label'} queryType={'graphql'} query={query} isDynamic={true}
+                      onSelect={that.optionsBySelectOfficeType}
+                      selectedValue={that.state.branchType} data-required={true}
+                      data-errMsg="Office Type is required"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                  placeholder="Branch Address"
-                                  labelKey={'label'} queryType={"graphql"} query={addressQuery} isDynamic={true}
-                                  disabled={this.state.branchType == 'BRANCH' ? false : true}
-                                  onSelect={that.optionsBySelectBranchAddress}
-                                  selectedValue={that.state.branchAddress}/>
+                    <Moolyaselect
+                      multiSelect={false} className="form-control float-label" valueKey={'value'}
+                      placeholder="Branch Address"
+                      labelKey={'label'} queryType={'graphql'} query={addressQuery} isDynamic={true}
+                      disabled={this.state.branchType != 'BRANCH'}
+                      onSelect={that.optionsBySelectBranchAddress}
+                      selectedValue={that.state.branchAddress}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Office Location" className="form-control float-label" ref="officeLocation"
-                           defaultValue={props.officeLocation}/>
+                    <input
+                      type="text" placeholder="Office Location" className="form-control float-label" ref="officeLocation"
+                      defaultValue={props.officeLocation}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Street No/Locality" className="form-control float-label" ref={"streetLocality"}
-                           defaultValue={props.streetLocality}/>
+                    <input
+                      type="text" placeholder="Street No/Locality" className="form-control float-label" ref={'streetLocality'}
+                      defaultValue={props.streetLocality}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Landmark" className="form-control float-label" ref={"landmark"}
-                           defaultValue={props.landmark}/>
+                    <input
+                      type="text" placeholder="Landmark" className="form-control float-label" ref={'landmark'}
+                      defaultValue={props.landmark}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Area" className="form-control float-label" ref={"area"}
-                           defaultValue={props.area}/>
+                    <input
+                      type="text" placeholder="Area" className="form-control float-label" ref={'area'}
+                      defaultValue={props.area}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Town/City" className="form-control float-label" ref={"city"}
-                           defaultValue={props.city}/>
+                    <input
+                      type="text" placeholder="Town/City" className="form-control float-label" ref={'city'}
+                      defaultValue={props.city}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="State" className="form-control float-label" ref={"state"}
-                           defaultValue={props.state}/>
+                    <input
+                      type="text" placeholder="State" className="form-control float-label" ref={'state'}
+                      defaultValue={props.state}/>
                   </div>
                   <div className="form-group">
-                    {/*<input type="text" placeholder="Country" className="form-control float-label"*/}
-                    {/*defaultValue={props.country}/>*/}
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                  placeholder="Country"
-                                  labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
-                                  disabled={true}
-                                  selectedValue={that.state.selectedCountry}
-                                  data-errMsg="Country is required"/>
+                    {/* <input type="text" placeholder="Country" className="form-control float-label" */}
+                    {/* defaultValue={props.country}/> */}
+                    <Moolyaselect
+                      multiSelect={false} className="form-control float-label" valueKey={'value'}
+                      placeholder="Country"
+                      labelKey={'label'} queryType={'graphql'} query={countryQuery} isDynamic={true}
+                      disabled={true}
+                      selectedValue={that.state.selectedCountry}
+                      data-errMsg="Country is required"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Zip Code" className="form-control float-label" ref={"zipCode"}
-                           defaultValue={props.zipCode}/>
+                    <input
+                      type="text" placeholder="Zip Code" className="form-control float-label" ref={'zipCode'}
+                      defaultValue={props.zipCode}/>
                   </div>
                   <div className="form-group">
-                    {/*<a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a>*/}
-                    {/*<a href="" className="mlUpload_btn">Cancel</a>*/}
+                    {/* <a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a> */}
+                    {/* <a href="" className="mlUpload_btn">Cancel</a> */}
                     {!props.isBSpoke ? <a className="mlUpload_btn" onClick={this.submitDetails}>Activate Card</a> :
                       <div></div>}
                     <a className="mlUpload_btn" onClick={this.backUserRoute}>Cancel</a>

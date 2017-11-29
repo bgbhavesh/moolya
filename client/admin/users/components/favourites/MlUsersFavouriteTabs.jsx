@@ -4,10 +4,10 @@
 /**
  * import of libs and routes
  * */
-import React, {Component} from "react";
-import {render} from "react-dom";
-import MlUsersFavourites from "./MlUsersFavourites";
-import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import MlUsersFavourites from './MlUsersFavourites';
+import MlTabComponent from '../../../../commons/components/tabcomponent/MlTabComponent';
 
 /**
  * export of default class
@@ -15,19 +15,19 @@ import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabCom
 export default class MlUsersFavouriteTabs extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: []};
+    this.state = { tabs: [] };
   }
 
   /**
    * making the tabs as horizontal swiper
    * */
   componentDidMount() {
-    setTimeout(function () {
+    setTimeout(() => {
       $('.swiper-menu').addClass('hide');
       $('div[role="tab"]').each(function (index) {
-        var test = $(this).text();
+        const test = $(this).text();
         $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+        $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
@@ -39,41 +39,41 @@ export default class MlUsersFavouriteTabs extends React.Component {
    * tabs to be displayed
    * */
   getTabComponents() {
-    let tabs = [
+    const tabs = [
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Ideator",
+        title: 'Ideator',
         component: <MlUsersFavourites key="1" communityCode={'IDE'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Investor",
+        title: 'Investor',
         component: <MlUsersFavourites key="2" communityCode={'FUN'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Service Provider",
+        title: 'Service Provider',
         component: <MlUsersFavourites key="3" communityCode={'SPS'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Startup",
+        title: 'Startup',
         component: <MlUsersFavourites key="4" communityCode={'STU'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Company",
+        title: 'Company',
         component: <MlUsersFavourites key="5" communityCode={'CMP'} data={this.props}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Institutions",
+        title: 'Institutions',
         component: <MlUsersFavourites key="6" communityCode={'INS'} data={this.props}/>
       }
     ]
@@ -81,7 +81,7 @@ export default class MlUsersFavouriteTabs extends React.Component {
   }
 
   componentWillMount() {
-    let tabs = this.getTabComponents();
+    const tabs = this.getTabComponents();
 
     function getTabs() {
       return tabs.map(tab => ({
@@ -92,11 +92,11 @@ export default class MlUsersFavouriteTabs extends React.Component {
       }));
     }
 
-    this.setState({tabs: getTabs() || []});
+    this.setState({ tabs: getTabs() || [] });
   }
 
   render() {
-    let tabs = this.state.tabs;
+    const tabs = this.state.tabs;
     return <div className="admin_main_wrap">
       <div className="admin_padding_wrap"><MlTabComponent tabs={tabs}/></div>
     </div>

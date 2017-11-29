@@ -1,47 +1,51 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
+const FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { findIdeatorIntellectualPlanningTrademarkActionHandler } from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 
-export default class MlIdeatorIntellectualPlanningAndTrademark extends Component{
+export default class MlIdeatorIntellectualPlanningAndTrademark extends Component {
   constructor(props, context) {
     super(props);
-    this.state =  {loading:true,data:{}, privateKey:{},
-      privateValues:[]};
+    this.state = {
+      loading: true,
+      data: {},
+      privateKey: {},
+      privateValues: []
+    };
     this.fetchPortfolioDetails.bind(this);
     return this
   }
-  componentWillMount(){
+  componentWillMount() {
     const resp = this.fetchPortfolioDetails();
     return resp
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
   async fetchPortfolioDetails() {
-    let portfoliodetailsId=this.props.portfolioDetailsId;
+    const portfoliodetailsId = this.props.portfolioDetailsId;
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
-    let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.intellectualPlanning)
-    if(empty && response){
-        this.setState({loading: false, data: response});
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    const empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.intellectualPlanning)
+    if (empty && response) {
+      this.setState({ loading: false, data: response });
+      _.each(response.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }else{
-      this.setState({loading: false, data: this.context.ideatorPortfolio.intellectualPlanning, privateValues: response.privateFields}, () => {
+    } else {
+      this.setState({ loading: false, data: this.context.ideatorPortfolio.intellectualPlanning, privateValues: response.privateFields }, () => {
         this.lockPrivateKeys()
       });
     }
@@ -51,60 +55,62 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
    * UI creating lock function
    * */
   lockPrivateKeys() {
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
-    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  onInputChange(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  onInputChange(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
 
-  onLockChange(fieldName, field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onLockChange(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    let isPrivate = false
+    details = _.omit(details, [key]);
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
 
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, tabName: this.props.tabName
+    }
     // this.setState({privateKey:privateKey})
-    this.setState({data:details, privateKey:privateKey}, function () {
+    this.setState({ data: details, privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
   sendDataToParent() {
     let data = this.state.data;
-    for (var propName in data) {
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
         delete data[propName];
       }
     }
-    data=_.omit(data,["privateFields"]);
+    data = _.omit(data, ['privateFields']);
     this.props.getIntellectualPlanning(data, this.state.privateKey);
   }
 
-  render(){
-    let description =this.state.data.IPdescription?this.state.data.IPdescription:''
-    let isIntellectualPrivate = this.state.data.isIntellectualPrivate?this.state.data.isIntellectualPrivate:false
+  render() {
+    const description = this.state.data.IPdescription ? this.state.data.IPdescription : ''
+    const isIntellectualPrivate = this.state.data.isIntellectualPrivate ? this.state.data.isIntellectualPrivate : false
 
     const showLoader = this.state.loading;
     return (
@@ -124,7 +130,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Intellectual Property And Trademark
-                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "IPdescription", "isIntellectualPrivate")}/>
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, 'IPdescription', 'isIntellectualPrivate')}/>
                     </div>
                     <div className="panel-body">
 
@@ -142,8 +148,8 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
       </div>
     )
   }
-};
+}
 MlIdeatorIntellectualPlanningAndTrademark.contextTypes = {
   ideatorPortfolio: PropTypes.object,
-  portfolioKeys: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

@@ -1,18 +1,18 @@
 /**
  * Created by Mohammed.Mohasin on 21/6/17.
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MlInvestmentRequestPresentation from './MlInvestmentRequestPresentation';
-import {updateStageForOnBoardActionHandler, fetchOnBoardByTransaction} from '../../../../app/investment/actions/updateStage';
+import { updateStageForOnBoardActionHandler, fetchOnBoardByTransaction } from '../../../../app/investment/actions/updateStage';
 
 
-export default class MlInvestmentRequest extends Component{
-  constructor(props){
+export default class MlInvestmentRequest extends Component {
+  constructor(props) {
     super(props);
     this.fetchConnectionDetails.bind(this);
-    this.state={
-      'connectionId':null,
-      'data':{},
+    this.state = {
+      connectionId: null,
+      data: {},
       showAcceptAndReject: true,
       canAccept: false,
       canReject: false
@@ -23,47 +23,45 @@ export default class MlInvestmentRequest extends Component{
     return this;
   }
 
-  async fetchConnectionDetails(){
-
-    let transactionId=this.props.data&&this.props.data._id?this.props.data._id:null;
-    if( transactionId){
-      let connection  = await fetchOnBoardByTransaction(transactionId);
-      if(connection.success){
-        let result = JSON.parse(connection.result);
+  async fetchConnectionDetails() {
+    const transactionId = this.props.data && this.props.data._id ? this.props.data._id : null;
+    if (transactionId) {
+      const connection = await fetchOnBoardByTransaction(transactionId);
+      if (connection.success) {
+        const result = JSON.parse(connection.result);
         this.setState({
           canAccept: result.canAccept,
           canReject: result.canReject
         })
       }
       console.log(connection);
-      this.setState({data:connection||{},connectionId:(connection||{})._id});
+      this.setState({ data: connection || {}, connectionId: (connection || {})._id });
     }
-  };
+  }
 
-  async componentWillMount(){
+  async componentWillMount() {
     await this.fetchConnectionDetails();
   }
 
-  async OnBoardHandler(transactionLogId, transactionType, status, that){
-    var response=await updateStageForOnBoardActionHandler(transactionLogId, transactionType, status);
-    if(response){
+  async OnBoardHandler(transactionLogId, transactionType, status, that) {
+    const response = await updateStageForOnBoardActionHandler(transactionLogId, transactionType, status);
+    if (response) {
       toastr.success(`On-board request ${status}ed successfully`);
-      this.setState({showAcceptAndReject : false})
+      this.setState({ showAcceptAndReject: false })
       await this.fetchConnectionDetails();
-    }else{
-      toastr.error("Failed to accept the On-board request");
+    } else {
+      toastr.error('Failed to accept the On-board request');
     }
   }
 
-  render(){
-
-    const {data} = this.props;
-    const {canAccept, canReject} = this.state;
+  render() {
+    const { data } = this.props;
+    const { canAccept, canReject } = this.state;
     // var data=this.state.data;
     console.log('State:', data);
     console.log('Props:', data);
 
-    let userDetails = {
+    const userDetails = {
       userId: data && data.fromProfileId ? data.fromProfileId : '',
       transactionId: data && data.transactionId ? data.transactionId : '',
       dateTime: data && data.createdAt ? data.createdAt : '',
@@ -76,13 +74,13 @@ export default class MlInvestmentRequest extends Component{
       community: data && data.community ? data.community : ''
     };
 
-    let activityLog = {
+    const activityLog = {
       dateTime: data && data.createdAt ? data.createdAt : '',
-      type: data && data.transactionType ? (data.transactionType == "interaction" ? data.activity : data.transactionType ): '',
+      type: data && data.transactionType ? (data.transactionType == 'interaction' ? data.activity : data.transactionType) : '',
       status: data && data.status ? data.status : ''
     };
 
-    return(
+    return (
       <div>
         <MlInvestmentRequestPresentation
           userDetails={userDetails}

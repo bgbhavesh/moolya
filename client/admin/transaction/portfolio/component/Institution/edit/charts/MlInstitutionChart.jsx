@@ -1,100 +1,105 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../../app/core/appConnection'
-import MlInstitutionCompanyEmployment from "./subTabs/MlInstitutionCompanyEmployment";
-import MlInstitutionProfitRevenue from "./subTabs/MlInstitutionProfitRevenue";
-import MlInstitutionCompanyReview from "./subTabs/MlInstitutionCompanyReview";
-import MlInstitutionEmployeeBreakup from "./subTabs/MlInstitutionEmployeeBreakup";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTabComponent from '../../../../../../../commons/components/tabcomponent/MlTabComponent';
+import { client } from '../../../../../../core/apolloConnection'
+import { appClient } from '../../../../../../../app/core/appConnection'
+import MlInstitutionCompanyEmployment from './subTabs/MlInstitutionCompanyEmployment';
+import MlInstitutionProfitRevenue from './subTabs/MlInstitutionProfitRevenue';
+import MlInstitutionCompanyReview from './subTabs/MlInstitutionCompanyReview';
+import MlInstitutionEmployeeBreakup from './subTabs/MlInstitutionEmployeeBreakup';
 
-export default class MlInstitutionChart extends React.Component{
-  constructor(props,context){
+export default class MlInstitutionChart extends React.Component {
+  constructor(props, context) {
     super(props)
-    this.state =  {tabs: [],portfolioStartupEmployment:{},getStartupProfitRevenue:{},getStartupReview:{},getStartupEmployeeData:{}}
+    this.state = {
+      tabs: [], portfolioStartupEmployment: {}, getStartupProfitRevenue: {}, getStartupReview: {}, getStartupEmployeeData: {}
+    }
   }
 
-  getStartupCompanyEmployment(details){
+  getStartupCompanyEmployment(details) {
     let data = this.state.portfolioStartupEmployment;
-    data=details;
-    this.setState({portfolioStartupEmployment : data})
-    this.props.getPortfolioInstitutionChartDetails(data,"employmentOfCompanyChart");
-
+    data = details;
+    this.setState({ portfolioStartupEmployment: data })
+    this.props.getPortfolioInstitutionChartDetails(data, 'employmentOfCompanyChart');
   }
-  getStartupProfitRevenue(details){
+  getStartupProfitRevenue(details) {
     let data = this.state.getStartupProfitRevenue;
-    data=details;
-    this.setState({getStartupProfitRevenue : data})
-    this.props.getPortfolioInstitutionChartDetails(data,"profitRevenueLiabilityChart");
+    data = details;
+    this.setState({ getStartupProfitRevenue: data })
+    this.props.getPortfolioInstitutionChartDetails(data, 'profitRevenueLiabilityChart');
   }
-  getStartupCompanyReview(details){
+  getStartupCompanyReview(details) {
     let data = this.state.getStartupReview;
-    data=details;
-    this.setState({getStartupReview : data})
-    this.props.getPortfolioInstitutionChartDetails(data,"reviewOfCompanyChart");
+    data = details;
+    this.setState({ getStartupReview: data })
+    this.props.getPortfolioInstitutionChartDetails(data, 'reviewOfCompanyChart');
   }
-  getStartupEmployeeBreakup(details){
+  getStartupEmployeeBreakup(details) {
     let data = this.state.getStartupEmployeeData;
-    data=details;
-    this.setState({getStartupEmployeeData : data})
-    this.props.getPortfolioInstitutionChartDetails(data,"employeeBreakupDepartmentChart");
+    data = details;
+    this.setState({ getStartupEmployeeData: data })
+    this.props.getPortfolioInstitutionChartDetails(data, 'employeeBreakupDepartmentChart');
   }
 
   getTabComponents() {
-    let tabs = [
+    const tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Employment Of Company",
-        component: <MlInstitutionCompanyEmployment client={client} isAdmin={true} key="1"
-                                        getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}
-                                        employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}
-                                        communityType={"institution"}/>
+        title: 'Employment Of Company',
+        component: <MlInstitutionCompanyEmployment
+          client={client} isAdmin={true} key="1"
+          getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          employmentDetails={this.props.startupChartsDetails && this.props.startupChartsDetails.employmentOfCompanyChart}
+          communityType={'institution'}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Profit,Revenue & Liability",
-        component: <MlInstitutionProfitRevenue key="2" client={client} isAdmin={true}
-                                    getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}
-                                    revenueDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.profitRevenueLiabilityChart}
-                                    communityType={"institution"}/>
+        title: 'Profit,Revenue & Liability',
+        component: <MlInstitutionProfitRevenue
+          key="2" client={client} isAdmin={true}
+          getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          revenueDetails={this.props.startupChartsDetails && this.props.startupChartsDetails.profitRevenueLiabilityChart}
+          communityType={'institution'}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Review Of Company",
-        component: <MlInstitutionCompanyReview client={client} isAdmin={true} key="3"
-                                    getStartupCompanyReview={this.getStartupCompanyReview.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}
-                                    reviewDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.reviewOfCompanyChart}/>
+        title: 'Review Of Company',
+        component: <MlInstitutionCompanyReview
+          client={client} isAdmin={true} key="3"
+          getStartupCompanyReview={this.getStartupCompanyReview.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          reviewDetails={this.props.startupChartsDetails && this.props.startupChartsDetails.reviewOfCompanyChart}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Employee Breakup At Department",
-        component: <MlInstitutionEmployeeBreakup key="4" client={client} isAdmin={true}
-                                      getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
-                                      portfolioDetailsId={this.props.portfolioDetailsId}
-                                      dataDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employeeBreakupDepartmentChart}/>
-      },
+        title: 'Employee Breakup At Department',
+        component: <MlInstitutionEmployeeBreakup
+          key="4" client={client} isAdmin={true}
+          getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
+          portfolioDetailsId={this.props.portfolioDetailsId}
+          dataDetails={this.props.startupChartsDetails && this.props.startupChartsDetails.employeeBreakupDepartmentChart}/>
+      }
 
     ]
     return tabs;
   }
 
-  componentDidMount(){
-    var props = this.props
-    setTimeout(function(){
+  componentDidMount() {
+    const props = this.props
+    setTimeout(() => {
       $('.last-item').addClass('menunone');
-      if(!props.isApp) {
+      if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
-          var test = $(this).text();
+          const test = $(this).text();
           $(this).empty();
-          $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+          $(this).html(`<div class="moolya_btn moolya_btn_in">${test}</div>`);
         });
         $('.first-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
@@ -103,17 +108,16 @@ export default class MlInstitutionChart extends React.Component{
         $('.RRT__panel .RRT__panel').removeClass('nomargintop');
         $('.horizon-swiper').horizonSwiper();
       }
-    },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
+    }, 10);
+    const path = FlowRouter._current.path;
+    if (path.indexOf('app') != -1) {
+      this.setState({ admin: false, client: appClient })
     }
   }
 
 
-  componentWillMount()
-  {
-    let tabs = this.getTabComponents();
+  componentWillMount() {
+    const tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
         tabClassName: 'moolya_btn', // Optional
@@ -122,18 +126,16 @@ export default class MlInstitutionChart extends React.Component{
         getContent: () => tab.component
       }));
     }
-    this.setState({tabs:getTabs() ||[]});
+    this.setState({ tabs: getTabs() || [] });
   }
 
 
-
-  render(){
-    let tabs = this.state.tabs;
+  render() {
+    const tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
   }
-
 }
 
 MlInstitutionChart.contextTypes = {
-  institutionPortfolio: PropTypes.object,
+  institutionPortfolio: PropTypes.object
 };

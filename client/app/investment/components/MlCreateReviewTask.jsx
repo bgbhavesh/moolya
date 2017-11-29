@@ -1,48 +1,45 @@
 /**
  * Created by pankaj on 20/6/17.
  */
-import React from "react";
-var FontAwesome = require('react-fontawesome');
-import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
-let Select = require('react-select');
-import {createInternalTaskActionHandler} from '../actions/createInternalTask'
+import React from 'react';
+const FontAwesome = require('react-fontawesome');
+import { fetchAllOfficeMembers } from '../actions/fetchAllTeamMember';
+const Select = require('react-select');
+import { createInternalTaskActionHandler } from '../actions/createInternalTask'
 
 export default class MlAssignTask extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log(props);
-    this.state={
-      showAdd : true,
+    this.state = {
+      showAdd: true,
       users: [],
-      members:[],
-      selectedUser:[],
-      docs:[]
+      members: [],
+      selectedUser: [],
+      docs: []
     }
   }
-  componentDidMount(){
+  componentDidMount() {
     this.fetchAllOfficeMembers();
   }
 
-  async submit(){
-    if( !this.props.data.state.selected || !this.props.data.state.selected.resourceId ){
-      toastr.error("Select a portfolio");
+  async submit() {
+    if (!this.props.data.state.selected || !this.props.data.state.selected.resourceId) {
+      toastr.error('Select a portfolio');
       return false;
     }
-    if(!this.state.selectedUser.length){
-      toastr.error("Select atleast one user");
+    if (!this.state.selectedUser.length) {
+      toastr.error('Select atleast one user');
       return false;
     }
-    let members = this.state.members;
-    let dataToInsert = {
-      name : this.props.config.actionName,
-      stage : this.props.data.props.currentStage.stageId,
-      attendees: this.state.selectedUser.map(function (userId) {
-        let user = members.find(function (user) {
-          return user.userId == userId;
-        });
+    const members = this.state.members;
+    const dataToInsert = {
+      name: this.props.config.actionName,
+      stage: this.props.data.props.currentStage.stageId,
+      attendees: this.state.selectedUser.map((userId) => {
+        const user = members.find(user => user.userId == userId);
         return {
-          userId: userId,
+          userId,
           profileId: user.profileId
         }
       }),
@@ -52,11 +49,11 @@ export default class MlAssignTask extends React.Component {
         name: this.props.data.state.selected.portfolio.communityName,
         type: this.props.data.state.selected.portfolio.communityType
       },
-      docs:this.state.docs,
-      note:this.refs.note.value
+      docs: this.state.docs,
+      note: this.refs.note.value
     };
-    let response = await createInternalTaskActionHandler(dataToInsert);
-    if(response.success) {
+    const response = await createInternalTaskActionHandler(dataToInsert);
+    if (response.success) {
       toastr.success('Internal task created successfully');
       this.props.toggle();
     } else {
@@ -64,35 +61,31 @@ export default class MlAssignTask extends React.Component {
     }
   }
 
-  async fetchAllOfficeMembers(){
-    let response = await fetchAllOfficeMembers();
-    if(response){
+  async fetchAllOfficeMembers() {
+    const response = await fetchAllOfficeMembers();
+    if (response) {
       console.log(response);
-      let options = response.map(function (user) {
-        return {
-          value:user.userId,
-          label:user.name + (user.officeName ? (" - " + user.officeName ) : '' )
-        }
-      });
+      const options = response.map(user => ({
+        value: user.userId,
+        label: user.name + (user.officeName ? (` - ${user.officeName}`) : '')
+      }));
       this.setState({
-        users:options,
-        members:response
+        users: options,
+        members: response
       });
     }
   }
 
-  toggleAddUser(){
+  toggleAddUser() {
     this.setState({
-      showAdd : !this.state.showAdd
+      showAdd: !this.state.showAdd
     });
   }
 
-  addUser(user){
-    let seletectUsers = this.state.selectedUser;
-    let isAlready = seletectUsers.find(function (userId) {
-      return userId == user.value;
-    });
-    if(!isAlready){
+  addUser(user) {
+    const seletectUsers = this.state.selectedUser;
+    const isAlready = seletectUsers.find(userId => userId == user.value);
+    if (!isAlready) {
       seletectUsers.push(user.value);
       this.setState({
         selectedUser: seletectUsers
@@ -101,16 +94,16 @@ export default class MlAssignTask extends React.Component {
   }
 
   removeUser(userId) {
-    let seletectUsers = this.state.selectedUser;
+    const seletectUsers = this.state.selectedUser;
     seletectUsers.splice(seletectUsers.indexOf(userId), 1);
     this.setState({
       selectedUser: seletectUsers
     });
   }
 
-  render(){
+  render() {
     const that = this;
-    return(
+    return (
       <div className="popover-lg">
         <div className="pop_review" >
           <div className="comments-container cus_scroll">
@@ -166,7 +159,7 @@ export default class MlAssignTask extends React.Component {
           <div className="clearfix" />
           <a href="" className="save_btn add-question">Add Question </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" className="save_btn">Submit</a>
         </div>
-        <div className="pop_review_question" style={{'display':'none'}}>
+        <div className="pop_review_question" style={{ display: 'none' }}>
           <div className="comments-container cus_scroll">
             <ul className="pop-questions">
               <li>

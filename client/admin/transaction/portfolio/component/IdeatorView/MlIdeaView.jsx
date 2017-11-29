@@ -1,23 +1,23 @@
-import React from "react";
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-import {initalizeFloatLabel} from "../../../../utils/formElemUtil";
-import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
-import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
-import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
-import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
-import {fetchIdeaActionHandler} from "../../../../../app/portfolio/ideators/actions/ideatorActionHandler";
+import React from 'react';
+import _ from 'lodash';
+const FontAwesome = require('react-fontawesome');
+import { initalizeFloatLabel } from '../../../../utils/formElemUtil';
+import { findAnnotations } from '../../../../../commons/annotator/findAnnotations';
+import { initializeMlAnnotator } from '../../../../../commons/annotator/mlAnnotator';
+import { createAnnotationActionHandler } from '../../actions/updatePortfolioDetails';
+import { validateUserForAnnotation } from '../../actions/findPortfolioIdeatorDetails'
+import { fetchIdeaActionHandler } from '../../../../../app/portfolio/ideators/actions/ideatorActionHandler';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlIdeaView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading:true,
-      portfolioIdeatorInfo: {},
+      loading: true,
+      portfolioIdeatorInfo: {}
     }
     this.fetchIdeatorIdeas.bind(this);
-    //this.fetchAnnotations.bind(this);
+    // this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -25,19 +25,18 @@ export default class MlIdeaView extends React.Component {
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#psContent").annotator();
+    this.state.content = jQuery('#psContent').annotator();
     this.state.content.annotator('addPlugin', 'MyPlugin', {
-      pluginInit: function () {
+      pluginInit() {
       }
     });
   }
 
   annotatorEvents(event, annotation, editor) {
-    if (!annotation)
-      return;
+    if (!annotation) { return; }
     switch (event) {
       case 'create': {
-        let response = this.createAnnotations(annotation);
+        const response = this.createAnnotations(annotation);
       }
         break;
       case 'update': {
@@ -55,7 +54,7 @@ export default class MlIdeaView extends React.Component {
   }
 
   async createAnnotations(annotation) {
-    let details = {portfolioId: this.props.portfolioDetailsId, docId: "ideas", quote: JSON.stringify(annotation)}
+    const details = { portfolioId: this.props.portfolioDetailsId, docId: 'ideas', quote: JSON.stringify(annotation) }
     const response = await createAnnotationActionHandler(details);
     if (response && response.success) {
       this.fetchAnnotations(true);
@@ -64,30 +63,30 @@ export default class MlIdeaView extends React.Component {
   }
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "ideas");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    const response = await findAnnotations(this.props.portfolioDetailsId, 'ideas');
+    const resp = JSON.parse(response.result);
+    const annotations = this.state.annotations;
+    this.setState({ annotations: JSON.parse(response.result) })
 
-    let quotes = [];
+    const quotes = [];
 
-    _.each(this.state.annotations, function (value) {
+    _.each(this.state.annotations, (value) => {
       quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName" : value.roleName,
-        "profileImage" : value.profileImage,
-        "createdAt": value.createdAt
+        id: value.annotatorId,
+        text: value.quote.text,
+        quote: value.quote.quote,
+        ranges: value.quote.ranges,
+        userName: value.userName,
+        roleName: value.roleName,
+        profileImage: value.profileImage,
+        createdAt: value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
   componentWillMount() {
-    let resp = this.validateUserForAnnotation();
+    const resp = this.validateUserForAnnotation();
     return resp
   }
   componentDidMount() {
@@ -100,7 +99,7 @@ export default class MlIdeaView extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+      this.setState({ isUserValidForAnnotation: response })
 
       this.initalizeAnnotaor()
 
@@ -114,79 +113,76 @@ export default class MlIdeaView extends React.Component {
     const response = await fetchIdeaActionHandler(portfolioId);
     if (response) {
       let currentIdea = {}
-      _.each(response, function (idea) {
+      _.each(response, (idea) => {
         if (idea._id == ideaId) {
           currentIdea = idea
         }
       });
-      if (_.findIndex(currentIdea.privateFields, {booleanKey: 'isIdeaTitlePrivate'}) >= 0) {
-        currentIdea = _.omit(currentIdea, "title");
-        currentIdea = _.extend(currentIdea, {title: "No ideas are available to show"});
+      if (_.findIndex(currentIdea.privateFields, { booleanKey: 'isIdeaTitlePrivate' }) >= 0) {
+        currentIdea = _.omit(currentIdea, 'title');
+        currentIdea = _.extend(currentIdea, { title: 'No ideas are available to show' });
       }
-      this.setState({portfolioIdeatorInfo: currentIdea, loading:false})
-      _.each(currentIdea.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      this.setState({ portfolioIdeatorInfo: currentIdea, loading: false })
+      _.each(currentIdea.privateFields, (pf) => {
+        $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
     }
   }
 
   render() {
     const showLoader = this.state.loading;
-    let image = this.state.portfolioIdeatorInfo&&this.state.portfolioIdeatorInfo.ideaImage&&this.state.portfolioIdeatorInfo.ideaImage.fileUrl?this.state.portfolioIdeatorInfo.ideaImage.fileUrl:'/images/no_image.png';
+    const image = this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.ideaImage && this.state.portfolioIdeatorInfo.ideaImage.fileUrl ? this.state.portfolioIdeatorInfo.ideaImage.fileUrl : '/images/no_image.png';
     return (
       <div id="psContent" className="admin_padding_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<div className="loader_wrap"></div>) : (
           <div>
             <h2>About Ideas</h2>
             <div className="ideas_swiper 4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
               <div className="swiper-wrapper">
-                <div className="swiper-slide ideas_block" name="idea1" style={{'backgroundImage': 'url(' +generateAbsolutePath(image)+ ')'}}>
+                <div className="swiper-slide ideas_block" name="idea1" style={{ backgroundImage: `url(${generateAbsolutePath(image)})` }}>
                   <h3 className="rating_xs"><p>{this.state.portfolioIdeatorInfo.title}</p></h3>
                 </div>
-            {/*<div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">*/}
-              {/*<div className="list_block notrans">*/}
-                {/*<FontAwesome name='lock'/>*/}
-                {/*<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>*/}
-                {/*<h3>Ideas</h3>*/}
-              {/*</div>*/}
-              {/*<div className="upload_hex">*/}
-                {/*/!*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*!/*/}
-                {/*{image?<img src={image} id="blah" width="105" height="auto"/>:<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>}*/}
-              {/*</div>*/}
+                {/* <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4"> */}
+                {/* <div className="list_block notrans"> */}
+                {/* <FontAwesome name='lock'/> */}
+                {/* <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div> */}
+                {/* <h3>Ideas</h3> */}
+                {/* </div> */}
+                {/* <div className="upload_hex"> */}
+                {/* /!*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*!/ */}
+                {/* {image?<img src={image} id="blah" width="105" height="auto"/>:<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>} */}
+                {/* </div> */}
 
 
-
-
-
-                {/*</div>*/}
+                {/* </div> */}
                 <div className="swiper-pagination"></div>
               </div>
-
 
 
             </div>
             <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 hide_unlock">
               <div className="form-group">
 
-              {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
-                       defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/>*/}
-<br /><br />
-                    <p><b>Title: </b>{this.state.portfolioIdeatorInfo.title}</p>
-                    <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                 id="isIdeaTitlePrivate"/>
-                {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>*/}
+                {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
+                       defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/> */}
+                <br /><br />
+                <p><b>Title: </b>{this.state.portfolioIdeatorInfo.title}</p>
+                <FontAwesome
+                  name='unlock' className="input_icon req_textarea_icon un_lock"
+                  id="isIdeaTitlePrivate"/>
+                {/* <input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/> */}
 
 
               </div>
               <div className="form-group">
                 <p><b>Description: </b>{this.state.portfolioIdeatorInfo.ideaDescription}</p>
-                 {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
+                {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
-                            readOnly="true"></textarea>*/}
-                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                             id="isIdeaPrivate"/>
-                {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>*/}
+                            readOnly="true"></textarea> */}
+                <FontAwesome
+                  name='unlock' className="input_icon req_textarea_icon un_lock"
+                  id="isIdeaPrivate"/>
+                {/* <input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/> */}
               </div>
             </div>
           </div>

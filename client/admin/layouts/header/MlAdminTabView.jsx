@@ -14,50 +14,51 @@ export default class MlTabView extends Component {
     return this;
   }
 
-  componentDidMount(){
-    var mySwiper = new Swiper('.swiper-menu',{
+  componentDidMount() {
+    const mySwiper = new Swiper('.swiper-menu', {
       speed: 400,
-      spaceBetween:30,
-      slidesPerView:'auto',
-      mousewheelControl:true
+      spaceBetween: 30,
+      slidesPerView: 'auto',
+      mousewheelControl: true
     });
 
 
-    $(document).ready(()=>{
-      $('.moolya_btn_in').click(function(e){
+    $(document).ready(() => {
+      $('.moolya_btn_in').click((e) => {
         let transaction = $('.swiping_filters').css('transform');
-        if($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]){
-          transaction = JSON.stringify({transaction:transaction,name:$('.swiping_filters')[0].childNodes[0].innerText});
-          localStorage.setItem('transaction',transaction);
+        if ($('.swiping_filters')[0] && $('.swiping_filters')[0].childNodes && $('.swiping_filters')[0].childNodes[0]) {
+          transaction = JSON.stringify({ transaction, name: $('.swiping_filters')[0].childNodes[0].innerText });
+          localStorage.setItem('transaction', transaction);
         }
       });
     });
 
-    let transaction =localStorage.getItem('transaction');
-    if(transaction) {
+    let transaction = localStorage.getItem('transaction');
+    if (transaction) {
       transaction = JSON.parse(transaction);
-      localStorage.setItem('transaction','');
+      localStorage.setItem('transaction', '');
 
-      if(transaction.name === $('.swiping_filters')[0].childNodes[0].innerText){
-        setTimeout(function () {
-          $('.swiping_filters').css("transform",transaction.transaction);
+      if (transaction.name === $('.swiping_filters')[0].childNodes[0].innerText) {
+        setTimeout(() => {
+          $('.swiping_filters').css('transform', transaction.transaction);
         }, 500);
       }
-
     }
   }
 
   render() {
-    let path = FlowRouter.current().route.name;
-    let params = FlowRouter.current().params;
-    let queryParams = FlowRouter.current().queryParams;
-    let menuConfig = this.props.tabOptions||[];
-    let menu, tabOptions;
+    const path = FlowRouter.current().route.name;
+    const params = FlowRouter.current().params;
+    const queryParams = FlowRouter.current().queryParams;
+    const menuConfig = this.props.tabOptions || [];
+    let menu,
+      tabOptions;
 
     menu = find(path, menuConfig);
 
     function find(uniqueId, menus) {
-      var i = 0, found;
+      let i = 0,
+        found;
 
       for (; i < menus.length; i++) {
         if (menus[i].uniqueId === uniqueId) {
@@ -71,7 +72,7 @@ export default class MlTabView extends Component {
       }
     }
 
-    /*function dynamicLinkHandler(path,params,queryParams){
+    /* function dynamicLinkHandler(path,params,queryParams){
       const menuLinkHandlerConfig={
         "editCluster":function(params,queryParams){
               return '/admin/cluster/'+params.cluserId;
@@ -173,50 +174,52 @@ export default class MlTabView extends Component {
             return link;
           }
       return "";
-    }*/
+    } */
 
     if (menu != undefined) {
-      let subMenuHide=menu.hideSubMenu;
+      const subMenuHide = menu.hideSubMenu;
       console.log(menu.subMenu)
-      //if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
-      const subMenusId=menu.subMenusId;
-      const subMenuMappingId=menu.subMenuMappingId;
-      if (subMenusId){
+      // if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
+      const subMenusId = menu.subMenusId;
+      const subMenuMappingId = menu.subMenuMappingId;
+      if (subMenusId) {
         menu = find(menu.subMenusId, menuConfig);
       }
 
       let tabMenu = [];
-      if(!subMenuHide){
-        tabMenu= menu.subMenu;
+      if (!subMenuHide) {
+        tabMenu = menu.subMenu;
       }
 
 
-      tabOptions = tabMenu.map(function (option,index) {
-        let activeClass="";
-        let disabledClass = "";
-        if(option.uniqueId===path){
+      tabOptions = tabMenu.map(function (option, index) {
+        let activeClass = '';
+        let disabledClass = '';
+        if (option.uniqueId === path) {
           activeClass = 'active_btn'
         }
 
-        if(option.isDisabled){
+        if (option.isDisabled) {
           disabledClass = 'disabled_item'
         }
 
-        if(subMenuMappingId&&subMenuMappingId===option.uniqueId){
+        if (subMenuMappingId && subMenuMappingId === option.uniqueId) {
           activeClass = 'active_btn'
         }
 
-        let isDynamicLink=option.dynamicLink||false;
-        let isDisabled = option.isDisabled || false;
-        let menuLink=option.link;
-        if(isDynamicLink){
-          menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
+        const isDynamicLink = option.dynamicLink || false;
+        const isDisabled = option.isDisabled || false;
+        let menuLink = option.link;
+        if (isDynamicLink) {
+          menuLink = dynamicLinkHandler(option.uniqueId, params, queryParams);
         }
         return (
           <li key={index} className={`swiper-slide ${disabledClass}`}>
-            <div className={`moolya_btn ${activeClass} `}
-                 onClick={this.subMenuClick}><a href={menuLink}
-                                                className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+            <div
+              className={`moolya_btn ${activeClass} `}
+              onClick={this.subMenuClick}><a
+                href={menuLink}
+                className={'moolya_btn moolya_btn_in'}>  {option.name} </a></div>
           </li>
         )
       });
@@ -224,14 +227,13 @@ export default class MlTabView extends Component {
 
     return (
       <div className="swiper-container swiper-menu">
-      <ul className="swiper-wrapper swiping_filters">
-        {tabOptions}
-      </ul>
+        <ul className="swiper-wrapper swiping_filters">
+          {tabOptions}
+        </ul>
       </div>
 
 
     )
   }
-
 }
 

@@ -4,9 +4,8 @@
 
 import React from 'react';
 
-export default class MlAppMemberTaskInfo extends React.Component{
-
-  render(){
+export default class MlAppMemberTaskInfo extends React.Component {
+  render() {
     return (
       <div>
         <div className="col-lg-12">
@@ -57,4 +56,4 @@ export default class MlAppMemberTaskInfo extends React.Component{
       </div>
     )
   }
-};
+}

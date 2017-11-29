@@ -1,18 +1,18 @@
-import React, {Component, PropTypes} from "react";
-import gql from "graphql-tag";
-import _ from "lodash";
-import Datetime from "react-datetime";
-import ScrollArea from "react-scrollbar";
-import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
-import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
-import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfolioServiceProviderDetails";
-import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-import MlLoader from "../../../../../../commons/components/loader/loader";
+import React, { Component, PropTypes } from 'react';
+import gql from 'graphql-tag';
+import _ from 'lodash';
+import Datetime from 'react-datetime';
+import ScrollArea from 'react-scrollbar';
+import { Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel } from '../../../../../utils/formElemUtil';
+import Moolyaselect from '../../../../../commons/components/MlAdminSelectWrapper';
+import { multipartASyncFormHandler } from '../../../../../../commons/MlMultipartFormAction';
+import { fetchServiceProviderPortfolioAwards } from '../../../actions/findPortfolioServiceProviderDetails';
+import { putDataIntoTheLibrary } from '../../../../../../commons/actions/mlLibraryActionHandler'
+import MlLoader from '../../../../../../commons/components/loader/loader';
 import CropperModal from '../../../../../../commons/components/cropperModal';
-import {mlFieldValidations} from "../../../../../../commons/validations/mlfieldValidation";
+import { mlFieldValidations } from '../../../../../../commons/validations/mlfieldValidation';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
 
@@ -22,19 +22,19 @@ export default class MlServiceProviderAwards extends Component {
     this.state = {
       loading: false,
       data: {},
-      fileName:"",
+      fileName: '',
       serviceProviderAwards: [],
       popoverOpen: false,
       selectedIndex: -1,
       serviceProviderAwardsList: [],
       selectedVal: null,
-      selectedObject: "default",
-      privateKey:{},
+      selectedObject: 'default',
+      privateKey: {},
       showProfileModal: false,
       uploadingAvatar: false
     };
     this.curSelectLogo = {};
-    this.tabName = this.props.tabName || ""
+    this.tabName = this.props.tabName || ''
     this.handleBlur = this.handleBlur.bind(this);
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
@@ -55,7 +55,7 @@ export default class MlServiceProviderAwards extends Component {
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-    //initalizeFloatLabel();
+    // initalizeFloatLabel();
   }
 
   componentWillMount() {
@@ -64,16 +64,15 @@ export default class MlServiceProviderAwards extends Component {
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.awardsRecognition)
+    const that = this;
+    const portfolioDetailsId = that.props.portfolioDetailsId;
+    const empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.awardsRecognition)
     const response = await fetchServiceProviderPortfolioAwards(portfolioDetailsId);
     if (empty) {
       if (response && response.length) {
-        this.setState({loading: false, serviceProviderAwards: response, serviceProviderAwardsList: response});
-      }
-      else{
-        this.setState({loading:false})
+        this.setState({ loading: false, serviceProviderAwards: response, serviceProviderAwardsList: response });
+      } else {
+        this.setState({ loading: false })
       }
     } else {
       this.setState({
@@ -82,15 +81,17 @@ export default class MlServiceProviderAwards extends Component {
         serviceProviderAwardsList: that.context.serviceProviderPortfolio.awardsRecognition
       });
     }
-    this.serviceProviderAwardServer = response &&response.awardsRecognition?response.awardsRecognition:[]
+    this.serviceProviderAwardServer = response && response.awardsRecognition ? response.awardsRecognition : []
   }
 
   addAward() {
-    this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null})
+    this.setState({
+      selectedObject: 'default', popoverOpen: !(this.state.popoverOpen), data: {}, selectedVal: null
+    })
     if (this.state.serviceProviderAwards) {
-      this.setState({selectedIndex: this.state.serviceProviderAwards.length})
+      this.setState({ selectedIndex: this.state.serviceProviderAwards.length })
     } else {
-      this.setState({selectedIndex: 0})
+      this.setState({ selectedIndex: 0 })
     }
   }
 
@@ -98,30 +99,31 @@ export default class MlServiceProviderAwards extends Component {
     const requiredFields = this.getFieldValidations();
     if (requiredFields && !requiredFields.errorMessage) {
       this.sendDataToParent(true)
-    }else {
+    } else {
       toastr.error(requiredFields.errorMessage);
       return
     }
-    var setObject =  this.state.serviceProviderAwards
-    if(this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.awardsRecognition ){
+    let setObject = this.state.serviceProviderAwards
+    if (this.context && this.context.serviceProviderPortfolio && this.context.serviceProviderPortfolio.awardsRecognition) {
       setObject = this.context.serviceProviderPortfolio.awardsRecognition
     }
-    this.setState({serviceProviderAwardsList: setObject, popoverOpen: false})
+    this.setState({ serviceProviderAwardsList: setObject, popoverOpen: false })
     this.curSelectLogo = {}
   }
 
   onTileClick(index, uiIndex, e) {
-    let cloneArray = _.cloneDeep(this.state.serviceProviderAwards);
+    const cloneArray = _.cloneDeep(this.state.serviceProviderAwards);
     // let details = cloneArray[index]
-    var details = _.find(cloneArray, {index: index});
-    details = _.omit(details, "__typename");
+    let details = _.find(cloneArray, { index });
+    details = _.omit(details, '__typename');
     this.curSelectLogo = details.logo;
     this.setState({
       selectedIndex: index,
       data: details,
       selectedObject: uiIndex,
-      "selectedVal": details.awardId,
-      popoverOpen: !(this.state.popoverOpen)},() =>{
+      selectedVal: details.awardId,
+      popoverOpen: !(this.state.popoverOpen)
+    }, () => {
       this.lockPrivateKeys(index)
     });
     // setTimeout(function () {
@@ -131,154 +133,155 @@ export default class MlServiceProviderAwards extends Component {
     // }, 10)
   }
 
-  //todo:// context data connection first time is not coming have to fix
+  // todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
-    var privateValues = this.serviceProviderAwardServer && this.serviceProviderAwardServer[selIndex]?this.serviceProviderAwardServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
-    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
-    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    const privateValues = this.serviceProviderAwardServer && this.serviceProviderAwardServer[selIndex] ? this.serviceProviderAwardServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssss', keys)
-    _.each(keys, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    _.each(keys, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
   onLockChange(fieldName, field, e) {
-    var isPrivate = false;
-    let className = e.target.className;
-    if (className.indexOf("fa-lock") != -1) {
+    let isPrivate = false;
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
       isPrivate = true;
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
-    this.setState({privateKey:privateKey}, function () {
+    const privateKey = {
+      keyName: fieldName, booleanKey: field, isPrivate, index: this.state.selectedIndex, tabName: this.props.tabName
+    }
+    this.setState({ privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
   onStatusChangeNotify(e) {
     let updatedData = this.state.data || {};
-    let key = e.target.id;
+    const key = e.target.id;
     updatedData = _.omit(updatedData, [key]);
     if (e.currentTarget.checked) {
-      updatedData = _.extend(updatedData, {[key]: true});
+      updatedData = _.extend(updatedData, { [key]: true });
     } else {
-      updatedData = _.extend(updatedData, {[key]: false});
+      updatedData = _.extend(updatedData, { [key]: false });
     }
-    this.setState({data: updatedData}, function () {
+    this.setState({ data: updatedData }, () => {
       // this.sendDataToParent()
     })
   }
 
   onOptionSelected(selectedAward, callback, selObject) {
     let details = this.state.data;
-    details = _.omit(details, ["awardId"]);
-    details = _.omit(details, ["awardName"]);
+    details = _.omit(details, ['awardId']);
+    details = _.omit(details, ['awardName']);
     if (selectedAward) {
-      details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-      this.setState({data: details, "selectedVal": selectedAward, awardName: selObject.label}, function () {
+      details = _.extend(details, { awardId: selectedAward, awardName: selObject.label });
+      this.setState({ data: details, selectedVal: selectedAward, awardName: selObject.label }, function () {
         this.sendDataToParent()
       })
     } else {
-      details = _.extend(details, {["awardId"]: '', "awardName": ''});
-      this.setState({data: details, "selectedVal": '', awardName: ''}, function () {
+      details = _.extend(details, { awardId: '', awardName: '' });
+      this.setState({ data: details, selectedVal: '', awardName: '' }, () => {
         // this.sendDataToParent()
       })
     }
-
   }
 
   handleBlur(e) {
     let details = this.state.data;
-    let name = e.target.name;
+    const name = e.target.name;
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
 
   handleYearChange(e) {
     let details = this.state.data;
-    let name = 'year';
+    const name = 'year';
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: this.refs.year.state.inputValue});
-    this.setState({data: details}, function () {
+    details = _.extend(details, { [name]: this.refs.year.state.inputValue });
+    this.setState({ data: details }, () => {
       // this.sendDataToParent()
     })
   }
 
   getFieldValidations() {
     const ret = mlFieldValidations(this.refs);
-    return {tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex}
+    return { tabName: this.tabName, errorMessage: ret, index: this.state.selectedIndex }
   }
 
-  getActualIndex(dataArray, checkIndex){
-    var response = _.findIndex(dataArray, {index: checkIndex});
+  getActualIndex(dataArray, checkIndex) {
+    let response = _.findIndex(dataArray, { index: checkIndex });
     response = response >= 0 ? response : checkIndex;
     return response;
   }
 
   sendDataToParent(isSaveClicked) {
-    let data = this.state.data;
-    let awards = this.state.serviceProviderAwards;
+    const data = this.state.data;
+    const awards = this.state.serviceProviderAwards;
     let serviceProviderAwards = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
     data.logo = this.curSelectLogo;
-    if(isSaveClicked){
+    if (isSaveClicked) {
       const actualIndex = this.getActualIndex(serviceProviderAwards, this.state.selectedIndex);
       serviceProviderAwards[actualIndex] = data;
     }
-    let arr = [];
-    _.each(serviceProviderAwards, function (item) {
-      for (var propName in item) {
+    const arr = [];
+    _.each(serviceProviderAwards, (item) => {
+      for (const propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename");
-      newItem =_.omit(newItem,"privateFields");
+      let newItem = _.omit(item, '__typename');
+      newItem = _.omit(newItem, 'privateFields');
       arr.push(newItem)
     })
     serviceProviderAwards = arr;
-    this.setState({serviceProviderAwards: serviceProviderAwards})
+    this.setState({ serviceProviderAwards })
     this.props.getAwardsDetails(serviceProviderAwards, this.state.privateKey);
   }
 
-  onLogoFileUpload(image,fileInfo) {
+  onLogoFileUpload(image, fileInfo) {
     // let fileName=this.state.fileName;
-    const fileName = fileInfo && fileInfo.name ? fileInfo.name : "fileName";
-    let file=image;
-    if(file){
-      let data = {
-        moduleName: "PORTFOLIO",
-        actionName: "UPLOAD",
+    const fileName = fileInfo && fileInfo.name ? fileInfo.name : 'fileName';
+    const file = image;
+    if (file) {
+      const data = {
+        moduleName: 'PORTFOLIO',
+        actionName: 'UPLOAD',
         portfolioDetailsId: this.props.portfolioDetailsId,
-        portfolio: {awardsRecognition: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+        portfolio: { awardsRecognition: [{ logo: { fileUrl: '', fileName }, index: this.state.selectedIndex }] }
       };
-      let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
-    }else{
+      const response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
+    } else {
       this.setState({
-        uploadingAvatar: false,
+        uploadingAvatar: false
       });
     }
   }
 
-  onFileUploadCallBack(file,resp) {
+  onFileUploadCallBack(file, resp) {
     this.setState({
       uploadingAvatar: false,
       showProfileModal: false
     });
     if (resp) {
-      let result = JSON.parse(resp);
+      const result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-        if(ifConfirm){
-          let fileObjectStructure = {
+      Confirm('', 'Do you want to add the file into the library', 'Ok', 'Cancel', (ifConfirm) => {
+        if (ifConfirm) {
+          const fileObjectStructure = {
             fileName: this.state.fileName,
             fileType: file.type,
             fileUrl: result.result,
-            libraryType: "image"
+            libraryType: 'image'
           }
           this.libraryAction(fileObjectStructure)
         }
@@ -286,7 +289,7 @@ export default class MlServiceProviderAwards extends Component {
 
       if (result && result.success) {
         this.curSelectLogo = {
-          fileName: file && file.name ? file.name : "",
+          fileName: file && file.name ? file.name : '',
           fileUrl: result.result
         }
         // this.setState({loading: true});
@@ -296,9 +299,9 @@ export default class MlServiceProviderAwards extends Component {
   }
 
   async libraryAction(file) {
-    let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    if(resp.code === 404) {
+    const portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId, file, this.props.client)
+    if (resp.code === 404) {
       toastr.error(resp.result)
     } else {
       toastr.success(resp.result)
@@ -313,17 +316,16 @@ export default class MlServiceProviderAwards extends Component {
   async fetchOnlyImages() {
     const response = await fetchServiceProviderPortfolioAwards(this.props.portfolioDetailsId);
     if (response) {
-      let thisState = this.state.selectedIndex;
-      let dataDetails = this.state.serviceProviderAwards
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      const thisState = this.state.selectedIndex;
+      const dataDetails = this.state.serviceProviderAwards
+      const cloneBackUp = _.cloneDeep(dataDetails);
+      const specificData = cloneBackUp[thisState];
       if (specificData) {
-        let curUpload = response[thisState]
-        specificData['logo'] = curUpload['logo']
-        this.setState({loading: false, serviceProviderAwards: cloneBackUp});
-
+        const curUpload = response[thisState]
+        specificData.logo = curUpload.logo
+        this.setState({ loading: false, serviceProviderAwards: cloneBackUp });
       } else {
-        this.setState({loading: false})
+        this.setState({ loading: false })
       }
     }
   }
@@ -334,37 +336,37 @@ export default class MlServiceProviderAwards extends Component {
       showProfileModal: !that.state.showProfileModal
     });
   }
-  handleUploadAvatar(image,file) {
+  handleUploadAvatar(image, file) {
     this.setState({
-      //uploadingAvatar: true,,
+      // uploadingAvatar: true,,
     });
     this.setState({ fileName: file.name })
-    this.onLogoFileUpload(image,file);
+    this.onLogoFileUpload(image, file);
   }
 
   render() {
-    var yesterday = Datetime.moment().subtract(0, 'day');
-    var valid = function (current) {
+    const yesterday = Datetime.moment().subtract(0, 'day');
+    const valid = function (current) {
       return current.isBefore(yesterday);
     };
-    let query = gql`query{
+    const query = gql`query{
       data:fetchActiveAwards {
         label:awardDisplayName
         value:_id
       }
     }`;
-    let that = this;
+    const that = this;
     const showLoader = that.state.loading;
-    let serviceProviderAwardsList = that.state.serviceProviderAwardsList || [];
+    const serviceProviderAwardsList = that.state.serviceProviderAwardsList || [];
     let displayUploadButton = null;
-    if (this.state.selectedObject != "default") {
+    if (this.state.selectedObject != 'default') {
       displayUploadButton = true
     } else {
       displayUploadButton = false
     }
     return (
       <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div>
             <h2>Awards</h2>
             <div className="requested_input main_wrap_scroll">
@@ -383,71 +385,75 @@ export default class MlServiceProviderAwards extends Component {
                         </div>
                       </a>
                     </div>
-                    {serviceProviderAwardsList.map(function (details, idx) {
-                      return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                        <a id={"create_client" + idx}>
-                          <div className="list_block">
-                            <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
+                    {serviceProviderAwardsList.map((details, idx) => (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
+                      <a id={`create_client${idx}`}>
+                        <div className="list_block">
+                          <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"
                             checked={details.makePrivate}/>
-                            {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that,details.index, idx)}>
-                              <img
-                                src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : "/images/sub_default.jpg"}/>
-                            </div>
-                            <h3>{details.awardName ? details.awardName : ""}</h3>
+                          {/* <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div> */}
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, details.index, idx)}>
+                            <img
+                              src={details.logo && details.logo.fileUrl ? generateAbsolutePath(details.logo.fileUrl) : '/images/sub_default.jpg'}/>
                           </div>
-                        </a>
-                      </div>)
-                    })}
+                          <h3>{details.awardName ? details.awardName : ''}</h3>
+                        </div>
+                      </a>
+                    </div>))}
                   </div>
                 </div>
               </ScrollArea>
-              <Popover placement="right" isOpen={this.state.popoverOpen}
-                       target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+              <Popover
+                placement="right" isOpen={this.state.popoverOpen}
+                target={`create_client${this.state.selectedObject}`} toggle={this.toggle}>
                 <PopoverTitle>Add Award</PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                        labelKey={'label'} queryType={"graphql"} query={query}
-                                        isDynamic={true} placeholder="Select Award.."
-                                        onSelect={this.onOptionSelected.bind(this)} mandatory={true}
-                                        selectedValue={this.state.selectedVal} ref={"awardId"} data-required={true}
-                                        data-errMsg="Award is required"/>
+                          <Moolyaselect
+                            multiSelect={false} className="form-control float-label" valueKey={'value'}
+                            labelKey={'label'} queryType={'graphql'} query={query}
+                            isDynamic={true} placeholder="Select Award.."
+                            onSelect={this.onOptionSelected.bind(this)} mandatory={true}
+                            selectedValue={this.state.selectedVal} ref={'awardId'} data-required={true}
+                            data-errMsg="Award is required"/>
                           <div className="form-group">
-                            <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                      inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
-                                      defaultValue={this.state.data.year}
-                                      closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
+                            <Datetime
+                              dateFormat="YYYY" timeFormat={false} viewMode="years"
+                              inputProps={{ placeholder: 'Select Year', className: 'float-label form-control', readOnly: true }}
+                              defaultValue={this.state.data.year}
+                              closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" name="awardsDescription" placeholder="About"
-                                   className="form-control float-label" defaultValue={this.state.data.awardsDescription}
-                                   onBlur={this.handleBlur}/>
-                            <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                         id="isDescriptionPrivate"
-                                         defaultValue={this.state.data.isDescriptionPrivate}
-                                         onClick={this.onLockChange.bind(this, "awardDescription", "isDescriptionPrivate")}/>
+                            <input
+                              type="text" name="awardsDescription" placeholder="About"
+                              className="form-control float-label" defaultValue={this.state.data.awardsDescription}
+                              onBlur={this.handleBlur}/>
+                            <FontAwesome
+                              name='unlock' className="input_icon req_textarea_icon un_lock"
+                              id="isDescriptionPrivate"
+                              defaultValue={this.state.data.isDescriptionPrivate}
+                              onClick={this.onLockChange.bind(this, 'awardDescription', 'isDescriptionPrivate')}/>
                           </div>
                           {displayUploadButton ? <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
-                                <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
-                              {/*<input type="file" name="logo" id="logo" className="upload" accept="image/*"
-                                     onChange={this.onLogoFileUpload.bind(this)}/>*/}
+                              <span onClick={this.toggleModal.bind(this)}>Upload Logo</span>
+                              {/* <input type="file" name="logo" id="logo" className="upload" accept="image/*"
+                                     onChange={this.onLogoFileUpload.bind(this)}/> */}
                             </div>
-                          </div> : ""}
+                          </div> : ''}
                           <div className="clearfix"></div>
                           <div className="form-group">
-                            <div className="input_types"><input id="makePrivate" type="checkbox"
-                                                                checked={this.state.data.makePrivate && this.state.data.makePrivate}
-                                                                name="checkbox"
-                                                                onChange={this.onStatusChangeNotify.bind(this)}/><label
+                            <div className="input_types"><input
+                              id="makePrivate" type="checkbox"
+                              checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                              name="checkbox"
+                              onChange={this.onStatusChangeNotify.bind(this)}/><label
                               htmlFor="checkbox1"><span></span>Make Private</label></div>
                           </div>
-                          <div className="ml_btn" style={{'textAlign': 'center'}}>
+                          <div className="ml_btn" style={{ textAlign: 'center' }}>
                             <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                           </div>
                         </div>
@@ -471,5 +477,5 @@ export default class MlServiceProviderAwards extends Component {
 }
 MlServiceProviderAwards.contextTypes = {
   serviceProviderPortfolio: PropTypes.object,
-  portfolioKeys :PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

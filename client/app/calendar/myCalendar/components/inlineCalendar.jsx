@@ -1,17 +1,16 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import Calendar from "./infiniteCalendar";
-var FontAwesome = require('react-fontawesome');
+import Calendar from './infiniteCalendar';
+const FontAwesome = require('react-fontawesome');
 
-export default class inlineCalender extends React.Component{
-  componentDidMount()
-  {
-    setTimeout(function(){
-      var WinHeight = $(window).height();
-      $('#calendar').height(WinHeight-$('.app_header').outerHeight(true));
-    },1000);
-    $('.calender_switch').click(function(){
+export default class inlineCalender extends React.Component {
+  componentDidMount() {
+    setTimeout(() => {
+      const WinHeight = $(window).height();
+      $('#calendar').height(WinHeight - $('.app_header').outerHeight(true));
+    }, 1000);
+    $('.calender_switch').click(function () {
       $(this).toggleClass('cH');
       $('#calendar').toggleClass('calHide');
     });
@@ -19,15 +18,16 @@ export default class inlineCalender extends React.Component{
   handleDateSelect(date) {
     console.log(date.toLocaleString());
   }
-  render(){
+  render() {
     return (
       <div>
         <span className="calender_switch"><FontAwesome name="calendar"/></span>
-        <Calendar startDate={new Date()}
-                  width={this.props.width}
-                  handleDateSelect={this.handleDateSelect} />
+        <Calendar
+          startDate={new Date()}
+          width={this.props.width}
+          handleDateSelect={this.handleDateSelect} />
 
       </div>
     )
   }
-};
+}

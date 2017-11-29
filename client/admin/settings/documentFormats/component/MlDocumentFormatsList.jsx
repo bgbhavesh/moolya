@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlDocumentFormatTableConfig} from "../config/mlDocumentFormatConfig";
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlDocumentFormatTableConfig } from '../config/mlDocumentFormatConfig';
 export default class MlDocumentFormatsList extends Component {
-
   componentDidMount() {
   }
 

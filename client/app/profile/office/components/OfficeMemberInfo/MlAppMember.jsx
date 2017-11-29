@@ -25,7 +25,7 @@ export default class MlAppMember extends React.Component {
       { name: 'Schedule', tabContent: <MlAppMemberSchedule/> },
       { name: 'Task Info', tabContent: <MlAppMemberTaskInfo/> },
       { name: 'Upcoming Task', tabContent: <MlAppMemberUpcomingTask/> },
-      { name: 'History of Task', tabContent: <MlAppMemberTaskHistory/> },
+      { name: 'History of Task', tabContent: <MlAppMemberTaskHistory/> }
     ];
 
     function getTabs() {
@@ -34,7 +34,7 @@ export default class MlAppMember extends React.Component {
         panelClassName: 'panel1', // Optional
         title: MlTab.name,
         key: MlTab.name,
-        getContent: () => MlTab.tabContent,
+        getContent: () => MlTab.tabContent
       }));
     }
 

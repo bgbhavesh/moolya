@@ -1,20 +1,19 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlShareTableConfig} from "../config/MlShareConfig";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import MlTableViewContainer from '../../../core/containers/MlTableViewContainer';
+import { mlShareTableConfig } from '../config/MlShareConfig';
 // import CreateRequestComponent from './CreateRequestComponent'
 import _ from 'lodash';
 
 export default class MlProcessSetupRequestsList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={showCreateRequestComponent:[], time: new Date()};
+    this.state = { showCreateRequestComponent: [], time: new Date() };
     // this.refreshList = this.refreshList.bind(this);
-
   }
 
-  addRequestHandler(){
-    this.setState({showCreateRequestComponent:true});
+  addRequestHandler() {
+    this.setState({ showCreateRequestComponent: true });
   }
 
   render() {
@@ -28,7 +27,7 @@ export default class MlProcessSetupRequestsList extends Component {
         <div className="admin_padding_wrap">
           <h2>Share </h2>
           <MlTableViewContainer {...mlShareTableConfig} forceFetch={false}/>
-          {/*{showCreateRequestComponent?<CreateRequestComponent refreshList={refreshList} openPopUp={true}/>:<div></div>}*/}
+          {/* {showCreateRequestComponent?<CreateRequestComponent refreshList={refreshList} openPopUp={true}/>:<div></div>} */}
         </div>
       </div>
     )

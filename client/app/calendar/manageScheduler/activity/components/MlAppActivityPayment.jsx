@@ -1,19 +1,18 @@
-import React from "react";
-import ScrollArea from "react-scrollbar";
+import React from 'react';
+import ScrollArea from 'react-scrollbar';
 import { fetchCurrencyTypeActionHandler } from '../../../../../commons/actions/mlCurrencySymbolHandler'
 
-export default class Step4 extends React.Component{
-
+export default class Step4 extends React.Component {
   /**
    * Constructor
    * @param props :: Object - Parents data
    */
   constructor(props) {
     super(props);
-    this.state={
-      paymentData: props.data ? props.data : {isDiscount: false},
-      isDataChanged:false,
-      currencySymbol:""
+    this.state = {
+      paymentData: props.data ? props.data : { isDiscount: false },
+      isDataChanged: false,
+      currencySymbol: ''
     };
   }
 
@@ -27,17 +26,17 @@ export default class Step4 extends React.Component{
    */
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(260+$('.admin_app').outerHeight(true)));
+    const WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (260 + $('.admin_app').outerHeight(true)));
     this.props.getActivityDetails();
-    this.props.setActivityDetails({payment:this.state.paymentData}, false);
+    this.props.setActivityDetails({ payment: this.state.paymentData }, false);
     // this.saveDetails();
-    this.setState({isDataChanged:false});
+    this.setState({ isDataChanged: false });
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.saved){
-      this.setState({isDataChanged:false});
+  componentWillReceiveProps(nextProps) {
+    if (this.props.saved) {
+      this.setState({ isDataChanged: false });
       this.props.resetSaved();
     }
   }
@@ -49,17 +48,17 @@ export default class Step4 extends React.Component{
    * @returns Void
    */
   discountEligibility(evt) {
-    let paymentData = this.state.paymentData;
+    const paymentData = this.state.paymentData;
     paymentData.isDiscount = !evt.target.checked;
-    if(!paymentData.isDiscount){
+    if (!paymentData.isDiscount) {
       delete paymentData.discountType;
       delete paymentData.discountValue;
     }
     this.setState({
-      paymentData: paymentData,
-    }, function () {
+      paymentData
+    }, () => {
       this.calculateDerivedAmount();
-    }.bind(this));
+    });
   }
   componentWillMount() {
     this.props.activeComponent(1);
@@ -67,12 +66,11 @@ export default class Step4 extends React.Component{
   }
 
   async getCurrencyType() {
-    let profileId = FlowRouter.getParam('profileId');
+    const profileId = FlowRouter.getParam('profileId');
     const response = await fetchCurrencyTypeActionHandler(this.props.client, null, null, profileId);
-    this.setState({currencySymbol: response.symbol})
+    this.setState({ currencySymbol: response.symbol })
     return response;
   }
-
 
 
   /**
@@ -82,15 +80,15 @@ export default class Step4 extends React.Component{
    * @returns Void
    */
   updateDiscountType(evt) {
-    let paymentData = this.state.paymentData;
-    if(paymentData.isDiscount) {
-      let discountType = evt.target.value;
+    const paymentData = this.state.paymentData;
+    if (paymentData.isDiscount) {
+      const discountType = evt.target.value;
       paymentData.discountType = discountType;
       this.setState({
-        paymentData: paymentData,
-      }, function () {
+        paymentData
+      }, () => {
         this.calculateDerivedAmount();
-      }.bind(this));
+      });
     }
   }
 
@@ -101,21 +99,21 @@ export default class Step4 extends React.Component{
    * @returns Void
    */
   payableAmount(evt) {
-    let amount = evt.target.value;
-    if(amount >= 0){
-      let paymentData = this.state.paymentData;
+    const amount = evt.target.value;
+    if (amount >= 0) {
+      const paymentData = this.state.paymentData;
       paymentData.amount = amount;
       this.setState({
-        paymentData: paymentData
-      }, function () {
+        paymentData
+      }, () => {
         this.calculateDerivedAmount();
-      }.bind(this));
+      });
     } else {
-      let paymentData = this.state.paymentData;
+      const paymentData = this.state.paymentData;
       paymentData.derivedAmount = paymentData.amount || 0;
       paymentData.discountValue = 0;
       this.setState({
-        paymentData: paymentData
+        paymentData
       }, () => {
         this.saveDetails();
       });
@@ -129,21 +127,21 @@ export default class Step4 extends React.Component{
    * @returns Void
    */
   discountedAmount(evt) {
-    let discountValue = evt.target.value;
-    if(discountValue > 0){
-      let paymentData = this.state.paymentData;
+    const discountValue = evt.target.value;
+    if (discountValue > 0) {
+      const paymentData = this.state.paymentData;
       paymentData.discountValue = discountValue;
       this.setState({
-        paymentData: paymentData
-      }, function () {
+        paymentData
+      }, () => {
         this.calculateDerivedAmount();
-      }.bind(this));
+      });
     } else {
-      let paymentData = this.state.paymentData;
+      const paymentData = this.state.paymentData;
       paymentData.derivedAmount = paymentData.amount || 0;
       paymentData.discountValue = 0;
       this.setState({
-        paymentData: paymentData
+        paymentData
       }, () => {
         this.saveDetails();
       });
@@ -155,9 +153,9 @@ export default class Step4 extends React.Component{
    * @return {boolean}
    */
   paymentValidate() {
-    let paymentData = this.state.paymentData;
+    const paymentData = this.state.paymentData;
     this.errorMsg = '';
-    if(paymentData.amount === '' || typeof paymentData.amount === 'undefined' || paymentData.amount === null ){
+    if (paymentData.amount === '' || typeof paymentData.amount === 'undefined' || paymentData.amount === null) {
       this.errorMsg = 'Payable amount is required';
       toastr.error(this.errorMsg);
       return false;
@@ -182,23 +180,23 @@ export default class Step4 extends React.Component{
    * Desc   :: calculate derived amount for activity
    * @returns Void
    */
-  calculateDerivedAmount(){
-    let paymentData = this.state.paymentData;
+  calculateDerivedAmount() {
+    const paymentData = this.state.paymentData;
     this.paymentValidate();
     if (this.errorMsg) {
       toastr.error(this.errorMsg);
     } else {
       this.errorMsg = '';
       let derivedAmount = this.state.paymentData.amount ? this.state.paymentData.amount : 0;
-      if(paymentData.isDiscount && paymentData.discountType == "amount") {
-        derivedAmount -= paymentData.discountValue ? paymentData.discountValue : 0 ;
-      } else if (paymentData.isDiscount && paymentData.discountType == "percent") {
-        derivedAmount -= paymentData.discountValue ? ( paymentData.amount / 100 )*paymentData.discountValue : 0 ;
+      if (paymentData.isDiscount && paymentData.discountType == 'amount') {
+        derivedAmount -= paymentData.discountValue ? paymentData.discountValue : 0;
+      } else if (paymentData.isDiscount && paymentData.discountType == 'percent') {
+        derivedAmount -= paymentData.discountValue ? (paymentData.amount / 100) * paymentData.discountValue : 0;
       }
       paymentData.derivedAmount = derivedAmount;
-      paymentData.currencyType =  this.state.currencySymbol;
+      paymentData.currencyType = this.state.currencySymbol;
       this.setState({
-        paymentData: paymentData
+        paymentData
       }, () => {
         this.saveDetails();
       });
@@ -211,16 +209,16 @@ export default class Step4 extends React.Component{
    * @returns Void
    */
   async saveDetails() {
-    let paymentData = this.state.paymentData;
-    if(!paymentData.isDiscount){
-      delete  paymentData.discountType;
-      delete  paymentData.discountValue;
+    const paymentData = this.state.paymentData;
+    if (!paymentData.isDiscount) {
+      delete paymentData.discountType;
+      delete paymentData.discountValue;
     } else {
       this.paymentValidate();
     }
-    this.setState({isDataChanged:true});
+    this.setState({ isDataChanged: true });
     if (!this.errorMsg) {
-      this.props.setActivityDetails({payment:paymentData}, false);
+      this.props.setActivityDetails({ payment: paymentData }, false);
     }
   }
 
@@ -230,7 +228,6 @@ export default class Step4 extends React.Component{
    * @returns {HTML}
    */
   render() {
-
     /**
      * Return the html to render
      */
@@ -241,51 +238,55 @@ export default class Step4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Gross payable amount &nbsp;<label>{this.state.paymentData.currencyType ?  this.state.paymentData.currencyType :this.state.currencySymbol}</label>&nbsp;
-                  <input type="Number" onChange={(e)=>this.payableAmount(e)}
-                         value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
-                         className="form-control inline_input medium_in"/>
+                  Gross payable amount &nbsp;<label>{this.state.paymentData.currencyType ? this.state.paymentData.currencyType : this.state.currencySymbol}</label>&nbsp;
+                  <input
+                    type="Number" onChange={e => this.payableAmount(e)}
+                    value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
+                    className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label>Is Eligible for discount</label>
                 <span className={this.state.paymentData.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
-                <input type="checkbox" checked={ !this.state.paymentData.isDiscount } onChange={this.discountEligibility.bind(this)} />
-                <div className="slider"></div>
-              </label>
+                  <input type="checkbox" checked={ !this.state.paymentData.isDiscount } onChange={this.discountEligibility.bind(this)} />
+                  <div className="slider"></div>
+                </label>
                 <span className={this.state.paymentData.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <br className="brclear"/>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="amountDiscount" type="radio"
-                         name="amountDiscount"
-                         value="amount"
-                         disabled={!this.state.paymentData.isDiscount}
-                         checked={ this.state.paymentData.discountType == "amount" ? true : false } onChange={this.updateDiscountType.bind(this)}/>
+                  <input
+                    id="amountDiscount" type="radio"
+                    name="amountDiscount"
+                    value="amount"
+                    disabled={!this.state.paymentData.isDiscount}
+                    checked={ this.state.paymentData.discountType == 'amount' } onChange={this.updateDiscountType.bind(this)}/>
                   <label htmlFor="amountDiscount"><span><span></span></span>
                     Amount
-                    {this.state.paymentData.discountType === 'amount'?
-                      <input className="form-control inline_input"
-                             onChange={(evt)=>this.discountedAmount(evt)}
-                             defaultValue={ this.state.paymentData.discountValue }/>:<div></div>}
+                    {this.state.paymentData.discountType === 'amount' ?
+                      <input
+                        className="form-control inline_input"
+                        onChange={evt => this.discountedAmount(evt)}
+                        defaultValue={ this.state.paymentData.discountValue }/> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percentDiscount" type="radio"
-                         name="percentDiscount" value="percent"
-                         disabled={!this.state.paymentData.isDiscount}
-                         checked={ this.state.paymentData.discountType == "percent" ? true : false }  onChange={this.updateDiscountType.bind(this)}/>
+                  <input
+                    id="percentDiscount" type="radio"
+                    name="percentDiscount" value="percent"
+                    disabled={!this.state.paymentData.isDiscount}
+                    checked={ this.state.paymentData.discountType == 'percent' } onChange={this.updateDiscountType.bind(this)}/>
                   <label htmlFor="percentDiscount"><span><span></span></span>
                     Percentage
-                    {this.state.paymentData.discountType === 'percent'? <input className="form-control inline_input" onChange={(evt)=>this.discountedAmount(evt)} defaultValue={ this.state.paymentData.discountValue } /> :<div></div>}
+                    {this.state.paymentData.discountType === 'percent' ? <input className="form-control inline_input" onChange={evt => this.discountedAmount(evt)} defaultValue={ this.state.paymentData.discountValue } /> : <div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group">
                 <label>
-                  Net payable amount &nbsp;<label>{this.state.paymentData.currencyType ?  this.state.paymentData.currencyType :this.state.currencySymbol}</label>&nbsp;
+                  Net payable amount &nbsp;<label>{this.state.paymentData.currencyType ? this.state.paymentData.currencyType : this.state.currencySymbol}</label>&nbsp;
                   <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} disabled />
                 </label>
               </div>
@@ -295,4 +296,4 @@ export default class Step4 extends React.Component{
       </div>
     )
   }
-};
+}

@@ -1,27 +1,26 @@
 /**
  * import of libs and routes
  * */
-import React, {Component, PropTypes} from "react";
-import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
+import React, { Component, PropTypes } from 'react';
+import { fetchPortfolioActionHandler } from '../../ideators/actions/ideatorActionHandler'
 import CDNImage from '../../../../commons/components/CDNImage/CDNImage';
-import MlLoader from "../../../../commons/components/loader/loader";
+import MlLoader from '../../../../commons/components/loader/loader';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath'
 
 export default class MlAppCompanyListView extends Component {
-
   /**
    * @props isExplore
    * Note: routes [deciding] based on isExplore
    * cheking [permissions to view the portfolio]
    * */
-  componentDidUpdate  (){
+  componentDidUpdate() {
     $('.pie-passion').pieChart({
       barColor: '#ef4647',
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 3,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
@@ -30,7 +29,7 @@ export default class MlAppCompanyListView extends Component {
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 3,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
@@ -39,26 +38,21 @@ export default class MlAppCompanyListView extends Component {
       trackColor: '#192430',
       lineCap: 'round',
       lineWidth: 3,
-      onStep: function (from, to, percent) {
+      onStep(from, to, percent) {
         $(this.element).find('.pie-value').text(Math.round(percent));
       }
     });
   }
   async viewDetails(portfolioId, e) {
     const response = await fetchPortfolioActionHandler(portfolioId);
-    if (this.props.config.isExplore && response && response.canAccess)
-      FlowRouter.go('/app/explore/company/' + portfolioId)
-    else if (response && response.canAccess)
-      FlowRouter.go('/app/company/' + portfolioId)
-    else if(response && !response.canAccess)
-      toastr.error('Portfolio not available for view')
+    if (this.props.config.isExplore && response && response.canAccess) { FlowRouter.go(`/app/explore/company/${portfolioId}`) } else if (response && response.canAccess) { FlowRouter.go(`/app/company/${portfolioId}`) } else if (response && !response.canAccess) { toastr.error('Portfolio not available for view') }
   }
 
-  render(){
-    let that = this
-    const data=this.props.data||[];
-    let loading=this.props.config&&this.props.config.loading;
-    const list=  data.map((company, idx) =>
+  render() {
+    const that = this
+    const data = this.props.data || [];
+    const loading = this.props.config && this.props.config.loading;
+    const list = data.map((company, idx) =>
       <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, company.portfolioDetailsId)}>
           <div className="company_block">
@@ -69,7 +63,7 @@ export default class MlAppCompanyListView extends Component {
                 <CDNImage src="/images/no_image.png" />}
             </div>
             <h3>{company.firstName}<br/>
-              <span>{company.chapterName}{!company.isDefaultSubChapter?"-" +company.subChapterName:""}</span>
+              <span>{company.chapterName}{!company.isDefaultSubChapter ? `-${company.subChapterName}` : ''}</span>
             </h3>
             <div className="row nomargin">
               <div className="col-md-4 col-xs-4 col-sm-4 col-lg-4 text-center nopadding">
@@ -101,8 +95,7 @@ export default class MlAppCompanyListView extends Component {
             </div>
           </div>
         </a>
-      </div>
-    );
+      </div>);
 
     // const list=  data.map((company, idx) =>
     //   <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
@@ -125,17 +118,16 @@ export default class MlAppCompanyListView extends Component {
 
     return (
       <div>
-        {loading === true ? ( <MlLoader/>) : (
-      <div className="ideators_list">
-      <div className="col-md-12"><h2>Companies</h2></div>
-      {data && !data.length?(
-        <NoDataList moduleName="Portfolios" />
-      ):(<div>{list}</div>)
-      }
-    </div>
+        {loading === true ? (<MlLoader/>) : (
+          <div className="ideators_list">
+            <div className="col-md-12"><h2>Companies</h2></div>
+            {data && !data.length ? (
+              <NoDataList moduleName="Portfolios" />
+            ) : (<div>{list}</div>)
+            }
+          </div>
         )}
       </div>
     );
-
   }
 }

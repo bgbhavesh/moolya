@@ -1,34 +1,43 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import formHandler from "../../../../../commons/containers/MlFormHandler";
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
+import formHandler from '../../../../../commons/containers/MlFormHandler';
 import {
   updatePortfolioActionHandler,
   updateIdeatorIdeaActionHandler,
   approvePortfolio,
   rejectPortfolio
-} from "../../actions/updatePortfolioDetails";
-import {fetchTemplateHandler} from "../../../../../commons/containers/templates/mltemplateActionHandler";
-import MlActionComponent from "../../../../../commons/components/actions/ActionComponent";
-import {findComments} from "../../../../../commons/annotaterComments/findComments";
+} from '../../actions/updatePortfolioDetails';
+import { fetchTemplateHandler } from '../../../../../commons/containers/templates/mltemplateActionHandler';
+import MlActionComponent from '../../../../../commons/components/actions/ActionComponent';
+import { findComments } from '../../../../../commons/annotaterComments/findComments';
 import {
   createCommentActionHandler,
   resolveCommentActionHandler,
   reopenCommentActionHandler
-} from "../../../../../commons/annotaterComments/createComment";
-import moment from "moment";
-import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../../../../app/portfolio/ideators/actions/ideatorActionHandler";
-import MlLoader from "../../../../../commons/components/loader/loader";
-import _ from "lodash";
-import {client} from "../../../../core/apolloConnection";
-import {getAdminUserContext} from "../../../../../commons/getAdminUserContext";
+} from '../../../../../commons/annotaterComments/createComment';
+import moment from 'moment';
+import { Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+import { fetchIdeaByPortfolioId } from '../../../../../app/portfolio/ideators/actions/ideatorActionHandler';
+import MlLoader from '../../../../../commons/components/loader/loader';
+import _ from 'lodash';
+import { client } from '../../../../core/apolloConnection';
+import { getAdminUserContext } from '../../../../../commons/getAdminUserContext';
 
 class MlPortfolio extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
-      isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
+      editComponent: '',
+      portfolio: {},
+      privateKeys: [],
+      removePrivateKeys: [],
+      selectedTab: '',
+      annotations: [],
+      isOpen: false,
+      annotationData: {},
+      commentsData: [],
+      popoverOpen: false,
+      saveButton: false
     }
     this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
@@ -67,7 +76,7 @@ class MlPortfolio extends React.Component {
       $('.comment_wrap').slideToggle();
     }
     if (selAnnotation) {
-      this.setState({annotationData: selAnnotation}, function () {
+      this.setState({ annotationData: selAnnotation }, function () {
         this.fetchComments(selAnnotation.id);
       })
     }
@@ -75,7 +84,7 @@ class MlPortfolio extends React.Component {
 
   commentClicked() {
     $('.comment_wrap').slideToggle();
-    this.setState({"saveButton": true})
+    this.setState({ saveButton: true })
   }
 
   async componentWillMount() {
@@ -85,136 +94,133 @@ class MlPortfolio extends React.Component {
     } else {
       this.fetchEditPortfolioTemplate(this.props.config);
     }
-    if (this.props.communityType == "Ideators") {
-      this.setState({loading: true});
+    if (this.props.communityType == 'Ideators') {
+      this.setState({ loading: true });
       this.fetchIdeaId()
     } else {
-      this.setState({ideaId: " "})
+      this.setState({ ideaId: ' ' })
     }
   }
 
-  async updateApproveUser(){
-    let portfolioId = this.props.config
+  async updateApproveUser() {
+    const portfolioId = this.props.config
     const response = await approvePortfolio(portfolioId, this.loggedUserDetails);
     if (response.success) {
-      toastr.success("Portfolio approved successfully")
+      toastr.success('Portfolio approved successfully')
       FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
-    }else{
+    } else {
       toastr.error(response.result)
     }
   }
 
-  approveUser(){
+  approveUser() {
     const resp = this.updateApproveUser();
     return resp;
   }
-  async updateRejectUser(){
-    let portfolioId = this.props.config
+  async updateRejectUser() {
+    const portfolioId = this.props.config
     const response = await rejectPortfolio(portfolioId);
     if (response) {
       // this.props.getRegistrationKYCDetails();
-      toastr.success("Portfolio rejected successfully")
+      toastr.success('Portfolio rejected successfully')
     }
   }
-  rejectUser(){
+  rejectUser() {
     const resp = this.updateRejectUser();
     return resp;
   }
 
   async fetchIdeaId() {
-    let portfolioId = this.props.config;
+    const portfolioId = this.props.config;
     const response = await fetchIdeaByPortfolioId(portfolioId);
-    if(response){
-      this.setState({ideaId: response._id, loading: false});
-    }else {
+    if (response) {
+      this.setState({ ideaId: response._id, loading: false });
+    } else {
       toastr.error('Idea is not initiated');
-      this.setState({loading: false})
+      this.setState({ loading: false })
       FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
     }
   }
 
   async fetchEditPortfolioTemplate(pId) {
-    let userType = this.context.userType;
+    const userType = this.context.userType;
     const reg = await fetchTemplateHandler({
-      process: "Registration",
-      subProcess: "Registration",
-      stepCode: "PORTFOLIO",
+      process: 'Registration',
+      subProcess: 'Registration',
+      stepCode: 'PORTFOLIO',
       recordId: pId,
-      mode: "edit",
-      userType: userType,
-      connection:client
+      mode: 'edit',
+      userType,
+      connection: client
     });
-    this.setState({editComponent: reg && reg.component ? reg.component : null});
+    this.setState({ editComponent: reg && reg.component ? reg.component : null });
   }
 
   async fetchViewPortfolioTemplate(id) {
-    let userType = this.context.userType;
+    const userType = this.context.userType;
     const reg = await fetchTemplateHandler({
-      process: "Registration",
-      subProcess: "Registration",
-      stepCode: "PORTFOLIO",
+      process: 'Registration',
+      subProcess: 'Registration',
+      stepCode: 'PORTFOLIO',
       recordId: id,
-      mode: "view",
-      userType: userType,
-      connection:client
+      mode: 'view',
+      userType,
+      connection: client
     });
-    this.setState({editComponent: reg && reg.component ? reg.component : null});
+    this.setState({ editComponent: reg && reg.component ? reg.component : null });
   }
 
   async onSavingComment() {
-    let commentsData = {
+    const commentsData = {
       annotatorId: this.state.annotationData.id,
       portfolioId: this.props.config,
       comment: this.refs.comment.value
     }
 
-    const response = await createCommentActionHandler(commentsData,client)
+    const response = await createCommentActionHandler(commentsData, client)
 
     if (response) {
-      this.setState({annotationData: this.state.annotationData}, function () {
+      this.setState({ annotationData: this.state.annotationData }, function () {
         this.fetchComments(this.state.annotationData.id);
       })
-      this.refs.comment.value = ""
+      this.refs.comment.value = ''
     }
   }
 
   async onResolveComment() {
-    const response = await resolveCommentActionHandler(this.state.annotationData.id,client)
-    if (response && response.success)
-      toastr.success(response.result);
+    const response = await resolveCommentActionHandler(this.state.annotationData.id, client)
+    if (response && response.success) { toastr.success(response.result); }
     return response;
   }
 
 
   async onReopenComment() {
-    const response = await reopenCommentActionHandler(this.state.annotationData.id,client)
-    if (response && response.success)
-      toastr.success(response.result);
+    const response = await reopenCommentActionHandler(this.state.annotationData.id, client)
+    if (response && response.success) { toastr.success(response.result); }
     return response;
   }
 
 
   async fetchComments(annotationId) {
     if (annotationId) {
-      const response = await findComments(annotationId,client);
-      this.setState({commentsData: response}, function () {
+      const response = await findComments(annotationId, client);
+      this.setState({ commentsData: response }, () => {
       });
     }
   }
 
   getIdeatorIdeaDetails(details, privateKey, requiredFields) {
-    this.setState({idea: details});
-    if(!_.isEmpty(privateKey)){
+    this.setState({ idea: details });
+    if (!_.isEmpty(privateKey)) {
       this.updatePrivateKeys(privateKey)
     }
-    if (requiredFields)
-      this.updateRequiredFields(requiredFields)
+    if (requiredFields) { this.updateRequiredFields(requiredFields) }
   }
 
   updateRequiredFields(requiredFields) {
-    console.log("requiredFields", requiredFields)
-    var ary = this.requiredFieldAry
-    _.remove(ary, {tabName: requiredFields.tabName, index: requiredFields.index})
+    console.log('requiredFields', requiredFields)
+    const ary = this.requiredFieldAry
+    _.remove(ary, { tabName: requiredFields.tabName, index: requiredFields.index })
     if (requiredFields && requiredFields.errorMessage) {
       ary.push(requiredFields)
     }
@@ -222,64 +228,66 @@ class MlPortfolio extends React.Component {
   }
 
   getPortfolioDetails(portfolioDetails, privateKey, requiredFields) {
-    console.log("portfolioDetails", portfolioDetails)
-    console.log("privateKey", privateKey)
-    this.setState({portfolio: portfolioDetails});
-    if(!_.isEmpty(privateKey)){
+    console.log('portfolioDetails', portfolioDetails)
+    console.log('privateKey', privateKey)
+    this.setState({ portfolio: portfolioDetails });
+    if (!_.isEmpty(privateKey)) {
       this.updatePrivateKeys(privateKey)
     }
-    if (requiredFields)
-      this.updateRequiredFields(requiredFields)
+    if (requiredFields) { this.updateRequiredFields(requiredFields) }
   }
 
-  updatePrivateKeys(privateKey){
-    var keyName = privateKey.keyName
-    var booleanKey = privateKey.booleanKey
-    var isPrivate = privateKey.isPrivate
-    var objectName = ""
-    var index = -1;
-    var tabName = ""
-    if(privateKey.index >= 0){
+  updatePrivateKeys(privateKey) {
+    const keyName = privateKey.keyName
+    const booleanKey = privateKey.booleanKey
+    const isPrivate = privateKey.isPrivate
+    let objectName = ''
+    let index = -1;
+    let tabName = ''
+    if (privateKey.index >= 0) {
       index = privateKey.index
-    }else index = 0;
-    if(privateKey.tabName){
+    } else index = 0;
+    if (privateKey.tabName) {
       tabName = privateKey.tabName
     }
-    if(privateKey.objectName){
+    if (privateKey.objectName) {
       objectName = privateKey.objectName
     }
 
     // var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
-    var keyIndex = _.findIndex(this.state.privateKeys, {keyName: keyName, index: index, tabName: tabName});
-    if(keyIndex < 0 && index >= 0){
+    let keyIndex = _.findIndex(this.state.privateKeys, { keyName, index, tabName });
+    if (keyIndex < 0 && index >= 0) {
       // keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
-      keyIndex = _.findIndex(this.state.privateKeys, {keyName: keyName, index: index, tabName: tabName});
+      keyIndex = _.findIndex(this.state.privateKeys, { keyName, index, tabName });
     }
-    var privateKeys = this.state.privateKeys;
-    var removePrivateKeys = this.state.removePrivateKeys;
-    if(isPrivate && keyIndex < 0){
+    const privateKeys = this.state.privateKeys;
+    const removePrivateKeys = this.state.removePrivateKeys;
+    if (isPrivate && keyIndex < 0) {
       // var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName, index:index})
-      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName: keyName, index: index, tabName: tabName});
+      const rIndex = _.findIndex(this.state.removePrivateKeys, { keyName, index, tabName });
       removePrivateKeys.splice(rIndex, 1);
-      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName});
+      privateKeys.push({
+        keyName, booleanKey, index, tabName, objectName
+      });
       // this.setState({privateKeys:privateKeys})
-    }else if(!isPrivate){
-      if(keyIndex >= 0){
-        var keyObj = _.cloneDeep(privateKeys[keyIndex])
+    } else if (!isPrivate) {
+      if (keyIndex >= 0) {
+        const keyObj = _.cloneDeep(privateKeys[keyIndex])
         removePrivateKeys.push(keyObj)
         privateKeys.splice(keyIndex, 1);
-      }else{
-        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
+      } else {
+        removePrivateKeys.push({
+          keyName, booleanKey, index, tabName, objectName
+        })
       }
-
     }
-    this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
+    this.setState({ privateKeys, removePrivateKeys })
   }
 
   async updatePortfolioDetails() {
     const isRequired = this.isRequired()
-    if(!isRequired){
-      var jsonData = {
+    if (!isRequired) {
+      const jsonData = {
         portfolioId: this.props.config,
         portfolio: this.state.portfolio,
         privateKeys: this.state.privateKeys,
@@ -288,8 +296,8 @@ class MlPortfolio extends React.Component {
       // toastr.success("server hit")
       const response = await updatePortfolioActionHandler(jsonData)
       if (response) {
-        if (this.props.communityType == "Ideators") {
-          let idea = this.state.idea
+        if (this.props.communityType == 'Ideators') {
+          const idea = this.state.idea
           if (idea) {
             const response1 = await updateIdeatorIdeaActionHandler(idea, this.loggedUserDetails)
             return response1;
@@ -297,12 +305,11 @@ class MlPortfolio extends React.Component {
         }
         return response;
       }
-    }else
-      toastr.error(isRequired.errorMessage +' in '+ isRequired.tabName);
+    } else { toastr.error(`${isRequired.errorMessage} in ${isRequired.tabName}`); }
   }
 
   isRequired() {
-    console.log("this.requiredFieldAry", this.requiredFieldAry)
+    console.log('this.requiredFieldAry', this.requiredFieldAry)
     const error = this.requiredFieldAry && this.requiredFieldAry.length ? this.requiredFieldAry[0] : null
     if (error) {
       return error
@@ -312,16 +319,13 @@ class MlPortfolio extends React.Component {
    * success handle if no error in server
    * */
   async handleSuccess(response) {
-    if (response && response.success)
-      toastr.success(response.result)
-    else if (response && !response.success)
-      toastr.error(response.result)
+    if (response && response.success) { toastr.success(response.result) } else if (response && !response.success) { toastr.error(response.result) }
     // FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
-  };
+  }
 
   render() {
-    let that = this;
-    let MlActionConfig = []
+    const that = this;
+    const MlActionConfig = []
     // if(FlowRouter.getRouteName() === "portfolio_requested"){
     //   MlActionConfig.push({
     //     showAction: true,
@@ -332,18 +336,15 @@ class MlPortfolio extends React.Component {
     MlActionConfig.push({
       actionName: 'save',
       showAction: true,
-      handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
+      handler: async event => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
     });
     MlActionConfig.push({
       showAction: true,
       actionName: 'cancel',
-      handler: async(event) => {
-        if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_approved")
-          FlowRouter.go("/admin/transactions/portfolio/approvedPortfolioList");
-        else if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_requested"){
-          FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
-        }
-        else{
+      handler: async (event) => {
+        if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == 'portfolio_approved') { FlowRouter.go('/admin/transactions/portfolio/approvedPortfolioList'); } else if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == 'portfolio_requested') {
+          FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList');
+        } else {
           window.history.back();
         }
       }
@@ -353,7 +354,7 @@ class MlPortfolio extends React.Component {
       actionName: 'assign',
       handler: null
     });
-    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests") {
+    if (FlowRouter.getRouteName() != 'transaction_portfolio_EditRequests') {
       MlActionConfig.push(
         {
           showAction: true,
@@ -364,16 +365,17 @@ class MlPortfolio extends React.Component {
         {
           showAction: true,
           actionName: 'approveUser',
-          handler:  this.approveUser.bind(this)
+          handler: this.approveUser.bind(this)
         },
         {
           showAction: true,
           actionName: 'rejectUser',
           handler: this.rejectUser.bind(this)
-        });
+        }
+      );
     }
-    let EditComponent = "";
-    let ViewComponent = "";
+    let EditComponent = '';
+    let ViewComponent = '';
     if (this.props.viewMode) {
       ViewComponent = this.state.editComponent;
     } else {
@@ -383,32 +385,32 @@ class MlPortfolio extends React.Component {
 
     let hasViewComponent = false
     let hasEditComponent = false
-    if (EditComponent != "")
-      hasEditComponent = true
-    if (ViewComponent != "")
-      hasViewComponent = true
+    if (EditComponent != '') { hasEditComponent = true }
+    if (ViewComponent != '') { hasViewComponent = true }
 
-    let annotations = this.state.annotations;
-    let annotationDetails = this.state.annotationData;
+    const annotations = this.state.annotations;
+    const annotationDetails = this.state.annotationData;
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <div className='step-progress'>
-              {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
-                                                  getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
-                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
-                                                  privateKeys = {this.state.privateKeys}
-                                                  removePrivateKeys={this.state.removePrivateKeys}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
-                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
-                                                  annotations={annotations}
-                                                  getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+              {/* {this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>} */}
+              {hasEditComponent && <EditComponent
+                getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
+                portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                privateKeys = {this.state.privateKeys}
+                removePrivateKeys={this.state.removePrivateKeys}/>}
+              {hasViewComponent && <ViewComponent
+                getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                annotations={annotations}
+                getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}
-        {/*<div className="overlay"></div>*/}
+        {/* <div className="overlay"></div> */}
         <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
           <PopoverTitle>Portfolio Annotations</PopoverTitle>
           <PopoverContent>
@@ -420,11 +422,11 @@ class MlPortfolio extends React.Component {
                       <div className="comment-avatar"><img src="/images/def_profile.png" alt="No image available"/>
                       </div>
                       <div className="comment-box">
-                        <div style={{marginTop: '8px'}} className="annotate">1</div>
-                        <div style={{paddingLeft: '50px'}} className="comment-head">
+                        <div style={{ marginTop: '8px' }} className="annotate">1</div>
+                        <div style={{ paddingLeft: '50px' }} className="comment-head">
                           <h6
-                            className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>
-                          {annotationDetails.roleName?<div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>:""}
+                            className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ''}</h6>
+                          {annotationDetails.roleName ? <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ''}</div> : ''}
                           <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                         </div>
                         <div className="comment-content">
@@ -439,8 +441,9 @@ class MlPortfolio extends React.Component {
                       <a className="cancel_btn" onClick={this.commentClicked.bind(this)}>Comment</a>
                     </div>
                     <div className="comment_wrap">
-                      <textarea ref="comment" className="form-control comment-input-box"
-                                placeholder="Enter your comment here"></textarea>
+                      <textarea
+                        ref="comment" className="form-control comment-input-box"
+                        placeholder="Enter your comment here"></textarea>
 
                       <a href="" data-id={annotationDetails.id} className="circle_btn">
                         <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
@@ -449,31 +452,29 @@ class MlPortfolio extends React.Component {
                     </div>
 
                     <ul className="comments-list reply-list">
-                      {that.state.commentsData.map(function (options, key) {
-                        return (<li key={key}>
-                          <div className="comment-avatar">
-                            <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
+                      {that.state.commentsData.map((options, key) => (<li key={key}>
+                        <div className="comment-avatar">
+                          <img src={options.profileImage ? options.profileImage : '/images/def_profile.png'} alt=""/>
+                        </div>
+                        <div className="comment-box">
+                          <div className="comment-head">
+                            <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
+                            <span>{moment(options.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
                           </div>
-                          <div className="comment-box">
-                            <div className="comment-head">
-                              <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
-                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:mm:ss')}</span>
-                            </div>
-                            <div className="comment-content">
-                              {options.comment}
-                            </div>
+                          <div className="comment-content">
+                            {options.comment}
                           </div>
-                        </li>)
-                      })}
+                        </div>
+                      </li>))}
                     </ul>
                   </li>
                 </ul>
               </div>
             </div>
-            {/*<div className="overlay"></div>*/}
+            {/* <div className="overlay"></div> */}
           </PopoverContent>
         </Popover>
-        {this.props.isHideAction? <div></div> :
+        {this.props.isHideAction ? <div></div> :
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>}
       </div>
     )
@@ -483,7 +484,7 @@ class MlPortfolio extends React.Component {
 MlPortfolio.contextTypes = {
   userType: PropTypes.string,
   annotationsInfo: PropTypes.array,
-  breadCrum:PropTypes.object
+  breadCrum: PropTypes.object
 };
 
 export default MlPortfolio = formHandler()(MlPortfolio);

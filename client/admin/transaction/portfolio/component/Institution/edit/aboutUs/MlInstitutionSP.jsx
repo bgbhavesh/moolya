@@ -1,90 +1,88 @@
-import React, { Component, PropTypes }  from "react";
+import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
-var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+const FontAwesome = require('react-fontawesome');
+import { dataVisibilityHandler, OnLockSwitch } from '../../../../../../utils/formElemUtil';
 
 
-export default class MlInstitutionSP extends React.Component{
-  constructor(props, context){
+export default class MlInstitutionSP extends React.Component {
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
-      data:this.props.serviceProductsDetails || {},
-      privateKey:{}
+      data: this.props.serviceProductsDetails || {},
+      privateKey: {}
     }
     this.handleBlur.bind(this);
     return this;
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
     this.updatePrivateKeys();
   }
-  componentWillMount(){
-    let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
-    if(!empty){
-      this.setState({loading: false, data: this.context.institutionPortfolio.serviceProducts});
+  componentWillMount() {
+    const empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
+    if (!empty) {
+      this.setState({ loading: false, data: this.context.institutionPortfolio.serviceProducts });
     }
   }
 
-  handleBlur(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  handleBlur(e) {
+    let details = this.state.data;
+    const name = e.target.name;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: e.target.value });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
-  sendDataToParent(){
+  sendDataToParent() {
     let data = this.state.data;
-    for (var propName in data) {
+    for (const propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
         delete data[propName];
       }
     }
-    data=_.omit(data,["privateFields"]);
-    this.props.getInstitutionSP(data,this.state.privateKey)
+    data = _.omit(data, ['privateFields']);
+    this.props.getInstitutionSP(data, this.state.privateKey)
   }
-  onLockChange(fieldName,field, e){
-
-
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+  onLockChange(fieldName, field, e) {
+    let details = this.state.data || {};
+    const key = e.target.id;
+    let isPrivate = false;
+    details = _.omit(details, [key]);
+    const className = e.target.className;
+    if (className.indexOf('fa-lock') != -1) {
+      details = _.extend(details, { [key]: true });
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
+    } else {
+      details = _.extend(details, { [key]: false });
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate }
+    this.setState({ privateKey })
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
-   /* this.setState({data:details}, function () {
+    /* this.setState({data:details}, function () {
       this.sendDataToParent()
-    })*/
+    }) */
   }
 
-  updatePrivateKeys(){
-    let response = this.props.serviceProductsDetails
-    _.each(response.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  updatePrivateKeys() {
+    const response = this.props.serviceProductsDetails
+    _.each(response.privateFields, (pf) => {
+      $(`#${pf.booleanKey}`).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
 
-  render(){
+  render() {
     return (
 
 
@@ -97,8 +95,8 @@ export default class MlInstitutionSP extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this, "spDescription", "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about" defaultValue={this.state.data && this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, 'spDescription', 'isDescriptionPrivate')}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>
@@ -109,15 +107,9 @@ export default class MlInstitutionSP extends React.Component{
       </div>
 
 
-
-
-
-
-
-
     )
   }
 }
 MlInstitutionSP.contextTypes = {
-  institutionPortfolio: PropTypes.object,
+  institutionPortfolio: PropTypes.object
 };

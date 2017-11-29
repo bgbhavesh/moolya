@@ -1,8 +1,8 @@
 /**
  * Created by pankaj on 25/7/17.
  */
-import gql from "graphql-tag";
-import { client } from "../../../../../core/apolloConnection";
+import gql from 'graphql-tag';
+import { client } from '../../../../../core/apolloConnection';
 
 export async function requestedAppointmentActionHandler() {
   const result = await client.query({
@@ -36,5 +36,4 @@ export async function servicesForAppointmentsActionHandler() {
   const data = result.data.fetchServicesForAppointments;
   return data;
 }
-
 

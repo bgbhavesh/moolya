@@ -5,12 +5,6 @@ import  MlAdminProfile from './MlAdminProfile'
 import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
 import BugReportWrapper from "../../commons/components/MlAdminBugReportWrapper";
 
-// const today = new Date();
-// const dd = today.getDate().toString();
-// const mm = (today.getMonth()+1).toString(); //January is 0!
-// const yy = today.getFullYear().toString().substr(-2)
-// const curDate = dd+mm+yy;
-
 const build_versionToken = localStorage.getItem('build_version');
 
 export default class MlAdminHeader extends Component {

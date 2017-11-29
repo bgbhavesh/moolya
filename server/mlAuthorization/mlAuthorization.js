@@ -439,7 +439,8 @@ class MlAuthorization
   isCanAccessUrl(context, isInternalUserCheck) {
     let res = true;
     const urlPath = context && context.url ? context.url : '';
-    const pathCheck = isInternalUserCheck ? urlPath.indexOf('app') : urlPath.indexOf('admin');
+    const urlSplit = urlPath ? urlPath.split('/') : [];
+    const pathCheck = isInternalUserCheck ? urlSplit.indexOf('app') : urlSplit.indexOf('admin');
     if (pathCheck != -1)
       res = false;
     return res

@@ -10,11 +10,6 @@ import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 
-// const today = new Date();
-// const dd = today.getDate().toString();
-// const mm = (today.getMonth()+1).toString(); //January is 0!
-// const yy = today.getFullYear().toString().substr(-2)
-// const curDate = dd+mm+yy;
 const build_versionToken = localStorage.getItem('build_version');
 
 class MlAppProfileHeader extends Component {

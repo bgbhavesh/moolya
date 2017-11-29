@@ -137,7 +137,7 @@ export default class MlFilterListRepo{
         if(requestParams.fieldActive == "Cluster"){
 
           if(listData.length < 1){ //if isCustom false
-            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 ){
               let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
               result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
             }else{
@@ -156,7 +156,7 @@ export default class MlFilterListRepo{
           }
         }else if(requestParams.fieldActive == "Chapter"){ //display as per usercontext
           if(listData.length < 1){ //if isCustom false
-            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 ){
               result=MlChapters.find({ clusterId : { $in: [clusterIds] },isActive : true}).fetch();
             }else{
               let allchapterIds = _.contains(chapterIds,"all") || null;
@@ -183,7 +183,7 @@ export default class MlFilterListRepo{
          if(requestParams.fieldActive == "Cluster" || requestParams.fieldActive == "Chapter"){ //display subchapter as per selected chapter(if chapter or cluster is active)
           if(listData.length < 1){
 
-            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2 || userProfile.hierarchyLevel == 0){
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2){
               let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
               if(requestParams.fieldActive == "Cluster"){
                 result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();

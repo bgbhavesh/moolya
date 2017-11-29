@@ -84,7 +84,9 @@ export default class MlSelectComponent extends Component {
       let refSelected=[]
       for(let i=0;i<val.length;i++){
         refSelected.push(val[i].value)
+        if(val[i].value === 'all')refSelected = ['all'];
       }
+      refSelected.map(function(data){if(data === 'all'){refSelected.length = 1;refSelected = [data];}})
       this.props.onSelect(refSelected,this.onChangeCallBackHandler, val);
       // this.setState({ selectedValue: refSelected });
     }

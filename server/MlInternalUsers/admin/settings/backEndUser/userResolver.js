@@ -265,8 +265,9 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
                     const clusterData = mlDBController.findOne('MlClusters', {_id: role.clusterId}, context) || [];
                     roleCombination = clusterData.clusterName
                   }
-
-                  assignedRoles += role.roleName+" ("+ roleCombination + ")"+","
+                  const isParentRoleActive = getParentRoleStatus(role).isActive;
+                  const roleStatus = isParentRoleActive && role.isActive ? "Active":"Inactive";
+                  assignedRoles += role.roleName+" ("+ roleCombination + ")-("+roleStatus+")"+","
                 });
             }
         });
@@ -1974,5 +1975,8 @@ MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => 
   var  clusterInfo = MlClusters.findOne(clusterId, context)
   var  currencyInfo = MlCurrencyType.findOne({countryName:clusterInfo.countryName}, context);
   return currencyInfo;
+  }
 
+  getParentRoleStatus = (role)=>{
+    return mlDBController.findOne('MlRoles', {_id:role.roleId}) || {}
   }

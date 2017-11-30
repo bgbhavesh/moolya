@@ -761,10 +761,14 @@ class MlAppointment {
         appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
         let name;
         if(appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard' ) {
-          name = appointment.appointmentInfo.serviceName + ' ' + appointment.appointmentInfo.sessionId;
+          name = appointment.appointmentInfo.serviceName
+            // + ' ' + appointment.appointmentInfo.sessionId
+          ;
 
         } else if(appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
-          name = appointment.appointmentInfo.taskName + ' ' + appointment.appointmentInfo.sessionId;
+          name = appointment.appointmentInfo.taskName
+            // + ' ' + appointment.appointmentInfo.sessionId
+          ;
 
         } else if(appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
           name = appointment.appointmentInfo.taskName;

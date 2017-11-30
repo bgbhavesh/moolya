@@ -27,7 +27,6 @@ export default class AppCalendarDayView extends React.Component{
   }
 
   async getMyAppointment() {
-    console.log(this.props);
     let date = new Date(this.props.appointmentDate);
     let day = date.getDate();
     let month = date.getMonth();
@@ -57,7 +56,6 @@ export default class AppCalendarDayView extends React.Component{
   }
 
   render(){
-    console.log('This Slots', this.state.slots)
     const that = this;
     return (
       <div className="app_main_wrap">

@@ -31,7 +31,7 @@ export default class MlAppRegStep7 extends Component {
       Your {communityName} registration details have been submitted to the administrator. <br/>You will receive email
       alerts on the next steps.
       <br/><br/>
-      You can explore the moolya global ecosystem by clicking on the<br/> ‘Explore’ button on the left ribbon menu.<br/><br/>
+      You can explore the moolya global ecosystem by clicking on the<br/> community options on the left ribbon menu.<br/><br/>
       Additional moolya features and actions will be unlocked,<br/>
       once your profile and KYC details are approved by the administrator.
     </p>

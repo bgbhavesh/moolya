@@ -50,7 +50,7 @@ export default class MlStartupManagement extends Component{
     this.handleBlur = this.handleBlur.bind(this);
     this.addManagement.bind(this);
     this.onSelectUser.bind(this);
-    this.imagesDisplay.bind(this);
+    // this.imagesDisplay.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -66,7 +66,7 @@ export default class MlStartupManagement extends Component{
     $('#testing').click(function(){
       $('#management-form').slideDown();
     });
-    this.imagesDisplay()
+    // this.imagesDisplay()
   }
 
   componentDidUpdate(){
@@ -110,14 +110,28 @@ export default class MlStartupManagement extends Component{
     this.setState({selectedIndex:index, data:managmentDetails}, function () {
       this.setState({loading:false}, function () {
         $('#management-form').slideDown();
+        this.lockPrivateKeys(index)
       })
     })
-    setTimeout(function () {
-      _.each(managmentDetails.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(managmentDetails.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
     this.curSelectLogo = managmentDetails.logo
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.startupManagementServer && this.startupManagementServer[selIndex] ? this.startupManagementServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   optionsBySelectTitle(val){
@@ -203,19 +217,19 @@ export default class MlStartupManagement extends Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.management)
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.management);
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if(empty){
-      const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({loading: false, startupManagement: response.management, startupManagementList: response.management});
         // this.fetchOnlyImages()
-
       }else{
         this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
     }
+    this.startupManagementServer = response && response.management ? response.management : [];
   }
 
   onDateChange(name, event) {
@@ -326,7 +340,7 @@ export default class MlStartupManagement extends Component{
       details=_.extend(details,{[name]:{fileName: file.fileName,fileUrl: temp}});
       that.setState({data: details,responseImage: temp}, function () {
         that.sendDataToParent()
-        that.imagesDisplay()
+        // that.imagesDisplay()
       })
       if (result && result.success) {
         this.curSelectLogo = {
@@ -372,21 +386,21 @@ export default class MlStartupManagement extends Component{
     }
   }
 
-  async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      let detailsArray = response.management?response.management:[]
-      let dataDetails =this.state.startupManagement
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
-      // listDetails = this.state.startupManagementList || [];
-      let listDetails = cloneBackUp || [];
-      let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupManagement:cloneBackUp,startupManagementList:cloneBackUpList});
-    }
-  }
+  // async imagesDisplay(){
+  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response) {
+  //     let detailsArray = response.management?response.management:[]
+  //     let dataDetails =this.state.startupManagement
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     _.each(detailsArray, function (obj,key) {
+  //       cloneBackUp[key]["logo"] = obj.logo;
+  //     })
+  //     // listDetails = this.state.startupManagementList || [];
+  //     let listDetails = cloneBackUp || [];
+  //     let cloneBackUpList = _.cloneDeep(listDetails);
+  //     this.setState({loading: false, startupManagement:cloneBackUp,startupManagementList:cloneBackUpList});
+  //   }
+  // }
 
   toggleModal() {
     const that = this;
@@ -600,5 +614,6 @@ export default class MlStartupManagement extends Component{
   }
 };
 MlStartupManagement.contextTypes = {
-  startupPortfolio: PropTypes.object
+  startupPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

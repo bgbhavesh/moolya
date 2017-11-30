@@ -176,7 +176,7 @@ class MlServiceCardRepo{
           deviceId: machineInfo.osVersion,
           ipAddress: context.ip
         }
-        serviceCard["deviceDetails"] =  deviceInfo;
+        servicecard["deviceDetails"] =  deviceInfo;
 
         if(servicecard.tasks){
           let taskIds = servicecard.tasks.map(function (task) { return task.id; });

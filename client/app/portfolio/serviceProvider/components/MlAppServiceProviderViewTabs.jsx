@@ -56,7 +56,7 @@ export default class MlAppServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards and Rewards",
-        component: <MlServiceProviderViewAwards key="2"
+        component: <MlServiceProviderViewAwards key="2" isAdmin={false}
                                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                                 getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },

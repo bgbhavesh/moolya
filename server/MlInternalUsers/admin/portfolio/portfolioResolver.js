@@ -74,15 +74,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkTypeName == "Facebook"){
+                                  if(link.socialLinkTypeName.toLowerCase() == "facebook"){
                                       fb = link.socialLinkUrl
-                                  }else if(link.socialLinkTypeName == "Linkedin"){
+                                  }else if(link.socialLinkTypeName.toLowerCase() == "linkedin"){
                                       linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkTypeName == "Twitter"){
+                                  else if(link.socialLinkTypeName.toLowerCase() == "twitter"){
                                       twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkTypeName == "GooglePlus"){
+                                  else if(link.socialLinkTypeName.toLowerCase() == "googleplus"){
                                       googleplus = link.socialLinkUrl
                                 }
                               })
@@ -137,15 +137,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkTypeName == "Facebook"){
+                                  if(link.socialLinkTypeName.toLowerCase() == "facebook"){
                                     fb = link.socialLinkUrl
-                                  }else if(link.socialLinkTypeName == "Linkedin"){
+                                  }else if(link.socialLinkTypeName.toLowerCase() == "linkedin"){
                                     linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkTypeName == "Twitter"){
+                                  else if(link.socialLinkTypeName.toLowerCase() == "twitter"){
                                     twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkTypeName == "GooglePlus"){
+                                  else if(link.socialLinkTypeName.toLowerCase() == "googleplus"){
                                     googleplus = link.socialLinkUrl
                                   }
                               })

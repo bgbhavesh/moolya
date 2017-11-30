@@ -102,6 +102,9 @@ MlResolver.MlMutationResolver['createTemplateAssignment'] = (obj, args, context,
     //validation for duplicate steps
     var hasDuplicate=hasDuplicateSteps(args.template.assignedTemplates||[]);
     if(hasDuplicate) return new MlRespPayload().errorPayload("Duplicate steps selected", 409);
+    //validate steps for Browser
+    var isValid=mlTemplateAssignmentRepo.validateTemplateAssignment(args.template);
+    if(!isValid) return new MlRespPayload().errorPayload("Hard and Portfolio steps are not allowed for Browser community", 409);
 
       args.template.createdDate = new Date()
       if(Meteor.users.findOne({_id : context.userId}))
@@ -131,6 +134,10 @@ MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context,
     //validation for duplicate steps
     var hasDuplicate=hasDuplicateSteps(args.template.assignedTemplates||[]);
     if(hasDuplicate) return new MlRespPayload().errorPayload("Duplicate steps selected", 409);
+    //validate steps for Browser
+    var isValid=mlTemplateAssignmentRepo.validateTemplateAssignment(args.template);
+    if(!isValid) return new MlRespPayload().errorPayload("Hard and Portfolio steps are not allowed for Browser community", 409);
+
     else if (template) {
         // let resp = MlTemplateAssignment.update({_id: args.id}, {$set: args.template}, {upsert: true})
       args.template.modifiedDate = new Date()

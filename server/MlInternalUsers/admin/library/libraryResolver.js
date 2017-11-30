@@ -38,13 +38,14 @@ MlResolver.MlQueryResolver['fetchCurrentUserPermissions'] = (obj, args, context,
 
 
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
+  var newPortfolioCollection;
   if (args.portfolioDetailsId) {
-    MlLibraryRepo.portfolioLibraryCreation(args.detailsInput, args.portfolioDetailsId , context)
+    newPortfolioCollection = new MlLibraryRepo.portfolioLibraryCreation(args.detailsInput, args.portfolioDetailsId , context)
   } else {
       args.detailsInput.userId = context.userId;
-      var newPortfolioCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
-      return newPortfolioCollection
+      newPortfolioCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
   }
+  return newPortfolioCollection;
 }
 
 

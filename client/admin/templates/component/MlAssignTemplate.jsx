@@ -79,7 +79,12 @@ class MlAssignTemplate extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/templates/templateList");
+    if(response&&!response.success){
+      toastr.error(response.result);
+    }else{
+      FlowRouter.go("/admin/templates/templateList");
+    }
+
   };
 
 

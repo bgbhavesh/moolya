@@ -43,7 +43,8 @@ class MlEditAssignTemplate extends React.Component{
       templateInfo: [],
       steps       : [],
       data        : '',
-      stepAvailability:[]
+      stepAvailability:[],
+      loading:true
     }
     this.findTemplate.bind(this);
     return this;

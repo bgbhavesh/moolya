@@ -11,7 +11,7 @@ class MlLibraryRepo {
   constructor() {
   }
 
-  portfolioLibraryCreation(portfolioDetailsId, libraryData, context){
+  portfolioLibraryCreation(libraryData,portfolioDetailsId, context){
     let portfolioContainer = [];
     try {
       let portfolioUserId = mlDBController.findOne('MlPortfolioDetails', portfolioDetailsId, context).userId;
@@ -22,7 +22,7 @@ class MlLibraryRepo {
       portfolioContainer.push(portfolioInfo)
       libraryData.portfolioReference = portfolioContainer;
       libraryData.userId = portfolioUserId === context.userId ? context.userId : portfolioUserId;
-      let newPortfolio = mlDBController.insert('MlLibrary', args.detailsInput, context)
+      let newPortfolio = mlDBController.insert('MlLibrary', libraryData, context)
       newPortfolio = newPortfolio ?  new MlRespPayload().successPayload(result, 200) : new MlRespPayload().errorPayload(e.message, 400);
       return newPortfolio;
     }
@@ -30,4 +30,7 @@ class MlLibraryRepo {
   }
 }
 
-module.exports = MlLibraryRepo
+const mlLibraryRepo  = new MlLibraryRepo();
+Object.freeze(mlLibraryRepo);
+
+export default mlLibraryRepo;

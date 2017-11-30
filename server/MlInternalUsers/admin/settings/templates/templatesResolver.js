@@ -3,6 +3,22 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 import mlTemplateAssignmentRepo from './mlTemplateAssignmentRepo';
 
+export function hasDuplicateSteps(data){
+   let hasNoDuplicate = _.every(data, function(o, i) {
+    var eq = _.find(data, function(e, ind) {
+      if (i > ind) {
+        return _.isEqual(e, o);
+      }
+    })
+    if (eq) {
+      return false;
+    }else{
+      return true;
+    }
+  });
+  return hasNoDuplicate===false?true:false;
+}
+
 MlResolver.MlQueryResolver['findTemplateSteps'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.id) {
@@ -83,6 +99,10 @@ MlResolver.MlQueryResolver['fetchSubProcess'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createTemplateAssignment'] = (obj, args, context, info) => {
   if (args.template) {
       // let resp = MlTemplateAssignment.insert({...args.accountType});
+    //validation for duplicate steps
+    var hasDuplicate=hasDuplicateSteps(args.template.assignedTemplates||[]);
+    if(hasDuplicate) return new MlRespPayload().errorPayload("Duplicate steps selected", 409);
+
       args.template.createdDate = new Date()
       if(Meteor.users.findOne({_id : context.userId}))
       {
@@ -108,6 +128,9 @@ MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context,
       let response = new MlRespPayload().errorPayload("System defined template assignment cannot be edited", code);
       return response;
     }
+    //validation for duplicate steps
+    var hasDuplicate=hasDuplicateSteps(args.template.assignedTemplates||[]);
+    if(hasDuplicate) return new MlRespPayload().errorPayload("Duplicate steps selected", 409);
     else if (template) {
         // let resp = MlTemplateAssignment.update({_id: args.id}, {$set: args.template}, {upsert: true})
       args.template.modifiedDate = new Date()

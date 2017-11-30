@@ -1788,7 +1788,7 @@ class Library extends React.Component {
                 <CropperModal
                   uploadingImage={this.state.uploadingAvatar}
                   handleImageUpload={this.handleUploadAvatar}
-                  cropperStyle="any"
+                  cropperStyle="circle"
                   show={this.state.showProfileModal}
                   toggleShow={this.toggleModal}
                 />
@@ -1856,7 +1856,7 @@ class Library extends React.Component {
                 <CropperModal
                   uploadingImage={this.state.uploadingAvatar1}
                   handleImageUpload={this.handleUploadAvatar1}
-                  cropperStyle="any"
+                  cropperStyle="circle"
                   show={this.state.showProfileModal1}
                   toggleShow={this.toggleModal1}
                 />
@@ -1943,7 +1943,7 @@ class Library extends React.Component {
               </div>
             </div>
           </PopoverContent>
-          <CropperModal handleImageUpload={this.uploadImage2.bind(this)} toggleShow={this.toggleShowImageUploadCropper} show={this.state.showImageUploadCropper} uploadingImage={this.state.uploadingImage2} cropperStyle={'any'}/>
+          <CropperModal handleImageUpload={this.uploadImage2.bind(this)} toggleShow={this.toggleShowImageUploadCropper} show={this.state.showImageUploadCropper} uploadingImage={this.state.uploadingImage2} cropperStyle={'circle'}/>
         </Popover>
         {this.state.isLibrary ? <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} /> : ""}
       </div>

@@ -28,7 +28,7 @@ class MlPortfolio extends React.Component {
     super(props)
     this.state = {
         editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
-      isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
+      isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false,commentsCount:null
     }
     this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
@@ -45,9 +45,16 @@ class MlPortfolio extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen
-    });
+    if($(".annotator-widget").is(':visible')){
+      this.setState({
+        popoverOpen: false
+      });
+    }else{
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
+   
   }
 
 
@@ -198,6 +205,11 @@ class MlPortfolio extends React.Component {
     if (annotationId) {
       const response = await findComments(annotationId,client);
       this.setState({commentsData: response}, function () {
+        if(response&&response.length){
+          this.setState({commentsCount : response.length})
+        }else{
+         this.setState({commentsCount : 0})
+        }
       });
     }
   }
@@ -420,7 +432,7 @@ class MlPortfolio extends React.Component {
                       <div className="comment-avatar"><img src="/images/def_profile.png" alt="No image available"/>
                       </div>
                       <div className="comment-box">
-                        <div style={{marginTop: '8px'}} className="annotate">1</div>
+                        <div style={{marginTop: '8px'}} className="annotate">{this.state.commentsCount}</div>
                         <div style={{paddingLeft: '50px'}} className="comment-head">
                           <h6
                             className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>

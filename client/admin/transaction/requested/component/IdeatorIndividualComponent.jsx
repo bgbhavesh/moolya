@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -394,7 +395,7 @@ export default class IdeatorIndividualComponent extends React.Component{
 
       <div>
           <div className="col-md-6 nopadding-left">
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
             <div className="form_bg">
               <form>
@@ -449,10 +450,10 @@ export default class IdeatorIndividualComponent extends React.Component{
 
               </form>
             </div>
-            </ScrollArea>
+            </Scrollbars>
           </div>
           <div className="col-md-6 nopadding-right">
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
             <div className="form_bg">
               <form>
@@ -492,7 +493,7 @@ export default class IdeatorIndividualComponent extends React.Component{
                 </div>
               </form>
             </div>
-            </ScrollArea>
+            </Scrollbars>
           </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>

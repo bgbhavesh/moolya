@@ -111,9 +111,7 @@ export default class CropperModal extends React.PureComponent {
     );
     if (cropperStyle === 'circle') {
       return (
-        <div className={cropperStyle === 'circle' ? 'circle-cropper': ''}>
-          {CModal}
-        </div>
+        CModal
       );
     }
     return CModal;

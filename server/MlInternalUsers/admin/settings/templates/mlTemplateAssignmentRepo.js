@@ -87,6 +87,24 @@ class MlTemplateAssignmentRepo{
 
    return null;
   }
+
+  validateTemplateAssignment(record){
+    var isValid = true;
+    if (record) {
+      //Fix for Issue: MOOLYA-868 - BROWSER community should not be allowed to select hard and protfolio steps.
+      var isBrowser = record.templatecommunityCode === 'BRW' ? true : false;
+      if (isBrowser) {
+        var data = _.find(record.assignedTemplates, function (o) {
+          if (o.stepCode === 'PORTFOLIO' || o.stepCode === 'HARD') {
+            return true;
+          }
+          return false;
+        });
+        if (data && _.isObject(data)) isValid = false;
+      }
+      return isValid;
+    }
+  }
 }
 const mlTemplateAssignmentRepo = new MlTemplateAssignmentRepo();
 Object.freeze(mlTemplateAssignmentRepo);

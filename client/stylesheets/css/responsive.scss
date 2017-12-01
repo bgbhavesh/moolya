@@ -98,3 +98,9 @@ $menuTrans:all 0.5s linear;
   .ideas_swiper .swiper-wrapper{z-index: 0;}
 
 }
+@media (max-width: 1024px){
+	ol.progtrckr li {
+		margin-right: 46px;
+		margin-left: 46px;
+		}
+}

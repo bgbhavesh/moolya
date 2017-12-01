@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
-
+import { Scrollbars } from 'react-custom-scrollbars';
 import ScrollArea from 'react-scrollbar'
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
@@ -79,7 +79,7 @@ export default class Step3 extends React.Component{
 
           <div className="col-lg-6 nopadding-left">
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -100,14 +100,14 @@ export default class Step3 extends React.Component{
                     <EmailDetails ref={'emailDetailsComponent'} registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>
                 </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
 
 
           <div className="col-lg-6 nopadding-right">
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -121,7 +121,7 @@ export default class Step3 extends React.Component{
                   <AddressDetails ref={'addressDetailsComponent'} registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                 </div>
               </form>
-              </ScrollArea>
+              </Scrollbars>
 
             </div>
 

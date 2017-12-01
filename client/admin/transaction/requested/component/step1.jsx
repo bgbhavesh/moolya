@@ -7,6 +7,7 @@ import {fetchSubChapterDetails} from "../actions/findRegistration"
 var Select = require('react-select');
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
@@ -585,7 +586,7 @@ export default class step1 extends React.Component{
 
             {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
               <div className="col-md-6 nopadding-left">
-                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+                <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
                 <div className="form_bg">
                   <form>
@@ -708,10 +709,10 @@ export default class step1 extends React.Component{
                     </div>
                   </form>
                 </div>
-                </ScrollArea>
+                </Scrollbars>
               </div>
               <div className="col-md-6 nopadding-right">
-                 <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+                 <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
                 <div className="form_bg">
                   <form>
@@ -763,7 +764,7 @@ export default class step1 extends React.Component{
 
                   </form>
                 </div>
-                </ScrollArea>
+                </Scrollbars>
               </div>
 
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

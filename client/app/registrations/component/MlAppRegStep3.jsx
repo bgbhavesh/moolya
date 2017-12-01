@@ -2,6 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import {graphql} from "react-apollo";
 import MlAppRegContactDetails from "./MlAppRegContactDetails";
 import MlAppRegAddressDetails from "./MlAppRegAddressDetails";
@@ -147,7 +148,7 @@ export default class MlAppRegStep3 extends React.Component {
 
     return (
       <div className="step_form_wrap step3">
-        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+        <Scrollbars speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
         <div className="col-lg-6">
 
 
@@ -199,7 +200,7 @@ export default class MlAppRegStep3 extends React.Component {
 
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-        </ScrollArea>
+        </Scrollbars>
       </div>
     )
   }

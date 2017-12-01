@@ -168,7 +168,19 @@ class MlEditBackendUser extends React.Component{
     const loggedInUser = getAdminUserContext();
     let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
-    this.setState({loading: false, data: response});
+    let userProfiles = (response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
+                    && response.profile.InternalUprofile.moolyaProfile.userProfiles)?
+      response.profile.InternalUprofile.moolyaProfile.userProfiles : '';
+
+    let clusterId='';
+    for(let i=0;i<userProfiles.length;i++){
+      if(userProfiles[i].isDefault){
+        clusterId = userProfiles[i].clusterId;
+      }
+    }
+
+    this.setState({loading: false, data: response, clusterId: clusterId});
+
     if (response) {
       let dateOfBirth=response.profile.dateOfBirth;
       if(dateOfBirth&&dateOfBirth!= "Invalid Date"){
@@ -547,7 +559,7 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.lastName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)} disabled="disabled"
+                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)} disabled={true}
                     />
                   </div>
                     {that.state.selectedBackendUserType == 'non-moolya' && (
@@ -615,7 +627,7 @@ class MlEditBackendUser extends React.Component{
                       </div>
                     </div>
                     <div className="clearfix"></div>
-                  <MlContactFormComponent getAssignedContacts={that.getAssignedContacts.bind(that)} contacts={that.state.data && that.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
+                  <MlContactFormComponent clusterId={that.state.clusterId} getAssignedContacts={that.getAssignedContacts.bind(that)} contacts={that.state.data && that.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
 
                   <div className="form-group switch_wrap inline_switch">
                     <label>Global Assignment Availability</label>

@@ -18,6 +18,10 @@ MlLoginContent = React.createClass({
     return this;
   },
 
+  rememberMe(isRememberMeChecked){
+    localStorage.setItem('rememberMe',isRememberMeChecked+'');
+  },
+
   loginSubmit(){
     let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
     this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
@@ -53,6 +57,8 @@ MlLoginContent = React.createClass({
   componentDidMount() {
     var WinHeight = $(window).height();
     $('.login_bg').height(WinHeight);
+
+    localStorage.setItem('rememberMe','false');
     initalizeFloatLabel();
   },
   onValueChange(event){
@@ -100,7 +106,7 @@ MlLoginContent = React.createClass({
                          placeholder="Password" required defaultValue={this.state.password}
                          onBlur={this.validationCheck}/>
 
-                  <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
+                  <div className="checkbox_wrap"><input type="checkbox" value={false} onClick={e=>this.rememberMe(e.target.checked)}/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a onClick={this.redirectRegister.bind(this)} href="#">Register</a></p>

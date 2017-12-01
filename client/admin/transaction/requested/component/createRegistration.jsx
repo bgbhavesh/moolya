@@ -6,6 +6,7 @@ import Select from 'react-select';
 import Datetime from "react-datetime";
 import moment from "moment";
 import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
@@ -292,7 +293,7 @@ export default class MlCreateRegistration extends React.Component{
             <h2>Fill Registration Details</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -328,12 +329,12 @@ export default class MlCreateRegistration extends React.Component{
                   </div>
                 </div>
               </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -379,7 +380,7 @@ export default class MlCreateRegistration extends React.Component{
                   <br className="brclear"/>
                 </div>
               </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           </div>

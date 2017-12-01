@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import communityRoutes from '../actions/communityRouteHandler';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+
 export default class MlCommunityList extends Component {
   constructor(props){
     super(props);
-    this.userhierarchy = this.props.userhierarchy;
+    this.userhierarchy = getAdminUserContext().hierarchyLevel;
     return this
   }
 

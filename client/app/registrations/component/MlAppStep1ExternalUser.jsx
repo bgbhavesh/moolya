@@ -512,10 +512,8 @@ export default class MlAppStep1ExternalUser extends Component {
 
             </div>
             <div className="col-md-6">
-
                 <div className="form_bg">
                   <form>
-
                     <div className="form-group">
                       <input type="text" placeholder="User Name" ref="userName"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.userName}
@@ -523,9 +521,7 @@ export default class MlAppStep1ExternalUser extends Component {
                     </div>
                     <div className="form-group">
                       <input type="Password" placeholder="Password" ref="password"
-                             defaultValue={that.state.registrationDetails && that.state.registrationDetails.password}
-                             //defaultValue={"passwordUnSeen"}
-                             className="form-control float-label"  disabled="true"/>
+                        defaultValue={"passwordUnSeen"} className="form-control float-label" disabled="true" />
                     </div>
                     <div className="form-group">
                       {/*<span className="placeHolder active">Account Type</span>*/}

@@ -11,7 +11,7 @@ import _ from "underscore";
 import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
-import {getCommunityName} from '../../../commons/utils';
+import {getCommunityName, encryptPassword, deCryptPassword} from '../../../commons/utils';
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlSMSNotification from '../../../mlNotifications/mlSmsNotifications/mlSMSNotification'
 import {userAgent} from '../../../commons/utils';
@@ -66,7 +66,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   } else {  //default moolya subChapter will be taken
     subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
   }
-  let password = args.registration&&args.registration.password?args.registration.password:""
+  const password = args.registration && args.registration.password ? encryptPassword(args.registration.password) : ""
   args.registration.password = password;
   args.registration.clusterName = subChapterDetails.clusterName;
   args.registration.chapterName = subChapterDetails.chapterName;
@@ -291,7 +291,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     registrationRecord["registrationInfo.lastName"] = args.registration.lastName;
     registrationRecord["registrationInfo.userName"] = args.registration.email;
     registrationRecord["registrationInfo.contactNumber"] = args.registration.contactNumber;
-    registrationRecord["registrationInfo.password"] = args.registration.password;
+    registrationRecord["registrationInfo.password"] = encryptPassword(args.registration.password);         //password encryption of the registration from WEB
     registrationRecord["registrationInfo.countryId"] = args.registration.countryId;
     registrationRecord["registrationInfo.cityId"] = args.registration.cityId;
 
@@ -545,6 +545,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       //validate the registrationInfo for mandatory fields such as cluster chapter etc
       // updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,"registrationDetails.identityType":details.identityType,"registrationDetails.userType":details.userType }});
       /** Update the registration details like - registraionInfo and firstName,lastName,identityType,userType*/
+      details.password = registrationInfo.password;     //password copy from DB encrypted only taken at creation type only
       let updateObj = {
         registrationInfo: details,
         "registrationDetails.firstName": details.firstName,
@@ -601,7 +602,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         genderType: null
       }
       /**External User Object*/
-      let password = details&&details.password?details.password:""
+      const password = details && details.password ? deCryptPassword(details.password) : ""               //password decrypt and sending to users for further implications
       //let pwdEncrypted = CryptoJS.SHA256(password).toString()
       let userObject = {
         username: details.email,

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from "graphql-tag";
 import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {updateRegistrationActionHandler} from "../actions/updateRegistration";
@@ -276,7 +277,7 @@ export default class MlAppRegInstitution extends Component {
         {showLoader === true ? (<MlLoader/>) : (
           <div className="step_form_wrap step2">
 
-            <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+            <Scrollbars speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
@@ -395,7 +396,7 @@ export default class MlAppRegInstitution extends Component {
                 </div>
               </div>
             <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
-            </ScrollArea>
+            </Scrollbars>
             {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
           </div> )}
       </div>

@@ -591,25 +591,25 @@ export default class step1 extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')} className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY HH:mm:ss')} className="form-control float-label" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" data-required={true} data-errMsg="First Name is required" />
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" />
+                      <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" data-required={true} data-errMsg="Last Name is required" />
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} mandatory={true} ref="country" className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required"  />
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" />
+                      <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label"  data-required={true} data-errMsg="Contact Number is required" />
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email Id" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
+                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email Id" className="form-control float-label"   disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Registration Type" disabled={this.state.isOfficeBearer} className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} />
@@ -691,19 +691,19 @@ export default class step1 extends React.Component{
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true" />
+                          <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label"   disabled="true" />
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="Device Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceName} className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" placeholder="Device Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceName} className="form-control float-label"   disabled="true"/>
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="Device Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceNumber} className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" placeholder="Device Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceNumber} className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="IP Address" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.ipAddress} className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" placeholder="IP Address" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.ipAddress} className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="IP Location" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.ipLocation} className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" placeholder="IP Location" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.ipLocation} className="form-control float-label"  disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -718,10 +718,12 @@ export default class step1 extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" placeholder="User Name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
+
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
+
                     </div>
                     <div className="form-group">
                       {/*<span className="placeHolder active">Account Type</span>*/}
@@ -735,13 +737,13 @@ export default class step1 extends React.Component{
                       {that.state.isEcoSystem?<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="No" options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>:<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="Yes"  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>}
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id="" />
+                      <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label"  />
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="companyUrl" placeholder="Company URL"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyUrl}  className="form-control float-label" id="" />
+                      <input type="text" ref="companyUrl" placeholder="Company URL"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyUrl}  className="form-control float-label"  />
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" />
+                      <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label"  />
                     </div>
                     <div className="form-group">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>

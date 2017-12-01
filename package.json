@@ -78,7 +78,7 @@
     "bufferutil": "3.0.2",
     "connect-multiparty": "2.0.0",
     "cors": "^2.8.1",
-    "crypto-js": "^3.1.9-1",
+    "crypto-js": "3.1.9-1",
     "csrf": "3.0.6",
     "custom-error": "0.2.1",
     "deep-diff": "^0.3.4",

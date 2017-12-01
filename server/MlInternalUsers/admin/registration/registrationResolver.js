@@ -18,7 +18,7 @@ import {userAgent} from '../../../commons/utils';
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
-let CryptoJS = require("crypto-js");
+
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck = null;
@@ -67,8 +67,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
   }
   let password = args.registration&&args.registration.password?args.registration.password:""
-  let pwdEncrypted = CryptoJS.SHA256(password).toString()
-  args.registration.password = pwdEncrypted;
+  args.registration.password = password;
   args.registration.clusterName = subChapterDetails.clusterName;
   args.registration.chapterName = subChapterDetails.chapterName;
   args.registration.subChapterName = subChapterDetails.subChapterName;
@@ -603,10 +602,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       }
       /**External User Object*/
       let password = details&&details.password?details.password:""
-      let pwdEncrypted = CryptoJS.SHA256(password).toString()
+      //let pwdEncrypted = CryptoJS.SHA256(password).toString()
       let userObject = {
         username: details.email,
-        password: pwdEncrypted,
+        password: password,
         profile: profile,
         emails: registerDetails && registerDetails.emails ? registerDetails.emails : [],
         mobileNumbers:registerDetails && registerDetails.otps ? registerDetails.otps : []

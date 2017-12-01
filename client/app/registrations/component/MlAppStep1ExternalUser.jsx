@@ -523,8 +523,8 @@ export default class MlAppStep1ExternalUser extends Component {
                     </div>
                     <div className="form-group">
                       <input type="Password" placeholder="Password" ref="password"
-                             //defaultValue={that.state.registrationDetails && that.state.registrationDetails.password}
-                             defaultValue={"passwordUnSeen"}
+                             defaultValue={that.state.registrationDetails && that.state.registrationDetails.password}
+                             //defaultValue={"passwordUnSeen"}
                              className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">

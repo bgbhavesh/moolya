@@ -1225,6 +1225,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .clusterMarker{position: absolute; cursor: pointer; width: 40px; height: 40px; left: -20px; top: -20px; border: 5px  solid #ef4647; border-radius: 50%; background-color: white; text-align: center; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 .date-pick-wrap .rdtPicker{bottom:20%;}
 .rdtPicker{ position: fixed !important;}
+.step_form_wrap .rdtPicker{ position: absolute !important;}
 /*.moolya_admin .react-bs-container-body{overflow:hidden;}*/
 /*.react-bs-container-body {position:relative !important;}*/
 

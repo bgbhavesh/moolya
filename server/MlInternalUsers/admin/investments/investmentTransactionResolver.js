@@ -112,8 +112,8 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
       ipAddress: context.ip
     }
     args.processSetup["deviceDetails"] =  deviceInfo;
-    processSetup["deviceDetails"] =  deviceInfo;
     if(processSetup){
+      processSetup["deviceDetails"] =  deviceInfo;
         try{
           ret = mlDBController.update('MlProcessSetup', {processTransactionId:args.processTransactionId}, args.processSetup, {$set:true}, context)
         }catch(e){

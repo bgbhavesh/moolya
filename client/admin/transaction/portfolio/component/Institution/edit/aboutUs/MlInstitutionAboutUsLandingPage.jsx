@@ -111,7 +111,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
                   empty="fa fa-star-o empty"
                   full="fa fa-star fill"
                   fractions={2}
-                  initialRate={this.state.institutionAboutUs.rating && this.state.institutionAboutUs.rating.rating ? this.state.institutionAboutUs.rating.rating : 4}
+                  initialRate={this.state.institutionAboutUs.rating && this.state.institutionAboutUs.rating.rating ? Number(this.state.institutionAboutUs.rating.rating) : 4}
                   readonly={true}
                 />
               </div>

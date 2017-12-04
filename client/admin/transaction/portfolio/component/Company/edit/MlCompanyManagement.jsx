@@ -102,17 +102,31 @@ export default class MlCompanyManagement extends Component {
     let managmentDetails = this.state.management[index]
     managmentDetails = _.omit(managmentDetails, "__typename");
     this.curSelectLogo = managmentDetails.logo
-    this.setState({ selectedIndex: index });
-    this.setState({ data: managmentDetails }, function () {
+    // this.setState({ selectedIndex: index });
+    this.setState({ selectedIndex: index, data: managmentDetails }, function () {
       this.setState({ loading: false }, function () {
         $('#management-form').slideDown();
+        this.lockPrivateKeys(index);
       })
     })
-    setTimeout(function () {
-      _.each(managmentDetails.privateFields, function (pf) {
-        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(managmentDetails.privateFields, function (pf) {
+    //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.companyManagementServer && this.companyManagementServer[selIndex] ? this.companyManagementServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   optionsBySelectTitle(val) {
@@ -205,8 +219,8 @@ export default class MlCompanyManagement extends Component {
     let that = this;
     let portfoliodetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.management)
+    const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (empty) {
-      const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({ loading: false, management: response.management, managementList: response.management });
         // this.fetchOnlyImages()
@@ -216,6 +230,7 @@ export default class MlCompanyManagement extends Component {
     } else {
       this.setState({ loading: false, management: that.context.companyPortfolio.management, managementList: that.context.companyPortfolio.management });
     }
+    this.companyManagementServer = response && response.management ? response.management : [];
   }
   onDateChange(name, event) {
     if (event._d) {
@@ -390,7 +405,7 @@ export default class MlCompanyManagement extends Component {
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.managementList || [];
-    let genderImage = this.state.data && this.state.data.gender === 'female' ? "/images/female.jpg" : "/images/def_profile.png";
+    // let genderImage = this.state.data && this.state.data.gender === 'female' ? "/images/female.jpg" : "/images/def_profile.png";
 
     return (
       <div>
@@ -410,6 +425,7 @@ export default class MlCompanyManagement extends Component {
                     </a>
                   </div>
                   {managementArr.map(function (user, index) {
+                    let genderImage = user.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                         <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
@@ -561,5 +577,6 @@ export default class MlCompanyManagement extends Component {
   }
 };
 MlCompanyManagement.contextTypes = {
-  companyPortfolio: PropTypes.object
+  companyPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

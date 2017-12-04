@@ -27,7 +27,7 @@ h1,h2,h3,h4,h5,h6{font-family:'DINPro-Regular';font-weight:400}
 .header_right .ms_social_wrap .ms_socialNetworks ul li{display:inline-block;padding:0 5px}
 .header_right .ms_social_wrap .ms_socialNetworks ul li a{font-size:18px;color:#6f6854}
 .header_right .ms_social_wrap .ms_socialNetworks ul li a:hover{color:#ef4647}
-.share-social{display:inline-block;float:left;padding:0 20px 0 0;font-size:28px;line-height:60px}
+.share-social{display:inline-block;float:left;padding:0 20px 0 0;font-size:35px;line-height:60px}
 .share-url{clear:both;margin:10px;overflow:hidden}
 .share-url .ms_btn_re{float:left;margin-top:4px;margin-right:20px;height:30px;line-height:30px; min-width: 50px;}
 .share-url .ms_btn_re:before{border-width:15px 12px 15px 0}

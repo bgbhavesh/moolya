@@ -16,7 +16,8 @@
         "port":443,
         "secure":true
       }
-    }
+    },
+    "phpWebSiteLink": "https://www.moolya.global/register"
   },
   "private": {
     "subChapterName":"moolya",

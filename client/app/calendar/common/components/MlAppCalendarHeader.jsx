@@ -2,6 +2,7 @@
  * Created by pankaj on 28/8/17.
  */
 import React, {Component} from "react";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAppCalendarHeader extends Component {
 
@@ -16,7 +17,7 @@ export default class MlAppCalendarHeader extends Component {
             return(
               <li key={index} className={ selectedUser == user._id ? 'active_user' : ''}>
                 <a href="" onClick={()=>selectUser(user)}>
-                  <img src={ user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                  <img src={ user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"} /><br />
                   <div className="tooltiprefer">
                     <span>{user.name}</span>
                   </div>

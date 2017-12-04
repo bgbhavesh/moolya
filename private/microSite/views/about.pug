@@ -86,6 +86,7 @@ html(prefix='og: http://ogp.me/ns#')
       }(document, 'script', 'facebook-jssdk'));
 
     script(type = 'in/Login').
+    .mask(style='display: none;')
     .ms_main_wrap
       .ms_header
         .header_left
@@ -344,8 +345,14 @@ html(prefix='og: http://ogp.me/ns#')
           script.
             $(document).ready(function () {
               $(".share-social").click(function () {
-                $(".ms_socialNetworks").slideToggle();
-              });
+                  $(".ms_socialNetworks").slideToggle();
+                  $(".mask").toggle();
+                });
+                $(".mask").click(function(){
+                  $(".ms_socialNetworks").slideUp();
+                  $(this).hide();
+                });
+                $(".share-social").click();
               $(".ms_socialNetworks li").click(function () {
                 $(".ms_socialNetworks li").removeClass("active");
                 $(this).toggleClass("active");

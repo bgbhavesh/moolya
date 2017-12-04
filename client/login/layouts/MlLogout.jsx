@@ -7,6 +7,8 @@ import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
+
+const webSiteUrl = Meteor.settings.public.phpWebSiteLink;
 export default class MlLogout extends Component {
   constructor(props) {
     super(props)
@@ -72,9 +74,9 @@ export default class MlLogout extends Component {
   redirectRegister(e){
     e.preventDefault();
     if(!Meteor.isCordova){
-      window.location.href = "https://www.moolya.global/register";
+      window.location.href = webSiteUrl;
     } else{
-      window.open('https://www.moolya.global/register', '_system');
+      window.open(webSiteUrl, '_system');
     }
 }
   render() {

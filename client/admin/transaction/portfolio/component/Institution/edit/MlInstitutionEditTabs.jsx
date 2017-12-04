@@ -322,6 +322,7 @@ export default class MlInstitutionEditTab extends Component {
     } else {
       let data = this.state.institutionPortfolio;
       data[tabName] = details;
+      this.setState({institutionPortfolio: data});
       this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey, requiredFields);
     }
   }
@@ -338,12 +339,11 @@ export default class MlInstitutionEditTab extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys: privateKeys,
-      removePrivateKeys: removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj});
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
+    return privateObject
   }
 
   componentWillReceiveProps(newProps) {

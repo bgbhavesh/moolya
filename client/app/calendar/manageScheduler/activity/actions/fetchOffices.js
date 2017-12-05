@@ -38,6 +38,7 @@ export async function fetchMyConnectionActionHandler() {
         userId
         profileId
         name
+        profileImage
       }
     }`,
     forceFetch: true

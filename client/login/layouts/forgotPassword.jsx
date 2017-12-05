@@ -5,6 +5,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {forgotPasswordActionHandler} from '../actions/forgotPassword'
+const webSiteUrl = Meteor.settings.public.phpWebSiteLink;
 
 MlForgotPasswordContent = React.createClass({
 
@@ -38,9 +39,9 @@ MlForgotPasswordContent = React.createClass({
   redirectRegister(e){
     e.preventDefault();
     if(!Meteor.isCordova){
-      window.location.href = "https://www.moolya.global/register";
+      window.location.href = webSiteUrl;
     } else{
-      window.open('https://www.moolya.global/register', '_system');
+      window.open(webSiteUrl, '_system');
     }
   },
   handleKeyPress(target) {

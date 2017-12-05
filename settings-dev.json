@@ -16,7 +16,8 @@
         "port":9090,
         "secure":false
       }
-    }
+    },
+    "phpWebSiteLink": "https://qa.moolya.global/register"
   },
   "private": {
       "subChapterName":"moolya",

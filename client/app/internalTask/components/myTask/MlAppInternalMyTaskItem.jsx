@@ -20,6 +20,7 @@ import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -528,7 +529,7 @@ class MlAppInternalMyTaskItem extends React.Component{
                           return (
                             <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                               <a href="">
-                                <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                                <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"} /><br />
                                 <div className="tooltiprefer">
                                   <span>{user.name}</span>
                                 </div>

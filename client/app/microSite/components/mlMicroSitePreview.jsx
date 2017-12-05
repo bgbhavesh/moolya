@@ -24,9 +24,8 @@ export default class MlMicroSitePreview extends React.Component {
     const url = response.url
 
     if (url) {
-      let absoluteUrl = window.location.origin + '/view' + url
+      let absoluteUrl = url
       this.setState({src: absoluteUrl})
-
     }
     else {
       this.setState({src: false})

@@ -6,7 +6,8 @@
     "createNewUser":{
       "code"    : 209,
       "message" : "New User Created"
-    }
+    },
+    "phpWebSiteLink": "https://uat.moolya.global/register"
   },
   "private": {
     "subChapterName":"moolya",

@@ -95,6 +95,7 @@ class MlServiceCardRepo{
               });
             }
             result = mlDBController.insert('MlServiceCardDefinition' , serviceCard, context)
+            this.createTransactionRequest(context.userId, "serviceCardCreated", result, result, context.userId, 'user', context)
             if(!result){
               let code = 400;
               return new MlRespPayload().errorPayload(result, code);
@@ -254,6 +255,7 @@ class MlServiceCardRepo{
         servicecard.isReview = false;
         servicecard.isApproved = false;
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
+        this.createTransactionRequest(context.userId, "serviceCardUpdated", service._id, service._id, context.userId, 'user', context)
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
         }
@@ -634,6 +636,36 @@ class MlServiceCardRepo{
               'activityDocId': resourceId,
               'docId': orderId,
               'transactionDetails': 'Service-Purchased',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
+            case "serviceCardCreated":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'ServiceCard-Created',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Created',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
+            case "serviceCardUpdated":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'ServiceCard-Updated',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Updated',
               'context': context || {},
               'transactionTypeId': "appointment",
               'fromUserType': fromUserType

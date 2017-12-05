@@ -5,7 +5,6 @@ import { Accounts } from 'meteor/accounts-base';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
@@ -36,25 +35,42 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
     } else {
       const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
       const currentUserToken = localStorageLoginToken || loginToken;
-      const middlewareLink = setContext(() => ({
-        headers: {
-          authorization: localStorage.getItem('token') || null,
-          'meteor-login-token': currentUserToken,
-          cookie : document.cookie,
-        }
-      }))
-      const link = middlewareLink.concat(httpLink);
-      const errorLink = onError(({ networkError, graphQLErrors }) => {
-        if (networkError.statusCode === 401) {
-          logout();
+      const MiddlewareLink = new ApolloLink((operation, forward) => {
+        operation.setContext({
+          headers: {
+            cookie : document.cookie,            
+            'meteor-login-token': RegExp("meteor_login_token[^;]+").exec(document.cookie)[0].toString().replace(/^[^=]+./,"") || currentUserToken,
+          }
+        });
+        return forward(operation)
+      })
+      // logger
+      const LoggerLink = new ApolloLink((operation, forward) => {
+        if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
+        return forward(operation).map(result => {
+          if (process.env.NODE_ENV === 'development') console.log(
+            `[GraphQL Logger] received result from ${operation.operationName}`,
+          )
+          return result
+        })
+      })
+      // error - use your error lib here
+      const ErrorLink = onError(({graphQLErrors, networkError}) => {
+        if (graphQLErrors)
+          graphQLErrors.map(({message, locations, path}) =>
+            console.log(
+              `[GraphQL Error] Message: ${message}, Location: ${locations}, Path: ${path}`),
+          )
+        if (networkError) {
+          if (networkError.statusCode === 401) {
+            logout();
+          } console.log(`[Network error] ${networkError}`)
         }
       })
-      const linkE = errorLink.concat(link);
-      const addLink = new ApolloLink((operation, forward) => {
+      const AddLink = new ApolloLink((operation, forward) => {
         return forward(operation).map((response) => {
           console.log(response)
             const data = response;
-            const { errors = [] } = response;
             if(data && data.unAuthorized){
                 // toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
                 // window.history.back()
@@ -64,9 +80,6 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
               FlowRouter.go('/login')
             }
           return response;          
-          // if (response.data.user.lastLoginDate) {
-          //   response.data.user.lastLoginDate = new Date(response.data.user.lastLoginDate)
-          // }
         })
         // return forward(operation).map((response) => {
         //   const clonedResponse = response.clone();
@@ -85,7 +98,7 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
 
         // })
       });
-      const linkA = addLink.concat(link);
+      const link = ApolloLink.from([MiddlewareLink, LoggerLink, ErrorLink, AddLink, httpLink])
       return link;
 
     }
@@ -93,13 +106,15 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
     return httpLink
   }
 };
-
+const cache = new InMemoryCache({
+  dataIdFromObject: r =>r.id,
+  addTypename: true,
+});
 const defaultClientConfig =
 {
     link: createMeteorNetworkInterface(),
     //ssrMode: Meteor.isServer,
-    cache: new InMemoryCache(),
-    dataIdFromObject: r =>r.id
+    cache: cache,
 };
 
 const networkInterface = defaultClientConfig.link;

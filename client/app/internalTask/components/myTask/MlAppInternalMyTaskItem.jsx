@@ -555,7 +555,7 @@ class MlAppInternalMyTaskItem extends React.Component{
                           return (
                             <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                               <a href="">
-                                <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                                <img src={user.profileImage ? generateAbsolutePath(user.profileImage) : "/images/def_profile.png"} /><br />
                                 <div className="tooltiprefer">
                                   <span>{user.name}</span>
                                 </div>

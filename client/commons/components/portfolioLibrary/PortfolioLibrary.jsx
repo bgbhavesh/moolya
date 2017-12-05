@@ -643,7 +643,7 @@ class Library extends React.Component {
     if (resp !== 'Maximum file size exceeded') {
       var link = JSON.parse(resp).result;
       if (!this.state.isLibrary) {
-        Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        Confirm('', " Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
           if(ifConfirm){
             let addToCentralLibrary = true;
             this.storeData(link, type, addToCentralLibrary)
@@ -1432,9 +1432,13 @@ class Library extends React.Component {
       }
       $(this).parents('.panel').find(".show-information").toggle(200);
     });
-
+setTimeout(function(){
     var mySwiper = new Swiper('.manage_tasks', {
-    });
+      slidesPerView: 'auto',
+      speed: 400,
+      spaceBetween: 5
+  });
+},300);
 
     //$(".library-wrap .see-less").click(function(){
       //$(this).parents('.library-wrap').addClass("wrap_open")
@@ -1705,7 +1709,7 @@ class Library extends React.Component {
 
     return (
       <div>
-        <h2>Library</h2>
+        <h2>Library {this.state.totalLibrarySize} of 50 MB used</h2>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
@@ -1815,7 +1819,7 @@ class Library extends React.Component {
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
               </div>
                 </div>
               </div>

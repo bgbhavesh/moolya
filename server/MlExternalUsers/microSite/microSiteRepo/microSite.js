@@ -29,6 +29,7 @@ async function findPortFolioDetails(pathName, fullUrl, originalUrl) {
       privateFields: {},
       currentUrl: fullUrl,
       twitterHandle: '@moolyaglobal',
+      defaultTextShare:"Hi: Check out my moolya profile on the 'World’s 1st Comprehensive Global Digital Startup Platform: www.moolya.global'",
       branches: []
     }
 

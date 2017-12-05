@@ -38,30 +38,46 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
     } else {
       const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
       const currentUserToken = localStorageLoginToken || loginToken;
-      const middlewareLink = setContext(() => ({
-        headers: {
-          authorization: localStorage.getItem('token') || null,
-          'meteor-login-token': currentUserToken,
-          cookie : document.cookie,
-        }
-      }))
-      const link = middlewareLink.concat(httpLink);
-      const errorLink = onError(({ networkError, graphQLErrors }) => {
-        if (networkError.statusCode === 401) {
-          logout();
+      const MiddlewareLink = new ApolloLink((operation, forward) => {
+        operation.setContext({
+          headers: {
+            cookie : document.cookie,            
+            'meteor-login-token': RegExp("meteor_login_token[^;]+").exec(document.cookie)[0].toString().replace(/^[^=]+./,"") || currentUserToken,
+          }
+        });
+        return forward(operation)
+      })
+      // logger
+      const LoggerLink = new ApolloLink((operation, forward) => {
+        if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
+        return forward(operation).map(result => {
+          if (process.env.NODE_ENV === 'development') console.log(
+            `[GraphQL Logger] received result from ${operation.operationName}`,
+          )
+          return result
+        })
+      })
+      // error - use your error lib here
+      const ErrorLink = onError(({graphQLErrors, networkError}) => {
+        if (graphQLErrors)
+          graphQLErrors.map(({message, locations, path}) =>
+            console.log(
+              `[GraphQL Error] Message: ${message}, Location: ${locations}, Path: ${path}`),
+          )
+        if (networkError) {
+          if (networkError.statusCode === 401) {
+            logout();
+          } console.log(`[Network error] ${networkError}`)
         }
       })
-      const linkE = errorLink.concat(link);
-      // const addLink = new ApolloLink((operation, forward) => {
-      //   return forward(operation).map((response) => {
-      //     console.log(response)
-      //     const clonedResponse = response.clone();
-      //     return clonedResponse.json()
-
-      //   })
-      // });
-      // const linkA = addLink.concat(linkE);
-      return linkE;
+      const AddLink = new ApolloLink((operation, forward) => {
+        return forward(operation).map((response) => {
+          return response;          
+        })
+     
+      });
+      const link = ApolloLink.from([MiddlewareLink, LoggerLink, ErrorLink, AddLink, httpLink])
+      return link;
 
     }
   } else {
@@ -69,19 +85,18 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
   }
 };
 
+const cache = new InMemoryCache({
+  dataIdFromObject: r =>r.id,
+  addTypename: true,
+});
 const defaultClientConfig =
-  {
+{
     link: createMeteorNetworkInterface(),
     //ssrMode: Meteor.isServer,
-    cache: new InMemoryCache(),
-    dataIdFromObject: r =>r.id
-  };
+    cache: cache,
+};
 
 const networkInterface = defaultClientConfig.link;
 const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
-// export const client = new ApolloClient(defaultClientConfig);
-export const client = new ApolloClient({
-  link: createHttpLink({ uri: Meteor.absoluteUrl('moolyaAdmin') }),
-  cache: new InMemoryCache(),
-});
+export const client = new ApolloClient(defaultClientConfig);

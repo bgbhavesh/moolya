@@ -20,6 +20,7 @@ import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction';
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -46,7 +47,7 @@ class MlAppInternalMyTaskItem extends React.Component{
       offices:[],
       users:[],
       teamData: [{users: []}],
-      docs: []
+      docs: [],previewDocument:""
 
     };
     this.deleteDocs = this.deleteDocs.bind(this);
@@ -334,16 +335,20 @@ class MlAppInternalMyTaskItem extends React.Component{
     this.setState({docs: docs})
   }
 
+  randomDocument(link, index) {
+    let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
+    this.setState({ previewDocument: documentPreviewUrl });
+  }
+  
   attachedDocuments() {
     let that = this;
     let documents = that.state.docs || [];
     let documentsUploaded =  documents.map(function(docsToView, index){
       return(
-        <div className="thumbnail" key={index}>
+        <div className="thumbnail" key={index} >
           <FontAwesome name='trash-o' onClick={that.deleteDocs.bind(that, index)} />
-          <div id="images" className="title">
-            <img src="/images/pdf.png"/>
-          </div>
+          <a data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(that,docsToView,index)}><img src="/images/pdf.png"/></a>
+          <div id="images" className="title">{docsToView.fileName}</div>
         </div>
       )
     });
@@ -396,6 +401,28 @@ class MlAppInternalMyTaskItem extends React.Component{
      */
     return (
       <div className="step_form_wrap step1">
+            <div className="modal fade bs-example-modal-sm library-popup documentpop"
+      onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
+      aria-labelledby="mySmallModalLabel">
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          </div>
+          <div className="modal-body">
+            {this.state.previewDocument&&(this.state.previewDocument).endsWith('.pdf')?
+              <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
+              :
+
+              <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewDocument}`} />
+            }
+            {/*{<MlFileViewer/>}*/}
+            {/*<div className="img_scroll"><MlDocViewer/></div>*/}
+          </div>
+        </div>
+      </div>
+    </div>
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">

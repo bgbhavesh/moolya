@@ -319,7 +319,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
-          toastr.error("Image with the same file name already exists");
+          toastr.error("Image with the same file name already exists in your library");
           this.setState({
             uploadingAvatar: false,
             uploadingAvatar1: false,
@@ -348,7 +348,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
-          toastr.error("Image with the same file name already exists");
+          toastr.error("Image with the same file name already exists in your library");
           this.setState({
             uploadingAvatar: false,
             uploadingAvatar1: false,
@@ -388,7 +388,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "video"));
         } else {
-          toastr.error("Video with the same file name already exists");
+          toastr.error("Video with the same file name already  exists in your library");
         }
       } else {
         toastr.error("Please select a Video Format");
@@ -418,7 +418,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "template"));
         } else {
-          toastr.error("Template with the same file name already exists");
+          toastr.error("Template with the same file name already exists in your library");
         }
       } else {
         toastr.error("Please select a Template Format");
@@ -442,7 +442,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "template"));
         } else {
-          toastr.error("Template with the same file name already exists");
+          toastr.error("Template with the same file name already exists in your library");
           this.toggleModal1();
         }
       } else {
@@ -475,7 +475,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
         } else {
-          toastr.error("Document with the same file name already exists")
+          toastr.error("Document with the same file name already exists in your library")
         }
       } else {
         toastr.error("Please select a Document Format")

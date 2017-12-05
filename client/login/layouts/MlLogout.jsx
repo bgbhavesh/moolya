@@ -7,6 +7,8 @@ import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
+
+const webSiteUrl = Meteor.settings.public.phpWebSiteLink;
 export default class MlLogout extends Component {
   constructor(props) {
     super(props)
@@ -46,8 +48,13 @@ export default class MlLogout extends Component {
         toastr.error(this.validationMessage.errMsg);
     }
   }
+  rememberMe(isRememberMeChecked){
+    localStorage.setItem('rememberMe',isRememberMeChecked+'');
+  }
 
   componentDidMount() {
+
+    localStorage.setItem('rememberMe','false');
     initalizeFloatLabel();
   }
 
@@ -67,9 +74,9 @@ export default class MlLogout extends Component {
   redirectRegister(e){
     e.preventDefault();
     if(!Meteor.isCordova){
-      window.location.href = "https://www.moolya.global/register";
+      window.location.href = webSiteUrl;
     } else{
-      window.open('https://www.moolya.global/register', '_system');
+      window.open(webSiteUrl, '_system');
     }
 }
   render() {
@@ -98,7 +105,7 @@ export default class MlLogout extends Component {
                   <span ref="Password">{this.state.passwordErr}</span>
                   <input type="password" name="Password" className="form-control float-label" ref="password"
                          placeholder="Password" required defaultValue={this.state.password}/>
-                  <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
+                  <div className="checkbox_wrap"><input type="checkbox" value={false} onClick={e=>this.rememberMe(e.target.checked)}/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a

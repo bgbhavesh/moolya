@@ -138,7 +138,7 @@ export default class MlStartupEmployeeBreakup extends React.Component{
     data["ebdToMonth"] =  this.refs["ebdToMonth"+index].state.inputValue;
     data["ebdToYear"] =   this.refs["ebdToYear"+index].state.inputValue;
     data["ebdNumberOfEmployment"] =  this.refs["ebdNumberOfEmployment"+index].value;
-    data["ebdAbout"] = this.state.selectedVal;
+    data["ebdAbout"] = this.refs["ebdAbout"+index].value;
     data["index"] =  this.state.startupCompanyData&&this.state.startupCompanyData.length?this.state.startupCompanyData.length:0
     let clients = this.state.startupCompanyData;
     clients[index] = data

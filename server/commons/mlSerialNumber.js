@@ -96,6 +96,16 @@ if (!systemTransactionNumber) {
   MlSerialNumbers.insert({_id: "systemTransactionNumber", seq: 0});
 }
 
+var onBoardTransactionNumber=MlSerialNumbers.findOne({_id: "onBoardTransactionNumber"});
+if (!onBoardTransactionNumber) {
+  MlSerialNumbers.insert({_id: "onBoardTransactionNumber", seq: 0});
+}
+
+var shareLibraryNumber=MlSerialNumbers.findOne({_id: "shareLibraryNumber"});
+if (!shareLibraryNumber) {
+  MlSerialNumbers.insert({_id: "shareLibraryNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -177,16 +187,34 @@ orderNumberGenService = (function(){
       data.paymentId = "PY"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"),10);
     },
     createConnectionInteractionId: function (data) {
-      data.transactionId = "CR"+ FormatUtil.leadingZeros(getNextSequence("connectionRequestNumber"),10);
+      var transactionId= "CR"+ FormatUtil.leadingZeros(getNextSequence("connectionRequestNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
     },
     createLikeInteractionId: function (data) {
-      data.transactionId = "LK"+ FormatUtil.leadingZeros(getNextSequence("likesNumber"),10);
+      var transactionId= "LK"+ FormatUtil.leadingZeros(getNextSequence("likesNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
     },
     createReviewInteractionId: function (data) {
-      data.transactionId = "RV"+ FormatUtil.leadingZeros(getNextSequence("reviewsNumber"),10);
+      var transactionId="RV"+ FormatUtil.leadingZeros(getNextSequence("reviewsNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
     },
     createSystemTransactionId: function (data) {
-      data.transactionId = "SY"+ FormatUtil.leadingZeros(getNextSequence("systemTransactionNumber"),10);
+      var transactionId= "SY"+ FormatUtil.leadingZeros(getNextSequence("systemTransactionNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createOnBoardTransactionId: function (data) {
+      var transactionId= "OB"+ FormatUtil.leadingZeros(getNextSequence("onBoardTransactionNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
+    },
+    createShareLibraryId:function(data){
+      var transactionId= "SD"+ FormatUtil.leadingZeros(getNextSequence("shareLibraryNumber"),10);
+      if(data){data.transactionId = transactionId; return data;};
+      return transactionId;
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

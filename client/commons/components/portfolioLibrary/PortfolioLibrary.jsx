@@ -319,7 +319,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
-          toastr.error("Image with the same file name already exists");
+          toastr.error("Image with the same file name already exists in your library");
           this.setState({
             uploadingAvatar: false,
             uploadingAvatar1: false,
@@ -348,7 +348,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "image"));
         } else {
-          toastr.error("Image with the same file name already exists");
+          toastr.error("Image with the same file name already exists in your library");
           this.setState({
             uploadingAvatar: false,
             uploadingAvatar1: false,
@@ -388,7 +388,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "video"));
         } else {
-          toastr.error("Video with the same file name already exists");
+          toastr.error("Video with the same file name already  exists in your library");
         }
       } else {
         toastr.error("Please select a Video Format");
@@ -418,7 +418,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "template"));
         } else {
-          toastr.error("Template with the same file name already exists");
+          toastr.error("Template with the same file name already exists in your library");
         }
       } else {
         toastr.error("Please select a Template Format");
@@ -442,7 +442,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "template"));
         } else {
-          toastr.error("Template with the same file name already exists");
+          toastr.error("Template with the same file name already exists in your library");
           this.toggleModal1();
         }
       } else {
@@ -475,7 +475,7 @@ class Library extends React.Component {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
         } else {
-          toastr.error("Document with the same file name already exists")
+          toastr.error("Document with the same file name already exists in your library")
         }
       } else {
         toastr.error("Please select a Document Format")
@@ -643,7 +643,7 @@ class Library extends React.Component {
     if (resp !== 'Maximum file size exceeded') {
       var link = JSON.parse(resp).result;
       if (!this.state.isLibrary) {
-        Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+        Confirm('', " Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
           if(ifConfirm){
             let addToCentralLibrary = true;
             this.storeData(link, type, addToCentralLibrary)
@@ -918,6 +918,23 @@ class Library extends React.Component {
     return popImages
   }
 
+
+  popImagesinPopUp() {
+    let that = this;
+    let popImageData = this.state.imageDetails || [];
+    const popImages = popImageData.map(function (show, id) {
+      if (show.inCentralLibrary) {
+        return (
+          <div className="thumbnail"  key={id}>
+              <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
+            <div id="images" className="title">{show.fileName}</div>
+          </div>
+        )
+      }
+    });
+    return popImages
+  }
+
   showSharedFiles() {
     let that = this;
     let popImageData = that.state.sharedFiles || [];
@@ -1007,6 +1024,22 @@ class Library extends React.Component {
                 src={generateAbsolutePath(show.fileUrl)} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={generateAbsolutePath(show.fileUrl)} /></a>}
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )
+      }
+    });
+    return popTemplates
+  }
+
+  popTemplatesinPopUp() {
+    let that = this;
+    let popTemplateData = this.state.templateDetails || [];
+    const popTemplates = popTemplateData.map(function (show, id) {
+      if (show.inCentralLibrary) {
+        return (
+          <div className="thumbnail"  key={id}>
+            <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1106,6 +1139,30 @@ class Library extends React.Component {
     });
     return popVideos;
   }
+
+
+
+  popVideosinPopUp() {
+    let that = this;
+    let popVideoData = this.state.videoDetails || [];
+    const popVideos = popVideoData.map(function (show, id) {
+      if (show.inCentralLibrary) {
+        return (
+          <div className="thumbnail"  key={id}>
+            <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+              <video width="120" height="100" >
+                <source src={generateAbsolutePath(show.fileUrl)} type="video/mp4"></source>
+              </video>
+            </a>
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )
+      }
+    });
+    return popVideos
+  }
+
+
 
   /**
    * Method :: documents
@@ -1212,6 +1269,35 @@ class Library extends React.Component {
     });
     return popDocuments;
   }
+
+
+  popDocumentsinPopUp() {
+    let that = this;
+    let popDocumentData = this.state.documentDetails || [];
+    const popDocuments = popDocumentData.map(function (show, id) {
+      var docType = 'doc';
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'ppt'){
+          docType = type;
+        }
+      }
+      if (show.inCentralLibrary) {
+        return (
+          <div className="thumbnail"  key={id}>
+            <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={`/images/${docType}.png`}/></a>
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )
+      }
+    });
+    return popDocuments
+  }
+
 
   /**
    * Method :: sendDataToPortfolioLibrary
@@ -1346,9 +1432,13 @@ class Library extends React.Component {
       }
       $(this).parents('.panel').find(".show-information").toggle(200);
     });
-
+setTimeout(function(){
     var mySwiper = new Swiper('.manage_tasks', {
-    });
+      slidesPerView: 'auto',
+      speed: 400,
+      spaceBetween: 5
+  });
+},300);
 
     //$(".library-wrap .see-less").click(function(){
       //$(this).parents('.library-wrap').addClass("wrap_open")
@@ -1561,25 +1651,25 @@ class Library extends React.Component {
     let that = this;
     let ImageDetails = {
       id: "create_client",
-      toDisplay: this.popImages(),
+      toDisplay: this.popImagesinPopUp(),
       placement: "left",
       title: "Images"
     }
     let TemplateDetails = {
       id: "create_template",
-      toDisplay: this.popTemplates(),
+      toDisplay: this.popTemplatesinPopUp(),
       placement: "left",
       title: "Templates"
     }
     let VideoDetails = {
       id: "create_video",
-      toDisplay: this.popVideos(),
+      toDisplay: this.popVideosinPopUp(),
       placement: "left",
       title: "Videos"
     }
     let DocumentDetails = {
       id: "create_document",
-      toDisplay: this.popDocuments(),
+      toDisplay: this.popDocumentsinPopUp(),
       placement: "left",
       title: "Documents"
     }
@@ -1619,7 +1709,7 @@ class Library extends React.Component {
 
     return (
       <div>
-        <h2>Library</h2>
+        <h2>Library {this.state.totalLibrarySize} of 50 MB used</h2>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
@@ -1702,7 +1792,7 @@ class Library extends React.Component {
                 <CropperModal
                   uploadingImage={this.state.uploadingAvatar}
                   handleImageUpload={this.handleUploadAvatar}
-                  cropperStyle="any"
+                  cropperStyle="circle"
                   show={this.state.showProfileModal}
                   toggleShow={this.toggleModal}
                 />
@@ -1729,7 +1819,7 @@ class Library extends React.Component {
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
               </div>
                 </div>
               </div>
@@ -1770,7 +1860,7 @@ class Library extends React.Component {
                 <CropperModal
                   uploadingImage={this.state.uploadingAvatar1}
                   handleImageUpload={this.handleUploadAvatar1}
-                  cropperStyle="any"
+                  cropperStyle="circle"
                   show={this.state.showProfileModal1}
                   toggleShow={this.toggleModal1}
                 />
@@ -1857,7 +1947,7 @@ class Library extends React.Component {
               </div>
             </div>
           </PopoverContent>
-          <CropperModal handleImageUpload={this.uploadImage2.bind(this)} toggleShow={this.toggleShowImageUploadCropper} show={this.state.showImageUploadCropper} uploadingImage={this.state.uploadingImage2} cropperStyle={'any'}/>
+          <CropperModal handleImageUpload={this.uploadImage2.bind(this)} toggleShow={this.toggleShowImageUploadCropper} show={this.state.showImageUploadCropper} uploadingImage={this.state.uploadingImage2} cropperStyle={'circle'}/>
         </Popover>
         {this.state.isLibrary ? <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} /> : ""}
       </div>

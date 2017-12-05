@@ -4,6 +4,7 @@
 import MlUserContext from '../mlUserContext'
 import MlRespPayload from '../../commons/mlPayload'
 import _ from 'lodash'
+import {userAgent} from '../../commons/utils'
 
 import moment from "moment";
 import MlTransactionsHandler from '../../commons/mlTransactionsLog';
@@ -66,6 +67,12 @@ class MlServiceCardRepo{
               }
               return response
             }
+            let machineInfo =userAgent(context.browser);
+            var deviceInfo = {
+                deviceName: machineInfo.osName,
+                deviceId: machineInfo.osVersion,
+                ipAddress: context.ip
+            }
 
             var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName', 'communityCode'];
             var serviceCard                 = service;
@@ -75,6 +82,7 @@ class MlServiceCardRepo{
             serviceCard["versions"]         =  INITIAL_VERSION;
             serviceCard["isApproved"]       =  false;
             serviceCard["isCurrentVersion"] =  true;
+            serviceCard["deviceDetails"]    =  deviceInfo;
             orderNumberGenService.createServiceId(serviceCard);
             var userExternalProfile = new MlUserContext().userProfileDetailsByProfileId(service.profileId);
             if (userExternalProfile) {
@@ -87,6 +95,7 @@ class MlServiceCardRepo{
               });
             }
             result = mlDBController.insert('MlServiceCardDefinition' , serviceCard, context)
+            this.createTransactionRequest(context.userId, "serviceCardCreated", result, result, context.userId, 'user', context)
             if(!result){
               let code = 400;
               return new MlRespPayload().errorPayload(result, code);
@@ -162,6 +171,13 @@ class MlServiceCardRepo{
           return response
         }
 
+        let machineInfo =userAgent(context.browser);
+        var deviceInfo = {
+          deviceName: machineInfo.osName,
+          deviceId: machineInfo.osVersion,
+          ipAddress: context.ip
+        }
+        servicecard["deviceDetails"] =  deviceInfo;
 
         if(servicecard.tasks){
           let taskIds = servicecard.tasks.map(function (task) { return task.id; });
@@ -239,6 +255,7 @@ class MlServiceCardRepo{
         servicecard.isReview = false;
         servicecard.isApproved = false;
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
+        this.createTransactionRequest(context.userId, "serviceCardUpdated", service._id, service._id, context.userId, 'user', context)
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
         }
@@ -619,6 +636,36 @@ class MlServiceCardRepo{
               'activityDocId': resourceId,
               'docId': orderId,
               'transactionDetails': 'Service-Purchased',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
+            case "serviceCardCreated":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'ServiceCard-Created',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Created',
+              'context': context || {},
+              'transactionTypeId': "appointment",
+              'fromUserType': fromUserType
+            });
+            break;
+            case "serviceCardUpdated":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'appointment',
+              'activity': 'ServiceCard-Updated',
+              'transactionType': 'appointment',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'Service-Updated',
               'context': context || {},
               'transactionTypeId': "appointment",
               'fromUserType': fromUserType

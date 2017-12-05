@@ -7,7 +7,8 @@ import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
 import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
 import { graphql,compose } from 'react-apollo';
 import gql from 'graphql-tag'
-import MlLoader from '../../../commons/components/loader/loader'
+import MlLoader from '../../../commons/components/loader/loader';
+import isEqualWith from 'lodash/isEqualWith';
 
 import { withApollo } from 'react-apollo';
 
@@ -16,12 +17,25 @@ class MlAdminAppComponent extends Component {
 
   constructor(p, c) {
     super(p, c)
-    this.state = { theme: null,language:null,menu:null,loading:true,userType:null};
+    this.state = { theme: null,language:null,menu:null,loading:true,userType:null,breadcrumbValue:1};
     this.fetchMenu.bind(this);
   }
 
+  shouldComponentUpdate(nextProps,nextState,nextContext){
+    if(!FlowRouter.getQueryParam('tab')) return true;
+
+    return !isEqualWith(this.props, nextProps) ||
+      !isEqualWith(this.state, nextState) ||
+      !isEqualWith(this.context, nextContext);
+  }
+
+
   componentDidMount(){
     this.fetchMenu();
+  }
+
+  breadcrumbClicked(){
+    this.setState({breadcrumbValue: !this.state.breadcrumbValue});
   }
 
   async fetchMenu(){
@@ -41,9 +55,12 @@ class MlAdminAppComponent extends Component {
       if (props.showLoader) {
         return <MlLoader/>;
       }
+      var headerComponent =null;
+      if(props.headerContent)headerComponent=React.cloneElement(props.headerContent,{breadcrumbClicked:props.breadcrumbClicked});
+
 
       return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
-        {props.headerContent ? (props.headerContent) : (<MlAdminHeader/>)}
+        {headerComponent ? (headerComponent) : (<MlAdminHeader breadcrumbClicked={props.breadcrumbClicked}/>)}
         {/*<MlAdminHeader/>*/}
         <MlAdminLeftNav/>
         {props.adminContent}
@@ -51,7 +68,7 @@ class MlAdminAppComponent extends Component {
 
     };
 
-    return <MlComponent {...this.props} showLoader={showLoader} theme={this.state.theme} menu={this.state.menu} language={this.state.language} userType={this.state.userType}/>;
+    return <MlComponent breadcrumbClicked={this.breadcrumbClicked.bind(this)} {...this.props} showLoader={showLoader} theme={this.state.theme} menu={this.state.menu} language={this.state.language} userType={this.state.userType}/>;
   }
 }
 

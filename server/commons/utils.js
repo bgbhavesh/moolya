@@ -5,8 +5,11 @@
 /**
  * Updated by shubhankit on 24/8/17
  */
+const CryptoJS = require("crypto-js");
 
 var useragent = require('useragent');
+const passwordSecretKey = "Rak@Se_Key$12";
+
 Number.prototype.round = function(p) {
   p = p || 10;
   return parseFloat( this.toFixed(p) );
@@ -61,4 +64,16 @@ export const userAgent = function(useragentString){
            agentName:ugDetails.toString(),
            agentVersion:ugDetails.toVersion()
       };
+}
+
+export const encryptPassword = (password)=>{
+  var ciphertext = CryptoJS.AES.encrypt(password, passwordSecretKey);
+  console.log("encrypted", ciphertext.toString());
+  return ciphertext.toString();
+}
+
+export const deCryptPassword = (password)=>{
+  var bytes  = CryptoJS.AES.decrypt(password, passwordSecretKey);
+  console.log("decrypted", bytes.toString(CryptoJS.enc.Utf8));
+  return bytes.toString(CryptoJS.enc.Utf8);
 }

@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -205,7 +206,13 @@ export default class institution extends React.Component{
       ]
     }
     let that=this;
-
+    let foundationActive ='',institutionTypesActive = ''
+    if(that.state.foundationDate){
+      foundationActive='active'
+    }
+    if(this.state.selectedInstitutionType){
+      institutionTypesActive = 'active'
+    }
     let institutionTypes = [
       {value: 'SubChapter', label: 'SubChapter'},
       {value: 'Institution', label: 'Institution'}
@@ -267,7 +274,7 @@ export default class institution extends React.Component{
         {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
-      <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+      <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
       <div className="col-md-6 nopadding-left">
           <div className="form_bg">
               <form>
@@ -275,6 +282,7 @@ export default class institution extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
+                  <span className={`placeHolder ${institutionTypesActive}`}>Select Institution Type</span>
                   <Select name="form-field-name" placeholder="Select Institution Type" options={institutionTypes} value={this.state.selectedInstitutionType}  onChange={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
@@ -284,6 +292,7 @@ export default class institution extends React.Component{
                   <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">
+                  <span className={`placeHolder ${foundationActive}`}>Foundation Year</span>
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"foundationDate"} inputProps={{placeholder: "Foundation Year",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
@@ -339,7 +348,7 @@ export default class institution extends React.Component{
     </form>
     </div>
     </div>
-      </ScrollArea>
+      </Scrollbars>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div> )}
       </div>

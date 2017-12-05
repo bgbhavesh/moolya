@@ -14,7 +14,7 @@ import _ from 'lodash'
 export default class MlIdeatorPortfolioEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], ideatorPortfolio: {}, idea: {}, portfolioKeys: {privateKeys:[], removePrivateKeys:[]}};
+    this.state = {tabs: [], ideatorPortfolio: {}, idea: {}, portfolioKeys: {privateKeys:[], removePrivateKeys:[],activeTab:'Ideas'}};
     this.getIdeatorDetails.bind(this);
     this.getProblemSolution.bind(this)
     this.getChildContext.bind(this)
@@ -166,6 +166,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
+        key: tab.title,
         getContent: () => tab.component
       }));
     }
@@ -189,10 +190,14 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
       return resp
     }
   }
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
+  }
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="title"/>
   }
 }
 MlIdeatorPortfolioEditTabs.childContextTypes = {

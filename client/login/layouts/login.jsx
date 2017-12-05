@@ -4,6 +4,8 @@ import {mlValidations} from "../../commons/validations/formValidation";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {validatedEmailId} from "../../commons/validations/mlfieldValidation";
 import passwordSAS_validate from '../../../lib/common/validations/passwordSASValidator';
+
+const webSiteUrl = Meteor.settings.public.phpWebSiteLink;
 MlLoginLayout = React.createClass({
   render(){
     return <main>{this.props.content}</main>
@@ -16,6 +18,10 @@ MlLoginContent = React.createClass({
     this.state = {username: "", password: "", userNameErr: "", passwordErr: ""};
     this.validationMessage = "";
     return this;
+  },
+
+  rememberMe(isRememberMeChecked){
+    localStorage.setItem('rememberMe',isRememberMeChecked+'');
   },
 
   loginSubmit(){
@@ -53,6 +59,8 @@ MlLoginContent = React.createClass({
   componentDidMount() {
     var WinHeight = $(window).height();
     $('.login_bg').height(WinHeight);
+
+    localStorage.setItem('rememberMe','false');
     initalizeFloatLabel();
   },
   onValueChange(event){
@@ -70,9 +78,9 @@ MlLoginContent = React.createClass({
   },
   redirectRegister(){
       if(!Meteor.isCordova){
-        window.location.href = "https://www.moolya.global/register";
+        window.location.href = webSiteUrl;
       } else{
-        window.open('https://www.moolya.global/register', '_system');
+        window.open(webSiteUrl, '_system');
       }
   },
   render() {
@@ -100,7 +108,7 @@ MlLoginContent = React.createClass({
                          placeholder="Password" required defaultValue={this.state.password}
                          onBlur={this.validationCheck}/>
 
-                  <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
+                  <div className="checkbox_wrap"><input type="checkbox" value={false} onClick={e=>this.rememberMe(e.target.checked)}/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="/forgot-password">Forgot Password</a> | <a onClick={this.redirectRegister.bind(this)} href="#">Register</a></p>

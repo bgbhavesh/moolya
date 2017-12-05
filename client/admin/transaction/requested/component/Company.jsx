@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -351,13 +352,20 @@ export default class Company extends React.Component{
     let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     //let countryOption = {options: { variables: {countryId:this.props.clusterId}}};
     let that=this;
+    let foundationActive ='',subsidarycomapnyActive = ''
+    if(that.state.foundationDate){
+      foundationActive='active'
+    }
+    if(this.state.selectedSubsidaryComapny){
+      subsidarycomapnyActive='active'
+    }
     const showLoader=this.state.loading;
     return (
       <div>
         {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
-      <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+      <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
         <div className="col-md-6 nopadding-left">
           <div className="form_bg">
             <form>
@@ -383,6 +391,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group mandatory">
+                <span className={`placeHolder ${foundationActive}`}>Foundation Year</span>
                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  ref={"foundationDate"} inputProps={{placeholder: "Foundation Year",readOnly:true}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Foundation Date is required"/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
@@ -439,6 +448,7 @@ export default class Company extends React.Component{
                 <Moolyaselect multiSelect={false} placeholder="Select Stage Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedStageOfCompany} queryType={"graphql"} query={stageofcompquery} onSelect={that.optionsBySelectStageOfCompany.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
+                <span className={`placeHolder ${subsidarycomapnyActive}`}>Select Subsidiary Company</span>
                 <Select name="form-field-name" placeholder="Select Subsidiary Company" options={subsidary} value={this.state.selectedSubsidaryComapny} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
               </div>
               {this.state.selectedSubsidaryComapny=='Yes'?
@@ -464,7 +474,7 @@ export default class Company extends React.Component{
             </form>
           </div>
         </div>
-      </ScrollArea>
+      </Scrollbars>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div> )}
       </div>

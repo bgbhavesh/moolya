@@ -8,7 +8,7 @@ import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
 
 export default class MlInstitutionCSREditTabs extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props)
     this.state =  {
       tabs: [],
@@ -78,25 +78,25 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     return tabs;
   }
 
-  getInstitutionEvolution(details, privateKey){
-    let data = this.state.evolution;
-    data = details;
-    this.setState({evolution : data})
-    this.props.getCSRDetails(data,"evolution", privateKey);
+  getInstitutionEvolution(details, privateKey) {
+    // let data = this.state.evolution;
+    // data = details;
+    // this.setState({evolution : data})
+    this.props.getCSRDetails(details, "evolution", privateKey);
   }
 
-  getInstitutionAchivements(details, privateKey, requiredFields){
-    let data = this.state.achivements;
-    data=details;
-    this.setState({achivements : data})
-    this.props.getCSRDetails(data, "achievements", privateKey, requiredFields);
+  getInstitutionAchivements(details, privateKey, requiredFields) {
+    // let data = this.state.achivements;
+    // data=details;
+    // this.setState({achivements : data})
+    this.props.getCSRDetails(details, "achievements", privateKey, requiredFields);
   }
 
-  getInstitutionPolicy(details, privateKey){
-    let data = this.state.listOfIncubators;
-    data = details;
-    this.setState({policy : data})
-    this.props.getCSRDetails(data,"policy", privateKey);
+  getInstitutionPolicy(details, privateKey) {
+    // let data = this.state.listOfIncubators;
+    // data = details;
+    // this.setState({policy : data})
+    this.props.getCSRDetails(details, "policy", privateKey);
   }
 
 
@@ -127,9 +127,9 @@ export default class MlInstitutionCSREditTabs extends React.Component{
       }));
     }
     let AllTabs =getTabs() ||[];
-    if(admin){
-      AllTabs.forEach(function(v){ delete v.key });
-    }
+    // if(admin){
+    //   AllTabs.forEach(function(v){ delete v.key });
+    // }
     let activeTab = FlowRouter.getQueryParam('subtab');
     if(activeTab){
       this.setState({activeTab,tabs:AllTabs,admin});
@@ -146,10 +146,10 @@ export default class MlInstitutionCSREditTabs extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    if(this.state.admin){
-      return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
-    }
-    else{
+    // if(this.state.admin){
+    //   return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
+    // }
+    // else{
       return <MlTabComponent tabs={tabs}
                              selectedTabKey={this.state.activeTab}
                              onChange={this.updateTab}
@@ -158,6 +158,6 @@ export default class MlInstitutionCSREditTabs extends React.Component{
       />
     }
 
-  }
+  // }
 }
 

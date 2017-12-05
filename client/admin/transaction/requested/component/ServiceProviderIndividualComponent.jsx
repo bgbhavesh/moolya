@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -380,12 +381,19 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
 
     let that=this;
+    let dateOfBirthActive='',employementdateActive =''
+    if(that.state.dateOfBirth){
+      dateOfBirthActive='active'
+    }
+    if(that.state.employmentDate){
+      employementdateActive='active'
+    }
     const showLoader=this.state.loading;
     return (
 
       <div>
           <div className="col-md-6 nopadding-left">
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
             <div className="form_bg">
               <form>
@@ -416,6 +424,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
+                    <span className={`placeHolder ${dateOfBirthActive}`}>Date Of Birth</span>
                     <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  ref={"dob"} inputProps={{placeholder: "Date Of Birth",readOnly:true}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid }  data-required={true} data-errMsg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerDateOfBirth.bind(that)} />
                     {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
@@ -436,10 +445,10 @@ export default class ServiceProviderIndividualComponent extends React.Component{
 
               </form>
             </div>
-            </ScrollArea>
+            </Scrollbars>
           </div>
           <div className="col-md-6 nopadding-right">
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            <Scrollbars speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
             <div className="form_bg">
               <form>
@@ -467,6 +476,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                   <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group" id="date-time">
+                  <span className={`placeHolder ${employementdateActive}`}>Employment Date</span>
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date",readOnly:true}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerEmploymentDate.bind(that)}/>
                 </div>
@@ -475,7 +485,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                 </div>
               </form>
             </div>
-            </ScrollArea>
+            </Scrollbars>
           </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>

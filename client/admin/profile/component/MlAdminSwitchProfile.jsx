@@ -158,7 +158,7 @@ export default class MlAdminSwitchProfile extends React.Component{
                     {that.state.userProfiles.map(function (prf, idx) {
                       return(
                         <div className="swiper-slide profile_accounts" key={idx} name={idx} onClick={that.onChange.bind(that)}>
-                          <img src={prf.clusterFlag?generateAbsolutePath(prf.clusterFlag):""}/><br />{prf.clusterName?prf.clusterName:""}
+                          <img src={prf.clusterFlag?Meteor.settings.public.countriesFlagBaseUrl+prf.clusterFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
                           <h2>{prf.clusterName?prf.clusterName:""}</h2>
                         </div>
                       )

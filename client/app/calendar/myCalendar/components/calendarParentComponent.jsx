@@ -69,6 +69,15 @@ export default class MLAppMyCalendar extends Component {
       endMonth = startMonth;
       endYear =startYear;
     }
+    // else if(view === 'month'){
+    //   startDay = date.getDate();
+    //   startMonth = date.getMonth();
+    //   startYear = date.getFullYear();
+    //
+    //   endDay =new Date(date.setMonth(date.getMonth() + 1, 0)).getDate();
+    //   endMonth = startMonth;
+    //   endYear =startYear;
+    // }
 
     let profileId = this.state.profileId;
     let userId = Meteor.userId();
@@ -106,7 +115,15 @@ export default class MLAppMyCalendar extends Component {
 
   onViewChange (view) {
     this.setState({calendarView:view});
-    this.onViewOrNagivationChange(view);
+    let profileId = this.state.profileId;
+    if(profileId){
+      if(view === 'day' ||view === 'week' ){
+        this.onViewOrNagivationChange(view);
+      }else
+        this.getProfileBasedAppointments(profileId);
+    } else {
+      this.getAppointmentCounts()
+    }
   }
 
   componentWillUpdate(nextProps, nextState){

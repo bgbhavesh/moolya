@@ -301,18 +301,18 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device Name" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceName?that.state.data.deviceDetails.deviceName:""} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Device Name" value={that.props.data.deviceDetails&&that.props.data.deviceDetails.deviceName?that.props.data.deviceDetails.deviceName:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Device Id" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceId?that.state.data.deviceDetails.deviceId:""} className="form-control float-label" />
+                  <input type="text" placeholder="Device Id" value={that.props.data.deviceDetails&&that.props.data.deviceDetails.deviceId?that.props.data.deviceDetails.deviceId:""} className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="IP Address" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.ipAddress?that.state.data.deviceDetails.ipAddress:""} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="IP Address" value={that.props.data.deviceDetails&&that.props.data.deviceDetails.ipAddress?that.props.data.deviceDetails.ipAddress:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="IP Location" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.location?that.state.data.deviceDetails.location:""} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="IP Location" value={that.props.data.deviceDetails&&that.props.data.deviceDetails.location?that.props.data.deviceDetails.location:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>

@@ -230,6 +230,14 @@ let service=`
     isApproved: Boolean
     userDetails: UserDetails
     finalAmount:Float
+    deviceDetails: deviceInfo
+  }
+  
+  type deviceInfo {
+    deviceName: String
+    ipAddress: String
+    deviceId: String
+    location: String
   }
 
    input serviceFacilitationCharge {

@@ -764,7 +764,8 @@ validateinternalUserLoginAttempt=(user)=>{
             }
 
             // let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityCode}, {isActive:true}]})
-            const defaultCommunity = MlCommunity.findOne({_id: role.communityId, isActive: true});
+            // const defaultCommunity = MlCommunity.findOne({_id: role.communityId, isActive: true});
+            const defaultCommunity = getCommunityAccessCriteria(role);
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }
@@ -797,57 +798,23 @@ validateinternalUserLoginAttempt=(user)=>{
 MlNotificationController.createNewApplication()
 mlResourceConfigRepo.defaultResourceConfig();
 /******************************************* User Login <End> *********************************************************/
-/******************************************* Teplates <Start> *******************************************************/
-/*let process = MlprocessTypes.findOne({processName:"Registration"})
-if(!process) {
-process = {
-    processName   : "Registration",
-    displayName   : "Registration",
-    processDesc   : "Registration Details",
-    isActive      : true
-}
-MlprocessTypes.insert(process);
-}
-let subProces = MlSubProcess.findOne({subProcessName:"Registration"})
-if(!subProces) {
-  let process = MlprocessTypes.findOne({processName:"Registration"})
-  let stepDetails = [{stepId: "1", stepCode: "SOFT", stepName: "Soft",isActive:true},{stepId: "2", stepCode: "HARD", stepName: "Hard",isActive:true},{stepId: "3", stepCode: "PORTFOLIO", stepName: "Portfolio",isActive:true}]
-   subProces = {
-    processName           : "Registration",
-    procesId              : process._id,
-    subProcessName        : "Registration",
-    subProcessDescription : "Registration Details",
-    isActive              : true,
-    steps                 : stepDetails,
-    createdBy             : "System",
-    createdDate           : "01-02-2017"
-  };
-  MlSubProcess.insert(subProces);
-}*/
-/*let proc = MlprocessTypes.findOne({processName:"Registration"})
-let subProc = MlSubProcess.findOne({processName:"Registration"})
-let template = MlTemplates.findOne({processName:"Registration"})
-if(!template){
-let templates = [{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-1",templateDescription:"",isActive: true,createdDate: "01-02-2017"},
-                 {stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-2",templateDescription:"",isActive: true,createdDate: "01-02-2017"},
-                 {stepName:"Hard",stepCode:"HARD",templateCode:"",templateName:"Hard-Template-2",templateDescription:"",isActive: true,createdDate: "02-02-2017"},
-                 {stepName:"Hard",stepCode:"HARD",templateCode:"",templateName:"Hard-Template-2",templateDescription:"",isActive: true,createdDate: "02-02-2017"},
-                 {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"",templateName:"Portfolio-Template-2",templateDescription:"",isActive: true,createdDate: "03-03-2017"},
-                 {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"",templateName:"Portfolio-Template-2",templateDescription:"",isActive: true,createdDate: "03-03-2017"}]
-  let templateObject = {
-    procesId                    : proc._id,
-    subProcessId                : subProc._id,
-    processName                 : "Registration",
-    subProcessName              : "Registration",
-    templates                   : templates,
-    createdBy                   : "System",
-    createdDate                 : "01-02-2017",
-    isActive                    : true
+
+/********************************************functions <start>*********************************************************/
+const getCommunityAccessCriteria = (role) => {
+  let response = false;
+  const isCommunityActive = MlCommunityAccess.findOne({communityDefCode:role.communityCode, "hierarchyLevel" : 4, isActive:true});
+  if(isCommunityActive){
+    const clusterStatusCheck = MlCommunityAccess.findOne({clusterId:role.clusterId, communityDefCode:role.communityCode, "hierarchyLevel" : 3, isActive:true});
+    if(clusterStatusCheck){
+      const chapterStatusCheck = MlCommunityAccess.findOne({clusterId:role.clusterId, chapterId:role.chapterId, communityDefCode:role.communityCode, "hierarchyLevel" : 2, isActive:true});
+      if(chapterStatusCheck){
+        const subChapterStatusCheck = MlCommunityAccess.findOne({clusterId:role.clusterId, chapterId:role.chapterId, subChapterId:role.subChapterId, communityDefCode:role.communityCode, "hierarchyLevel" : 1, isActive:true});
+        if(subChapterStatusCheck){
+          response = true
+        }
+      }
+    }
   }
-  MlTemplates.insert(templateObject);
-}*/
-
-
-/******************************************* Templates <Start> *******************************************************/
-
-
+  return response
+};
+/********************************************functions <end>***********************************************************/

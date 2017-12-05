@@ -9,6 +9,13 @@ var from=Meteor.settings.private.fromEmailAddr;
 Meteor.startup(function () {
   //console.log(encodeURIComponent("qasmtp@moolya.in"));
   process.env.MAIL_URL = Meteor.settings.private.smtpMailUrl;
+  let mmm = Meteor.isCordova;
+  if(mmm){
+    console.log(process.env.ROOT_URL);
+  }else{
+      console.log(mmm);
+    console.log('Not Cordova')
+;  }
 });
 
   class SmtpEmail{

@@ -24,9 +24,8 @@ export default class MlMicroSitePreview extends React.Component {
     const url = response.url
 
     if (url) {
-      let absoluteUrl = window.location.origin + '/view' + url
+      let absoluteUrl = url
       this.setState({src: absoluteUrl})
-
     }
     else {
       this.setState({src: false})
@@ -49,10 +48,8 @@ export default class MlMicroSitePreview extends React.Component {
             </div>)
             :
             (<div align="center"
-                  style={{'text-align': 'center', 'margin': '20px 0 0 0', 'fontSize': '25px', 'color': 'black'}}>
-              <span style={{'backgroundColor': 'yellow'}}> Your public profile will be created, once your moolya portfolio is made live.</span>
-
-              <span  style={{'backgroundColor': 'yellow','display':'inline-block'}}>You can then share it with your friends and colleagues over email and social media.</span>
+                  style={{'text-align': 'center', 'margin': '20% 0 0 0', 'fontSize': '15px', 'color': 'black'}}>
+              <span> Your public profile will be created, once your moolya portfolio is made live.<br />You can then share it with your friends and colleagues over email and social media.</span>
             </div>)
         }
       </div>)

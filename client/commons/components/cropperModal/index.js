@@ -70,7 +70,7 @@ export default class CropperModal extends React.PureComponent {
     const CModal = (
       <Modal show={show}>
         <Modal.Header>
-          Choose your profile picture.
+         <center> Choose the image to upload. </center>
         </Modal.Header>
         <Modal.Body>
           {uploadingImage ? <MlLoader /> : ''}
@@ -80,6 +80,7 @@ export default class CropperModal extends React.PureComponent {
                 <a className="mlUpload_btn">Browse Image</a>
               </label>
             </center>
+            <p className="text-center small">Scroll to zoom in or zoom out of the image. You can crop your image using the blue square.</p>
             <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeImageSrc} style={{ display: 'none' }} />
             <br />
             <br />
@@ -111,9 +112,7 @@ export default class CropperModal extends React.PureComponent {
     );
     if (cropperStyle === 'circle') {
       return (
-        <div className={cropperStyle === 'circle' ? 'circle-cropper': ''}>
-          {CModal}
-        </div>
+        CModal
       );
     }
     return CModal;

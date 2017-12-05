@@ -55,7 +55,8 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
         onBoardRequested = true;
         result = mlDBController.update('MlStage', {_id:args.stageId} , {onBoardRequest: true}, {$set:true}, context);
       let user = mlDBController.findOne('MlPortfolioDetails', {_id: args.stage.resourceId}, context);
-        new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)
+        var transactionId=orderNumberGenService.createOnBoardTransactionId();
+        new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context,transactionId);
       } else {
         let response = new MlRespPayload().errorPayload('Investment to be done prior to On-Boarding', 200);
         return response

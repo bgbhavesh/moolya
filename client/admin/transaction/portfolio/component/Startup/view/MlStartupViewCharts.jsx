@@ -38,9 +38,9 @@ export default class MlStartupViewCharts extends React.Component{
     var WinHeight = $(window).height();
     var className = this.props.isAdmin?"admin_header":"app_header"
     // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
   }
 
@@ -381,9 +381,9 @@ export default class MlStartupViewCharts extends React.Component{
     return(
       <div>
 
-
-            <div className="tab_wrap_scroll ">
-
+<h2>Charts</h2>
+            <div className="main_wrap_scroll ">
+            
 
                 <div className="col-md-6">
                   <div className="chart_bg">

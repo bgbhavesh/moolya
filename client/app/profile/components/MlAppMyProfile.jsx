@@ -554,7 +554,7 @@ class MlAppMyProfile extends Component {
                         {this.state.showPasswordFields ?
                           <div className="form-group mandatory">
                             <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                            <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
+                            <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
 
                           </div> : <div></div>}
                       <div className="form-group mandatory">

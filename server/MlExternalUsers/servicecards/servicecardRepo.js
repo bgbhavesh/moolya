@@ -126,6 +126,7 @@ class MlServiceCardRepo{
         serviceCard["subChapterName"]       = defaultProfile.subChapterName;
         serviceCard["communityId"]          = defaultProfile.communityId;
         serviceCard["communityName"]        = defaultProfile.communityName;
+        serviceCard["communityCode"]        = defaultProfile.communityDefCode;
         orderNumberGenService.createServiceId(serviceCard);
         var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', portfolioId, context);
         if(portfolioDetailsTransactions){

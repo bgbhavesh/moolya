@@ -60,7 +60,7 @@ export default class MlFunderEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Investments",
         name: "Investments",
-        component: <MlFunderInvestment key="2" tabName="investments"
+        component: <MlFunderInvestment key="2" tabName="investments" isAdmin={true}
                                        getInvestmentsDetails={this.getInvestmentsDetails.bind(this)}
                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -69,7 +69,7 @@ export default class MlFunderEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Principals & Team",
         name: "Principals And Team",
-        component: <MlFunderPrincipalTeam client={client} tabName="Principals & Team" key="3"
+        component: <MlFunderPrincipalTeam client={client} tabName="Principals & Team" key="3" isAdmin={true}
                                           getPrincipalDetails={this.getPrincipalDetails.bind(this)}
                                           getTeamDetails={this.getTeamDetails.bind(this)}
                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
@@ -87,7 +87,7 @@ export default class MlFunderEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Areas Of Interest",
         name: "Areas Of Interest",
-        component: <MlFunderAreaOfInterest key="6" tabName="areaOfInterest"
+        component: <MlFunderAreaOfInterest key="6" tabName="areaOfInterest" isAdmin={true}
                                            getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },

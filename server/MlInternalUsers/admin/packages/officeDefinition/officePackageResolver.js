@@ -52,6 +52,7 @@ MlResolver.MlMutationResolver['updateOfficePackage'] = (obj, args, context, info
  * @module ['OfficePackage']
  * @params [context.userId]
  * @returns *Array* [officePackages]
+ * @update [MOOLYA-3478] checking active package
  * */
 MlResolver.MlQueryResolver['fetchOfficePackages'] = (obj, args, context, info) => {
   let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
@@ -64,6 +65,7 @@ MlResolver.MlQueryResolver['fetchOfficePackages'] = (obj, args, context, info) =
           {"def.profileId": extProfile.profileId},
           {
             isBSpoke: false,
+            isActive: true,
             clusters: {$elemMatch: {clusterId: extProfile.clusterId}},
             chapters: {$elemMatch: {chapterId: extProfile.chapterId}},
             subChapters: {$elemMatch: {subChapterId: extProfile.subChapterId}}

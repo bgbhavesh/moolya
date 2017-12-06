@@ -134,9 +134,12 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       });
     });
 
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-($('.' + className).outerHeight(true) + 120));
-
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
     initalizeFloatLabel();
 
   }
@@ -200,8 +203,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         <div>
           {showLoader === true ? (<MlLoader/>) : (
             <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-
               <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
                 <div className="panel panel-default">
                   <div className="panel-heading"> Principal </div>
@@ -417,10 +418,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                   </div>
                 </div>
               </div>
-              </ScrollArea>
-
-
-
               <div style={{'display': 'none'}} className="ml_create_client">
                 <div className="medium-popover">
                   <div className="row">

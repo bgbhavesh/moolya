@@ -97,7 +97,7 @@ export default class MlCompanyEditTabs extends Component {
         panelClassName: 'panel',
         title: "Data",
         name: "Data",
-        component: <MlCompanyData key="4" isApp={false} client={client} getDataDetails={this.getDataDetails.bind(this)}
+        component: <MlCompanyData key="4" isApp={false} isAdmin={true} client={client} getDataDetails={this.getDataDetails.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
@@ -146,7 +146,7 @@ export default class MlCompanyEditTabs extends Component {
         panelClassName: 'panel',
         title: "Partners",
         name: "Partners",
-        component: <MlCompanyPartners key="10" client={client} getPartnersDetails={this.getPartnersDetails.bind(this)}
+        component: <MlCompanyPartners key="10" client={client} isAdmin={true} getPartnersDetails={this.getPartnersDetails.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
       {

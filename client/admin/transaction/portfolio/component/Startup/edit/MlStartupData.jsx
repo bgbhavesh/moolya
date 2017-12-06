@@ -93,7 +93,7 @@ export default class MlStartupData extends React.Component{
     if (resp && type) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file.name,

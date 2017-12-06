@@ -7,3 +7,6 @@ node_modules
 .idea/workspace.xml
 /.idea
 .idea/
+.vscode/launch.json
+.vscode/settings.json
+.vscode/typings

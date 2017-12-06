@@ -18,6 +18,31 @@ export default class MlAppInternalMyTaskList extends React.Component{
   }
 
   componentDidMount() {
+    (function (a) {
+      a.createModal = function (b) {
+        defaults = { scrollable: false };
+        var b = a.extend({}, defaults, b);
+        var c = (b.scrollable === true) ? 'style="max-height: 420px;overflow-y: auto;"' : "";
+        html = '<div class="modal fade library-popup" id="myModal">';
+        html += '<div class="modal-dialog">';
+        html += '<div class="modal-content">';
+        html += '<div class="modal-header">';
+        html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>';
+        if (b.title.length > 0) {
+          html += '<h4 class="modal-title">' + b.title + "</h4>"
+        }
+        html += "</div>";
+        html += '<div class="modal-body" ' + c + ">";
+        html += b.message;
+        html += "</div>";
+        a("body").prepend(html);
+        a("#myModal").modal().on("hidden.bs.modal", function () {
+          a(this).remove()
+        })
+      }
+    })(jQuery);
+
+
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     $(".swiper-slide .team-block").click(function(){

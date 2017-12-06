@@ -9,6 +9,7 @@ import moment from "moment";
 import MlAccordion from "../../commons/components/MlAccordion";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 
 class MlAppInternalTaskItem extends React.Component {
 
@@ -20,7 +21,7 @@ class MlAppInternalTaskItem extends React.Component {
         userInfo:[],
         community:{}
       },
-      taskId: ''
+      taskId: '', previewDocument:""
     }
   }
 
@@ -40,6 +41,33 @@ class MlAppInternalTaskItem extends React.Component {
 
   }
 
+componentDidMount() {
+  (function (a) {
+    a.createModal = function (b) {
+      defaults = { scrollable: false };
+      var b = a.extend({}, defaults, b);
+      var c = (b.scrollable === true) ? 'style="max-height: 420px;overflow-y: auto;"' : "";
+      html = '<div class="modal fade library-popup" id="myModal">';
+      html += '<div class="modal-dialog">';
+      html += '<div class="modal-content">';
+      html += '<div class="modal-header">';
+      html += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>';
+      if (b.title.length > 0) {
+        html += '<h4 class="modal-title">' + b.title + "</h4>"
+      }
+      html += "</div>";
+      html += '<div class="modal-body" ' + c + ">";
+      html += b.message;
+      html += "</div>";
+      a("body").prepend(html);
+      a("#myModal").modal().on("hidden.bs.modal", function () {
+        a(this).remove()
+      })
+    }
+  })(jQuery);
+}
+
+
   async fetchTaskInfo() {
     if(this.props.taskId){
       let response = await fetchInternalTaskInfo(this.props.taskId);
@@ -53,6 +81,12 @@ class MlAppInternalTaskItem extends React.Component {
         })
       };
     }
+  }
+
+  randomDocument(link, index) {
+    console.log('link',link);
+    let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
+    this.setState({ previewDocument: documentPreviewUrl });
   }
 
   async updateStatus(status){
@@ -144,6 +178,28 @@ class MlAppInternalTaskItem extends React.Component {
     return(
       <div id="details-div">
         <div>
+            <div className="modal fade bs-example-modal-sm library-popup documentpop"
+          onContextMenu={(e) => e.preventDefault()} tabIndex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                {this.state.previewDocument&&(this.state.previewDocument).endsWith('.pdf')?
+                  <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
+                  :
+
+                  <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewDocument}`} />
+                }
+                {/*{<MlFileViewer/>}*/}
+                {/*<div className="img_scroll"><MlDocViewer/></div>*/}
+              </div>
+            </div>
+          </div>
+        </div>
           <div className="row">
             <div className="investement-view-content">
               <div className="col-md-6">
@@ -160,13 +216,13 @@ class MlAppInternalTaskItem extends React.Component {
                       <div className="panel-body">
                         <div className="swiper-container conversation-slider blocks_in_form">
                           <div className="swiper-wrapper">
-                            {task.docs.map(function(doc) {
+                            {task.docs.map(function(doc, index) {
                               return(
                                 <div className="swiper-slide">
-                                  <a href={doc.fileUrl} target="_blank">
+                                  <a href="" data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(doc,index)}>
                                     <FontAwesome name='eye'/>
                                   </a>
-                                  <a href={doc.fileUrl} download="FileName">
+                                  <a href={doc.fileUrl} download={doc.fileName}>
                                     <FontAwesome name='download'/>
                                   </a>
                                 </div>

@@ -88,22 +88,23 @@ export default class MlInstitutionEditManagement extends Component{
     // this.setState({data:{}})
     // $('#management-form').slideDown();
   }
-  onSelectUser(index,uiIndex, e){
+  onSelectUser(index, uiIndex, e) {
     this.setState({loading:true})
     //let managmentDetails = this.state.institutionManagement[index]
     let managmentDetails = _.find(this.state.institutionManagement,{index:index});
     managmentDetails = _.omit(managmentDetails, "__typename");
-    this.setState({selectedIndex:index});
-    this.setState({data:managmentDetails}, function () {
+    // this.setState({selectedIndex:index});
+    this.setState({selectedIndex:index, data:managmentDetails}, function () {
       this.setState({loading:false}, function () {
         $('#management-form').slideDown();
+        this.lockPrivateKeys(index);
       })
     })
-    setTimeout(function () {
-      _.each(managmentDetails.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(managmentDetails.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
     this.curSelectLogo = managmentDetails.logo
   }
   optionsBySelectTitle(val){
@@ -183,23 +184,25 @@ export default class MlInstitutionEditManagement extends Component{
       })
     }
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.management)
+    const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
       if (response && response.management) {
         this.setState({loading: false, institutionManagement: response.management, institutionManagementList: response.management});
         // this.fetchOnlyImages()
-
       }else{
         this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, institutionManagement: that.context.institutionPortfolio.management, institutionManagementList:that.context.institutionPortfolio.management});
     }
+    this.institutionManagementServer = response && response.management ? response.management : [];
   }
+
   onDateChange(name, event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
@@ -210,6 +213,19 @@ export default class MlInstitutionEditManagement extends Component{
         // this.sendDataToParent()
       })
     }
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionManagementServer && this.institutionManagementServer[selIndex] ? this.institutionManagementServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onSaveAction() {
@@ -282,7 +298,7 @@ export default class MlInstitutionEditManagement extends Component{
     let details =this.state.data;
     if(resp){
       let result = JSON.parse(resp)
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file.name,
@@ -324,25 +340,25 @@ export default class MlInstitutionEditManagement extends Component{
   }
 
 
-  async fetchOnlyImages(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response) {
-      this.setState({loading:false})
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.institutionManagement
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response[thisState]
-        specificData['logo']= curUpload['logo']?curUpload['logo']: " "
-        this.setState({loading: false, institutionManagement:cloneBackUp, data: specificData}, function () {
-          $('#management-form').slideDown();
-        });
-      }else {
-        this.setState({loading: false})
-      }
-    }
-  }
+  // async fetchOnlyImages(){
+  //   const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response) {
+  //     this.setState({loading:false})
+  //     let thisState=this.state.selectedIndex;
+  //     let dataDetails =this.state.institutionManagement
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if(specificData){
+  //       let curUpload=response[thisState]
+  //       specificData['logo']= curUpload['logo']?curUpload['logo']: " "
+  //       this.setState({loading: false, institutionManagement:cloneBackUp, data: specificData}, function () {
+  //         $('#management-form').slideDown();
+  //       });
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
   optionsBySelectGender(val){
     this.setState({gender:val.value})
   }
@@ -531,5 +547,6 @@ export default class MlInstitutionEditManagement extends Component{
   }
 };
 MlInstitutionEditManagement.contextTypes = {
-  institutionPortfolio: PropTypes.object
+  institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

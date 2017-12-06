@@ -50,14 +50,16 @@ export default class MlInstitutionEditAchivements extends Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.achievements)
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.achievements) {
         this.setState({loading: false, institutionAchievements: response.achievements, institutionAchievementsList: response.achievements});
       }else{
@@ -66,7 +68,9 @@ export default class MlInstitutionEditAchivements extends Component{
     }else{
       this.setState({loading: false, institutionAchievements: that.context.institutionPortfolio.achievements, institutionAchievementsList: that.context.institutionPortfolio.achievements});
     }
+    this.institutionAchievementsServer = response && response.achievements ? response.achievements : [];
   }
+
   addAchievement(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.institutionAchievements){
@@ -98,12 +102,28 @@ export default class MlInstitutionEditAchivements extends Component{
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo
-    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen)});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({ selectedIndex: index, data: details, selectedObject: uiIndex, popoverOpen: !(this.state.popoverOpen) }, () => {
+      this.lockPrivateKeys(index);
+    });
+    
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionAchievementsServer && this.institutionAchievementsServer[selIndex] ? this.institutionAchievementsServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName, index: selIndex })
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName, index: selIndex })
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fiedName, field, e){
@@ -224,7 +244,7 @@ export default class MlInstitutionEditAchivements extends Component{
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file.name,
@@ -258,24 +278,22 @@ export default class MlInstitutionEditAchivements extends Component{
     }
   }
 
+  // async fetchOnlyImages(){
+  //   const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
+  //   if (response && response.achievements) {
+  //     let dataDetails =this.state.institutionAchievements
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[this.state.selectedIndex];
+  //     if(specificData){
+  //       let curUpload=response.achievements[this.state.selectedIndex]
+  //       specificData['logo']= curUpload['logo']
+  //       this.setState({loading: false, institutionAchievements:cloneBackUp });
 
-
-  async fetchOnlyImages(){
-    const response = await fetchInstitutionDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.achievements) {
-      let dataDetails =this.state.institutionAchievements
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[this.state.selectedIndex];
-      if(specificData){
-        let curUpload=response.achievements[this.state.selectedIndex]
-        specificData['logo']= curUpload['logo']
-        this.setState({loading: false, institutionAchievements:cloneBackUp });
-
-      }else {
-        this.setState({loading: false})
-      }
-    }
-  }
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
 
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
@@ -345,11 +363,11 @@ export default class MlInstitutionEditAchivements extends Component{
                                  className="form-control float-label" defaultValue={this.state.data.achievementName}
                                  onBlur={this.handleBlur.bind(this)} data-required={true}
                                  data-errMsg="Achievement Name is required"/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementNamePrivate" defaultValue={this.state.data.isAchievementNamePrivate}  onClick={this.onLockChange.bind(this, "achievementName", "isAchievementNamePrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementNamePrivate" onClick={this.onLockChange.bind(this, "achievementName", "isAchievementNamePrivate")}/>
                         </div>
                         <div className="form-group">
                           <input type="text" name="achievementDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.achievementDescription}  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementDescriptionPrivate" defaultValue={this.state.data.isAchievementDescriptionPrivate}  onClick={this.onLockChange.bind(this, "achievementDescription", "isAchievementDescriptionPrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementDescriptionPrivate" onClick={this.onLockChange.bind(this, "achievementDescription", "isAchievementDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -377,4 +395,5 @@ export default class MlInstitutionEditAchivements extends Component{
 }
 MlInstitutionEditAchivements.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object
 };

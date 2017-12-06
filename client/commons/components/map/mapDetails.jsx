@@ -28,7 +28,7 @@ export default class MapDetails extends Component {
       }else if (m.key == "companies"){
         title = "Companies"
       }else if (m.key == "startups"){
-        title = "Start Ups"
+        title = "Startups"
       }else if (m.key == "institutions"){
         title = "Institutions"
       }else if (m.key == "serviceproviders"){

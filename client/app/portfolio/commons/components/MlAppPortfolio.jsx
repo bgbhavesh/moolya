@@ -32,7 +32,8 @@ class MlAppPortfolio extends Component{
       popoverOpen: false,
       saveButton: false,
       backHandlerMethod: "",
-      portfolioDetails: {}
+      portfolioDetails: {},
+      commentsCount:null
     }
     this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
@@ -56,9 +57,16 @@ class MlAppPortfolio extends Component{
   // }
 
   toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen
-    });
+    if($(".annotator-widget").is(':visible')){
+      this.setState({
+        popoverOpen: false
+      });
+    }else{
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
+    
   }
 
 
@@ -188,7 +196,11 @@ class MlAppPortfolio extends Component{
     if(annotationId){
       const response = await findComments(annotationId,appClient);
       this.setState({commentsData : response},function () {
-
+        if(response&&response.length){
+          this.setState({commentsCount : response.length})
+        }else{
+         this.setState({commentsCount : 0})
+        }
       });
     }
   }
@@ -436,7 +448,7 @@ class MlAppPortfolio extends Component{
                       <div className="comment-main-level">
                         <div className="comment-avatar"><img src={generateAbsolutePath(annotationDetails.profileImage)?generateAbsolutePath(annotationDetails.profileImage):"/images/def_profile.png"} alt=""/></div>
                         <div className="comment-box">
-                          <div style={{marginTop:'8px'}} className="annotate">1</div>
+                          <div style={{marginTop:'8px'}} className="annotate">{this.state.commentsCount}</div>
                           <div style={{paddingLeft:'50px'}} className="comment-head">
                             <h6 className="comment-name"> {annotationDetails.userName?annotationDetails.userName:""}</h6>
                             <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>

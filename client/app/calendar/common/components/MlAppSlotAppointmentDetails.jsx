@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 var FontAwesome = require('react-fontawesome');
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 import {fetchSlotAppointmentsDetailsActionHandler} from './../actions/fetchSlotAppointmentsDetails';
 
 export default class MlAppSlotAppointmentDetails extends Component {
@@ -59,7 +60,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
                   <div className="panel-body">
                     <div className="col-md-12 nopadding">
                       <div className="col-lg-3 col-md-4 nopadding text-center">
-                        <img src={user.profileImage?user.profileImage:'/images/img2.png'} className="image" />
+                        <img src={user.profileImage?generateAbsolutePath(user.profileImage):'/images/img2.png'} className="image" />
                         <div className="">
                           <span>{`${user.firstName} ${user.lastName}`}</span>
                         </div>
@@ -90,7 +91,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
                               <a href="">
                                 {info.status === 'Accepted' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellowgreen'}}/> : info.status === 'Pending' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'yellow'}}/> :
                                   info.status === 'Rejected' ? <FontAwesome name='circle' style={{'position': 'absolute', 'color': 'red'}}/> : <FontAwesome name='circle' style={{'position': 'absolute', }}/>}
-                                <img src={info.profileImage? info.profileImage : "/images/img2.png"}/><br />
+                                <img src={info.profileImage? generateAbsolutePath(info.profileImage) : "/images/img2.png"}/><br />
                                 <div className="tooltiprefer">
                                   <span>{`${info.firstName} ${info.lastName}`}</span>
                                 </div>

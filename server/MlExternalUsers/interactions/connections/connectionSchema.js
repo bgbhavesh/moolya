@@ -45,7 +45,8 @@ let connections = `
     type MyConnectionUser{
         userId: String,
         profileId: String,
-        name: String
+        name: String,
+        profileImage: String,
     }
     
     input user{

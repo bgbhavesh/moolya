@@ -60,12 +60,21 @@ export default class MlFunderPrincipalTeam extends Component {
   }
 
   componentDidUpdate() {
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
   }
 
   componentDidMount() {
+    
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -408,7 +417,7 @@ export default class MlFunderPrincipalTeam extends Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: this.state.fileName,
@@ -546,7 +555,7 @@ export default class MlFunderPrincipalTeam extends Component {
         {showLoader === true ? (<MlLoader />) : (
           <div className="portfolio-main-wrap">
             <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
+              
                 <div className="ml_tabs ml_tabs_large">
                   <ul className="nav nav-pills" id="myTabs">
                     <li id="principal" className={that.state.principalContext}
@@ -640,7 +649,6 @@ export default class MlFunderPrincipalTeam extends Component {
 
                   </div>
                 </div>
-              </ScrollArea>
               <CropperModal
                 uploadingImage={this.state.uploadingAvatar}
                 handleImageUpload={this.handleUploadAvatar}

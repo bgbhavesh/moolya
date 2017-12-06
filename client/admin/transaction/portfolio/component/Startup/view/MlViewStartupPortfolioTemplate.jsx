@@ -59,7 +59,7 @@ export default class MlViewStartupPortfolioTemplate extends React.Component {
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" ,name:"About" , component:<MlStartupViewAboutLanding key="1" tabName="About" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.backClickHandler.bind(this)}/>},
+      { tabClassName: 'tab', panelClassName: 'panel', title: "About", name: "About", component: <MlStartupViewAboutLanding key="1" tabName="About" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.backClickHandler.bind(this)} isAdmin={true} /> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" ,  name:"Management" ,component:<MlStartupViewManagement key="2" tabName="Management" isAdmin={true} client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , name:"Investor" , component:<MlStartupViewInvestor key="3" tabName="Investor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" ,name:"Charts" , component:<MlStartupViewCharts key="5" tabName="Charts" isAdmin={true}  portfolioDetailsId={this.props.portfolioDetailsId}/>},

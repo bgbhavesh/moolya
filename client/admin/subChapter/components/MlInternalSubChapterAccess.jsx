@@ -162,9 +162,8 @@ export default class MlInternalSubChapterAccess extends React.Component {
 
   render() {
     let that = this;
-    // let subChapterQuery = gql `query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName, chapterId:chapterId}}`;
-    var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName, chapterId:chapterId}}`;
-    var subChapterOption = {options: {variables: {subChapterId: this.props.curSubChapter}}};
+    var subChapterQuery = gql`query($subChapterId:String, $clusterId: String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId, clusterId:$clusterId) { value:_id, label:subChapterName, chapterId:chapterId}}`;
+    var subChapterOption = { options: { variables: { subChapterId: this.props.curSubChapter, clusterId: this.props.clusterId } } };
     return (
       <div >
         {that.state.data.map(function (value, id) {

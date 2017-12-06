@@ -2452,3 +2452,5 @@ li.sameWorkTime:after {
   }
 }
 .m_yellow{color: $mlYellow;}
+.pdf-view{height: 380px}
+.pdf-view iframe, .pdf-view .img_scroll{height: 100%;max-height: inherit;}

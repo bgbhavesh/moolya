@@ -58,6 +58,23 @@ export function validatedPhoneNumber(countryCode, contactNumber){
   return isValidPhoneNumber;
 }
 
+/**
+ * Validate the phone number based on country code
+ * @param countryCode
+ * @param contactNumber
+ * @return {boolean}
+ */
+export function validatedPhoneNumber_strict(countryCode, contactNumber){
+  let isValidPhoneNumber = false;
+  if (contactNumber  && countryCode) {
+    var cCode = PhoneNumber.getCountryCodeForRegionCode(countryCode);
+    var regionCode = PhoneNumber.getRegionCodeForCountryCode(cCode);
+    var pn = new PhoneNumber(contactNumber, regionCode );
+    isValidPhoneNumber = pn.isValid( );
+  }
+  return isValidPhoneNumber;
+}
+
 export function validatedEmailId(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);

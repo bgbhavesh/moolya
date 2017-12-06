@@ -287,11 +287,7 @@ export default class MlInstitutionEditData extends React.Component{
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}>
+            
             <div className="col-md-6 col-sm-6 nopadding-left library-wrap">
               <div className="panel panel-default panel-form-view uploaded_files">
                 <div className="panel-heading">
@@ -456,7 +452,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
               </div>
             </div>
-              </ScrollArea>
+              
           </div>
         </div>
       </div>

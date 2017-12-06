@@ -9,3 +9,4 @@ node_modules
 .idea/
 .vscode/launch.json
 .vscode/settings.json
+.vscode/typings

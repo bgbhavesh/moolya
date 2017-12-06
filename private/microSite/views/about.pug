@@ -110,10 +110,10 @@ html(prefix='og: http://ogp.me/ns#')
               label share your public profile
               ul
                 li
-                  a(href='#' rel='nofollow' onclick='facebookShare("' + currentUrl + '",this)')
+                  a(href='#' rel='nofollow' onclick='facebookShare("'+defaultTextShare+' Thank You, '+ displayName+'","'+ currentUrl + '",this)')
                     i.fa.fa-facebook(aria-hidden='true')
                 li
-                  a.customer.share(href='http://www.twitter.com/intent/tweet?url=' + currentUrl + '', title='Twitter share' rel='nofollow')
+                  a.customer.share(href='http://www.twitter.com/intent/tweet?text='+defaultTextShare+' Thank You, '+ displayName +'&url=' + currentUrl + '', title='Twitter share' rel='nofollow')
                     i.fa.fa-twitter(aria-hidden='true')
                 li
                   a.customer.share(href='https://www.linkedin.com/shareArticle?mini=true&url=' + currentUrl + '' rel='nofollow')
@@ -371,13 +371,14 @@ html(prefix='og: http://ogp.me/ns#')
               $('.' + linkName).css('display', 'block')
             }
 
-            var facebookShare = function (linkName, event) {
+            var facebookShare = function (defaultShareText,linkName, event) {
               FB.ui({
                 method: 'share',
                 display: 'popup',
                 href: linkName,
+                quote:defaultShareText
               }, function (response) {
-                console.log(response);
+                //console.log(response);
               });
             }
           script.

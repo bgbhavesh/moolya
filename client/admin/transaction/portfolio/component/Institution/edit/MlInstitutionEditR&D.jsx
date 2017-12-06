@@ -220,7 +220,7 @@ export default class MlInstitutionEditRD extends React.Component{
   onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file.name,

@@ -404,7 +404,7 @@ class MlAddSubChapter extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
+                    <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)} {...this.props}
                                                 assignedDetails={this.state.associatedObj}/>
 
                     <div className="panel panel-default">

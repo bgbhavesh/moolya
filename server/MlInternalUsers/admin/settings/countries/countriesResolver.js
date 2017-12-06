@@ -11,6 +11,17 @@ MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return result
 }
+
+MlResolver.MlQueryResolver['fetchCountriesForCountryCode'] = (obj, args, context, info) =>{
+  let result= mlDBController.find('MlCountries', {}, context, {sort: {country:1,displayName:1}}).fetch()
+  if(result && result.length){
+    result.map((obj, index)=>{
+      obj.displayName += ` (${obj.phoneNumberCode})`;
+    });
+  }
+  return result;
+}
+
 MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     let country=null;
     if(args.countryId){
@@ -106,7 +117,11 @@ MlResolver.MlQueryResolver['fetchCountryCode'] = (obj, args, context, info) =>{
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return result
   }
-
-
 }
 
+MlResolver.MlQueryResolver['findCountryCodeForDisplayName'] = (obj, args, context, info) =>{
+  if(args.countryCode){
+    let result=MlCountries.findOne({"countryCode" : args.countryCode});
+    return result;
+  }
+}

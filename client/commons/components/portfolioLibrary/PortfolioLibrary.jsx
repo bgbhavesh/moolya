@@ -74,7 +74,7 @@ class Library extends React.Component {
       showProfileModal1: false,
       showImageUploadCropper: false,
       uploadingImage2: false,
-      memberInfo: []
+      memberInfo: [],validDocFormat: false
     };
     this.toggle = this.toggle.bind(this);
     this.refetchData.bind(this);
@@ -408,12 +408,16 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
-    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
+    let fileName = file.name; 
+    let docFormat = fileName.split('.')[1];
+    let validDocFormat = false;
+    if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
+    this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize});
     this.getCentralLibrary();
     if (this.state.totalLibrarySize < 50) {
       let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
       let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] == "image") {
+      if (file && typeShouldBe && (typeShouldBe[0] == "image" || validDocFormat) ) {
         if (!fileExists) {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "template"));
@@ -432,12 +436,16 @@ class Library extends React.Component {
     let file = fileInfo;
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
+    let fileName = file.name; 
+    let validDocFormat = false;
+    let docFormat = fileName.split('.')[1];
+    if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
     this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
     this.getCentralLibrary();
     if (this.state.totalLibrarySize < 50) {
       let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
       let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] == "image") {
+      if (file && typeShouldBe && (typeShouldBe[0] == "image" || validDocFormat)) {
         if (!fileExists) {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, image, 'registration', this.onFileUploadCallBack.bind(this, "template"));
@@ -465,12 +473,15 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileSize = file.size / 1024 / 1024;
     let fileType = file.type;
+    let validDocFormat = false;
+    let docFormat = fileName.split('.')[1];
+    if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
     this.setState({ fileType: file.type, fileName: file.name, fileSize: fileSize });
     this.getCentralLibrary();
     if (this.state.totalLibrarySize < 50) {
       let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
       let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] !== "image" && typeShouldBe[0] !== "video") {
+      if (file && typeShouldBe && typeShouldBe[0] !== "image" && typeShouldBe[0] !== "video" && validDocFormat) {
         if (!fileExists) {
           let data = { moduleName: "PROFILE", actionName: "UPDATE" }
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
@@ -749,13 +760,13 @@ class Library extends React.Component {
   }
 
   randomTemplate(link, index) {
-    let data = this.state.templateSpecifications || [];
     let templatePreviewUrl ;
-    templatePreviewUrl = generateAbsolutePath(data[index].fileUrl);
-    this.setState({ previewTemplate: templatePreviewUrl });
+    templatePreviewUrl = generateAbsolutePath(link);
+    let isDocument = (templatePreviewUrl.endsWith('.pdf') || templatePreviewUrl.endsWith('.doc') || templatePreviewUrl.endsWith('.docx') || templatePreviewUrl.endsWith('.xls') || templatePreviewUrl.endsWith('.xlsx')) ? true : false;
+    this.setState({ previewTemplate: templatePreviewUrl, validDocFormat: isDocument});
   }
 
-  ///================================================================================================================
+  
 
   onFileSelect(index, type, e) {
     if (e.target.checked) {
@@ -959,6 +970,17 @@ class Library extends React.Component {
     let that = this;
     let templateData = this.state.isLibrary ? this.state.templateDetails || [] : this.state.templateSpecifications || [];
     const Templates = templateData.map(function (show, id) {
+      let docType = null;
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'doc' || type === 'docx' ){
+          docType = 'doc';
+        }
+      }
       return (
         <div className="thumbnail swiper-slide" key={id}>
 
@@ -977,7 +999,7 @@ class Library extends React.Component {
 
           <a href="" data-toggle="modal" data-target=".templatepop"
             onClick={that.randomTemplate.bind(that,show.fileUrl, id)}>
-            <img src={generateAbsolutePath(show.fileUrl)} /></a>
+            {docType ? <img src={`/images/${docType}.png`}/> : <img src={generateAbsolutePath(show.fileUrl)} />}</a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -996,6 +1018,17 @@ class Library extends React.Component {
     const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
     const popTemplates = popTemplateData.map(function (show, id) {
+      let docType = null;
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'doc' || type === 'docx' ){
+          docType = 'doc';
+        }
+      }
       if (show.inCentralLibrary) {
         return (
           <div className="thumbnail swiper-slide" key={id}>
@@ -1020,10 +1053,10 @@ class Library extends React.Component {
               }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".templatepop"
-              onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={generateAbsolutePath(show.fileUrl)} /></a> :
-              <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={generateAbsolutePath(show.fileUrl)} /></a>}
+              onClick={that.randomTemplate.bind(that, show.fileUrl, id)}>
+              {docType ? <img src={`/images/${docType}.png`}/> : <img src={generateAbsolutePath(show.fileUrl)} />}</a> :
+              <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+              {docType ? <img src={`/images/${docType}.png`}/> : <img src={generateAbsolutePath(show.fileUrl)} />}</a>}
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1036,10 +1069,22 @@ class Library extends React.Component {
     let that = this;
     let popTemplateData = this.state.templateDetails || [];
     const popTemplates = popTemplateData.map(function (show, id) {
+      let docType = null;
+      if(show.fileName && show.fileName.split('.')[1]) {
+        let type = show.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'doc' || type === 'docx' ){
+          docType = 'doc';
+        }
+      }
       if (show.inCentralLibrary) {
         return (
           <div className="thumbnail"  key={id}>
-            <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
+            <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+            {docType ? <img src={`/images/${docType}.png`}/> : <img src={generateAbsolutePath(show.fileUrl)} />}</a>
             <div id="templates" className="title">{show.fileName}</div>
           </div>
         )
@@ -1337,7 +1382,6 @@ class Library extends React.Component {
         let data = this.state.templateDetails || [];
         let templatePreviewUrl;
         templatePreviewUrl = generateAbsolutePath(data[index].fileUrl);
-        console.log('templatePreviewUrl', templatePreviewUrl)
         this.setState({ previewTemplate: templatePreviewUrl });
       } else {
         let data = this.state.templateSpecifications || [];
@@ -1740,8 +1784,14 @@ setTimeout(function(){
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
               </div>
-              <div className="modal-body">
-                <div className="img_scroll"><img src={this.state.previewTemplate} /></div>
+              <div className="modal-body moolya pdf-view">
+                {this.state.validDocFormat ? 
+                 this.state.previewTemplate&&(this.state.previewTemplate).endsWith('.pdf')?
+                 <iframe src={`https://docs.google.com/gview?url=${this.state.previewTemplate}&embedded=true`} />
+                 :
+                 <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewTemplate}`} />
+
+                :<div className="img_scroll"><img src={this.state.previewTemplate} /></div>}
               </div>
             </div>
           </div>
@@ -1759,7 +1809,6 @@ setTimeout(function(){
                 {this.state.previewDocument&&(this.state.previewDocument).endsWith('.pdf')?
                   <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
                   :
-
                   <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewDocument}`} />
                 }
                 {/*{<MlFileViewer/>}*/}
@@ -1819,7 +1868,7 @@ setTimeout(function(){
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /></p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpg, .jpeg <br />Document Size : 10 MB <br /></p>
               </div>
                 </div>
               </div>
@@ -1834,7 +1883,7 @@ setTimeout(function(){
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask" id="create_video">
                     <a href="javascript:void(0);">
-                      {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ? <span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} /></span> : <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, VideoDetails)}></span>}
+                      {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ? <span className="ml ml-upload"><input type="file" accept=".mp4" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} /></span> : <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, VideoDetails)}></span>}
                     </a>
                   </div>
                 </div>
@@ -1846,7 +1895,7 @@ setTimeout(function(){
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : mp4 <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : .mp4 <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>
                 </div>
               </div>
@@ -1857,22 +1906,15 @@ setTimeout(function(){
             <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Templates
-                <CropperModal
-                  uploadingImage={this.state.uploadingAvatar1}
-                  handleImageUpload={this.handleUploadAvatar1}
-                  cropperStyle="circle"
-                  show={this.state.showProfileModal1}
-                  toggleShow={this.toggleModal1}
-                />
                 <span className="see-more pull-right">See More</span>
                 <span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>
                 <div className="pull-right block_action">
                   <div className="fileUpload upload_file_mask pull-right" id="create_template">
                     <a href="javascript:void(0);">
                       {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
-                        <span className="ml ml-upload" onClick={this.toggleModal1.bind(this)}>
-                          {/* <input type="file" className="upload_file upload" name="image_source"
-                          id="template_upload" onChange={that.TemplateUpload.bind(that)} />*/}
+                        <span className="ml ml-upload" >
+                          <input type="file" accept=".jpeg,.png,.jpg,.xls,.xlsx,.doc,.docx,.pdf" className="upload_file upload" name="image_source"
+                          id="template_upload" onChange={that.TemplateUpload.bind(that)} />
                         </span> :
                         <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, TemplateDetails)}></span>}
                     </a>
@@ -1886,7 +1928,7 @@ setTimeout(function(){
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>
                 </div>
                   </div>
@@ -1902,7 +1944,7 @@ setTimeout(function(){
                   <div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
-                        <span className="ml ml-upload"><input type="file" className="upload_file upload"
+                        <span className="ml ml-upload"><input type="file" accept=".pdf,.xls,.xlsx,.doc,.docx" className="upload_file upload"
                           name="image_source" id="document_upload"
                           onChange={that.documentUpload.bind(that)} /></span> :
                         <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, DocumentDetails)}></span>}
@@ -1917,7 +1959,7 @@ setTimeout(function(){
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}
-                <p className="show-information" style={{ 'display': 'none' }}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
+                <p className="show-information" style={{ 'display': 'none' }}>Document Format : .pdf, .xls, .xlsx, .doc, .docx <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
                   </div>
                 </div>
                   </div>
@@ -1935,13 +1977,13 @@ setTimeout(function(){
                 <div className="fileUpload mlUpload_btn">
                   <span>Upload</span>
                   {this.state.file === "Images" ?
-                    <input type="file" className="upload" onClick={this.toggleShowImageUploadCropper} /> :
+                    <input type="file" accept=".jpeg,.png,.jpg," className="upload" onClick={this.toggleShowImageUploadCropper} /> :
                     this.state.file === "Videos" ?
-                      <input type="file" className="upload_file upload" name="video_source" id="video_upload"
+                      <input type="file" accept=".mp4" className="upload_file upload" name="video_source" id="video_upload"
                         onChange={that.videoUpload.bind(that)} /> :
-                      this.state.file === "Documents" ? <input type="file" className="upload" ref="upload"
+                      this.state.file === "Documents" ? <input type="file" accept=".xls,.xlsx,.pdf,.doc,.docx" className="upload" ref="upload"
                         onChange={this.documentUpload.bind(this)} /> :
-                        this.state.file === "Templates" ? <input type="file" className="upload" ref="upload"
+                        this.state.file === "Templates" ? <input type="file" accept=".xls,.xlsx,.pdf,.doc,.docx,.jpg,.jpeg,.png" className="upload" ref="upload"
                           onChange={this.TemplateUpload.bind(this)} /> : ""}
                 </div>
               </div>

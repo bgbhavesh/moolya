@@ -7,6 +7,7 @@ var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+import { setTimeout } from "timers";
 export default class MlStartupAboutUs extends Component{
   constructor(props){
     super(props)
@@ -26,9 +27,16 @@ export default class MlStartupAboutUs extends Component{
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
     var WinHeight = $(window).height();
-    var height  = this.props.isAdmin ? 465 : 535;
+    var WinWidth = $(window).width();
+    var height  = this.props.isAdmin ? 465 : 535;    
     $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
     $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+height));
+    setTimeout(function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+80));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },100);
   }
 
   componentWillMount() {
@@ -76,12 +84,8 @@ export default class MlStartupAboutUs extends Component{
     return (
       <div>
       {this.state.aboutStartup===false?(<div className=" portfolio-main-wrap">
-        <ScrollArea
-          speed={0.8}
-          className="main_wrap_scroll"
-          smoothScrolling={true}
-          default={true}
-        >        <h2>Portfolio</h2>
+             <h2>Portfolio</h2>
+             <div className="main_wrap_scroll"> 
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={e=>this.selectedTab('About Us')}/></a></div>
@@ -166,7 +170,7 @@ export default class MlStartupAboutUs extends Component{
           </div></div>
 
         </div>
-        </ScrollArea>
+        </div>
       </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp} activeTab={this.state.activeTab}></MlStartupTab> }</div>)}
       </div>
 

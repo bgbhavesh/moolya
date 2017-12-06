@@ -495,6 +495,7 @@ class MlSubChapterDetails extends Component {
                         {/*<div className="panel-heading">Internal Subchapter Access</div>*/}
                         <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
                                                     curSubChapter = {this.props.params}
+                                                    {...this.props}
                                                     assignedDetails={this.state.associatedObj}/>
                       {/*</div>*/}
                       <div className="panel panel-default">

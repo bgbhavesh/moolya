@@ -203,6 +203,11 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
   return result
 }
 
+/**
+ * @Module [department, clusterRoles, subChapterDetails]
+ * @lastUpdate : relatedSubChapter dropdown
+ */
+
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
   let id = args.chapterId || "";
   let result = [];
@@ -222,12 +227,11 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
       result.push({"subChapterName": "All", "_id": "all"});
     }
   } else {
-    // result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
     var query = args.chapterId ? {
       chapterId: args.chapterId,
       isDefaultSubChapter: false,
       isActive: true
-    } : {'$and': [{isDefaultSubChapter: false, isActive: true}, {'_id': {$ne: args.subChapterId}}]}
+    } : { '$and': [{ isDefaultSubChapter: false, isActive: true, clusterId: args.clusterId }, { '_id': { $ne: args.subChapterId } }] }
     result = mlDBController.find('MlSubChapters', query, context).fetch() || [];
     if (result.length > 0 && args.chapterId) {
       result.push({"subChapterName": "All", "_id": "all"});

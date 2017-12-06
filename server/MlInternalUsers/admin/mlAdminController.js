@@ -122,6 +122,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
       if (portFolio === 'Next' || portFolio === 'Redirect_to_login') {
         res.redirect('/login');
       }
+      if(req.headers && req.headers.host){
+
+        res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + 'https://'+req.headers.host)
+      }
       res.render(pathJadeFiles, portFolio)
     }
   )

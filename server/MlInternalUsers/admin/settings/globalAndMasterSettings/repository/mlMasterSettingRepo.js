@@ -110,10 +110,19 @@ export default class MlMasterSettingRepo{
   }
   dropDownMasterSettingsPlatformAdmin(requestParams){
     check(requestParams.type,String);
-    check(requestParams.hierarchyRefId,String);
-    let result = null;
+    if(requestParams.type !=='CONTACTTYPE2')
+      check(requestParams.hierarchyRefId,String);
+    let result = null;let resultResponse=null;
     let  options=[]
     switch (requestParams.type) {
+      case "CONTACTTYPE2":
+        result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true}).fetch();
+
+        resultResponse=_.each(result,function (option,id) {
+          options.push({"label":option.contactTypeInfo.contactName,"value":option._id})
+        })
+
+        break;
       case "CONTACTTYPE":
         /*     if(requestParams && requestParams.numberType.length > 0){
          result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId,_id:{$nin : requestParams.numberType}}).fetch();

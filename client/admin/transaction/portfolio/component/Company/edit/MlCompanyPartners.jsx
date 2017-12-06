@@ -253,7 +253,7 @@ export default class MlCompanyPartners extends React.Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file to your library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file&&file.name?file.name:"",

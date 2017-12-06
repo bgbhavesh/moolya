@@ -654,7 +654,7 @@ class Library extends React.Component {
     if (resp !== 'Maximum file size exceeded') {
       var link = JSON.parse(resp).result;
       if (!this.state.isLibrary) {
-        Confirm('', " Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
+        Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
           if(ifConfirm){
             let addToCentralLibrary = true;
             this.storeData(link, type, addToCentralLibrary)

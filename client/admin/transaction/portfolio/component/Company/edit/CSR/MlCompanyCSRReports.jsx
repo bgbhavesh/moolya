@@ -83,7 +83,7 @@ export default class MlCompanyCSRReports extends React.Component{
     let data = this.state.uploadedData;
     let result = JSON.parse(resp)
     if (resp && type) {
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file.name,

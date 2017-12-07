@@ -3,6 +3,7 @@ import BeSpokeHandler from '../Container/beSpokeHandler'
 import FunderAboutView from '../../MlFunderServiceBooking'
 import MlAppServiceManageSchedule from '../../../../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
 import generateAbsolutePath from '../../../../../../../../../lib/mlGenerateAbsolutePath'
+import NoData from "../../../../../../../../commons/components/noData/noData";
 
 export default class  MlFunderServicesListView extends Component {
   constructor(props) {
@@ -68,6 +69,12 @@ export default class  MlFunderServicesListView extends Component {
                   </div><div className="block_footer"><span>{"BeSpoke"}</span></div></div>
               </div>
               )})}
+              {
+                this.props.view  &&(!this.props.beSpokeServices || !this.props.beSpokeServices.length)
+              && (!this.props.services || !this.props.services.length)
+              && <NoData tabName={'Services'}/>
+
+              }
           </div>
         </div>
       </div>

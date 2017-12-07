@@ -27,6 +27,7 @@ import SharedLibrary from './sharedLibrary';
 import CropperModal from '../cropperModal';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../commons/utils/confirm';
+import NoData from "../noData/noData";
 
 
 
@@ -408,7 +409,7 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
-    let fileName = file.name; 
+    let fileName = file.name;
     let docFormat = fileName.split('.')[1];
     let validDocFormat = false;
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -436,7 +437,7 @@ class Library extends React.Component {
     let file = fileInfo;
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
-    let fileName = file.name; 
+    let fileName = file.name;
     let validDocFormat = false;
     let docFormat = fileName.split('.')[1];
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -473,6 +474,7 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileSize = file.size / 1024 / 1024;
     let fileType = file.type;
+    let fileName = file.name;
     let validDocFormat = false;
     let docFormat = fileName.split('.')[1];
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -766,7 +768,7 @@ class Library extends React.Component {
     this.setState({ previewTemplate: templatePreviewUrl, validDocFormat: isDocument});
   }
 
-  
+
 
   onFileSelect(index, type, e) {
     if (e.target.checked) {
@@ -857,6 +859,12 @@ class Library extends React.Component {
   images() {
     let that = this;
     let imageData =  this.state.imageSpecifications || [];
+
+    if(this.props.view){
+      if(!imageData || !imageData.length)
+        return <NoData tabName={'Images'}/>
+    }
+
     const Images = imageData.map(function (show, id) {
       return (
 
@@ -870,7 +878,7 @@ class Library extends React.Component {
             that.state.explore ?
             ""
             :
-            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
+            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image")} />
           }
           <a href="" data-toggle="modal" data-target=".imagepop"
             onClick={that.random.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
@@ -892,6 +900,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popImageData = this.state.imageDetails || [];
+
+    if(this.props.view) {
+      if (!popImageData || !popImageData.length)
+        return <NoData tabName={'Images'}/>
+    }
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -969,6 +982,11 @@ class Library extends React.Component {
   templates() {
     let that = this;
     let templateData = this.state.isLibrary ? this.state.templateDetails || [] : this.state.templateSpecifications || [];
+
+    if(this.props.view) {
+      if (!templateData || !templateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const Templates = templateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1017,6 +1035,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
+
+    if(this.props.view) {
+      if (!popTemplateData || !popTemplateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const popTemplates = popTemplateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1102,6 +1125,12 @@ class Library extends React.Component {
   videos() {
     let that = this;
     let videodata = this.state.isLibrary ? this.state.videoDetails || [] : this.state.videoSpecifications || [];
+
+    if(this.props.view) {
+      if (!videodata || !videodata.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail swiper-slide" key={id}>
@@ -1143,6 +1172,12 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } = that.state;
     let popVideoData = this.state.videoDetails || [];
+
+    if(this.props.view) {
+      if (!popVideoData || !popVideoData.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -1152,7 +1187,7 @@ class Library extends React.Component {
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
-              <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
+              <FontAwesome name='trash-o' onClick={() => that.delete(id, "video", "portfolio")} />}
             <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
             <div className="show_details" style={{'display': 'none'}}>
@@ -1219,6 +1254,12 @@ class Library extends React.Component {
     let that = this;
 
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
+
+    if(this.props.view) {
+      if (!documentData || !documentData.length)
+        return <NoData tabName={'Documents'}/>
+    }
+
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1267,6 +1308,11 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
+
+    if(this.props.view) {
+      if (!popDocumentData || !popDocumentData.length)
+        return <NoData tableName={'Documents'}/>
+    }
     const popDocuments = popDocumentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1287,7 +1333,7 @@ class Library extends React.Component {
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
-              <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
+              <FontAwesome name='trash-o' onClick={() => that.delete(id, "document", "portfolio")} />}
             <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
             <div className="show_details" style={{'display': 'none'}}>
@@ -1547,10 +1593,10 @@ setTimeout(function(){
    * @returns Void
    */
 
-  delete(index, type) {
+  delete(index, type, libraryType) {
     switch (type) {
       case "image":
-        let imageData = this.state.imageSpecifications;
+        let imageData = libraryType ? this.state.imageDetails : this.state.imageSpecifications
         let initialImageData = imageData[index];
         imageData.splice(index, 1);
         this.setState({
@@ -1564,7 +1610,7 @@ setTimeout(function(){
         this.updateLibrary(imageDelete)
         break;
       case "video":
-        let videoData = this.state.videoSpecifications;
+        let videoData = libraryType ? this.state.videoDetails : this.state.videoSpecifications;
         let initialVideoData = videoData[index];
         videoData.splice(index, 1);
         this.setState({
@@ -1578,7 +1624,7 @@ setTimeout(function(){
         this.updateLibrary(videoDelete)
         break;
       case "template":
-        let templateData = this.state.templateSpecifications;
+        let templateData = libraryType ? this.state.templateDetails : this.state.templateSpecifications;
         let initialTemplateData = templateData[index];
         templateData.splice(index, 1);
         this.setState({
@@ -1592,7 +1638,7 @@ setTimeout(function(){
         this.updateLibrary(tempDelete)
         break;
       case "document":
-        let documentData = this.state.documentSpecifications;
+        let documentData = libraryType ? this.state.documentDetails : this.state.documentSpecifications;
         let initialDocumentData = documentData[index];
         documentData.splice(index, 1);
         this.setState({
@@ -1785,7 +1831,7 @@ setTimeout(function(){
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body moolya pdf-view">
-                {this.state.validDocFormat ? 
+                {this.state.validDocFormat ?
                  this.state.previewTemplate&&(this.state.previewTemplate).endsWith('.pdf')?
                  <iframe src={`https://docs.google.com/gview?url=${this.state.previewTemplate}&embedded=true`} />
                  :
@@ -1865,7 +1911,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpg, .jpeg <br/>Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpg, .jpeg <br/>Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }

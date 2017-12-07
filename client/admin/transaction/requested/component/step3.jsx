@@ -77,7 +77,7 @@ export default class Step3 extends React.Component{
     return (
       <div className="step_form_wrap step3">
 
-          <div className="col-lg-6 nopadding-left">
+          <div className="col-lg-6 col-md-6 nopadding-left">
             <div className="form_bg left_wrap">
               <Scrollbars
                 speed={0.8}
@@ -105,7 +105,7 @@ export default class Step3 extends React.Component{
           </div>
 
 
-          <div className="col-lg-6 nopadding-right">
+          <div className="col-lg-6 col-md-6 nopadding-right">
             <div className="form_bg left_wrap">
               <Scrollbars
                 speed={0.8}

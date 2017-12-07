@@ -10,6 +10,7 @@ let countriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        flag_32       : String,
         about         : String,
         capital       : String,
         isActive      : Boolean,

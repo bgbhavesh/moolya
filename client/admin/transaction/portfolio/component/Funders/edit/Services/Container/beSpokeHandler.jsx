@@ -99,6 +99,7 @@ export default class BeSpokeHandler extends Component {
       this.setState({ hour: value })
       this.handleDuration()
     } else if (name === "minutes") {
+      if(value > 59) value = 59;
       this.setState({ minute: value })
       this.handleDuration();
     }

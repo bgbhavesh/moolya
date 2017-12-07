@@ -34,11 +34,11 @@ export default class MlGenericAwardsView extends React.Component {
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
@@ -98,13 +98,8 @@ export default class MlGenericAwardsView extends React.Component {
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
           <div className="col-md-12">
-            <div className="requested_input" id="show">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="requested_input main_wrap_scroll" id="show">
+              
                 <div className="col-lg-12 nopadding">
                   <div className="row">
                     {arrayList && arrayList.map(function (details, idx) {
@@ -122,7 +117,6 @@ export default class MlGenericAwardsView extends React.Component {
                     })}
                   </div>
                 </div>
-              </ScrollArea>
             </div>
 
             <div className="sub_wrap_scroll" id="details-div" style={{'display': 'none'}}>
@@ -145,8 +139,7 @@ export default class MlGenericAwardsView extends React.Component {
               </div>
 
               <div className="main_wrap_scroll">
-                <ScrollArea speed={0.8} className="main_wrap_scroll"smoothScrolling={true} default={true} >
-                  <div className="col-lg-12">
+               <div className="col-lg-12">
                     <div className="row">
                       <div className="investement-view-content">
                         <div className="panel panel-default panel-form-view">
@@ -158,7 +151,6 @@ export default class MlGenericAwardsView extends React.Component {
                       </div>
                     </div>
                   </div>
-                </ScrollArea>
               </div>
             </div>
           </div>

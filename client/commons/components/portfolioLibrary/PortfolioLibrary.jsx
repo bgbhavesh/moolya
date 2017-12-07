@@ -473,6 +473,7 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileSize = file.size / 1024 / 1024;
     let fileType = file.type;
+    let fileName = file.name;
     let validDocFormat = false;
     let docFormat = fileName.split('.')[1];
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;

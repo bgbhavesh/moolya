@@ -82,6 +82,13 @@ class MlOfficeRepo{
     }
 
     // This Method Updates office Service Card
+   
+    /**
+     * @param {*} officeId 
+     * @param {*} updatedSCDetails 
+     * @param {*} context 
+     * @Note: this method not yet used
+     */
     updateOfficeServiceCard(officeId, updatedSCDetails, context){
       if(!officeId)
         throw new Error('Office Not Found');
@@ -168,6 +175,11 @@ class MlOfficeRepo{
     }
 
     //This Method Reconcile ServiceCard and Update Office Service Card and Ledger Balance
+    /**
+     * @param {*} officeId 
+     * @param {*} context 
+     * @Note: To be used
+     */
     reconcileSCLedgerBalance(officeId,context){
         if(!officeId)
             return
@@ -199,7 +211,13 @@ class MlOfficeRepo{
         ledger["updatedOn"]             = new Date();
         return mlDBController.update('MlOfficeLedger',{officeId:officeId},ledger,{$set: true,upsert: true},context);
     }
-
+    
+  /**
+   * @Note: update of office ledger
+   * @param {*} officeId 
+   * @param {*} officeMemberDetails 
+   * @param {*} context 
+   */
     updateLedgerBalanceOfficeJournal(officeId, officeMemberDetails, context){
       var ledgerBalance = mlDBController.findOne('MlOfficeLedger', {officeId:officeId});
       if(!ledgerBalance)

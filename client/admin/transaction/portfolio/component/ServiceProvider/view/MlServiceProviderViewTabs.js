@@ -46,7 +46,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlServiceProviderViewAbout key="1"
+        component: <MlServiceProviderViewAbout key="1" isAdmin={true}
                                            portfolioDetailsId={this.props.portfolioDetailsId}
                                            getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -69,7 +69,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "MCL",
-        component: <MlServiceProviderViewMCL key="4"
+        component: <MlServiceProviderViewMCL key="4" isAdmin={true}
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },

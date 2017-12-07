@@ -36,11 +36,11 @@ export default class MlGenericManagementView extends React.Component {
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }
@@ -174,12 +174,7 @@ export default class MlGenericManagementView extends React.Component {
 
                   {/*centered data*/}
                   <div className="main_wrap_scroll">
-                    <ScrollArea
-                      speed={0.8}
-                      className="main_wrap_scroll"
-                      smoothScrolling={true}
-                      default={true}
-                    >
+                    
                       <div className="col-lg-12" id="psContent">
                         <div className="row">
                           <div className="investement-view-content">
@@ -322,7 +317,6 @@ export default class MlGenericManagementView extends React.Component {
                           </div>
                         </div>
                       </div>
-                    </ScrollArea>
                   </div>
                 </div>
               </div>

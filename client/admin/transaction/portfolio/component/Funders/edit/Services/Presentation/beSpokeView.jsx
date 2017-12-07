@@ -95,7 +95,7 @@ export default class  BeSpokeView extends Component {
                 <div className="form-group">
                   <label>Duration &nbsp;</label>
                     <input type="number" value={this.props.data.duration && this.props.data.duration.hours ? this.props.data.duration.hours : '' }  min="0"  name="hours" onChange={(e)=>this.props.duration(e.target.value,"hours")} disabled={this.state.disableMode} className="form-control inline_input"/> Hours
-                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} disabled={this.state.disableMode} className="form-control inline_input"/> Mins
+                    <input type="number" value={this.props.data.duration && this.props.data.duration.minutes ? this.props.data.duration.minutes : '' } name="minutes" min="0" max="59"  onChange={(e)=>this.props.duration(e.target.value,"minutes")} disabled={this.state.disableMode} className="form-control inline_input"/> Mins
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" disabled={this.state.disableMode} placeholder="Expected input" name="expectedInput" defaultValue={this.props.data.expectedInput} onChange={(e)=>this.props.dataToSet(e.target.value,"expectedInput")} ></textarea>
@@ -148,33 +148,34 @@ export default class  BeSpokeView extends Component {
                 {
                   attach.map(function(details, index){
                     return(
-                      <div className="panel panel-default step5" key={index}>
-                        <div className="panel-heading">Attachments if any ?
-                          <div className="pull-right block_action">
-                            <div className="fileUpload upload_file_mask" onClick={() => that.props.addComponent()} >
-                              &nbsp;&nbsp;<span className="ml ml-plus" ></span>
-                            </div>
-                          </div>
-                          <div className="pull-right">
-                            {/*style={{'marginTop': '-15px'}}*/}
-                            {/*<input type="text" placeholder="Document Name" />*/}
-                          </div>
-                        </div>
-                        <div className="panel-body nopadding">
-                          <div className="upload-file-wrap">
-                            {/*<input type="file" name="logo" id="logoFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={(e)=>that.props.fileUpload(e, index)} multiple />*/}
-                            {/*<label htmlFor="logoFileinput">*/}
-                            <input type="file" className="inputfile inputfile-upload"  name="fileinput[]" id="fileinput" onChange={(e)=>that.props.fileUpload(e, index)}  />
-                            {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
-                            {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
-                            {/*multiple/>*/}
-                            <label htmlFor="fileinput">
-                              <figure>
-                                <i className="fa fa-upload" aria-hidden="true"></i>
-                              </figure>
-                            </label>
-                          </div>
-                          {details.fileUrl ? details.fileUrl.map(function(image, id){
+
+
+ <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left hide_panel">
+            <div className="panel panel-default uploaded_files">
+              <div className="panel-heading">
+              Attachments if any ?
+                <span className="see-more pull-right">See More</span>
+                {/*<span className="see-less pull-right" style={{'display':'none'}}><a href="">See Less</a></span>*/}
+                <div className="pull-right block_action">
+                  <div className="fileUpload upload_file_mask pull-right" id="create_client">
+                    <a href="javascript:void(0);">
+                        <span className="ml ml-upload">
+                          <input type="file" className="upload_file upload"
+                            name="video_source" id="video_upload"
+                            onChange={that.props.addComponent(that)} />
+                        </span> 
+                    </a>
+                  </div>
+                </div>
+                <div className="pull-right block_action">
+                  <span className="single_icon ml ml-information information"></span>
+                </div>
+              </div>
+              <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
+              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpg, .jpeg , .doc, .docx, .xls, .xlsx, .pdf<br/>Document Size : 10 MB <br/></p>
+                <div className="swiper-container manage_tasks">
+                  <div className="manage_swiper swiper-wrapper">
+                  {details.fileUrl ? details.fileUrl.map(function(image, id){
                             return(
                               <div className="upload-image">
                                 <FontAwesome className="pull-right" onClick={()=>that.props.deleteAttachments(id, index)} name='minus'/>
@@ -182,9 +183,11 @@ export default class  BeSpokeView extends Component {
                               </div>
                             )
                           }): [] }
-                          <div className="upload-image"></div>
-                        </div>
-                      </div>
+              </div>
+                </div>
+              </div>
+            </div>
+          </div>
                     )})
                 }
               </form>

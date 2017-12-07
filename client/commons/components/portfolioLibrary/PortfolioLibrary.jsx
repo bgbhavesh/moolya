@@ -473,6 +473,7 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileSize = file.size / 1024 / 1024;
     let fileType = file.type;
+    let fileName = file.name;
     let validDocFormat = false;
     let docFormat = fileName.split('.')[1];
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -870,7 +871,7 @@ class Library extends React.Component {
             that.state.explore ?
             ""
             :
-            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")} />
+            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image")} />
           }
           <a href="" data-toggle="modal" data-target=".imagepop"
             onClick={that.random.bind(that, generateAbsolutePath(show.fileUrl), id)}><img src={generateAbsolutePath(show.fileUrl)} /></a>
@@ -1152,7 +1153,7 @@ class Library extends React.Component {
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
-              <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")} />}
+              <FontAwesome name='trash-o' onClick={() => that.delete(id, "video", "portfolio")} />}
             <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
             <div className="show_details" style={{'display': 'none'}}>
@@ -1287,7 +1288,7 @@ class Library extends React.Component {
               <label htmlFor={"checkboxImg" + id} ><span></span></label>
             </div>
             {that.state.explore || that.state.deleteOption ? "" :
-              <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")} />}
+              <FontAwesome name='trash-o' onClick={() => that.delete(id, "document", "portfolio")} />}
             <div className="icon_count"> <FontAwesome name='share-alt' /> </div>
             <FontAwesome name='times' style={{ 'display': 'none' }} />
             <div className="show_details" style={{'display': 'none'}}>
@@ -1547,10 +1548,10 @@ setTimeout(function(){
    * @returns Void
    */
 
-  delete(index, type) {
+  delete(index, type, libraryType) {
     switch (type) {
       case "image":
-        let imageData = this.state.imageSpecifications;
+        let imageData = libraryType ? this.state.imageDetails : this.state.imageSpecifications
         let initialImageData = imageData[index];
         imageData.splice(index, 1);
         this.setState({
@@ -1564,7 +1565,7 @@ setTimeout(function(){
         this.updateLibrary(imageDelete)
         break;
       case "video":
-        let videoData = this.state.videoSpecifications;
+        let videoData = libraryType ? this.state.videoDetails : this.state.videoSpecifications;
         let initialVideoData = videoData[index];
         videoData.splice(index, 1);
         this.setState({
@@ -1578,7 +1579,7 @@ setTimeout(function(){
         this.updateLibrary(videoDelete)
         break;
       case "template":
-        let templateData = this.state.templateSpecifications;
+        let templateData = libraryType ? this.state.templateDetails : this.state.templateSpecifications;
         let initialTemplateData = templateData[index];
         templateData.splice(index, 1);
         this.setState({
@@ -1592,7 +1593,7 @@ setTimeout(function(){
         this.updateLibrary(tempDelete)
         break;
       case "document":
-        let documentData = this.state.documentSpecifications;
+        let documentData = libraryType ? this.state.documentDetails : this.state.documentSpecifications;
         let initialDocumentData = documentData[index];
         documentData.splice(index, 1);
         this.setState({

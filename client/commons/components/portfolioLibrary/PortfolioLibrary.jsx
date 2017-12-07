@@ -1865,7 +1865,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpg, .jpeg <br/>Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpg, .jpeg <br/>Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }

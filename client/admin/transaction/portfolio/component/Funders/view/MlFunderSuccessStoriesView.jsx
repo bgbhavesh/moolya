@@ -41,8 +41,8 @@ export default class MlFunderSuccessStoriesView extends React.Component {
       )
     } else {
       return (
-        <div className="admin_main_wrap">
-          <div className="admin_padding_wrap">
+        <div>
+          <div>
             <h2>Success Stories</h2>
             <div className="main_wrap_scroll">
               <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>

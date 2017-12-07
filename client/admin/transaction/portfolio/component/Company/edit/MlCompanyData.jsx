@@ -46,7 +46,16 @@ export default class MlCompanyData extends React.Component{
       uploadedData: resp
     })
   }
-
+ componentDidUpdate(){
+  var className = this.props.isAdmin ? "admin_header" : "app_header"
+  var WinWidth = $(window).width();
+  var WinHeight = $(window).height();
+  // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+  $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+  if (WinWidth > 768) {
+    $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+  }
+ }
   componentDidMount()
   {
     $(function() {
@@ -60,12 +69,7 @@ export default class MlCompanyData extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-    var WinWidth = $(window).width();
-    var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
-    }
+    
     $(".information").unbind("click").click(function () {
       if ($(this).hasClass('ml-information')) {
         $(this).removeClass('ml-information').addClass('ml-delete');
@@ -284,6 +288,7 @@ export default class MlCompanyData extends React.Component{
       <div>
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
+          <div className="main_wrap_scroll">
           <div className="tab_wrap_scroll">
             <div className="col-md-6 col-sm-6 nopadding-left library-wrap">
               <div className="panel panel-default panel-form-view uploaded_files">
@@ -449,6 +454,7 @@ export default class MlCompanyData extends React.Component{
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

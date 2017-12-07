@@ -139,6 +139,14 @@ export default class MlFunderSuccessStories extends Component {
   }
 
   componentDidUpdate() {
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
     OnLockSwitch();
     dataVisibilityHandler();
     initalizeFloatLabel();
@@ -327,7 +335,6 @@ export default class MlFunderSuccessStories extends Component {
           <div className="portfolio-main-wrap">
             <h2>Success Stories</h2>
             <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-4 col-sm-4">
@@ -359,7 +366,6 @@ export default class MlFunderSuccessStories extends Component {
                     })}
                   </div>
                 </div>
-              </ScrollArea>
 
               {/*popover view*/}
               <Popover placement="right" isOpen={this.state.popoverOpen}

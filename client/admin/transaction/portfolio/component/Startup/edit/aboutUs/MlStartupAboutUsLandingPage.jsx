@@ -32,7 +32,7 @@ export default class MlStartupAboutUs extends Component{
     $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
     $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+height));
     setTimeout(function(){
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+80));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }

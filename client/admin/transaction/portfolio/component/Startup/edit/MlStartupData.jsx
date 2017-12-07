@@ -34,7 +34,7 @@ export default class MlStartupData extends React.Component{
   var className = this.props.isAdmin?"admin_header":"app_header"
   var WinWidth = $(window).width();
   var WinHeight = $(window).height();
-  $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+80));
+  $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
   if(WinWidth > 768){
     $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
   }

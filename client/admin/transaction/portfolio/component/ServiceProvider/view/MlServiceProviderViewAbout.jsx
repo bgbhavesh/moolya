@@ -42,7 +42,14 @@ export default class MlServiceProviderViewAbout extends React.Component {
     /**fetch the component data*/
     //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },500);
     this.validateUserForAnnotation();
     this.fetchPortfolioDetails();
   }
@@ -166,6 +173,8 @@ export default class MlServiceProviderViewAbout extends React.Component {
       <div>
         {showLoader===true?(<MlLoader/>):(
       <div className="requested_input">
+      <h2>About</h2>
+      <div className="main_wrap_scroll">
         {image||title||description? (
             <div className="col-lg-12">
               <div className="row">
@@ -194,6 +203,7 @@ export default class MlServiceProviderViewAbout extends React.Component {
               </div>
             </div>
         ):(<NoData tabName={this.props.tabName}/>)}
+        </div>
       </div>
         )}
         </div>

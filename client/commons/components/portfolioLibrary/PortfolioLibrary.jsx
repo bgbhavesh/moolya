@@ -27,6 +27,7 @@ import SharedLibrary from './sharedLibrary';
 import CropperModal from '../cropperModal';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../commons/utils/confirm';
+import NoData from "../noData/noData";
 
 
 
@@ -408,7 +409,7 @@ class Library extends React.Component {
     let file = e.target.files[0];
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
-    let fileName = file.name; 
+    let fileName = file.name;
     let docFormat = fileName.split('.')[1];
     let validDocFormat = false;
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -436,7 +437,7 @@ class Library extends React.Component {
     let file = fileInfo;
     let fileType = file.type;
     let fileSize = file.size / 1024 / 1024;
-    let fileName = file.name; 
+    let fileName = file.name;
     let validDocFormat = false;
     let docFormat = fileName.split('.')[1];
     if(docFormat === 'doc'|| docFormat === 'docx' || docFormat === 'xls' || docFormat === 'xlsx'|| docFormat === 'pdf')validDocFormat= true;
@@ -767,7 +768,7 @@ class Library extends React.Component {
     this.setState({ previewTemplate: templatePreviewUrl, validDocFormat: isDocument});
   }
 
-  
+
 
   onFileSelect(index, type, e) {
     if (e.target.checked) {
@@ -858,6 +859,12 @@ class Library extends React.Component {
   images() {
     let that = this;
     let imageData =  this.state.imageSpecifications || [];
+
+    if(this.props.view){
+      if(!imageData || !imageData.length)
+        return <NoData tabName={'Images'}/>
+    }
+
     const Images = imageData.map(function (show, id) {
       return (
 
@@ -893,6 +900,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popImageData = this.state.imageDetails || [];
+
+    if(this.props.view) {
+      if (!popImageData || !popImageData.length)
+        return <NoData tabName={'Images'}/>
+    }
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -970,6 +982,11 @@ class Library extends React.Component {
   templates() {
     let that = this;
     let templateData = this.state.isLibrary ? this.state.templateDetails || [] : this.state.templateSpecifications || [];
+
+    if(this.props.view) {
+      if (!templateData || !templateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const Templates = templateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1018,6 +1035,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
+
+    if(this.props.view) {
+      if (!popTemplateData || !popTemplateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const popTemplates = popTemplateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1103,6 +1125,12 @@ class Library extends React.Component {
   videos() {
     let that = this;
     let videodata = this.state.isLibrary ? this.state.videoDetails || [] : this.state.videoSpecifications || [];
+
+    if(this.props.view) {
+      if (!videodata || !videodata.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail swiper-slide" key={id}>
@@ -1144,6 +1172,12 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } = that.state;
     let popVideoData = this.state.videoDetails || [];
+
+    if(this.props.view) {
+      if (!popVideoData || !popVideoData.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -1220,6 +1254,12 @@ class Library extends React.Component {
     let that = this;
 
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
+
+    if(this.props.view) {
+      if (!documentData || !documentData.length)
+        return <NoData tabName={'Documents'}/>
+    }
+
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1268,6 +1308,11 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
+
+    if(this.props.view) {
+      if (!popDocumentData || !popDocumentData.length)
+        return <NoData tableName={'Documents'}/>
+    }
     const popDocuments = popDocumentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1786,7 +1831,7 @@ setTimeout(function(){
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body moolya pdf-view">
-                {this.state.validDocFormat ? 
+                {this.state.validDocFormat ?
                  this.state.previewTemplate&&(this.state.previewTemplate).endsWith('.pdf')?
                  <iframe src={`https://docs.google.com/gview?url=${this.state.previewTemplate}&embedded=true`} />
                  :

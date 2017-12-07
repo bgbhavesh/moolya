@@ -75,7 +75,7 @@ export default class Step3 extends React.Component{
         {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <h2>My Contact Details</h2>
-            <div className="col-lg-6 ">
+            <div className="col-lg-6 col-md-6">
               <div className="form_bg left_wrap">
                 <ScrollArea
                   speed={0.8}
@@ -105,7 +105,7 @@ export default class Step3 extends React.Component{
                 </ScrollArea>
               </div>
             </div>
-            <div className="col-lg-6 ">
+            <div className="col-lg-6 col-md-6">
               <div className="form_bg left_wrap">
                 <ScrollArea
                   speed={0.8}

@@ -109,8 +109,7 @@ export default class MlCompanyViewMCL extends React.Component {
       licenses: this.state.licenses,
       compliances:this.state.compliances
     }
-    this.setState({data:data})
-
+    this.setState({ data: data, loading: false })
   }
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
@@ -185,8 +184,6 @@ export default class MlCompanyViewMCL extends React.Component {
     return (
       <div>
         <div className="main_wrap_scroll">
-          
-
               <div className="portfolio-main-wrap" id="annotatorContent">
                 <h2>MCL</h2>
 
@@ -195,10 +192,11 @@ export default class MlCompanyViewMCL extends React.Component {
                     <div className="panel-heading">Membership</div>
                     <div className="panel-body ">
 
-                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.memberships && this.state.memberships.membershipsDescription ? <div>{this.state.memberships.membershipsDescription}</div> :  (<div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
-                      </div>)}</p>)}
-
+                  {showLoader === true ? (<MlLoader />) : (
+                    <div>{this.state.memberships && this.state.memberships.membershipsDescription ? <p>{this.state.memberships.membershipsDescription}</p> : (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName} />
+                    </div>)}
+                  </div>)}
 
                     </div>
                   </div>
@@ -207,15 +205,14 @@ export default class MlCompanyViewMCL extends React.Component {
 
                 </div>
                 <div className="col-md-6 col-sm-6 nopadding-right">
-
-
                   <div className="panel panel-default panel-form-view">
                     <div className="panel-heading">Compliances</div>
                     <div className="panel-body ">
 
-                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : (<div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
-                      </div>)}</p>)}
+                      {showLoader === true ? ( <MlLoader/>) : (
+                    <div>{this.state.compliances && this.state.compliances.compliancesDescription ? <p>this.state.compliances.compliancesDescription</p> : (<div className="portfolio-main-wrap">
+                      <NoData tabName={this.props.tabName} />
+                    </div>)}</div>)}
 
                     </div>
                   </div>
@@ -224,15 +221,15 @@ export default class MlCompanyViewMCL extends React.Component {
                     <div className="panel-heading">Licenses</div>
                     <div className="panel-body ">
 
-                      {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : (<div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
-                      </div>)}</p>)}
-
+                  {showLoader === true ? (<MlLoader />) : (
+                    <div>
+                      {this.state.licenses && this.state.licenses.licensesDescription ? <p>this.state.licenses.licensesDescription</p> : (<div className="portfolio-main-wrap">
+                        <NoData tabName={this.props.tabName} />
+                      </div>)}
+                    </div>)}
 
                     </div>
                   </div>
-
-
                 </div>
               </div>
         </div>

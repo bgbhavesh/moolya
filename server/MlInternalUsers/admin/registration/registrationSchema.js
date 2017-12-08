@@ -225,6 +225,7 @@ let registrationSchema = `
          promoCode       :   String,
          campaignCode    :   String
          userProfileImage : String
+        portfolioStatus : String
     }
     
    

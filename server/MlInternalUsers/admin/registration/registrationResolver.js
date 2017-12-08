@@ -417,7 +417,9 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
-          response.pendingRegId = isAllowRegisterAs._id
+          response.pendingRegId = isAllowRegisterAs._id;
+          const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: isAllowRegisterAs._id }) || {}
+          response.portfolioStatus = portfolioStatus.status;
         }
 
         if (response.status === "REG_USER_APR") {

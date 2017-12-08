@@ -17,6 +17,7 @@ import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 // import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import CropperModal from "../../../../client/commons/components/cropperModal";
+import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 // import gql from "graphql-tag";
 // var Select = require('react-select');
 // var FontAwesome = require('react-fontawesome');
@@ -350,7 +351,7 @@ class MlAddSubChapter extends React.Component {
                       />
                       <div className="previewImg ProfileImg">
                         <img
-                          src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
+                          src={this.state.data && this.state.data.subChapterImageLink ? generateAbsolutePath(this.state.data.subChapterImageLink) : '/images/def_profile.png'} />
                       </div>
                     </div>
 

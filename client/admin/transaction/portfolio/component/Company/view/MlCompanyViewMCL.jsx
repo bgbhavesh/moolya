@@ -210,7 +210,7 @@ export default class MlCompanyViewMCL extends React.Component {
                     <div className="panel-body ">
 
                       {showLoader === true ? ( <MlLoader/>) : (
-                    <div>{this.state.compliances && this.state.compliances.compliancesDescription ? <p>this.state.compliances.compliancesDescription</p> : (<div className="portfolio-main-wrap">
+                    <div>{this.state.compliances && this.state.compliances.compliancesDescription ? <p>{this.state.compliances.compliancesDescription}</p> : (<div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName} />
                     </div>)}</div>)}
 
@@ -223,7 +223,7 @@ export default class MlCompanyViewMCL extends React.Component {
 
                   {showLoader === true ? (<MlLoader />) : (
                     <div>
-                      {this.state.licenses && this.state.licenses.licensesDescription ? <p>this.state.licenses.licensesDescription</p> : (<div className="portfolio-main-wrap">
+                      {this.state.licenses && this.state.licenses.licensesDescription ? <p>{this.state.licenses.licensesDescription}</p> : (<div className="portfolio-main-wrap">
                         <NoData tabName={this.props.tabName} />
                       </div>)}
                     </div>)}

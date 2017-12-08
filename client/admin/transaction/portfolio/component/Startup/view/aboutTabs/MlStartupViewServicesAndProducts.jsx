@@ -104,10 +104,9 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
         <div className="row">
           <h2>Service & Products</h2>
           <div className="panel panel-default panel-form-view">
-
             <div className="panel-body">
-              {this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
-                <p>this.props.serviceProductsDetails.spDescription</p> : <NoData tabName={this.props.tabName}/>}
+                  {this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
+                    <p>{this.props.serviceProductsDetails.spDescription}</p> : <NoData tabName={this.props.tabName} />}
               {/*<p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (*/}
                 {/*<NoData tabName={this.props.tabName}/>)}</p>*/}
 

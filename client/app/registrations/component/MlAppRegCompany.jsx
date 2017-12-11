@@ -149,7 +149,7 @@ export default class MlAppRegCompany extends React.Component {
       industry              :   existingObject.industry?existingObject.industry:null,
       subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
       stageOfCompany        :   existingObject.stageOfCompany?existingObject.stageOfCompany:null,
-      subsidaryCompany      :   existingObject.selectedSubsidaryComapny?existingObject.selectedSubsidaryComapny:null,
+      subsidaryCompany      :   existingObject.subsidaryCompany?existingObject.subsidaryCompany:null,
       registrationNumber    :   existingObject.registrationNumber?existingObject.registrationNumber:null,
       isoAccrediationNumber :   existingObject.isoAccrediationNumber?existingObject.isoAccrediationNumber:null,
       companyTurnOver       :   existingObject.companyTurnOver?existingObject.companyTurnOver:null,
@@ -190,6 +190,8 @@ export default class MlAppRegCompany extends React.Component {
       associatedCompanies   :   this.refs.associatedCompanies.value?this.refs.associatedCompanies.value:null,
     }
     var differences = diff(oldObject, newObject);
+    console.log("//////////////////////////////////");
+    console.log(differences);
     var filteredObject = _underscore.where(differences, {kind: "E"});
     if(filteredObject && filteredObject.length>0){
       return false

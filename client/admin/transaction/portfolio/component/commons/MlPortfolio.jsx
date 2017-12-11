@@ -30,6 +30,7 @@ class MlPortfolio extends React.Component {
         editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
       isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false,commentsCount:null
     }
+    this.windowBackHistory = FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name;
     this.requiredFieldAry = []
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
@@ -349,13 +350,13 @@ class MlPortfolio extends React.Component {
     MlActionConfig.push({
       showAction: true,
       actionName: 'cancel',
-      handler: async(event) => {
-        if (FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_approved")
+      handler: async (event) => {
+        if (this.windowBackHistory == "portfolio_approved")
           FlowRouter.go("/admin/transactions/portfolio/approvedPortfolioList");
-        else if(FlowRouter._current.oldRoute && FlowRouter._current.oldRoute.name == "portfolio_requested"){
+        else if (this.windowBackHistory == "portfolio_requested") {
           FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
         }
-        else{
+        else {
           window.history.back();
         }
       }

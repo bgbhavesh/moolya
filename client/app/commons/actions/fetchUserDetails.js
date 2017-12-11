@@ -16,6 +16,7 @@ export async function fetchUserDetailsHandler() {
        headerCommunityDisplay
        isCalendar
        pendingRegId
+       portfolioStatus
           registrationInfo {
             firstName
             lastName

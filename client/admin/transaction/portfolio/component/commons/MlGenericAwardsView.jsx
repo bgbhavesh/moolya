@@ -91,7 +91,6 @@ export default class MlGenericAwardsView extends React.Component {
 
   render() {
     var _this = this
-    console.log('selected : ', _this.state.viewCurDetail);
     const showLoader = _this.state.loading;
     var arrayList = _this.props.awardsList ? _this.props.awardsList : []
     return (

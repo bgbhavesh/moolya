@@ -98,6 +98,8 @@ export async function fetchServiceProviderPortfolioAbout(portfoliodetailsId) {
               privateFields{
                   keyName,
                   booleanKey
+                  tabName
+                  index
                 }
               }
             }

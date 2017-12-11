@@ -189,7 +189,8 @@ let registrationSchema = `
         status          :   String,
         createdBy       :   String,
         promoCode       :   String,
-        campaignCode    :   String
+        campaignCode    :   String,
+        transactionUpdatedDate : Date
     }
     
      type emailVerification{
@@ -211,7 +212,6 @@ let registrationSchema = `
          transactionType : String
          allocation     : allocation
          transactionCreatedDate : String
-         transactionUpdatedDate : String
          emails  : [emailVerification]
          isAllowRegisterAs : Boolean
          pendingRegId : String
@@ -279,7 +279,8 @@ let registrationSchema = `
         createdBy       :   String,
         allocationStatus :  String,
         promoCode       :   String,
-        campaignCode    :   String
+        campaignCode    :   String,
+        transactionUpdatedDate : Date
         
     }
     

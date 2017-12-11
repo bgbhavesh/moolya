@@ -13,6 +13,11 @@ function dateFormatter (data){
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
 }
 
+function updatedDateFormatter(data){
+  let createdDateTime=data&&data.data&&data.data.transactionUpdatedDate?data.data.transactionUpdatedDate:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
+
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
@@ -49,7 +54,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true},
     {dataField: "subChapterName", title: "SubChapter",dataSort:true},
     {dataField: "communityName", title: "Community",dataSort:true},
-    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
+    //{dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
+    {dataField: "transactionUpdatedDate", title: "Last UpdatedDate",dataSort:true,customComponent:updatedDateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
     {dataField: "allocationStatus", title: "Allocation Status",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
@@ -122,6 +128,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               assignedUserId
                               allocationStatus
                               createdBy
+                              transactionUpdatedDate
                           }
                       }
               }

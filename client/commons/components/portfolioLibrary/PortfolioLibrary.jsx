@@ -27,6 +27,7 @@ import SharedLibrary from './sharedLibrary';
 import CropperModal from '../cropperModal';
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../commons/utils/confirm';
+import NoData from "../noData/noData";
 
 
 
@@ -863,6 +864,12 @@ class Library extends React.Component {
   images() {
     let that = this;
     let imageData =  this.state.imageSpecifications || [];
+
+    if(this.props.view){
+      if(!imageData || !imageData.length)
+        return <NoData tabName={'Images'}/>
+    }
+
     const Images = imageData.map(function (show, id) {
       return (
 
@@ -898,6 +905,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popImageData = this.state.imageDetails || [];
+
+    if(this.props.view) {
+      if (!popImageData || !popImageData.length)
+        return <NoData tabName={'Images'}/>
+    }
     const popImages = popImageData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -975,6 +987,11 @@ class Library extends React.Component {
   templates() {
     let that = this;
     let templateData = this.state.isLibrary ? this.state.templateDetails || [] : this.state.templateSpecifications || [];
+
+    if(this.props.view) {
+      if (!templateData || !templateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const Templates = templateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1023,6 +1040,11 @@ class Library extends React.Component {
     let that = this;
     const {memberInfo} = that.state;
     let popTemplateData = this.state.templateDetails || [];
+
+    if(this.props.view) {
+      if (!popTemplateData || !popTemplateData.length)
+        return <NoData tabName={'Templates'}/>
+    }
     const popTemplates = popTemplateData.map(function (show, id) {
       let docType = null;
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1108,6 +1130,12 @@ class Library extends React.Component {
   videos() {
     let that = this;
     let videodata = this.state.isLibrary ? this.state.videoDetails || [] : this.state.videoSpecifications || [];
+
+    if(this.props.view) {
+      if (!videodata || !videodata.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail swiper-slide" key={id}>
@@ -1149,6 +1177,12 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } = that.state;
     let popVideoData = this.state.videoDetails || [];
+
+    if(this.props.view) {
+      if (!popVideoData || !popVideoData.length)
+        return <NoData tabName={'Videos'}/>
+    }
+
     const popVideos = popVideoData.map(function (show, id) {
       if (show.inCentralLibrary) {
         return (
@@ -1225,6 +1259,12 @@ class Library extends React.Component {
     let that = this;
 
     let documentData = this.state.isLibrary ? this.state.documentDetails || [] : this.state.documentSpecifications || [];
+
+    if(this.props.view) {
+      if (!documentData || !documentData.length)
+        return <NoData tabName={'Documents'}/>
+    }
+
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1273,6 +1313,11 @@ class Library extends React.Component {
     let that = this;
     const { memberInfo } =  that.state;
     let popDocumentData = this.state.documentDetails || [];
+
+    if(this.props.view) {
+      if (!popDocumentData || !popDocumentData.length)
+        return <NoData tableName={'Documents'}/>
+    }
     const popDocuments = popDocumentData.map(function (show, id) {
       var docType = 'doc';
       if(show.fileName && show.fileName.split('.')[1]) {
@@ -1904,7 +1949,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpg, .jpeg <br/>Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpg, .jpeg <br/>Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popImages() : this.images() }
@@ -1931,7 +1976,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .mp4 <br />Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .mp4 <br />Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
@@ -1964,7 +2009,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
@@ -1995,7 +2040,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .pdf, .xls, .xlsx, .doc, .docx <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s)  : .pdf, .xls, .xlsx, .doc, .docx <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}

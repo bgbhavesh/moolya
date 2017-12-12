@@ -33,11 +33,11 @@ export default class MlGenericIntrapreneurView extends React.Component {
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     var className = this.props.isAdmin ? "admin_header" : "app_header"
-    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+220));
     if(WinWidth > 768){
       $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
   }

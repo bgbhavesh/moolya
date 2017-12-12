@@ -27,11 +27,15 @@ export default class MlServiceProviderViewClients extends React.Component {
 
   componentDidMount() {
     //this.initalizeAnnotaor()
-    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinHeight = $(window).height();
-    // $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.'+className).outerHeight(true)));
-
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
     $("#show").click(function(){
       $("#details-div").show();
       var $frame = $('#centered');
@@ -194,12 +198,9 @@ export default class MlServiceProviderViewClients extends React.Component {
                 <NoData tabName={this.props.tabName} />
               </div>): (
               <div className="" id="annotatorContent">
+              <h2>Clients</h2>
               <div className="main_wrap_scroll">
-                <ScrollArea
-                  speed={0.8}
-                  className="main_wrap_scroll"
-                  smoothScrolling={true}
-                  default={true}>
+                
                   <div className="">
                     <div className="col-lg-12" id="show">
                       <div className="row">
@@ -251,7 +252,7 @@ export default class MlServiceProviderViewClients extends React.Component {
                     </div>
                     <br className="brclear"/>
                   </div>
-                </ScrollArea>
+                
               </div>
             </div>)
           }

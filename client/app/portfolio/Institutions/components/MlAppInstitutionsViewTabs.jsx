@@ -106,7 +106,7 @@ export default class MlAppInstitutionViewTabs extends Component {
         panelClassName: 'panel',
         title: "Library",
         name: "Library",
-        component: <PortfolioLibrary isAdmin={false} client={appClient} key="7"
+        component: <PortfolioLibrary isAdmin={false} client={appClient} key="7" view={true}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },

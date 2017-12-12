@@ -161,7 +161,7 @@ export default class MlServiceProviderViewServices extends Component {
     return (
       <div>
         <div className="clearfix"/>
-        <MlFunderServicesList
+        <MlFunderServicesList view={this.props.view}
           myPortfolio={this.props.myPortfolio}
           createServiceMode={this.props.createServiceMode ? this.props.createServiceMode : ""}
           portfolioDetailsId={this.props.portfolioDetailsId} />

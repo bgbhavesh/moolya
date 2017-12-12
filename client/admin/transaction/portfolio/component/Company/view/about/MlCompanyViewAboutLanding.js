@@ -29,9 +29,16 @@ export default class MlCompanyViewAboutLanding extends Component {
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
     var WinHeight = $(window).height();
+    var WinWidth = $(window).width();
     var height  = this.props.isAdmin ? 465 : 535;
     $('.md_scroll').height(WinHeight-($('.'+className).outerHeight(true)+255));
     $('.sm_scroll').height(WinHeight-($('.'+className).outerHeight(true)+height));
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+    $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+    },200);
   }
 
   componentWillMount() {
@@ -84,12 +91,8 @@ export default class MlCompanyViewAboutLanding extends Component {
     return (
       <div>
         {this.state.aboutCompany === false ? (<div className=" portfolio-main-wrap">
-          <ScrollArea
-            speed={0.8}
-            className="main_wrap_scroll"
-            smoothScrolling={true}
-            default={true}
-          ><h2>Portfolio</h2>
+         <h2>Portfolio</h2>
+         <div className="main_wrap_scroll">
             <div className="col-md-6 col-sm-6 nopadding">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome
@@ -192,7 +195,7 @@ export default class MlCompanyViewAboutLanding extends Component {
               </div>
 
             </div>
-          </ScrollArea>
+            </div>
         </div>) : (<div>{<MlCompanyViewAboutusTabs getInstitutionState={this.getInstitutionState.bind(this)}
                                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                                    institutionAboutUsDetails={this.state.aboutUs}

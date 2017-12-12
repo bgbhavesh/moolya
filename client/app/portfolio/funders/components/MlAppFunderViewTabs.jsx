@@ -41,10 +41,10 @@ export default class MlAppFunderViewTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" ,  name:"Engagement Methods" ,component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Areas Of Interest" ,  name:"Areas Of Interest" ,component:<MlFunderAreaOfInterestView key="6" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" ,name:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" ,name:"Library" , component:<PortfolioLibrary  client={appClient} key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" ,name:"Library" , component:<PortfolioLibrary view={true} client={appClient} key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"News" ,  name:"News" , component:<MlFunderNewsView key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , name:"Looking For" , component:<MlFunderLookingForView key="11" tabName="lookingFor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , name:"Services" ,  component:<MlBeSpokeListView  myPortfolio={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , name:"Services" ,  component:<MlBeSpokeListView view={true}  myPortfolio={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
   }

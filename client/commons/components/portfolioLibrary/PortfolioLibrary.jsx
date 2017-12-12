@@ -1938,7 +1938,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .mp4 <br />Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .mp4 <br />Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
@@ -1971,7 +1971,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
@@ -2002,7 +2002,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .pdf, .xls, .xlsx, .doc, .docx <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s)  : .pdf, .xls, .xlsx, .doc, .docx <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}

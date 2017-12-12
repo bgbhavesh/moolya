@@ -2,7 +2,8 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
@@ -272,7 +273,7 @@ class MlAddProcessMapping extends React.Component{
 
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -305,13 +306,13 @@ class MlAddProcessMapping extends React.Component{
                     </div>
                   </form>
                 </div>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
             <div className="form_bg" >
               <div className="left_wrap">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="left_wrap"
                   smoothScrolling={true}
@@ -340,7 +341,7 @@ class MlAddProcessMapping extends React.Component{
   <Moolyaselect  ref="subChapter" multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
   <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
                 </form>
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
           </div>

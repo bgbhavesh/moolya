@@ -7,7 +7,8 @@ import MlActionComponent from '../../../commons/components/actions/ActionCompone
 import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
 import {OnToggleSwitch} from "../../utils/formElemUtil";
-import ScrollArea from "react-scrollbar"
+// import ScrollArea from "react-scrollbar"
+import { Scrollbars } from 'react-custom-scrollbars';
 import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -223,7 +224,7 @@ class MlEditCommunityFormComponent extends React.Component {
           <div className="admin_padding_wrap">
             <h2>Edit Community Details</h2>
             <div className="main_wrap_scroll">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="main_wrap_scroll"
                 smoothScrolling={true}
@@ -293,7 +294,7 @@ class MlEditCommunityFormComponent extends React.Component {
                 </form>
               </div>
             </div>
-              </ScrollArea>
+              </Scrollbars>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>)}

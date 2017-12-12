@@ -249,6 +249,10 @@ export default class MlAppRegCompany extends React.Component {
   }
 
   render() {
+    var yesterday = Datetime.moment().subtract(0, 'day');
+    var valid = function (current) {
+      return current.isBefore(yesterday);
+    };
     let MlActionConfig
     let userType = this.props.userType;
     /**
@@ -408,7 +412,7 @@ export default class MlAppRegCompany extends React.Component {
                     <div className="form-group mandatory">
                       <Datetime dateFormat="DD-MM-YYYY" ref={"foundationDate"} timeFormat={false} inputProps={{placeholder: "Foundation Year",readOnly:true}}
                                 closeOnSelect={true} value={that.state.foundationDate}
-                                onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
+                                onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Foundation Date is required"/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
                  {/*   <div className="form-group">

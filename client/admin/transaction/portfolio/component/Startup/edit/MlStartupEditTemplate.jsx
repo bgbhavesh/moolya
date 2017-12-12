@@ -77,7 +77,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Investor",
         name: "Investor",
-        component: <MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
+        component: <MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} client={client}
                                       portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
@@ -101,7 +101,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Awards",
         name: "Awards",
-        component: <MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
+        component: <MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} client={client}
                                     portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
@@ -109,7 +109,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Library",
         name: "Library",
-        component: <PortfolioLibrary key="7" client={client} isAdmin={false}
+        component: <PortfolioLibrary key="7" client={client} isAdmin={false} client={client}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       }, //
       {
@@ -125,7 +125,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "Looking For",
         name: "Looking For",
-        component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
+        component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} client={client}
                                         portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
 

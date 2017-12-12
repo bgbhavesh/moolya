@@ -44,34 +44,35 @@ MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
   } else {
       args.detailsInput.userId = context.userId;
       newPortfolioCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+      newPortfolioCollection = newPortfolioCollection ? new MlRespPayload().successPayload("File uploaded successfully", 200) : new MlRespPayload().errorPayload("Failed to upload the file", 400);
   }
   return newPortfolioCollection;
 }
 
 
 MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
-  let currentProfile = context.url.split("/");
-  let dataExists = false;
+  // let currentProfile = context.url.split("/");
+  // let dataExists = false;
   let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: context.url.split("/")[6]}, context)
-  var existingCollection = mlDBController.findOne('MlLibrary', {_id:args.id}, context)
-  if(existingCollection) {
-    if(Array.isArray(existingCollection.portfolioReference)) {
-      existingCollection.portfolioReference.map(function (data) {
-        if (Array.isArray(args.files.portfolioReference)) {
-          args.files.portfolioReference.map(function (incoming) {
-            if (data.portfolioId === incoming.portfolioId) {
-              dataExists = true;
-            }
-          })
-        }
-      })
-    }
-    if(dataExists){
-      let code = 20
-      let response = new MlRespPayload().errorPayload('File already exists', code);
-      return response
-    }
-  }
+  // var existingCollection = mlDBController.findOne('MlLibrary', {_id:args.id, 'libraryType':args.files.libraryType}, context)
+  // if(existingCollection) {
+  //   if(Array.isArray(existingCollection.portfolioReference)) {
+  //     existingCollection.portfolioReference.map(function (data) {
+  //       if (Array.isArray(args.files.portfolioReference)) {
+  //         args.files.portfolioReference.map(function (incoming) {
+  //           if (data.portfolioId === incoming.portfolioId) {
+  //             dataExists = true;
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  //   if(dataExists){
+  //     let code = 20
+  //     let response = new MlRespPayload().errorPayload('File already exists', code);
+  //     return response
+  //   }
+  // }
   if(args.files.portfolioReference){
     if(args.files.portfolioReference.portfolioId ===portfolioDetails._id){
       let code = 20
@@ -94,10 +95,9 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
     if(tempObject && tempObject.portfolioId) args.files.portfolioReference = tempArray;
     else return
   }
-  if(!dataExists){
     var newCollection = mlDBController.update('MlLibrary', {_id:args.id},args.files,{$set:1}, context)
-    return newCollection
-  }
+    newCollection = newCollection ? new MlRespPayload().successPayload("File imported successfully", 200) : new MlRespPayload().errorPayload("Failed to Import file", 400);
+    return newCollection;
 }
 
 /**

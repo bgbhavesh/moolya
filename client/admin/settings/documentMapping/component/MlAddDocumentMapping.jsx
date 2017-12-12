@@ -1,7 +1,8 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
@@ -226,7 +227,7 @@ class MlAddDocumentMapping extends React.Component{
 
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -281,7 +282,7 @@ class MlAddDocumentMapping extends React.Component{
 
                   </form>
                 </div>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >

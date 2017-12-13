@@ -46,7 +46,7 @@ export default class MlAppIdeatorListView extends Component {
             <h2>Ideators</h2>
           </div>
           {data && !data.length?
-            (<NoDataList moduleName="Portfolios" />):(
+            (<NoDataList profile={true} moduleName="user profiles" />):(
               <div>
                   {data.map(function (ideator, idx) {
                   return (

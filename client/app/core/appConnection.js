@@ -30,8 +30,8 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
   httpLink = createHttpLink(interfaceArgument);
 
   if (config.useMeteorAccounts) {
-    const { loginToken } = config;
-
+    const loginToken= localStorage.getItem('token');
+    
     if (Meteor.isClient && loginToken) {
       console.error('[Meteor Apollo Integration] The current user is not handled with your GraphQL requests: you are trying to pass a login token to an Apollo Client instance defined client-side. This is only allowed during server-side rendering, please check your implementation.');
       return httpLink
@@ -99,4 +99,4 @@ const defaultClientConfig =
 const networkInterface = defaultClientConfig.link;
 const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
-export const client = new ApolloClient(defaultClientConfig);
+export const appClient = new ApolloClient(defaultClientConfig);

@@ -35,6 +35,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       selectedObject: "default",
       selectedTab:'principal'
     }
+    this.selectedPrincipalIndex = 0;
+    this.selectedTeamIndex = 0;
     this.fetchPrincipalDetails.bind(this);
     this.fetchTeamDetails.bind(this);
     return this;
@@ -74,8 +76,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     // if(WinWidth > 768){
     //   $(".medium-popover").mCustomScrollbar({theme:"minimal-dark"});
     // }
-
   }
+  /**
+   * [.two] class is for principle
+   * [.one] class is for team
+   */
   componentDidUpdate(){
     var className = this.props.isAdmin ? "admin_header" : "app_header"
     $('.two').click(function(){
@@ -93,7 +98,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
-        startAt:0,
+        startAt: this.selectedPrincipalIndex,
         scrollBar: $wrap.find('.scrollbar'),
         scrollBy: 1,
         speed: 300,
@@ -121,7 +126,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
-        startAt: 0,
+        startAt: this.selectedTeamIndex,
         scrollBar: $wrap.find('.scrollbar'),
         scrollBy: 1,
         speed: 300,
@@ -134,11 +139,13 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       });
     });
 
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-($('.' + className).outerHeight(true) + 120));
-
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
     initalizeFloatLabel();
-
   }
 
 
@@ -165,7 +172,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         $("#"+field).removeClass('fa-lock').addClass('un_lock fa-unlock')
     })
     this.setState({PIndex:index})
-
+    this.selectedPrincipalIndex = index;
     _.each(this.state.funderPrincipalList[index].privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -176,7 +183,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         $("#team"+field).removeClass('fa-lock').addClass('un_lock fa-unlock')
     })
     this.setState({TIndex:index})
-
+    this.selectedTeamIndex = index;
     _.each(this.state.funderTeamList[index].privateFields, function (pf) {
       $("#team"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -200,8 +207,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
         <div>
           {showLoader === true ? (<MlLoader/>) : (
             <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-
               <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
                 <div className="panel panel-default">
                   <div className="panel-heading"> Principal </div>
@@ -237,7 +242,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                             <ul>
                               {that.state.funderPrincipalList.map(function (principal, idx) {
                                 return (
-                                  <li key={idx} onClick={that.onSelectPrincipal.bind(that, idx)}>
+                                  <li key={idx} onClick={that.onSelectPrincipal.bind(that, idx)} className={idx == that.selectedPrincipalIndex ? "active" : ""}>
                                     <div className="team-block">
                                       <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"}
                                            className="team_img"/>
@@ -343,7 +348,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                             <ul>
                               {that.state.funderTeamList.map(function (team, idx) {
                                 return (
-                                  <li onClick={that.onSelectTeam.bind(that, idx)} key={idx}>
+                                  <li onClick={that.onSelectTeam.bind(that, idx)} key={idx} className={idx == that.selectedTeamIndex ? "active" : ""}> 
                                     <div className="team-block">
                                       <img src={team.logo ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"}
                                            className="team_img"/>
@@ -417,10 +422,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                   </div>
                 </div>
               </div>
-              </ScrollArea>
-
-
-
               <div style={{'display': 'none'}} className="ml_create_client">
                 <div className="medium-popover">
                   <div className="row">

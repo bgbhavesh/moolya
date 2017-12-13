@@ -66,6 +66,14 @@ export default class MlCompanyManagement extends Component {
 
   }
   componentDidUpdate() {
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+    }
     initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
@@ -306,7 +314,7 @@ export default class MlCompanyManagement extends Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: this.state.fileName,
@@ -413,7 +421,7 @@ export default class MlCompanyManagement extends Component {
           <div>
             <h2>Management</h2>
             <div className="tab_wrap_scroll">
-
+            <div className="main_wrap_scroll">
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
@@ -569,6 +577,7 @@ export default class MlCompanyManagement extends Component {
                 <div className="ml_btn text-center" style={{'textAlign':'center'}}>
                   <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                 </div>
+              </div>
               </div>
             </div>
           </div>)}

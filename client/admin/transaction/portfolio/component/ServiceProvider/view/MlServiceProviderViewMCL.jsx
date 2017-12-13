@@ -37,11 +37,20 @@ export default class MlServiceProviderViewMCL extends Component {
   }
 
   componentDidMount() {
-    //this.initalizeAnnotaor()
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.app_header').outerHeight(true)));
+    //this.initalizeAnnotaor()    
     this.fetchPortfolioStartupDetails();
     this.validateUserForAnnotation();
+  }
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
   }
 
   componentWillMount() {
@@ -167,12 +176,7 @@ export default class MlServiceProviderViewMCL extends Component {
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
               <div className="main_wrap_scroll">
-                <ScrollArea
-                  speed={0.8}
-                  className="main_wrap_scroll"
-                  smoothScrolling={true}
-                  default={true}
-                >
+                
                   <div className="col-md-6 col-sm-6 nopadding-left">
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Memberships</div>
@@ -212,7 +216,7 @@ export default class MlServiceProviderViewMCL extends Component {
                       </div>
                     </div>
                   </div>
-                </ScrollArea>
+                
               </div>
             </div>
           )

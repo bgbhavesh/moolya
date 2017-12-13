@@ -531,7 +531,7 @@ export default class MlAppFunderIndividualComponent extends React.Component {
                 </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={{placeholder: "Employment Date",readOnly:true}}
-                            closeOnSelect={true} value={that.state.employmentDate}
+                            closeOnSelect={true} value={that.state.employmentDate} isValidDate={ valid }
                             onChange={that.onemploymentDateSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"
                                onClick={that.openDatePickerEmploymentDate.bind(that)}/>

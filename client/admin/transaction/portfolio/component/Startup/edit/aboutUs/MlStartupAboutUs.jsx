@@ -38,10 +38,18 @@ class MlStartupAboutUs extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
+    //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
     // this.lockPrivateKeys()
-    // this.props.getStartupAboutUs(this.state.data)
+    // this.props.getStartupAboutUs(this.state.data)    
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
@@ -179,13 +187,14 @@ class MlStartupAboutUs extends React.Component{
     }));
 
     return(
-      <div className="requested_input">
-        <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true} >
+      <div className="requested_input"> 
+      <h2>
+              About Us
+            </h2> 
+      <div className="main_wrap_scroll">      
         <div className="col-lg-12">
           <div className="row">
-            <h2>
-              About Us
-            </h2>
+            
             <div className="panel panel-default panel-form">
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
@@ -211,7 +220,8 @@ class MlStartupAboutUs extends React.Component{
             </div>
 
           </div> </div>
-        </ScrollArea>
+        
+      </div>
       </div>
     )
   }

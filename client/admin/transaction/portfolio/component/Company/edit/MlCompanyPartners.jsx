@@ -47,6 +47,15 @@ export default class MlCompanyPartners extends React.Component {
   }
 
   componentDidMount() {
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    setTimeout (function(){
+      $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+      if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      }
+      },200);
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -253,7 +262,7 @@ export default class MlCompanyPartners extends React.Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file to your library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: file&&file.name?file.name:"",
@@ -321,8 +330,9 @@ export default class MlCompanyPartners extends React.Component {
       <div>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
+          <h2>Partners</h2>
             <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
+              
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPrincipal.bind(this)}>
@@ -356,7 +366,6 @@ export default class MlCompanyPartners extends React.Component {
 
                         </div>
                       </div>
-              </ScrollArea>
 
               <Popover placement="right" isOpen={this.state.popoverOpenP}
                        target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>

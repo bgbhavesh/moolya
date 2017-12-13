@@ -44,6 +44,15 @@ class MlStartupTechnology extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    var WinHeight = $(window).height();
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
   }
 
   componentWillMount(){
@@ -282,12 +291,7 @@ class MlStartupTechnology extends Component{
         <h2>Technology</h2>
         {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
-          <ScrollArea
-            speed={0.8}
-            className="main_wrap_scroll"
-            smoothScrolling={true}
-            default={true}
-          >
+          
             <div className="col-lg-12">
               <div className="row">
                 <div className="col-lg-2 col-md-3 col-sm-3">
@@ -314,7 +318,7 @@ class MlStartupTechnology extends Component{
                 })}
               </div>
             </div>
-          </ScrollArea>
+          
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
              <PopoverTitle>Add New Technology</PopoverTitle>
             <PopoverContent>

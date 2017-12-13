@@ -556,6 +556,9 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     let response = new MlRespPayload().successPayload("Member added successfully", code);
     return response;
 }
+/**
+ * Todo:// If any user is made from member to principle then then office ledger to be updated again
+ */
 
 MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) => {
   if(!args.memberId){

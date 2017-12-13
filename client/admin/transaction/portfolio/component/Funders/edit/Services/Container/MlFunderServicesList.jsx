@@ -107,6 +107,7 @@ export default class  MlFunderServicesList extends Component {
   render() {
     return(
     <MlFunderServicesListView
+        view={this.props.view}
         viewComponent={this.state.componentToView}
         componentToView={this.componentView.bind(this)}
         data={this.state.data}

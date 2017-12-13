@@ -57,7 +57,7 @@ const mlCountriesTableConfig=new MlViewer.View({
                     data{
                       ...on Countries{
                               country
-                              url
+                              url:flag_32
                               displayName
                               countryCode
                               about

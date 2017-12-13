@@ -10,6 +10,7 @@ let countriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        flag_32       : String,
         about         : String,
         capital       : String,
         isActive      : Boolean,
@@ -34,10 +35,13 @@ let countriesSchema = `
     
     type Query {
         fetchCountries: [Countries]
+        fetchCountriesForCountryCode : [Countries]
         fetchCountry(countryId: String): Countries
         fetchCountriesSearch: [Countries]
         fetchCountriesAPI:[Countries]
         fetchCountryCode(clusterId: String):Countries
+        findCountryCodeForDisplayName(countryCode: String):Countries
+        
     }
     
     type Mutation{
@@ -48,6 +52,8 @@ let countriesSchema = `
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);
 let supportedApi = [
     {api:'fetchCountries', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'findCountryCodeForDisplayName', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'fetchCountriesForCountryCode', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
     {api:'fetchCountry', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
     {api:'fetchCountriesSearch', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
     {api:'fetchCountriesAPI', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},

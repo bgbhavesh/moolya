@@ -116,35 +116,23 @@ export default class  SharedLibrary extends React.Component {
     });
   }
 
+   /**
+   * Method :: preview
+   * Desc   :: Handles all the previewing operations
+   */
 
-  randomVideo(link, index) {
-    let data = this.state.videoDetails|| [];
-    let videoPreviewUrl;
-    videoPreviewUrl = generateAbsolutePath(data[index].file.url);
-    this.setState({previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl});
-  }
-
-  random(link, index) {
-    let data = this.state.imageDetails || [];
-    let imagePreviewUrl;
-    imagePreviewUrl = data[index].file.url;
-    this.setState({previewImage: imagePreviewUrl});
-  }
-
-  randomDocument(link, index) {
-    let data = this.state.documentDetails|| [];
-    let documentPreviewUrl;
-    documentPreviewUrl = data[index].file.url;
-    this.setState({previewDocument: documentPreviewUrl});
+  preview(link, type) {
+    if(type === "Image")this.setState({previewImage: link});
+    else if(type === "Video") this.setState({previewVideo: link, videoUrl: link});
+    else if(type === "Document") this.setState({previewDocument: link});
   }
 
   randomTemplate(link, index) {
-    let data = this.state.templateDetails|| [];
-    let templatePreviewUrl;
-    templatePreviewUrl = data[index].file.url;
-    this.setState({previewTemplate: templatePreviewUrl});
+    let templatePreviewUrl ;
+    templatePreviewUrl = generateAbsolutePath(link);
+    let isDocument = (templatePreviewUrl.endsWith('.pdf') || templatePreviewUrl.endsWith('.doc') || templatePreviewUrl.endsWith('.docx') || templatePreviewUrl.endsWith('.xls') || templatePreviewUrl.endsWith('.xlsx')) ? true : false;
+    this.setState({ previewTemplate: templatePreviewUrl, validDocFormat: isDocument});
   }
-
 
   /**
    * Method :: images
@@ -159,9 +147,8 @@ export default class  SharedLibrary extends React.Component {
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
-            <a href="" data-toggle="modal" data-target=".imagespop"
-                                                 onClick={that.random.bind(that, generateAbsolutePath(show.file.url), id)}>
+          {show.isDownloadable ? <a href={generateAbsolutePath(show.file.url)} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
+            <a href="" data-toggle="modal" data-target=".imagespop" onClick={that.preview.bind(that, show.file.url, "Image")}>
               <img src={generateAbsolutePath(show.file.url)} /></a>
           <div id="images" className="title">{show.file.fileName}</div>
 
@@ -181,13 +168,24 @@ export default class  SharedLibrary extends React.Component {
     let that = this;
     let templateData = that.state.templateDetails  || [];
     const Templates = templateData.map(function (show, id) {
+      let docType = null;
+      if(show.file && show.file.fileName) {
+        let type = show.file.fileName.split('.')[1];
+        if(type === 'pdf'){
+          docType = type;
+        }else if(type === 'xls' ||type === 'xlsx' ){
+          docType = 'xls';
+        }else if(type === 'doc' || type === 'docx' ){
+          docType = 'doc';
+        }
+      }
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
+          {show.isDownloadable ? <a href={generateAbsolutePath(show.file.url)} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".templatespop"
-             onClick={that.randomTemplate.bind(that, generateAbsolutePath(show.file.url), id)}>
-            <img src={generateAbsolutePath(show.file.url)} /></a>
+             onClick={that.randomTemplate.bind(that, show.file.url, id)}>
+            {docType ? <img src={`/images/${docType}.png`}/> :<img src={generateAbsolutePath(show.file.url)} />}</a>
           <div id="templates" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -209,10 +207,10 @@ export default class  SharedLibrary extends React.Component {
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download' /></a>:<div></div>}
+          {show.isDownloadable ? <a href={generateAbsolutePath(show.file.url)} download={show.file.fileName}><FontAwesome  name='download' /></a>:<div></div>}
           <br/>
           <a href="" data-toggle="modal" data-target=".videospop"
-             onClick={that.randomVideo.bind(that, generateAbsolutePath(show.file.url), id)}>
+             onClick={that.preview.bind(that, show.file.url, "Video")}>
             <video width="120" height="100" controls>
               <source src={generateAbsolutePath(show.file.url)} type="video/mp4"></source>
             </video>
@@ -235,8 +233,8 @@ export default class  SharedLibrary extends React.Component {
     let documentData = that.state.documentDetails || [];
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
-      if(show.fileName && show.fileName.split('.')[1]) {
-        let type = show.fileName.split('.')[1];
+      if(show.file.fileName && show.file.fileName.split('.')[1]) {
+        let type = show.file.fileName.split('.')[1];
         if(type === 'pdf'){
           docType = type;
         }else if(type === 'xls' ||type === 'xlsx' ){
@@ -248,9 +246,9 @@ export default class  SharedLibrary extends React.Component {
       return (
         <div className="thumbnail" key={id}>
           <div className="icon_count_times"> <FontAwesome name="clock-o"></FontAwesome>{show.daysToExpire}</div>
-          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
+          {show.isDownloadable ? <a href={generateAbsolutePath(show.file.url)} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentspop"
-             onClick={that.randomDocument.bind(that, generateAbsolutePath(show.file.url), id)}>
+             onClick={that.preview.bind(that, generateAbsolutePath(show.file.url), "Document")}>
             <img src={`/images/${docType}.png`}/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
@@ -305,7 +303,7 @@ export default class  SharedLibrary extends React.Component {
     var videoJsOptions = [{
       autoplay: true,
       controls: true,
-      sources: [{src: this.state.previewVideo, type: 'video/mp4'}]
+      sources: [{src: generateAbsolutePath(this.state.previewVideo), type: 'video/mp4'}]
     }]
 
 
@@ -342,8 +340,14 @@ export default class  SharedLibrary extends React.Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
               </div>
-              <div className="modal-body">
-                <div className="img_scroll"><img src={generateAbsolutePath(this.state.previewTemplate)}/></div>
+              <div className="modal-body pdf-view">
+              {this.state.validDocFormat ?
+                 this.state.previewTemplate&&(this.state.previewTemplate).endsWith('.pdf')?
+                 <iframe src={`https://docs.google.com/gview?url=${this.state.previewTemplate}&embedded=true`} />
+                 :
+                 <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewTemplate}`} />
+
+                :<div className="img_scroll"><img src={this.state.previewTemplate} /></div>}
               </div>
             </div>
           </div>
@@ -363,8 +367,13 @@ export default class  SharedLibrary extends React.Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div className="modal-body">
-                <iframe src={this.state.previewDocument}/>
+              <div className="modal-body pdf-view">
+             
+                 {this.state.previewDocument&&(this.state.previewDocument).endsWith('.pdf')?
+                 <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`} />
+                 :
+                 <iframe src={`https://view.officeapps.live.com/op/view.aspx?src=${this.state.previewDocument}`} />}
+
               </div>
             </div>
           </div>

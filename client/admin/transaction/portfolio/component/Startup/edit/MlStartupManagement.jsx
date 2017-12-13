@@ -323,7 +323,7 @@ export default class MlStartupManagement extends Component{
     });
     if(resp){
       let result = JSON.parse(resp)
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: this.state.fileName,
@@ -606,6 +606,7 @@ export default class MlStartupManagement extends Component{
                 <div className="ml_btn text-center" style={{'textAlign':'center'}}>
                   <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                 </div>
+                <br/>
               </div>
             </div>
           </div>)}

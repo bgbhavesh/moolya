@@ -149,7 +149,7 @@ export default class MlAppRegCompany extends React.Component {
       industry              :   existingObject.industry?existingObject.industry:null,
       subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
       stageOfCompany        :   existingObject.stageOfCompany?existingObject.stageOfCompany:null,
-      subsidaryCompany      :   existingObject.selectedSubsidaryComapny?existingObject.selectedSubsidaryComapny:null,
+      subsidaryCompany      :   existingObject.subsidaryCompany?existingObject.subsidaryCompany:null,
       registrationNumber    :   existingObject.registrationNumber?existingObject.registrationNumber:null,
       isoAccrediationNumber :   existingObject.isoAccrediationNumber?existingObject.isoAccrediationNumber:null,
       companyTurnOver       :   existingObject.companyTurnOver?existingObject.companyTurnOver:null,
@@ -190,6 +190,8 @@ export default class MlAppRegCompany extends React.Component {
       associatedCompanies   :   this.refs.associatedCompanies.value?this.refs.associatedCompanies.value:null,
     }
     var differences = diff(oldObject, newObject);
+    console.log("//////////////////////////////////");
+    console.log(differences);
     var filteredObject = _underscore.where(differences, {kind: "E"});
     if(filteredObject && filteredObject.length>0){
       return false
@@ -247,6 +249,10 @@ export default class MlAppRegCompany extends React.Component {
   }
 
   render() {
+    var yesterday = Datetime.moment().subtract(0, 'day');
+    var valid = function (current) {
+      return current.isBefore(yesterday);
+    };
     let MlActionConfig
     let userType = this.props.userType;
     /**
@@ -406,7 +412,7 @@ export default class MlAppRegCompany extends React.Component {
                     <div className="form-group mandatory">
                       <Datetime dateFormat="DD-MM-YYYY" ref={"foundationDate"} timeFormat={false} inputProps={{placeholder: "Foundation Year",readOnly:true}}
                                 closeOnSelect={true} value={that.state.foundationDate}
-                                onChange={that.onFoundationDateSelection.bind(that)} data-required={true} data-errMsg="Foundation Date is required"/>
+                                onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Foundation Date is required"/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
                  {/*   <div className="form-group">

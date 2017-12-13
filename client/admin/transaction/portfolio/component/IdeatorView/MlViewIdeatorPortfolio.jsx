@@ -62,7 +62,7 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                    getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary tabName="Library" isAdmin={true} client={client} key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary view={true} tabName="Library" isAdmin={true} client={client} key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="5" tabName="Strategy and Plans" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Property And Trademarks" , component:<MlPortfolioIdeatorPlanningTrademarkView key="6" tabName="IP and Trademark" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlIdeatorLookingForView key="7" tabName="Looking For" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

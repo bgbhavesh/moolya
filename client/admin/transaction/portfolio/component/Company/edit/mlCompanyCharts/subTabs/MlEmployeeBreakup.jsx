@@ -219,12 +219,12 @@ export default class MlEmployeeBreakup extends React.Component{
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}}
-                                    closeOnSelect={true} ref={"ebdFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
+                                    closeOnSelect={true} ref={"ebdFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                         </div>
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}}
-                                    closeOnSelect={true} ref={"ebdFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
+                                    closeOnSelect={true} ref={"ebdFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
                         </div>
 
                       </div>
@@ -233,12 +233,12 @@ export default class MlEmployeeBreakup extends React.Component{
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                     inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}}
-                                    closeOnSelect={true} ref={"ebdToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
+                                    closeOnSelect={true} ref={"ebdToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                         </div>
                         <div className="form-group col-md-6 col-sm-6">
                           <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                     inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}}
-                                    closeOnSelect={true} ref={"ebdToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
+                                    closeOnSelect={true} ref={"ebdToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>
                         </div>
                       </div>
 
@@ -275,13 +275,13 @@ export default class MlEmployeeBreakup extends React.Component{
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdFromYear}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
-                                      closeOnSelect={true} ref={"ebdFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
+                                      closeOnSelect={true} ref={"ebdFromYear"+idx} onChange={that.handleFromYearChange.bind(that, idx)}/>
                           </div>
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdFromMonth}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
-                                      closeOnSelect={true} ref={"ebdFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
+                                      closeOnSelect={true} ref={"ebdFromMonth"+idx} onChange={that.handleFromMonthChange.bind(that, idx)}/>
                           </div>
 
                         </div>
@@ -292,13 +292,13 @@ export default class MlEmployeeBreakup extends React.Component{
                             <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdToYear}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 
-                                      closeOnSelect={true} ref={"ebdToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
+                                      closeOnSelect={true} ref={"ebdToYear"+idx} onChange={that.handleToYearChange.bind(that, idx)}/>
                           </div>
                           <div className="form-group col-md-6 col-sm-6">
                             <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdToMonth}
                                       inputProps={{placeholder: "Select Year", className: "float-label form-control",readOnly:true}}
 
-                                      closeOnSelect={true} ref={"ebdToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
+                                      closeOnSelect={true} ref={"ebdToMonth"+idx} onChange={that.handleToMonthChange.bind(that, idx)}/>
                           </div>
                         </div>
                         <div className="form-group col-lg-6 col-md-6 col-sm-6">

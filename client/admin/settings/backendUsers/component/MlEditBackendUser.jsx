@@ -71,8 +71,7 @@ class MlEditBackendUser extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     passwordVisibilityHandler();
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    
     //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
@@ -82,6 +81,8 @@ class MlEditBackendUser extends React.Component{
   componentDidMount(){
     setTimeout(function(){
     initalizeFloatLabel();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     },1000);
   }
 

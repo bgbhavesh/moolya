@@ -115,7 +115,7 @@ class MlAppServiceBasicInfo extends Component {
       }
     }`;
 
-    let citiesQuery = gql`query($stateIds:[String]){data:fetchCitiesPerStates(stateIds:$stateIds) {
+    let citiesQuery = gql`query($stateIds:[String],$countryId: String){data:fetchCitiesPerStates(stateIds:$stateIds,countryId: $countryId) {
      value:_id
      label:name
      }
@@ -140,7 +140,7 @@ class MlAppServiceBasicInfo extends Component {
     let states = clusterData.state ? clusterData.state : [];
     console.log(states);
     let statesOption={options: { variables: {countryId: clusterCode}}};
-    let citiesOption={options: { variables: {stateIds: states}}};
+    let citiesOption={options: { variables: {stateIds: states,countryId: clusterCode}}};
     //let citiesOption={options: { variables: {countryId: clusterCode}}};
     return (
       <div className="step_form_wrap step1">

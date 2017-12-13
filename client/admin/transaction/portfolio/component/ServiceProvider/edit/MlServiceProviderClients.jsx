@@ -52,6 +52,15 @@ export default class MlServiceProviderClients extends Component {
     OnLockSwitch();
     dataVisibilityHandler();
     // this.imagesDisplay();
+    var WinHeight = $(window).height();
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
   }
 
   componentWillMount() {
@@ -245,7 +254,7 @@ export default class MlServiceProviderClients extends Component {
     if (resp) {
       let result = JSON.parse(resp);
 
-      Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
+      Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
             fileName: this.state.fileName,
@@ -355,12 +364,7 @@ export default class MlServiceProviderClients extends Component {
         <h2>Clients</h2>
         {showLoader === true ? ( <MlLoader/>) : (
           <div className="requested_input main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+            
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
@@ -395,7 +399,7 @@ export default class MlServiceProviderClients extends Component {
                   })}
                 </div>
               </div>
-            </ScrollArea>
+            
             <Popover placement="right" isOpen={this.state.popoverOpen}
                      target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
               <PopoverTitle>Add New Client</PopoverTitle>

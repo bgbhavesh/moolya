@@ -233,8 +233,8 @@ export default class  SharedLibrary extends React.Component {
     let documentData = that.state.documentDetails || [];
     const Documents = documentData.map(function (show, id) {
       var docType = 'doc';
-      if(show.fileName && show.fileName.split('.')[1]) {
-        let type = show.fileName.split('.')[1];
+      if(show.file.fileName && show.file.fileName.split('.')[1]) {
+        let type = show.file.fileName.split('.')[1];
         if(type === 'pdf'){
           docType = type;
         }else if(type === 'xls' ||type === 'xlsx' ){

@@ -4,7 +4,8 @@ import { render } from 'react-dom';
 import {upsertDateAndTimeActionHandler} from '../actions/upsertDateAndTimeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
@@ -261,7 +262,7 @@ class MlAddDateAndTime extends React.Component{
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -293,7 +294,7 @@ class MlAddDateAndTime extends React.Component{
                   </div>
                   <br className="brclear"/>
                 </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

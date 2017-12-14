@@ -1,6 +1,6 @@
 import React, { Component, PropTypes }  from "react";
 import _ from 'lodash'
-import RichTextEditor from 'react-rte';
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
@@ -10,7 +10,8 @@ import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetai
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-var FontAwesome = require('react-fontawesome');
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor"
+
 // import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 
 
@@ -161,7 +162,7 @@ export default class MlAudienceView extends Component{
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     if (response) {
-      const editorValue = this._createValueFromString(response.audienceDescription);
+      const editorValue = createValueFromString(response.audienceDescription);
       this.setState({loading: false, data: response, editorValue: editorValue});
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -169,12 +170,6 @@ export default class MlAudienceView extends Component{
     }
   }
 
-  _createValueFromString(string) {
-    if (string)
-      return RichTextEditor.createValueFromString(string, 'html');
-    else
-      return RichTextEditor.createEmptyValue();
-  }
   // onAudienceImageFileUpload(e){
   //   if(e.target.files[0].length ==  0)
   //     return;
@@ -213,7 +208,8 @@ export default class MlAudienceView extends Component{
         </div>
       )
     });
-    let description =this.state.data.audienceDescription?this.state.data.audienceDescription:'';
+    let description = this.state.data.audienceDescription ? this.state.data.audienceDescription : '';
+    const { editorValue } = this.state;
     let loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
@@ -230,12 +226,10 @@ export default class MlAudienceView extends Component{
                                 </div>
                                 <div className="panel-body">
                                   {/*{loading === true ? ( <MlLoader/>) : (<div>{description?description:(<NoData tabName={this.props.tabName}/>)}</div>)}*/}
-                                  {loading === true ? ( <MlLoader/>) : (<div>{description ? <RichTextEditor
-                                    value={this.state.editorValue}
-                                    // onChange={this.handleBlur}
-                                    autoFocus={true}
-                                    readOnly={true}
-                                    placeholder="Describe..."
+                                  {loading === true ? ( <MlLoader/>) : (<div>{description ? 
+                                  <MlTextEditor
+                                    value={editorValue}
+                                    isReadOnly={true}
                                   /> : (<NoData tabName={this.props.tabName}/>)}</div>)}
                                 </div>
                             </div>

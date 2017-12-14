@@ -51,6 +51,7 @@ class portfolioValidation {
      * for tabs containing array or multiple objects
      */
     if (!_.isArray(object)) {
+      // for tabs with simple objects [code can be written in this]
     } else {
       _.each(object, function (item, index) {
         var omittedfields = []
@@ -87,8 +88,7 @@ class portfolioValidation {
               delete object[praviteField.objectName][praviteField.keyName]
           }
         } 
-        var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });
-        console.log(praviteObject);
+        var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });      //filtering only the required tab keys
         if (praviteObject)
           omittedFields.push(praviteObject)
       }

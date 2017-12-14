@@ -1,7 +1,6 @@
 import React, { Component, PropTypes }  from "react";
-var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
-import RichTextEditor from 'react-rte';
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
@@ -9,23 +8,7 @@ import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commo
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import Confirm from '../../../../../commons/utils/confirm';
-
-const toolbarConfig = {
-  display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
-  INLINE_STYLE_BUTTONS: [
-    {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'}
-  ],
-  BLOCK_TYPE_DROPDOWN: [
-    {label: 'Normal', style: 'unstyled'},
-    {label: 'Heading Large', style: 'header-one'}
-  ],
-  BLOCK_TYPE_BUTTONS: [
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'}
-  ]
-};
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor"
 
 export default class MlIdeatorAudience extends Component{
   constructor(props, context){
@@ -34,8 +17,7 @@ export default class MlIdeatorAudience extends Component{
       loading: true,
       data:{},
       privateKey:{},
-      privateValues:[],
-      editorValue:RichTextEditor.createEmptyValue()
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
@@ -44,6 +26,7 @@ export default class MlIdeatorAudience extends Component{
     this.fetchOnlyImages.bind(this);
     this.libraryAction.bind(this);
   }
+
   componentWillMount(){
     const resp = this.fetchPortfolioInfo();
     return resp
@@ -60,21 +43,13 @@ export default class MlIdeatorAudience extends Component{
   }
 
   onClick(fieldName, field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
+    let isPrivate = false;
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data:details, privateKey:privateKey}, function () {
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -85,9 +60,6 @@ export default class MlIdeatorAudience extends Component{
     let name  = "audienceDescription";
     details=_.omit(details,[name]);
     details = _.extend(details, {[name]: value.toString('html')});
-    // this.setState({richValue, htmlValue: richValue.toString('html')}, () => {
-    //   this.props.onChange(this.state.htmlValue);
-    // });
     this.setState({data:details, editorValue:value}, function () {
       this.sendDataToParent()
     })
@@ -111,14 +83,14 @@ export default class MlIdeatorAudience extends Component{
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
     if(empty && response){
-      const editorValue = this._createValueFromString(response.audienceDescription);
+      const editorValue = createValueFromString(response.audienceDescription);
       this.setState({loading: false, data: response, editorValue: editorValue});
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }else{
       this.fetchOnlyImages();
-      const editorValue = this._createValueFromString(that.context.ideatorPortfolio.audience.audienceDescription);
+      const editorValue = createValueFromString(that.context.ideatorPortfolio.audience.audienceDescription);
       this.setState({loading: true, data: that.context.ideatorPortfolio.audience, editorValue: editorValue});
     }
   }
@@ -179,13 +151,6 @@ export default class MlIdeatorAudience extends Component{
     }
   }
 
-  _createValueFromString(string) {
-    if (string)
-      return RichTextEditor.createValueFromString(string, 'html');
-    else
-      return RichTextEditor.createEmptyValue();
-  }
-
   async libraryAction(file) {
     console.log(this.props.client)
     let portfolioDetailsId = this.props.portfolioDetailsId;
@@ -207,17 +172,18 @@ export default class MlIdeatorAudience extends Component{
   }
   render(){
     const showLoader = this.state.loading;
-    const audienceImageArray = this.state.data.audienceImages && this.state.data.audienceImages.length > 0 ? this.state.data.audienceImages : [];
     let that=this;
+    const { editorValue } = this.state;
+    const audienceImageArray = this.state.data.audienceImages && this.state.data.audienceImages.length > 0 ? this.state.data.audienceImages : [];
     const audienceImages = audienceImageArray.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
-          <FontAwesome className="fa fa-trash-o" onClick={that.removeProblemAndSolutionPic.bind(that,"audienceImages",m.fileUrl)}/>
+          <FontAwesome className="fa fa-trash-o" name="audienceImages" onClick={that.removeProblemAndSolutionPic.bind(that,"audienceImages",m.fileUrl)}/>
           <img id="output" src={generateAbsolutePath(m.fileUrl)}/>
         </div>
       )
     });
-    let description = this.state.data.audienceDescription ? this.state.data.audienceDescription : this.state.editorValue;
+    // let description = this.state.data.audienceDescription ? this.state.data.audienceDescription : "";
     let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
       <div>
@@ -229,16 +195,13 @@ export default class MlIdeatorAudience extends Component{
             <div className="panel panel-default panel-form">
               <div className="panel-heading">
                 Audience
-                <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>
+                <FontAwesome name='unlock' name="isAudiencePrivate" className="input_icon req_header_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>
               </div>
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <RichTextEditor
-                    value={this.state.editorValue}
-                    onChange={this.handleBlur}
-                    autoFocus={true}
-                    placeholder="Describe..."
-                    toolbarConfig={toolbarConfig}
+                  <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={this.handleBlur}
                   />
                   {/*<textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>*/}
                 </div>
@@ -266,6 +229,7 @@ export default class MlIdeatorAudience extends Component{
     )
   }
 };
+
 MlIdeatorAudience.contextTypes = {
   ideatorPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object,

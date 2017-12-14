@@ -30,19 +30,19 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
   httpLink = createHttpLink(interfaceArgument);
 
   if (config.useMeteorAccounts) {
-    const loginToken= localStorage.getItem('token');
+    const { loginToken } = config;
     
     if (Meteor.isClient && loginToken) {
       console.error('[Meteor Apollo Integration] The current user is not handled with your GraphQL requests: you are trying to pass a login token to an Apollo Client instance defined client-side. This is only allowed during server-side rendering, please check your implementation.');
       return httpLink
     } else {
-      const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
-      const currentUserToken = localStorageLoginToken || loginToken;
       const MiddlewareLink = new ApolloLink((operation, forward) => {
+        const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
+        const currentUserToken = localStorageLoginToken || loginToken;
         operation.setContext({
           headers: {
             cookie : document.cookie,            
-            'meteor-login-token': RegExp("meteor_login_token[^;]+").exec(document.cookie)[0].toString().replace(/^[^=]+./,"") || currentUserToken,
+            'meteor-login-token': currentUserToken,
           }
         });
         return forward(operation)

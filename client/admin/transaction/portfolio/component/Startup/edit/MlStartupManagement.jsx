@@ -606,6 +606,7 @@ export default class MlStartupManagement extends Component{
                 <div className="ml_btn text-center" style={{'textAlign':'center'}}>
                   <a className="save_btn" onClick={this.onSaveAction}>Save</a>
                 </div>
+                <br/>
               </div>
             </div>
           </div>)}

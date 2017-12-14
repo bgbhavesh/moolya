@@ -56,6 +56,8 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "MYCURRENTAPPOINTMENT":
       case "MYCOMPLETEDAPPOINTMENT":
       case "MYREJECTEDAPPOINTMENT":
+      case "MYTODAYAPPOINTMENT":
+      case "MYEXPIREDAPPOINTMENT":
         return "Appointment";
         break;
       case "MYREQUESTEDBESPOKESERVICE":
@@ -1103,6 +1105,67 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
       { $project : { "userDetails": 0 } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } },
+
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myTodayAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted", isCancelled : { "$ne" : true } } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery,
+        {startDate: {$gte: new Date()}},
+        {startDate: {$lte: new Date((new Date()).setHours(23,59,59,999))}},
+      ] } },
+
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myExpiredAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted", isCancelled : { "$ne" : true } } },
+      { $addFields: { appointmentWith: {
+        $cond: [
+          { $eq: [ "$client.profileId", profileId] }, "$provider" , { $ifNull : ["$client", "$provider"] }
+        ]
+      } } },
+      {$lookup:{from:'users',localField:'appointmentWith.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails'},
+      { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
+      { $project : { "userDetails": 0 } },
+      { $match: { "$and":  [ searchQuery, filterQuery,
+        {endDate: {$lt: new Date()}},
+      ] } },
 
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);

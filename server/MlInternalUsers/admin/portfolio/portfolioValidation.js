@@ -33,6 +33,13 @@ class portfolioValidation {
     return allowPrivateFields;
   }
 
+  /**
+   * 
+   * @param {*} portfolioDetailsId 
+   * @param {*} object "data to be checked"
+   * @param {*} context "login user context"
+   * @param {*} tabName "for which data to be filtered"
+   */
   omitPrivateDetails(portfolioDetailsId, object, context, tabName) {
     var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
     //Pre Condition for restricting the private fields.
@@ -40,7 +47,11 @@ class portfolioValidation {
     var praviteFields = portfolioDetails.privateFields
     var omittedFields = []
 
+    /**
+     * for tabs containing array or multiple objects
+     */
     if (!_.isArray(object)) {
+      // for tabs with simple objects [code can be written in this]
     } else {
       _.each(object, function (item, index) {
         var omittedfields = []
@@ -63,17 +74,23 @@ class portfolioValidation {
       }
       return object;
     }
+
+    /**
+     * for tabs with simple objects
+     */
     _.each(praviteFields, function (praviteField) {
       if (object[praviteField.keyName] != undefined || ((_.isEmpty(object[praviteField.objectName]) == false && object[praviteField.objectName][praviteField.keyName] != undefined))) {
-        if (!allowPrivateFields) {
-          // delete object[praviteField.keyName]
-          if (object[praviteField.keyName])
-            delete object[praviteField.keyName]
-          else
-            delete object[praviteField.objectName][praviteField.keyName]
-        }
-        var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
-        omittedFields.push(praviteObject)
+        if (praviteField.tabName === tabName) {
+          if (!allowPrivateFields) {
+            if (object[praviteField.keyName])
+              delete object[praviteField.keyName]
+            else
+              delete object[praviteField.objectName][praviteField.keyName]
+          }
+        } 
+        var praviteObject = _.find(praviteFields, { keyName: praviteField.keyName, tabName: tabName });      //filtering only the required tab keys
+        if (praviteObject)
+          omittedFields.push(praviteObject)
       }
     })
     object.privateFields = _.cloneDeep(omittedFields);

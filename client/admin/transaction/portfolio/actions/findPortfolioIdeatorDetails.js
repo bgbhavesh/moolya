@@ -168,7 +168,6 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
   })
   const id = result.data.data && result.data.data.audience;
   let data = _.omit(id, '__typename')
-  console.log(data)
   return data
 }
 export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {

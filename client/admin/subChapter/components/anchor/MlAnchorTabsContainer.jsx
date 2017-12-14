@@ -212,7 +212,7 @@ class MlAnchorTabsContainer extends React.Component {
         <div className="admin_padding_wrap">
           <div className='step-progress'>
             <div id="root">
-              <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} preventEnterSubmission={true} />
+              <StepZilla steps={steps} showNavigation={false} prevBtnOnLastStep={true} preventEnterSubmission={true} />
             </div>
           </div>
         </div>

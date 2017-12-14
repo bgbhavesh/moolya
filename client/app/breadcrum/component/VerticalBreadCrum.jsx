@@ -248,7 +248,7 @@ export default class VerticalBreadCrum extends Component {
             link: `${path.split(routePathHierarchy[index])[0]}myOffice`,
           });
           list.push({
-            name: properName(routePathHierarchy[index]),
+            name: (routePathHierarchy[index] === 'editOffice')?'Enter Office':properName(routePathHierarchy[index]),
             link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
           });
         } else {

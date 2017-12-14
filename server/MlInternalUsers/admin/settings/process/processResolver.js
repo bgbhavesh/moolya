@@ -634,6 +634,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
             }
           }
           //if matching documents available
+          MatchingDocuments = _.uniqBy(MatchingDocuments, function(elem) { return [elem.docTypeId, elem.documentId].join(); }); //to remove if there are any duplicate documents
           if (MatchingDocuments && MatchingDocuments.length > 0) {
             //search for unmatched documents in latestkyc
             for (var i = 0, len = MatchingDocuments.length; i < len; i++) {
@@ -644,7 +645,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                 }
               }
             }
-            console.log(latestKyc)
+
             //if unmatched docs found pushed to matching doc and return the documents
             if (latestKyc && latestKyc.length) {
               for (let i = 0; i < latestKyc.length; i++) {

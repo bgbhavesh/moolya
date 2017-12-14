@@ -162,8 +162,8 @@ export default class  BeSpokeView extends Component {
                         <span className="ml ml-upload">
                           <input type="file" className="upload_file upload"
                             name="video_source" id="video_upload"
-                            onChange={that.props.addComponent(that)} />
-                        </span> 
+                            onChange={e=>that.props.addComponent(that)} />
+                        </span>
                     </a>
                   </div>
                 </div>

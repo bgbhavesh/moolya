@@ -243,7 +243,7 @@ class MlAppInternalAssignTaskItem extends React.Component {
                             <a href="" data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(that,doc,index)}>
                               <FontAwesome name='eye'/>
                             </a>
-                            <a href={doc.fileUrl} download={doc.fileName}>
+                            <a href={generateAbsolutePath(doc.fileUrl)} download={doc.fileName}>
                               <FontAwesome name='download'/>
                             </a>
                           </div>

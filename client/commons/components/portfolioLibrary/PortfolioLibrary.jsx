@@ -701,8 +701,13 @@ class Library extends React.Component {
     }
     let portfolioDetailsId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : null;
     const resp = await createLibrary(portfolioDetailsId, Details, this.props.client)
-    this.refetchData();
-    this.getCentralLibrary();
+    if(resp.success){
+      toastr.success(resp.result)
+      this.refetchData();
+      this.getCentralLibrary();
+    }else {
+      toastr.error(resp.result)
+    }
     return resp;
   }
 
@@ -740,14 +745,14 @@ class Library extends React.Component {
   }
 
   randomVideo(link, index) {
-    let data = this.state.videoSpecifications || [];
+    let data = this.state.isLibrary ? this.state.videoDetails :this.state.videoSpecifications || [];
     let videoPreviewUrl;
     videoPreviewUrl = generateAbsolutePath(data[index].fileUrl);
     this.setState({ previewVideo: videoPreviewUrl, videoUrl: videoPreviewUrl });
   }
 
   random(link, index) {
-    let data = this.state.imageSpecifications || [];
+    let data = this.state.isLibrary ? this.state.imageDetails: this.state.imageSpecifications;
     let imagePreviewUrl;
     imagePreviewUrl = generateAbsolutePath(data[index].fileUrl);
     console.log('imagePreviewUrl', imagePreviewUrl)
@@ -755,7 +760,7 @@ class Library extends React.Component {
   }
 
   randomDocument(link, index) {
-    let data = this.state.documentSpecifications || [];
+    let data = this.state.isLibrary ? this.state. documentDetails : this.state.documentSpecifications ;
     let documentPreviewUrl;
     documentPreviewUrl = generateAbsolutePath(data[index].fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
@@ -930,7 +935,7 @@ class Library extends React.Component {
             }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".imagepop"
-              onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
+              onClick={that.random.bind(that, generateAbsolutePath(show.fileUrl), id)}><img
                 src={generateAbsolutePath(show.fileUrl)} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={generateAbsolutePath(show.fileUrl)} /></a>}
@@ -1203,7 +1208,7 @@ class Library extends React.Component {
               }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".videopop"
-              onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+              onClick={that.randomVideo.bind(that, show, id)}>
               <video width="120" height="100" controls>
                 <source src={generateAbsolutePath(show.fileUrl)} type="video/mp4"></source>
               </video>
@@ -1349,7 +1354,7 @@ class Library extends React.Component {
               }
             </div>
             {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
-              onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+              onClick={that.randomDocument.bind(that, show, id)}>
               <img src={`/images/${docType}.png`} /></a> :
               <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={generateAbsolutePath(show.fileUrl)} /></a>}
@@ -1389,6 +1394,23 @@ class Library extends React.Component {
     return popDocuments
   }
 
+  /**
+   * Method :: checkIfFileExistsInPortfolioLibrary
+   * Desc   :: Send the data to portfolio library from the user Library
+   * @params :: dataDetail : Object :: index : Number
+   * @returns Void
+   */
+
+
+  checkIfFileExistsInPortfolioLibrary(data, tempObject) {
+    let doesFileExistInPortfolioLibrary = false;
+    data.map(function(info){
+      if(info.fileName === tempObject.fileName)doesFileExistInPortfolioLibrary = true;
+    });
+    if(doesFileExistInPortfolioLibrary) toastr.error("File already Exists in your portfolio Library")
+    return doesFileExistInPortfolioLibrary;
+  }
+
 
   /**
    * Method :: sendDataToPortfolioLibrary
@@ -1398,8 +1420,10 @@ class Library extends React.Component {
    */
 
   sendDataToPortfolioLibrary(dataDetail, index) {
+    let that= this;
     let portfolioId = FlowRouter.getRouteName();
     let tempObject = Object.assign({}, dataDetail);
+    let doesFileExistInPortfolioLibrary = false;
     this.setState({ popoverOpen: !(this.state.popoverOpen) })
     if (dataDetail.libraryType === "image") {
       if (portfolioId === "library") {
@@ -1409,8 +1433,11 @@ class Library extends React.Component {
         this.setState({ previewImage: imagePreviewUrl });
       } else {
         let data = this.state.imageSpecifications || [];
-        data.push(tempObject);
-        this.setState({ imageSpecifications: data })
+        doesFileExistInPortfolioLibrary = that.checkIfFileExistsInPortfolioLibrary(data, tempObject)
+        if(!doesFileExistInPortfolioLibrary) {
+          data.push(tempObject);
+          this.setState({imageSpecifications: data})
+        }
       }
     } else if (dataDetail.libraryType === "video") {
       if (portfolioId === "library") {
@@ -1420,8 +1447,11 @@ class Library extends React.Component {
         this.setState({ previewVideo: videoPreviewUrl });
       } else {
         let data = this.state.videoSpecifications || [];
+        doesFileExistInPortfolioLibrary = that.checkIfFileExistsInPortfolioLibrary(data, tempObject)
+        if(!doesFileExistInPortfolioLibrary) {
         data.push(tempObject);
         this.setState({ videoSpecifications: data })
+        }
       }
     } else if (dataDetail.libraryType === "template") {
       if (portfolioId === "library") {
@@ -1431,8 +1461,11 @@ class Library extends React.Component {
         this.setState({ previewTemplate: templatePreviewUrl });
       } else {
         let data = this.state.templateSpecifications || [];
+        doesFileExistInPortfolioLibrary = that.checkIfFileExistsInPortfolioLibrary(data, tempObject)
+        if(!doesFileExistInPortfolioLibrary) {
         data.push(tempObject);
         this.setState({ templateSpecifications: data })
+        }
       }
     } else if (dataDetail.libraryType === "document") {
       if (portfolioId === "library") {
@@ -1442,20 +1475,23 @@ class Library extends React.Component {
         this.setState({ previewDocument: documentPreviewUrl });
       } else {
         let data = this.state.documentSpecifications || [];
+        doesFileExistInPortfolioLibrary = that.checkIfFileExistsInPortfolioLibrary(data, tempObject)
+        if(!doesFileExistInPortfolioLibrary) {
         data.push(tempObject);
         this.setState({ documentSpecifications: data })
+        }
       }
     }
     newItem = _.omit(tempObject, "__typename", "_id")
     let temp = newItem
-    if (newItem.portfolioReference) {
+    if (newItem.portfolioReference && !doesFileExistInPortfolioLibrary) {
       let y = newItem.portfolioReference.map(function (data) {
         return _.omit(data, '__typename')
       })
       newItem.portfolioReference = y;
       this.updateLibraryPortfolioLibrary(tempObject._id, newItem)
     } else {
-      this.updateLibraryPortfolioLibrary(tempObject._id, newItem)
+      !doesFileExistInPortfolioLibrary && this.updateLibraryPortfolioLibrary(tempObject._id, newItem)
     }
   }
 
@@ -1468,11 +1504,13 @@ class Library extends React.Component {
 
   async updateLibraryPortfolioLibrary(id, data) {
     const resp = await updateLibrary(id, data, this.props.client)
-    this.refetchData();
-    this.getCentralLibrary();
-    // if(!resp.success){
-    //   toastr.error("Image already Exists in library")
-    // }
+    if(resp.success){
+      toastr.success(resp.result)
+      this.refetchData();
+      this.getCentralLibrary();
+    } else {
+      toastr.error(resp.result);
+    }
     return resp;
   }
 
@@ -1799,7 +1837,7 @@ setTimeout(function(){
 
     return (
       <div>
-        <h2>Library {this.state.totalLibrarySize} of 50 MB used</h2>
+        <h2>Library {this.state.isLibrary ? `${this.state.totalLibrarySize} of 50 MB used`:""}</h2>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
@@ -1938,7 +1976,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .mp4 <br />Document Size : 10 MB <br/></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .mp4 <br />Max Document File Size : 10 MB <br/></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
@@ -1971,7 +2009,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
@@ -2002,7 +2040,7 @@ setTimeout(function(){
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
-              <p className="show-information" style={{ 'display': 'none' }}>Document Format : .pdf, .xls, .xlsx, .doc, .docx <br />Document Size : 10 MB <br /></p>
+              <p className="show-information" style={{ 'display': 'none' }}>Permitted Upload File Type(s)  : .pdf, .xls, .xlsx, .doc, .docx <br />Max Document File Size : 10 MB <br /></p>
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}

@@ -110,7 +110,7 @@ export default class MlAppStartupListView extends Component {
           <div className="ideators_list">
           <div className="col-md-12"> <h2>Startups</h2></div>
             {data && !data.length?(
-              <NoDataList moduleName="Portfolios" />
+              <NoDataList profile={true} moduleName="user profiles" />
             ):(<div>{list}</div>)
             }
           </div>

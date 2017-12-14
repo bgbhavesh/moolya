@@ -14,6 +14,8 @@ import MlAppCurrentMyAppointment from './MlAppCurrentMyAppointment';
 import MlInfiniteScroll from "../../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll";
 import {mlAppPendingAppointmentConfig} from "./../config/mlAppPendingAppointmentsConfig";
 import {mlAppCurrentAppointmentConfig} from "./../config/mlAppCurrentAppointmentsConfig";
+import {mlAppExpiredAppointmentConfig} from "./../config/mlAppExpiredAppointmentsConfig";
+import {mlAppTodayAppointmentConfig} from "./../config/mlAppTodayAppointmentsConfig";
 import {mlAppRejectedAppointmentConfig} from "./../config/mlAppRejectedAppointmentsConfig";
 import {mlAppCompletedAppointmentConfig} from "./../config/mlAppCompletedAppointments";
 import {mlAppMyRequestedBespokeServiceConfig} from "./../config/mlAppRequestedAppointmentsConfig";
@@ -80,9 +82,17 @@ export default class MlAppMyAppointment extends React.Component {
         tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppPendingAppointmentConfig} />
       },
       {
-        name: 'Current',
+        name: 'Accepted', //current tab is changed to accepted
         selected: true,
         tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppCurrentAppointmentConfig} />
+      },
+      {
+        name: 'Today',
+        tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppTodayAppointmentConfig} />
+      },
+      {
+        name: 'Expired',
+        tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppExpiredAppointmentConfig} />
       },
       {
         name: 'Completed',

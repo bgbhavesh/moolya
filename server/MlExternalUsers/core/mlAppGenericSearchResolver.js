@@ -1104,7 +1104,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {$unwind:'$userDetails'},{$unwind:'$userDetails'},
       { "$addFields": { "appointmentWith.status": "Accepted", "appointmentWith.displayName": "$userDetails.profile.displayName", "appointmentWith.userProfilePic": "$userDetails.profile.profileImage" } },
       { $project : { "userDetails": 0 } },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } },
+      { $match: { "$and":  [ searchQuery, filterQuery,
+        {startDate: {$gt: new Date((new Date()).setHours(23,59,59,999))}},
+      ] } },
 
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);

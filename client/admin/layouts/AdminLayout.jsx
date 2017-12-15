@@ -15,11 +15,10 @@ import mlStartupEditTemplateReducer from '../transaction/portfolio/component/Sta
 const store = createStore(
   combineReducers({
     mlStartupEditTemplateReducer,
-    apollo: client.reducer(),
   }),
   {}, // initial state
   compose(
-    applyMiddleware(client.middleware()),
+    // applyMiddleware(client.middlewareLink()),
     (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
   )
 );

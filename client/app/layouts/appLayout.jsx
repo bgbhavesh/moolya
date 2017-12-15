@@ -11,12 +11,12 @@ import MlAppLayout from '../core/components/MlAppComponent'
 const store = createStore(
   combineReducers({
     appRedux: () => ({type: 'App'}),
-    apollo: appClient.reducer(),
+    // apollo: appClient.reducer(),
   }),
   {}, // initial state
   compose(
-    applyMiddleware(appClient.middleware()),
-    (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
+    // applyMiddleware(appClient.middleware()),
+    // (typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined') ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
   )
 );
 

@@ -5,9 +5,12 @@ import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
-import {ApolloClient,createNetworkInterface, createBatchingNetworkInterface} from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
-
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
+import { onError } from 'apollo-link-error';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 const defaultNetworkInterfaceConfig = {
   uri: Meteor.absoluteUrl('moolya'),
   opts: {credentials: 'same-origin'},
@@ -20,61 +23,80 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
     ...defaultNetworkInterfaceConfig,
     ...customNetworkInterfaceConfig,
   };
-  const useBatchingInterface = config.batchingInterface && typeof config.batchInterval === 'number';
-  const interfaceToUse = useBatchingInterface ? createBatchingNetworkInterface : createNetworkInterface;
   const interfaceArgument = {
     uri: config.uri,
-    opts: config.opts,
+    credentials: config.credentials,
   }
-  const networkInterface = interfaceToUse(interfaceArgument);
+  httpLink = createHttpLink(interfaceArgument);
+
   if (config.useMeteorAccounts) {
     const { loginToken } = config;
-
+    
     if (Meteor.isClient && loginToken) {
       console.error('[Meteor Apollo Integration] The current user is not handled with your GraphQL requests: you are trying to pass a login token to an Apollo Client instance defined client-side. This is only allowed during server-side rendering, please check your implementation.');
+      return httpLink
     } else {
-      networkInterface.use([{
-        applyMiddleware(request, next) {
-          const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
-          const currentUserToken = localStorageLoginToken || loginToken;
-          if (!currentUserToken) {
-            next();
+      const MiddlewareLink = new ApolloLink((operation, forward) => {
+        const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
+        const currentUserToken = localStorageLoginToken || loginToken;
+        operation.setContext({
+          headers: {
+            cookie : document.cookie,            
+            'meteor-login-token': currentUserToken,
           }
-          if (!request.options.headers) {
-            request.options.headers = new Headers();
-          }
-          request.options.headers['meteor-login-token'] = currentUserToken;
-          request.options.headers['cookie'] = document.cookie;
-          next();
-        }
-      }]);
-
-      networkInterface.useAfter([{
-        applyAfterware({ response }, next) {
-          if (response.status === 401) {
+        });
+        return forward(operation)
+      })
+      // logger
+      const LoggerLink = new ApolloLink((operation, forward) => {
+        if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
+        return forward(operation).map(result => {
+          if (process.env.NODE_ENV === 'development') console.log(
+            `[GraphQL Logger] received result from ${operation.operationName}`,
+          )
+          return result
+        })
+      })
+      // error - use your error lib here
+      const ErrorLink = onError(({graphQLErrors, networkError}) => {
+        if (graphQLErrors)
+          graphQLErrors.map(({message, locations, path}) =>
+            console.log(
+              `[GraphQL Error] Message: ${message}, Location: ${locations}, Path: ${path}`),
+          )
+        if (networkError) {
+          if (networkError.statusCode === 401) {
             logout();
-          }
-
-          const clonedResponse = response.clone();
-
-          clonedResponse.json().then(data => {
-              next();
-          });
+          } console.log(`[Network error] ${networkError}`)
         }
-      }]);
+      })
+      const AddLink = new ApolloLink((operation, forward) => {
+        return forward(operation).map((response) => {
+          return response;          
+        })
+     
+      });
+      const link = ApolloLink.from([MiddlewareLink, LoggerLink, ErrorLink, AddLink, httpLink])
+      return link;
+
     }
+  } else {
+    return httpLink
   }
-  return networkInterface;
 };
 
+const cache = new InMemoryCache({
+  dataIdFromObject: r =>r.id,
+  addTypename: true,
+});
 const defaultClientConfig =
-  {
-    networkInterface: createMeteorNetworkInterface(),
+{
+    link: createMeteorNetworkInterface(),
     //ssrMode: Meteor.isServer,
-    dataIdFromObject: r =>r.id
-  };
+    cache: cache,
+};
 
-const networkInterface = defaultClientConfig.networkInterface;
+const networkInterface = defaultClientConfig.link;
 const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
-export const appClient = new ApolloClient({networkInterface, dataIdFromObject});
+export const appClient = new ApolloClient(defaultClientConfig);

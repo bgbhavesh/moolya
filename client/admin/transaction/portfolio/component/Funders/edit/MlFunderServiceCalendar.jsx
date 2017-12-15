@@ -37,7 +37,6 @@ export default class MlAppMyCalendar extends Component {
 
   async getMyCalendar(){
     let date = new Date(this.state.date);
-    console.log(this.props);
     let orderId = this.props.orderId;
     let portfolioId = FlowRouter.getParam('portfolioId');
     const data = await fetchServiceCalendarActionHandler(portfolioId, date.getMonth(), date.getFullYear(), orderId);
@@ -62,7 +61,6 @@ export default class MlAppMyCalendar extends Component {
   }
 
   slots(response, date){
-    console.log('Date', date);
     this.setState({
       slotDate: date
     });
@@ -87,7 +85,6 @@ export default class MlAppMyCalendar extends Component {
 
   render() {
     const that = this;
-    console.log("this.state.data",this.state.data);
     return (
       !that.state.showDetailView?<div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">

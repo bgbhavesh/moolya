@@ -1,14 +1,13 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import _ from 'lodash';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor"
 
-export default class MlIdeatorStrategyAndPlanning extends React.Component{
+export default class MlIdeatorStrategyAndPlanning extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -18,9 +17,10 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
       privateValues:[]
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
   }
+
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
     return resp
@@ -43,12 +43,14 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.strategyAndPlanning)
     if(empty && response){
-        this.setState({loading: false, data: response});
+      const editorValue = createValueFromString(response.spDescription);
+        this.setState({ loading: false, data: response, editorValue: editorValue });
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }else{
-      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning, privateValues: response.privateFields}, () => {
+      const editorValue = createValueFromString(that.context.ideatorPortfolio.strategyAndPlanning.spDescription);
+      this.setState({ loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning, privateValues: response.privateFields, editorValue: editorValue }, () => {
         this.lockPrivateKeys()
       });
     }
@@ -68,32 +70,25 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     })
   }
 
-  onClick(fieldName, field,e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false
-    details=_.omit(details,[key]);
+  onClick(fieldName, field, e) {
+    let isPrivate = false
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
-    // this.setState({privateKey:privateKey})
-    this.setState({data: details, privateKey: privateKey}, function () {
+    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName }
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
   }
 
-  handleBlur(e){
+  handleBlur(value){
     let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    // let name  = e.target.name;
+    const name = "spDescription";
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: value.toString('html') });
+    this.setState({ data: details, editorValue: value }, function () {
       this.sendDataToParent()
     })
   }
@@ -114,6 +109,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     let description =this.state.data.spDescription?this.state.data.spDescription:''
     let isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate?this.state.data.isStrategyPlansPrivate:false
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         <h2>Problems and Solutions</h2>
@@ -135,8 +131,11 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="spDescription" onBlur={this.handleBlur.bind(this)}></textarea>
-
+                        {/* <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="spDescription" onBlur={this.handleBlur.bind(this)}></textarea> */}
+                        <MlTextEditor
+                          value={editorValue}
+                          handleOnChange={this.handleBlur}
+                        />
                       </div>
 
                     </div>

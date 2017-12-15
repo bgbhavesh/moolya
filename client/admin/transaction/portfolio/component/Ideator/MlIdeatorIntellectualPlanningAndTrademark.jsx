@@ -1,11 +1,11 @@
 import React, { Component, PropTypes }  from "react";
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-import MlLoader from '../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../commons/components/loader/loader';
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends Component{
   constructor(props, context) {
@@ -13,6 +13,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
     this.state =  {loading:true,data:{}, privateKey:{},
       privateValues:[]};
     this.fetchPortfolioDetails.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
     return this
   }
   componentWillMount(){
@@ -32,16 +33,18 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
   }
 
   async fetchPortfolioDetails() {
-    let portfoliodetailsId=this.props.portfolioDetailsId;
+    const portfoliodetailsId = this.props.portfolioDetailsId;
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.intellectualPlanning)
-    if(empty && response){
-        this.setState({loading: false, data: response});
+    if (empty && response) {
+      const editorValue = createValueFromString(response.IPdescription);
+      this.setState({ loading: false, data: response, editorValue: editorValue });
       _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }else{
-      this.setState({loading: false, data: this.context.ideatorPortfolio.intellectualPlanning, privateValues: response.privateFields}, () => {
+    } else {
+      const editorValue = createValueFromString(this.context.ideatorPortfolio.intellectualPlanning.IPdescription);
+      this.setState({ loading: false, data: this.context.ideatorPortfolio.intellectualPlanning, privateValues: response.privateFields, editorValue: editorValue }, () => {
         this.lockPrivateKeys()
       });
     }
@@ -61,12 +64,12 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
     })
   }
 
-  onInputChange(e){
-    let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+  onInputChange(value) {
+    let details = this.state.data;
+    const name = "IPdescription";
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: value.toString('html') });
+    this.setState({ data: details, editorValue: value }, function () {
       this.sendDataToParent()
     })
   }
@@ -103,9 +106,9 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
   }
 
   render(){
-    let description =this.state.data.IPdescription?this.state.data.IPdescription:''
+    // let description =this.state.data.IPdescription?this.state.data.IPdescription:''
     let isIntellectualPrivate = this.state.data.isIntellectualPrivate?this.state.data.isIntellectualPrivate:false
-
+    const { editorValue } = this.state;
     const showLoader = this.state.loading;
     return (
       <div>
@@ -129,7 +132,11 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="IPdescription"></textarea>
+                        <MlTextEditor
+                          value={editorValue}
+                          handleOnChange={this.onInputChange}
+                        />
+                        {/* <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="IPdescription"></textarea> */}
 
                       </div>
 

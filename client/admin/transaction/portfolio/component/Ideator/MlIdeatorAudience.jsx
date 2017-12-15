@@ -8,7 +8,7 @@ import {putDataIntoTheLibrary,removePortfolioFileUrl} from '../../../../../commo
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import Confirm from '../../../../../commons/utils/confirm';
-import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor"
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlIdeatorAudience extends Component{
   constructor(props, context){

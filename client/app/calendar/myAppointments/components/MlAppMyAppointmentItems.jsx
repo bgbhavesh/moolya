@@ -102,7 +102,7 @@ export default class MlAppMyAppointmentItems extends Component{
         return "Pending Appointments"
         break;
       case 'myCurrentAppointment':
-        return "Current Appointments"
+        return "Accepted Appointments"
         break;
       case 'myCompletedAppointment':
         return "Completed Appointments"
@@ -110,8 +110,14 @@ export default class MlAppMyAppointmentItems extends Component{
       case 'myRejectedAppointment':
         return "Rejected Appointments"
         break;
+      case 'myTodayAppointment':
+        return "Today Appointments"
+        break;
+      case 'myExpiredAppointment':
+        return "Expired Appointments"
+        break;
       default:
-            return "Appoitments"
+            return "Appointments"
       // do nothing
     }
   }

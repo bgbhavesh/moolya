@@ -1,16 +1,19 @@
 /* eslint-disable */
 import {logoutActionHandler} from "../actions/logoutAction";
-import {loginActionHandler} from "../actions/loginGraphqlAction";
 export let loginContainer = {
     login(username, password, callback){
-        const loginPromise=loginActionHandler(username, password);
-        loginPromise.then(data => {
-            localStorage.setItem('meteor-login-token',data.data.login.token)
-            callback()
-            console.log(data)
-        })
-        .catch(err=>{
-            console.log("error",err);
+        Meteor.loginWithPassword({username:username},password, function (result)
+        {
+            if(result && result.error){
+                callback(result);
+            }
+             else{
+                var user = Meteor.user();
+                 if(user && user.profile){
+                   Meteor.logoutOtherClients();
+                      callback(user);
+                 }
+             }
         })
     },
     /*this function is depricated.*/

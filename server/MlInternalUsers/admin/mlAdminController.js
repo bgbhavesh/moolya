@@ -34,7 +34,7 @@ let multipart = require('connect-multiparty'),
 var path = Npm.require('path');
 const resolvers = _.extend({
   Query: MlResolver.MlQueryResolver,
-  Mutation: MlResolver.MlMutationResolver
+  Mutation: MlResolver.MlLoginResolver,
 }, MlResolver.MlUnionResolver, MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
@@ -68,7 +68,7 @@ const defaultServerConfig = {
   buildVersion: '/buildVersion/:releaseType',
   getBuildVersion: '/getBuildVersion',
   graphiqlOptions: {
-    passHeader: "'meteor-login-token': localStorage['Meteor.loginToken']"
+    passHeader: "'meteor-login-token': localStorage['token']",
   },
 };
 
@@ -188,13 +188,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
         ...customOptionsObject,
       };
 
-      // var context = getContext({req, res});
       var context = getContext({req, res});
 
-      if (!context || !context.userId) {
-        res.json({invalidToken: true, message: "Invalid Token"})
-        return;
-      }
+      // if (!context || !context.userId) {
+      //   res.json({invalidToken: true, message: "Invalid Token"})
+      //   return;
+      // }
 
       /*const tokenValue = getCookie(req.headers.cookie, '_csrf');
        var isValid = tokens.verify(secret, tokenValue)
@@ -202,11 +201,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
        res.json({unAuthorized:true,message:"Not Authorized"})
        return;
        }*/
-      var isAut = mlAuthorization.authChecker({req, context})
-      if (!isAut) {
-        res.json({unAuthorized: true, message: "Not Authorized"})
-        return;
-      }
+      // var isAut = mlAuthorization.authChecker({req, context})
+      // if (!isAut) {
+      //   res.json({unAuthorized: true, message: "Not Authorized"})
+      //   return;
+      // }
 
       return {
         schema: executableSchema,

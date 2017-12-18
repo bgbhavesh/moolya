@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
@@ -8,7 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 const defaultNetworkInterfaceConfig = {
     uri:  Meteor.absoluteUrl('moolyaAdmin'),
     opts: {credentials: 'same-origin'},
-    useMeteorAccounts: true,
+    useMeteorAccounts: false,
     batchingInterface: false
 };
 
@@ -32,44 +33,44 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
     } else {
       networkInterface.use([{
         applyMiddleware(request, next) {
-          const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
-          const currentUserToken = localStorageLoginToken || loginToken;
-          if (!currentUserToken) {
-            next();
-          }
-          if (!request.options.headers) {
-            request.options.headers = new Headers();
+          // const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
+          // const currentUserToken = localStorageLoginToken || loginToken;
+          // if (!currentUserToken) {
+          //   next();
+          // }
+          // if (!request.options.headers) {
+          //   request.options.headers = new Headers();
 
-          }
-          request.options.headers['meteor-login-token'] = currentUserToken;
-          request.options.headers['cookie'] = document.cookie;
-          next();
+          // }
+          // request.options.headers['meteor-login-token'] = currentUserToken;
+          // request.options.headers['cookie'] = document.cookie;
+          // next();
         }
       }]);
 
-      networkInterface.useAfter([{
-        applyAfterware({ response }, next) {
-          if (response.status === 401) {
-            logout();
-          }
+      // networkInterface.useAfter([{
+        // applyAfterware({ response }, next) {
+        //   if (response.status === 401) {
+        //     logout();
+        //   }
 
-          const clonedResponse = response.clone();
+        //   const clonedResponse = response.clone();
 
-          clonedResponse.json().then(data => {
-            const { errors = [] } = data;
-            if(data && data.unAuthorized){
-                // toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
-                // window.history.back()
-                FlowRouter.go('/unauthorize')
-            }
-            else if(data && data.invalidToken){
-              FlowRouter.go('/login')
-            }
-            else
-              next();
-          });
-        }
-      }]);
+        //   clonedResponse.json().then(data => {
+        //     const { errors = [] } = data;
+        //     if(data && data.unAuthorized){
+        //         // toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
+        //         // window.history.back()
+        //         FlowRouter.go('/unauthorize')
+        //     }
+        //     else if(data && data.invalidToken){
+        //       FlowRouter.go('/login')
+        //     }
+        //     else
+        //       next();
+        //   });
+        // }
+      //}]);
     }
   }
   return networkInterface;

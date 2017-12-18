@@ -23,7 +23,7 @@ let multipart 	= require('connect-multiparty'),
     fs 			    = require('fs'),
     multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlLoginResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -41,7 +41,7 @@ const defaultServerConfig = {
   conversationPath: '/conversationlogin',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
-    passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
+    passHeader : "'meteor-login-token': localStorage['token']"
   },
 };
 

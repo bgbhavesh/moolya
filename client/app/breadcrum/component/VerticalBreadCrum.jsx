@@ -5,7 +5,9 @@ import { fetchInternalTaskInfo } from '../../internalTask/actions/fetchInternalT
 import { findRegistrationActionHandler } from '../../registrations/actions/findRegistration';
 import { fetchAllOfficeMembers } from '../../investment/actions/fetchAllTeamMember';
 import {fetchActivitiesActionHandler} from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
-import ScrollArea from 'react-scrollbar'
+import ScrollArea from 'react-scrollbar';
+import {fetchOfficeMember} from '../../profile/office/actions/findOfficeMember';
+
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
     super(props);
@@ -14,8 +16,9 @@ export default class VerticalBreadCrum extends Component {
       list: [],
     };
     this.setDefaultName = this.setDefaultName.bind(this);
-    this.fetchNameToDisplay.bind(this);
+    this.fetchNameToDisplay = this.fetchNameToDisplay.bind(this);
     this.getHierarchyDetails = this.getHierarchyDetails.bind(this);
+    this.isOfficeMemberAPrincipal = this.isOfficeMemberAPrincipal.bind(this);
   }
 
   setDefaultName(type) {
@@ -32,9 +35,20 @@ export default class VerticalBreadCrum extends Component {
     this.setState({ toggle: !this.state.toggle });
   }
 
+  async isOfficeMemberAPrincipal(){
+    const id = FlowRouter.getParam('memberId');
+    let forPrincipal = await fetchOfficeMember(id);
+    this.setState({isPrincipal:forPrincipal.isPrincipal||false});
+  }
+
   componentWillMount() {
     const routePath = Object.assign(FlowRouter._current.route.path);
     const routePathHierarchy = routePath.split('/');
+
+    const id = FlowRouter.getParam('memberId');
+    if(id){
+      this.isOfficeMemberAPrincipal();
+    }
 
     routePathHierarchy.map((object, index) => {
       if (object.startsWith(':')) {
@@ -81,6 +95,7 @@ export default class VerticalBreadCrum extends Component {
       } else this.setDefaultName('officeId');
     } else if (FlowRouter.getParam('memberId')) {
       const id = FlowRouter.getParam('memberId');
+
       var response = await fetchAllOfficeMembers();
       if (response) {
         response.map((obj) => {
@@ -121,15 +136,32 @@ export default class VerticalBreadCrum extends Component {
 
     let list = [];
 
-    if (routePath === '/officeMember/:officeId/:memberId') {
+    if (routePath == '/app/officeMember/:officeId/:memberId') {
+
+      list.push({
+        name:'Enter Office',
+        link:path.split('officeMember')[0]+'editOffice/'+FlowRouter.getParam('officeId')
+      });
+
+
+      list.push({
+        name:(this.state.isPrincipal)?'Principal':'Team Member',
+        link:path.split('?')[0]
+      });
+
+      if(tab){
+        list.push({
+          name:tab,
+          link:''
+        });
+      }
+
       // return [
       //   {linkName : 'Edit Office'}
       // ]
       // const cname = routePathHierarchy[index].split(':')[1];
       // const name = this.state[cname];
-    }
-
-    if(routePath.includes('/calendar/manageSchedule')&&FlowRouter.getParam('profileId')){
+    }else if(routePath.includes('/calendar/manageSchedule')&&FlowRouter.getParam('profileId')){
       if(routePath.endsWith('createTask')){
         list.push({name: 'Task Master', link: path.replace('createTask','taskList')});
         list.push({name: 'Create', link: path});

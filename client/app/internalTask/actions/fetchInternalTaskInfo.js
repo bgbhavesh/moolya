@@ -47,7 +47,7 @@ export async function fetchInternalTaskInfo(taskId) {
     variables:{
       internalTaskId:taskId
     },
-    forceFetch: true
+    fetchPolicy:'network-only',
   })
   const id = result.data.fetchInternalTaskById;
   return id

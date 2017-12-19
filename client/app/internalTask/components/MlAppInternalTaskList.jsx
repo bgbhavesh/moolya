@@ -17,7 +17,12 @@ export default class MlAppInternalTaskList extends React.Component{
       selectTask:'',
       selectedTaskType: ''
     };
+    this.fetchTaskList = this.fetchTaskList.bind(this);
   }
+
+  // componentWillRecceiveProps(nextProps){
+  //   this.setState({tasks:nextProps.data,config});
+  // }
 
   componentDidMount() {
     var WinWidth = $(window).width();
@@ -69,7 +74,6 @@ export default class MlAppInternalTaskList extends React.Component{
   }
 
   selectTask(task) {
-    console.log('task',task);
     this.setState({
       selectTask: task._id ? task._id : '',
       selectedTaskType: task.type,
@@ -79,16 +83,41 @@ export default class MlAppInternalTaskList extends React.Component{
   getTaskType(moduleName) {
     switch (moduleName) {
       case 'myPendingInternalTask':
-        return "Pending Tasks"
+        return "Assigned Tasks"
         break;
       case 'myCurrentInternalTask':
-        return "Current Tasks"
+        return "Accepted Tasks"
+        break;
+      case 'myStartedInternalTask':
+        return "Started Tasks"
         break;
       case 'myCompletedInternalTask':
         return "Completed Tasks"
         break;
       case 'myRejectedInternalTask':
         return "Rejected Tasks"
+        break;
+      default:
+        return "Tasks"
+      // do nothing
+    }
+  }
+  getStatus(moduleName) {
+    switch (moduleName) {
+      case 'myPendingInternalTask':
+        return "pending"
+        break;
+      case 'myCurrentInternalTask':
+        return "current"
+        break;
+      case 'myStartedInternalTask':
+        return "started"
+        break;
+      case 'myCompletedInternalTask':
+        return "completed"
+        break;
+      case 'myRejectedInternalTask':
+        return "rejected"
         break;
       default:
         return "Tasks"

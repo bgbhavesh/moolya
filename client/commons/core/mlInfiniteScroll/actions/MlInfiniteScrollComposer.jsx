@@ -36,10 +36,9 @@ export default class MlInfiniteScrollComposer extends Component {
     if(DataComposerType==='graphQl') {
       let config=this.props;
       config.perPageLimit = config.perPageLimit || 10;
-      console.log('config',config);
       //note: params are mandatory,if not data will not be fetched
       let queryOptions={
-        forceFetch: true,
+        fetchPolicy: 'network-only',
         variables: {
           module:config.moduleName,
           queryProperty: {

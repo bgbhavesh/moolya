@@ -44,7 +44,7 @@ export default class  MlListViewComposer extends Component {
                 return prev;
               }
               return {
-                data: fetchMoreResult.data.data
+                data: fetchMoreResult.data
               };
             },
           }),

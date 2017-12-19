@@ -28,7 +28,7 @@ function pidTracker(OrgId, Domain) {
     JSScript.async = true;
     JSScript.src = JScriptURL;
 
-    ElementHead.appendChild(JSScript);
+    // ElementHead.appendChild(JSScript);
 }
 
 function GetCookie(c_name) {
@@ -124,7 +124,7 @@ function logMXWebEvent(orgId, eventCode, note, score) {
     JSScript.src    = JScriptURL;
     JSScript.setAttribute('name', ScriptName);
 
-    document.getElementsByTagName("head")[0].appendChild(JSScript);
+    // document.getElementsByTagName("head")[0].appendChild(JSScript);
 
     /*Helper Functions*/
     function _removeEventTrackingScript() {
@@ -172,7 +172,7 @@ function getTopbar(OrgId) {
     JSScript.type = 'text/javascript';
     JSScript.src = JScriptURL;
 
-    ElementHead.appendChild(JSScript);
+    // ElementHead.appendChild(JSScript);
 }
 var MergeJSON = function (mergeWith, newObj) {
     for (var key in newObj) {

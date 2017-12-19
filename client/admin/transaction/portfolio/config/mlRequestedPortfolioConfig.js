@@ -17,9 +17,9 @@ export function portfolioRowClassNameFormat(row, rowIdx) {
   let status=row.status;
   var rowClassName='';
   switch(status){
-    case 'PORT_GO_LIVE_PEND':rowClassName='ml_pink'; break;
-    case 'INV_PRC_PEND': rowClassName='ml_pink';break;
-    case 'REG_PORT_PEND': rowClassName='ml_pink';break;
+    case 'PORT_GO_LIVE_PEND':rowClassName='ml_red'; break;
+    case 'INV_PRC_PEND': rowClassName='ml_red';break;
+    case 'REG_PORT_PEND': rowClassName='ml_orange';break;
   }
  return rowClassName;
 } 

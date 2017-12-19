@@ -1673,3 +1673,6 @@ margin: 0px;
 .reg_payment{position: absolute;text-align: center;top: 50%;left: 50%;transform: translate(-50%,-50%);}
 
 .ml_pink {background-color: #f48794 !important}
+.ml_red {background-color: #dd5f5f !important}
+.ml_orange {background-color: #e29213 !important}
+.ml_green {background-color: #1fea68 !important}

@@ -22,10 +22,10 @@ export function registrationRowClassNameFormat(row, rowIdx) {
   let status=row.registrationStatus;
   var rowClassName='';
   switch(status){
-    case 'REG_EMAIL_P':rowClassName='ml_pink'; break;
-    case 'REG_EMAIL_V': rowClassName='ml_pink';break;
-    case 'REG_KYC_U_PEND': rowClassName='ml_pink';break;
-    case 'REG_PORT_PEND':rowClassName='ml_pink'; break;
+    case 'REG_EMAIL_P':rowClassName='ml_green'; break;
+    case 'REG_EMAIL_V': rowClassName='ml_red';break;
+    case 'REG_KYC_U_PEND': rowClassName='ml_red';break;
+    case 'REG_PORT_PEND':rowClassName='ml_orange'; break;
   }
  return rowClassName;
 } 

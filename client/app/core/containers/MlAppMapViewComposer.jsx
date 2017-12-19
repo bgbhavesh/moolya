@@ -48,7 +48,7 @@ export default class MlAppMapViewComposer extends Component {
                 return prev;
               }
               return {
-                data: fetchMoreResult.data.data
+                data: fetchMoreResult.data
               };
             },
           }),

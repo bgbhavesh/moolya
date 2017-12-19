@@ -58,7 +58,7 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
       variables: {
         portfoliodetailsId: portfoliodetailsId
       },
-      forceFetch: true
+      fetchPolicy: 'network-only'
   })
   const id = result.data.fetchIdeatorPortfolioDetails;
   let data = _.omit(id,'__typename')
@@ -92,7 +92,7 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
     variables: {
       ideaId: ideaId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchIdeatorPortfolioIdeas;
   let data = _.omit(id, '__typename')
@@ -130,7 +130,7 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.problemSolution;
   let data = _.omit(id, '__typename')
@@ -164,7 +164,7 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.audience;
   let data = _.omit(id, '__typename')
@@ -186,7 +186,7 @@ export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   console.log(result)
   const id = result.data.fetchIdeatorPortfolioLibrary;
@@ -215,7 +215,7 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.strategyAndPlanning;
   let data = _.omit(id, '__typename')
@@ -246,7 +246,7 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.lookingFor;
   return id
@@ -283,7 +283,7 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.intellectualPlanning;
   let data = _.omit(id, '__typename')
@@ -303,7 +303,7 @@ export async function validateUserForAnnotation(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data && result.data.validateUserForAnnotation;
   return id

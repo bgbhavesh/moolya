@@ -424,7 +424,7 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orde
       serviceId,
       orderId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   var taskDetails = result.data.fetchTaskDetailsForServiceCard;
   let tasks = [];

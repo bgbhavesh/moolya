@@ -22,7 +22,7 @@ export async function fetchOfficeMembers(officeId,isPrincipal) {
       isPrincipal: isPrincipal,
       officeId: officeId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   return result.data.fetchOfficeMembers
 }

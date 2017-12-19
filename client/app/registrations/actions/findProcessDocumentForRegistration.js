@@ -52,7 +52,7 @@ export async function findProcessDocumentForRegistrationActionHandler(countryIdI
       industry,
       email
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findProcessDocumentForRegistration;
   return id

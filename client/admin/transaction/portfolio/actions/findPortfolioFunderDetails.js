@@ -61,7 +61,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId)
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data;
   let data = _.omit(id,'__typename')
@@ -119,7 +119,7 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.principal;
   return id
@@ -174,7 +174,7 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.team;
   return id
@@ -210,7 +210,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data;
   // let data = _.omit(id,'__typename')
@@ -251,7 +251,7 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.successStories;
   return id
@@ -288,7 +288,7 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.areaOfInterest;
   return id
@@ -324,7 +324,7 @@ export async function fetchfunderPortfolioService(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchfunderPortfolioService;
   // let data = _.omit(id,'__typename')
@@ -355,7 +355,7 @@ export async function findFunderLookingForActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data && result.data.data.lookingFor;
   return id

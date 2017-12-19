@@ -16,7 +16,7 @@ export async function removePortfolioProfilePic(portfoliodetailsId) {
     variables: {
       portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.removeIdetaorProfilePic;
   return id

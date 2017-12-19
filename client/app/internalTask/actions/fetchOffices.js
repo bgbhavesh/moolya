@@ -24,7 +24,7 @@ export async function fetchOfficeActionHandler (Details) {
     variables: {
       Details
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const offices = result.data.fetchOffice;
   return offices

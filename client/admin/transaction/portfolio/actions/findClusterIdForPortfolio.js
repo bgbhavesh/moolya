@@ -16,7 +16,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findPortfolioDetails;
   return id

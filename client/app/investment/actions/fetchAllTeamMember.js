@@ -18,7 +18,7 @@ export async function fetchAllOfficeMembers(resourceType) {
         }
       }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchAllOfficeMembersWithUserId;
   return id

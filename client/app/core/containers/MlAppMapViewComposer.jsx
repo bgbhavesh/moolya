@@ -14,7 +14,7 @@ export default class MlAppMapViewComposer extends Component {
     }
     //note: params are mandatory,if not data will not be fetched
     let queryOptions={
-      forceFetch: true,
+      fetchPolicy: 'network-only',
       variables: {
         module:config.module,
         offset: 0,

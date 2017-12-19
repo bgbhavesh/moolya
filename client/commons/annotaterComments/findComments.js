@@ -27,7 +27,7 @@ export async function findComments(annotationId,client) {
     variables: {
       annotationId: annotationId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const data = result.data.fetchComments;
   let commitsArray = []

@@ -41,7 +41,7 @@ export async function fetchExploreMenuHandler(connector){
       }
     `,
     variables: {name:'mlExploreMenu'},
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const menu = result.data.data.menu;

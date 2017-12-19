@@ -13,6 +13,17 @@ function dateFormatter (cell,data){
   return dateVal;
 }
 
+export function portfolioRowClassNameFormat(row, rowIdx) {
+  let status=row.status;
+  var rowClassName='';
+  switch(status){
+    case 'PORT_GO_LIVE_PEND':rowClassName='ml_pink'; break;
+    case 'INV_PRC_PEND': rowClassName='ml_pink';break;
+    case 'REG_PORT_PEND': rowClassName='ml_pink';break;
+  }
+ return rowClassName;
+} 
+
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioDetails",//Module name for filter.
@@ -45,6 +56,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {dataField: "assignedUser", title: "Assign",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
+  trClassName:portfolioRowClassNameFormat,
   showActionComponent:true,
 
   actionConfiguration:[

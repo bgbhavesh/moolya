@@ -18,7 +18,7 @@ export default function getBreadCrumListBasedOnhierarchy(module, params, callbac
     variables: {
       hierarchyContext: requ,
     },
-    forceFetch: true,
+    fetchPolicy: 'network-only',
   });
 
   breadCrumHierarchyPromise.then((data) => {

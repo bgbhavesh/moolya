@@ -18,7 +18,7 @@ export async function updateInternalTaskInfo(taskId, task) {
       internalTaskId: taskId,
       internalTask: task
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.updateInternalTask;
   return id

@@ -140,7 +140,7 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findPortfolioDetails;
   return id
@@ -164,7 +164,7 @@ export async function fetchPortfolioImageHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchPortfolioImage;
   return id

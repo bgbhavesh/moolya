@@ -135,7 +135,7 @@ export async function fetchClusterDetails(clusterId) {
     variables: {
       clusterId: clusterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchUserRoleDetails;
   return id;

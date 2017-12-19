@@ -17,7 +17,7 @@ export async function fetchLikePortfolioActionHandler(resourceType) {
     variables: {
       resourceType: resourceType
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchLikes;
   return id.result

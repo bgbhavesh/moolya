@@ -24,7 +24,7 @@ export async function fetchFavouritesHandler(registrationId, communityCode) {
       registrationId,
       communityCode
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const connection = result.data.fetchFavouritesByReg;
   return connection

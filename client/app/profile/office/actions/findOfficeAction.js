@@ -18,7 +18,7 @@ export async function findOfficeAction(officeId) {
     variables: {
       officeId: officeId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findOfficeDetail;
   return id

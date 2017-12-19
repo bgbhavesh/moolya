@@ -23,7 +23,7 @@ export async function fetchProcessSetupHandler(processTransactionId) {
     variables: {
       processTransactionId: processTransactionId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   var stages = result.data.fetchProcessSetup;
   var ary = [];

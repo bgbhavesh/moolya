@@ -176,7 +176,7 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       officeId:officeId
     }
@@ -268,7 +268,7 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       userId: userId,
       profileId: profileId

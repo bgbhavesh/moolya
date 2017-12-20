@@ -59,7 +59,7 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       officeId:officeId
     }
@@ -80,7 +80,7 @@ export async function getUserProfileActionHandler() {
         }
       }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const users = result.data.getUserProfiles;
   return users
@@ -104,7 +104,7 @@ export async function getUserActiveProfileDetails() {
         }
       }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const users = result.data.getUserActiveProfileDetails;
   return users
@@ -162,7 +162,7 @@ export async function getActivityActionHandler(id) {
     variables: {
       activityId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const users = result.data.fetchActivity;
   return users
@@ -203,7 +203,7 @@ export async function fetchActivitiesActionHandler (profileId) {
     variables: {
       profileId:profileId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchActivities;
   return activities
@@ -242,7 +242,7 @@ export async function fetchActivitiesForTaskActionHandler(taskId){
     variables: {
       taskId:taskId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchActivitiesForTask;
   return activities

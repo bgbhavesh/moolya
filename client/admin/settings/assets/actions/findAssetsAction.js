@@ -18,7 +18,7 @@ export async function findAssetActionHandler(assetId) {
     variables: {
         assetId:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findAsset;
   return id

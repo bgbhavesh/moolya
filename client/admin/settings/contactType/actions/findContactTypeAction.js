@@ -19,7 +19,7 @@ export async function findContactTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findContactType;
   return id*/
@@ -41,7 +41,7 @@ export async function findContactTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {contactName,aboutContact,contactDisplayName}=masterSetting.contactTypeInfo||{};

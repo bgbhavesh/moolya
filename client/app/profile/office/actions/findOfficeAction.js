@@ -65,7 +65,7 @@ export async function fetchOfficePackages() {
             }
           }
           `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const data = result.data.fetchOfficePackages
   return data

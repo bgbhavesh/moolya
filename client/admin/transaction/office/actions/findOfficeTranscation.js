@@ -48,7 +48,7 @@ export async function findOfficeTransactionHandler(TransId, loggedUserDetails) {
 //     variables: {
 //       id:TransId
 //     },
-//     forceFetch:true
+//     fetchPolicy: 'network-only'
 //   })
 //   const id = result.data.findOfficeTransaction;
 //   return id

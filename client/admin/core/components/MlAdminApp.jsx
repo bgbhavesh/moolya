@@ -39,10 +39,10 @@ class MlAdminAppComponent extends Component {
   }
 
   async fetchMenu(){
-    const menuData=await client.query({forceFetch:true,query: query,
+    const menuData=await client.query({fetchPolicy: 'network-only',query: query,
                   variables: { name:'mlAdminMenu' }
      });
-    const userType=await client.query({forceFetch:true,query:gql`query{data:fetchUserTypeFromProfile}`
+    const userType=await client.query({fetchPolicy: 'network-only',query:gql`query{data:fetchUserTypeFromProfile}`
     });
     this.setState({loading:false,userType:userType&&userType.data&&userType.data.data?userType.data.data:null,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});
   }

@@ -22,7 +22,7 @@ export async function fetctOfficeDayAppointmentActionHandler (userId, profile, d
       month: month,
       year: year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.fetchMyAppointment;
   return myCalendar;

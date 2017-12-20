@@ -21,7 +21,7 @@ export async function findCompanyTypeActionHandler(CompanyTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {companyName,aboutCompany,companyDisplayName}=masterSetting.companyTypeInfo||{};

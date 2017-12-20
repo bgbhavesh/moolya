@@ -21,7 +21,7 @@ export async function fetchMyCalendarActionHandler (month, year) {
       month: month,
       year: year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.getMyCalendar;
   return myCalendar;
@@ -44,7 +44,7 @@ export async function fetchServiceCalendarActionHandler (portfolioId,month, year
       month: month?month:0,
       year: year?year:0
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.getServiceProviderCalendar;
   return myCalendar;
@@ -69,7 +69,7 @@ export async function fetchSessionDayActionHandler (orderId,sessionId, day, mont
       month,
       year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.getSessionDayAvailable;
   return myCalendar;

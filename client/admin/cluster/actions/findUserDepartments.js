@@ -25,7 +25,7 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
       id:did,
       clusterId:clusterid
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data;
   return id
@@ -51,7 +51,7 @@ export async function checkDefaultRole(userId) {
     variables: {
       userId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.checkDefaultRole;
   return id

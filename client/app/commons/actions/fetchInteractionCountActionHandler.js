@@ -16,7 +16,7 @@ export async function fetchInteractionsCountActionHandler(details) {
       resourceId : details.resourceId,
       resourceType: details.resourceType
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchInteractionsCount?result.data.fetchInteractionsCount:[];
   return data;

@@ -93,7 +93,7 @@ query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId
       subChapterId,
       communityId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.getServiceBasedOnServiceId;
   let service = _.omit(response, '__typename');

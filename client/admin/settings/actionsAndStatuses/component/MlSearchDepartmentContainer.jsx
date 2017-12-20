@@ -178,7 +178,7 @@ class MlSearchDepartmentContainer extends React.Component{
 
     client.query({
       query: departmentAndSubDeparmentQuery,
-      forceFetch:true,
+      fetchPolicy: 'network-only',
       variables:departmentAndSubDeparmentOption.options.variables
     }).then(data =>{
       this.setState({

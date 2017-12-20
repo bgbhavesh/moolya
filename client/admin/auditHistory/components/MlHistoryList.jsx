@@ -6,6 +6,7 @@ export default class MlHistoryList extends Component {
 
   componentDidMount() {
   }
+  
 
   render() {
     let params = this.props.params ? this.props.params : null;

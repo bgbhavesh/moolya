@@ -23,7 +23,7 @@ export async function updateProcessActionHandler(pid,process) {
      process,
      moduleName:"PROCESSMAPPING",
      actionName:"UPDATE",
-     forceFetch:true
+     fetchPolicy: 'network-only'
    }
    })
   const id = result.data.updateProcess;

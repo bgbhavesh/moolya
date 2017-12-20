@@ -21,7 +21,7 @@ import {appClient} from '../../../app/core/appConnection';
 //             }
 //           }
 //         `,
-//         forceFetch:true
+//         fetchPolicy: 'network-only'
 //     })
 //
 //     const communities = result.data.data;
@@ -44,7 +44,7 @@ export async function fetchOfficeUserTypes() {
             }
           }
         `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const communities = result.data.data;
@@ -69,7 +69,7 @@ export async function fetchCommunitiesHandlerReg() {
             }
           }
         `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const communities = result.data.data;

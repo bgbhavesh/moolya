@@ -48,10 +48,22 @@ export async function multipartFormHandler(data, file, endPoint) {
 
 export function multipartASyncFormHandler(data,file,endPoint,callback) {
   let formdata = new FormData();
+  let imageOnly=false;
+  if(data.imageOnly){
+    imageOnly=true;
+    delete data.imageOnly;
+  }
     formdata.append('data', JSON.stringify(data));
   if(file)
     formdata.append('file', file);
-    let fileSizeExceeded = file.size/1024/1024 > 10 ? true : false
+    let fileSizeExceeded = file.size/1024/1024 > 10 ? true : false;
+    if(imageOnly){
+      if(!file.type || !(file.type).includes('image')){
+        toastr.error('Invalid file type');
+        callback('Invalid file type');
+        return false;
+      }
+    }
     if(fileSizeExceeded) {
       callback('Maximum file size exceeded');
       return false;

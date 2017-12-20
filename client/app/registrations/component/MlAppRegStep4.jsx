@@ -269,6 +269,7 @@ export default class MlAppRegStep4 extends React.Component {
       documentId: null,
       registrationId: this.props.registrationId
     };
+    data.imageOnly=true;
     let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
     //this.props.onFileUpload(file,documentId);
   }
@@ -444,7 +445,7 @@ export default class MlAppRegStep4 extends React.Component {
                     </div>
                     <div className="fileUpload mlUpload_btn">
                       <span>Profile Pic</span>
-                      <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+                      <input type="file" accept=".jpg,.jpeg,.png" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                     </div>
 
                   </div>

@@ -45,15 +45,15 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
         return forward(operation)
       })
       // logger
-      const LoggerLink = new ApolloLink((operation, forward) => {
-        if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
-        return forward(operation).map(result => {
-          if (process.env.NODE_ENV === 'development') console.log(
-            `[GraphQL Logger] received result from ${operation.operationName}`,
-          )
-          return result
-        })
-      })
+      // const LoggerLink = new ApolloLink((operation, forward) => {
+      //   if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
+      //   return forward(operation).map(result => {
+      //     if (process.env.NODE_ENV === 'development') console.log(
+      //       `[GraphQL Logger] received result from ${operation.operationName}`,
+      //     )
+      //     return result
+      //   })
+      // })
       // error - use your error lib here
       const ErrorLink = onError(({graphQLErrors, networkError}) => {
         if (graphQLErrors)
@@ -69,7 +69,6 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
       })
       const AddLink = new ApolloLink((operation, forward) => {
         return forward(operation).map((response) => {
-          console.log(response)
             const data = response;
             if(data && data.unAuthorized){
                 // toastr.error('Sorry! You do not have access permission for this option, if you think this is incorrect - please contact us at +91-4046725726 or your  Sub-Chapter admin ');
@@ -98,9 +97,9 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
 
         // })
       });
-      const link = ApolloLink.from([MiddlewareLink, LoggerLink, ErrorLink, AddLink, httpLink])
+      const link = ApolloLink.from([MiddlewareLink,  ErrorLink, AddLink, httpLink])
       return link;
-
+      // LoggerLink
     }
   } else {
     return httpLink

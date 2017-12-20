@@ -21,7 +21,7 @@ export async function findLanguageActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const masterSetting= result.data.findMasterSetting||{};
   const {languageName,aboutLanguage,languageDisplayName}=masterSetting.languageInfo||{};

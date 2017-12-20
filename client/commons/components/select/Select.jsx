@@ -49,7 +49,7 @@ export default class MlSelectComponent extends Component {
     //  queryOptions.options.forceFetch=true;
     }
     //Dynamic query to retrieve data is configured through props
-   /* const selectionOptionsPromise =  client.query({query: props.query,forceFetch:true,variables:queryOptions.options.variables});
+   /* const selectionOptionsPromise =  client.query({query: props.query,fetchPolicy: 'network-only',variables:queryOptions.options.variables});
       selectionOptionsPromise.then(data =>{if(queryCallbackHandler){ queryCallbackHandler(data.data.data); }})*/
 
    this.props.retrieveSelectOptions({queryOptions:queryOptions.options.variables},queryCallbackHandler);

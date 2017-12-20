@@ -44,7 +44,7 @@ export async function findActionAndStatusActionHandler(statusAndStatusId) {
     variables: {
       _id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.findActionsAndStatus;
   console.log(id);

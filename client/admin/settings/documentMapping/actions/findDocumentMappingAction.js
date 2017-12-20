@@ -29,7 +29,7 @@ export async function findDocumentMappingActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findDocument;
   return id

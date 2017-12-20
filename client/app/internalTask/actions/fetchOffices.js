@@ -44,7 +44,7 @@ export async function getTeamUsersActionHandler(officeId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       officeId:officeId
     }

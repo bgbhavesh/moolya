@@ -18,7 +18,7 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
       id:did.id,
       moduleName:did.moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const totalResult = result.data.data;
   return totalResult
@@ -39,7 +39,7 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
       id:did.id,
       module:did.moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   result=result&&result.data&&result.data.data?result.data.data:null;
   return result;
@@ -73,7 +73,7 @@ export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
       subChapterId:subChapterId,
       userType:userType
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data.data;
   return id

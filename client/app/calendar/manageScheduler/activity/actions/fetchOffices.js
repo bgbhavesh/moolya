@@ -59,7 +59,7 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       userId: userId,
       profileId: profileId

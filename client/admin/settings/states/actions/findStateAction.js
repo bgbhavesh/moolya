@@ -22,7 +22,7 @@ export async function findStateActionHandler(Id) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchState;
   return id

@@ -16,7 +16,7 @@ export async function createIdeaActionHandler(ideaDetails) {
                 }
             }
         `,
-      forceFetch:true,
+      fetchPolicy: 'network-only',
       variables:{
           idea
       }
@@ -57,7 +57,7 @@ export async function fetchIdeaActionHandler(portfolioId) {
       variables:{
         portfolioId:  portfolioId
       },
-        forceFetch:true
+        fetchPolicy: 'network-only'
     })
     const ideas = result.data.fetchIdeas;
     return ideas
@@ -87,7 +87,7 @@ export async function fetchIdeators() {
                 }
             }
         `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const ideas = result.data.fetchIdeators;
   return ideas
@@ -115,7 +115,7 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
     variables:{
       portfolioId:portfolioId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const ideas = result.data.fetchIdeaByPortfolioId;
   return ideas

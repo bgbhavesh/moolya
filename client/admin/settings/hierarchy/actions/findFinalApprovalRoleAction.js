@@ -24,7 +24,7 @@ export async function findFinalApprovalRoleActionHandler(department,subDepartmen
       subChapterId:subChapterId,
       isDefaultSubChapter:isDefaultSubChapter
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   var id = result.data.fetchFinalApprovalRole;
   var data = _.omit(id, '__typename')

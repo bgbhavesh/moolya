@@ -36,7 +36,7 @@ export async function findUserActionHandler() {
             }
           }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const id = result.data.fetchInternalUserProfiles;

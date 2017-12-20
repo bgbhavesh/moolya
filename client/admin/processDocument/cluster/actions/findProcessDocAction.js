@@ -46,7 +46,7 @@ export async function findProcessDocActionHandler(processId) {
     variables: {
       id:processId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findProcess;
   return id

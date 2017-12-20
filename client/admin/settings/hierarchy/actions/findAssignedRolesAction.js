@@ -31,7 +31,7 @@ export async function findAssignedRolesActionHandler(clusterId, departmentId,sub
       subChapterId:subChpId,
       type : type
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchAssignedRolesHierarchy;
   return id

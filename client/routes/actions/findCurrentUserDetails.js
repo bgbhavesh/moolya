@@ -16,7 +16,7 @@ export async function findUserActionHandler(token) {
     variables: {
       token:LoginToken
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findUserOnToken;
   return id

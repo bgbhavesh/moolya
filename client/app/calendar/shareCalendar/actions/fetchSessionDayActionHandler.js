@@ -21,7 +21,7 @@ export async function fetchSessionDayActionHandler (orderId,sessionId, day, mont
       month,
       year
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const myCalendar = result.data.getSessionDayAvailable;
   return myCalendar;

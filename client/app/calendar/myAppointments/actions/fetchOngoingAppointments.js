@@ -107,7 +107,7 @@ export async function fetchServiceByServiceId (serviceId, sessionId) {
     variables: {
       serviceId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.findService;
   let service = _.omit(response, '__typename');
@@ -261,7 +261,7 @@ export async function fetchSelfTaskById (selfTaskId) {
     variables: {
       selfTaskId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.fetchSelfTask;
   return response;

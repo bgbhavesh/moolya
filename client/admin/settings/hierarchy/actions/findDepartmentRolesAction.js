@@ -31,7 +31,7 @@ export async function findDeptRolesActionHandler(department,subDepartmentId,clus
       subChapterId:subChapterId,
       isDefaultSubChapter:isDefaultSubChapter
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result && result.data && result.data.fetchRolesForDepartment;
   return id

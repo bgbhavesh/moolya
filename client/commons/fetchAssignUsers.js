@@ -31,7 +31,7 @@ export async function fetchAssignUsersActionHandler(clusterId, chapterId, subCha
       communityId:communityid,
       subChapterName:scName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data;
   return id

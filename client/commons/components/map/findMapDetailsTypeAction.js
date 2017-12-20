@@ -17,7 +17,7 @@ import {client} from '../../../admin/core/apolloConnection';
       id:did.id,
       moduleName:did.moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const totalResult = result.data.data;
   return totalResult
@@ -38,7 +38,7 @@ import {client} from '../../../admin/core/apolloConnection';
       id:did.id,
       module:did.moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   result=result&&result.data&&result.data.data?result.data.data:null;
   return result;
@@ -72,7 +72,7 @@ import {client} from '../../../admin/core/apolloConnection';
       subChapterId:subChapterId,
       userType:userType
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data.data;
   return id

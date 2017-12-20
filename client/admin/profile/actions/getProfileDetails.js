@@ -82,7 +82,7 @@ export async function findMyProfileActionHandler(userTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchMyProfile;
   return id

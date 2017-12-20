@@ -3,7 +3,6 @@
  */
 
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express';
-
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools';
 import {parse, buildASTSchema} from 'graphql';
 import {build} from 'graphql-utilities';
@@ -23,7 +22,7 @@ import MlRespPayload from '../../commons/mlPayload';
 import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
 import getSiteMapUrls from '../../MlExternalUsers/microSite/microSiteRepo/siteMapCreation'
 let helmet = require('helmet');
-var Tokens = require('csrf')
+var Tokens = require('csrf');
 var siteMap = require('sitemap')
 let cors = require('cors');
 const Fiber = Npm.require('fibers')

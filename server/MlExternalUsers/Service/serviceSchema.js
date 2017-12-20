@@ -18,6 +18,13 @@ let service=`
      isMandatory: Boolean
      fileUrl : [String]
   }
+
+  type FileInfo {
+    fileName : String
+    fileUrl: String
+    fileSize: Int
+ }
+
   type ServicePayment {
      tasksAmount: Float
      tasksDiscount: Float
@@ -100,6 +107,7 @@ let service=`
     status: String
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
+    beSpokeAttachments: [FileInfo]
     payment: ServicePayment
     tasks: [ServiceTask]
     facilitationCharge : ServiceFacilitationCharge
@@ -252,6 +260,12 @@ let service=`
        fileUrl : [String]
    }
 
+   input fileInfo {
+      fileName : String
+      fileUrl: String
+      fileSize: Int
+   }
+
    input servicepayment {
        tasksAmount: Float
        tasksDiscount: Float
@@ -328,6 +342,7 @@ let service=`
         isActive: Boolean
         termsAndCondition: termsAndCondition
         attachments: [attachments]
+        beSpokeAttachments: [fileInfo]
         payment: servicepayment
         tasks: [serviceTask]
         facilitationCharge : serviceFacilitationCharge

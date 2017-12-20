@@ -48,15 +48,15 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
         return forward(operation)
       })
       // logger
-      const LoggerLink = new ApolloLink((operation, forward) => {
-        if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
-        return forward(operation).map(result => {
-          if (process.env.NODE_ENV === 'development') console.log(
-            `[GraphQL Logger] received result from ${operation.operationName}`,
-          )
-          return result
-        })
-      })
+      // const LoggerLink = new ApolloLink((operation, forward) => {
+      //   if (process.env.NODE_ENV === 'development') console.log(`[GraphQL Logger] ${operation.operationName}`)
+      //   return forward(operation).map(result => {
+      //     if (process.env.NODE_ENV === 'development') console.log(
+      //       `[GraphQL Logger] received result from ${operation.operationName}`,
+      //     )
+      //     return result
+      //   })
+      // })
       // error - use your error lib here
       const ErrorLink = onError(({graphQLErrors, networkError}) => {
         if (graphQLErrors)
@@ -76,9 +76,9 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
         })
      
       });
-      const link = ApolloLink.from([MiddlewareLink, LoggerLink, ErrorLink, AddLink, httpLink])
+      const link = ApolloLink.from([MiddlewareLink , ErrorLink, AddLink, httpLink])
       return link;
-
+      // LoggerLink
     }
   } else {
     return httpLink

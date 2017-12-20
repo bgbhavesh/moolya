@@ -14,6 +14,7 @@ import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDe
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from '../../../../../../commons/components/loader/loader';
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlServiceProviderViewAbout extends React.Component {
 
@@ -22,7 +23,8 @@ export default class MlServiceProviderViewAbout extends React.Component {
     this.state = {
       loading: true,
       data: {},
-      privateKey: {}
+      privateKey: {},
+      editorValue: null
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -142,7 +144,8 @@ export default class MlServiceProviderViewAbout extends React.Component {
     let portfolioDetailsId = that.props.portfolioDetailsId;
     const response = await fetchServiceProviderPortfolioAbout(portfolioDetailsId);
     if (response) {
-      this.setState({loading: false, data: response});
+      const editorValue = createValueFromString(response && response.aboutDescription ? response.aboutDescription : null);
+      this.setState({ loading: false, data: response, editorValue });
       this.fetchAnnotations();
     }else{
       this.setState({ loading: false })
@@ -169,6 +172,7 @@ export default class MlServiceProviderViewAbout extends React.Component {
     let description = this.state.data.aboutDescription ? this.state.data.aboutDescription : ''
     let title = this.state.data.aboutTitle ? this.state.data.aboutTitle : ''
     let image = this.state.data.aboutImages&&this.state.data.aboutImages[0]&&this.state.data.aboutImages[0].fileUrl ? this.state.data.aboutImages[0].fileUrl : ''
+    const { editorValue } = this.state;
     //let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
     const showLoader = this.state.loading;
     return (
@@ -186,8 +190,12 @@ export default class MlServiceProviderViewAbout extends React.Component {
                             {title} <FontAwesome name='unlock' className="input_icon req_input_icon un_lock" id="isAboutTitlePrivate"/>
                         </div>
                         <div className="panel-body">
-                            <FontAwesome name='unlock' className="input_icon view_req_textarea_icon un_lock"
-                                                                 id="isDescriptionPrivate"/>{description}
+                          <FontAwesome name='unlock' className="input_icon view_req_textarea_icon un_lock" id="isDescriptionPrivate" />
+                            {/* {description} */}
+                            <MlTextEditor
+                              value={editorValue}
+                              isReadOnly={true}
+                            />
                             <div className="media">
                                 <div className="upload-image">
                                     <a href="">
@@ -198,9 +206,6 @@ export default class MlServiceProviderViewAbout extends React.Component {
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
               </div>
             </div>

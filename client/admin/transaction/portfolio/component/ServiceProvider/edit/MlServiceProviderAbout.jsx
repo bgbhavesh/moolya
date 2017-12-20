@@ -1,14 +1,15 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
 import {findServiceProviderAboutActionHandler} from "../../../actions/findPortfolioServiceProviderDetails";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
-import _ from "lodash";
 import MlLoader from "../../../../../../commons/components/loader/loader";
-var FontAwesome = require('react-fontawesome');
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../commons/utils/confirm';
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlServiceProviderAbout extends Component {
   constructor(props, context) {
@@ -19,7 +20,8 @@ export default class MlServiceProviderAbout extends Component {
       privateKey: {}
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+    this.handleEditorBlur = this.handleEditorBlur.bind(this);
     this.onAboutImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
@@ -42,24 +44,24 @@ export default class MlServiceProviderAbout extends Component {
   }
 
   onClick(fieldName, field, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
     var isPrivate = false;
-    details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
       isPrivate = true;
-    } else {
-      details = _.extend(details, {[key]: false});
     }
-
-    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate}
-    this.setState({privateKey: privateKey})
-    this.setState({data: details}, function () {
+    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate }
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
+  }
 
+  handleEditorBlur(value, name) {
+    let details = this.state.data;
+    details = _.omit(details, [name]);
+    details = _.extend(details, { [name]: value.toString('html') });
+    this.setState({ data: details, editorValue: value }, function () {
+      this.sendDataToParent()
+    })
   }
 
   handleBlur(e) {
@@ -92,16 +94,17 @@ export default class MlServiceProviderAbout extends Component {
     if (empty) {
       const response = await findServiceProviderAboutActionHandler(portfoliodetailsId);
       if (response) {
-        this.setState({loading: false, data: response});
+        const editorValue = createValueFromString(response && response.aboutDescription ? response.aboutDescription : null);
+        this.setState({ loading: false, data: response, editorValue });
       }
-
       _.each(response.privateFields, function (pf) {
         $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
 
     } else {
       this.fetchOnlyImages();
-      this.setState({loading: true, data: that.context.serviceProviderPortfolio.about});
+      const editorValue = createValueFromString(that.context.serviceProviderPortfolio.about && that.context.serviceProviderPortfolio.about.aboutDescription ? that.context.serviceProviderPortfolio.about.aboutDescription : null);
+      this.setState({ loading: true, data: that.context.serviceProviderPortfolio.about, editorValue });
     }
   }
 
@@ -172,8 +175,9 @@ export default class MlServiceProviderAbout extends Component {
         </div>
       )
     });
-    let description = this.state.data.aboutDescription ? this.state.data.aboutDescription : ''
+    // let description = this.state.data.aboutDescription ? this.state.data.aboutDescription : ''
     let isDescriptionPrivate = this.state.data.isDescriptionPrivate ? this.state.data.isDescriptionPrivate : false
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -186,16 +190,20 @@ export default class MlServiceProviderAbout extends Component {
                     <div className="form-group nomargin-bottom">
                       <input type="text" placeholder="Title Here..." className="form-control"
                              defaultValue={this.state.data ? this.state.data.aboutTitle : ''}
-                             name="aboutTitle" onBlur={this.handleBlur.bind(this)}/>
+                             name="aboutTitle" onBlur={this.handleBlur}/>
                       <FontAwesome name='unlock' className="input_icon req_input_icon un_lock" id="isAboutTitlePrivate"
                                    onClick={this.onClick.bind(this, "aboutTitle", "isAboutTitlePrivate")}/>
                     </div>
                   </div>
                   <div className="panel-body">
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." className="form-control" id="cl_about"
+                      {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
                                 defaultValue={description} name="aboutDescription"
-                                onBlur={this.handleBlur.bind(this)}></textarea>
+                                onBlur={this.handleBlur.bind(this)}></textarea> */}
+                      <MlTextEditor
+                        value={editorValue}
+                        handleOnChange={(value, name) => this.handleEditorBlur(value, "aboutDescription")}
+                      />
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                    id="isDescriptionPrivate"
                                    onClick={this.onClick.bind(this, "aboutDescription", "isDescriptionPrivate")}/>

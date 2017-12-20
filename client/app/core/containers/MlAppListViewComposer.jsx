@@ -11,7 +11,7 @@ export default class  MlListViewComposer extends Component {
     let config=this.props;
     //note: params are mandatory,if not data will not be fetched
     let queryOptions={
-      forceFetch: true,
+      fetchPolicy: 'network-only',
       variables: {
         module:config.module,
         offset: 0,
@@ -45,7 +45,7 @@ export default class  MlListViewComposer extends Component {
                 return prev;
               }
               return {
-                data: fetchMoreResult.data.data
+                data: fetchMoreResult.data
               };
             },
           }),

@@ -26,7 +26,7 @@ export async function findRequestssActionHandler() {
     variables: {
   status
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchRequestss;
   return id

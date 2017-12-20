@@ -23,7 +23,7 @@ export async function fetchAssignedTemplate(process,subProcess,stepCode,recordId
       recordId:recordId,
       mode:mode
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const templateData = result.data.fetchAssignedTemplate;
   return templateData;

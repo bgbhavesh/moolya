@@ -19,7 +19,7 @@ export async function findDeptAndsubDeptActionHandler(clusterId) {
     variables: {
       clusterId:cid
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchMoolyaBasedDepartmentAndSubDepartment;
   return id
@@ -44,7 +44,7 @@ export async function findNonMoolyaDeptAndsubDeptActionHandler(clusterId,subChap
       clusterId:cid,
       subChapterId:subChapterId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchNonMoolyaBasedDepartmentAndSubDepartments;
   return id

@@ -30,7 +30,7 @@ export async function fetchOfficeMember(memberId) {
     variables: {
       memberId: memberId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   return result.data.fetchOfficeMember;
 }

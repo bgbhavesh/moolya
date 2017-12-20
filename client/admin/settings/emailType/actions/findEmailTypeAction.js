@@ -19,7 +19,7 @@ export async function findEmailTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findEmailType;
   return id*/
@@ -40,7 +40,7 @@ export async function findEmailTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {emailName,aboutEmail,emailDisplayName}=masterSetting.emailTypeInfo||{};

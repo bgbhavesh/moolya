@@ -35,7 +35,7 @@ export async function fetchSelectedFilterDataActionHandler(id) {
     variables: {
       id: id,
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const data = result.data.fetchSelectedFilterData;
   let resultData = _.omit(data,'__typename');

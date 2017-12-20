@@ -32,7 +32,7 @@ export async function findRegionalActionHandler()
           
         }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchGlobalSettings;
   return id

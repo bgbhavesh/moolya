@@ -14,7 +14,7 @@ export async function requestedAppointmentActionHandler() {
       }
       }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchBeSpokeServices;
   return data;
@@ -68,7 +68,7 @@ export async function getBeSpokeForAppointments (serviceId) {
     variables: {
       serviceId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const taskDetails = result.data.getBeSpokeForAppointments;
   return taskDetails
@@ -84,7 +84,7 @@ export async function servicesForAppointmentsActionHandler() {
       }
       }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchServicesForAppointments;
   return data;

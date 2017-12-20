@@ -21,7 +21,7 @@ export async function findAddressTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {addressName,aboutAddress,addressDisplayName}=masterSetting.addressTypeInfo||{};

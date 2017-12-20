@@ -5,7 +5,8 @@ import MlActionComponent from "../../../../commons/components/actions/ActionComp
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAssignDepartments from "./MlAssignDepartments";
 import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddDepartment extends React.Component {
 
@@ -81,6 +82,7 @@ class MlAddDepartment extends React.Component {
         toastr.error("Department Name is mandatory");
       } else {
         const response = await addDepartmentActionHandler(DepartmentDetails)
+        toastr.success("'Department' added successfully")
         return response;
       }
     }
@@ -148,7 +150,7 @@ class MlAddDepartment extends React.Component {
           <div className="col-md-6 nopadding-right">
             <div className="clearfix"></div>
             <div className="form_bg left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -173,7 +175,7 @@ class MlAddDepartment extends React.Component {
                   }
 
                 </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
         </div>

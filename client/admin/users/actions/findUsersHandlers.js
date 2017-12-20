@@ -177,7 +177,7 @@ export async function findUserRegistrationActionHandler(registrationId) {
     variables: {
       registrationId: regId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const data = result.data.findRegistrationInfoUser;
   return data
@@ -196,7 +196,7 @@ export async function findUserPortfolioActionHandler(registrationId) {
     variables: {
       registrationId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchPortfolioByReg;
   return id
@@ -221,7 +221,7 @@ export async function fetchIdeaActionHandler(portfolioId) {
     variables: {
       portfolioId: portfolioId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const ideas = result.data.fetchIdeas;
   return ideas

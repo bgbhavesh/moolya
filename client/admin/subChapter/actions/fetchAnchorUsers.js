@@ -24,7 +24,7 @@ export async function findAnchorUserActionHandler(paramContext) {
         }
       } 
     }`,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables:{
       clusterId,
       chapterId,

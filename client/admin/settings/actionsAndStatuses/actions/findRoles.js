@@ -19,7 +19,7 @@ export async function findRolessActionHandler(departmentId, subDepartmentId) {
       department: departmentId,
       subDepartment: subDepartmentId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.data;
   return id

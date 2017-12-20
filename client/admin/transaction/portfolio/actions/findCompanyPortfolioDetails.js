@@ -79,7 +79,7 @@ export async function fetchDetailsCompanyActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchCompanyPortfolioAboutUs;
@@ -418,7 +418,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
       portfoliodetailsId: portfoliodetailsId,
       key: key
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   var response = result.data.fetchCompanyDetails;
@@ -481,7 +481,7 @@ export async function fetchCompanyPortfolioData(portfoliodetailsId, connection) 
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchCompanyPortfolioData;
   let reportsArray = {}
@@ -573,7 +573,7 @@ export async function fetchDetailsCompanyChartsActionHandler(portfoliodetailsId)
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchCompanyPortfolioCharts;
@@ -648,7 +648,7 @@ export async function fetchCompanyPortfolioReports(portfoliodetailsId, connectio
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchCompanyPortfolioCSRReports;
   let reportsArray = {}

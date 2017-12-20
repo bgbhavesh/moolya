@@ -12,6 +12,7 @@ import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../commons/components/loader/loader";
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlPortfolioIdeatorStrategyPlansView extends React.Component {
   constructor(props) {
@@ -35,8 +36,6 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
       pluginInit:  function () {
       }
     });
-
-
   }
 
   annotatorEvents(event, annotation, editor){
@@ -130,7 +129,8 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
   async fetchPortfolioInfo(){
     const response = await findIdeatorStrategyPlansActionHandler(this.props.portfolioDetailsId);
     if(response){
-      this.setState({portfolioIdeatorInfo : response,loading:false});
+      const editorValue = createValueFromString(response.spDescription);
+      this.setState({ portfolioIdeatorInfo: response, loading: false, editorValue: editorValue });
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
@@ -138,11 +138,10 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
   }
 
   render(){
-
+    const { editorValue } = this.state;
     let loading = this.state.loading ? this.state.loading : false;
     return (
       <div>
-
           <div className="requested_input">
 
               <div className="col-lg-12 col-sm-12">
@@ -155,16 +154,17 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
                         <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" />
                       </div>
                     <div className="panel-body">
-                      {loading === true ? ( <MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ? this.state.portfolioIdeatorInfo.spDescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
+                      {loading === true ? (<MlLoader />) : (<div>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.spDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
                     </div>
                       </div>
                   </div>
-
                 </div>
               </div>
-
           </div>
-
         </div>
     )
   }

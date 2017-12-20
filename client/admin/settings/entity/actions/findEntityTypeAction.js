@@ -18,7 +18,7 @@ export async function findEntityTypeActionHandler(EntityTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindEntity;
   return id

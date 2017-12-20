@@ -17,7 +17,7 @@ export async function createStageActionHandler(stage) {
     variables: {
       stage: stage
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.createStage;
   return id

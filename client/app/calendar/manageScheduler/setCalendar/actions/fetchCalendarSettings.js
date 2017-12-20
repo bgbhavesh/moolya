@@ -48,7 +48,7 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
     variables: {
       profileId:profileId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const settings = result.data.fetchMyCalendarSetting;
   return settings;

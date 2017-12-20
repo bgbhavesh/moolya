@@ -46,7 +46,7 @@ export async function findAddressBookActionHandler(registrationId) {
     variables: {
       registrationId: registrationId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findExternalUserAddressBook;
   return id
@@ -129,7 +129,7 @@ export async function fetchUserDetails() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchExternalUserDetails;
   return id
@@ -156,7 +156,7 @@ export async function findCountryCode(clusterId) {
     variables: {
       clusterId: clusterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchCountryCode;
   return id

@@ -21,7 +21,7 @@ export async function findEmployeeTypeActionHandler(EmpTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {employmentName,aboutEmployment,employmentDisplayName}=masterSetting.employmentTypeInfo||{};

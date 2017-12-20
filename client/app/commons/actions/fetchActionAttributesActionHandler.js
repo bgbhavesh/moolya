@@ -17,7 +17,7 @@ export async function fetchInteractionActionAttributesHandler(details) {
       resourceId : details.resourceId,
       resourceType: details.resourceType
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchInteractionActionAttributes?result.data.fetchInteractionActionAttributes:[];
   return data;

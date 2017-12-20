@@ -52,7 +52,7 @@ import _ from "underscore";
 //     variables: {
 //       portfoliodetailsId: portfoliodetailsId
 //     },
-//     forceFetch: true
+//     fetchPolicy: 'network-only'
 //   })
 //   console.log(result)
 //   const id = result.data.fetchStartupPortfolioManagement;
@@ -204,7 +204,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchStartupPortfolioAboutUs;
@@ -257,7 +257,7 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioInvestor;
   // let data = _.omit(id,'__typename')
@@ -289,7 +289,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioLookingFor;
   // let data = _.omit(id,'__typename')
@@ -322,7 +322,7 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioAwards;
   return id
@@ -342,7 +342,7 @@ export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioMemberships;
   let data = _.omit(id, '__typename')
@@ -364,7 +364,7 @@ export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioCompliances;
   let data = _.omit(id, '__typename')
@@ -386,7 +386,7 @@ export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioLicenses;
   let data = _.omit(id, '__typename')
@@ -447,7 +447,7 @@ export async function fetchStartupPortfolioData(portfoliodetailsId, connection) 
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchStartupPortfolioData;
   let reportsArray = {}
@@ -539,7 +539,7 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   const data = result.data.fetchStartupPortfolioCharts;
@@ -847,7 +847,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
       portfoliodetailsId: portfoliodetailsId,
       key: key
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
 
   var response = result.data.fetchStartupDetails;

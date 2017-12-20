@@ -17,7 +17,7 @@ export async function createOnBoardActionHandler(onBoard) {
     variables: {
       onBoard: onBoard
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.createOnBoard;
   return id

@@ -9,12 +9,14 @@ import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPo
 import {putDataIntoTheLibrary, removePortfolioFileUrl} from '../../../../../commons/actions/mlLibraryActionHandler'
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../commons/utils/confirm';
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
-export default class MlIdeatorProblemsAndSolutions extends React.Component{
+export default class MlIdeatorProblemsAndSolutions extends Component{
   constructor(props, context) {
     super(props);
     this.state =  {loading: true, data:{}, privateKey:{},
       privateValues:[]};
+    this.onInputChange = this.onInputChange.bind(this);
     this.onProblemImageFileUpload.bind(this);
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
@@ -33,7 +35,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     if(empty){
       const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
       if (response) {
-        this.setState({loading: false, data: response});
+        const solutionStatement = createValueFromString(response.solutionStatement);
+        const problemStatement = createValueFromString(response.problemStatement);
+        this.setState({ loading: false, data: response, solutionStatement, problemStatement });
       }
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -41,7 +45,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
 
     }else{
       this.fetchOnlyImages();
-      this.setState({loading: true, data: this.context.ideatorPortfolio.problemSolution});
+      const solutionStatement = createValueFromString(this.context.ideatorPortfolio.problemSolution.solutionStatement);
+      const problemStatement = createValueFromString(this.context.ideatorPortfolio.problemSolution.problemStatement);
+      this.setState({ loading: true, data: this.context.ideatorPortfolio.problemSolution, solutionStatement, problemStatement });
     }
   }
 
@@ -71,12 +77,12 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     })
   }
 
-  onInputChange(e){
-      let details =this.state.data;
-      let name  = e.target.name;
-      details=_.omit(details,[name]);
-      details=_.extend(details,{[name]:e.target.value});
-      this.setState({data:details}, function () {
+  onInputChange(value, name){
+      let details = this.state.data;
+      // let name  = e.target.name;
+      details = _.omit(details, [name]);
+      details = _.extend(details, { [name]: value.toString('html') });
+      this.setState({ data: details, [name]: value }, function () {
         this.sendDataToParent()
       })
   }
@@ -209,11 +215,12 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
         </div>
       )
     });
-    let problemStatement = this.state.data.problemStatement?this.state.data.problemStatement:''
-    let solutionStatement =   this.state.data.solutionStatement?this.state.data.solutionStatement:''
+    // let problemStatement = this.state.data.problemStatement?this.state.data.problemStatement:''
+    // let solutionStatement =   this.state.data.solutionStatement?this.state.data.solutionStatement:''
     let problemLockStatus =  this.state.data.isProblemPrivate?this.state.data.isProblemPrivate:false
     let solutionLockStatus =  this.state.data.isSolutionPrivate?this.state.data.isSolutionPrivate:false
     const showLoader = this.state.loading;
+    const { solutionStatement, problemStatement } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -227,8 +234,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={problemStatement}></textarea>
-
+                        {/* <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange} name="problemStatement" defaultValue={problemStatement}></textarea> */}
+                        <MlTextEditor
+                          handleOnChange={(value, name) => this.onInputChange(value, "problemStatement")}
+                          value={problemStatement}
+                        />
                       </div>
                     </div>
                   </div>
@@ -257,8 +267,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" defaultValue={solutionStatement}></textarea>
-
+                        {/* <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange} name="solutionStatement" defaultValue={solutionStatement}></textarea> */}
+                        <MlTextEditor
+                          handleOnChange={(value, name) => this.onInputChange(value, "solutionStatement")}
+                          value={solutionStatement}
+                        />
                       </div>
                     </div>
                   </div>

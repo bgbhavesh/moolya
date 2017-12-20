@@ -72,8 +72,8 @@ export async function selfAssignUserForTransactionAction(module,transactionId,tr
 }
 
 export async function validateTransaction(transactionId,collection,assignedUserId) {
-  const result = await client.mutate({
-    mutation: gql`
+  const result = await client.query({
+    query: gql`
      query($transactionId:String,$collection:String,$assignedUserId:String){
     validateTransaction(transactionId:$transactionId,collection:$collection,assignedUserId:$assignedUserId){
       success
@@ -93,8 +93,8 @@ export async function validateTransaction(transactionId,collection,assignedUserI
 }
 
 export async function validateAssignmentsDataContext(data,userId) {
-  const result = await client.mutate({
-    mutation: gql`
+  const result = await client.query({
+    query: gql`
      query($data:[transactionData],$userId:String){
       validateAssignmentsDataContext(data:$data,userId:$userId){
         success

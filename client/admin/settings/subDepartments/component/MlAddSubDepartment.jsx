@@ -9,7 +9,8 @@ import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAssignDepartments from "./MlAssignDepartments";
 import {findDepartmentActionHandler} from "../actions/findDepartmentAction";
 import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddSubDepartment extends React.Component{
   constructor(props) {
@@ -139,7 +140,7 @@ class MlAddSubDepartment extends React.Component{
             <div className="col-md-6 nopadding-right">
               <div className="clearfix"></div>
               <div className="form_bg left_wrap">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="left_wrap"
                   smoothScrolling={true}
@@ -173,7 +174,7 @@ class MlAddSubDepartment extends React.Component{
                       }
                     </div> )}
                   </form>
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

@@ -661,9 +661,11 @@ class MlAppointment {
       calendarSetting.vacations.forEach(function (vacation) {
         let vacationStartDate = new Date(vacation.start);
         let vacationEndDate = new Date(vacation.end);
-          if(vacationStartDate.getDate() <= date.getDate() && vacationEndDate.getDate() >= date.getDate() &&
-                vacationStartDate.getMonth() <= date.getMonth() && vacationEndDate.getMonth() >= date.getMonth() &&
-                    vacationStartDate.getYear() <= date.getYear() && vacationEndDate.getYear() >= date.getYear()) {
+        // if(vacationStartDate.getDate() <= date.getDate() && vacationEndDate.getDate() >= date.getDate() &&
+        //   vacationStartDate.getMonth() <= date.getMonth() && vacationEndDate.getMonth() >= date.getMonth() &&
+        //   vacationStartDate.getYear() <= date.getYear() && vacationEndDate.getYear() >= date.getYear())
+
+          if(new Date(vacationStartDate)<= date && new Date(vacationEndDate)>=date) {
             if(vacation.type == 'travel'){
               status = 4;
             } else {

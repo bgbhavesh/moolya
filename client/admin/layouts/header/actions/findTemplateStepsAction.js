@@ -19,7 +19,7 @@ export async function findTemplateStepsActionHandler(subProcessId) {
     variables: {
       id:subProcessId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findTemplateSteps;
   return id

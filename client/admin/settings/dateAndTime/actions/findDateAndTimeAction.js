@@ -23,7 +23,7 @@ export async function findDateAndTimeActionHandler(Id)
           
         }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchGlobalSettings;
   return id

@@ -29,7 +29,7 @@ export async function findTransactionApprovalActionHandler(transactionTypeDetail
       transactionType,
       status
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchRequestsForApproval;
   return id

@@ -27,7 +27,7 @@ export async function fetchSlotAppointmentsDetailsActionHandler(appointmentId) {
     variables: {
       appointmentId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const slotDetails = result.data.fetchSlotDetails;
   return slotDetails;

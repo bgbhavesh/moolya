@@ -27,7 +27,7 @@ export async function fetchInternalTask(status) {
     variables:{
       status:status
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchMyInternalTask;
   return id

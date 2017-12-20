@@ -54,7 +54,7 @@ export default class MlTextEditor extends PureComponent {
             <div>
                 <RichTextEditor
                     value={value}
-                    onChange={(value) => handleOnChange(value)}
+                    onChange={(value, name) => handleOnChange(value, name)}
                     autoFocus={autoFocus}
                     readOnly={isReadOnly}
                     placeholder={placeholder}
@@ -76,5 +76,6 @@ MlTextEditor.defaultProps = {
     handleOnChange: MlTextEditor.prototype.handleOnChange,
     isReadOnly: false,
     placeholder: "Describe...",
-    autoFocus: true
+    autoFocus: true,
+    value: RichTextEditor.createEmptyValue()
 }

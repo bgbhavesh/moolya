@@ -149,7 +149,7 @@ export async function fetchServiceActionHandler (serviceId) {
     variables: {
       serviceId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.findService;
   let service = _.omit(response, '__typename');
@@ -255,7 +255,7 @@ export async function fetchServicesActionHandler (profileId) {
       }
     }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       profileId:profileId
     }
@@ -287,13 +287,15 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
           hours
           minutes
         }
-        attachments{
+        beSpokeAttachments{
+          fileName
+          fileSize
           fileUrl
         }
       }
     }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       portfolioId:portfolioId
     }
@@ -322,7 +324,7 @@ export async function fetchProfileActionHandler (profileId) {
   }
 }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       profileId
     }
@@ -340,7 +342,7 @@ query ($profileId: String) {
   }
 }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       profileId:profileId
     }
@@ -358,7 +360,7 @@ query ($portfolioId: String) {
   }
 }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       portfolioId
     }
@@ -424,7 +426,7 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId, orde
       serviceId,
       orderId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   var taskDetails = result.data.fetchTaskDetailsForServiceCard;
   let tasks = [];

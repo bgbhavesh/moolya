@@ -1,6 +1,4 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -12,6 +10,7 @@ import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../commons/components/loader/loader";
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Component {
   constructor(props) {
@@ -134,21 +133,22 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     }
   }
 
-  async fetchPortfolioInfo(){
+  async fetchPortfolioInfo() {
     const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(this.props.portfolioDetailsId);
-    if(response){
-      this.setState({portfolioIdeatorInfo : response, loading : false});
+    if (response) {
+      const editorValue = createValueFromString(response.IPdescription);
+      this.setState({ portfolioIdeatorInfo: response, editorValue: editorValue, loading: false });
       _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }
   }
 
   render(){
     let loading = this.state.loading ? this.state.loading : false;
+    const { editorValue } = this.state;
     return (
       <div>
-
           <div className="requested_input">
 
               <div className="col-lg-12 col-sm-12">
@@ -161,8 +161,11 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
                         <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
                       </div>
                     <div className="panel-body">
-                      {this.state.portfolioIdeatorInfo.IPdescription}
-                      {loading === true ? ( <MlLoader/>) : (<p>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ? this.state.portfolioIdeatorInfo.IPdescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
+                    {loading === true ? (<MlLoader />) : (<div>{this.state.portfolioIdeatorInfo && this.state.portfolioIdeatorInfo.IPdescription ?
+                      <MlTextEditor
+                        value={editorValue}
+                        isReadOnly={true}
+                      /> : (<NoData tabName={this.props.tabName} />)}</div>)}
                         </div>
                       </div>
                   </div>

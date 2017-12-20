@@ -75,7 +75,12 @@ export default class MlAppServicePurchasedDetail extends React.Component {
   render() {
 
     const { data } = this.state;
-
+    let appointmentWith = data.owner;
+    let currentUser = data.client;
+    if(Meteor.userId()===data.owner.userId) {
+      appointmentWith = data.client;
+      currentUser = data.owner;
+    }
     // console.log("This Props", this.props);
     return (
       <div className="ml_tabs">
@@ -108,34 +113,34 @@ export default class MlAppServicePurchasedDetail extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={data.client.userId} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User Id" value={currentUser.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Date & Time" value={data.createdAt} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={data.client.name} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Name" value={currentUser.name} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" value={data.client.email} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email ID" value={currentUser.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" value={data.client.phoneNo} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Phone no" value={currentUser.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={data.client.cluster} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={currentUser.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={data.client.chapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={currentUser.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={data.client.subChapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Sub Chapter" value={currentUser.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={data.client.community} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={currentUser.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <a className="fileUpload mlUpload_btn" onClick={() => { this.setState({ showCancelModal: true }) }}>Cancel</a>
                 <AppointmentModal
@@ -169,34 +174,35 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                   <input type="text" placeholder="Transaction ID" value={data.orderId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Appointment With" value={data.owner.name} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Appointment With" defaultValue="" className="form-control float-label" id=""
+                         value={appointmentWith.name}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={data.owner.userId} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="User Id" value={appointmentWith.userId} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={data.owner.community} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Community" value={appointmentWith.community} defaultValue="" className="form-control float-label" id="" />
                 </div>
               </div>
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <input type="text" placeholder="subChater" value={data.owner.subChapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="subChater" value={appointmentWith.subChapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={data.owner.chapter} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Chapter" value={appointmentWith.chapter} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={data.owner.cluster} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Cluster" value={appointmentWith.cluster} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Contact Number" value={data.owner.phoneNo} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Contact Number" value={appointmentWith.phoneNo} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email Id" value={data.owner.email} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Email Id" value={appointmentWith.email} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Gender" value={data.owner.gender} defaultValue="" className="form-control float-label" id="" />
+                  <input type="text" placeholder="Gender" value={appointmentWith.gender} defaultValue="" className="form-control float-label" id="" />
                 </div>
                 {/*<a href="#" className="fileUpload mlUpload_btn">Cancel</a> <a href="#" className="fileUpload mlUpload_btn">Sign Off</a>*/}
               </div>

@@ -287,7 +287,9 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
           hours
           minutes
         }
-        attachments{
+        beSpokeAttachments{
+          fileName
+          fileSize
           fileUrl
         }
       }

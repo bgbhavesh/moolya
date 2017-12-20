@@ -295,8 +295,16 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
     {
       let communityDetails=mlDBController.findOne('MlCommunityDefinition', {code: profile.communityDefCode}, context) || {};
       if(communityDetails) {profile.communityImage=communityDetails.communityImageLink}
+
+      if(profile.accountType){
+        let AccountType=mlDBController.findOne('MlAccountTypes', {_id: profile.accountType}, context) || {};
+        if(AccountType.accountDisplayName)
+          profile.accountType = AccountType.accountDisplayName;
+      }
+
       return profile;
     })
+
     return userProfiles;
   }else {
     let code = 409;

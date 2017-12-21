@@ -178,7 +178,7 @@ export default MlAccounts=class MlAccounts {
       this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
 
       //on successful email verification
-      MlSMSNotification.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
+      //MlSMSNotification.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
     }
 
     return {
@@ -248,9 +248,7 @@ export default MlAccounts=class MlAccounts {
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
       "\n\nTeam moolya\n";*/
-      msg= "Thank you for registering with moolya!"+"Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons."+
-        "Regards,"+"Team moolya";
-
+      msg= "Your email-id has been verified."+"Please use "+otpNum+" as OTP to verify your mobile number when prompted. Do not share this OTP with anyone. - Team moolya"
     }
 
     //send SMS

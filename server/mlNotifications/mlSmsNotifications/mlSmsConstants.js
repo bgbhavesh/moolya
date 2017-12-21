@@ -3,7 +3,7 @@
  */
 const SMS = [
   {
-    SMS_EMAIL_VERIFIED: "Congratulations! Your moolya account login has\n now been verified and activated. Login to moolya\n now!"},
+    SMS_EMAIL_VERIFIED: "Congratulations! We have received your details. Please check your email for next steps. - Team moolya"},
   {
     KYC_APPROVED:"Your KYC have been approved by the Admin. Please login to your moolya account and complete the next steps. Thank you."
   },

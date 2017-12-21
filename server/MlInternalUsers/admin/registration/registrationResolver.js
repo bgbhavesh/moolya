@@ -125,6 +125,8 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
+    //sms to be sent on new moolya registration
+    MlSMSNotification.sendSMSonSuccessfulEmailVerification(id)
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: id}, context, info);
     validationCheck = MlRegistrationPreCondition.validateActiveCommunity(id, args.registration);
     if (validationCheck && !validationCheck.isValid) {
@@ -346,6 +348,8 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     //  let updatedResponse = mlDBController.update('MlRegistration',response,updateRecord, {$set: true}, context)
       let regRec = mlDBController.findOne('MlRegistration', {transactionId:transactionId}, context);
       if(regRec){
+         //sms to be sent on new moolya registration
+        MlSMSNotification.sendSMSonSuccessfulEmailVerification(regRec&&regRec._id?regRec._id:"")
          let updatedResponse = mlDBController.update('MlRegistration',regRec._id,{'registrationInfo.registrationId':transactionId}, {$set: true}, context);
          MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: regRec._id}, context, info);
          // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);

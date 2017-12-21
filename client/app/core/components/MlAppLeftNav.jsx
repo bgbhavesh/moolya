@@ -44,7 +44,7 @@ export default class MlAppLeftNav extends Component {
       $(document).ready(()=>{
         $('.menu_item a').click(function(event) {
           // Do the async thing
-          let margin = $(".mCSB_container").css("top");
+          let margin = $(".app_menu .mCSB_container").css("top");
           let obj={};
           obj.top =margin;
           obj.name=mname;
@@ -62,7 +62,7 @@ export default class MlAppLeftNav extends Component {
 
       if(topscroll && topscroll.top && topscroll.name === mname) {
         setTimeout(function () {
-          $(".mCSB_container").css({"top": topscroll.top});
+          $(".app_menu .mCSB_container").css({"top": topscroll.top});
           // $(".admin_menu .scrollarea-content").refresh();
           // $("#mCSB_1_container").animate({ scrollTop: -margin });
 

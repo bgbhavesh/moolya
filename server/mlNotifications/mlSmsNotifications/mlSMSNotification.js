@@ -59,7 +59,7 @@ const MlSMSNotification= class MlSMSNotification{
     }
   }
 
-  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
+  static sendSMSonSuccessfulEmailVerification(regId){
     var regDetails = mlDBController.findOne('MlRegistration',{_id:regId});
     if(!regDetails){
       throw new Error(403, "Mobile Number entered  is not registered");
@@ -67,6 +67,7 @@ const MlSMSNotification= class MlSMSNotification{
     var countryCode = (regDetails.registrationInfo||{}).countryId;
     var sms = _.find(mlSMSConst, 'SMS_EMAIL_VERIFIED')
     var msg= sms.SMS_EMAIL_VERIFIED
+    var mobileNumber =  regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.contactNumber?regDetails.registrationInfo.contactNumber:""
     mlSmsController.sendSMS(msg, countryCode, mobileNumber)
   }
 

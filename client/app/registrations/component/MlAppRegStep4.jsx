@@ -15,7 +15,7 @@ import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import MlLoader from "../../../commons/components/loader/loader";
 import _underscore from "underscore";
 import generateAbsolutePath from "../../../../lib/mlGenerateAbsolutePath"
-import {validatedURL} from "../../../commons/validations/mlfieldValidation";
+import {validatedURL, isUrl} from "../../../commons/validations/mlfieldValidation";
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var diff = require('deep-diff').diff;
@@ -168,7 +168,7 @@ export default class MlAppRegStep4 extends React.Component {
     refs.push(this.refs["socialLinkTypeUrl"])
     let ret = mlFieldValidations(refs)
     let socialLinkURL = this.refs["socialLinkTypeUrl"].value
-    let isValidURL = validatedURL(socialLinkURL);
+    let isValidURL = isUrl(socialLinkURL);
 
     if (ret) {
       toastr.error(ret);

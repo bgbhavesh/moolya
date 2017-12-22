@@ -90,18 +90,23 @@ export default class BeSpokeHandler extends Component {
 
 
   handleBlur(value, name) {
-    let details = this.state.details;
-    details = _.omit(details, [name]);
-    details = _.extend(details, { [name]: value });
-    this.setState({ details: details })
-    if (name === "hours") {
-      this.setState({ hour: value })
-      this.handleDuration()
-    } else if (name === "minutes") {
+    let { details } = this.state;
+    // details = _.omit(details, [name]);
+    // details = _.extend(details, { [name]: value });
+    // this.setState({ details: details })
+    if(name === 'minutes'){
       if(value > 59) value = 59;
-      this.setState({ minute: value })
-      this.handleDuration();
     }
+    details.duration[name] = value?parseInt(value):0;
+    this.setState({ details })
+
+    // if (name === "hours") {
+    //   this.setState({ hour: value },this.handleDuration())
+    //
+    // } else if (name === "minutes") {
+    //   if(value > 59) value = 59;
+    //   this.setState({ minute: value },this.handleDuration())
+    // }
   }
 
   /**
@@ -191,7 +196,7 @@ export default class BeSpokeHandler extends Component {
 
    /**
    * Method :: saveBeSpokeServiceDetails
-   * Description :: Saves the data 
+   * Description :: Saves the data
    * @params ::  No params
    * returns ::  response from the server
    **/
@@ -316,7 +321,7 @@ export default class BeSpokeHandler extends Component {
     }
   }
 
-  
+
   DataToBeSet(response, name) {
     if (name === 'mode') {
       let details = this.state.details;

@@ -7,7 +7,8 @@ import {addTemplateAssignmentActionHandler} from '../actions/addTemplateAssignme
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import MlStepAvailability from './MlStepAvailabilityComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -285,7 +286,7 @@ class MlAssignTemplate extends React.Component{
                 <h2>Template Assignment</h2>
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg left_wrap">
-                    <ScrollArea
+                    <Scrollbars
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
@@ -325,12 +326,12 @@ class MlAssignTemplate extends React.Component{
                           <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>
                       </form>
-                    </ScrollArea>
+                    </Scrollbars>
                   </div>
                 </div>
                 <div className="col-md-6 nopadding-right">
                   <div className="form_bg left_wrap">
-                    <ScrollArea
+                    <Scrollbars
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
@@ -365,7 +366,7 @@ class MlAssignTemplate extends React.Component{
                           </div>
                         </div>
                       </div>
-                    </ScrollArea>
+                    </Scrollbars>
                   </div>
                 </div>
                 {/*<span className="actions_switch show_act"></span>

@@ -54,13 +54,11 @@ componentDidMount(){
 }
 
 previewHandler(link) {
-  console.log(link)
   if(link.endsWith('.pdf') || link.endsWith('.doc') || link.endsWith('.docx') || link.endsWith('.xls') || link.endsWith('.xlsx')) this.setState({fileFormat: "Document"})
   else if(link.endsWith('.jpg') || link.endsWith('.jpeg') || link.endsWith('.png')) this.setState({fileFormat: "Image"})
   else if(link.endsWith('.mp4')) this.setState({fileFormat: "Video"})
   this.setState({previewTemplate: generateAbsolutePath(link)})
 }
-
 
     render() {
       var videoJsOptions = [{
@@ -118,6 +116,7 @@ previewHandler(link) {
                 <div className="swiper-container manage_tasks">
                   <div className="manage_swiper swiper-wrapper">
                   {this.props.attach.map(function(details, index){return(
+                    details.fileUrl ?
                    <div className="upload-image">
                       <a href="" data-toggle="modal" data-target=".templatepop">
                       {details.fileUrl.endsWith('.pdf') || details.fileUrl.endsWith('.doc') || details.fileUrl.endsWith('.docx') || details.fileUrl.endsWith('.xls') || details.fileUrl.endsWith('.xlsx') ?
@@ -125,9 +124,10 @@ previewHandler(link) {
                       :details.fileUrl.endsWith('.png') || details.fileUrl.endsWith('.jpg') || details.fileUrl.endsWith('.jpeg') ? <img src={generateAbsolutePath(details.fileUrl)} id="output" onClick={that.previewHandler.bind(that,details.fileUrl)}/>
                       :details.fileUrl.endsWith('.mp4')?<a onClick={that.previewHandler.bind(that,details.fileUrl)}><video style={{"width": "100%","height":"100%"}} onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls><source src={generateAbsolutePath(details.fileUrl)} type="video/mp4"></source></video></a>
                       :<div></div>}
-                       <div className="title">{details.fileName}</div>
                       </a>
-                  </div> )})}        
+                      <div className="title">{details.fileName}</div>
+                  </div> :"")})}        
+                               
                 </div>
               </div>
             </div>

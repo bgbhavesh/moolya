@@ -6,7 +6,8 @@ import React from 'react';
 import {requestedAppointmentActionHandler, getBeSpokeForAppointments} from '../actions/fetchRequestedAppointments';
 import NoDataList from '../../../../commons/components/noData/noDataList';
 import MlLoader from "../../../../commons/components/loader/loader";
-import BeSpokeView from "../../../../admin/transaction/portfolio/component/Funders/edit/Services/Presentation/beSpokeView"
+import BeSpokeView from "../../../../admin/transaction/portfolio/component/Funders/edit/Services/Presentation/beSpokeView";
+import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
 export default class MlAppRequestedMyAppointment extends React.Component {
 
   constructor(props){
@@ -60,18 +61,19 @@ export default class MlAppRequestedMyAppointment extends React.Component {
           <div className="tab_wrap_scroll ideators_list">
             {appointments.map(function (appointment, index) {
               return (
-                <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index}>
-                  <div className="ideators_list_block" onClick={that.selectedAppointment.bind(that,appointment )}>
-                    <div className="inactive"><span>inactive</span></div>
-                    {/*<div className="hex_outer"><img src="/images/valuation.png"/></div>
-                     <div className="task-status pending"></div>*/}
-                    <h3>{appointment.displayName ? appointment.displayName : 'Bespoke Service'}</h3>
-                    <img src="/images/valuation.png" className="c_image"/>
-                    <div className="block_footer">
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                <div className="card_block appointment_card"  onClick={that.selectedAppointment.bind(that,appointment )}><h3>{appointment.displayName}</h3>
+                  <div className="clearfix"></div>
+                  <div className="list_icon mart0">
+                    <span className="profile-text">By</span>
+                    <button className={`btn ${appointment.mode === 'online' ? 'btn-danger' : 'btn-success'} pull-right`}>{appointment.mode}</button>
+                    <div className="clearfix"></div>
+                    <img className="c_image" src={appointment.beSpokeCreatorProfileImage?generateAbsolutePath(appointment.beSpokeCreatorProfileImage):'/images/def_profile.png'}/>
+                    <div className="clearfix"></div>
+                    <span className="price">{appointment.duration ? `${appointment.duration.hours ? appointment.duration.hours : 0} Hrs ${appointment.duration.minutes ? appointment.duration.minutes : 0} Mins` : ''}</span>
+                    <span className="price pull-right">{`${appointment.noOfSession ? appointment.noOfSession : '0'} Sessions`}</span>
+                  </div><div className="block_footer"><span>{"BeSpoke"}</span></div></div>
+              </div>
               )
             })}
           </div>)

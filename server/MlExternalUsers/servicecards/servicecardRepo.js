@@ -502,7 +502,7 @@ class MlServiceCardRepo{
           serviceCard["isExpired"] = false;
           serviceCard["startDate"] = new Date();
           serviceCard["orderId"] = orderId;
-          serviceCard["expiryDate"] = this.getServicecardExpiryDate(serviceDef.sessionFrequency)
+          serviceCard["expiryDate"] = this.getServicecardExpiryDate(serviceDef.sessionFrequency,serviceDef.serviceExpiry)
           // Need to add these two fields
           //serviceCard["transactionId"] = new Date();
           //serviceCard["serviceName"] = new Date();
@@ -537,7 +537,7 @@ class MlServiceCardRepo{
     return new MlRespPayload().successPayload(result, 200);
     }
 
-    getServicecardExpiryDate(frequencyString){
+    getServicecardExpiryDate(frequencyString, serviceExpiry){
       var frequency;
       switch (_.toUpper(frequencyString)){
         case 'WEEKLY':{
@@ -548,8 +548,16 @@ class MlServiceCardRepo{
           frequency = 30;
         }
         break
+        case 'QUARTERLY':{
+          frequency = 90;
+        }
+        break
         case 'YEARLY':{
           frequency = 365;
+        }
+        break;
+        case 'ONETIME':{
+          frequency = serviceExpiry||1;
         }
         break;
       }

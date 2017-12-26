@@ -127,7 +127,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     let currentUser = this.state.data.owner;
     let appointmentWith = this.state.data.client;
 
-    if(Meteor.userId()===this.state.data.owner.userId) {
+    if(Meteor.userId()===this.state.data.client.userId) {
       currentUser = this.state.data.client;
       appointmentWith = this.state.data.owner;
     }

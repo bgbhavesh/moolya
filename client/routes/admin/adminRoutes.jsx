@@ -343,7 +343,7 @@ adminSection.route('/transactions/editRequests/:id', {
 adminSection.route('/transactions/editApprovedRequests/:id', {
   name: 'transaction_registration_approved_edit',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'approved',transactionsRegistrations:'registrationApprovedList'}} />, adminContent:<RegistrationWizard config={params.id}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registrations', subModule:'approved',transactionsRegistrations:'registrationApprovedList'}} />, adminContent:<RegistrationWizard config={params.id} isApprovedList={true}/>})
   }
 });
 

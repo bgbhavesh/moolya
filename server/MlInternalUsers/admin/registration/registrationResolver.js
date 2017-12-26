@@ -443,7 +443,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
 }
 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
- 
+
   if (args.registrationId) {
     var updatedResponse;
     var validationCheck = null;
@@ -461,14 +461,17 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     if (validationCheck && !validationCheck.isValid) {
       return validationCheck.validationResponse;
     }
-  
-      
-    if (args && args.registrationDetails && !args.registrationDetails.identityType && args.registrationDetails.registrationType!='OFB') {
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Identity Type is required", code);
-      return response;
+
+
+    if (args && args.registrationDetails && !args.registrationDetails.identityType) {
+      if(!(args.registrationDetails.registrationType==="OFB" || args.registrationDetails.registrationType==="BRW")){
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Identity Type is required", code);
+        return response;
+      }
+
     }
-    
+
 
     if (args.registrationDetails) {
       let details = args.registrationDetails || {};

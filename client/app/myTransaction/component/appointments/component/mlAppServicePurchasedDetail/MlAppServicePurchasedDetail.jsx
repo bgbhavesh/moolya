@@ -9,6 +9,7 @@ import MlServiceCardsDetailsComponent from '../mlAppServiceDetails/MlserviceCard
 import AppointmentModal from './../AppointmentModal';
 import { cancelUserServiceCardOrder } from './../../action/cancelUserServiceCardOrder';
 import { signOffUserServiceCardOrder } from './../../action/signOffUserServiceCardOrder';
+import {fetchServiceByServiceId} from '../../action/findServiceCardDetails';
 
 export default class MlAppServicePurchasedDetail extends React.Component {
 
@@ -16,23 +17,63 @@ export default class MlAppServicePurchasedDetail extends React.Component {
     super(props);
     this.state = {
       orderId: props.orderId,
+      releasePayComponents:[],
+      amount:0,
       data: {
         client: {},
         owner: {},
         sessionInfo: [],
-        service: {}
+        service: {},
       }
     };
+    this.setPaymentAmount = this.setPaymentAmount.bind(this);
+    this.updateReleasePayCount = this.updateReleasePayCount.bind(this);
   }
 
   componentWillReceiveProps({ orderId }) {
     this.setState({ orderId }, () => {
       this.fetchAppServiceAppointmentByTransactionId();
     })
+
+    // this.setPaymentAmount();
   }
 
+  updateReleasePayCount(){
+    let releasePayComponents = this.state.releasePayComponents;
+    releasePayComponents.push(
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <div className="pull-right block_action"  onClick={e=>this.decreaseReleasePayCount()}><img
+            src="/images/remove.png"/></div>
+        </div>
+        <div className="panel-body">
+          <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Select Community</option></select></div></div></div>
+          <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name" /></div></div></div>
+          <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Enter Units" /></div></div></div>
+          <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
+        </div>
+      </div>
+    );
+    this.setState({releasePayComponents});
+  }
+
+  decreaseReleasePayCount(){
+    let releasePayComponents = this.state.releasePayComponents;
+    if(releasePayComponents && releasePayComponents.length>0){
+      releasePayComponents.splice(releasePayComponents.length-1,1);
+    }
+      this.setState({releasePayComponents});
+  }
   componentWillMount() {
     this.fetchAppServiceAppointmentByTransactionId();
+
+  }
+
+  async setPaymentAmount(){
+    let resp = await fetchServiceByServiceId(this.state.data.service._id);
+    let amount = 0;
+    if(resp.finalAmount) amount = resp.finalAmount;
+    this.setState({amount});
   }
 
   async signOffOrder() {
@@ -69,6 +110,7 @@ export default class MlAppServicePurchasedDetail extends React.Component {
           data: data
         });
       }
+      // this.setPaymentAmount();
     }
   }
 
@@ -222,8 +264,11 @@ export default class MlAppServicePurchasedDetail extends React.Component {
           </div>
           {/*fivth tab*/}
           <div className="tab-pane" id={`${data.orderId}5a`}>
-            <h3>Total Amount: 25,000 INR</h3>
+            <h3>{`Total Amount: ${data.totalAmount} INR`}</h3>
             <div className="panel panel-default">
+              <div className="panel-heading">
+                <div className="pull-right block_action"  onClick={e=>this.updateReleasePayCount()}><img src="/images/add.png"/></div>
+              </div>
               <div className="panel-body">
                 <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Select Community</option></select></div></div></div>
                 <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Search Person Name" /></div></div></div>
@@ -231,22 +276,9 @@ export default class MlAppServicePurchasedDetail extends React.Component {
                 <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
               </div>
             </div>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Service Provider</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Mohan Kumar" /></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5000 Units" /></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
-              </div>
-            </div>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-3 nopadding-left"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span>  <select className="form-control"><option>Investor</option></select></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Ramesh Jain" /></div></div></div>
-                <div className="col-md-3"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="5600 Units" /></div></div></div>
-                <div className="col-md-3 nopadding-right"><div className="form-group"><div className="jvFloat"><span className="placeHolder">Date</span><input type="text" className="form-control float-label" placeholder="Status" /></div></div></div>
-              </div>
-            </div>
+            {this.state.releasePayComponents&&this.state.releasePayComponents.map(obj=>{
+              return obj;
+            })}
           </div>
 
           <div className="tab-pane" id={`${data.orderId}6a`}>

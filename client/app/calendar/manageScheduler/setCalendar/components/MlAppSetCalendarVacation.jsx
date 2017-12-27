@@ -292,7 +292,7 @@ class MlAppSetCalendarVacation extends Component {
     return (
       <div className="step_form_wrap step3">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
-          <div className="wrap_left">
+          <div className="wrap_left" style={{"height":"365px"}}>
             <div className="col-md-6 nopadding-left">
             <form>
               <div className="form-group">

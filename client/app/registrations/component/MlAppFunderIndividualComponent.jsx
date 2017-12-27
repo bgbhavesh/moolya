@@ -43,7 +43,8 @@ export default class MlAppFunderIndividualComponent extends React.Component {
       citizenships: '',
       investingFrom: null,
       investmentAmount: '',
-      currency: null
+      currency: null,
+      isValidDOB:false
       // profession:''
 
     };
@@ -194,6 +195,12 @@ export default class MlAppFunderIndividualComponent extends React.Component {
   }
 
   async  updateregistration() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    }else if(this.state.isValidDOB){
+      toastr.error("Minimum Age for registration as 'Investor' is 18 years")
+    } else {
     let Details = null;
     Details = {
       registrationId: this.props.registrationId,
@@ -231,7 +238,7 @@ export default class MlAppFunderIndividualComponent extends React.Component {
     }
     return response;
   }
-
+  }
   updateRegistration() {
     const resp = this.updateregistration();
     return resp;
@@ -252,9 +259,11 @@ export default class MlAppFunderIndividualComponent extends React.Component {
       this.setState({loading: false, dateOfBirth: value});
     }
     if ((Math.abs(ageDate.getUTCFullYear() - 1970) >= 18)) {
+      this.setState({"isValidDOB" : false})
     }
     else {
-      toastr.error("Minimum Age for Registration is 18 years")
+      this.setState({"isValidDOB" : true})
+      toastr.error("Minimum Age for registration as 'Investor' is 18 years")
     }
   }
 

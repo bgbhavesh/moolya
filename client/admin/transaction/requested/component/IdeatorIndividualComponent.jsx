@@ -39,7 +39,8 @@ export default class IdeatorIndividualComponent extends React.Component{
       //identity:'',
       title:null,
       gender:null,
-      citizenships:null
+      citizenships:null,
+      isValidDOB:false
       // profession:''
 
     };
@@ -175,8 +176,9 @@ export default class IdeatorIndividualComponent extends React.Component{
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
+    }else if(this.state.isValidDOB){
+      toastr.error("Minimum age for 'Ideator' registration is 10 years")
     } else {
-
       let Details = null;
       Details = {
         registrationId: this.props.registrationId,
@@ -234,8 +236,10 @@ export default class IdeatorIndividualComponent extends React.Component{
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>10)){
+      this.setState({"isValidDOB" : false})
     }
     else{
+      this.setState({"isValidDOB" : true})
       toastr.error("Minimum age for 'Ideator' registration is 10 years")
     }
   }
@@ -426,8 +430,8 @@ export default class IdeatorIndividualComponent extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <span className={`placeHolder ${dateofbirthActive}`}>Date Of Birth</span>
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"dob"} inputProps={{readOnly:true}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Date Of Birth is required"/>
+                    {/* <span className={`placeHolder ${dateofbirthActive}`}>Date Of Birth</span> */}
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} ref={"dob"} inputProps={{readOnly:true, placeholder:"Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} isValidDate={ valid } data-required={true} data-errMsg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerDateOfBirth.bind(that)}/>
                     {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
                   </div>

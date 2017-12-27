@@ -132,7 +132,7 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
       toastr.error(ret);
     } else if(this.state.isValidDOB){
       toastr.error("Minimum Age for registration as 'Service Provider' is 18 years")
-    } else {
+    }else {
       let Details = null;
       Details = {
         registrationId: this.props.registrationId,

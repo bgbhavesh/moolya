@@ -1,0 +1,6 @@
+cordova-plugin-meteor-webapp@https://github.com/panter/cordova-plugin-meteor-webapp.git#7bb095ce393d17f662cc6bb596ce91acf743d17a
+cordova-plugin-wkwebview-engine@https://github.com/apache/cordova-plugin-wkwebview-engine.git#815ed0741b9ae30b343d6429bd8ff2ad37ec5790
+cordova-plugin-file@4.3.1
+cordova-plugin-file-transfer@1.6.1
+cordova.plugins.diagnostic@3.4.2
+cordova-plugin-inappbrowser@1.7.1

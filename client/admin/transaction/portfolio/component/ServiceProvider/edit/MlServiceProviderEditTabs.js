@@ -214,7 +214,6 @@ export default class MlServiceProviderEditTabs extends Component {
     return obj
   }
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp

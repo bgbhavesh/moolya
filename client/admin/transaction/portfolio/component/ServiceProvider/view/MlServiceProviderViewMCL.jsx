@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 import {
   fetchServiceProviderMemberships,
   fetchServiceProviderCompliances,
@@ -12,9 +13,7 @@ import {findAnnotations} from "../../../../../../commons/annotator/findAnnotatio
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails';
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
-import _ from "lodash";
-var FontAwesome = require('react-fontawesome');
-
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlServiceProviderViewMCL extends Component {
   constructor(props) {
@@ -38,51 +37,57 @@ export default class MlServiceProviderViewMCL extends Component {
 
   componentDidMount() {
     //this.initalizeAnnotaor()    
-    this.fetchPortfolioStartupDetails();
+    // this.fetchPortfolioStartupDetails();
     this.validateUserForAnnotation();
   }
-  componentDidUpdate(){
+
+  componentDidUpdate() {
     var WinHeight = $(window).height();
     var WinWidth = $(window).width();
-    var className = this.props.isAdmin?"admin_header":"app_header"
-    setTimeout (function(){
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
-    }
-  },200);
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    setTimeout(function () {
+      $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+      if (WinWidth > 768) {
+        $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
+      }
+    }, 200);
   }
 
   componentWillMount() {
-
+    const resp = this.fetchPortfolioStartupDetails();
+    return resp
   }
 
   async fetchPortfolioStartupDetails() {
     let that = this;
     let data = {};
-    let portfoliodetailsId = that.props.portfolioDetailsId;
+    let membershipDescription;
+    let compliancesDescription;
+    let licensesDescription;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const responseM = await fetchServiceProviderMemberships(portfoliodetailsId);
     if (responseM) {
-      this.setState({memberships: responseM});
+      data.memberships = responseM;
     }
     const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
     if (responseC) {
-      this.setState({compliances: responseC});
+      data.compliances = responseC;
     }
     const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
     if (responseL) {
-      this.setState({licenses: responseL});
+      data.licenses = responseL;
     }
-    this.setState({loading: false});
-    data = {
-      memberships: this.state.memberships,
-      licenses: this.state.licenses,
-      compliances: this.state.compliances
-    }
-    this.setState({data: data},function () {
+    // data = {
+    //   memberships: this.state.memberships,
+    //   licenses: this.state.licenses,
+    //   compliances: this.state.compliances
+    // }
+    membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
+    compliancesDescription = createValueFromString(data.compliances ? data.compliances.compliancesDescription : null);
+    licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
+    this.setState({ loading: false, data: data, membershipDescription, compliancesDescription, licensesDescription }, function () {
       this.fetchAnnotations();
     })
-
   }
 
   initalizeAnnotaor() {
@@ -170,22 +175,26 @@ export default class MlServiceProviderViewMCL extends Component {
 
   render() {
     const showLoader = this.state.loading;
+    const { membershipDescription, compliancesDescription, licensesDescription } = this.state;
     return (
       <div>
           {showLoader === true ? ( <MlLoader/>) : (
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
               <div className="main_wrap_scroll">
-                
                   <div className="col-md-6 col-sm-6 nopadding-left">
                     <div className="panel panel-default panel-form-view">
                       <div className="panel-heading">Memberships</div>
                       <div className="panel-body ">
 
-                        {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription :
-                          <div className="portfolio-main-wrap">
-                            <NoData tabName={this.props.tabName}/>
-                          </div>}
+                      {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
+                        <MlTextEditor
+                          value={membershipDescription}
+                          isReadOnly={true}
+                        /> :
+                        <div className="portfolio-main-wrap">
+                          <NoData tabName={this.props.tabName} />
+                        </div>}
 
                       </div>
                     </div>
@@ -196,7 +205,11 @@ export default class MlServiceProviderViewMCL extends Component {
                       <div className="panel-heading">Compliances</div>
                       <div className="panel-body ">
 
-                        {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription :
+                        {this.state.data.compliances && this.state.data.compliances.compliancesDescription ? 
+                          <MlTextEditor
+                            value={compliancesDescription}
+                            isReadOnly={true}
+                          /> :
                           <div className="portfolio-main-wrap">
                             <NoData tabName={this.props.tabName}/>
                           </div>}
@@ -208,7 +221,11 @@ export default class MlServiceProviderViewMCL extends Component {
                       <div className="panel-heading">Licenses</div>
                       <div className="panel-body ">
 
-                        {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription :
+                        {this.state.data.licenses && this.state.data.licenses.licensesDescription ?     
+                          <MlTextEditor
+                            value={licensesDescription}
+                            isReadOnly={true}
+                          /> :
                           <div className="portfolio-main-wrap">
                             <NoData tabName={this.props.tabName}/>
                           </div>}
@@ -216,7 +233,6 @@ export default class MlServiceProviderViewMCL extends Component {
                       </div>
                     </div>
                   </div>
-                
               </div>
             </div>
           )

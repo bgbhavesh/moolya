@@ -73,11 +73,27 @@ export default class MlInfiniteScrollComposer extends Component {
               if (!fetchMoreResult.data) {
                 return prev;
               }
-              let response = {
-                count: fetchMoreResult.data.data.count,
-                data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
-              };
-              // console.log(response);
+
+              let response={};
+
+              if(pagination){
+                response = {
+                  count: fetchMoreResult.data.data.count,
+                  data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
+                };
+              }else{
+                response = Object.assign({},{count:fetchMoreResult.data.count,data:[...fetchMoreResult.data.data]});
+              }
+
+
+              // let response = {
+              //   count: fetchMoreResult.data.count,
+              //   data : pagination ? fetchMoreResult.data.data :
+              //     Object.assign({},{data:[...fetchMoreResult.data.data]})
+              //   // prev.data.data.concat(fetchMoreResult.data.data.data)
+              //     // Object.assign({},{data:{count:fetchMoreResult.data.count,data:[...prev.data.data, ...fetchMoreResult.data.data]}})
+              // };
+
               return {
                 data: response
               }

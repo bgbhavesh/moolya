@@ -1,6 +1,9 @@
 import React from 'react';
 import {render} from 'react-dom';
 import NoData from '../../../../../../../commons/components/noData/noData';
+import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 
 
 export default class MlStartupViewLegalIssues extends React.Component {
@@ -93,9 +96,9 @@ export default class MlStartupViewLegalIssues extends React.Component {
   render() {
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div id="annotatorContent"> 
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12">
+      <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Legal Issue</h2>
           <div className="panel panel-default panel-form-view">

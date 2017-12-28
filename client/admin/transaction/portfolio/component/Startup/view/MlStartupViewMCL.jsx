@@ -153,7 +153,7 @@ export default class MlStartupViewMCL extends React.Component {
             smoothScrolling={true}
             default={true}
           >
-        {showLoader === true ? ( <MlLoader/>) : (
+        {/* {showLoader === true ? ( <MlLoader/>) : ( */}
 
             <div className="portfolio-main-wrap" id="annotatorContent">
               <h2>MCL</h2>
@@ -206,8 +206,8 @@ export default class MlStartupViewMCL extends React.Component {
 
 
           </div>
-          )
-        }
+          {/* )
+        } */}
           </ScrollArea>
         </div>
       </div>

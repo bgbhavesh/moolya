@@ -26,7 +26,7 @@ export default class MlServiceProviderMCL extends React.Component {
     this.onLockChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.updateprivateFields.bind(this)
-    this.fetchPortfolioDetails.bind(this);
+    // this.fetchPortfolioDetails.bind(this);
   }
 
   componentWillMount() {
@@ -152,22 +152,14 @@ export default class MlServiceProviderMCL extends React.Component {
     }, 200);
   }
 
-  // handleBlur(type, e) {
   handleBlur(value, keyName, object) {
-    console.log(value, keyName, object)
     let details = this.state.data;
-    // let name = e.target.name;
-    // let name = keyName;
-    // let mcl = details[type];
     let mcl = details[object];
     mcl = _.omit(details[object], keyName);
     if (details && mcl) {
-      // mcl[name] = e.target.value
-      // details[type] = mcl;
       mcl[keyName] = value.toString('html');
       details[object] = mcl;
     } else {
-      // details = _.extend(details, { [type]: { [name]: e.target.value } });
       details = _.extend(details, { [object]: { [keyName]: value.toString('html') } });
     }
     this.setState({ data: details, [keyName]: value }, function () {

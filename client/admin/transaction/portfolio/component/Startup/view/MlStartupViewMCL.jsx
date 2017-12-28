@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
@@ -9,7 +10,7 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations';
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
-import _ from 'lodash'
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -31,7 +32,6 @@ export default class MlStartupViewMCL extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
   }
 
   componentDidMount(){
@@ -46,34 +46,43 @@ export default class MlStartupViewMCL extends React.Component {
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
   }
-  componentWillMount(){
-    this.fetchPortfolioStartupDetails();
+
+  componentWillMount() {
+    const resp = this.fetchPortfolioStartupDetails();
+    return resp
   }
+
   async fetchPortfolioStartupDetails() {
     let that = this;
     let data = {};
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let membershipDescription;
+    let complianceDescription;
+    let licenseDescription;
+
+    let portfoliodetailsId = that.props.portfolioDetailsId;
     const responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM.memberships});
+      data.memberships = responseM.memberships;
     }
     const responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC.compliances});
+      data.compliances = responseC.compliances;
     }
     const responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL.licenses});
+      data.licenses = responseL.licenses;
     }
-    this.setState({loading: false});
-    data = {
-      memberships:this.state.memberships,
-      licenses: this.state.licenses,
-      compliances:this.state.compliances
-    }
-    this.setState({data:data})
-
+    // data = {
+    //   memberships:this.state.memberships,
+    //   licenses: this.state.licenses,
+    //   compliances:this.state.compliances
+    // }
+    membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
+    complianceDescription = createValueFromString(data.compliances ? data.compliances.complianceDescription : null);
+    licenseDescription = createValueFromString(data.licenses ? data.licenses.licenseDescription : null);
+    this.setState({ loading: false, data: data, membershipDescription, complianceDescription, licenseDescription })
   }
+
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -115,8 +124,6 @@ export default class MlStartupViewMCL extends React.Component {
     return response;
   }
 
-
-
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "startupMCL");
     let resp = JSON.parse(response.result);
@@ -138,12 +145,12 @@ export default class MlStartupViewMCL extends React.Component {
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
-
     return response;
   }
 
   render(){
     const showLoader = this.state.loading;
+    const { membershipDescription, complianceDescription, licenseDescription } = this.state;
     return (
       <div>
         <div className="tab_wrap_scroll">
@@ -162,49 +169,50 @@ export default class MlStartupViewMCL extends React.Component {
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership</div>
                   <div className="panel-body ">
-
-                    {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription :
+                    {this.state.data.memberships && this.state.data.memberships.membershipDescription ?
+                      <MlTextEditor
+                        value={membershipDescription}
+                        isReadOnly={true}
+                      /> :
                       <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
+                        <NoData tabName={this.props.tabName} />
                       </div>}
-
                   </div>
                 </div>
                 <div className="clearfix"></div>
-
-
               </div>
+
               <div className="col-md-6 col-sm-6 nopadding-right">
-
-
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
-
-                    {this.state.compliances && this.state.compliances.complianceDescription ? this.state.compliances.complianceDescription :
+                    {this.state.data.compliances && this.state.data.compliances.complianceDescription ?
+                      <MlTextEditor
+                        value={complianceDescription}
+                        isReadOnly={true}
+                      /> :
                       <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
+                        <NoData tabName={this.props.tabName} />
                       </div>}
-
                   </div>
                 </div>
                 <div className="clearfix"></div>
+
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Licenses</div>
                   <div className="panel-body ">
-
-                    {this.state.licenses && this.state.licenses.licenseDescription ? this.state.licenses.licenseDescription :
+                    {this.state.data.licenses && this.state.data.licenses.licenseDescription ?
+                      <MlTextEditor
+                        value={licenseDescription}
+                        isReadOnly={true}
+                      /> :
                       <div className="portfolio-main-wrap">
-                        <NoData tabName={this.props.tabName}/>
+                        <NoData tabName={this.props.tabName} />
                       </div>}
-
                   </div>
                 </div>
 
-
               </div>
-
-
           </div>
           )
         }

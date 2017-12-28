@@ -1,13 +1,12 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import MlLoader from '../../../../../../commons/components/loader/loader'
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
+import MlLoader from '../../../../../../commons/components/loader/loader'
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 import {fetchStartupPortfolioMemberships, fetchStartupPortfolioLicenses, fetchStartupPortfolioCompliances} from '../../../actions/findPortfolioStartupDetails'
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
-import _ from 'lodash';
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -27,10 +26,11 @@ export default class MlStartupMCL extends React.Component{
       privateFields:[]
     }
     this.onLockChange.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.updateprivateFields.bind(this)
-    this.fetchPortfolioDetails.bind(this);
+    // this.fetchPortfolioDetails.bind(this);
   }
+
   componentWillMount(){
    const resp = this.fetchPortfolioDetails();
    return resp
@@ -54,50 +54,49 @@ export default class MlStartupMCL extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const portfoliodetailsId=that.props.portfolioDetailsId;
+    let membershipDescription;
+    let complianceDescription;
+    let licenseDescription;
+    
     var responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
     var responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     var responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
 
     if(that.context.startupPortfolio && (that.context.startupPortfolio.memberships || that.context.startupPortfolio.compliances || that.context.startupPortfolio.licenses)){
-      this.setState({
-        memberships: that.context.startupPortfolio.memberships,
-        compliances: that.context.startupPortfolio.compliances,
-        licenses: that.context.startupPortfolio.licenses
-      });
       data = {
         memberships:that.context.startupPortfolio.memberships,
         compliances: that.context.startupPortfolio.compliances,
         licenses:that.context.startupPortfolio.licenses
       }
+      const editorValues = this.getBaseValues(data);
+      membershipDescription = editorValues.membershipDescription;
+      complianceDescription = editorValues.complianceDescription;
+      licenseDescription = editorValues.licenseDescription;
 
-      this.setState({loading: false,data:data}, () => {
-        var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
-        this.lockPrivateKeys('memberships', MprivateKeys);
-      });
-
-      this.setState({loading: false, data: data}, () => {
-        var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
+      this.setState({ loading: false, data: data, membershipDescription, complianceDescription, licenseDescription }, () => {
+        var CprivateKeys = responseC && responseC.compliances ? responseC.compliances.privateFields : [];
+        var MprivateKeys = responseM && responseM.memberships ? responseM.memberships.privateFields : [];
+        var LprivateKeys = responseL && responseL.licenses ? responseL.licenses.privateFields : [];
         this.lockPrivateKeys('licenses', LprivateKeys);
-      });
-
-      this.setState({loading: false, data: data}, () => {
-        var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
         this.lockPrivateKeys('compliances', CprivateKeys);
       });
-
+      
+      console.log("editorValues", editorValues);
     }else {
       var pf;
       if (responseM && responseM.memberships) {
         var object = responseM.memberships;
         object = _.omit(object, '__typename')
-        this.setState({memberships: object});
+        data.memberships = object;
+
         pf = object.privateFields;
       }
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
         object = _.omit(object, '__typename')
-        this.setState({compliances: object});
+        data.compliances = object;
 
         if(object.privateFields){
           pf = pf.concat(object.privateFields)
@@ -106,40 +105,56 @@ export default class MlStartupMCL extends React.Component{
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
         object = _.omit(object, '__typename')
-        this.setState({licenses: object});
+
+        data.licenses = object;
         if(object.privateFields){
           pf = pf.concat(object.privateFields)
         }
       }
-      this.setState({privateFields:pf});
-      data = {
-        memberships:this.state.memberships,
-        licenses: this.state.licenses,
-        compliances:this.state.compliances
-      }
-      this.setState({loading: false,data:data});
+      
+      const editorValues = this.getBaseValues(data);
+      membershipDescription = editorValues.membershipDescription;
+      complianceDescription = editorValues.complianceDescription;
+      licenseDescription = editorValues.licenseDescription;
+
+      console.log("editorValues", editorValues);
+      this.setState({ loading: false, data: data, privateFields: pf, membershipDescription, complianceDescription, licenseDescription });
       this.updateprivateFields();
     }
+  }
+
+  getBaseValues(data) {
+    membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
+    complianceDescription = createValueFromString(data.compliances ? data.compliances.complianceDescription : null);
+    licenseDescription = createValueFromString(data.licenses ? data.licenses.licenseDescription : null);
+    return { membershipDescription, complianceDescription, licenseDescription }
   }
 
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
   }
-  handleBlur(type, e){
+/**
+ * @function same as SPS
+ * @param {*html value} value 
+ * @param {* key in the object} keyName 
+ * @param {* tabName} object 
+ */
+  handleBlur(value, keyName, object) {
     let details = this.state.data;
-    let name  = e.target.name;
-    let mcl = details[type];
-    if(details && mcl){
-      mcl[name] = e.target.value
-      details[type] = mcl;
-    }else{
-      details=_.extend(details,{[type]:{[name]:e.target.value}});
+    let mcl = details[object];
+    mcl = _.omit(details[object], keyName);
+    if (details && mcl) {
+      mcl[keyName] = value.toString('html');
+      details[object] = mcl;
+    } else {
+      details = _.extend(details, { [object]: { [keyName]: value.toString('html') } });
     }
-    this.setState({data:details}, function () {
+    this.setState({ data: details, [keyName]: value }, function () {
       this.sendDataToParent()
     })
   }
+
   onLockChange(fieldName, type, tabName, e){
     var isPrivate = false;
     let details = this.state.data||{};
@@ -175,6 +190,7 @@ export default class MlStartupMCL extends React.Component{
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data.compliances) {
@@ -202,7 +218,6 @@ export default class MlStartupMCL extends React.Component{
     if(data['compliances'])
       data['compliances'] = _.omit(data['compliances'], ["privateFields"])
 
-
     this.props.getStartupMCL(data, this.state.privateKey)
   }
 
@@ -224,6 +239,7 @@ export default class MlStartupMCL extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    const { membershipDescription, complianceDescription, licenseDescription } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -233,9 +249,13 @@ export default class MlStartupMCL extends React.Component{
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership </div>
-                  <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="membershipDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.memberships&&this.state.data.memberships.membershipDescription?this.state.data.memberships.membershipDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
+                  <div className="panel-body">
+                    <div className="form-group nomargin-bottom panel_input">
+                      {/* <textarea placeholder="Describe..." name="membershipDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.memberships&&this.state.data.memberships.membershipDescription?this.state.data.memberships.membershipDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea> */}
+                      <MlTextEditor
+                        value={membershipDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "membershipDescription", "memberships")}
+                      />
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
                     </div>
                   </div>
@@ -243,38 +263,49 @@ export default class MlStartupMCL extends React.Component{
                 <div className="clearfix"></div>
               </div>
 
-
               <div className="col-md-6 col-sm-6 nopadding-right">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="complianceDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.compliances&&this.state.data.compliances.complianceDescription?this.state.data.compliances.complianceDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
+                    <div className="form-group nomargin-bottom panel_input">
+                      {/* <textarea placeholder="Describe..." name="complianceDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.compliances&&this.state.data.compliances.complianceDescription?this.state.data.compliances.complianceDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea> */}
+                      <MlTextEditor
+                        value={complianceDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "complianceDescription", "compliances")}
+                      />
                       <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate" onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
                     </div>
                   </div>
                 </div>
 
-
                 <div className="clearfix"></div>
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="licenseDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.licenses&&this.state.data.licenses.licenseDescription?this.state.data.licenses.licenseDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
+                    <div className="form-group nomargin-bottom panel_input">
+                      {/* <textarea placeholder="Describe..." name="licenseDescription" className="form-control float-label" id="cl_about" defaultValue={this.state.data&&this.state.data.licenses&&this.state.data.licenses.licenseDescription?this.state.data.licenses.licenseDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea> */}
+                      <MlTextEditor
+                        value={licenseDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "licenseDescription", "licenses")}
+                      />
                       <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate" onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
                     </div>
                   </div>
                 </div>
+
               </div>
         </div>
-
-)}
+        )}
       </div>
     )
   }
 };
+
 MlStartupMCL.contextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object,
 };
+
+/**
+ * @Note: licenseDescription key is been misplaced wrt licenseDescription
+ */

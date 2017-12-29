@@ -332,7 +332,7 @@ export default class MlAppNewSpokePerson extends React.Component {
             <div className="col-md-6">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName" data-required={true} data-errMsg="Office Name is required"/>
                   </div>
 

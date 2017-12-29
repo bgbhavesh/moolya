@@ -62,9 +62,12 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
               `[GraphQL Error] Message: ${message}, Location: ${locations}, Path: ${path}`),
           )
         if (networkError) {
-          if (networkError.statusCode === 401) {
+          if (networkError.statusCode === 200 && networkError.result && networkError.result.unAuthorized) {
+            FlowRouter.go('/unauthorize')
+          } else if (networkError.statusCode === 401) {
             logout();
-          } console.log(`[Network error] ${networkError}`)
+          }
+          console.log(`[Network error] ${networkError}`)
         }
       })
       const AddLink = new ApolloLink((operation, forward) => {

@@ -1435,7 +1435,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
     }
     else if (args.type == "KYCDOCUMENT") {
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
+      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[];
       if (registrationDetails.kycDocuments) {
         let existisngKYCDocs  = registrationDetails&&registrationDetails.kycDocuments&&registrationDetails.kycDocuments.length>0?registrationDetails.kycDocuments:[]
         let registrationKYCUpdatedDocs = []
@@ -1452,7 +1452,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
           });
         })
-
+        registrationKYCUpdatedDocs = _lodash.uniqBy(registrationKYCUpdatedDocs, function(elem) { return [elem.docTypeId, elem.documentId].join(); }); //to remove if there are any duplicate documents
         if(registrationKYCUpdatedDocs&&registrationKYCUpdatedDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,

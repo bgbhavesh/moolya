@@ -2,21 +2,18 @@
  * Created by Mukhil on 20/6/17.
  */
 
+var _ = require('lodash');
 import MlResolver from '../../commons/mlResolverDef';
 import MlRespPayload from '../../commons/mlPayload';
 import MlUserContext from '../../MlExternalUsers/mlUserContext';
 import MlSubChapterAccessControl from './../../mlAuthorization/mlSubChapterAccessControl';
 import mlServiceCardRepo from '../servicecards/servicecardRepo'
 
-var extendify = require('extendify');
-var _ = require('lodash');
-
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
   let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context);
   let userId = context.userId;
   if(portfolio){
     let profile = new MlUserContext().userProfileDetails(userId);
-    console.log(profile);
     var query = {
       userId: portfolio.userId,
       profileId:portfolio.profileId,
@@ -198,7 +195,6 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
         args.Services.isCurrentVersion = false;
       }
 
-      console.log(' args.Services', args.Services);
       let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
       if(result){
         let serviceInfo = args.Services;

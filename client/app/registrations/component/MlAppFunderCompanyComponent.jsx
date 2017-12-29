@@ -170,7 +170,7 @@ export default class MlAppFunderCompanyComponent extends React.Component {
       industry              :   existingObject.industry?existingObject.industry:null,
       subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
       stageOfCompany        :   existingObject.stageOfCompany?existingObject.stageOfCompany:null,
-      subsidaryCompany      :   existingObject.selectedSubsidaryComapny?existingObject.selectedSubsidaryComapny:null,
+      subsidaryCompany      :   existingObject.subsidaryCompany?existingObject.subsidaryCompany:null,
       registrationNumber    :   existingObject.registrationNumber?existingObject.registrationNumber:null,
       isoAccrediationNumber :   existingObject.isoAccrediationNumber?existingObject.isoAccrediationNumber:null,
       companyTurnOver       :   existingObject.companyTurnOver?existingObject.companyTurnOver:null,

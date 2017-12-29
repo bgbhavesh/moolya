@@ -403,7 +403,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
  *       2) "getting if any registration is other than pending or approved state"
  * */
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
-  let userId = context.userId
+  let userId = context.userId;
   if (userId) {
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if (profile) {
@@ -417,13 +417,13 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           "registrationInfo.communityDefCode": {$ne: "BRW"},
           "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
+         const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: registerId }) || {}
+         response.portfolioStatus = portfolioStatus && portfolioStatus.status ? portfolioStatus.status : "" ;
         if (_lodash.isEmpty(isAllowRegisterAs))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id;
-          const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: isAllowRegisterAs._id }) || {}
-          response.portfolioStatus = portfolioStatus.status;
         }
 
         if (response.status === "REG_USER_APR") {
@@ -1435,7 +1435,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
     }
     else if (args.type == "KYCDOCUMENT") {
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
+      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[];
       if (registrationDetails.kycDocuments) {
         let existisngKYCDocs  = registrationDetails&&registrationDetails.kycDocuments&&registrationDetails.kycDocuments.length>0?registrationDetails.kycDocuments:[]
         let registrationKYCUpdatedDocs = []
@@ -1452,7 +1452,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
           });
         })
-
+        registrationKYCUpdatedDocs = _lodash.uniqBy(registrationKYCUpdatedDocs, function(elem) { return [elem.docTypeId, elem.documentId].join(); }); //to remove if there are any duplicate documents
         if(registrationKYCUpdatedDocs&&registrationKYCUpdatedDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,

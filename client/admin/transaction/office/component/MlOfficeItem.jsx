@@ -355,7 +355,7 @@ export default class MlOfficeItem extends React.Component {
                     <div className="form-group">
                       <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" ></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>

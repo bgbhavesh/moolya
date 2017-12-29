@@ -448,7 +448,7 @@ export default class MlAppRegStep5 extends React.Component {
             var documentNames =  key.replace(/\b\w/g, l => l.toUpperCase())
             return (<div className="col-md-12" key={id}>
               <div key={key} className="row">
-                <h3>{documentNames}</h3>
+                <h3 className="sub-head-border">{documentNames}</h3>
                 {registrationDocumentsGroup[key].map(function (regDoc, idx) {
                   let documentExist = _.isEmpty(regDoc)
                   return (

@@ -526,7 +526,7 @@ export default class Step5 extends React.Component {
             return (
               <div>
                <div className="col-md-12"> <div key={key} className="row">
-                     <h3>{documentNames}</h3>
+                     <h3 className="sub-head-border">{documentNames}</h3>
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(

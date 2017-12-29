@@ -1,11 +1,16 @@
 import React from 'react';
-import {render} from 'react-dom';
 import NoData from '../../../../../../../commons/components/noData/noData';
-
+import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 
 export default class MlStartupViewLegalIssues extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      editorValue: createValueFromString(this.props.legalIssueDetails ? this.props.legalIssueDetails.legalDescription : null)
+    }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -17,9 +22,9 @@ export default class MlStartupViewLegalIssues extends React.Component {
     this.fetchAnnotations();
   }
 
-  componentWillMount(){
-    this.setState({loading: false});
-  }
+  // componentWillMount(){
+  //   this.setState({loading: false});
+  // }
 
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
@@ -62,8 +67,6 @@ export default class MlStartupViewLegalIssues extends React.Component {
     return response;
   }
 
-
-
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "startupLegalIssues");
     let resp = JSON.parse(response.result);
@@ -85,22 +88,26 @@ export default class MlStartupViewLegalIssues extends React.Component {
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
-
     return response;
   }
 
 
   render() {
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
-      <div>
+      <div id="annotatorContent"> 
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12">
+      <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Legal Issue</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.legalIssueDetails && this.props.legalIssueDetails.legalDescription ? this.props.legalIssueDetails.legalDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+                  <div>{this.props.legalIssueDetails && this.props.legalIssueDetails.legalDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
             </div>
           </div>
         </div>

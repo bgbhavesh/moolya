@@ -518,7 +518,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let {source,ipAddress,ipLocation,deviceName,deviceNumber}=registrationInfo;
       details=_.extend(details,{source:source,ipAddress:ipAddress,ipLocation:ipLocation,deviceName:deviceName,deviceNumber:deviceNumber});
 
-      //details.registrationDate = registerDetails && registerDetails.registrationDate ? registerDetails.registrationDate : new Date();
+      details.registrationDate = registerDetails && registerDetails.registrationDate ? registerDetails.registrationDate : new Date();
       //details.transactionUpdatedDate =  new Date();
       // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
       /**Fetch community Definition*/

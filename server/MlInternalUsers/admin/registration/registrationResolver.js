@@ -403,7 +403,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
  *       2) "getting if any registration is other than pending or approved state"
  * */
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
-  let userId = context.userId
+  let userId = context.userId;
   if (userId) {
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if (profile) {
@@ -417,13 +417,13 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           "registrationInfo.communityDefCode": {$ne: "BRW"},
           "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
+         const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: registerId }) || {}
+         response.portfolioStatus = portfolioStatus && portfolioStatus.status ? portfolioStatus.status : "" ;
         if (_lodash.isEmpty(isAllowRegisterAs))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id;
-          const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: isAllowRegisterAs._id }) || {}
-          response.portfolioStatus = portfolioStatus.status;
         }
 
         if (response.status === "REG_USER_APR") {

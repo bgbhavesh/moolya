@@ -4,6 +4,7 @@
 
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
+import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
@@ -60,6 +61,19 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
     args.taskDetails.isCurrentVersion = true;
     let res = mlDBController.insert('MlTask', args.taskDetails, context)
     if (res) {
+      new MlTransactionsHandler().recordTransaction({
+        'fromUserId': context.userId,
+        'moduleName': 'manageSchedule',
+        'activity': 'Task-Created',
+        'transactionType': 'manageSchedule',
+        'userId': context.userId,
+        'activityDocId': res,
+        'docId': res,
+        'transactionDetails': 'Task-Created',
+        'context': context || {},
+        'transactionTypeId': "manageSchedule",
+        'fromUserType': 'user'
+      });
       let code = 200;
       let result = res;
       let response = new MlRespPayload().successPayload(result, code);
@@ -165,6 +179,19 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
       }
       task.isCurrentVersion = false;
       let updatedOldVersionTask = mlDBController.update('MlTask', {_id: task._id}, task, {'$set':1}, context);
+      new MlTransactionsHandler().recordTransaction({
+        'fromUserId': context.userId,
+        'moduleName': 'manageSchedule',
+        'activity': 'Task-Updated',
+        'transactionType': 'manageSchedule',
+        'userId': context.userId,
+        'activityDocId': task._id,
+        'docId': task._id,
+        'transactionDetails': 'Task-Updated',
+        'context': context || {},
+        'transactionTypeId': "manageSchedule",
+        'fromUserType': 'user'
+      });
       args.taskDetails.isCurrentVersion = true;
       args.taskDetails.userId = task.userId;
       // args.taskDetails.transactionId = task.transactionId;

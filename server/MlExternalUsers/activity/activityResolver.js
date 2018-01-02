@@ -4,6 +4,7 @@
 
 import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
+import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 import MlUserContext from '../../MlExternalUsers/mlUserContext'
 var _ = require('lodash')
 
@@ -95,6 +96,19 @@ MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => 
     orderNumberGenService.createActivityId(args.Details);
     let result = mlDBController.insert('MlActivity', args.Details , context)
     if(result){
+      new MlTransactionsHandler().recordTransaction({
+        'fromUserId': context.userId,
+        'moduleName': 'manageSchedule',
+        'activity': 'Activity-Created',
+        'transactionType': 'manageSchedule',
+        'userId': context.userId,
+        'activityDocId': result,
+        'docId': result,
+        'transactionDetails': 'Activity-Created',
+        'context': context || {},
+        'transactionTypeId': "manageSchedule",
+        'fromUserType': 'user'
+      });
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -152,6 +166,19 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
 
     oldActiveActivity.isCurrentVersion = false;
     let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
+    new MlTransactionsHandler().recordTransaction({
+      'fromUserId': context.userId,
+      'moduleName': 'manageSchedule',
+      'activity': 'Activity-Updated',
+      'transactionType': 'manageSchedule',
+      'userId': context.userId,
+      'activityDocId': updatedOldVersionActivity,
+      'docId': updatedOldVersionActivity,
+      'transactionDetails': 'Activity-Updated',
+      'context': context || {},
+      'transactionTypeId': "manageSchedule",
+      'fromUserType': 'user'
+    });
     args.Details.isCurrentVersion = true;
     args.Details.userId = oldActiveActivity.userId
     args.Details.updatedAt = new Date();
@@ -164,6 +191,19 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     }
     let newVersionActivity = mlDBController.insert('MlActivity', args.Details , context);
     if(newVersionActivity){
+      new MlTransactionsHandler().recordTransaction({
+        'fromUserId': context.userId,
+        'moduleName': 'manageSchedule',
+        'activity': 'Activity-Created',
+        'transactionType': 'manageSchedule',
+        'userId': context.userId,
+        'activityDocId': newVersionActivity,
+        'docId': newVersionActivity,
+        'transactionDetails': 'Activity-Created',
+        'context': context || {},
+        'transactionTypeId': "manageSchedule",
+        'fromUserType': 'user'
+      });
       let code = 200;
       let result = newVersionActivity
       let response = new MlRespPayload().successPayload(result, code);

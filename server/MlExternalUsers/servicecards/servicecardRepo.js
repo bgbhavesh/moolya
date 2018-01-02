@@ -653,30 +653,30 @@ class MlServiceCardRepo{
             case "serviceCardCreated":
             new MlTransactionsHandler().recordTransaction({
               'fromUserId': fromUserId,
-              'moduleName': 'appointment',
+              'moduleName': 'manageSchedule',
               'activity': 'ServiceCard-Created',
-              'transactionType': 'appointment',
+              'transactionType': 'manageSchedule',
               'userId': userId,
               'activityDocId': resourceId,
               'docId': orderId,
               'transactionDetails': 'Service-Created',
               'context': context || {},
-              'transactionTypeId': "appointment",
+              'transactionTypeId': "manageSchedule",
               'fromUserType': fromUserType
             });
             break;
             case "serviceCardUpdated":
             new MlTransactionsHandler().recordTransaction({
               'fromUserId': fromUserId,
-              'moduleName': 'appointment',
+              'moduleName': 'manageSchedule',
               'activity': 'ServiceCard-Updated',
-              'transactionType': 'appointment',
+              'transactionType': 'manageSchedule',
               'userId': userId,
               'activityDocId': resourceId,
               'docId': orderId,
               'transactionDetails': 'Service-Updated',
               'context': context || {},
-              'transactionTypeId': "appointment",
+              'transactionTypeId': "manageSchedule",
               'fromUserType': fromUserType
             });
             break;

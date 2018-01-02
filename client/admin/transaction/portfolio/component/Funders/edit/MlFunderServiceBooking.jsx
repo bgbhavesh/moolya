@@ -318,7 +318,6 @@ export default class FunderAboutView extends React.Component{
                     </div>
                   </div>
                   <h1>
-                    Payment Gateway Here
                     <div className="ml_btn" style={{'textAlign':'center'}}><a href="" className="save_btn" onClick={this.payment.bind(this)}>Proceed</a>
                       <a href="" className="cancel_btn" onClick={ () => that.props.componentToView('landingPage') } >Cancel</a> </div>
                   </h1>

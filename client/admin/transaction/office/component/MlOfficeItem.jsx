@@ -257,19 +257,19 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" />
+                  <input type="text" placeholder="Order ID" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeSCDef.serviceCardName} className="form-control float-label" />
+                  <input type="text" placeholder="Subscription Name" value={this.state.officeSCDef.serviceCardName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeSC.totalusercount} className="form-control float-label" />
+                  <input type="text" placeholder="Total number of users" value={this.state.officeSC.totalusercount} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeSC.principalcount} className="form-control float-label" />
+                  <input type="text" placeholder="Total number of principal" value={this.state.officeSC.principalcount} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeSC.teamMembercount} className="form-control float-label" />
+                  <input type="text" placeholder="Total number of Team" value={this.state.officeSC.teamMembercount} className="form-control float-label" />
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
@@ -341,7 +341,7 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label"  />
+                      <input type="text" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label"  />
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
@@ -355,7 +355,7 @@ export default class MlOfficeItem extends React.Component {
                     <div className="form-group">
                       <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" ></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>
@@ -366,36 +366,47 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" />
+                  <input type="text" placeholder="Transaction Date & Time"
+                         value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.datetime )?
+                           moment(this.state.transInfo.paymentDetails.datetime).format('MM/DD/YYYY HH:mm:ss'):''} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" />
+                  <input type="text" placeholder="Transaction ID"
+                         value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.transactionId )?
+                    this.state.transInfo.paymentDetails.transactionId:''} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" defaultValue={`${this.state.currencySymbol} 25,000`}  value={`${this.state.currencySymbol} 25,000`} className="form-control float-label" />
+                  <input type="text" placeholder="Total amount paid"
+                         value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.totalAmountPaid )?
+                           `${this.state.currencySymbol} ${this.state.transInfo.paymentDetails.totalAmountPaid}`:''}
+                         className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" />
+                  <input type="text" placeholder="Payment mode"
+                         value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.paymentMode )?
+                           this.state.transInfo.paymentDetails.paymentMode:''} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card number" defaultValue="1234 2545 2565 4585" className="form-control float-label" />
+                  <input type="text" placeholder="Card number"  className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" defaultValue="Kiran Kumar" className="form-control float-label" />
+                  <input type="text" placeholder="Card Holder name" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" defaultValue="Null" className="form-control float-label" />
+                  <input type="text" placeholder="Promotion Code" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Code Amount" defaultValue="Null" className="form-control float-label" />
+                  <input type="text" placeholder="Code Amount" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="Null" className="form-control float-label" />
+                  <input type="text" placeholder="Status"
+                         value={(this.state.transInfo.paymentDetails && this.state.transInfo.paymentDetails.paymentStatus )?
+                           this.state.transInfo.paymentDetails.paymentStatus:''} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" defaultValue="Null" className="form-control float-label" />
+                  <input type="text" placeholder="Voucher Code" className="form-control float-label" />
                 </div>
               </div>
             </div>
@@ -404,18 +415,26 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device name" defaultValue="Ipad air 2" className="form-control float-label" />
+                  <input type="text" placeholder="Device name"  className="form-control float-label"
+                         value={(this.state.transInfo.deviceDetails && this.state.transInfo.deviceDetails.deviceName )?
+                           this.state.transInfo.deviceDetails.deviceName:''}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Device ID" defaultValue="L8125#585" className="form-control float-label" />
+                  <input type="text" placeholder="Device ID" className="form-control float-label"
+                         value={(this.state.transInfo.deviceDetails && this.state.transInfo.deviceDetails.deviceId )?
+                           this.state.transInfo.deviceDetails.deviceId:''}/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device IP" defaultValue="10.20.1.6" className="form-control float-label" />
+                  <input type="text" placeholder="Device IP"  className="form-control float-label"
+                         value={(this.state.transInfo.deviceDetails && this.state.transInfo.deviceDetails.ipAddress )?
+                           this.state.transInfo.deviceDetails.ipAddress:''}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="IP Location" defaultValue="Hyderabad" className="form-control float-label" />
+                  <input type="text" placeholder="IP Location"  className="form-control float-label"
+                         value={(this.state.transInfo.deviceDetails && this.state.transInfo.deviceDetails.ipAddress )?
+                           this.state.transInfo.deviceDetails.ipAddress:''}/>
                 </div>
               </div>
             </div>

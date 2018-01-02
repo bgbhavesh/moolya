@@ -19,6 +19,7 @@ export default class MlFunderInvestmentView extends React.Component {
       content: {},
       tabIndex: null
     }
+    this.selectedInvestmentIndex = 0;
     this.fetchPortfolioDetails.bind(this);
     this.viewDetails.bind(this)
     this.showDetails.bind(this)
@@ -113,7 +114,7 @@ export default class MlFunderInvestmentView extends React.Component {
       mouseDragging: 1,
       touchDragging: 1,
       releaseSwing: 1,
-      startAt: 0,
+      startAt: id ? id : this.selectedInvestmentIndex,
       scrollBar: $wrap.find('.scrollbar'),
       scrollBy: 1,
       speed: 300,
@@ -154,6 +155,7 @@ export default class MlFunderInvestmentView extends React.Component {
     let data = this.state.funderInvestmentList;
     let getData = data[id];
     let ary = []
+    this.selectedInvestmentIndex = id;
     ary.push(getData)
     if (this.state.content && this.state.content.annotator) {
       this.state.content.unbind();
@@ -175,7 +177,7 @@ export default class MlFunderInvestmentView extends React.Component {
   }
 
   render() {
-    let that = this;
+    const that = this;
     const showLoader = that.state.loading;
     const detailData = this.state.viewCurDetail && this.state.viewCurDetail.length > 0 ? this.state.viewCurDetail : [];
     const detailView = detailData.map(function (say, value) {
@@ -249,7 +251,7 @@ export default class MlFunderInvestmentView extends React.Component {
                         {/*view listing*/}
                         {investmentArray && investmentArray.map(function (details, idx) {
                           return (
-                            <li key={idx}>
+                            <li key={idx} className={idx == that.selectedInvestmentIndex ? "active" : ""}>
                               <div className="team-block" onClick={that.viewDetails.bind(that, idx)}>
                                 <h2>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h2>
                                 <h3>

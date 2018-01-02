@@ -1,22 +1,20 @@
 import React from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+var FontAwesome = require('react-fontawesome');
+// var Select = require('react-select');
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../../actions/findPortfolioFunderDetails";
 import NoData from '../../../../../../commons/components/noData/noData';
-import {initalizeFloatLabel } from "../../../../../utils/formElemUtil";
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-
+import { initalizeFloatLabel, OnLockSwitch, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
 import generateAbsolutePath from '../../../../../../../lib/mlGenerateAbsolutePath';
 
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
+// var options = [
+//   {value: 'Type of Funding', label: 'Type of Funding'},
+//   {value: '2', label: '2'}
+// ];
+// function logChange(val) {
+//   console.log("Selected: " + val);
+// }
 
 
 export default class MlFunderPrincipalTeamView extends React.Component {
@@ -37,52 +35,29 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     }
     this.selectedPrincipalIndex = 0;
     this.selectedTeamIndex = 0;
-    this.fetchPrincipalDetails.bind(this);
-    this.fetchTeamDetails.bind(this);
+    // this.fetchPrincipalDetails.bind(this);
+    // this.fetchTeamDetails.bind(this);
     return this;
   }
+
   componentWillMount() {
     this.fetchPrincipalDetails();
     this.fetchTeamDetails()
   }
+
   componentDidMount() {
     var WinWidth = $(window).width();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-    $("#create_client").popover({
-      'title' : 'Add New Member',
-      'html' : true,
-      'placement' : 'right',
-      'container' : '.admin_main_wrap',
-      'content' : $(".ml_create_client").html()
-    });
-    $("#team-list").popover({
-      'title' : 'Add New Member',
-      'html' : true,
-      'placement' : 'right',
-      'container' : '.admin_main_wrap',
-      'content' : $(".team-list-main").html()
-    });
-
     // if(WinWidth > 768){
     //   $(".medium-popover").mCustomScrollbar({theme:"minimal-dark"});
     // }
   }
+  
   /**
    * [.two] class is for principle
    * [.one] class is for team
    */
   componentDidUpdate(){
-    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    const className = this.props.isAdmin ? "admin_header" : "app_header";
     $('.two').click(function(){
       $('#details-div').show();
       $('.top-content').hide();
@@ -145,7 +120,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     if (WinWidth > 768) {
       $(".main_wrap_scroll").mCustomScrollbar({ theme: "minimal-dark" });
     }
-    initalizeFloatLabel();
+    // initalizeFloatLabel();
+    OnLockSwitch();
+    // dataVisibilityHandler();
   }
 
 
@@ -177,6 +154,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
+  
   onSelectTeam(index, e){
     _.each(this.state.funderTeamList[index], function (value, field) {
       if (typeof (field) == 'string')
@@ -188,6 +166,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
       $("#team"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
+
   render() {
     let that = this;
     const showLoader = that.state.loading;
@@ -219,8 +198,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <div onClick={that.onSelectPrincipal.bind(that, idx)}>
                                 <div className="ideators_list_block two">
                                   <div>
-                                  {/*<FontAwesome className='pull-left' name='trash-o'/>*/}
-                                  <FontAwesome className='pull-right' name='lock'/></div>
+                                    <FontAwesome className='pull-right' name='unlock' />
+                                    <input type="checkbox" className="lock_input" checked={principal.makePrivate} />
+                                  </div>
                                   <img src={principal.logo ? generateAbsolutePath(principal.logo.fileUrl) : "/images/def_profile.png"} className="c_image"/>
                                   <div className="block_footer nopadding"><p>{principal.firstName?principal.firstName:"" + " " + principal.lastName?principal.lastName:""}</p><p
                                     className="small">{principal.designation}</p></div>
@@ -263,7 +243,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div className="col-lg-12 col-md-12 col-sm-12">
                                     <div>
                                       <div className="list_block notrans funding_list">
-                                        <FontAwesome name='lock'/>
+                                        <FontAwesome className='pull-right' name='unlock'/>
+                                        <input type="checkbox" className="lock_input" checked={selectedPrincipal.makePrivate} />
                                         {/*<div className="cluster_status inactive_cl">*/}
                                           {/*<FontAwesome name='trash-o'/>*/}
                                         {/*</div>*/}
@@ -281,7 +262,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 </div>
                                 <div className="col-lg-8 col-md-8 col-sm-8">
                                   <div className="form_bg col-md-12">
-
                                       <dl>
                                         <dt>Name</dt>
                                         <dd>{selectedPrincipal.firstName?selectedPrincipal.firstName:"" + " " + selectedPrincipal.lastName?selectedPrincipal.lastName:""}</dd>
@@ -304,8 +284,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <dt>About</dt>
                                         <dd>{selectedPrincipal.aboutPrincipal ? selectedPrincipal.aboutPrincipal : ""}</dd>
                                       </dl>
-
-
                                   </div>
                                 </div>
                               </div>
@@ -329,7 +307,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 <div className="ideators_list_block one">
                                   <div>
                                     {/*<FontAwesome className='pull-left' name='trash-o'/>*/}
-                                    <FontAwesome className='pull-right' name='lock'/>
+                                    <FontAwesome className='pull-right' name='unlock'/>
+                                    <input type="checkbox" className="lock_input" checked={team.makePrivate} />
                                   </div>
                                   <img className="c_image" src={team.logo ? generateAbsolutePath(team.logo.fileUrl) : "/images/def_profile.png"}/>
                                   <div className="block_footer nopadding"><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
@@ -369,7 +348,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                   <div className="col-lg-12 col-md-12 col-sm-12">
                                     <div>
                                       <div className="list_block notrans funding_list">
-                                        <FontAwesome name='lock'/>
+                                        <FontAwesome className='pull-right' name='unlock' />
+                                        <input type="checkbox" className="lock_input" checked={selectedTeam.makePrivate} />
                                         {/*<div className="cluster_status inactive_cl">*/}
                                           {/*<FontAwesome name='trash-o'/>*/}
                                         {/*</div>*/}
@@ -417,112 +397,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               </div>
                             </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div style={{'display': 'none'}} className="ml_create_client">
-                <div className="medium-popover">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Upload Pic</span>
-                          <input type="file" className="upload"/>
-                        </div>
-                        <div className="previewImg ProfileImg">
-                          <img src="/images/ideator_01.png"/>
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Title" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-
-                      <div className="form-group">
-                        <input type="text" placeholder="First Name" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Last Name" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <Select
-                          name="form-field-name"
-                          options={options}
-                          value='Company Name'
-                          onChange={logChange}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <input type="text" placeholder="Duration in years" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Years of Experience" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Qualification" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="About" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn">Save</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{'display': 'none'}} className="team-list-main">
-                <div className="medium-popover">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Upload Pic</span>
-                          <input type="file" className="upload"/>
-                        </div>
-                        <div className="previewImg ProfileImg">
-                          <img src="/images/def_profile.png"/>
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Title" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-
-                      <div className="form-group">
-                        <input type="text" placeholder="First Name" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Last Name" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-
-                      <div className="form-group">
-                        <input type="text" placeholder="Designation" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Company Name" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Duration in years" className="form-control float-label"/>
-                        <FontAwesome name='unlock' className="input_icon"/>
-                      </div>
-
-                      <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn">Save</a>
                       </div>
                     </div>
                   </div>

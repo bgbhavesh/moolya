@@ -119,12 +119,21 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
      }
     return {'isValid':true};
   }
-  static  validateEmailClusterCommunity(registration) {
+
+/**
+ * @function used in the case of [RegisterAs]
+ * @param {*payload} registration 
+ */
+  static validateEmailClusterCommunity(registration) {
    // let clusterInfo=MlClusters.findOne({countryId:args.registration.countryId})
-    var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.clusterId":registration.clusterId},{"registrationInfo.registrationType":registration.registrationType}]})
+    // var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.clusterId":registration.clusterId},{"registrationInfo.registrationType":registration.registrationType}]})
+    var validate = MlRegistration.findOne({
+      "registrationInfo.email": registration.email,
+      "registrationInfo.clusterId": registration.clusterId,
+      "registrationInfo.registrationType": registration.registrationType,
+      status: { $nin: ['REG_USER_REJ', 'REG_ADM_REJ'] }
+    })
     if(validate){
-   /* var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
-    if(validate){*/
       let code = 409;
       let message ="Registration Exist"
       let errResp = new MlRespPayload().errorPayload(message, code);
@@ -132,6 +141,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
     return {'isValid':true};
   }
+
   static  validateEmail(registration) {
     // let clusterInfo=MlClusters.findOne({countryId:args.registration.countryId})
     var validate = MlRegistration.findOne({"registrationInfo.email":registration.email,status: { $nin: [ 'REG_USER_REJ','REG_ADM_REJ' ] }})

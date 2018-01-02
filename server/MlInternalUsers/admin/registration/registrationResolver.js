@@ -1081,8 +1081,8 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             if(allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
-            }else if(!allManditoryKYCuploaded){
-              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
+            }else if(!allManditoryKYCuploaded){     
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
             }
 
@@ -1146,7 +1146,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             let updateDocument = mlDBController.update('MlRegistration', args.registrationId,{'registrationInfo.transactionUpdatedDate': new Date()},{$set: true}, context)
             let updateRecord = {}
             if(allManditoryKYCuploaded){
-              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
             }else if(!allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');

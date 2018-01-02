@@ -1,5 +1,4 @@
-import React from "react";
-import {render} from "react-dom";
+import React, { Component } from "react";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 import {fetchfunderPortfolioInvestor} from "../../../actions/findPortfolioFunderDetails";
@@ -8,9 +7,10 @@ import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDet
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../../commons/components/loader/loader'
-import NoData from '../../../../../../commons/components/noData/noData'
+import NoData from '../../../../../../commons/components/noData/noData';
+import { OnLockSwitch, dataVisibilityHandler } from "../../../../../utils/formElemUtil";
 
-export default class MlFunderInvestmentView extends React.Component {
+export default class MlFunderInvestmentView extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -129,6 +129,11 @@ export default class MlFunderInvestmentView extends React.Component {
     this.viewDetails(id)
   }
 
+  componentDidUpdate(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
   componentWillMount() {
     this.fetchPortfolioDetails();
     let resp = this.validateUserForAnnotation();
@@ -151,6 +156,7 @@ export default class MlFunderInvestmentView extends React.Component {
   }
 
   viewDetails(id, e) {
+    this.resetAllLocks();
     this.setState({loading: true})
     let data = this.state.funderInvestmentList;
     let getData = data[id];
@@ -176,33 +182,51 @@ export default class MlFunderInvestmentView extends React.Component {
     })
   }
 
-  render() {
-    const that = this;
-    const showLoader = that.state.loading;
+  resetAllLocks() {
+    $(".list_left span").each(function () {
+      $("#" + this.id).removeClass('fa-lock').addClass('un_lock fa-unlock')
+    });
+  }
+
+  getCurrentDetailView(){ 
     const detailData = this.state.viewCurDetail && this.state.viewCurDetail.length > 0 ? this.state.viewCurDetail : [];
     const detailView = detailData.map(function (say, value) {
       return (
         <div key={value}>
           <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
           <ul className="list_left">
-            <li>Date : {say.dateOfInvestment} <FontAwesome name='lock'/></li>
-            <li>Company - {say.investmentcompanyName}<FontAwesome name='lock'/></li>
-            <li>Amount - {say.investmentAmount}<FontAwesome name='lock'/></li>
-            <li>Funding Type - {say.typeOfFundingName}<FontAwesome name='lock'/></li>
+            <li>Date1 : {say.dateOfInvestment} <FontAwesome name='unlock' className="un_lock" id="isDateOfInvestmentPrivate"/></li>
+            <li>Company - {say.investmentcompanyName}<FontAwesome name='unlock' className="un_lock" id="isCompanyNamePrivate"/></li>
+            <li>Amount - {say.investmentAmount}<FontAwesome name='unlock' className="un_lock" id="isInvestmentAmountPrivate"/></li>
+            <li>Funding Type - {say.typeOfFundingName}</li>
           </ul>
           <br className="brclear" />
-          {/*<p>Date
-            - {say.dateOfInvestment}<br/>
-            Company - {say.investmentcompanyName}<br/>
-
-            Amount - {say.investmentAmount}<br/>
-            Funding Type
-            - {say.typeOfFundingName}
-          </p>*/}
           <p>{say.aboutInvestment ? say.aboutInvestment : '--'}</p>
         </div>
       )
     })
+    return detailView;
+  }
+
+  render() {
+    const that = this;
+    const showLoader = that.state.loading;
+    // const detailData = this.state.viewCurDetail && this.state.viewCurDetail.length > 0 ? this.state.viewCurDetail : [];
+    // const detailView = detailData.map(function (say, value) {
+    //   return (
+    //     <div key={value}>
+    //       <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
+    //       <ul className="list_left">
+    //         <li>Date : {say.dateOfInvestment} <FontAwesome name='lock'/></li>
+    //         <li>Company - {say.investmentcompanyName}<FontAwesome name='lock'/></li>
+    //         <li>Amount - {say.investmentAmount}<FontAwesome name='lock'/></li>
+    //         <li>Funding Type - {say.typeOfFundingName}<FontAwesome name='lock'/></li>
+    //       </ul>
+    //       <br className="brclear" />
+    //       <p>{say.aboutInvestment ? say.aboutInvestment : '--'}</p>
+    //     </div>
+    //   )
+    // })
     let investmentArray = that.state.funderInvestmentList || [];
     if(_.isEmpty(investmentArray)){
       return (
@@ -232,6 +256,10 @@ export default class MlFunderInvestmentView extends React.Component {
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)}
                                key={idx}>
                             <div className="list_block notrans funding_list">
+                              <div>
+                                <FontAwesome className='pull-right' name='unlock' />
+                                <input type="checkbox" className="lock_input" checked={details.makePrivate} />
+                              </div>
                               <div><p>{details.investmentcompanyName}</p><p className="fund">{details.investmentAmount}</p>
                                 <p>{details.typeOfFundingName}</p></div>
                               <h3>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h3>
@@ -276,11 +304,10 @@ export default class MlFunderInvestmentView extends React.Component {
                     <div className="col-lg-12" id="psContent">
                       <div className="row">
                         <div className="investement-view-content">
-
                           <div className="funding-investers" id="funding_show">
-                            {detailView}
+                            {/* {detailView} */}
+                            {this.getCurrentDetailView()}
                           </div>
-
                         </div>
                       </div>
                     </div>
@@ -291,6 +318,5 @@ export default class MlFunderInvestmentView extends React.Component {
         </div>
       )
     }
-
   }
 };

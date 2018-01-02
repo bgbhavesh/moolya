@@ -339,7 +339,7 @@ class MlAppInternalMyTaskItem extends React.Component{
     let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
   }
-  
+
   attachedDocuments() {
     let that = this;
     let documents = that.state.docs || [];
@@ -358,7 +358,8 @@ class MlAppInternalMyTaskItem extends React.Component{
 
   cancelDetails(){
     FlowRouter.setQueryParams({
-      add: null
+      add: null,
+      tab:null
     });
   }
 

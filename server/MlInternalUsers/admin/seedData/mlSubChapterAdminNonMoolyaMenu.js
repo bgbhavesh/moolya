@@ -238,43 +238,58 @@ if (Meteor.isServer) {
                   "subMenusId": "communities_chapters",
                   "hideSubMenu": true,
                   "subMenuMappingId": "communities_subChapters",
-                  "subMenu": [
+                  "subMenu":[
                     {
-                      "link": "/admin/community/subChapter/community/communityDetails",
-                      "name": "Community Details",
-                      "uniqueId": "communities_subChapters_communityDetails",
+                      "link": "/admin/community/chapter/subChapter/community",
+                      "name": "Community",
+                      "uniqueId": "communities_communities",
                       "isLink": true,
                       "isMenu": true,
                       "image": "",
                       "dynamicLink": true,
                       "dynamicLinkHandler": "",
+                      "hideSubMenu": true,
                       "subMenusId": "communities_subChapters",
-                      "subMenuMappingId": "communities_subChapters_communityDetails",
-                    },
-                    {
-                      "link": "/admin/community/subChapter/community/assignuser",
-                      "name": "Backend User",
-                      "uniqueId": "communities_subChapters_assignUsers",
-                      "isLink": true,
-                      "isMenu": true,
-                      "image": "",
-                      "dynamicLink": true,
-                      "dynamicLinkHandler": "",
-                      "subMenusId": "communities_subChapters",
-                      "subMenuMappingId": "communities_subChapters_assignUsers",
-                    },
-                    {
-                      "link": "/admin/community/history",
-                      "name": "History",
-                      "uniqueId": "community_subChapter_History_Details",
-                      "isLink": true,
-                      "isMenu": true,
-                      "image": "",
-                      "dynamicLink": true,
-                      "dynamicLinkHandler": "",
-                      "subMenusId": "communities_subChapters",
-                      "subMenuMappingId": "community_subChapter_History_Details"
-                    },
+                      "subMenuMappingId": "communities_communities",
+                      "subMenu": [
+                        {
+                          "link": "/admin/community/subChapter/community/communityDetails",
+                          "name": "Community Details",
+                          "uniqueId": "communities_subChapters_communityDetails",
+                          "isLink": true,
+                          "isMenu": true,
+                          "image": "",
+                          "dynamicLink": true,
+                          "dynamicLinkHandler": "",
+                          "subMenusId": "communities_communities",
+                          "subMenuMappingId": "communities_subChapters_communityDetails",
+                        },
+                        {
+                          "link": "/admin/community/subChapter/community/assignuser",
+                          "name": "Backend User",
+                          "uniqueId": "communities_subChapters_assignUsers",
+                          "isLink": true,
+                          "isMenu": true,
+                          "image": "",
+                          "dynamicLink": true,
+                          "dynamicLinkHandler": "",
+                          "subMenusId": "communities_communities",
+                          "subMenuMappingId": "communities_subChapters_assignUsers",
+                        },
+                        {
+                          "link": "/admin/community/history",
+                          "name": "History",
+                          "uniqueId": "community_subChapter_History_Details",
+                          "isLink": true,
+                          "isMenu": true,
+                          "image": "",
+                          "dynamicLink": true,
+                          "dynamicLinkHandler": "",
+                          "subMenusId": "communities_communities",
+                          "subMenuMappingId": "community_subChapter_History_Details"
+                        }
+                      ]
+                    }
                   ]
                 }
               ]

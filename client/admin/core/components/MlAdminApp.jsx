@@ -98,6 +98,9 @@ const query = gql`fragment subMenu on Menu{
                       ...subMenu
                           subMenu{
                              ...subMenu
+                                   subMenu{
+                                     ...subMenu
+                                   }
                                  }
                            }
                       }

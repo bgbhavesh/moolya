@@ -140,4 +140,9 @@ let update_progress=(e)=> {
 
 let start_progress=(e)=>{
   progressbar(0);
+  setTimeout(()=>{
+    removeProgressbar(()=>{
+      callback({success:false,code:500,result:"error"});
+    });
+  },5000);
 };

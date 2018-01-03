@@ -169,9 +169,9 @@ class MlEditBackendUser extends React.Component{
     const loggedInUser = getAdminUserContext();
     let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
-    let userProfiles = (response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
+    let userProfiles = (response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile
                     && response.profile.InternalUprofile.moolyaProfile.userProfiles)?
-      response.profile.InternalUprofile.moolyaProfile.userProfiles : '';
+      response.profile.InternalUprofile.moolyaProfile.userProfiles : [];
 
     let clusterId='';
     for(let i=0;i<userProfiles.length;i++){

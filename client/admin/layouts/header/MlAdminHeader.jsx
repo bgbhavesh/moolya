@@ -6,6 +6,7 @@ import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
 import BugReportWrapper from "../../commons/components/MlAdminBugReportWrapper";
 
 const build_versionToken = localStorage.getItem('build_version');
+const buildInstance = Meteor.settings.public.instance;
 
 export default class MlAdminHeader extends Component {
   constructor(props,context){
@@ -31,7 +32,7 @@ export default class MlAdminHeader extends Component {
         <BugReportWrapper />
 
         <MlAdminProfile/>
-          <span className="version">Ver.&beta;eta {build_versionToken}</span>
+          <span className="version"> {buildInstance} - Ver.&beta;eta {build_versionToken}</span>
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
           <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>

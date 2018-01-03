@@ -16,7 +16,6 @@ export default class MlFunderDayComponent extends Component {
   }
 
   componentWillMount(){
-    console.log(this.props);
     let that = this;
     let calendarInfo = this.props.dayData ? this.props.dayData.days : [];
     let expiry = this.props.dayData ?  this.props.dayData.expiryDate : ''

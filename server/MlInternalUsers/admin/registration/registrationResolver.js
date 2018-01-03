@@ -125,6 +125,8 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if (id) {
     mlRegistrationRepo.updateStatus(updateRecord,'REG_EMAIL_P');
     let updatedResponse = mlDBController.update('MlRegistration',id,updateRecord, {$set: true}, context)
+    //sms to be sent on new moolya registration
+    MlSMSNotification.sendSMSonSuccessfulEmailVerification(id)
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: id}, context, info);
     validationCheck = MlRegistrationPreCondition.validateActiveCommunity(id, args.registration);
     if (validationCheck && !validationCheck.isValid) {
@@ -346,6 +348,8 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     //  let updatedResponse = mlDBController.update('MlRegistration',response,updateRecord, {$set: true}, context)
       let regRec = mlDBController.findOne('MlRegistration', {transactionId:transactionId}, context);
       if(regRec){
+         //sms to be sent on new moolya registration
+        MlSMSNotification.sendSMSonSuccessfulEmailVerification(regRec&&regRec._id?regRec._id:"")
          let updatedResponse = mlDBController.update('MlRegistration',regRec._id,{'registrationInfo.registrationId':transactionId}, {$set: true}, context);
          MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: regRec._id}, context, info);
          // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
@@ -399,7 +403,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
  *       2) "getting if any registration is other than pending or approved state"
  * */
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
-  let userId = context.userId
+  let userId = context.userId;
   if (userId) {
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if (profile) {
@@ -413,13 +417,13 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           "registrationInfo.communityDefCode": {$ne: "BRW"},
           "status": {$nin: ["REG_USER_APR", 'REG_ADM_REJ', 'REG_USER_REJ']}
         })
+         const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: registerId }) || {}
+         response.portfolioStatus = portfolioStatus && portfolioStatus.status ? portfolioStatus.status : "" ;
         if (_lodash.isEmpty(isAllowRegisterAs))
           response.isAllowRegisterAs = true
         else {
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id;
-          const portfolioStatus = mlDBController.findOne('MlPortfolioDetails', { registrationId: isAllowRegisterAs._id }) || {}
-          response.portfolioStatus = portfolioStatus.status;
         }
 
         if (response.status === "REG_USER_APR") {
@@ -439,7 +443,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
 }
 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
- 
+
   if (args.registrationId) {
     var updatedResponse;
     var validationCheck = null;
@@ -457,14 +461,17 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     if (validationCheck && !validationCheck.isValid) {
       return validationCheck.validationResponse;
     }
-  
-      
-    if (args && args.registrationDetails && !args.registrationDetails.identityType && args.registrationDetails.registrationType!='OFB') {
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Identity Type is required", code);
-      return response;
+
+
+    if (args && args.registrationDetails && !args.registrationDetails.identityType) {
+      if(!(args.registrationDetails.registrationType==="OFB" || args.registrationDetails.registrationType==="BRW")){
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Identity Type is required", code);
+        return response;
+      }
+
     }
-    
+
 
     if (args.registrationDetails) {
       let details = args.registrationDetails || {};
@@ -511,7 +518,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let {source,ipAddress,ipLocation,deviceName,deviceNumber}=registrationInfo;
       details=_.extend(details,{source:source,ipAddress:ipAddress,ipLocation:ipLocation,deviceName:deviceName,deviceNumber:deviceNumber});
 
-      //details.registrationDate = registerDetails && registerDetails.registrationDate ? registerDetails.registrationDate : new Date();
+      details.registrationDate = registerDetails && registerDetails.registrationDate ? registerDetails.registrationDate : new Date();
       //details.transactionUpdatedDate =  new Date();
       // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
       /**Fetch community Definition*/
@@ -1074,8 +1081,8 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             if(allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
-            }else if(!allManditoryKYCuploaded){
-              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
+            }else if(!allManditoryKYCuploaded){     
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
             }
 
@@ -1139,7 +1146,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             let updateDocument = mlDBController.update('MlRegistration', args.registrationId,{'registrationInfo.transactionUpdatedDate': new Date()},{$set: true}, context)
             let updateRecord = {}
             if(allManditoryKYCuploaded){
-              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
+              mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
             }else if(!allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_REJ');
@@ -1428,7 +1435,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
     }
     else if (args.type == "KYCDOCUMENT") {
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
+      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[];
       if (registrationDetails.kycDocuments) {
         let existisngKYCDocs  = registrationDetails&&registrationDetails.kycDocuments&&registrationDetails.kycDocuments.length>0?registrationDetails.kycDocuments:[]
         let registrationKYCUpdatedDocs = []
@@ -1445,7 +1452,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
           });
         })
-
+        registrationKYCUpdatedDocs = _lodash.uniqBy(registrationKYCUpdatedDocs, function(elem) { return [elem.docTypeId, elem.documentId].join(); }); //to remove if there are any duplicate documents
         if(registrationKYCUpdatedDocs&&registrationKYCUpdatedDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,

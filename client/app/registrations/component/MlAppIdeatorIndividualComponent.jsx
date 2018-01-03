@@ -40,7 +40,8 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
       //identity:'',
       title: '',
       gender: '',
-      citizenships: ''
+      citizenships: '',
+      isValidDOB:false
       // profession:''
 
     };
@@ -180,8 +181,9 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
+    }else if(this.state.isValidDOB){
+      toastr.error("Minimum age for 'Ideator' registration is 10 years")
     } else {
-
       let Details = null;
       Details = {
         registrationId: this.props.registrationId,
@@ -234,9 +236,11 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
       this.setState({loading: false, dateOfBirth: value});
     }
     if ((Math.abs(ageDate.getUTCFullYear() - 1970) > 10)) {
+      this.setState({"isValidDOB" : false})
     }
     else {
-      toastr.error("Minimum Age for Registration is 10 years")
+      this.setState({"isValidDOB" : true})
+      toastr.error("Minimum age for 'Ideator' registration is 10 years")
     }
   }
 

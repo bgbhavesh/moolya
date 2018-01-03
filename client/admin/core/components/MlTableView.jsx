@@ -177,9 +177,14 @@ export default class MlTableView extends Component {
       // let pConfig=_.extend(this.props,{onFilterChange:this.onFilterChange.bind(this)});
        FilterComponent=React.cloneElement(this.props.filterComponent,{onFilterChange:this.onFilterChange.bind(this)});
     }
+    let endsAt = this.state.pageNumber*this.state.sizePerPage;
+    if(endsAt>totalDataSize) endsAt = totalDataSize;
+    let message = `Showing ${(this.state.pageNumber-1)*this.state.sizePerPage+1}-${endsAt} rows of ${totalDataSize}`;
+
     return (<div>{loading ? (<div className="loader_wrap"></div>) : (
       <div>
         {FilterComponent}
+        {totalDataSize>0 && <p className='showTotal'>{message}</p>}
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}

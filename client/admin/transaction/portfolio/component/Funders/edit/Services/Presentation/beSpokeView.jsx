@@ -1,3 +1,14 @@
+/** ************************************************************
+ * Date: 19 Jun, 2017
+ * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
+ * Description : This is the view layer of beSpoke
+ * JavaScript XML file beSpokeView.jsx
+ * *************************************************************** */
+
+/**
+ * Imports libs and components
+ */
+
 import React, {Component} from "react";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'

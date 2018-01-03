@@ -477,15 +477,15 @@ export default class AddressDetails extends React.Component{
         }
       }`
 
-    let statesQuery=gql`query ($countryId: String) {
-        data: fetchStatesPerCountry(countryId: $countryId) {
+    let statesQuery=gql`query ($countryId: String,$isActive : Boolean) {
+        data: fetchStatesPerCountry(countryId: $countryId, isActive : $isActive) {
         value: _id
         label: name
       }
     }`;
 
     let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
-    let statesOption={options: { variables: {countryId:this.state.countryId}}};
+    let statesOption={options: { variables: {countryId:this.state.countryId,isActive:false}}};
 
     return (
       <div className="panel-body">

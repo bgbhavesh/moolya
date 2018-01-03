@@ -15,7 +15,8 @@ import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import MlLoader from "../../../commons/components/loader/loader";
 import _underscore from "underscore";
 import generateAbsolutePath from "../../../../lib/mlGenerateAbsolutePath"
-import {validatedURL} from "../../../commons/validations/mlfieldValidation";
+import {validatedURL, isUrl} from "../../../commons/validations/mlfieldValidation";
+import CropperModal from '../../../commons/components/cropperModal';
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var diff = require('deep-diff').diff;
@@ -29,11 +30,15 @@ export default class MlAppRegStep4 extends React.Component {
       selectedTab: false,
       selectedAddressLabel: null,
       selectedValue: null,
+      uploadingAvatar: false,
+      showProfileModal: false,
       socialLinkObject: {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
       socialLinkArray: [],
       uploadedProfilePic: "/images/ideator_01.png",
       activeTab: "active",
     }
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +85,20 @@ export default class MlAppRegStep4 extends React.Component {
   optionsBySelectSocialLinkType(selectedIndex, handler, selectedObj) {
 
     this.setState({selectedValue: selectedIndex, selectedSocialLinkLabel: selectedObj.label});
+  }
+
+  handleUploadAvatar(image, e) {
+    this.setState({
+      //uploadingAvatar: true,,
+    });
+    this.onFileUpload(image, e);
+  }
+
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal,
+    });
   }
 
   updateOptions(index, did, selectedValue, selObject, callback) {
@@ -168,7 +187,7 @@ export default class MlAppRegStep4 extends React.Component {
     refs.push(this.refs["socialLinkTypeUrl"])
     let ret = mlFieldValidations(refs)
     let socialLinkURL = this.refs["socialLinkTypeUrl"].value
-    let isValidURL = validatedURL(socialLinkURL);
+    let isValidURL = isUrl(socialLinkURL);
 
     if (ret) {
       toastr.error(ret);
@@ -261,8 +280,8 @@ export default class MlAppRegStep4 extends React.Component {
     }
   }
 
-  onFileUpload(value) {
-    let file = document.getElementById("profilePic").files[0];
+  onFileUpload(value, fileInfo) {
+    let file = fileInfo;
     let data = {
       moduleName: "REGISTRATION",
       actionName: "UPLOAD",
@@ -279,10 +298,8 @@ export default class MlAppRegStep4 extends React.Component {
       // this.setState({registrationDocuments:resp})
       //refresh the registration data in the pare
       //this.props.getRegistrationKYCDetails();
-      this.setState({"uploadedProfilePic": resp.result})
+      this.setState({"uploadedProfilePic": resp.result, uploadingAvatar: false, showProfileModal: false})
       this.props.getRegistrationSocialLinks();
-
-
     }
   }
 
@@ -306,6 +323,12 @@ export default class MlAppRegStep4 extends React.Component {
      registrationDetails["socialLinksInfo"][index] = omitData
      this.setState({defaultData : registrationDetails});*/
 
+  }
+
+  cropperHandler() {
+    this.setState({
+      showProfileModal: true
+    })
   }
 
 
@@ -443,9 +466,16 @@ export default class MlAppRegStep4 extends React.Component {
                     <div className="previewImg ProfileImg">
                       <img src={generateAbsolutePath(this.props.uploadedProfileImg)}/>
                     </div>
-                    <div className="fileUpload mlUpload_btn">
+                    <div className="fileUpload mlUpload_btn" onClick={this.cropperHandler.bind(this)}>
                       <span>Profile Pic</span>
-                      <input type="file" accept=".jpg,.jpeg,.png" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+                      <CropperModal
+                        uploadingImage={this.state.uploadingAvatar}
+                        handleImageUpload={this.handleUploadAvatar}
+                        cropperStyle="circle"
+                        show={this.state.showProfileModal}
+                        toggleShow={this.toggleModal}
+                      />
+                      {/* <input type="file" accept=".jpg,.jpeg,.png" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/> */}
                     </div>
 
                   </div>

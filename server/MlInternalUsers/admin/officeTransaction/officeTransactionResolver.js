@@ -94,6 +94,17 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$unwind':'$officeSCDef'}
   ];
   let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
+  if(result && result.length>0){
+    result.map((obj)=>{
+      if(obj.office && obj.office.country){
+        let clusterData = mlDBController.findOne('MlClusters', {_id:obj.office.country});
+        obj.office.country='';
+        if(clusterData.countryName){
+          obj.office.country = clusterData.countryName;
+        }
+      }
+    });
+  }
   let code = 200;
   let response = new MlRespPayload().successPayload(result, code);
   return response;

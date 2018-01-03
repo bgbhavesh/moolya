@@ -1715,10 +1715,21 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       })
     // }
+    //
+    // const data = activeClusters;
+    // const totalRecords = activeClusters.length
+    // return {totalRecords: totalRecords, data: data};
 
     const data = activeClusters;
-    const totalRecords = activeClusters.length
-    return {totalRecords: totalRecords, data: data};
+    let totalRecords = activeClusters.length;
+
+    let clustersData = mlDBController.find('MlClusters', {isActive: true}, context).fetch();
+    if(clustersData && clustersData.length) {
+      totalRecords = clustersData.length;
+    }
+
+
+    return {count: totalRecords, data: data};
   }
   else if(args.module === "chapter"){
       var activeChapters = [];

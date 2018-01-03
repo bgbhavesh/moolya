@@ -17,7 +17,6 @@ export default class BeSpokeHandler extends Component {
       selectedIndustryType: [],
       responsePic: [],
       attachmentDocs: [{}],
-      uploadedProfilePic: "",
       data: {},
       emptyData: {},
       selectedIndex: 0,
@@ -91,19 +90,31 @@ export default class BeSpokeHandler extends Component {
 
 
   handleBlur(value, name) {
-    let details = this.state.details;
-    details = _.omit(details, [name]);
-    details = _.extend(details, { [name]: value });
-    this.setState({ details: details })
-    if (name === "hours") {
-      this.setState({ hour: value })
-      this.handleDuration()
-    } else if (name === "minutes") {
+    let { details } = this.state;
+    // details = _.omit(details, [name]);
+    // details = _.extend(details, { [name]: value });
+    // this.setState({ details: details })
+    if(name === 'minutes'){
       if(value > 59) value = 59;
-      this.setState({ minute: value })
-      this.handleDuration();
     }
+    details.duration[name] = value?parseInt(value):0;
+    this.setState({ details })
+
+    // if (name === "hours") {
+    //   this.setState({ hour: value },this.handleDuration())
+    //
+    // } else if (name === "minutes") {
+    //   if(value > 59) value = 59;
+    //   this.setState({ minute: value },this.handleDuration())
+    // }
   }
+
+  /**
+   * Method :: handleDuration
+   * Description :: Duration field is handled
+   * @params ::  event Handler
+   * returns ::  data is set in details object
+   **/
 
   handleDuration() {
     let duration = {
@@ -144,10 +155,10 @@ export default class BeSpokeHandler extends Component {
   }
 
   /**
-   * Method :: sendDataToParent
-   * Description :: Sends data in the form of an Object back to the parent
+   * Method :: updateBeSpokeData
+   * Description :: Updates the data in edit mode
    * @params ::  No params
-   * returns ::  this.props.getServiceDetails(funderService)
+   * returns ::  response from the server
    **/
 
 
@@ -183,9 +194,15 @@ export default class BeSpokeHandler extends Component {
     }
   }
 
+   /**
+   * Method :: saveBeSpokeServiceDetails
+   * Description :: Saves the data
+   * @params ::  No params
+   * returns ::  response from the server
+   **/
+
 
   async saveBeSpokeServiceDetails(data) {
-    console.log('data',data)
     if (data && this.isValidBeSpoke()) {
       const res = await createBeSpokeServiceActionHandler(this.state.details, this.props.portfolioDetailsId);
       if (res && res.success) {
@@ -231,16 +248,22 @@ export default class BeSpokeHandler extends Component {
     let details = this.state.details;
     details['conversation'] = temp;
     this.setState({ details: details }, function () {
-      console.log(this.state.details)
+      console.log(this.state.details);
     })
   }
 
+  /**
+   * Method :: onFrequencySelected
+   * Description :: Daily, Weekly and Monthly options are provided to be chosen from
+   * @params ::  selectedFrequency : type :: String
+   * returns ::  data is redirected to sendDataToParent()
+   **/
 
   onFrequencySelected(selectedFrequency) {
     let details = this.state.details;
     details['sessionFrequency'] = selectedFrequency.value;
     this.setState({ details: details }, function () {
-      console.log(this.state.details)
+      console.log(this.state.details);
     })
   }
 
@@ -278,39 +301,26 @@ export default class BeSpokeHandler extends Component {
     }
   }
 
+   /**
+   * Method :: onFileUploadCallBack
+   * Description :: Checkbox to determine the mode of operation
+   * @params ::  fileDetails : Object , resp : response from the server
+   * returns ::  null
+   **/
+
   onFileUploadCallBack(fileDetails,resp) {
     let details = this.state.details;
     let fileContainer = [];
     if (resp) {
-      this.setState({ uploadedProfilePic: resp });
       var fileUrl = $.parseJSON(resp).result;
       fileDetails.fileUrl = fileUrl;
       fileContainer.push(fileDetails);
       if(details['beSpokeAttachments']) details['beSpokeAttachments'].push(fileDetails)
       else details['beSpokeAttachments'] = fileContainer;
+      this.forceUpdate();
     }
   }
 
-  documentName(index, e) {
-    let attach = this.state.attachmentDocs;
-    let temp = e.target.value;
-    attach[index].documentName = temp;
-    this.setState({ attachmentDocs: attach })
-  }
-
-  deleteAttachments(id, index) {
-    let details = this.state.details;
-    let attach = details.attachments;
-    if (attach) {
-      delete attach[index].fileUrl[id];
-      console.log('attach', attach)
-      if (_.isEmpty(attach)) {
-        attach = [{}]
-      }
-      details.attachments = attach;
-      this.setState({ details: details })
-    }
-  }
 
   DataToBeSet(response, name) {
     if (name === 'mode') {
@@ -343,7 +353,6 @@ export default class BeSpokeHandler extends Component {
         fileUpload={this.onFileUpload.bind(this)}
         modeSwitchHandler={this.modeSwitchHandler.bind(this)}
         componentToView={this.props.componentToView}
-        deleteAttachments={this.deleteAttachments.bind(this)}
       />
     )
   }

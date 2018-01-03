@@ -665,7 +665,7 @@ class MlAppointment {
         //   vacationStartDate.getMonth() <= date.getMonth() && vacationEndDate.getMonth() >= date.getMonth() &&
         //   vacationStartDate.getYear() <= date.getYear() && vacationEndDate.getYear() >= date.getYear())
 
-          if(new Date(vacationStartDate)<= date && new Date(vacationEndDate)>=date) {
+          if(vacationStartDate<= date && vacationEndDate>=date) {
             if(vacation.type == 'travel'){
               status = 4;
             } else {

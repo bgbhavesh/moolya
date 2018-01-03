@@ -22,6 +22,14 @@ export const mlAppMyRequestedBespokeServiceConfig = new MlAppViewer({
                         ...on Service {
                           _id
                           displayName
+                          isBeSpoke
+                          mode
+                          beSpokeCreatorProfileImage
+                          noOfSession
+                          duration {
+                            hours
+                            minutes
+                          }
                         }
                       }
                   }

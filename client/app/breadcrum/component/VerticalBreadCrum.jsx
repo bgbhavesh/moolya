@@ -38,7 +38,7 @@ export default class VerticalBreadCrum extends Component {
   async isOfficeMemberAPrincipal(){
     const id = FlowRouter.getParam('memberId');
     let forPrincipal = await fetchOfficeMember(id);
-    this.setState({isPrincipal:forPrincipal.isPrincipal||false});
+    this.setState({isPrincipal:forPrincipal.isPrincipal||false,teamMemberName:forPrincipal.name});
   }
 
   componentWillMount() {
@@ -143,9 +143,18 @@ export default class VerticalBreadCrum extends Component {
         link:path.split('officeMember')[0]+'editOffice/'+FlowRouter.getParam('officeId')
       });
 
+      let ptab = '?tab=Team%20Members';
+      if(this.state.isPrincipal){
+        ptab='';
+      }
 
       list.push({
         name:(this.state.isPrincipal)?'Principal':'Team Member',
+        link:path.split('officeMember')[0]+'editOffice/'+FlowRouter.getParam('officeId') +ptab
+      });
+
+      list.push({
+        name:this.state.teamMemberName || 'User',
         link:path.split('?')[0]
       });
 

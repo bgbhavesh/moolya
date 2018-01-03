@@ -1,11 +1,6 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
-import passwordUtil from "../../../../commons/passwordUtil";
-import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
-import getQuery from "../../genericSearch/queryConstructor";
 import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
@@ -16,6 +11,12 @@ import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlS
 import portfolioValidationRepo from '../../portfolio/portfolioValidation'
 import MlSMSNotification from "../../../../mlNotifications/mlSmsNotifications/mlSMSNotification"
 import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import passwordUtil from "../../../../commons/passwordUtil";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import getQuery from "../../genericSearch/queryConstructor";
+import { getCommunityName } from '../../../../commons/utils';
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -249,27 +250,16 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
         let displayName = user.profile.InternalUprofile.moolyaProfile.displayName;
         let deActive = user.profile.isActive;
         userProfiles.map(function (profile, index) {
-            let userRoles = profile.userRoles;
-            // const clusterData = MlClusters.findOne({_id:profile.clusterId})||[];
-            const clusterData = mlDBController.findOne('MlClusters', {_id: profile.clusterId}, context)||[];
-            if(clusterData){
-                userRoles.map(function (role) {
-                  let roleCombination;
-                  if(role.subChapterId != 'all'){
-                    const subChapterData = mlDBController.findOne('MlSubChapters', {_id: role.subChapterId}, context) || [];
-                    roleCombination = subChapterData.clusterName +' - '+ subChapterData.chapterName + ' - ' + subChapterData.subChapterName
-                  } else if(role.chapterId !='all'){
-                    const chapterData = mlDBController.findOne('MlChapters', {_id: role.chapterId}, context) || [];
-                    roleCombination = chapterData.clusterName +' - '+ chapterData.chapterName
-                  } else if (role.clusterId !='all') {
-                    const clusterData = mlDBController.findOne('MlClusters', {_id: role.clusterId}, context) || [];
-                    roleCombination = clusterData.clusterName
-                  }
-                  const isParentRoleActive = getParentRoleStatus(role).isActive;
-                  const roleStatus = isParentRoleActive && role.isActive ? "Active":"Inactive";
-                  assignedRoles += role.roleName+" ("+ roleCombination + ")-("+roleStatus+")"+","
-                });
-            }
+          let userRoles = profile.userRoles;
+          const clusterData = mlDBController.findOne('MlClusters', { _id: profile.clusterId }, context) || {};
+          if (clusterData) {
+            userRoles.map(function (role) {
+              const roleCombination = getRoleCombination(role, context);
+              const isParentRoleActive = getParentRoleStatus(role).isActive;
+              const roleStatus = isParentRoleActive && role.isActive ? "Active" : "Inactive";
+              assignedRoles += role.roleName + " (" + roleCombination + ")-(" + roleStatus + ")" + ","
+            });
+          }
         });
 
         userDetails['alsoAssignedas'] = assignedRoles;
@@ -1976,7 +1966,31 @@ MlResolver.MlQueryResolver['fetchCurrencyType'] = (obj, args, context, info) => 
   var  currencyInfo = MlCurrencyType.findOne({countryName:clusterInfo.countryName}, context);
   return currencyInfo;
   }
-
+  
+/**
+ * @function <**************<start>*****************>
+ */
   getParentRoleStatus = (role)=>{
     return mlDBController.findOne('MlRoles', {_id:role.roleId}) || {}
+  }
+
+  getRoleCombination = (role, context) => {
+    let roleCombination;
+    if (role.communityId != 'all') {
+      const communityData = mlDBController.findOne('MlCommunity', { _id: role.communityId }, context) || {};
+      roleCombination = communityData.clusterName + ' - ' + communityData.chapterName + ' - ' + communityData.subChapterName + ' - ' + getCommunityName(role.communityCode)
+    } else if (role.communityId == 'all' && role.hierarchyLevel == 0) {
+      const clusterData = mlDBController.findOne('MlClusters', { _id: role.clusterId }, context) || {};
+      roleCombination = clusterData.clusterName + ' - ' + getCommunityName(role.communityCode)
+    } else if (role.subChapterId != 'all') {
+      const subChapterData = mlDBController.findOne('MlSubChapters', { _id: role.subChapterId }, context) || [];
+      roleCombination = subChapterData.clusterName + ' - ' + subChapterData.chapterName + ' - ' + subChapterData.subChapterName
+    } else if (role.chapterId != 'all') {
+      const chapterData = mlDBController.findOne('MlChapters', { _id: role.chapterId }, context) || {};
+      roleCombination = chapterData.clusterName + ' - ' + chapterData.chapterName
+    } else if (role.clusterId != 'all') {
+      const clusterData = mlDBController.findOne('MlClusters', { _id: role.clusterId }, context) || {};
+      roleCombination = clusterData.clusterName
+    }
+    return roleCombination;
   }

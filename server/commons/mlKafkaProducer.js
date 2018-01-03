@@ -11,7 +11,7 @@ export function pushlogsByKafka (message,topic) {
   let producer = new Producer(client);
   try {
     let payloads = [
-      {topic: topic, messages: message, partition: 0},
+      {topic: topic, messages: message, partition: 0,timestamp: Date.now()},
     ];
 
     producer.on('ready', () => {

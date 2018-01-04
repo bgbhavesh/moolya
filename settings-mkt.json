@@ -17,7 +17,8 @@
           "secure":true
         }
       },
-      "phpWebSiteLink": "https://marketing.moolya.global/register"
+      "phpWebSiteLink": "https://marketing.moolya.global/register",
+      "instance":"MKT"
     },
     "private": {
       "subChapterName":"moolya",

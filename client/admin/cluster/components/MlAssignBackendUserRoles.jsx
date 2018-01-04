@@ -285,11 +285,11 @@ export default class MlAssignBackednUserRoles extends React.Component {
                 <div className="panel-body">
                   <div className="form-group">
                     <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                           value={department.departmentName}/>
+                           value={department.departmentName} readOnly/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                           value={department.subDepartmentName}/>
+                           value={department.subDepartmentName} readOnly/>
                   </div>
                   <div className="">
                     <div className="">
@@ -299,7 +299,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                             <div className="form-group">
                               {details.roleName ?
                                 <input type="text" defaultValue={details.roleName} className="form-control float-label"
-                                       disabled="true"/> :
+                                       disabled="true" readOnly/> :
                                 <MoolyaSelect multiSelect={false} className="form-control float-label"
                                               valueKey={'value'}
                                               labelKey={'label'} queryType={"graphql"} query={query}

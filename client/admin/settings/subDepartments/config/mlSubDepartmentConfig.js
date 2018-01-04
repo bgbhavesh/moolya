@@ -35,7 +35,7 @@ function departmentNameFormatter (data){
 function clustersFormatter (data){
 
   let departments=data&&data.data&&data.data.clustersList?data.data.clustersList:[];
-  if(departments.length>0){
+  if(departments&&departments.length){
     return <div>{departments.join()}</div>;
   }else{
     return <div>All</div>;
@@ -46,7 +46,7 @@ function clustersFormatter (data){
 function chapterFormatter(data){
   let departments = [];
   departments=data&&data.data&&data.data.chaptersList?data.data.chaptersList:[];
-  if(departments.length>0){
+  if(departments&&departments.length){
     return <div>{departments.join()}</div>;
   }else{
     return <div>All</div>;
@@ -57,7 +57,7 @@ function chapterFormatter(data){
 //@for displaying subchapters under dep in departments list
 function subChapterFormatter(data){
   let departments=data&&data.data&&data.data.subChapterList?data.data.subChapterList:[];
-  if(departments.length>0){
+  if(departments&&departments.length){
     return <div>{departments.join()}</div>;
   }else{
     return <div>All</div>;

@@ -182,7 +182,6 @@ export default class MlFilterListRepo{
 
          if(requestParams.fieldActive == "Cluster" || requestParams.fieldActive == "Chapter"){ //display subchapter as per selected chapter(if chapter or cluster is active)
           if(listData.length < 1){
-
             if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2){
               let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
               if(requestParams.fieldActive == "Cluster"){
@@ -206,7 +205,7 @@ export default class MlFilterListRepo{
             result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
 
           }
-        }else if(requestParams.fieldActive == "SubChapter"){
+        }else if(requestParams.fieldActive == "SubChapter"){ 
           if(listData.length < 1){ //display as per usercontext
               let allsubChapterIds = _.contains(subChapterIds,"all") || null;
               if(allsubChapterIds){
@@ -220,12 +219,6 @@ export default class MlFilterListRepo{
 
           }
         }
-
-
-
-
-
-
         let genSubChapterResponse=_.each(result,function (option,id) {
           options.push({"label":option.subChapterName,"value":option._id})
         })
@@ -234,8 +227,8 @@ export default class MlFilterListRepo{
 
       case "Gen_Users":
 
-        result= Meteor.users.find().fetch();
-
+        //result= Meteor.users.find().fetch();
+        result = mlDBController.find('users', {}).fetch()
         let genUsersResponse=_.each(result,function (option,id) {
           if(option.profile.isInternaluser){
             options.push({"label":option.profile.InternalUprofile.moolyaProfile.displayName,"value":option.profile.InternalUprofile.moolyaProfile.displayName})

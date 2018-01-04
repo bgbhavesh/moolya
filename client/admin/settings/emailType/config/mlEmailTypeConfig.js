@@ -42,7 +42,11 @@ const mlEmailTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addEmailType")
+        if(data&&data._id)
+          toastr.error("Please uncheck the record")
+        else {
+          FlowRouter.go("/admin/settings/addEmailType")
+        }
       }
     },
     // {

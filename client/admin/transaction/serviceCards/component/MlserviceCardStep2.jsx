@@ -167,7 +167,7 @@ export default class MlAppServiceStep2 extends React.Component{
                                  value={tasks.duration.hours} disabled /> Hours
                           <input type="text"
                                  className="form-control inline_input"
-                                 value={tasks.duration.hours} disabled /> Mins </label>
+                                 value={tasks.duration.minutes} disabled /> Mins </label>
                       </div>
                     </form>
                   </div>

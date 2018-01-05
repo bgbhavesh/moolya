@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "policy"
 
 export default class MlInstitutionPolicy extends React.Component{
@@ -19,7 +19,7 @@ export default class MlInstitutionPolicy extends React.Component{
       privateKey:{},
       policy:{}
     }
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -48,25 +48,28 @@ export default class MlInstitutionPolicy extends React.Component{
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.policy) {
+        const editorValue = createValueFromString(response.policy.institutionPolicyDescription);
         var object = response.policy;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields});
+        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
       }else{
         this.setState({loading:false})
       }
     }else{
-      this.setState({loading: false, data: that.context.institutionPortfolio.policy});
+      const editorValue = createValueFromString(that.context.institutionPortfolio.policy.institutionPolicyDescription);
+      this.setState({loading: false, data: that.context.institutionPortfolio.policy,editorValue});
     }
     this.updatePrivateKeys();
   }
 
-  handleBlur(e){
+  handleBlur(value,keyName){
     let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    // let name  = e.target.name;
+    details=_.omit(details,[keyName]);
+    details = _.extend(details, { [keyName]: value.toString('html') });
+    // details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -110,6 +113,7 @@ export default class MlInstitutionPolicy extends React.Component{
   render(){
     let that = this;
     const showLoader = that.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -122,7 +126,11 @@ export default class MlInstitutionPolicy extends React.Component{
                   <div className="panel-body">
 
                     <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." name="institutionPolicyDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionPolicyDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                      {/* <textarea placeholder="Describe..." name="institutionPolicyDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionPolicyDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
+                      <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={(value) => this.handleBlur(value, "institutionPolicyDescription")}
+                  />
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="institutionPolicyDescriptionPrivate" defaultValue={this.state.data&&this.state.data.institutionPolicyDescriptionPrivate} onClick={this.onLockChange.bind(this,"institutionPolicyDescription", "institutionPolicyDescriptionPrivate")}/>
                     </div>
 

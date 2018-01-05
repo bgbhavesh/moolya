@@ -115,7 +115,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async handleError(response) {
-    alert(response)
+    console.log("response error", response)
   };
 
   async handleSuccess(response) {

@@ -130,7 +130,7 @@ export default class MlStartupProfitRevenue extends React.Component{
     this.refs["prlabout"+index].value = ""
     this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
-    this.setState({data : {}})
+    this.setState({data : {},selectedVal:'',selectedValType:''})
 
   }
 
@@ -243,7 +243,7 @@ export default class MlStartupProfitRevenue extends React.Component{
                                     query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
                                     isDynamic={true}/>*/}
                       <span className={`placeHolder ${selectedEntityTypesActive}`}>Select Entity Type</span>
-                      <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
+                      <Select name="form-field-name" placeholder="Select Entity Type" options={entityTypes}
                               value={this.state.selectedVal}
                               onChange={this.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}  className="float-label"/>
                     </div>

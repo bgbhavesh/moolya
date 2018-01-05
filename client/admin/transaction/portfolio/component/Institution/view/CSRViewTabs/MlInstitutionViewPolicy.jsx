@@ -6,6 +6,7 @@ import {findAnnotations} from '../../../../../../../commons/annotator/findAnnota
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "policy"
 export default class MlInstitutionViewPolicy extends React.Component {
   constructor(props) {
@@ -120,10 +121,11 @@ export default class MlInstitutionViewPolicy extends React.Component {
 
     const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if (response && response.policy) {
+      const editorValue = createValueFromString(response.policy.institutionPolicyDescription);
       var object = response.policy;
       object = _.omit(object, '__typename')
       // this.setState({data: object});
-      this.setState({loading: false,data: object});
+      this.setState({loading: false,data: object,editorValue: editorValue});
     }else{
       this.setState({loading:false})
     }
@@ -131,6 +133,8 @@ export default class MlInstitutionViewPolicy extends React.Component {
   }
 
   render() {
+    let showLoader=this.state.loading?this.state.loading:false;
+    const { editorValue } = this.state;
     return (
       <div className="col-lg-12 col-sm-12" >
         <div className="row" id="annotatorContent">
@@ -138,7 +142,12 @@ export default class MlInstitutionViewPolicy extends React.Component {
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionPolicyDescription ? this.state.data.institutionPolicyDescription : (<NoData tabName={this.props.tabName}/>)}</p>)}
+            {showLoader === true ? (<MlLoader />) : (<div>{this.state.data && this.state.data.institutionPolicyDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+              {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.data && this.state.data.institutionPolicyDescription ? this.state.data.institutionPolicyDescription : (<NoData tabName={this.props.tabName}/>)}</p>)} */}
 
             </div>
           </div>

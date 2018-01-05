@@ -9,7 +9,7 @@ import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeato
 import _ from 'lodash'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader"; 
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "policy"
 
 export default class MlCompanyViewPolicy extends React.Component {
@@ -48,7 +48,8 @@ export default class MlCompanyViewPolicy extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
-      this.setState({policy: responseM.policy,loading:false});
+      const editorValue = createValueFromString(responseM.policy.policyDescription);
+      this.setState({policy: responseM.policy,loading:false,editorValue: editorValue});
     }
 
     data = {
@@ -139,7 +140,7 @@ export default class MlCompanyViewPolicy extends React.Component {
     let that = this;
     let policy = that.state.policy || {};
     let loading=this.state.loading
-
+    const { editorValue } = this.state;
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -147,15 +148,19 @@ export default class MlCompanyViewPolicy extends React.Component {
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body">
-                  {loading === true ? ( <MlLoader/>) : (<p>{this.state.policy && this.state.policy.policyDescription ? this.state.policy.policyDescription :  (<div className="portfolio-main-wrap">
+                {loading === true ? (<MlLoader />) : (<div>{this.state.policy && this.state.policy.policyDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+                  {/* {loading === true ? ( <MlLoader/>) : (<p>{this.state.policy && this.state.policy.policyDescription ? this.state.policy.policyDescription :  (<div className="portfolio-main-wrap">
                     <NoData tabName={this.props.tabName}/>
-                  </div>)}</p>)}
+                  </div>)}</p>)} */}
                 </div>
               </div>
             </div>
           </div>
         </div>
       )
-
   }
 }

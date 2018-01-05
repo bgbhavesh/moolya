@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 const KEY = "evolution"
 
 export default class MlInstitutionEvolution extends React.Component{
@@ -19,7 +19,7 @@ export default class MlInstitutionEvolution extends React.Component{
       privateKey:{},
       evolution:{}
     }
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -47,26 +47,29 @@ export default class MlInstitutionEvolution extends React.Component{
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.evolution)
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
+       const editorValue = createValueFromString(response.evolution.institutionEvolutionDescription);
       if (response && response.evolution) {
         var object = response.evolution;
         object = _.omit(object, '__typename')
         // this.setState({data: object});
-        this.setState({loading: false,data: object,privateFields:object.privateFields});
+        this.setState({loading: false,data: object,privateFields:object.privateFields,editorValue:editorValue});
       }else{
         this.setState({loading:false})
       }
     }else{
-      this.setState({loading: false, data: that.context.institutionPortfolio.evolution});
+      const editorValue = createValueFromString(that.context.institutionPortfolio.evolution.institutionEvolutionDescription);
+      this.setState({loading: false, data: that.context.institutionPortfolio.evolution,editorValue});
     }
     this.updatePrivateKeys();
   }
 
-  handleBlur(e){
+  handleBlur(value,keyName){
     let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    // let name  = e.target.name;
+    details=_.omit(details,[keyName]);
+    details = _.extend(details, { [keyName]: value.toString('html') });
+    // details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -110,6 +113,7 @@ export default class MlInstitutionEvolution extends React.Component{
   render(){
     let that = this;
     const showLoader = that.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -122,7 +126,11 @@ export default class MlInstitutionEvolution extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="institutionEvolutionDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionEvolutionDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  {/* <textarea placeholder="Describe..." name="institutionEvolutionDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionEvolutionDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
+                  <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={(value) => this.handleBlur(value, "institutionEvolutionDescription")}
+                  />
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="institutionEvolutionDescriptionPrivate" defaultValue={this.state.data&&this.state.data.institutionEvolutionDescriptionPrivate} onClick={this.onLockChange.bind(this, "institutionEvolutionDescription","institutionEvolutionDescriptionPrivate")}/>
                 </div>
 

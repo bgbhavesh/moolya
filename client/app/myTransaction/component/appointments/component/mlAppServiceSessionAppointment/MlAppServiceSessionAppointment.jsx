@@ -160,7 +160,8 @@ export default class MlAppServiceSessionAppointment extends Component {
                       <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                      <input type="text" placeholder="Date & Time"
+                             value={`${new moment(this.state.data.createdAt).format('DD-MMM-YYYY HH:mm')} GMT`} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Name" value={currentUser.name} defaultValue="" className="form-control float-label" id="" />
@@ -250,7 +251,8 @@ export default class MlAppServiceSessionAppointment extends Component {
                       <input type="text" placeholder="Appointment Id" value={this.state.orderId} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Appointment date & Time" value={this.state.data.createdAt} defaultValue="" className="form-control float-label" id="" />
+                      <input type="text" placeholder="Appointment date & Time"
+                             value={`${new moment(this.state.data.createdAt).format('DD-MMM-YYYY HH:mm')} GMT`} defaultValue="" className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Transaction Id" value={this.state.data.service.transactionId} defaultValue="" className="form-control float-label" id="" />

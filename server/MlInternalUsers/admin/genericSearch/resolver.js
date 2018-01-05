@@ -399,6 +399,17 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         subchapterIdsArray.push(doc.subChapter);
       });
 
+      if(doc.createdBy){
+        const getCreatedName = mlDBController.findOne('users',{username: doc.createdBy}).profile.firstName;
+        doc.createdBy = getCreatedName ||  doc.createdBy;
+      }
+
+      if(doc.updatedBy){
+        const getUpdatedName = mlDBController.findOne('users',{username: doc.updatedBy}).profile.firstName;
+        doc.updatedBy = getUpdatedName ||  doc.updatedBy;
+      }
+
+
       const departmentData =  MlDepartments.find({ _id: { $in: departmentsIdsArray } } ).fetch() || [];
       const subdepartmentData = MlSubDepartments.find( { _id: { $in: subdepartmentsIdsArray } } ).fetch() || [];
       const clusterData =  MlClusters.find( { _id: { $in: clusterIdsArray } } ).fetch() || [];

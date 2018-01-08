@@ -12,6 +12,7 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "institutionIncubators"
 
 export default class MlInstitutionStartupIncubators extends React.Component{
@@ -120,8 +121,9 @@ export default class MlInstitutionStartupIncubators extends React.Component{
 
     const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if (response && response.institutionIncubators) {
+      const editorValue = createValueFromString(response.institutionIncubators.institutionIncubatorsDescription);
       var object = response.institutionIncubators;
-      this.setState({loading: false,institutionIncubators: object});
+      this.setState({loading: false,institutionIncubators: object,editorValue : editorValue});
     }else{
       this.setState({loading:false})
     }
@@ -129,6 +131,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
 
           <div className="col-lg-12 col-sm-12">
@@ -136,11 +139,16 @@ export default class MlInstitutionStartupIncubators extends React.Component{
               <h2>Startup Incubators</h2>
               <div className="panel panel-default panel-form-view" id="annotatorContent">
                 <div className="panel-body">
-                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.institutionIncubators && this.state.institutionIncubators.institutionIncubatorsDescription ? this.state.institutionIncubators.institutionIncubatorsDescription
+                {showLoader === true ? (<MlLoader />) : (<div>{this.state.institutionIncubators && this.state.institutionIncubators.institutionIncubatorsDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+                  {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.institutionIncubators && this.state.institutionIncubators.institutionIncubatorsDescription ? this.state.institutionIncubators.institutionIncubatorsDescription
                     :   <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>
-                }</p>)}
+                }</p>)} */}
                 </div>
               </div>
             </div>

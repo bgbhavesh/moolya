@@ -15,6 +15,7 @@ export default class MlIdeaView extends React.Component {
     this.state = {
       loading:true,
       portfolioIdeatorInfo: {},
+      isUserValidForAnnotation:false
     }
     this.fetchIdeatorIdeas.bind(this);
     //this.fetchAnnotations.bind(this);
@@ -86,8 +87,8 @@ export default class MlIdeaView extends React.Component {
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-  componentWillMount() {
-    let resp = this.validateUserForAnnotation();
+  componentWillMount() { 
+    let resp =this.validateUserForAnnotation();
     return resp
   }
   componentDidMount() {
@@ -100,7 +101,8 @@ export default class MlIdeaView extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
+
+      this.setState({isUserValidForAnnotation:true})
 
       this.initalizeAnnotaor()
 
@@ -123,7 +125,12 @@ export default class MlIdeaView extends React.Component {
         currentIdea = _.omit(currentIdea, "title");
         currentIdea = _.extend(currentIdea, {title: "No ideas are available to show"});
       }
-      this.setState({portfolioIdeatorInfo: currentIdea, loading:false})
+      this.setState({portfolioIdeatorInfo: currentIdea, loading:false},function() {
+        if(this.state.isUserValidForAnnotation){
+          this.initalizeAnnotaor()
+          this.fetchAnnotations();
+        }
+      })
       _.each(currentIdea.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
@@ -135,7 +142,7 @@ export default class MlIdeaView extends React.Component {
     const showLoader = this.state.loading;
     let image = this.state.portfolioIdeatorInfo&&this.state.portfolioIdeatorInfo.ideaImage&&this.state.portfolioIdeatorInfo.ideaImage.fileUrl?this.state.portfolioIdeatorInfo.ideaImage.fileUrl:'/images/no_image.png';
     return (
-      <div id="psContent" className="admin_padding_wrap">
+      <div  className="admin_padding_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div>
             <h2>About Ideas</h2>
@@ -166,8 +173,8 @@ export default class MlIdeaView extends React.Component {
 
 
             </div>
-            <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 hide_unlock">
-              <div className="form-group">
+            <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 hide_unlock" id="psContent">
+              <div className="form-group" >
 
               {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
                        defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/>*/}
@@ -179,8 +186,8 @@ export default class MlIdeaView extends React.Component {
 
 
               </div>
-              <div className="form-group">
-                <p><b>Description: </b>{this.state.portfolioIdeatorInfo.ideaDescription}</p>
+              <div className="form-group" >
+                <p ><b>Description: </b>{this.state.portfolioIdeatorInfo.ideaDescription}</p>
                  {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
                             readOnly="true"></textarea>*/}

@@ -27,7 +27,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       },
       annotations: [],
       content: {},
-      loading: true
+      loading: true,
+      isUserValidForAnnotation:false
     }
 
     this.createAnnotations.bind(this);
@@ -40,8 +41,13 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
   initalizeAnnotaor() {
     initializeMlAnnotator(this.annotatorEvents.bind(this))
-    this.state.content = jQuery("#psContent").annotator();
-    this.state.content.annotator('addPlugin', 'MyPlugin', {
+    this.state.problemsContent = jQuery("#problemsContent").annotator();
+    this.state.solutionsContent = jQuery("#solutionsContent").annotator();
+    this.state.problemsContent.annotator('addPlugin', 'MyPlugin', {
+      pluginInit: function () {
+      }
+    });
+    this.state.solutionsContent.annotator('addPlugin', 'MyPlugin', {
       pluginInit: function () {
       }
     });
@@ -101,7 +107,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
         "createdAt": value.createdAt
       })
     })
-    this.state.content.annotator('loadAnnotations', quotes);
+    this.state.problemsContent.annotator('loadAnnotations', quotes);
+    this.state.solutionsContent.annotator('loadAnnotations', quotes);
 
     return response;
   }
@@ -132,7 +139,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
     if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation: response})
+      this.setState({isUserValidForAnnotation: true})
       this.initalizeAnnotaor()
       this.fetchAnnotations()
     }
@@ -144,7 +151,12 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     response.solutionImage ? response.solutionImage : response.solutionImage = [];
     const solutionStatement = createValueFromString(response && response.solutionStatement ? response.solutionStatement : null);
     const problemStatement = createValueFromString(response && response.problemStatement ? response.problemStatement : null);
-    this.setState({ portfolioIdeatorInfo: response, loading: false, solutionStatement, problemStatement });
+    this.setState({ portfolioIdeatorInfo: response, loading: false, solutionStatement, problemStatement },function() {
+      if(this.state.isUserValidForAnnotation){
+        this.initalizeAnnotaor()
+        this.fetchAnnotations();
+      }
+    })
     _.each(response.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -155,10 +167,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     const { solutionStatement, problemStatement } = this.state;
     return (
       <div>
-        <div className="requested_input" id="psContent">
+        <div className="requested_input">
           <h2>Problems and Solutions </h2>
-          <div className="tab_wrap_scroll hide_unlock">
-            <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+          <div className="tab_wrap_scroll hide_unlock" >
+            <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left" >
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Problems
@@ -167,7 +179,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                 <div className="panel-body">
                   {loading === true ? ( <MlLoader/>) : (
                     <div>{this.state.portfolioIdeatorInfo.problemStatement || this.state.portfolioIdeatorInfo.problemImage.length ? (
-                      <div>
+                      <div id="problemsContent">
                         <MlTextEditor
                           value={problemStatement}
                           isReadOnly={true}
@@ -183,8 +195,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-              <div className="panel panel-default">
+            <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left" >
+              <div className="panel panel-default" >
                 <div className="panel-heading">
                   Solutions
                   <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isSolutionPrivate"/>
@@ -192,7 +204,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                 <div className="panel-body">
                   {loading === true ? ( <MlLoader/>) : (
                     <div>{this.state.portfolioIdeatorInfo.solutionStatement || this.state.portfolioIdeatorInfo.solutionImage.length ? (
-                      <div>
+                      <div id="solutionsContent">
                         <MlTextEditor
                           value={solutionStatement}
                           isReadOnly={true}

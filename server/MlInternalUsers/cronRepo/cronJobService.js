@@ -9,5 +9,5 @@ var task = cron.schedule('2 * * * * *', Meteor.bindEnvironment(() => {
     
 // task.start();
 Meteor.startup(function () {
-    // task.start();
+    task.start();
 })

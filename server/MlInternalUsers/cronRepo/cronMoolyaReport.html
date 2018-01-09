@@ -1,0 +1,18 @@
+<label class="random">Active Cluster {{ data['activeCluster'] }}</label>
+<label class="random">Active Chapters {{ data['activeChapters'] }}</label>
+<label class="random">Active Non-Moolya {{ data['activeNon_moolyaSubChapters'] }}</label>
+
+<ul>
+  {% for cluster in data.data %}
+  <li>regB4Portfolio- {{ cluster.regB4Portfolio }}</li>
+  <li>approved_portfolios- {{ cluster.approved_portfolios }}</li>
+  <li>pending_officeApproval- {{ cluster.pending_officeApproval }}</li>
+  <li>Pending_SC_Approval_reqInActive_SubChapters- {{ cluster.Pending_SC_Approval_reqInActive_SubChapters }}</li>
+  <li>approved_Ideators- {{ cluster.approved_Ideators }}</li>
+  <li>approved_startup- {{ cluster.approved_startup }}</li>
+  <li>approved_funder- {{ cluster.approved_funder }}</li>
+  <li>approved_serviceProvider- {{ cluster.approved_serviceProvider }}</li>
+  <li>approved_institution- {{ cluster.approved_institution }}</li>
+  <li>approved_companies- {{ cluster.approved_companies }}</li>
+  {% endfor %}
+</ul>

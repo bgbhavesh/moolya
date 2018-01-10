@@ -1,8 +1,7 @@
 const cron = require('node-cron');
-const Future = Npm.require('fibers/future');
 import MlCronJobController from './cronJobController';
 
-var task = cron.schedule('2 * * * * *', Meteor.bindEnvironment(() => {    
+var task = cron.schedule('10 * * * * *', Meteor.bindEnvironment(() => {    
     MlCronJobController.dailyReport();
     console.log('................................................');
 }), false);

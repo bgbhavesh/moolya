@@ -17,6 +17,7 @@ export default class MlAppServiceSessionAppointment extends Component {
       orderId: props.orderId,
       docId: props.docId,
       selectedDate: moment(),
+      selectedDates:"",
       showSession: false,
       loadingSlots: false,
       validTill:"",
@@ -81,7 +82,7 @@ export default class MlAppServiceSessionAppointment extends Component {
     const that = this;
     if (event._d) {
       let value = new moment(event._d);
-      this.setState({ selectedDate: value, loadingSlots: true });
+      this.setState({ selectedDate: value, selectedDates: value, loadingSlots: true });
       const availableSlots = await getSessionDayAvailable(
         this.state.data.appointmentInfo.serviceOrderId,
         this.state.data.appointmentInfo.sessionId,
@@ -127,7 +128,7 @@ export default class MlAppServiceSessionAppointment extends Component {
   render() {
     let currentUser = this.state.data.owner;
     let appointmentWith = this.state.data.client;
-    var yesterday = Datetime.moment().subtract(1, 'day');   
+    var yesterday = Datetime.moment().subtract(1, 'day');
     let validTill = this.state.validTill ? `${new moment(this.state.validTill).format('DD-MMM-YYYY HH:mm')} GMT`: "";
     console.log("validTill", validTill)
     var validDate = function (current) {
@@ -352,7 +353,8 @@ export default class MlAppServiceSessionAppointment extends Component {
             <SessionTable
               showLoading={this.state.loadingSlots}
               availableSlots={this.state.data.availableSlots}
-              updateSession={this.updateSession} />
+              updateSession={this.updateSession}
+              selectedDate={this.state.selectedDates}/>
           </div>
         }
       </div>

@@ -19,6 +19,7 @@ export default class MlAppServiceSessionAppointment extends Component {
       selectedDate: moment(),
       showSession: false,
       loadingSlots: false,
+      validTill:"",
       data: {
         appointmentInfo: {},
         client: {},
@@ -98,7 +99,6 @@ export default class MlAppServiceSessionAppointment extends Component {
   async fetchServiceSessionAppointments() {
     if (this.state.orderId) {
       let response = await fetchAppAppointmentByTransactionId(this.state.orderId);
-
       if (response && response.success) {
         let data = JSON.parse(response.result);
         data = data[0] ? data[0] : {};
@@ -106,6 +106,7 @@ export default class MlAppServiceSessionAppointment extends Component {
         data.owner = data.owner ? data.owner : {};
         data.sessionInfo = data.sessionInfo ? data.sessionInfo : [];
         data.service = data.service ? data.service : {};
+        data.service && data.service.validTill ? this.setState({validTill: data.service.validTill}): "";
         data.appointmentInfo = data.appointmentInfo || {};
         let availableSlots = await getSessionDayAvailable(
           data.appointmentInfo.serviceOrderId,
@@ -126,6 +127,13 @@ export default class MlAppServiceSessionAppointment extends Component {
   render() {
     let currentUser = this.state.data.owner;
     let appointmentWith = this.state.data.client;
+    var yesterday = Datetime.moment().subtract(1, 'day');   
+    let validTill = this.state.validTill ? `${new moment(this.state.validTill).format('DD-MMM-YYYY HH:mm')} GMT`: "";
+    console.log("validTill", validTill)
+    var validDate = function (current) {
+      if(validTill) return current.isAfter(yesterday) && current.isBefore(validTill);
+      else return current.isAfter(yesterday);
+    }
 
     if(Meteor.userId()===this.state.data.client.userId) {
       currentUser = this.state.data.client;
@@ -333,6 +341,7 @@ export default class MlAppServiceSessionAppointment extends Component {
                 value={this.state.selectedDate
                   ? moment(this.state.selectedDate).format('DD-MM-YY')
                   : ''}
+                  isValidDate={validDate}
                 onChange={(event) => this.changeDate(event)}
               />
               <FontAwesome name="calendar" className="password_icon" />

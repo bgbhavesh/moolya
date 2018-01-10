@@ -4,6 +4,7 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
 
 export default class MlStartupViewLegalIssues extends React.Component {
   constructor(props) {
@@ -18,13 +19,24 @@ export default class MlStartupViewLegalIssues extends React.Component {
   }
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
 
-  // componentWillMount(){
-  //   this.setState({loading: false});
-  // }
+   componentWillMount(){
+     this.setState({loading: false});
+   }
+
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation: true})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
+  }
 
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
@@ -96,14 +108,14 @@ export default class MlStartupViewLegalIssues extends React.Component {
     const showLoader = this.state.loading;
     const { editorValue } = this.state;
     return (
-      <div id="annotatorContent"> 
+      <div> 
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent">
+      <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>Legal Issue</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-                  <div>{this.props.legalIssueDetails && this.props.legalIssueDetails.legalDescription ?
+                  <div id="annotatorContent">{this.props.legalIssueDetails && this.props.legalIssueDetails.legalDescription ?
                     <MlTextEditor
                       value={editorValue}
                       isReadOnly={true}

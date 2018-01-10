@@ -7,6 +7,7 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
 
 export default class MlStartupViewServicesAndProducts extends React.Component {
 
@@ -19,14 +20,23 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
   }
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
 
   componentWillMount(){
     this.setState({loading: false});
   }
 
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation: true})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
+  }
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -100,13 +110,13 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent"  >
+      <div className="col-lg-12 col-sm-12" >
         <div className="row">
           <h2>Service & Products</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
                   {this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
-                    <p>{this.props.serviceProductsDetails.spDescription}</p> : <NoData tabName={this.props.tabName} />}
+                    <p id="annotatorContent" >{this.props.serviceProductsDetails.spDescription}</p> : <NoData tabName={this.props.tabName} />}
               {/*<p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (*/}
                 {/*<NoData tabName={this.props.tabName}/>)}</p>*/}
 

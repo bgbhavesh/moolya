@@ -71,7 +71,7 @@ class MlEditBackendUser extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     passwordVisibilityHandler();
-    
+
     //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
@@ -510,7 +510,7 @@ class MlEditBackendUser extends React.Component{
 }
 `;
     let rolequery=gql` query{
-    data:fetchActiveRoles{label:roleName,value:_id}
+    data:fetchActiveRoles{label:displayName,value:_id}
     }
 `;
     let subChapterQuery=gql` query{

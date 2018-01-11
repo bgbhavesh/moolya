@@ -203,27 +203,27 @@ export default class MlAssignClustersToRoles extends React.Component {
     let departmentqueryOptions=''
     let queryOptions={options: { variables: {searchQuery:null}}};
     let departmentQuery=gql` query($isMoolya:Boolean,$clusterId:String){
-            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:departmentName,value:_id}
+            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:displayName,value:_id}
           }
           `;
     let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
     data:fetchChapters(id:$id) {
         value:_id,
-        label:chapterName
+        label:displayName
       }  
     }`;
 
     let subDepartmentquery=gql`query($id:String){  
       data:fetchSubDepartments(id:$id) {
         value:_id
-        label:subDepartmentName
+        label:displayName
       }  
     }`;
       let subChapterquery=gql`query($chapterId:String,$clusterId:String){
         data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
           value:_id
-          label:subChapterName
+          label:subChapterDisplayName
         }
       }`;
 
@@ -239,7 +239,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     // let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){
       departmentQuery=gql`  query($isMoolya:Boolean,$clusterId:String){
-            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:departmentName,value:_id}
+            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:displayName,value:_id}
           }
           `;
        subChapterquery=gql`query($chapterId:String,$clusterId:String){  
@@ -256,7 +256,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     //&&selectedSubChapter!=''
     if(selectedUserType=='non-moolya'){
       departmentQuery=gql` query($isMoolya:Boolean,$clusterId:String,$subChapter:String){
-      data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,clusterId:$clusterId,subChapter:$subChapter){label:departmentName,value:_id}
+      data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,clusterId:$clusterId,subChapter:$subChapter){label:displayName,value:_id}
     }
     `;
       subChapterquery=gql`query($chapterId:String,$clusterId:String){  

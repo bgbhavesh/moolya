@@ -6,7 +6,9 @@ var FontAwesome = require('react-fontawesome');
 import {initalizeFloatLabel} from '../../utils/formElemUtil';
 import {getContactDetails} from '../actions/getAddressBookAction'
 
-import ScrollArea from 'react-scrollbar'
+// import ScrollArea from 'react-scrollbar'
+import { Scrollbars } from 'react-custom-scrollbars';
+
 import  ContactDetails from './MlMyProfileContactDetails';
 import AddressDetails from './mlRegistrationAddressDetails'
 import EmailDetails from './mlRegistrationEmailDetails';
@@ -77,7 +79,7 @@ export default class Step3 extends React.Component{
             <h2>My Contact Details</h2>
             <div className="col-lg-6 col-md-6">
               <div className="form_bg left_wrap">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="left_wrap"
                   smoothScrolling={true}
@@ -102,12 +104,12 @@ export default class Step3 extends React.Component{
                                     clusterId={this.state.clusterId}/>
                     </div>
                   </form>
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
             <div className="col-lg-6 col-md-6">
               <div className="form_bg left_wrap">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="left_wrap"
                   smoothScrolling={true}
@@ -123,7 +125,7 @@ export default class Step3 extends React.Component{
                                       addressUpdated={this.addressUpdated.bind(this)}/>
                     </div>
                   </form>
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
           </div>)}

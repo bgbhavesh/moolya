@@ -1081,7 +1081,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             if(allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
-            }else if(!allManditoryKYCuploaded){     
+            }else if(!allManditoryKYCuploaded){
               mlRegistrationRepo.updateStatus(updateRecord,'REG_KYC_A_APR');
               let updatedResponse = mlDBController.update('MlRegistration',args.registrationId,updateRecord,{$set: true}, context)
             }
@@ -1799,6 +1799,13 @@ MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, inf
   let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
   let chapterIds = userProfile && userProfile.defaultChapters ? userProfile.defaultChapters : [];
   let subChapterIds = userProfile && userProfile.defaultSubChapters ? userProfile.defaultSubChapters : [];
+
+  var index = 0;
+  if(args.id && chapterIds && chapterIds.length){
+    index = chapterIds.lastIndexOf(args.id);
+    index = index>0?index:0;
+  }
+
   let result = null;
   if (hirarichyLevel == 4) {
     result = mlDBController.find('MlSubChapters', {
@@ -1806,7 +1813,7 @@ MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, inf
       isActive: true
     }, context, {sort: {subChapterName: 1, subChapterDisplayName: 1}}).fetch()
   } else {
-    if (subChapterIds[0] == "all") {
+    if (subChapterIds[index] == "all") {
       result = mlDBController.find('MlSubChapters', {
         chapterId: args.id,
         isActive: true

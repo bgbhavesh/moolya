@@ -184,7 +184,7 @@ export default class MlTableView extends Component {
     return (<div>{loading ? (<div className="loader_wrap"></div>) : (
       <div>
         {FilterComponent}
-        {totalDataSize>0 && <p className='showTotal'>{message}</p>}
+        {totalDataSize>0 && <p className='showTotal small'>{message}</p>}
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}

@@ -179,19 +179,19 @@ export default class MlAssignClustersToFilters extends React.Component {
     let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){
       data:fetchDepartmentsForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter) {
         value:_id
-        label:departmentName
+        label:displayName
       }
     }`;
     let subDepartmentQuery=gql`query($id:String){
       data:fetchSubDepartmentsForRegistration(id:$id) {
         value:_id
-        label:subDepartmentName
+        label:displayName
       }
     }`;
     let roleQuery=gql`query($cluster:String,$chapter:String,$subChapter:String,$department:String,$subDepartment:String){
       data:fetchRolesForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter,department:$department,subDepartment:$subDepartment) {
         value:_id
-        label:roleName
+        label:displayName
       }
     }`;*/
 
@@ -205,21 +205,21 @@ export default class MlAssignClustersToFilters extends React.Component {
     let departmentQuery=gql`query{  
       data:fetchDepartments{
         value:_id
-        label:departmentName
+        label:displayName
       }  
     }`;
 
     let subDepartmentQuery=gql`query($id:String){
       data:fetchSubDepartmentsForRegistration(id:$id) {
         value:_id
-        label:subDepartmentName
+        label:displayName
       }
     }`;
 
     let roleQuery=gql`query($cluster:String,$chapter:String,$subChapter:String,$department:String,$subDepartment:String){
       data:fetchRolesForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter,department:$department,subDepartment:$subDepartment) {
         value:_id
-        label:roleName
+        label:displayName
       }
     }`;
 

@@ -33,6 +33,7 @@ MlResolver.MlQueryResolver['fetchCommunityDefinitionAPI'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchCommunityDefinitionForProcessMapping'] = (obj, args, context, info) => {
   let result=MlCommunityDefinition.find({isActive:true}).fetch()||[];
+  result.map(function(data, index){if(data.name === "Browsers") result.splice(index, 1);})
   result.push({"name" : "All","code" : "all"});
   return result;
 }

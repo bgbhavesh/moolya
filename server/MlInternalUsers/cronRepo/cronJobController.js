@@ -504,16 +504,20 @@ class MlCronJobControllerClass {
     }
 
     sendHtmlEmail(emailObject) {
-      console.log("cron sending mail");
-      Meteor.setTimeout(function () {
-        mlEmail.sendHtml({
-          from: fromEmail,
-          to: "anil.kumar@raksan.in",
-          cc: "rudra.pratap@raksan.in",
-          subject: "moolya daily monitoring report",
-          html: emailObject.html
-        });
-      }, 2 * 1000);
+      if (Meteor.settings.public.instance != "DEV") {
+        console.log("cron sending mail");
+        Meteor.setTimeout(function () {
+          mlEmail.sendHtml({
+            from: fromEmail,
+            to: "anil.kumar@raksan.in",
+            cc: "rudra.pratap@raksan.in",
+            subject: "moolya daily monitoring report",
+            html: emailObject.html
+          });
+        }, 2 * 1000);
+      } else {
+        console.log("cron sending mail stopped in dev");
+      }
     }
 }
 const MlCronJobController = new MlCronJobControllerClass();

@@ -5,7 +5,8 @@
 import React from "react";
 import {Meteor} from "meteor/meteor";
 import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 // import ContactDetails from "./../../../../client/admin/profile/component/MlMyProfileContactDetails";
 // import AddressDetails from "./../../../../client/admin/profile/component/mlRegistrationAddressDetails";
 // import EmailDetails from "./../../../../client/admin/profile/component/mlRegistrationEmailDetails";
@@ -62,7 +63,7 @@ export default class MlAppProfileAddressBook extends React.Component {
           <h2>My Contact Details</h2>
 
               <div className="col-md-12  main_wrap_scroll nopadding">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="main_wrap_scroll"
                   smoothScrolling={true}
@@ -94,7 +95,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                     </div>
                   </form>
                 </div>
-                </ScrollArea>
+                </Scrollbars>
               </div>
 
         </div>)}

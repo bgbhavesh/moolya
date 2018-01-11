@@ -130,6 +130,7 @@ export default class MlAppBasicInfo extends React.Component {
    */
   updateDuration(evt, type) {
     let value=Number.parseInt(evt.target.value);
+    if(isNaN(value)) value = 0;
     if(value >59 && type ==='minutes'){
       return;
     }

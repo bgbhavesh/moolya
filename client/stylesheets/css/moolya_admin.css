@@ -1680,7 +1680,25 @@ margin: 0px;
 .reg_payment{position: absolute;text-align: center;top: 50%;left: 50%;transform: translate(-50%,-50%);}
 
 .ml_pink {background-color: #f48794 !important}
+.ml_pink:after {border-color: transparent transparent transparent #f48794 !important}
+.ml_pink:before {border-color: transparent #f48794 transparent transparent !important}
+
 .ml_red {background-color: #dd5f5f !important}
+.ml_red:after {border-color: transparent transparent transparent #dd5f5f !important}
+.ml_red:before {border-color: transparent #dd5f5f transparent transparent !important}
+
 .ml_orange {background-color: #e29213 !important}
+.ml_orange:after {border-color: transparent transparent transparent #e29213 !important}
+.ml_orange:before {border-color: transparent #e29213 transparent transparent !important}
+
 .ml_green {background-color: #1fea68 !important}
+.ml_green:after {border-color: transparent transparent transparent #1fea68 !important}
+.ml_green:before {border-color: transparent #1fea68 transparent transparent !important}
+
 .sub-head-border{ border-bottom: 1px solid #273545 !important;}
+
+
+.ml_inner_btn{width: 98%;position: absolute;text-align: center;}
+.ml_inner_btn .h_btn{display: inline-block; background: #ccc; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #000;text-shadow: none;text-align: center;cursor: pointer;padding:0px 5px;}
+.ml_inner_btn .h_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ccc;top: 0px;}
+.ml_inner_btn .h_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ccc transparent transparent;top: 0px;}

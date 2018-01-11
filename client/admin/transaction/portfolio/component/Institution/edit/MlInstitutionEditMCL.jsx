@@ -4,6 +4,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
 import _ from 'lodash';
+import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
@@ -21,13 +22,14 @@ export default class MlInstitutionEditMCL extends React.Component {
       privateFields: []
     }
     this.onLockChange.bind(this);
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.updateprivateFields.bind(this)
-    this.fetchPortfolioDetails.bind(this);
+    // this.fetchPortfolioDetails.bind(this);
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+   const resp = this.fetchPortfolioDetails();
+   return resp;
   }
 
   componentDidUpdate() {
@@ -49,6 +51,9 @@ export default class MlInstitutionEditMCL extends React.Component {
     let that = this;
     let data = {};
     let portfoliodetailsId = that.props.portfolioDetailsId;
+    let membershipDescription;
+    let complianceDescription;
+    let licenseDescription;
     var responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
     var responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     var responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
@@ -64,18 +69,23 @@ export default class MlInstitutionEditMCL extends React.Component {
         licenses: that.context.institutionPortfolio.licenses,
         compliances: that.context.institutionPortfolio.compliances
       }
+      const editorValues = this.getBaseValues(data);
+      membershipDescription = editorValues.membershipDescription;
+      complianceDescription = editorValues.complianceDescription;
+      licenseDescription = editorValues.licenseDescription;
 
-      this.setState({loading: false,data:data}, () => {
+
+      this.setState({loading: false,data:data, membershipDescription}, () => {
         var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
         this.lockPrivateKeys('memberships', MprivateKeys);
       });
 
-      this.setState({loading: false, data: data}, () => {
+      this.setState({loading: false, data: data,licenseDescription}, () => {
         var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
         this.lockPrivateKeys('licenses', LprivateKeys);
       });
 
-      this.setState({loading: false, data: data}, () => {
+      this.setState({loading: false, data: data,complianceDescription}, () => {
         var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
         this.lockPrivateKeys('compliances', CprivateKeys);
       });
@@ -110,10 +120,22 @@ export default class MlInstitutionEditMCL extends React.Component {
         licenses: this.state.licenses,
         compliances: this.state.compliances
       }
+      const editorValues = this.getBaseValues(data);
+      membershipDescription = editorValues.membershipDescription;
+      complianceDescription = editorValues.complianceDescription;
+      licenseDescription = editorValues.licenseDescription;
 
-      this.setState({loading: false, data: data})
+      // this.setState({loading: false, data: data})
+      // this.updateprivateFields();
+      this.setState({ loading: false, data: data, privateFields: pf, membershipDescription, complianceDescription, licenseDescription });
       this.updateprivateFields();
     }
+  }
+  getBaseValues(data) {
+    membershipDescription = createValueFromString(data.memberships ? data.memberships.membershipDescription : null);
+    complianceDescription = createValueFromString(data.compliances ? data.compliances.complianceDescription : null);
+    licenseDescription = createValueFromString(data.licenses ? data.licenses.licenseDescription : null);
+    return { membershipDescription, complianceDescription, licenseDescription }
   }
 
   componentDidMount() {
@@ -121,17 +143,22 @@ export default class MlInstitutionEditMCL extends React.Component {
     dataVisibilityHandler();
   }
 
-  handleBlur(type, e) {
+  handleBlur(value, keyName, object) {
     let details = this.state.data;
-    let name = e.target.name;
-    let mcl = details[type];
+    // let name = e.target.name;
+    // let mcl = details[type];
+    let mcl = details[object];
+    mcl = _.omit(details[object], keyName);
     if (details && mcl) {
-      mcl[name] = e.target.value
-      details[type] = mcl;
+      // mcl[name] = e.target.value
+      // details[type] = mcl;
+      mcl[keyName] = value.toString('html');
+      details[object] = mcl;
     } else {
-      details = _.extend(details, {[type]: {[name]: e.target.value}});
+      details = _.extend(details, { [object]: { [keyName]: value.toString('html') } });
+      // details = _.extend(details, {[type]: {[name]: e.target.value}});
     }
-    this.setState({data: details}, function () {
+    this.setState({data: details,[keyName]: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -221,6 +248,7 @@ export default class MlInstitutionEditMCL extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    const { membershipDescription, complianceDescription, licenseDescription } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -232,10 +260,14 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Membership</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="membershipDescription" className="form-control"
+                  <MlTextEditor
+                        value={membershipDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "membershipDescription", "memberships")}
+                      />
+                    {/* <textarea placeholder="Describe..." name="membershipDescription" className="form-control"
                               id="cl_about"
                               defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
+                              onBlur={this.handleBlur.bind(this, "memberships")}></textarea> */}
                     <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"
                                  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
                   </div>
@@ -250,10 +282,14 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Compliances</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="complianceDescription" className="form-control"
+                  <MlTextEditor
+                        value={complianceDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "complianceDescription", "compliances")}
+                      />
+                    {/* <textarea placeholder="Describe..." name="complianceDescription" className="form-control"
                               id="cl_about"
                               defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.complianceDescription ? this.state.data.compliances.complianceDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
+                              onBlur={this.handleBlur.bind(this, "compliances")}></textarea> */}
                     <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate"
                                  onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
                   </div>
@@ -264,9 +300,13 @@ export default class MlInstitutionEditMCL extends React.Component {
                 <div className="panel-heading">Licenses</div>
                 <div className="panel-body ">
                   <div className="form-group nomargin-bottom">
-                    <textarea placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about"
+                  <MlTextEditor
+                        value={licenseDescription}
+                        handleOnChange={(value) => this.handleBlur(value, "licenseDescription", "licenses")}
+                      />
+                    {/* <textarea placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about"
                               defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licenseDescription ? this.state.data.licenses.licenseDescription : ""}
-                              onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
+                              onBlur={this.handleBlur.bind(this, "licenses")}></textarea> */}
                     <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate"
                                  onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
                   </div>

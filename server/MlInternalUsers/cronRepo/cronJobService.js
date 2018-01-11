@@ -1,10 +1,12 @@
 const cron = require('node-cron');
 import MlCronJobController from './cronJobController';
 
-var task = cron.schedule('5 * * * * *', function () {
-    console.log('immediately started');
+var task = cron.schedule('10 * * * * *', Meteor.bindEnvironment(() => {    
     MlCronJobController.dailyReport();
-}, false);
-
-//todo:  [Error: Can't wait without a fiber] need to solve the error    
+    console.log('................................................');
+}), false);
+    
 // task.start();
+Meteor.startup(function () {
+    // task.start();
+})

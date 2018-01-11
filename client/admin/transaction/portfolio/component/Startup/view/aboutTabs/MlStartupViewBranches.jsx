@@ -9,6 +9,8 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+
 export default class MlStartupViewBranches extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +21,8 @@ export default class MlStartupViewBranches extends React.Component {
     this.annotatorEvents.bind(this);
   }
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
   // componentWillMount(){
   //   this.fetchPortfolioStartupDetails();
@@ -32,6 +34,15 @@ export default class MlStartupViewBranches extends React.Component {
       pluginInit:  function () {
       }
     });
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation: true})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   annotatorEvents(event, annotation, editor){
@@ -105,11 +116,11 @@ export default class MlStartupViewBranches extends React.Component {
     const branchesArray = that.props.branchesDetails || [];
     return (
 
-        <div id="annotatorContent">
+        <div>
           <h2>Branches</h2>
           <div>
             {branchesArray && branchesArray.length?(
-             <div className="col-lg-12">
+             <div className="col-lg-12"  id="annotatorContent">
             <div className="row">
               {branchesArray.map(function (details, idx) {
                 return(

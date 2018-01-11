@@ -334,6 +334,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .password_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
 .input_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
 .input_icon.fa-lock{color: #ef4647;}
+.input_icon.fa-unlock{color: #3c763d;}
 .delete_icon{position: absolute; float: right; right: 0; margin-top: -24px; margin-right: 7px; cursor: pointer; background: #ef4647; width: 30px; height: 30px; text-align: center; border-radius: 50%; color: #fff; /* padding: 9px; */ line-height: 29px;}
 .calendar_icon{position: absolute;float: right;right: 0;margin-top: -30px; margin-right: 20px;cursor: pointer;}
 .input_types{float: left;margin-right: 20px;}

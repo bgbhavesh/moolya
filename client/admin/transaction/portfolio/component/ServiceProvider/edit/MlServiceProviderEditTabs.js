@@ -185,19 +185,6 @@ export default class MlServiceProviderEditTabs extends Component {
   }
 
   getServiceProviderClients(details, privateKey, requiredFields) {
-    // let data = this.state.serviceProviderPortfolio;
-    // if (data && !data.clients) {
-    //   data['clients'] = [];
-    // }
-    // this.setState({serviceProviderPortfolio: data})
-    // let arr = [];
-    // _.each(details, function (obj) {
-    //   let updateItem = _.omit(obj, 'logo');
-    //   arr.push(updateItem)
-    // })
-    // data['clients'] = arr;
-    // this.setState({serviceProviderPortfolio: data})
-    // this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey, requiredFields);
     var data = this.state.serviceProviderPortfolio;
     data['clients'] = details;
     this.setState({serviceProviderPortfolio: data})
@@ -206,13 +193,18 @@ export default class MlServiceProviderEditTabs extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys:privateKeys,
-      removePrivateKeys:removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj});
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
+    // let obj = {
+    //   privateKeys:privateKeys,
+    //   removePrivateKeys:removePrivateKeys
+    // }
+    // this.setState({portfolioKeys: obj});
+    // return obj
   }
+
   componentWillReceiveProps(newProps) {
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);

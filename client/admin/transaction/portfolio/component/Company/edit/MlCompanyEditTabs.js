@@ -50,12 +50,14 @@ export default class MlCompanyEditTabs extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys: privateKeys,
-      removePrivateKeys: removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj});
-    return obj
+    // let obj = {
+    //   privateKeys: privateKeys,
+    //   removePrivateKeys: removePrivateKeys
+    // }
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
   }
 
   componentWillReceiveProps(newProps) {

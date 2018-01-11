@@ -217,14 +217,13 @@ class MlStartupEditTemplate extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys:privateKeys,
-      removePrivateKeys:removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj}, () => {
-      this.props.onChangePrivateKeys(obj)
-    });
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
+    // this.setState({portfolioKeys: obj}, () => {
+    //   this.props.onChangePrivateKeys(obj)
+    // });
   }
 
   componentWillReceiveProps(newProps) {
@@ -263,24 +262,26 @@ class MlStartupEditTemplate extends Component {
     return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }
+
 MlStartupEditTemplate.childContextTypes = {
   startupPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object
 };
 
-const mapStateToProps = (state) => {
-  return {
-    mlStartupEditTemplate: state,
-  };
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     mlStartupEditTemplate: state,
+//   };
+// }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onChangePrivateKeys: (keys) => dispatch({
-      type: 'CHANGE_PRIVATE_KEYS',
-      payload: keys,
-    }),
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onChangePrivateKeys: (keys) => dispatch({
+//       type: 'CHANGE_PRIVATE_KEYS',
+//       payload: keys,
+//     }),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);
+// export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);
+export default MlStartupEditTemplate;

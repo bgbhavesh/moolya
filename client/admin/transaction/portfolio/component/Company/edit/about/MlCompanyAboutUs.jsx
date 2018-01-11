@@ -7,6 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formE
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../../commons/utils/confirm';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -19,9 +20,10 @@ export default class MlCompanyAboutUs extends React.Component{
       loading: true,
       privateKey:{},
       data:this.props.aboutUsDetails || {},
+      editorValue: createValueFromString(this.props.aboutUsDetails ? this.props.aboutUsDetails.companyDescription : null)
     }
 
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.fetchOnlyImages.bind(this);
     this.libraryAction.bind(this);
     return this;
@@ -35,24 +37,36 @@ export default class MlCompanyAboutUs extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    
+    // var WinHeight = $(window).height();
+    // $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    var WinWidth = $(window).width();
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    setTimeout (function(){
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+  },200);
     this.fetchOnlyImages()
     this.props.getAboutUs(this.state.data)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.aboutUs)
+    const editorValue = createValueFromString(this.context.companyPortfolio && this.context.companyPortfolio.aboutUs ? this.context.companyPortfolio.aboutUs.companyDescription : null);
     if(!empty){
-      this.setState({loading: false, data: this.context.companyPortfolio.aboutUs});
+      this.setState({loading: false, data: this.context.companyPortfolio.aboutUs,editorValue});
     }
   }
 
-  handleBlur(e){
+  handleBlur(value, keyName){
     let details =this.state.data;
-    let name  = e.target.name;
+    // let name  = e.target.name;
     details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    details=_.extend(details,{[keyName]: value.toString('html')});
+    // details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -163,6 +177,7 @@ export default class MlCompanyAboutUs extends React.Component{
 
 
   render(){
+    const { editorValue } = this.state;
     const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
       return (
         <div className="upload-image" key={id}>
@@ -173,7 +188,7 @@ export default class MlCompanyAboutUs extends React.Component{
 
     return(
       <div className="requested_input">
-        <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true} >
+        <div className="main_wrap_scroll">
         <div className="col-lg-12">
           <div className="row">
             <h2>
@@ -182,7 +197,11 @@ export default class MlCompanyAboutUs extends React.Component{
             <div className="panel panel-default panel-form">
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control"  name="companyDescription" id="companyDescription" defaultValue={this.state.data&&this.state.data.companyDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={(value) => this.handleBlur(value, "companyDescription")}
+                  />
+                  {/* <textarea placeholder="Describe..." className="form-control"  name="companyDescription" id="companyDescription" defaultValue={this.state.data&&this.state.data.companyDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompanyDescriptionPrivate" onClick={this.onLockChange.bind(this, "companyDescription", "isCompanyDescriptionPrivate")}/>
                 </div>
 
@@ -204,7 +223,7 @@ export default class MlCompanyAboutUs extends React.Component{
             </div>
 
           </div> </div>
-        </ScrollArea>
+        </div>
       </div>
     )
   }

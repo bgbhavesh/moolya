@@ -6,6 +6,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
+import moment from 'moment';
+
 var options = [
   { value: 'role', label: 'Role' },
   { value: 'role', label: 'Role' }
@@ -133,7 +135,7 @@ export default class Appointments extends React.Component {
         dateTime: `${session.duration.hours}:${session.duration.minutes} Hours`,
         userId: nextProps.appointment.client.userId,
         status: session.status,
-        tarId: session.startDate,
+        tarId: `${new moment(session.startDate).format('DD-MMM-YYYY HH:mm')} GMT`,
         cluster: 'Rescheduled'
       })
     });

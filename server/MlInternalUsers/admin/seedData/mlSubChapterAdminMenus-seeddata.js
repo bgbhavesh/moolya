@@ -279,8 +279,9 @@ if(Meteor.isServer){
                     "image" : "",
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
-                    "subMenusId":"communities_communities",
                     "subMenuMappingId":"communities_subChapters_communityDetails",
+                    "subMenusId":"communities_communities",
+                    "hideSubMenu":false
                   },
                   {
                     "link" : "/admin/community/subChapter/community/assignuser",

@@ -129,7 +129,7 @@ export default class MlCompanyEditTabs extends Component {
         panelClassName: 'panel',
         title: "M C & L",
         name: "M C And L",
-        component: <MlCompanyMCL key="8" client={client} getMCL={this.getMCL.bind(this)}
+        component: <MlCompanyMCL key="8" client={client} isAdmin={true} getMCL={this.getMCL.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

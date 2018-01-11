@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 
 
 export default class MlInstitutionSP extends React.Component{
@@ -12,7 +13,8 @@ export default class MlInstitutionSP extends React.Component{
     this.state={
       loading: true,
       data:this.props.serviceProductsDetails || {},
-      privateKey:{}
+      privateKey:{},
+      editorValue: createValueFromString(this.props.serviceProductsDetails ? this.props.serviceProductsDetails.spDescription : null)
     }
     this.handleBlur.bind(this);
     return this;
@@ -30,16 +32,18 @@ export default class MlInstitutionSP extends React.Component{
   componentWillMount(){
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
     if(!empty){
-      this.setState({loading: false, data: this.context.institutionPortfolio.serviceProducts});
+      const editorValue = createValueFromString(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts ? this.context.institutionPortfolio.serviceProducts.spDescription : null);
+      this.setState({loading: false, data: this.context.institutionPortfolio.serviceProducts,editorValue});
     }
   }
 
-  handleBlur(e){
+  handleBlur(value, keyName){
     let details =this.state.data;
-    let name  = e.target.name;
+    // let name  = e.target.name;
     details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    details=_.extend(details,{[keyName]: value.toString('html')});
+    // details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -85,9 +89,8 @@ export default class MlInstitutionSP extends React.Component{
   }
 
   render(){
+    const { editorValue } = this.state;
     return (
-
-
       <div className="requested_input">
         <div className="col-lg-12">
           <div className="row">
@@ -97,7 +100,11 @@ export default class MlInstitutionSP extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={(value) => this.handleBlur(value, "spDescription")}
+                  />
+                  {/* <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea> */}
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this, "spDescription", "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 

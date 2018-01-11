@@ -14,14 +14,15 @@ import {check} from 'meteor/check';
 import {Accounts} from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+import _ from 'lodash';
 import getContext from '../../commons/mlAuthContext'
 import MlResolver from '../../commons/mlResolverDef';
 import MlSchemaDef from '../../commons/mlSchemaDef';
-import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
 import getSiteMapUrls from '../../MlExternalUsers/microSite/microSiteRepo/siteMapCreation'
+import MlCronJobController from '../cronRepo/cronJobController';
 let helmet = require('helmet');
 var Tokens = require('csrf')
 var siteMap = require('sitemap')
@@ -32,6 +33,7 @@ let multipart = require('connect-multiparty'),
   fs = require('fs'),
   multipartMiddleware = multipart();
 var path = Npm.require('path');
+
 const resolvers = _.extend({
   Query: MlResolver.MlQueryResolver,
   Mutation: MlResolver.MlMutationResolver
@@ -980,6 +982,10 @@ updateBuildVersion = (request) => {
         $set: {latestRelease: releaseType, updatedAt: new Date()}
       };
       returnResponse.success = true;
+      break;
+    case "GENERATEREPORT":
+      MlCronJobController.dailyReport();
+      returnResponse.success = false
       break;
     default:
       returnResponse.success = false

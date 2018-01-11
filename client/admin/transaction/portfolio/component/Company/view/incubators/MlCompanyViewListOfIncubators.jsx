@@ -8,6 +8,7 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "listOfIncubators"
 
 export default class MlCompanyViewListOfIncubators extends React.Component{
@@ -43,8 +44,9 @@ export default class MlCompanyViewListOfIncubators extends React.Component{
     let portfolioDetailsId=that.props.portfolioDetailsId;
     const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
     if (response && response.listOfIncubators) {
+      const editorValue = createValueFromString(response.listOfIncubators.listOfIncubatorsDescription);
       var object = response.listOfIncubators;
-      this.setState({loading: false,listOfIncubators: object});
+      this.setState({loading: false,listOfIncubators: object,editorValue: editorValue});
     }else{
       this.setState({loading:false})
     }
@@ -130,6 +132,7 @@ export default class MlCompanyViewListOfIncubators extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
      <div className="col-lg-12 col-sm-12" id="annotatorContent">
             <div className="row">
@@ -137,10 +140,16 @@ export default class MlCompanyViewListOfIncubators extends React.Component{
               <div className="panel panel-default panel-form-view">
 
                 <div className="panel-body">
-                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
+                {showLoader === true ? (<MlLoader />) : (<div>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+
+                  {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.listOfIncubators && this.state.listOfIncubators.listOfIncubatorsDescription ? this.state.listOfIncubators.listOfIncubatorsDescription
                     : <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
-                    </div>}</p>)}
+                    </div>}</p>)} */}
 
                 </div>
               </div>

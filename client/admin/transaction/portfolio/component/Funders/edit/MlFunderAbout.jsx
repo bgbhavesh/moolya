@@ -455,7 +455,7 @@ export default class MlFunderAbout extends React.Component {
                         {/*<img src="/images/def_profile.png"/>*/}
                         {/*</div>*/}
                       </div>
-                      <div className="clearfix"></div>
+                      <br className="brclear" />
                       <div className="panel panel-default mart20">
                         <div className="panel-heading"> Investment Budget Per Year (in {this.state.currencySymbol}): </div>
 

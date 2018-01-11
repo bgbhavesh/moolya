@@ -91,22 +91,14 @@ export default class BeSpokeHandler extends Component {
 
   handleBlur(value, name) {
     let { details } = this.state;
-    // details = _.omit(details, [name]);
-    // details = _.extend(details, { [name]: value });
-    // this.setState({ details: details })
-    if(name === 'minutes'){
-      if(value > 59) value = 59;
+    if(name === 'minutes'){if(value > 59) value = 59;}
+    if ("duration" in details) details.duration[name] = value?parseInt(value):0;
+    else {
+      let duration={};
+      duration[name] = value?parseInt(value):0;
+      details.duration = duration;
     }
-    details.duration[name] = value?parseInt(value):0;
     this.setState({ details })
-
-    // if (name === "hours") {
-    //   this.setState({ hour: value },this.handleDuration())
-    //
-    // } else if (name === "minutes") {
-    //   if(value > 59) value = 59;
-    //   this.setState({ minute: value },this.handleDuration())
-    // }
   }
 
   /**

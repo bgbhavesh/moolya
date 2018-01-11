@@ -134,15 +134,15 @@ export default class Pagination extends Component {
         <div className="pagination" role="navigation">
 
           <div className="perpage pagination_open" onClick={that.toggleOnClick.bind(that)}>
-            <a onClick={that.pageCount.bind(that)}>
+            {/*<a onClick={that.pageCount.bind(that)}>*/}
               {/*<FontAwesome name='chevron-up'/>*/}
-            </a>
-            <br />
+            {/*</a>*/}
+            {/*<br />*/}
             <b>50</b>
-            <br />
-            <a onClick={that.pageCount.bind(that)}>
+            {/*<br />*/}
+            {/*<a onClick={that.pageCount.bind(that)}>*/}
               {/*<FontAwesome name='chevron-down'/>*/}
-            </a>
+            {/*</a>*/}
           </div>
 
           {/*<a href="">

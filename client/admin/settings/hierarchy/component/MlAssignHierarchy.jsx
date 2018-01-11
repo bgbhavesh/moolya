@@ -377,33 +377,33 @@ export default class MlAssignHierarchy extends React.Component {
     let isMoolya=departmentInfo.isMoolya
     let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya, clusterId:this.props.data.clusterId}}};
     let departmentQuery = gql` query($isMoolya:Boolean, $clusterId:String){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya, clusterId:$clusterId){label:departmentName,value:_id}
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya, clusterId:$clusterId){label:displayName,value:_id}
           }
           `;
     let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department,subDepartmentId:departmentInfo.subDepartmentId}}};
     let subDepartmentquery=gql`query($id:String,$subDepartmentId:String){
       data:fetchSubDepartmentsHierarchy(id:$id,subDepartmentId:$subDepartmentId) {
         value:_id
-        label:subDepartmentName
+        label:displayName
       }
     }`
     let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String,$roles:[teamStructureAssignmentInput]){
       data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId,roles:$roles) {
         value:_id
-        label:roleName
+        label:displayName
       }
     }`
     /* let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String,$roles:teamStructureAssignmentInput){
      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId,roles:$roles) {
      value:_id
-     label:roleName
+     label:displayName
      }
      }`*/
     let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.data.clusterId, subChapterId: this.props.data.subChapterId}}};
     let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $subChapterId: String){
       data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, subChapterId: $subChapterId) {
         value:roleId
-        label:roleName
+        label:displayName
       }
     }`
 

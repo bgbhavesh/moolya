@@ -14,14 +14,15 @@ import {check} from 'meteor/check';
 import {Accounts} from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+import _ from 'lodash';
 import getContext from '../../commons/mlAuthContext'
 import MlResolver from '../../commons/mlResolverDef';
 import MlSchemaDef from '../../commons/mlSchemaDef';
-import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 import findPortFolioDetails from '../../MlExternalUsers/microSite/microSiteRepo/microSite'
 import getSiteMapUrls from '../../MlExternalUsers/microSite/microSiteRepo/siteMapCreation'
+import MlCronJobController from '../cronRepo/cronJobController';
 let helmet = require('helmet');
 var Tokens = require('csrf')
 var siteMap = require('sitemap')
@@ -915,6 +916,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
     graphQLServer.post(config.getBuildVersion, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      // MlCronJobController.dailyReport();
       const response = getBuildVersion(req);
       res.send(response);
     }))

@@ -1,4 +1,11 @@
-import EmailTemplates from 'swig-email-templates'
+import EmailTemplates from 'swig-email-templates'; 
+const fromEmail = Meteor.settings.private.fromEmailAddr; 
+
+const today = new Date();
+const dd = today.getDate().toString();
+const mm = (today.getMonth()+1).toString(); //January is 0!
+const yy = today.getFullYear().toString().substr(-2)
+const curDated = dd+"-"+mm+"-"+yy;
 
 class MlCronJobControllerClass {
     constructor() {
@@ -6,7 +13,7 @@ class MlCronJobControllerClass {
     }
     dailyReport() {
         let object = {
-            curDate: new Date(),
+            curDate: curDated,
             activeCluster: mlDBController.find('MlClusters', { isActive: true }).count(),
             activeChapters: mlDBController.find('MlChapters', { isActive: true }).count(),
             activeNon_moolyaSubChapters: mlDBController.find('MlSubChapters', { isActive: true, isDefaultSubChapter: false }).count()
@@ -106,7 +113,7 @@ class MlCronJobControllerClass {
           },
           {
               "$addFields": {
-                  "Pending_SC_Approval_reqInActive_SubChapters": {
+                  "pending_SC_Approval_reqInActive_SubChapters": {
                       "$size": {
                           "$filter": {
                               "input": "$subChapters",
@@ -326,6 +333,25 @@ class MlCronJobControllerClass {
               }
           },
           {
+              "$addFields": {
+                  "active_Chapters.pending_SC_Approval_reqInActive_SubChapters": {
+                      "$size": {
+                          "$filter": {
+                              "input": "$subChapters",
+                              "as": "subChapter",
+                              "cond": {
+                                  $and: [
+                                      { "$eq": ["$$subChapter.isActive", false] },
+                                      { "$eq": ["$$subChapter.isDefaultSubChapter", false] },
+                                      { "$eq": ["$$subChapter.chapterId", "$active_Chapters._id"] }
+                                  ]
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          {
               "$group": {
                   "_id": "$_id",
                   "clusterName": { $first: "$clusterName" },
@@ -333,7 +359,7 @@ class MlCronJobControllerClass {
                   "regB4Portfolio": { $first: "$regB4Portfolio" },
                   "approved_portfolios": { $first: "$approved_portfolios" },
                   "pending_officeApproval": { $first: "$pending_officeApproval" },
-                  "Pending_SC_Approval_reqInActive_SubChapters": { $first: "$Pending_SC_Approval_reqInActive_SubChapters" },
+                  "pending_SC_Approval_reqInActive_SubChapters": { $first: "$pending_SC_Approval_reqInActive_SubChapters" },
                   "active_Chapters": { $push: "$active_Chapters" },
               }
           },
@@ -344,7 +370,7 @@ class MlCronJobControllerClass {
                   regB4Portfolio: 1,
                   approved_portfolios: 1,
                   pending_officeApproval: 1,
-                  Pending_SC_Approval_reqInActive_SubChapters: 1,
+                  pending_SC_Approval_reqInActive_SubChapters: 1,
                   clusterName: 1,
                   // active_Chapters: 1,
                   active_Chapters: {
@@ -358,7 +384,8 @@ class MlCronJobControllerClass {
                       approved_companies: 1,
                       approved_portfolios: 1,
                       regB4Portfolio: 1,
-                      pending_officeApproval: 1
+                      pending_officeApproval: 1,
+                      pending_SC_Approval_reqInActive_SubChapters: 1
                   },
                   approved_Ideators: {
                       "$sum": {
@@ -437,6 +464,7 @@ class MlCronJobControllerClass {
     }
 
     generateHtmlFile(data) {
+      const _this = this;
       console.log(data)
 
       /* Templates Directory in src/ui/hcmMailTemplates folder - Can modify the templates as per required
@@ -452,14 +480,26 @@ class MlCronJobControllerClass {
         }
       });
       var absoluteFilePath = Npm.require('fs').realpathSync(process.cwd() + '/../../../../..') + '/server/MlInternalUsers/cronRepo/cronMoolyaReport.html';
-      console.log(absoluteFilePath)
       var context = {
         data: data
       };
-      customTemplates.render(absoluteFilePath, context, function (err, html, text, subject) {
-        console.log(err, html)
-        // sendEmail(emailObject)
-      });
+      customTemplates.render(absoluteFilePath, context, Meteor.bindEnvironment((err, html, text, subject) => {
+        emailObject.html = html;
+        emailObject.text = text;
+        _this.sendHtmlEmail(emailObject);
+      }))
+    }
+
+    sendHtmlEmail(emailObject) {
+      console.log(emailObject);
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: "vishwadeep.kapoor@raksan.in",
+          subject: "this is the test mail",
+          html: emailObject.html
+        });
+      }, 2 * 1000);
     }
 }
 const MlCronJobController = new MlCronJobControllerClass();

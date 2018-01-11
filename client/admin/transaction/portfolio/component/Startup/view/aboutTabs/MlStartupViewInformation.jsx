@@ -7,6 +7,8 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+
 
 export default class MlStartupViewInformation extends React.Component {
   constructor(props) {
@@ -18,12 +20,22 @@ export default class MlStartupViewInformation extends React.Component {
   }
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
 
   componentWillMount(){
     this.setState({loading: false});
+  }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation: true})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   initalizeAnnotaor(){
@@ -102,12 +114,12 @@ export default class MlStartupViewInformation extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="col-lg-12 col-sm-12" id="annotatorContent">
+      <div className="col-lg-12 col-sm-12">
         <div className="row">
           <h2>Information</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body panel-body-scroll">
-              <p>{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+              <p id="annotatorContent">{this.props.informationDetails && this.props.informationDetails.informationDescription ? this.props.informationDetails.informationDescription : (<NoData tabName={this.props.tabName}/>)}</p>
             </div>
           </div>
         </div>

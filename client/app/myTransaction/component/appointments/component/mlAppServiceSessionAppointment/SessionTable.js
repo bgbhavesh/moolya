@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AppointmentModal from './../AppointmentModal';
+import moment from "moment";
 
 export default class SessionTable extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class SessionTable extends Component {
   render() {
     let slots = [];
     let slotIndex = -1;
+    console.log( 'this.props.availableSlots',  this.props.availableSlots);
     this.props.availableSlots.forEach((slot, index) => {
       if (index % 4 === 0) {
         slotIndex++;
@@ -28,7 +30,7 @@ export default class SessionTable extends Component {
       }
       slots[slotIndex].push(slot);
     });
-    const currentDateString = new Date().toLocaleDateString();
+    const currentDateString = this.props.selectedDate ? new Date(this.props.selectedDate).toLocaleDateString() : new Date().toLocaleDateString();
     return (
       <div>
         <AppointmentModal

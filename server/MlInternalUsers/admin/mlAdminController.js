@@ -33,6 +33,7 @@ let multipart = require('connect-multiparty'),
   fs = require('fs'),
   multipartMiddleware = multipart();
 var path = Npm.require('path');
+
 const resolvers = _.extend({
   Query: MlResolver.MlQueryResolver,
   Mutation: MlResolver.MlMutationResolver
@@ -916,7 +917,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) => {
     graphQLServer.post(config.getBuildVersion, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      // MlCronJobController.dailyReport();
       const response = getBuildVersion(req);
       res.send(response);
     }))
@@ -982,6 +982,10 @@ updateBuildVersion = (request) => {
         $set: {latestRelease: releaseType, updatedAt: new Date()}
       };
       returnResponse.success = true;
+      break;
+    case "GENERATEREPORT":
+      MlCronJobController.dailyReport();
+      returnResponse.success = false
       break;
     default:
       returnResponse.success = false

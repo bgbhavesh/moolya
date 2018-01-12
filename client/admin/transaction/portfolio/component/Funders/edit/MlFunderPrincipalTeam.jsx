@@ -770,13 +770,13 @@ export default class MlFunderPrincipalTeam extends Component {
                                          onClick={this.onLockChange.bind(this, "linkedinUrl", "isLinkedinUrlPrivate", "principal")} />
 
                           </div>
-
+                          <div className="form-group">
                           <div className="input_types">
                             <input id="makePrivate" type="checkbox"
                                    checked={this.state.data.makePrivate && this.state.data.makePrivate}
                                    name="checkbox"
                                    onChange={this.onStatusChangeNotify} />
-                            <label htmlFor="checkbox1"><span></span>Make Private</label></div>
+                            <label htmlFor="checkbox1"><span></span>Make Private</label></div></div>
                           {/*<div className="form-group">*/}
                           {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
                           {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}

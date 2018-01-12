@@ -423,7 +423,89 @@ if(Meteor.isServer){
         "name" : "Documents",
         "uniqueId" : "documents",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu": [
+          {
+            "link": "/admin/documents/clusterList",
+            "name": "Cluster",
+            "uniqueId": "documents_Clusters",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/clusterList",
+                "name": "List Clusters",
+                "uniqueId": "documents_ClusterList",
+                "subMenuMappingId": "documents_Clusters",
+                "subMenusId": "documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link": "/admin/documents/chapterList",
+            "name": "Chapter",
+            "uniqueId": "documents_Chapter",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/chapterList",
+                "name": "List Clusters",
+                "uniqueId": "documents_ChapterList",
+                "subMenuMappingId": "documents_Chapter",
+                "subMenusId": "documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link": "/admin/documents/communityList",
+            "name": "Community",
+            "uniqueId": "documents_Community",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/communityList",
+                "name": "List Clusters",
+                "uniqueId": "documents_CommunityList",
+                "subMenuMappingId": "documents_Community",
+                "subMenusId": "documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link": "/admin/documents/history",
+            "name": "History",
+            "uniqueId": "documents_History",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/history",
+                "name": "List Clusters",
+                "uniqueId": "documents_HistoryList",
+                "subMenuMappingId": "documents_History",
+                "subMenusId": "documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
+        ]
       },
       /**
        * admin left nav users routes

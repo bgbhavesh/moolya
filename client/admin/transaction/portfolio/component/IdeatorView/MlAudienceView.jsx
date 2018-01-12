@@ -10,7 +10,7 @@ import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetai
 import MlLoader from '../../../../../commons/components/loader/loader'
 import NoData from '../../../../../commons/components/noData/noData';
 import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
-import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor"
+import MlTextEditor, {createValueFromString} from "../../../../../commons/components/textEditor/MlTextEditor";
 
 // import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 

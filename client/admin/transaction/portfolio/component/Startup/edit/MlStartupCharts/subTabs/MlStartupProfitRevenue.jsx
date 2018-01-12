@@ -130,7 +130,7 @@ export default class MlStartupProfitRevenue extends React.Component{
     this.refs["prlabout"+index].value = ""
     this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
-    this.setState({data : {}})
+    this.setState({data : {},selectedVal:'',selectedValType:''})
 
   }
 
@@ -242,18 +242,18 @@ export default class MlStartupProfitRevenue extends React.Component{
                                     selectedValue={this.state.selectedVal} queryType={"graphql"}
                                     query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
                                     isDynamic={true}/>*/}
-                      <span className={`placeHolder ${selectedEntityTypesActive}`}>Select Entity Type</span>
-                      <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
+                      <span className={`placeHolder ${selectedEntityTypesActive}`}> &nbsp; &nbsp; Select Entity Type</span>
+                      <Select name="form-field-name" placeholder="Select Entity Type" options={entityTypes}
                               value={this.state.selectedVal}
                               onChange={this.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}  className="float-label"/>
                     </div>
                     <div className="form-group col-lg-6">
-                      <div className="form-group col-md-6 col-sm-6">
+                      <div className="form-group col-md-6 col-sm-6 nopadding-left">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                   inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref={"prlFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                       </div>
-                      <div className="form-group col-md-6 col-sm-6">
+                      <div className="form-group col-md-6 col-sm-6 nopadding-right">
                         <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                   inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref={"prlFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
@@ -262,12 +262,12 @@ export default class MlStartupProfitRevenue extends React.Component{
                     </div>
 
                     <div className="form-group col-lg-6">
-                      <div className="form-group col-md-6 col-sm-6">
+                      <div className="form-group col-md-6 col-sm-6 nopadding-left">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                   inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref={"prlToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                       </div>
-                      <div className="form-group col-md-6 col-sm-6">
+                      <div className="form-group col-md-6 col-sm-6 nopadding-right">
                         <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                   inputProps={{placeholder: "Select To Month", className:"float-label form-control",readOnly:true}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref={"prlToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>
@@ -280,7 +280,7 @@ export default class MlStartupProfitRevenue extends React.Component{
                               value={this.state.selectedValType}
                               onChange={this.optionsBySelectTypeOfValue.bind(this,defaultIndex)}  className="float-label"/>
                     </div>
-
+                                      <br className="brclear"/>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
                       <input type="text" placeholder="Value" ref={"prlValue"+defaultIndex} className="form-control float-label"
                              id="" name="prlValue" onBlur={this.valueHandleBlur.bind(this,defaultIndex)}/>

@@ -86,7 +86,7 @@ export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapt
       subChapterId: did,
       communityId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   var id = result.data.fetchSubChapter;
   var data = omit(id, '__typename')

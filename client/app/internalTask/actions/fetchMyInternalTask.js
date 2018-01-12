@@ -22,7 +22,7 @@ export async function fetchSelfCreatedInternalTask(status) {
     variables:{
       status:status
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchSelfCreatedInternalTask;
   return id

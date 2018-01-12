@@ -22,7 +22,7 @@ export async function findCountryCode(clusterId) {
     variables: {
       clusterId: clusterId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchCountryCode;
   return id
@@ -41,7 +41,7 @@ export async function findCountryCodeForDisplayName(countryCode) {
     variables: {
       countryCode: countryCode
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.findCountryCodeForDisplayName;
   return id;

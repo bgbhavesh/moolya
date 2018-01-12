@@ -25,7 +25,7 @@ export async function findTemplatesActionHandler(templateId,code) {
       id:tid,
       stepCode:code
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findTemplates;
   return id

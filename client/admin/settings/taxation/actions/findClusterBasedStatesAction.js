@@ -11,7 +11,7 @@ export async function findClusterBasedStatesDeatilsActionHandler() {
           }
         }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FetchActiveStates;
   return id

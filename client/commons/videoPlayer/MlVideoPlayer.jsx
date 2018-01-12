@@ -9,12 +9,11 @@ export default class MlVideoPlayer extends React.Component {
       videoUrl: ""
     }
   }
-  componentDidMount() {
-      console.log(this.videoNode);
-    this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
-      console.log('onPlayerReady', this)
-    });
-  }
+  // componentDidMount() {
+  //     this.player = videojs(this.props, function onPlayerReady() {
+  //     console.log('onPlayerReady', this)
+  //   });
+  // }
   componentWillUnmount() {
     if (this.player) {
       this.player.dispose()

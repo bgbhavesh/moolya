@@ -210,8 +210,11 @@ MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchSubDepartmentsForRegistration'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
+    let query = {"departmentId":id};
+    if(args.isActive) query['isActive'] =args.isActive;
+
     // let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
-    let response= mlDBController.find('MlSubDepartments', {"departmentId":id}, context).fetch()||[];
+    let response= mlDBController.find('MlSubDepartments', query, context).fetch()||[];
     return response;
   }
 }

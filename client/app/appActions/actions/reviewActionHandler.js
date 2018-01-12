@@ -54,7 +54,7 @@ export async function fetchReviewsActionHandler(details) {
       resourceType: details.resourceType,
       cursor:details.cursor
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   var resp = result.data.fetchReviews||[];
   if (resp) {

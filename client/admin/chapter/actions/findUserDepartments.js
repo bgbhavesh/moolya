@@ -27,7 +27,7 @@ export async function findUserDepartmentypeActionHandler(userId, ClusterId, Chap
       id:did,
       subChapterId:scid
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.data;
   return id

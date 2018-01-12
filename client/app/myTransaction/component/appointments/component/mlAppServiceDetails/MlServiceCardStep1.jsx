@@ -27,7 +27,9 @@ import Moolyaselect from '../../../../../commons/components/MlAppSelectWrapper';
 var options = [
   { value: 'Weekly', label: 'Weekly' },
   { value: 'Daily', label: 'Daily' },
-  { value: 'Monthly', label: 'Monthly' }
+  { value: 'Monthly', label: 'Monthly' },
+  { value: 'Quarterly', label: 'Quarterly' },
+  { value: 'Onetime', label: 'One Time' }
 ];
 
 export default class MlServiceCardStep1 extends React.Component {
@@ -102,7 +104,7 @@ export default class MlServiceCardStep1 extends React.Component {
                   <Select name="form-field-name" options={options} value={serviceBasicInfo.sessionFrequency} placeholder='Frequency Type' disabled />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" className="form-control float-label" value={userDetails.clusterName} disabled />
+                  <input type="text" placeholder="Cluster" className="form-control float-label" value={serviceBasicInfo.cluster?serviceBasicInfo.cluster.name:''} disabled />
                 </div>
                 <div className="form-group">
                   <Select multi={true}

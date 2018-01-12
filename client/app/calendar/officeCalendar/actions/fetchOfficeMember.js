@@ -18,7 +18,7 @@ export async function fetchOfficeMemberActionHandler () {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const officeMember = result.data.fetchAllOfficeMembersWithUserId;
   return officeMember;

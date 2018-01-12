@@ -19,7 +19,7 @@ export async function findKycCategoryActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findKycCategory;
   console.log("DAta "+id);

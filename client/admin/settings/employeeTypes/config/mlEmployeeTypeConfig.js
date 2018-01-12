@@ -37,7 +37,11 @@ const mlEmployeeTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addEmployeeType")
+        if(data&&data._id)
+          toastr.error("Please uncheck the record")
+        else {
+          FlowRouter.go("/admin/settings/addEmployeeType")
+        }
       }
     },
     // {

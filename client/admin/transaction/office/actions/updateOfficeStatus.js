@@ -30,7 +30,7 @@ export async function updateOfficeStatus(officeId, loggedUserDetails) {
       subChapterId,
       communityId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   console.log(result);
   const id = result.data.updateOfficeStatus;

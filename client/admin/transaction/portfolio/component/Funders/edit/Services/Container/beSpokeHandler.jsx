@@ -17,7 +17,6 @@ export default class BeSpokeHandler extends Component {
       selectedIndustryType: [],
       responsePic: [],
       attachmentDocs: [{}],
-      uploadedProfilePic: "",
       data: {},
       emptyData: {},
       selectedIndex: 0,
@@ -91,19 +90,23 @@ export default class BeSpokeHandler extends Component {
 
 
   handleBlur(value, name) {
-    let details = this.state.details;
-    details = _.omit(details, [name]);
-    details = _.extend(details, { [name]: value });
-    this.setState({ details: details })
-    if (name === "hours") {
-      this.setState({ hour: value })
-      this.handleDuration()
-    } else if (name === "minutes") {
-      if(value > 59) value = 59;
-      this.setState({ minute: value })
-      this.handleDuration();
+    let { details } = this.state;
+    if(name === 'minutes'){if(value > 59) value = 59;}
+    if ("duration" in details) details.duration[name] = value?parseInt(value):0;
+    else {
+      let duration={};
+      duration[name] = value?parseInt(value):0;
+      details.duration = duration;
     }
+    this.setState({ details })
   }
+
+  /**
+   * Method :: handleDuration
+   * Description :: Duration field is handled
+   * @params ::  event Handler
+   * returns ::  data is set in details object
+   **/
 
   handleDuration() {
     let duration = {
@@ -144,41 +147,30 @@ export default class BeSpokeHandler extends Component {
   }
 
   /**
-   * Method :: sendDataToParent
-   * Description :: Sends data in the form of an Object back to the parent
+   * Method :: updateBeSpokeData
+   * Description :: Updates the data in edit mode
    * @params ::  No params
-   * returns ::  this.props.getServiceDetails(funderService)
+   * returns ::  response from the server
    **/
 
 
   async updateBeSpokeData(data) {
     if (data && this.isValidBeSpoke()) {
       let detailsData = _.cloneDeep(this.state.details);
-      console.log('detailsData', detailsData)
       let temp = _.omit(detailsData.duration, '__typename');
       let attachTemp = [];
-      if (detailsData.attachments && detailsData.attachments.length) {
-        attachTemp = detailsData.attachments.map(function (info, index) {
-          info.fileUrl.map(function (images) {
-            if (info.fileUrl === undefined) {
+      if (detailsData.beSpokeAttachments && detailsData.beSpokeAttachments.length) {
+        attachTemp = detailsData.beSpokeAttachments.map(function (info, index) {
+             if (info.fileUrl === undefined) {
               _.omit(images, _.isUndefined)
             }
-          })
-          // for (var propName in info.fileUrl) {
-          //   if (info.fileUrl[propName] === null || info.fileUrl[propName] === undefined) {
-          //     _.omit(info.fileUrl, _.isUndefined)
-          //   }
-          // }
           delete info['__typename']
           return info;
         })
       }
-      // _.omit(detailsData.attachments, '__typename')
-      console.log('attachTemp', attachTemp)
       detailsData.duration = temp;
-      detailsData.attachments = attachTemp;
+      detailsData.beSpokeAttachments = attachTemp;
       let service = _.omit(detailsData, '__typename');
-      console.log('service', service)
       const resp = await updateBeSpokeServiceActionHandler(service, this.props.portfolioDetailsId)
       if (resp && resp.success) {
         toastr.success("Bespoke request updated successfully");
@@ -193,6 +185,13 @@ export default class BeSpokeHandler extends Component {
       return resp;
     }
   }
+
+   /**
+   * Method :: saveBeSpokeServiceDetails
+   * Description :: Saves the data
+   * @params ::  No params
+   * returns ::  response from the server
+   **/
 
 
   async saveBeSpokeServiceDetails(data) {
@@ -241,16 +240,22 @@ export default class BeSpokeHandler extends Component {
     let details = this.state.details;
     details['conversation'] = temp;
     this.setState({ details: details }, function () {
-      console.log(this.state.details)
+      console.log(this.state.details);
     })
   }
 
+  /**
+   * Method :: onFrequencySelected
+   * Description :: Daily, Weekly and Monthly options are provided to be chosen from
+   * @params ::  selectedFrequency : type :: String
+   * returns ::  data is redirected to sendDataToParent()
+   **/
 
   onFrequencySelected(selectedFrequency) {
     let details = this.state.details;
     details['sessionFrequency'] = selectedFrequency.value;
     this.setState({ details: details }, function () {
-      console.log(this.state.details)
+      console.log(this.state.details);
     })
   }
 
@@ -274,74 +279,40 @@ export default class BeSpokeHandler extends Component {
    * and the return to current function and call storeImage()
    * returns :: Hits onFileUploadCallBack()
    * **/
-  async onFileUpload(e, index) {
-    let user = {
-      profile: {
-        InternalUprofile: { moolyaProfile: { profileImage: " " } }
-      }
-    }
-    let file = e.target.files[0];//document.getElementById("fileinput").files[0];
+  async onFileUpload(e) {
+    let file = e.target.files[0];
+    let fileDetails = {
+      fileName: file.name,
+      fileSize: file.size
+    };
+    let user = {profile: {InternalUprofile: { moolyaProfile: { profileImage: " " } } } };
     if (file) {
-      let data = { moduleName: "PROFILE", actionName: "UPDATE", user: user }
-      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, index));
+      let data = { moduleName: "PROFILE", actionName: "UPDATE", user: user };
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,fileDetails));
       return response;
     }
   }
 
-  onFileUploadCallBack(index, resp) {
+   /**
+   * Method :: onFileUploadCallBack
+   * Description :: Checkbox to determine the mode of operation
+   * @params ::  fileDetails : Object , resp : response from the server
+   * returns ::  null
+   **/
+
+  onFileUploadCallBack(fileDetails,resp) {
     let details = this.state.details;
-    let tempObject = [];
+    let fileContainer = [];
     if (resp) {
-      this.setState({ uploadedProfilePic: resp });
-      var temp = $.parseJSON(resp).result;
-      if (details['attachments'] && Object.keys(details['attachments'][index]).length > 0 && details['attachments'][index].fileUrl.length > 0) {
-        tempObject.push({ fileUrl: temp })
-        details['attachments'][index].fileUrl.push(temp);
-        // attach[index].images = tempObject
-      } else {
-        tempObject.push(temp)
-        if (!details['attachments']) {
-          details['attachments'] = [{}];
-        }
-        details['attachments'][index].fileUrl = tempObject;
-      }
-      return temp;
+      var fileUrl = $.parseJSON(resp).result;
+      fileDetails.fileUrl = fileUrl;
+      fileContainer.push(fileDetails);
+      if(details['beSpokeAttachments']) details['beSpokeAttachments'].push(fileDetails)
+      else details['beSpokeAttachments'] = fileContainer;
+      this.forceUpdate();
     }
   }
 
-  addComponent() {
-    let details = this.state.details;
-    if (details['attachments']) {
-      details['attachments'].push({})
-      this.setState({ details: details })
-    } else {
-      details['attachments'] = [{}];
-      details['attachments'].push({})
-      this.setState({ details: details })
-    }
-    // details['attachments'] = [{}
-  }
-
-  documentName(index, e) {
-    let attach = this.state.attachmentDocs;
-    let temp = e.target.value;
-    attach[index].documentName = temp;
-    this.setState({ attachmentDocs: attach })
-  }
-
-  deleteAttachments(id, index) {
-    let details = this.state.details;
-    let attach = details.attachments;
-    if (attach) {
-      delete attach[index].fileUrl[id];
-      console.log('attach', attach)
-      if (_.isEmpty(attach)) {
-        attach = [{}]
-      }
-      details.attachments = attach;
-      this.setState({ details: details })
-    }
-  }
 
   DataToBeSet(response, name) {
     if (name === 'mode') {
@@ -367,7 +338,6 @@ export default class BeSpokeHandler extends Component {
         updateBeSpokeData={this.updateBeSpokeData.bind(this)}
         dataToSet={this.DataToBeSet.bind(this)}
         data={this.state.details}
-        addComponent={this.addComponent.bind(this)}
         conversation={this.onConversationSelected.bind(this)}
         frequency={this.onFrequencySelected.bind(this)}
         industry={this.onOptionSelected.bind(this)}
@@ -375,7 +345,6 @@ export default class BeSpokeHandler extends Component {
         fileUpload={this.onFileUpload.bind(this)}
         modeSwitchHandler={this.modeSwitchHandler.bind(this)}
         componentToView={this.props.componentToView}
-        deleteAttachments={this.deleteAttachments.bind(this)}
       />
     )
   }

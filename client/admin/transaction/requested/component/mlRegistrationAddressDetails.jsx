@@ -334,7 +334,10 @@ export default class AddressDetails extends React.Component{
 
           }
         }
-
+        $('input').blur();
+        setTimeout(function(){
+         initalizeFloatLabel();
+       },1000);
   }
 
   async onEditAddress(index,value) {
@@ -477,15 +480,15 @@ export default class AddressDetails extends React.Component{
         }
       }`
 
-    let statesQuery=gql`query ($countryId: String) {
-        data: fetchStatesPerCountry(countryId: $countryId) {
+    let statesQuery=gql`query ($countryId: String,$activeCheck : Boolean) {
+        data: fetchStatesPerCountry(countryId: $countryId, activeCheck : $activeCheck) {
         value: _id
         label: name
       }
     }`;
 
     let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
-    let statesOption={options: { variables: {countryId:this.state.countryId}}};
+    let statesOption={options: { variables: {countryId:this.state.countryId,activeCheck:false}}};
 
     return (
       <div className="panel-body">

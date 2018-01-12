@@ -11,7 +11,7 @@ export async function getSharedConnectionsActionHandler() {
         profilePic
     }
   }`,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.getMySharedCalendarConnections;
   return id
@@ -31,7 +31,7 @@ export async function getSharedCalendarHandler (userId,month, year, date) {
       }
     }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables:{
       userId: userId,
       month:month,
@@ -54,7 +54,7 @@ export async function fetchConnections() {
         profileImage
       }
     }`,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchConnections;
   return id

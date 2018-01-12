@@ -199,8 +199,8 @@ export default class MlAppRegStep3 extends React.Component {
         </div>
 
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
-        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
         </Scrollbars>
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }

@@ -500,6 +500,14 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
             isActive: true
           }).fetch();
         }
+      }else{ //temporary code written by sireesha
+        data = MlDocumentMapping.find({
+          documentType: {$in: [id]},
+          clusters: {$in: clusterId},
+          chapters: {$in: chapterId},
+          subChapters:{$in: subChapterId},
+          isActive: true
+        }).fetch();
       }
 
     }

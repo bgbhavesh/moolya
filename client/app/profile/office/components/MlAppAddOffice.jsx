@@ -2,7 +2,8 @@
  * Created by vishwadeep on 12/5/17.
  */
 import React from "react";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import MlAppNewBSpokeOffice from "./MlAppNewBSpokeOffice";
 import MlAppBSpokeOfficeDetails from "./MlAppBSpokeOfficeDetails";
 import {fetchOfficePackages} from "../actions/findOfficeAction";
@@ -87,7 +88,7 @@ export default class MlAppAddOffice extends React.Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap portfolio-main-wrap main_wrap_scroll">
-          <ScrollArea
+          <Scrollbars
             speed={0.8}
             className="main_wrap_scroll"
             smoothScrolling={true}
@@ -149,7 +150,7 @@ export default class MlAppAddOffice extends React.Component {
               {isShowNewSpoke ? <MlAppNewBSpokeOffice/> : <MlAppBSpokeOfficeDetails officeData={this.detailData}/>}
 
             </div>
-          </ScrollArea>
+          </Scrollbars>
         </div>
       </div>
     )

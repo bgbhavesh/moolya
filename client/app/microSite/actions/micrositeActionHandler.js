@@ -14,7 +14,7 @@ export async function fetchMicroSiteUrl() {
         }
       }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.getMySiteMapUrl;
   return id

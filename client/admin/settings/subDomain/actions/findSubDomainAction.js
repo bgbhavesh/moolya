@@ -18,7 +18,7 @@ export async function findSubDomainActionHandler(SubDomainId) {
     variables: {
       SubDomainId:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findSubDomain;
   return id

@@ -20,7 +20,7 @@ import _underscore from 'underscore'
 var diff = require('deep-diff').diff;
 import CropperModal from '../../../../commons/components/cropperModal';
 import generateAbsolutePath from '../../../../../lib/mlGenerateAbsolutePath';
-import {validatedURL} from "../../../../commons/validations/mlfieldValidation";
+import {validatedURL, isUrl} from "../../../../commons/validations/mlfieldValidation";
 
 
 export default class Step4 extends React.Component{
@@ -136,7 +136,7 @@ export default class Step4 extends React.Component{
     refs.push(this.refs["socialLinkTypeUrl"])
     let socialLinkURL = this.refs["socialLinkTypeUrl"].value
     let ret = mlFieldValidations(refs)
-    let isValidURL = validatedURL(socialLinkURL);
+    let isValidURL = isUrl(socialLinkURL);
     if (ret) {
       toastr.error(ret);
     }else if(socialLinkURL && !isValidURL){

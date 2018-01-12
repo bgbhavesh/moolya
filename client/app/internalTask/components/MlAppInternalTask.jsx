@@ -17,6 +17,7 @@ import {mlMyAppPendingInternalTaskConfig} from './../config/MlAppPendingTasksCon
 import {mlMyAppCurrentInternalTaskConfig} from './../config/MlAppCurrentTasksConfig';
 import {mlMyAppCompletedInternalTaskConfig} from './../config/mlAppCompletedTasksConfig';
 import {mlMyAppRejectedInternalTaskConfig} from './../config/mlAppRejectedTasksConfig';
+import {mlMyAppStartedInternalTaskConfig} from './../config/MlAppStartedTasksConfig';
 import {mlMyAppSelfInternalTaskConfig} from './../config/MlAppSelfTasksConfig';
 
 export default class MlAppInternalTask extends React.Component{
@@ -48,19 +49,23 @@ export default class MlAppInternalTask extends React.Component{
         tabContent: <MlAppInternalMyTask />
       },
       {
-        name: 'Pending Tasks',
+        name: 'Assigned',
         tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppPendingInternalTaskConfig} />
       },
       {
-        name: 'Current Tasks',
+        name: 'Accepted',
         tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCurrentInternalTaskConfig} />
       },
       {
-        name: 'Completed Tasks',
+        name: 'Started',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppStartedInternalTaskConfig} />
+      },
+      {
+        name: 'Completed',
         tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCompletedInternalTaskConfig} />
       },
       {
-        name: 'Rejected Tasks',
+        name: 'Rejected',
         tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppRejectedInternalTaskConfig} />
       }
     ];

@@ -94,7 +94,7 @@ export async function fetchConnectionRequestHandler(transactionId) {
     variables: {
       transactionId:transactionId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchConnectionByTransaction?result.data.fetchConnectionByTransaction:null;
   return data;

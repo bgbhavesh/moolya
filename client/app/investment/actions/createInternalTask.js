@@ -17,7 +17,7 @@ export async function createInternalTaskActionHandler(internalTask) {
     variables: {
       internalTask: internalTask
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.createInternalTask;
   return id

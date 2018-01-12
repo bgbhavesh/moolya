@@ -26,6 +26,11 @@ export default function MlGenericTransactionAccordion(props) {
           appointmentId={data._id}
           docId={data.docId} />
       );
+      break;
+    }
+    case 'manageSchedule': {
+      return <MlEmptyView data={data} />
+      break;
     }
     case 'office': {
       return getOfficeActivity(data)

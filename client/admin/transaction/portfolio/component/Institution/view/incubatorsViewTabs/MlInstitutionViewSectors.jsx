@@ -12,6 +12,7 @@ import {createAnnotationActionHandler} from '../../../../actions/updatePortfolio
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails'
 import NoData from '../../../../../../../commons/components/noData/noData';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "sectorsAndServices"
 
 export default class MlInstitutionSectors extends React.Component{
@@ -120,8 +121,9 @@ export default class MlInstitutionSectors extends React.Component{
     let portfolioDetailsId=that.props.portfolioDetailsId;
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.sectorsAndServices) {
+        const editorValue = createValueFromString(response.sectorsAndServices.sectorsAndServicesDescription);
         var object = response.sectorsAndServices;
-        this.setState({loading: false,sectorsAndServices: object});
+        this.setState({loading: false,sectorsAndServices: object,editorValue : editorValue});
       }else{
         this.setState({loading:false})
       }
@@ -129,6 +131,7 @@ export default class MlInstitutionSectors extends React.Component{
 
   render(){
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
 
 
@@ -138,11 +141,16 @@ export default class MlInstitutionSectors extends React.Component{
               <div className="panel panel-default panel-form-view" id="annotatorContent">
 
                 <div className="panel-body">
-                  {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
+                {showLoader === true ? (<MlLoader />) : (<div>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+                  {/* {showLoader === true ? ( <MlLoader/>) : (<p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription
                     :  <div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
                     </div>
-                }</p>)}
+                }</p>)} */}
 
                 </div>
               </div>

@@ -69,15 +69,16 @@ export function dataVisibilityHandler(){
       // $(this).parents('.form-group').find('input').attr('type','text');
       $(this).removeClass('un_lock').removeClass('fa-unlock').addClass('fa-lock');
       $(this).parents('.form-group').find('#makePrivate').prop('checked',true);
+      $('.fa-lock').attr('title','Click to make public');
     }else{
       // $(this).parents('.form-group').find('input').attr('type','text');
       $(this).addClass('un_lock').removeClass('fa-lock').addClass('fa-unlock');
       $(this).parents('.form-group').find('#makePrivate').prop('checked',false);
+      $('.fa-unlock').attr('title','Click to make private');
     }
   });
 }
 export function OnLockSwitch(){
-
   $('.lock_input[type=checkbox]').each(function () {
     if ($(this).is(':checked')) {
       $(this).prev('span').addClass('fa-lock').removeClass('un_lock').removeClass('fa-unlock');
@@ -87,5 +88,5 @@ export function OnLockSwitch(){
       // $(this).parent('.switch').removeClass('on');
     }
   });
-
 }
+

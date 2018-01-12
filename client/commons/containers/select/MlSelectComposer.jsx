@@ -18,7 +18,7 @@ export default class MoolyaSelect extends Component {
     if(connection){
       const selectionOptionsPromise =  connection.query({
         query: this.props.query,
-        forceFetch:typeof this.props.forceFetch !== 'undefined'?options.forceFetch:true,
+        fetchPolicy:this.props.forceFetch ===true?'network-only':'network-only',
         variables:options.queryOptions
       })
       selectionOptionsPromise.then(data =>{

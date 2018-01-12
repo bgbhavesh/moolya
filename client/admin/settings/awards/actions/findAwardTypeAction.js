@@ -18,7 +18,7 @@ export async function findAwardActionHandler(AwardTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindAward;
   return id

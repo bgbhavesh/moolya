@@ -35,7 +35,7 @@ export default class MlFunderAbout extends React.Component {
     this.tabName = this.props.tabName || ""
     this.onClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
-    // this.fetchPortfolioDetails.bind(this);
+    this.fetchPortfolioDetails.bind(this);
     this.libraryAction.bind(this);
     this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -198,13 +198,13 @@ export default class MlFunderAbout extends React.Component {
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.funderAbout)
     if (empty) {
       if (response) {
-        this.setState({ loading: false, data: response, profilePic: response.profilePic });
+        this.setState({ profilePic: response.profilePic, loading: false, data: response });
         _.each(response.privateFields, function (pf) {
           $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         })
       }
     } else {
-      this.setState({ loading: false, data: that.context.funderPortfolio.funderAbout, privateValues: response.privateFields }, () => {
+      this.setState({ loading: false, data: that.context.funderPortfolio.funderAbout, privateValues: response.privateFields, profilePic: response ? response.profilePic : "" }, () => {
         this.lockPrivateKeys()
       });
     }
@@ -254,7 +254,7 @@ export default class MlFunderAbout extends React.Component {
   onFileUploadCallBack(file, resp) {
     if (resp) {
       let result = JSON.parse(resp);
-
+      
       Confirm('', "Do you want to add this file to your library?", 'Yes', 'No',(ifConfirm)=>{
         if(ifConfirm){
           let fileObjectStructure = {
@@ -455,7 +455,7 @@ export default class MlFunderAbout extends React.Component {
                         {/*<img src="/images/def_profile.png"/>*/}
                         {/*</div>*/}
                       </div>
-                      <div className="clearfix"></div>
+                      <br className="brclear" />
                       <div className="panel panel-default mart20">
                         <div className="panel-heading"> Investment Budget Per Year (in {this.state.currencySymbol}): </div>
 

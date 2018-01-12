@@ -38,20 +38,20 @@ export default class MlAppMember extends React.Component {
       }));
     }
 
-    const activeTab = FlowRouter.getQueryParam('tab');
-    if (activeTab) {
-      this.setState({ activeTab });
+    let activeTab = FlowRouter.getQueryParam('tab');
+    if(activeTab){
+      this.setState({activeTab});
     }
     this.setState({ tabs: getTabs() || [] });
   }
 
-  updateTab(index) {
-    const tab = this.state.tabs[index].name;
-    FlowRouter.setQueryParams({ tab });
+  updateTab(index){
+    let tab =  this.state.tabs[index].title;
+    FlowRouter.setQueryParams({ tab: tab });
   }
-
   render() {
-    const App = () => <MlTabComponent tabs={this.state.tabs} selectedTabKey={this.state.activeTab} onChange={this.updateTab}/>;
+    const App = () => <MlTabComponent tabs={this.state.tabs} selectedTabKey={this.state.activeTab} onChange={this.updateTab}
+                                      type="tab" mkey="name"/>;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

@@ -20,7 +20,7 @@ export async function findTitleActionHandler(TitleId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {titleName,aboutTitle,titleDisplayName}=masterSetting.titleInfo||{};

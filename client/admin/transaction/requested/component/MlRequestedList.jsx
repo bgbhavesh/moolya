@@ -50,7 +50,15 @@ export default class MlRequestedList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
+        <div className="ml_inner_btn">
+          <a className="h_btn">All </a>
+          <a className="h_btn ml_red">3<sup>rd</sup> Priority </a>
+          <a className="h_btn ml_orange">1<sup>st</sup> Priority </a>
+          <a className="h_btn ml_green">2<sup>nd</sup> Priority</a>
+          <a className="h_btn">Others</a>
+          </div>
           <h2>Requested List</h2>
+          
           <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
           {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} clusterId={this.state.clusterId} showPopUp={this.showPopUp.bind(this)}/>}
          </div>

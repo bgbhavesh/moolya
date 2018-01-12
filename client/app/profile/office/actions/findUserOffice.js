@@ -19,7 +19,7 @@ export async function findUserOfficeActionHandler() {
               }  
           }
       `,
-      forceFetch: true
+      fetchPolicy: 'network-only'
   })
   const id = result.data.fetchOfficeSC;
   return id
@@ -43,7 +43,7 @@ export async function findDefaultUserProfile() {
               }  
           }
       `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchOfficeSC;
   return id

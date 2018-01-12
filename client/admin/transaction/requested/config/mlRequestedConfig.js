@@ -18,6 +18,20 @@ function updatedDateFormatter(data){
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
 }
 
+export function registrationRowClassNameFormat(row, rowIdx) {
+  let status=row.registrationStatus;
+  var rowClassName='';
+  switch(status){
+    case 'REG_EMAIL_P':rowClassName='ml_green'; break;
+    case 'REG_EMAIL_V': rowClassName='ml_red';break;
+    case 'REG_KYC_U_PEND': rowClassName='ml_red';break;
+    case 'REG_PORT_PEND':rowClassName='ml_orange'; break;
+  }
+ return rowClassName;
+} 
+
+
+
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
@@ -61,6 +75,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
+  trClassName:registrationRowClassNameFormat,
   showActionComponent:true,
 
   actionConfiguration:[

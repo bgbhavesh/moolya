@@ -18,7 +18,7 @@ export async function findBusinessTypeActionHandler(BusinessTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.FindBusinessType;
   return id

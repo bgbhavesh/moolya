@@ -22,7 +22,7 @@ export async function findGenderActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {genderName,aboutGender,genderDisplayName,genderUploadIcon}=masterSetting.genderInfo||{};

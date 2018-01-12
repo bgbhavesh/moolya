@@ -70,7 +70,7 @@ export async function findBackendUserActionHandler(userTypeId) {
             }
           }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchUser;
   return id

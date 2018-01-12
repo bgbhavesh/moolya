@@ -18,7 +18,7 @@ export default function getBreadCrumListBasedOnhierarchy(params,portfolioName,ca
     variables: {
       hierarchyContext: requ,
     },
-    forceFetch: true,
+    fetchPolicy: 'network-only',
   });
 
   breadCrumHierarchyPromise.then((data) => {

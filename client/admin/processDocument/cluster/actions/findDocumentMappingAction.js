@@ -33,7 +33,7 @@ export async function findDocumentMappingActionHandler(kycid,processid)
       kycId,
       processId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findProcessDocuments;
   return id

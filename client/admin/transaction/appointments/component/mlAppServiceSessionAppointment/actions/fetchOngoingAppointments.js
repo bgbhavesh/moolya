@@ -29,7 +29,7 @@ export async function ongoingAppointmentActionHandler(status) {
     variables: {
       status
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const data = result.data.fetchMyAppointmentByStatus;
   return data;
@@ -107,7 +107,7 @@ export async function fetchServiceByServiceId(serviceId, sessionId) {
     variables: {
       serviceId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.findService;
   let service = _.omit(response, '__typename');
@@ -207,7 +207,7 @@ export async function findTaskActionHandler(taskId) {
     variables: {
       taskId: taskId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   var resp = result.data.fetchTaskForApointment;
   let data = _.omit(resp, '__typename')
@@ -254,7 +254,7 @@ export async function fetchSelfTaskById(selfTaskId) {
     variables: {
       selfTaskId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   var response = result.data.fetchSelfTask;
   return response;

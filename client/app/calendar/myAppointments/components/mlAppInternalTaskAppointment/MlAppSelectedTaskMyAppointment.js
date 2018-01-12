@@ -152,7 +152,6 @@ class MlAppSelectedTaskMyAppointment extends Component {
   render() {
     // const status = this.props.status;
     let status = FlowRouter.getQueryParam('tab');
-    console.log(status);
     let appActionConfig = [];
     const that = this;
     switch (status) {

@@ -167,7 +167,6 @@ export default class MlServiceCardStep4 extends React.Component {
                   <label htmlFor="radio2"><span><span></span></span>Percentage
                     {facilitationCharge.type === 'percent' ?
                       <input className="form-control inline_input" disabled={true}
-                        disabled={true}
                         defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
                         onChange={(event) => calculateCharges(event)}
                       /> : <div></div>

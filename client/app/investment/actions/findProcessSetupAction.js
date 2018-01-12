@@ -24,7 +24,7 @@ export async function findProcessSetupActionHandler() {
       }
     }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchUserProcessSetup;
   return id

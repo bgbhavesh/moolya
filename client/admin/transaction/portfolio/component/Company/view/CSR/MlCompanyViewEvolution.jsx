@@ -9,7 +9,7 @@ import NoData from '../../../../../../../commons/components/noData/noData';
 import {initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
 import MlLoader from "../../../../../../../commons/components/loader/loader";
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 const KEY = "evolution"
 
 export default class MlCompanyViewEvolution extends React.Component {
@@ -47,7 +47,8 @@ export default class MlCompanyViewEvolution extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (responseM) {
-      this.setState({evolution: responseM.evolution,loading:false});
+      const editorValue = createValueFromString(responseM.evolution.evolutionDescription);
+      this.setState({evolution: responseM.evolution,loading:false,editorValue: editorValue});
     }
 
     data = {
@@ -138,7 +139,7 @@ export default class MlCompanyViewEvolution extends React.Component {
     let that = this;
     let achievements = that.state.evolution || {};
     let loading=this.state.loading
-
+    const { editorValue } = this.state;
       return (
           <div className="portfolio-main-wrap" id="annotatorContent">
             <div className="col-lg-12 col-sm-12">
@@ -146,9 +147,14 @@ export default class MlCompanyViewEvolution extends React.Component {
                 <h2>Evolution</h2>
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-body">
-                    {loading === true ? ( <MlLoader/>) : (<p>{this.state.evolution && this.state.evolution.evolutionDescription ? this.state.evolution.evolutionDescription :  (<div className="portfolio-main-wrap">
+                  {loading === true ? (<MlLoader />) : (<div>{this.state.evolution && this.state.evolution.evolutionDescription ?
+                        <MlTextEditor
+                          value={editorValue}
+                          isReadOnly={true}
+                        /> : (<NoData tabName={this.props.tabName} />)}</div>)}
+                    {/* {loading === true ? ( <MlLoader/>) : (<p>{this.state.evolution && this.state.evolution.evolutionDescription ? this.state.evolution.evolutionDescription :  (<div className="portfolio-main-wrap">
                       <NoData tabName={this.props.tabName}/>
-                    </div>)}</p>)}
+                    </div>)}</p>)} */}
                   </div>
                 </div>
               </div>
@@ -156,5 +162,4 @@ export default class MlCompanyViewEvolution extends React.Component {
           </div>
       )
     }
-
 }

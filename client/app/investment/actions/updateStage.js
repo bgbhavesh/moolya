@@ -18,7 +18,7 @@ export async function updateStageActionHandler(stageId,stage) {
       stageId:stageId,
       stage: stage
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.updateStage;
   return id

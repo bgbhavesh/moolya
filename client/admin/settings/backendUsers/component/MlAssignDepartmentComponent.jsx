@@ -68,7 +68,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
     let that=this;
     let departmentqueryOptions=''
     let departmentQuery=gql` query($isMoolya:Boolean){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:displayName,value:_id}
           }
           `;
     let selectedUserType=that.props.selectedBackendUserType
@@ -77,7 +77,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
       // departmentqueryOptions = {options: {variables: {isMoolya: false}}};
       departmentqueryOptions = {options: {variables: {isMoolya: true}}};
       departmentQuery = gql` query($isMoolya:Boolean){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:displayName,value:_id}
           }
           `;
     }
@@ -85,7 +85,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
       // departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
       departmentqueryOptions = {options: {variables: {isMoolya: false, subChapter: selectedSubChapter}}};
       departmentQuery = gql` query($isMoolya:Boolean,$subChapter:String){
-        data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
+        data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:displayName,value:_id}
       }
       `;
     }
@@ -94,7 +94,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
    let subDepartmentquery=gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
         value:_id
-        label:subDepartmentName
+        label:displayName
       }
     }`
 

@@ -19,7 +19,7 @@ export async function findDocumentFormatActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findDocumentFormat;
   console.log("DAta "+id);

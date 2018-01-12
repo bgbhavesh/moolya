@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import gql from "graphql-tag";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import { Scrollbars } from 'react-custom-scrollbars';
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import MoolyaSelect from '../../../commons/components/MlAdminSelectWrapper'
@@ -351,7 +352,7 @@ class MlEditOfficePackage extends Component{
           <h2>Office Purchase</h2>
           <div className="col-lx-6 col-sm-6 col-md-6 nopadding-left">
             <div className="left_wrap left_user_blocks">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
               >
@@ -422,13 +423,13 @@ class MlEditOfficePackage extends Component{
                     <div className="slider"></div>
                   </label>
                 </div>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <div className="col-lx-6 col-sm-6 col-md-6 nopadding-right">
             <br className="brclear"/>
             <div className="left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
               >
@@ -488,7 +489,7 @@ class MlEditOfficePackage extends Component{
                   <br className="clearfix"/>
                   <br className="clearfix"/>
                 </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
         </div>

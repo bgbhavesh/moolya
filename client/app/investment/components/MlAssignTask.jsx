@@ -25,6 +25,17 @@ export default class MlAssignTask extends React.Component {
   }
   componentDidMount(){
     this.fetchAllOfficeMembers();
+    $(".information").unbind("click").click(function () {
+      if ($(this).hasClass('ml-information')) {
+        $(this).removeClass('ml-information').addClass('ml-delete');
+        //$(this).parents('.panel').find('.panel-body').css({ 'overflow': 'hidden' });
+
+      } else {
+        $(this).removeClass('ml-delete').addClass('ml-information');
+        //$(this).parents('.panel').find('.panel-body').css({ 'overflow': 'auto' });
+      }
+      $(this).parents('.popover-content').find(".show-info").toggle(200);
+    });
   }
 
   async submit(){
@@ -159,10 +170,14 @@ export default class MlAssignTask extends React.Component {
     const that = this;
     return(
       <div className="popover-lg">
-        <h1>Attached Documents <div className="fileUpload upload_file_mask pull-right" id="create_client">
-          <a href="javascript:void(0);">
-            <input type="file" className="upload_file upload" onChange={that.documentUpload.bind(that)}/>Add</a></div></h1>
-        <ul className="doc_upload">
+        <h1>Attached Documents 
+                  
+                <div className="fileUpload upload_file_mask pull-right" id="create_client">
+          <a href="javascript:void(0);" style={{'display':'inline-block','marginTop':'3px'}}>
+            <input type="file" className="upload_file upload" onChange={that.documentUpload.bind(that)}/>Add</a></div>
+            <span className="single_icon ml ml-information information pull-right" style={{'marginTop':'-6px'}}></span></h1>
+            <p className="show-info" style={{ 'display': 'none' }}>Permitted Upload File Type(s) : .png, .jpeg, .jpg, .pdf, .xls, .xlsx, .doc, .docx, .pdf <br />Max Document File Size : 10 MB <br /></p>
+            <ul className="doc_upload">
         {this.attachedDocuments()}
       </ul>
         <div className="clearfix" />

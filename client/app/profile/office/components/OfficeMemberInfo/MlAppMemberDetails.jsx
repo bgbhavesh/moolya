@@ -12,6 +12,7 @@ import Moolyaselect from  '../../../../../commons/containers/select/MlSelectComp
 import {appClient} from '../../../../core/appConnection';
 import {setOfficeMemberIndependent} from '../../actions/setOfficeMemberIndependent';
 import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import generateAbsolutePath from '../../../../../../lib/mlGenerateAbsolutePath';
 
 export default class MlAppMemberDetails extends React.Component{
   constructor(props){
@@ -185,7 +186,7 @@ export default class MlAppMemberDetails extends React.Component{
               </div>
             </div>
             <div className="col-md-6">
-              <div className="text-center"><img src={this.state.memberInfo.profileImage ? this.state.memberInfo.profileImage : "/images/ideator_01.png"}/></div>
+              <div className="text-center"><img src={this.state.memberInfo.profileImage ? generateAbsolutePath(this.state.memberInfo.profileImage) : "/images/ideator_01.png"}/></div>
               <br />
               <div className="clearfix"></div>
               <div className="form-group switch_wrap inline_switch">

@@ -24,7 +24,7 @@ export async function fetchOfficeActionHandler (profileId) {
     variables: {
       profileId: profileId
     },
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const offices = result.data.fetchOffice;
   return offices
@@ -41,7 +41,7 @@ export async function fetchMyConnectionActionHandler() {
         profileImage
       }
     }`,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const myConnections = result.data.fetchConnectionByUser;
   return myConnections;
@@ -59,7 +59,7 @@ export async function getMoolyaAdminsActionHandler(userId, profileId) {
         }
       }
     `,
-    forceFetch:true,
+    fetchPolicy: 'network-only',
     variables: {
       userId: userId,
       profileId: profileId

@@ -28,7 +28,7 @@ export async function fetchActivitiesActionHandler (profileId) {
     variables: {
       profileId:profileId
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchActivities;
   return activities
@@ -51,7 +51,7 @@ export async function fetchCurrencyTypeActionHandler () {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   });
   const activities = result.data.fetchCurrencyType;
   return activities

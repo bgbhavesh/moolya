@@ -24,7 +24,7 @@ export async function findNotificationTemplateActionHandler(fid) {
     variables: {
       notificationTemplateId:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchNotificationTemplate;
   return id

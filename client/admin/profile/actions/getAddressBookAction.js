@@ -39,7 +39,7 @@ export async function getContactDetails() {
       moduleName:"PROFILE",
       actionName:"GET"
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const id = result.data.fetchAddressBookInfo;

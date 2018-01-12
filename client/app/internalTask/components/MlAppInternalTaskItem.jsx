@@ -71,11 +71,9 @@ componentDidMount() {
   async fetchTaskInfo() {
     if(this.props.taskId){
       let response = await fetchInternalTaskInfo(this.props.taskId);
-      console.log(response);
       if(response){
         response.attendees = response.attendees ? response.attendees : [];
         response.docs = response.docs ? response.docs : [];
-        console.log('response', response)
         this.setState({
           taskInfo:response
         })
@@ -84,7 +82,6 @@ componentDidMount() {
   }
 
   randomDocument(link, index) {
-    console.log('link',link);
     let documentPreviewUrl = generateAbsolutePath(link.fileUrl);
     this.setState({ previewDocument: documentPreviewUrl });
   }
@@ -96,7 +93,7 @@ componentDidMount() {
     };
     let response = await updateInternalTaskInfo(taskId, dataToUpdata);
     if(response.success){
-      toastr.success('Task successfully moved to'+ status);
+      toastr.success('Task successfully moved to '+ status);
       // toastr.success('Task Updated Successfully');
       this.props.fetchTaskList();
     }

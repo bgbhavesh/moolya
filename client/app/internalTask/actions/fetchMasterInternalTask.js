@@ -18,7 +18,7 @@ export async function fetchMasterTasks() {
         }
       }
     `,
-    forceFetch: true
+    fetchPolicy: 'network-only'
   });
   const id = result.data.fetchTasks;
   return id;

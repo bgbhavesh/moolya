@@ -76,5 +76,6 @@ MlTextEditor.defaultProps = {
     handleOnChange: MlTextEditor.prototype.handleOnChange,
     isReadOnly: false,
     placeholder: "Describe...",
-    autoFocus: true
+    autoFocus: true,
+    value: RichTextEditor.createEmptyValue()
 }

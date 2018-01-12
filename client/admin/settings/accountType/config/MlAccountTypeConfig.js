@@ -75,7 +75,7 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
     //   handler: (data)=>{console.log(data);}
     // }
   ],
-  forceFetch: true,
+  fetchPolicy: 'network-only',
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {

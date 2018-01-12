@@ -18,7 +18,7 @@ export async function findFundingTypeActionHandler(fid) {
     variables: {
       fundingTypeId:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchFundingType;
   return id

@@ -50,12 +50,10 @@ export default class MlCompanyEditTabs extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys: privateKeys,
-      removePrivateKeys: removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj});
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
   }
 
   componentWillReceiveProps(newProps) {
@@ -129,7 +127,7 @@ export default class MlCompanyEditTabs extends Component {
         panelClassName: 'panel',
         title: "M C & L",
         name: "M C And L",
-        component: <MlCompanyMCL key="8" client={client} getMCL={this.getMCL.bind(this)}
+        component: <MlCompanyMCL key="8" client={client} isAdmin={true} getMCL={this.getMCL.bind(this)}
                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

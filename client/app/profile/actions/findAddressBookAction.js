@@ -50,7 +50,7 @@ export async function findAddressBookActionHandler() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.findAddressBook;
   return id
@@ -138,7 +138,7 @@ export async function fetchUserDetails() {
       }
     }
     `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const id = result.data.fetchExternalUserDetails;
   return id

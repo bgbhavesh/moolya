@@ -20,7 +20,7 @@ export async function findTaxTypeActionHandler(TaxTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
   const masterSetting= result.data.findMasterSetting||{};
   const {taxName,aboutTax,taxDisplayName}=masterSetting.taxTypeInfo||{};

@@ -30,7 +30,7 @@ export async function fetchUserDetailsHandler() {
         }
       }
         `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const user = result.data.findRegistrationInfoForUser;
@@ -53,7 +53,7 @@ export async function fetchPortfolioDetails() {
         }
       }
         `,
-    forceFetch:true
+    fetchPolicy: 'network-only'
   })
 
   const user = result.data.fetchPortfolioDetailsByUserId;

@@ -33,7 +33,7 @@ export default class MlOfficeItem extends React.Component {
       duration : ' ', currencySymbol:""
     }
     this.getTransaction.bind(this);
-    this.initializeSwiper.bind(this);
+    this.initializeSwiper=this.initializeSwiper.bind(this);
     this.onSlideIndexChange.bind(this);
     return this;
   }
@@ -46,9 +46,9 @@ export default class MlOfficeItem extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
+    // $(function() {
+    //   $('.float-label').jvFloat();
+    // });
 
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
@@ -57,7 +57,7 @@ export default class MlOfficeItem extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    this.initializeSwiper();
+    //this.initializeSwiper();
   }
 
   async getCurrencyType() {
@@ -76,7 +76,7 @@ export default class MlOfficeItem extends React.Component {
           centeredSlides: true,
           initialSlide: 0
         });
-      },100);
+      },1000);
   };
 
   async componentWillMount() {
@@ -201,7 +201,7 @@ export default class MlOfficeItem extends React.Component {
             <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} onClick={this.initializeSwiper} data-toggle="tab">Order Details</a>
           </li>
           <li>
             <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>

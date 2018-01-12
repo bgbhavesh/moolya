@@ -334,7 +334,10 @@ export default class AddressDetails extends React.Component{
 
           }
         }
-
+        $('input').blur();
+        setTimeout(function(){
+         initalizeFloatLabel();
+       },1000);
   }
 
   async onEditAddress(index,value) {

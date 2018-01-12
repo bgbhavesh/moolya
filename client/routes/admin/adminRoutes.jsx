@@ -207,7 +207,7 @@ adminSection.route('/documents/history', {
   }
 });
 adminSection.route('/documents/:pid/:kycid/:docid', {
-  name: '',
+  name: 'documents_HistoryList',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader breadcrum={{type:'documents','showBreadCrum':true, 'document':true}}  processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping processConfig={params.pid} kycConfig={params.kycid} docConfig={params.docid}/>})
   }

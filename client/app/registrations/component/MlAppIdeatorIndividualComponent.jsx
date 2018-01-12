@@ -523,10 +523,10 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
               </form>
             </div>
 
-        </div>
-        <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
+        </div>    
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
         </Scrollbars>
+        <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
       </div>
     )
   }

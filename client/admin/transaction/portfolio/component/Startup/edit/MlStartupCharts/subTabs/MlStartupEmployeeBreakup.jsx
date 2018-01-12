@@ -218,12 +218,12 @@ export default class MlStartupEmployeeBreakup extends React.Component{
 
                   </div>
                   <div className="form-group col-lg-6">
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-left">
                       <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                 inputProps={{placeholder: "Select From Year", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"ebdFromYear"+defaultIndex} onChange={this.handleFromYearChange.bind(this,defaultIndex)}/>
                     </div>
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-right">
                       <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                 inputProps={{placeholder: "Select From Month", className:"float-label form-control",readOnly:true}}
                                 closeOnSelect={true} ref={"ebdFromMonth"+defaultIndex} onChange={this.handleFromMonthChange.bind(this,defaultIndex)}/>
@@ -232,12 +232,12 @@ export default class MlStartupEmployeeBreakup extends React.Component{
                   </div>
 
                   <div className="form-group col-lg-6">
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-left">
                       <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                 inputProps={{placeholder: "Select To Year", className:"float-label form-control",readOnly:true,readOnly:true}}
                                 closeOnSelect={true} ref={"ebdToYear"+defaultIndex} onChange={this.handleToYearChange.bind(this,defaultIndex)}/>
                     </div>
-                    <div className="form-group col-md-6 col-sm-6">
+                    <div className="form-group col-md-6 col-sm-6 nopadding-right">
                       <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
                                 inputProps={{placeholder: "Select To Month", className:"float-label form-control"}}
                                 closeOnSelect={true} ref={"ebdToMonth"+defaultIndex} onChange={this.handleToMonthChange.bind(this,defaultIndex)}/>

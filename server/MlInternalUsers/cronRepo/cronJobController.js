@@ -1,4 +1,5 @@
 import EmailTemplates from 'swig-email-templates'; 
+import { remove, compact } from 'lodash';
 const fromEmail = Meteor.settings.private.fromEmailAddr; 
 
 const today = new Date();
@@ -355,6 +356,7 @@ class MlCronJobControllerClass {
               "$group": {
                   "_id": "$_id",
                   "clusterName": { $first: "$clusterName" },
+                  "clusterCode": { $first: "$clusterCode" },
                   "reqRegistration": { $first: "$reqRegistration" },
                   "regB4Portfolio": { $first: "$regB4Portfolio" },
                   "approved_portfolios": { $first: "$approved_portfolios" },
@@ -372,6 +374,7 @@ class MlCronJobControllerClass {
                   pending_officeApproval: 1,
                   pending_SC_Approval_reqInActive_SubChapters: 1,
                   clusterName: 1,
+                  clusterCode: 1,
                   // active_Chapters: 1,
                   active_Chapters: {
                       clusterName: 1,
@@ -456,17 +459,27 @@ class MlCronJobControllerClass {
               }
           }
       ]
-
-        object.data = mlDBController.aggregate('MlClusters', pipeLine);
+        let reqData = mlDBController.aggregate('MlClusters', pipeLine);        
+        object.data = this.generateClusterSeq(reqData)
         // console.log('get daily Report', object);
         this.generateHtmlFile(object);
         return object;
     }
 
+    generateClusterSeq(array) {
+      let sequence = [];
+      sequence.push(remove(array, { clusterCode: "IN" })[0]);
+      sequence.push(remove(array, { clusterCode: "US" })[0]);
+      sequence.push(remove(array, { clusterCode: "GB" })[0]);
+      sequence.push(remove(array, { clusterCode: "DE" })[0]);
+      sequence.push(remove(array, { clusterCode: "SG" })[0]);
+      sequence.push(remove(array, { clusterCode: "MY" })[0]);
+      sequence = compact(sequence);
+      return sequence.concat(array);
+    }
+
     generateHtmlFile(data) {
       const _this = this;
-      console.log(data)
-
       /* Templates Directory in src/ui/hcmMailTemplates folder - Can modify the templates as per required
       Useful Links :
       github.com/andrewrk/swig-email-templates
@@ -491,15 +504,20 @@ class MlCronJobControllerClass {
     }
 
     sendHtmlEmail(emailObject) {
-      console.log(emailObject);
-      Meteor.setTimeout(function () {
-        mlEmail.sendHtml({
-          from: fromEmail,
-          to: "vishwadeep.kapoor@raksan.in",
-          subject: "this is the test mail",
-          html: emailObject.html
-        });
-      }, 2 * 1000);
+      if (Meteor.settings.public.instance != "DEV") {
+        console.log("cron sending mail");
+        Meteor.setTimeout(function () {
+          mlEmail.sendHtml({
+            from: fromEmail,
+            to: "anil.kumar@raksan.in",
+            cc: "rudra.pratap@raksan.in",
+            subject: "moolya daily monitoring report",
+            html: emailObject.html
+          });
+        }, 2 * 1000);
+      } else {
+        console.log("cron sending mail stopped in dev");
+      }
     }
 }
 const MlCronJobController = new MlCronJobControllerClass();

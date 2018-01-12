@@ -130,7 +130,6 @@ export default class MlAppServiceSessionAppointment extends Component {
     let appointmentWith = this.state.data.client;
     var yesterday = Datetime.moment().subtract(1, 'day');
     let validTill = this.state.validTill ? `${new moment(this.state.validTill).format('DD-MMM-YYYY HH:mm')} GMT`: "";
-    console.log("validTill", validTill)
     var validDate = function (current) {
       if(validTill) return current.isAfter(yesterday) && current.isBefore(validTill);
       else return current.isAfter(yesterday);

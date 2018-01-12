@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 
 class MlStartupInformation extends React.Component{
   constructor(props, context){
@@ -13,9 +13,10 @@ class MlStartupInformation extends React.Component{
     this.state={
       loading: true,
       data:this.props.informationDetails || {},
-      privateKey:{}
+      editorValue: createValueFromString(this.props.informationDetails ? this.props.informationDetails.informationDescription : null),
+      privateKey:{},
     }
-    this.handleBlur.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -30,17 +31,20 @@ class MlStartupInformation extends React.Component{
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
+    const editorValue = createValueFromString(this.context.startupPortfolio && this.context.startupPortfolio.information ? this.context.startupPortfolio.information.informationDescription : null);
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.information});
+      this.setState({loading: false, data: this.context.startupPortfolio.information,editorValue});
     }
   }
 
-  handleBlur(e){
+  handleBlur(value, keyName){
     let details =this.state.data;
-    let name  = e.target.name;
-    details=_.omit(details,[name]);
-    details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
+    details=_.omit(details,[keyName]);
+    details=_.extend(details,{[keyName]: value.toString('html')});
+    // let name  = e.target.name;
+    // details=_.omit(details,[name]);
+    // details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
@@ -83,9 +87,8 @@ class MlStartupInformation extends React.Component{
     })
   }
   render(){
+    const { editorValue } = this.state;
     return (
-
-
       <div className="requested_input">
         <div className="col-lg-12">
           <div className="row">
@@ -95,7 +98,11 @@ class MlStartupInformation extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="informationDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.informationDescription}  onBlur={this.handleBlur.bind(this)}></textarea>
+                <MlTextEditor
+                    value={editorValue}
+                    handleOnChange={(value) => this.handleBlur(value, "informationDescription")}
+                  />
+                  {/* <textarea placeholder="Describe..." name="informationDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.informationDescription}  onBlur={this.handleBlur.bind(this)}></textarea> */}
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this,"informationDescription","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 

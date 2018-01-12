@@ -30,7 +30,7 @@ let States = `
         fetchState(stateId: String): States
         FetchStates:[States]
         FetchActiveStates:[States]
-        fetchStatesPerCountry(countryId: String, isActive:Boolean):[States]
+        fetchStatesPerCountry(countryId: String, activeCheck:Boolean):[States]
         fetchStatesPerCountryWithAll(countryId: String):[States]
         FetchActiveStatesForCluster(clusters:[String]):[States]
     }

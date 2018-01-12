@@ -865,6 +865,16 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {"$unwind": "$member"},
       {"$addFields": {"transactionLog.registrationId": "$member.registrationId"}},
       {
+        "$lookup": {
+          from: "mlRegistration",
+          localField: "transactionLog.registrationId",
+          foreignField: "_id",
+          as: "registration"
+        }
+      },
+      { "$unwind": "$registration" },
+      { "$addFields": { "transactionLog.status": "$registration.status" } },
+      {
         "$group": {
           _id: null,
           officeId: {"$first": "$officeId"},

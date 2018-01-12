@@ -1701,4 +1701,6 @@ margin: 0px;
 .ml_inner_btn .h_btn{display: inline-block; background: #ccc; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px; min-width: 60px; margin: 0px 6px 0px 21px;color: #000;text-shadow: none;text-align: center;cursor: pointer;padding:0px 5px;}
 .ml_inner_btn .h_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent #ccc;top: 0px;}
 .ml_inner_btn .h_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent #ccc transparent transparent;top: 0px;}
-.make-private-check{ position: relative; z-index: 9999 !important;}
+/* .make-private-check{ position: relative; z-index: 9999 !important;} */
+
+.medium-popover .form-group .input_types input{position: relative; z-index: 9999 !important;}

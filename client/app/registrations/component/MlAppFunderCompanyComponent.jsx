@@ -601,9 +601,9 @@ export default class MlAppFunderCompanyComponent extends React.Component {
                   </form>
                 </div>
             </div>
-            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
             {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
             </Scrollbars>
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
           </div> )}
       </div>
     )

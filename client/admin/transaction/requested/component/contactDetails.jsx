@@ -117,7 +117,10 @@ export default class ContactDetails extends React.Component{
 
        }
      }
-
+     $('input').blur();
+     setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
   async onEditingContact(index,value){
     let detailsType = "CONTACTTYPE";
@@ -172,9 +175,6 @@ export default class ContactDetails extends React.Component{
         }
 
       }
-
-
-
   }
   async findRegistration(){
     let registrationId=this.props.registerId;

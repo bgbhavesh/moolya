@@ -515,8 +515,9 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
               </form>
             </div>
         </div>
-        <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
+        
         </Scrollbars>
+        <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )

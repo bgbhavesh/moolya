@@ -78,10 +78,12 @@ MlResolver.MlQueryResolver['FetchActiveStatesForCluster'] = (obj, args, context,
 
 
 MlResolver.MlQueryResolver['fetchStatesPerCountry'] = (obj, args, context, info) => {
-  let isActive = true;
-  if(args.isActive == false) isActive= false;
+  let query={"countryId":args.countryId};
+
+  if(args.activeCheck==undefined ||args.activeCheck==true) query['isActive']= true;
+
   if(args.countryId){
-    let resp = MlStates.find({"countryId":args.countryId,"isActive":isActive}).fetch()
+    let resp = MlStates.find(query).fetch()
     return resp;
   }
 };

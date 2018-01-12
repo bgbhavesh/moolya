@@ -226,9 +226,13 @@ export default class EmailVerification extends React.Component{
                 We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
                   Good day and God speed to all your efforts.</p>*/}
 
-                <p>Your email Id has been successfully verified. <br/>If you are from India, you can verify your mobile number below to receive SMS notifications. <br/>
+                {/* <p>Your email Id has been successfully verified. <br/>If you are from India, you can verify your mobile number below to receive SMS notifications. <br/>
                   <b>If you are outside India</b>, please click the '<b>Verify Later</b>' Button below. We are working on SMS notifications for all countries. This will be available in the upcoming versions.
-                  Email notifications will be sent to users from all countries.<br /><br /></p>
+                  Email notifications will be sent to users from all countries.<br /><br /></p> */}
+
+                  <p>Your email Id has been successfully verified. <br/>
+You can verify your mobile number now. You may also choose to verify it later after you login in ’My Profile’ option. <br/>
+You will start receiving sms notifications only after you verify your mobile number.<br /><br /></p>
               <div className="form-group">
                 <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
               </div>

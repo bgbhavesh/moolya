@@ -8,12 +8,14 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlStartupViewAbout extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,isUserValidForAnnotation:false
+      loading: true,isUserValidForAnnotation:false,
+      editorValue: createValueFromString(this.props.aboutUsDetails ? this.props.aboutUsDetails.startupDescription : null)
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -114,6 +116,7 @@ export default class MlStartupViewAbout extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    const { editorValue } = this.state;
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -122,8 +125,12 @@ export default class MlStartupViewAbout extends React.Component {
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body" id="annotatorContent">
-            
-              <p >{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p>
+            <div>{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true}
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+              {/* <p >{this.props.aboutUsDetails && this.props.aboutUsDetails.startupDescription ? this.props.aboutUsDetails.startupDescription : (<NoData tabName={this.props.tabName}/>)}</p> */}
             
             </div>
             

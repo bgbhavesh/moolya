@@ -8,11 +8,14 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {validateUserForAnnotation} from '../../../../actions/findPortfolioIdeatorDetails';
-
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlStartupViewServicesAndProducts extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state={
+      editorValue: createValueFromString(this.props.serviceProductsDetails ? this.props.serviceProductsDetails.spDescription : null)
+    }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -106,6 +109,7 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
   }
 
   render() {
+    const { editorValue } = this.state;
     const showLoader = this.state.loading;
     return (
       <div>
@@ -115,8 +119,13 @@ export default class MlStartupViewServicesAndProducts extends React.Component {
           <h2>Service & Products</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-                  {this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
-                    <p id="annotatorContent" >{this.props.serviceProductsDetails.spDescription}</p> : <NoData tabName={this.props.tabName} />}
+            <div id="annotatorContent">{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
+                    <MlTextEditor
+                      value={editorValue}
+                      isReadOnly={true} 
+                    /> : (<NoData tabName={this.props.tabName} />)}</div>
+                  {/* {this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ?
+                    <p id="annotatorContent" >{this.props.serviceProductsDetails.spDescription}</p> : <NoData tabName={this.props.tabName} />} */}
               {/*<p>{this.props.serviceProductsDetails && this.props.serviceProductsDetails.spDescription ? this.props.serviceProductsDetails.spDescription : (*/}
                 {/*<NoData tabName={this.props.tabName}/>)}</p>*/}
 

@@ -470,15 +470,15 @@ export default class MlAppRegAddressDetails extends React.Component {
         }
       }`
 
-    let statesQuery=gql`query ($countryId: String,$isActive : Boolean) {
-        data: fetchStatesPerCountry(countryId: $countryId, isActive : $isActive) {
+    let statesQuery=gql`query ($countryId: String,$activeCheck : Boolean) {
+        data: fetchStatesPerCountry(countryId: $countryId, activeCheck : $activeCheck) {
         value: _id
         label: name
       }
     }`;
 
     let addressTypeOption = {options: {variables: {type: "ADDRESSTYPE", hierarchyRefId: this.props.clusterId}}};
-    let statesOption ={options: { variables: {countryId:this.state.countryId,isActive:false}}};
+    let statesOption ={options: { variables: {countryId:this.state.countryId,activeCheck:false}}};
 
     return (
       <div className="panel-body">

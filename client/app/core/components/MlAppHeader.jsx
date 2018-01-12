@@ -8,6 +8,8 @@ import VerticalBreadCrum from "../../breadcrum/component/VerticalBreadCrum";
 import DynamicBreadcrum from "../../breadcrum/component/DynamicBreadcrum";
 import generateAbsolutePath from '../../../../lib/mlGenerateAbsolutePath';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
+import {deleteToken} from "./MlFireBaseClientSetup"
+
 var FontAwesome = require('react-fontawesome');
 
 const build_versionToken = localStorage.getItem('build_version');
@@ -91,6 +93,7 @@ class MlAppProfileHeader extends Component {
   /**user logout function*/
   logoutUser() {
     logout();
+    deleteToken();
   }
 
   componentWillReceiveProps(user){

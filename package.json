@@ -92,6 +92,7 @@
     "express": "^4.14.0",
     "extendify": "1.0.0",
     "fastclick": "^1.0.6",
+    "firebase": "^4.8.1",
     "geocoder": "^0.2.2",
     "google-map-react": "0.22.3",
     "gql-merge": "0.0.4",

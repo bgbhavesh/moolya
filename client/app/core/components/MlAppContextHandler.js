@@ -8,6 +8,8 @@
 import React, {Component} from "react";
 import {fetchPendingRegistration} from "../../registrations/actions/findRegistration";
 import MlLoader from "../../../commons/components/loader/loader";
+import {requestPermission} from "./MlFireBaseClientSetup"
+
 export default class MlAppContextHandler extends Component {
   constructor(props, context) {
     super(props, context);
@@ -35,6 +37,7 @@ export default class MlAppContextHandler extends Component {
       else if (response && response.length == 0) {
         this.setState({loading: false})
       }
+      requestPermission();
     }
   }
 

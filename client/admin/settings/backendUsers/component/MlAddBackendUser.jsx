@@ -1,8 +1,8 @@
 import React from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
+import moment from "moment";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
@@ -14,7 +14,6 @@ import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "..
 import Datetime from "react-datetime";
 import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
 import {mlFieldValidations, validatedEmailId} from '../../../../commons/validations/mlfieldValidation';
-import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -282,13 +281,13 @@ class MlAddBackendUser extends React.Component {
                 <form>
                 <div className="form_bg">
                     <div className="form-group mandatory">
-                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id="" data-required={true} data-errMsg="First Name is Required"/>
+                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" data-required={true} data-errMsg="First Name is Required"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is Required"/>
+                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" data-required={true} data-errMsg="Last Name is Required"/>
                     </div>
                     <div className="form-group mandatory">
                       <Select name="form-field-name" ref="UserType" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} data-required={true} data-errMsg="BackendUserType is required"/>
@@ -329,10 +328,10 @@ class MlAddBackendUser extends React.Component {
                   <form>
 
                     <div className="form-group mandatory">
-                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is Required"/>
+                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is Required"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="email" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
+                      <input type="email" ref="email" placeholder="Email id" className="form-control float-label" data-required={true} data-errMsg="Email  is Required"/>
                     </div>
 
                     <div className="form-group mandatory">

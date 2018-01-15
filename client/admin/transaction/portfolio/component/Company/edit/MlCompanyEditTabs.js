@@ -319,6 +319,7 @@ export default class MlCompanyEditTabs extends Component {
     }
     this.setState({tabs: getTabs() || []});
   }
+  
   updateTab(index){
     let tab =  this.state.tabs[index].title;
     FlowRouter.setQueryParams({ tab: tab });

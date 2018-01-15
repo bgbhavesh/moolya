@@ -37,7 +37,7 @@ export default class MlAppContextHandler extends Component {
       else if (response && response.length == 0) {
         this.setState({loading: false})
       }
-      requestPermission();
+      requestPermission('LOGIN');
     }
   }
 

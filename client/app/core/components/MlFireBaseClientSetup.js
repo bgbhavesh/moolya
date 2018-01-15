@@ -34,16 +34,28 @@ let startListener = ()=>{
 }
  
 
-let requestPermission=()=> {
+let requestPermission=(loginType)=> {
   console.log('Requesting permission...');
   messaging.requestPermission()
   .then(function() {
     console.log('Notification permission granted.');
     messaging.getToken()
       .then(function(currentToken) {
-          console.log('The current token is:: ', currentToken);
+        console.log('The current token is:: ', currentToken);
         if (currentToken) {
-          
+          switch(loginType){
+          case 'LOGIN':
+          console.log('LOGIN************** called');
+          //send to users collection (should update the db value always)
+          //update isAllowedNotifications = true
+          break;
+
+          case 'LOGOUT':
+          console.log('LOGOUT************** called');
+          //send to users collection (should update the db value always)
+          //update isAllowedNotifications = false
+          break;
+          }
         } else {
           // Show permission request.
           console.log('No Instance ID token available. Request permission to generate one.');
@@ -64,6 +76,7 @@ let deleteToken = () => {
     messaging.deleteToken(currentToken)
     .then(function() {
       console.log('Token deleted.');
+      requestPermission('LOGOUT');
       // setTokenSentToServer(false);
     })
     .catch(function(err) {

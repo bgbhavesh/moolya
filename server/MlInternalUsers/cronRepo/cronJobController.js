@@ -638,6 +638,7 @@ class MlCronJobControllerClass {
           id.push(object.profile.firebaseId);
           if (object.totalConnections == 0 &&  object.totalLikes ==0 && object.totalViews ==0){
             //do not send the message
+            callback();
           }
           else {
             sender.send(message, { registrationIds: id }, function (err, result) {
@@ -652,6 +653,59 @@ class MlCronJobControllerClass {
       function (err){
         if (err){
           console.log(err);
+        }
+      })
+
+    }
+
+    sendPushNotificationsToALLUsers() {
+
+      let allUsersData = mlDBController.find('users', {}).fetch();
+      let totalUserCount = mlDBController.find('users', {}).count();
+      let ids = [];
+      let batchLimit = 1000;
+      let tokenBatches = [];
+      //Composing the message
+      const message = new gcm.Message({
+        data: {
+          notification: {
+              title: "",
+              icon: "/images/moolya_logo.png",
+              body: "moolya now hosts " +  totalUserCount+ " global users. Login now to explore and connect with them.",
+              click_action: "https://qaapp.moolya.global/"
+          }
+        }
+      });
+
+      async.each(allUsersData, function (object, callback){
+        if(object.profile.firebaseId){
+          ids.push(object.profile.firebaseId);
+        }
+        callback();
+      },
+      function (err){
+        if (err){
+          console.log(err);
+        }
+        else {
+          for (var start = 0; start < ids.length; start += batchLimit) {
+              var slicedTokens = ids.slice(start, start + batchLimit);
+              tokenBatches.push(slicedTokens);
+          }
+
+          async.each(tokenBatches, function (batch, callback) {
+              sender.send(message, { registrationIds: batch }, function (err, result) {
+                  if (err) {
+                      return callback(err);
+                  }
+                  callback();
+              });
+          },
+          function (err) {
+              if (err) {
+                  console.log(err);
+              }
+          });
         }
       })
 

@@ -120,6 +120,7 @@
     "mocha": "3.4.2",
     "moment": "^2.18.1",
     "node-cron": "^1.2.1",
+    "node-gcm": "^0.14.9",
     "omit-deep-lodash": "1.0.0",
     "points-cluster": "0.1.4",
     "prop-types": "15.5.10",

@@ -4,7 +4,9 @@
 import MlUserContext from '../mlUserContext'
 import MlRespPayload from '../../commons/mlPayload'
 import _ from 'lodash'
-import {userAgent} from '../../commons/utils'
+import {userAgent} from '../../commons/utils';
+//import MlNotificationController from '../../mlNotifications/mlSmsNotifications/mlSMSNotification';
+
 
 import moment from "moment";
 import MlTransactionsHandler from '../../commons/mlTransactionsLog';
@@ -138,6 +140,9 @@ class MlServiceCardRepo{
         if(!result){
           let code = 400;
           return new MlRespPayload().errorPayload(result, code);
+        } else {
+          this.createTransactionRequest(portfolioDetailsTransactions.userId, "beSpokeServiceCreated", result, result, context.userId, 'user', context)
+          //MlNotificationController.beSpokeServiceNotification(portfolioDetailsTransactions.userId)
         }
       }catch (e){
         return new MlRespPayload().errorPayload(e.message, 400);
@@ -526,10 +531,13 @@ class MlServiceCardRepo{
       serviceCard["isCurrentVersion"] =  true;
       let id = service._id
       delete service['_id']
-      result = mlDBController.update('MlServiceCardDefinition' , {_id:id},serviceCard,{$set:1}, context)
-      if(!result){
-        let code = 400;
-        return new MlRespPayload().errorPayload(result, code);
+      let recordExists = mlDBController.findOne('MlServiceCardDefinition' , id, context)
+      if(recordExists){
+        result = mlDBController.update('MlServiceCardDefinition' , {_id:id},serviceCard,{$set:1}, context)
+        if(!result){
+          let code = 400;
+          return new MlRespPayload().errorPayload(result, code);
+        } else this.createTransactionRequest(recordExists.userId, "beSpokeServiceUpdated", result, result, context.userId, 'user', context)
       }
     }catch (e){
       return new MlRespPayload().errorPayload(e.message, 400);
@@ -675,6 +683,36 @@ class MlServiceCardRepo{
               'activityDocId': resourceId,
               'docId': orderId,
               'transactionDetails': 'Service-Updated',
+              'context': context || {},
+              'transactionTypeId': "manageSchedule",
+              'fromUserType': fromUserType
+            });
+            break;
+          case "beSpokeServiceCreated":
+          new MlTransactionsHandler().recordTransaction({
+            'fromUserId': fromUserId,
+            'moduleName': 'manageSchedule',
+            'activity': 'BeSpokeService-Created',
+            'transactionType': 'manageSchedule',
+            'userId': userId,
+            'activityDocId': resourceId,
+            'docId': orderId,
+            'transactionDetails': 'BeSpokeService-Created',
+            'context': context || {},
+            'transactionTypeId': "manageSchedule",
+            'fromUserType': fromUserType
+          });
+          break;
+          case "beSpokeServiceUpdated":
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'manageSchedule',
+              'activity': 'BeSpokeService-Updated',
+              'transactionType': 'manageSchedule',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': orderId,
+              'transactionDetails': 'BeSpokeService-Updated',
               'context': context || {},
               'transactionTypeId': "manageSchedule",
               'fromUserType': fromUserType

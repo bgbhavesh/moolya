@@ -180,5 +180,8 @@
     "useragent": "2.2.1",
     "utf-8-validate": "3.0.3",
     "video.js": "5.20.1"
+  },
+"publishConfig": {
+    "registry": "http://cipocdev.moolya.global:8081/repository/npm-private/"
   }
 }

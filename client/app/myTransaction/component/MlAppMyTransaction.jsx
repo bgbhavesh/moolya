@@ -29,7 +29,7 @@ export default class MlAppMyTransaction extends Component {
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
         <h2>My Transactions on moolya</h2>
-          <div className="col-md-12 main_wrap_scroll">          
+          <div className="col-md-12 main_wrap_scroll nopadding">          
           <Scrollbars
                   speed={0.8}
                   className="main_wrap_scroll"

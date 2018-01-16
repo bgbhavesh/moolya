@@ -1,19 +1,19 @@
 import React, { Component, PropTypes }  from "react";
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+// import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 var Rating = require('react-rating');
+import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
 const KEY = 'rating'
 
-class MlStartupRating extends React.Component{
+class MlStartupRating extends Component{
   constructor(props, context){
     super(props);
     this.state={
+      loading: true,
       data:this.props.ratingDetails || {},
       privateKey: {}
     }
@@ -28,23 +28,37 @@ class MlStartupRating extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
   }
+
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.rating)
     if(!empty){
-      this.setState({data: this.context.startupPortfolio.rating});
+      this.setState({ loading: false, data: this.context.startupPortfolio.rating },()=>{
+        this.lockPrivateKeys();
+      });
+    }else{
+      this.setState({ loading: false },()=>{
+        this.lockPrivateKeys();
+      })
     }
   }
-  onClick(fieldName, field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
+  onClick(fieldName, field, e) {
+    let isPrivate = false;
+    const className = e.target.className;
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true;
-    }else{
-      details=_.extend(details,{[key]:false});
     }
 
     var privateKey = {
@@ -53,29 +67,32 @@ class MlStartupRating extends React.Component{
       isPrivate: isPrivate,
       tabName: KEY
     }
-    this.setState({privateKey: privateKey})
+    this.setState({ privateKey: privateKey }, function () {
+      this.sendDataToParent()
+    })
+  }
 
-    this.setState({data:details}, function () {
+  onRatingChange(rate) {
+    let details = this.state.data;
+    details = _.omit(details, "rating");
+    details = _.extend(details, { "rating": rate });
+    this.setState({ data: details }, function () {
       this.sendDataToParent()
     })
   }
-  onRatingChange(rate){
-    let details =this.state.data;
-    details=_.omit(details,"rating");
-    details=_.extend(details,{"rating":rate});
-    this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })
-  }
+
   sendDataToParent(){
-    let data = this.state.data
-
+    let data = this.state.data;
+    data = _.omit(data, ["privateFields"]);
     this.props.getStartupRating(data, this.state.privateKey)
   }
+
   render(){
     let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:4);
+    const showLoader = this.state.loading;
     return (
     <div className="requested_input">
+      {showLoader === true ? ( <MlLoader/>) : (
       <div className="col-lg-12">
         <div className="row">
           <h2>Add Rating</h2>
@@ -93,18 +110,17 @@ class MlStartupRating extends React.Component{
                   />
                 </div>
               </div>
-
             </div>
           </div>
-
-
-        </div> </div>
+        </div>
+      </div>)}
     </div>
     )
   }
 }
 MlStartupRating.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 

@@ -3,8 +3,8 @@ import ScrollArea from 'react-scrollbar'
 import { connect } from 'react-redux';
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import _ from 'lodash';
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
@@ -28,11 +28,11 @@ class MlStartupClients extends Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.startupClientsServer = this.props.clientsDetails || [];
     this.tabName = this.props.tabName || ""
     this.curSelectLogo = {};
     this.handleBlur.bind(this);
-    this.onSaveAction.bind(this);
-    // this.imagesDisplay.bind(this);
+    this.onSaveAction = this.onSaveAction.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -71,18 +71,32 @@ class MlStartupClients extends Component{
     }
   }
 
-  onTileSelect(index,uiIndex, e){
+  onTileSelect(index, uiIndex, e) {
     let cloneArray = _.cloneDeep(this.state.startupClients);
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
     this.curSelectLogo = details.logo;
-    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
-    const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
-    setTimeout(function () {
-      _.each(privateFieldAry, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({ selectedIndex: index, data: details, selectedObject: uiIndex, popoverOpen: !(this.state.popoverOpen), "selectedVal": details.companyId }, () => {
+      this.lockPrivateKeys(index)
+    });
+    // const privateFieldAry = _.filter(details.privateFields, {tabName: this.props.tabName});
+    // setTimeout(function () {
+    //   _.each(privateFieldAry, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  lockPrivateKeys(selIndex) {
+    const privateValues = this.startupClientsServer && this.startupClientsServer[selIndex]?this.startupClientsServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e){
@@ -208,9 +222,6 @@ class MlStartupClients extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        //this.setState({loading: true})
-        //this.fetchOnlyImages();
-        // this.imagesDisplay();
       }
     }
   }
@@ -242,26 +253,6 @@ class MlStartupClients extends Component{
       }
     }
   }
-
-  // async imagesDisplay(){
-  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-  //   if (response && response.clients) {
-  //     let dataDetails =this.state.startupClients;
-  //     if(!dataDetails || dataDetails.length<1){
-  //       dataDetails = response&&response.clients?response.clients:[]
-  //     }
-  //     let cloneBackUp = _.cloneDeep(dataDetails);
-  //     if(cloneBackUp && cloneBackUp.length>0) {
-  //       _.each(dataDetails, function (obj, key) {
-  //         cloneBackUp[key]["logo"] = obj.logo;
-  //       })
-  //     }
-  //     let listDetails = this.state.startupClientsList || [];
-  //     listDetails = cloneBackUp
-  //     let cloneBackUpList = _.cloneDeep(listDetails);
-  //     this.setState({loading: false, startupClients:cloneBackUp,startupClientsList:cloneBackUpList});
-  //   }
-  // }
 
   emptyClick(e) {
     if (this.state.popoverOpen)
@@ -347,7 +338,7 @@ class MlStartupClients extends Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                        <a href="" className="save_btn" onClick={this.onSaveAction}>Save</a>
                     </div>
                   </div>
                 </div></div>
@@ -359,8 +350,10 @@ class MlStartupClients extends Component{
     )
   }
 }
+
 MlStartupClients.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 // const mapStateToProps = (state, ownProps) => {
 //   return {

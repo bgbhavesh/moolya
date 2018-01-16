@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import {firbaseClientHandler} from '../../../commons/conversations/utils/mlConversationLoginQuery';
 var config = {
     apiKey: "AIzaSyAl07yTqgLkUhNQA5NAfc6XEMjDSyQsMQk",
     authDomain: "fir-poc-c8c76.firebaseapp.com",
@@ -34,24 +35,28 @@ let startListener = ()=>{
 }
  
 
-let requestPermission=(loginType)=> {
+let requestPermission=(loginType, callback)=> {
   console.log('Requesting permission...');
   messaging.requestPermission()
   .then(function() {
     console.log('Notification permission granted.');
     messaging.getToken()
       .then(function(currentToken) {
-        console.log('The current token is:: ', currentToken);
         if (currentToken) {
           switch(loginType){
           case 'LOGIN':
-          console.log('LOGIN************** called');
+          firbaseClientHandler('userPushNotification', currentToken, true, function(res){
+            console.log('response is: ',res);
+          })
           //send to users collection (should update the db value always)
           //update isAllowedNotifications = true
           break;
 
           case 'LOGOUT':
-          console.log('LOGOUT************** called');
+          firbaseClientHandler('userPushNotification', currentToken, false, function(res){
+            console.log('response is: ',res);
+            callback();
+          })
           //send to users collection (should update the db value always)
           //update isAllowedNotifications = false
           break;
@@ -70,13 +75,13 @@ let requestPermission=(loginType)=> {
   });
 }
 
-let deleteToken = () => {
+let deleteToken = (cb) => {
   messaging.getToken()
   .then(function(currentToken) {
     messaging.deleteToken(currentToken)
     .then(function() {
       console.log('Token deleted.');
-      requestPermission('LOGOUT');
+      requestPermission('LOGOUT', cb);
       // setTokenSentToServer(false);
     })
     .catch(function(err) {

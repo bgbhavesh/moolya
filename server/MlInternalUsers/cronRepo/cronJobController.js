@@ -623,7 +623,7 @@ class MlCronJobControllerClass {
       let usersData = mlDBController.aggregate('users', pipeLine);
 
       async.each(usersData, function (object, callback){
-        if(object.profile.firebaseId){
+        if(object.profile && object.profile.firebaseId){
           const message = new gcm.Message({
             data: {
               notification: {
@@ -678,7 +678,7 @@ class MlCronJobControllerClass {
       });
 
       async.each(allUsersData, function (object, callback){
-        if(object.profile.firebaseId){
+        if(object.profile && object.profile.firebaseId){
           ids.push(object.profile.firebaseId);
         }
         callback();

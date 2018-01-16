@@ -17,6 +17,7 @@ import MlResolver from '../commons/mlResolverDef';
 import MlSchemaDef from '../commons/mlSchemaDef';
 import MlRespPayload from '../commons/mlPayload';
 import mlserviceCardHandler from '../MlExternalUsers/userSubscriptions/serviceCardHandler'
+import mlNotificationRepo from '../mlNotifications/mlNotificationRepo';
 
 let cors = require('cors');
 let multipart 	= require('connect-multiparty'),
@@ -40,6 +41,7 @@ const defaultServerConfig = {
   graphiqlPath: '/graphiqlApp',
   conversationPath: '/conversationlogin',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
+  userPushNotification:'/userPushNotification',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -196,6 +198,18 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
           res.send(ret)
         });
 
+      }))
+    }
+
+    if(config.userPushNotification){
+      graphQLServer.options(config.userPushNotification, cors());
+      graphQLServer.post(config.userPushNotification, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
+        var context = getContext({req});
+        context.firebaseId = req.body.firebaseId;
+        context.isAllowedNotifications = req.body.isAllowedNotifications;
+        mlNotificationRepo.updateFirebaseId(context, function(result){
+          res.send({success:true});
+        })
       }))
     }
     WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));

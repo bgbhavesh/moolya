@@ -94,8 +94,9 @@ class MlAppProfileHeader extends Component {
 
   /**user logout function*/
   logoutUser() {
-    logout();
-    deleteToken();
+    deleteToken(function(){
+      logout();
+    });
   }
 
   componentWillReceiveProps(user){

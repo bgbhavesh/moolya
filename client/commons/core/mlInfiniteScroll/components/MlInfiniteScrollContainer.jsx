@@ -36,7 +36,7 @@ export default class MlInfiniteScrollContainer extends Component {
 
   componentWillMount() {
     let WinHeight = $(window).height();
-    $('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
+    //$('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
   }
 
 

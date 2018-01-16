@@ -8,11 +8,11 @@ import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
-import MlLoader from '../../../../../../../commons/components/loader/loader'
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = 'clients';
 import Confirm from '../../../../../../../commons/utils/confirm';
+const KEY = 'clients';
 
 class MlStartupClients extends Component{
   constructor(props, context){

@@ -11,6 +11,7 @@ import mlSmsController from "../mlNotifications/mlSmsNotifications/mlSmsControll
 import mlSMSConst from "../mlNotifications/mlSmsNotifications/mlSmsConstants"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
 import MlSMSNotification from '../mlNotifications/mlSmsNotifications/mlSMSNotification'
+import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 import _ from 'underscore'
 import moment from "moment";
 var _lodash = require('lodash');
@@ -795,11 +796,23 @@ Meteor.methods({
 Accounts.validateLoginAttempt(function (details) {
   if(details&&details.user&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
     let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
+    let userId = details&&details.user&&details.user._id?details.user._id:""
+    let userProfile=new MlAdminUserContext().userProfileDetails(userId);
+    let clusterId = userProfile&&userProfile.defaultCluster?userProfile.defaultCluster:""
     if(departmentId !='all') {
       mlDBController = new MlDBController();
       var department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
+      let clusterExists = MlDepartments.findOne( {
+          $and : [
+              { _id : departmentId },
+              {"depatmentAvailable.cluster" : {$in : [clusterId,"all"]}}
+          ]
+      } )
       if(!department.isActive){
         throw new Meteor.Error('department-deactivated', 'You do not have any active department');
+        return false;
+      }else if(!clusterExists){
+        throw new Meteor.Error('department-dont exist', 'You do not have any active department');
         return false;
       } else {
         return true;

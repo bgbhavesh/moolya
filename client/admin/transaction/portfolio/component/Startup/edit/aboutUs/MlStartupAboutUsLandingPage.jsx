@@ -4,10 +4,11 @@ import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
-import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
+import { setTimeout } from "timers";
+import MlStartupAboutUsTabs from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-import { setTimeout } from "timers";
+
 export default class MlStartupAboutUs extends Component{
   constructor(props){
     super(props)
@@ -23,6 +24,7 @@ export default class MlStartupAboutUs extends Component{
   getPortfolioStartupAboutUsDetails(details, tabName, privateKey, requiredFields) {
     this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+
   componentDidMount()
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
@@ -48,8 +50,7 @@ export default class MlStartupAboutUs extends Component{
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const portfoliodetailsId=this.props.portfolioDetailsId;
     const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
     if (response) {
       this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
@@ -171,7 +172,7 @@ export default class MlStartupAboutUs extends Component{
 
         </div>
         </div>
-      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp} activeTab={this.state.activeTab}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupAboutUsTabs getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp} activeTab={this.state.activeTab}></MlStartupAboutUsTabs> }</div>)}
       </div>
 
     )

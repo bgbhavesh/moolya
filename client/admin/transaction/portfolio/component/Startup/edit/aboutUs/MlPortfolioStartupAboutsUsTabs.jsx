@@ -14,7 +14,7 @@ import MlTabComponent from "../../../../../../../commons/components/tabcomponent
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
 
-export default class MlStartupTab extends React.Component {
+export default class MlStartupAboutUsTabs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

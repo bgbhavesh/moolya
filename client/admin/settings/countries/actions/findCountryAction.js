@@ -14,7 +14,7 @@ export async function findCountryActionHandler(CountryId) {
         displayName
         about
         capital
-        url
+        url: flag_128
         isActive
       }
     }  
@@ -27,3 +27,8 @@ export async function findCountryActionHandler(CountryId) {
   const id = result.data.fetchCountry;
   return id
 }
+
+/**
+ * server flag_32 is been taken in url
+ * @Note url : amzon old value
+ */

@@ -87,7 +87,7 @@ export default class MlIdeaView extends React.Component {
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-  componentWillMount() { 
+  componentWillMount() {
     let resp =this.validateUserForAnnotation();
     return resp
   }
@@ -115,7 +115,7 @@ export default class MlIdeaView extends React.Component {
     const portfolioId = this.props.portfolioDetailsId
     const response = await fetchIdeaActionHandler(portfolioId);
     if (response) {
-      let currentIdea = {}
+      let currentIdea = response.length?response[0]:{};
       _.each(response, function (idea) {
         if (idea._id == ideaId) {
           currentIdea = idea

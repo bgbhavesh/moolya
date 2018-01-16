@@ -18,6 +18,11 @@ const notificationOptions = {
   click_action: JSON.parse(payload.data.notification).click_action
 };
 
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(self.clients.openWindow(JSON.parse(payload.data.notification).click_action));
+});
+
 return self.registration.showNotification(notificationTitle,
   notificationOptions);
 });

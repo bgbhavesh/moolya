@@ -629,7 +629,7 @@ class MlCronJobControllerClass {
               notification: {
                   title: "",
                   icon: "/images/moolya_logo.png",
-                  body: "Your profile on moolya has " + object.totalLikes +" Likes, "+ object.totalViews + " Views and "+  object.totalConnections +" Connections",
+                  body: "Your profile has " + object.totalLikes +" Likes, "+ object.totalViews + " Views and "+  object.totalConnections +" Connections",
                   click_action: "https://qaapp.moolya.global/app/myprofile"
               }
             }

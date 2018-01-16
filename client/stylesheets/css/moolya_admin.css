@@ -1138,8 +1138,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .moolya_admin .RRT__container .moolya_btn.RRT__tab--selected .moolya_btn_in:before{border-color: transparent #fff transparent transparent;}
 
 
-.list_block .fa.fa-lock {position: absolute;left:4px;top:2px; font-size: 18px; color: #ee4847}
-.list_block .fa.fa-unlock {position: absolute;right:4px;top:2px; font-size: 18px; color: #273545}
+.list_block .fa.fa-lock {position: absolute;right:4px;top:2px; font-size: 18px; color: #ee4847}
+.list_block .fa.fa-unlock {position: absolute;right:4px;top:2px; font-size: 18px; color: #3c763d}
 
 .inputfile{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
 .inputfile + label{max-width:100%;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;display:inline-block;overflow:hidden;padding:.625rem 1.25rem}

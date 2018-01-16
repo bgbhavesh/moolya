@@ -157,7 +157,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
                   <div id="trademarkContent" className="panel-form-view hide_unlock">
                     <div className="panel panel-default">
                       <div className="panel-heading">
-                        Audience
+                      Intellectual Property And Trademark
                         <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" />
                       </div>
                     <div className="panel-body">

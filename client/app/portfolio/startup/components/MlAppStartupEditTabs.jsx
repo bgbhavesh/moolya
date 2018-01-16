@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import _ from 'lodash'
 import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlStartupAboutUs from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
+import MlStartupAboutUsLandingPage from "../../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
 import MlStartupManagement from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
 import MlStartupInvestor from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
 import MlStartupData from "../../../../admin/transaction/portfolio/component/Startup/edit/MlStartupData";
@@ -67,7 +67,7 @@ class MlAppStartupEditTabs extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlStartupAboutUs client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlStartupAboutUsLandingPage client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
       },
@@ -147,7 +147,7 @@ class MlAppStartupEditTabs extends Component {
   getAboutus(details, tabName, privatekey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     this.props.getPortfolioDetails({startupPortfolio: object}, privatekey, requiredFields);
   }
 

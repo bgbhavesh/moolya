@@ -81,7 +81,7 @@ export default class MlStartupAboutUsTabs extends React.Component {
         panelClassName: 'panel',
         title: "Rating",
         name: "Rating",
-        component: <MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)}
+        component: <MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)} tabName="rating"
                                     portfolioDetailsId={this.props.portfolioDetailsId}
                                     ratingDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.rating}/>
       },
@@ -100,7 +100,7 @@ export default class MlStartupAboutUsTabs extends React.Component {
         panelClassName: 'panel',
         title: "Services & Products",
         name: "Services And Products",
-        component: <MlStartupSP key="4" getStartupSP={this.getStartupServiceProducts.bind(this)}
+        component: <MlStartupSP key="4" getStartupSP={this.getStartupServiceProducts.bind(this)} tabName={"serviceProducts"}
                                 portfolioDetailsId={this.props.portfolioDetailsId}
                                 serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
       },
@@ -109,7 +109,7 @@ export default class MlStartupAboutUsTabs extends React.Component {
         panelClassName: 'panel',
         title: "Information",
         name: "Information",
-        component: <MlStartupInformation key="5" getStartupInfo={this.getStartupInfo.bind(this)}
+        component: <MlStartupInformation key="5" getStartupInfo={this.getStartupInfo.bind(this)} tabName={"information"}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          informationDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.information}/>
       },
@@ -148,7 +148,7 @@ export default class MlStartupAboutUsTabs extends React.Component {
         panelClassName: 'panel',
         title: "Legal Issue",
         name: "Legal Issue",
-        component: <MlStartupLegal key="9" getStartupLegalIssue={this.getStartupLegalIssue.bind(this)}
+        component: <MlStartupLegal key="9" getStartupLegalIssue={this.getStartupLegalIssue.bind(this)} tabName={"legalIssue"}
                                    portfolioDetailsId={this.props.portfolioDetailsId}
                                    legalIssueDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.legalIssue}/>
       }

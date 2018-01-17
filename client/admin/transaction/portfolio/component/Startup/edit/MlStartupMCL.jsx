@@ -184,9 +184,8 @@ export default class MlStartupMCL extends React.Component{
       isPrivate: isPrivate,
       tabName: tabName
     }
-    this.setState({privateKey: privateKey})
 
-    this.setState({data:details}, function () {
+    this.setState({data:details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -256,7 +255,7 @@ export default class MlStartupMCL extends React.Component{
                         value={membershipDescription}
                         handleOnChange={(value) => this.handleBlur(value, "membershipDescription", "memberships")}
                       />
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMDPrivate"  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -273,7 +272,7 @@ export default class MlStartupMCL extends React.Component{
                         value={complianceDescription}
                         handleOnChange={(value) => this.handleBlur(value, "complianceDescription", "compliances")}
                       />
-                      <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate" onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCDPrivate" onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -288,7 +287,7 @@ export default class MlStartupMCL extends React.Component{
                         value={licenseDescription}
                         handleOnChange={(value) => this.handleBlur(value, "licenseDescription", "licenses")}
                       />
-                      <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate" onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLDPrivate" onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
                     </div>
                   </div>
                 </div>

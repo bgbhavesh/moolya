@@ -1,9 +1,11 @@
 import React, { Component, PropTypes }  from "react";
 // import { connect } from 'react-redux';
 import ScrollArea from 'react-scrollbar';
+import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
 class MlStartupLegal extends Component{
   constructor(props, context){
@@ -25,20 +27,46 @@ class MlStartupLegal extends Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
 
-  componentWillMount(){
+  componentWillMount() {
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.legalIssue)
-    if(!empty){
+    if (!empty) {
       const editorValue = createValueFromString(this.context.startupPortfolio && this.context.startupPortfolio.legalIssue ? this.context.startupPortfolio.legalIssue.legalDescription : null);
-      this.setState({ loading: false, data: this.context.startupPortfolio.legalIssue, editorValue });
+      this.setState({ loading: false, data: this.context.startupPortfolio.legalIssue, editorValue }, () => {
+        this.resetAllLocks();
+        this.lockPrivateKeys();
+      });
+    } else {
+      this.setState({ loading: false }, () => {
+        this.resetAllLocks();
+        this.lockPrivateKeys();
+      })
     }
+  }
+  
+  resetAllLocks() {
+    console.log("generate reset lock")
+    // $(".nomargin-bottom span").each(function () {
+    //   $("#" + this.id).removeClass('fa-lock').addClass('un_lock fa-unlock')
+    // });
+  }
+
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   handleBlur(value, keyName) {
     let details = this.state.data;
-    // let name  = e.target.name;
     details = _.omit(details, [keyName]);
     details = _.extend(details, { [keyName]: value.toString('html') });
     this.setState({ data: details, editorValue: value }, () => {
@@ -57,34 +85,29 @@ class MlStartupLegal extends Component{
   }
 
   onLockChange(fieldName,field, e){
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName};
+    this.setState({privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
 
-  updatePrivateKeys(){
-    let response = this.props.legalIssueDetails
-    _.each(response.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    })
-  }
+  // updatePrivateKeys(){
+  //   let response = this.props.legalIssueDetails
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
   render(){
     const { editorValue } = this.state;
+    const showLoader = this.state.loading;
     return (
       <div className="requested_input">
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="col-lg-12">
           <div className="row">
             <h2>Legal Issue</h2>
@@ -98,19 +121,21 @@ class MlStartupLegal extends Component{
                     handleOnChange={(value) => this.handleBlur(value, "legalDescription")}
                   />
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "legalDescription", "isDescriptionPrivate")} />
-                  <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate} />
+                  {/* <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate} /> */}
                 </div>
 
               </div>
             </div>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }
 }
+
 MlStartupLegal.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 // const mapStateToProps = (state, ownProps) => {

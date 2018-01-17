@@ -6,20 +6,20 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCountryActionHandler} from '../actions/findCountryAction'
 import {updateCountryActionHandler} from '../actions/updateCountryAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import MlLoader from '../../../../commons/components/loader/loader'
+import MlLoader from '../../../../commons/components/loader/loader';
+import FlagFormatter from '../actions/FlagFormatter';
 
 class MlEditCountry extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{},url: ''};
+    this.state = { loading: true, data: {} };
     this.editCountry.bind(this);
     this.findCountry.bind(this);
     return this;
   }
 
-
   componentWillMount() {
-    const resp=this.findCountry();
+    const resp = this.findCountry();
     return resp;
   }
 
@@ -54,23 +54,26 @@ class MlEditCountry extends React.Component{
     }
   };
 
-  async  findCountry() {
-    let id = this.props.config
+  async findCountry() {
+    const id = this.props.config
     const response = await findCountryActionHandler(id);
-    this.setState({loading:false,data:response});
-    this.setState({url:this.state.data.url})
+    this.setState({ loading: false, data: response, url: this.state.data.url });
   }
 
+  /**
+   * Do not send url and country name on server
+   * as they are non-editable
+   */
   async  editCountry() {
     let CountryDetails = {
       id: this.refs.id.value,
-      // country: this.refs.country.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       capital: this.refs.capital.value,
-      url: this.refs.url.src,
       isActive: this.refs.status.checked
     };
+    // country: this.refs.country.value,
+    // url: this.refs.url.src,
     const response = await updateCountryActionHandler(CountryDetails);
     return response;
 
@@ -138,7 +141,8 @@ class MlEditCountry extends React.Component{
                         <input type="file" className="upload" />
                       </div>*/}
                       <div className="previewImg">
-                        <img ref="url" src={this.state.url}/>
+                        <FlagFormatter data={this.state.data} />
+                        {/* <img ref="url" src={this.state.url}/> */}
                       </div>
                     </div>
                     <br className="brclear"/>

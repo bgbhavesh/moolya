@@ -9,7 +9,7 @@ import MlStartupAboutUsTabs from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 
-export default class MlStartupAboutUs extends Component{
+export default class MlStartupAboutUsLandingPage extends Component{
   constructor(props){
     super(props)
     this.state = {aboutStartup:false,startupAboutUs:[], startupAboutUsList:[]}

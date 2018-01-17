@@ -1,19 +1,18 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import { connect } from 'react-redux';
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
-
-class MlStartupSP extends React.Component{
+class MlStartupSP extends Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: true,
-      data:this.props.serviceProductsDetails || {},
+      data: this.props.serviceProductsDetails || {},
       privateKey:{},
       editorValue: createValueFromString(this.props.serviceProductsDetails ? this.props.serviceProductsDetails.spDescription : null)
     }
@@ -28,26 +27,44 @@ class MlStartupSP extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
-    this.updatePrivateKeys();
+    // this.updatePrivateKeys();
   }
-  componentWillMount(){
+
+  componentWillMount() {
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.serviceProducts)
     const editorValue = createValueFromString(this.context.startupPortfolio && this.context.startupPortfolio.serviceProducts ? this.context.startupPortfolio.serviceProducts.spDescription : null);
-    if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.serviceProducts,editorValue});
+    if (!empty) {
+      this.setState({ loading: false, data: this.context.startupPortfolio.serviceProducts, editorValue }, () => {
+        this.lockPrivateKeys();
+      });
+    } else {
+      this.setState({ loading: false }, () => {
+        this.lockPrivateKeys();
+      })
     }
+  }
+
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   handleBlur(value, keyName){
     let details =this.state.data;
-    // let name  = e.target.name;
     details=_.omit(details,[name]);
-    // details=_.extend(details,{[name]:e.target.value});
     details=_.extend(details,{[keyName]: value.toString('html')});
     this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
@@ -58,46 +75,36 @@ class MlStartupSP extends React.Component{
     data=_.omit(data,["privateFields"]);
     this.props.getStartupSP(data,this.state.privateKey)
   }
+
   onLockChange(fieldName,field, e){
-
-
-    let details = this.state.data||{};
-    let key = e.target.id;
-    var isPrivate = false;
-    details=_.omit(details,[key]);
-    let className = e.target.className;
+    let isPrivate = false;
+    const className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    const privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName };
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
-   /* this.setState({data:details}, function () {
-      this.sendDataToParent()
-    })*/
   }
 
-  updatePrivateKeys(){
-    let response = this.props.serviceProductsDetails
-    _.each(response.privateFields, function (pf) {
-      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    })
-  }
+  // updatePrivateKeys(){
+  //   let response = this.props.serviceProductsDetails
+  //   _.each(response.privateFields, function (pf) {
+  //     $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+  //   })
+  // }
 
   render(){
     const { editorValue } = this.state;
+    const showLoader = this.state.loading;
     return (
       <div className="requested_input">
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="col-lg-12">
           <div className="row">
             <h2>Service & Products</h2>
             <div className="panel panel-default panel-form">
-
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
@@ -111,23 +118,16 @@ class MlStartupSP extends React.Component{
 
               </div>
             </div>
-
-
-          </div> </div>
+          </div> 
+        </div>)}
       </div>
-
-
-
-
-
-
-
-
     )
   }
 }
+
 MlStartupSP.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 

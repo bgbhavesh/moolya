@@ -17,6 +17,7 @@ let countriesSchema = `
         lat           : String,
         lng           : String,
         phoneNumberCode : String
+        flag_128       : String,
     }
     
     input countryObject{

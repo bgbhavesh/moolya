@@ -36,7 +36,7 @@ export default class MlCompanyAboutUsLandingPage extends Component{
       if(WinWidth > 768){
         $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
       }
-    },100);
+    }, 500);
   }
 
   componentWillMount(){

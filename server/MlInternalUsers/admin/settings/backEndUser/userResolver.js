@@ -1403,7 +1403,8 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
       "profile.middleName": args.attributes.middleName,
       "profile.lastName": args.attributes.lastName,
       "profile.genderType": args.attributes.genderType,
-      "profile.dateOfBirth": args.attributes.dateOfBirth
+      "profile.dateOfBirth": args.attributes.dateOfBirth,
+      "profile.firebaseInfo.frequency": args.attributes.frequency,
     }, {$set: true}, context)
   }
   if(resp){

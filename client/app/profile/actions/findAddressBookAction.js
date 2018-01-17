@@ -84,6 +84,9 @@ export async function fetchUserDetails() {
               firstName
               middleName
               lastName
+              firebaseInfo{
+                frequency
+              }
               externalUserProfiles{
                   profileId 
                   registrationId

@@ -15,8 +15,8 @@ class NotificationRepo{
   	let newFireBaseId = data.firebaseId;
   	let update = mlDBController.update('users', data.userId, 
   		{	
-  			"profile.firebaseId":data.firebaseId, 
-  			"profile.isAllowedNotifications": data.isAllowedNotifications
+  			"profile.firebaseInfo.firebaseId":data.firebaseId, 
+  			"profile.firebaseInfo.isAllowedNotifications": data.isAllowedNotifications
    		},
    		{
    			$set:true

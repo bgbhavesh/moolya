@@ -562,7 +562,7 @@ class MlCronJobControllerClass {
 
       let pipeLine =
       [
-          { "$match": { "profile.isAllowedNotifications": true } },
+          { "$match": { "profile.firebaseInfo.isAllowedNotifications": true } },
           {
               "$lookup": {
                   from: "mlPortfolioDetails",
@@ -616,14 +616,14 @@ class MlCronJobControllerClass {
                   totalLikes: 1,
                   totalViews: 1,
                   totalConnections: 1,
-                  "profile.firebaseId": 1
+                  "profile.firebaseInfo.firebaseId": 1
               }
           } 
       ]
       let usersData = mlDBController.aggregate('users', pipeLine);
 
       async.each(usersData, function (object, callback){
-        if(object.profile && object.profile.firebaseId){
+        if(object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId){
           const message = new gcm.Message({
             data: {
               notification: {
@@ -635,7 +635,7 @@ class MlCronJobControllerClass {
             }
           });
           var id = [];
-          id.push(object.profile.firebaseId);
+          id.push(object.profile.firebaseInfo.firebaseId);
           if (object.totalConnections == 0 &&  object.totalLikes ==0 && object.totalViews ==0){
             //do not send the message
             callback();
@@ -678,8 +678,8 @@ class MlCronJobControllerClass {
       });
 
       async.each(allUsersData, function (object, callback){
-        if(object.profile && object.profile.firebaseId){
-          ids.push(object.profile.firebaseId);
+        if(object.profile && object.profile.firebaseInfo && object.profile.firebaseInfo.firebaseId){
+          ids.push(object.profile.firebaseInfo.firebaseId);
         }
         callback();
       },

@@ -47,7 +47,7 @@ export default class MlInstitutionEvolution extends React.Component{
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.evolution)
     if(empty){
       const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-       const editorValue = createValueFromString(response.evolution.institutionEvolutionDescription);
+      const editorValue = createValueFromString(response && response.evolution && response.evolution.institutionEvolutionDescription ? response.evolution.institutionEvolutionDescription : null);
       if (response && response.evolution) {
         var object = response.evolution;
         object = _.omit(object, '__typename')

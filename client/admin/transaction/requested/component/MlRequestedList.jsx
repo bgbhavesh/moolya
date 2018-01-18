@@ -10,10 +10,12 @@ export default class MlRequestedList extends Component {
      super(props);
      this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,clusterId:null};
      this.assignActionHandler.bind(this);
+     this.onPriorityChange = this.onPriorityChange.bind(this);
   }
   showPopUp(value) {
     this.setState({'show': value})
   }
+
   componentDidMount() {
 
     /*$("#Reg_Request").popover({
@@ -38,6 +40,101 @@ export default class MlRequestedList extends Component {
   assignAddActionHandler(){
     this.setState({show:true});
   }
+
+  onPriorityChange(e,priority){
+    e.preventDefault();
+    let priorityFilter = [];
+    switch(priority){
+      case 'all':
+        break;
+      case 'priority-1':
+        priorityFilter = [
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_EMAIL_V"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_KYC_U_PEND"
+          }
+        ]
+        break;
+      case 'priority-2':
+        priorityFilter =[
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$and",
+            value:"REG_PORT_PEND"
+          }
+        ]
+        break;
+      case 'priority-3':
+        priorityFilter =[
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$and",
+            value:"REG_EMAIL_P"
+          }
+        ]
+        break;
+      case 'others':
+        priorityFilter =[
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_USER_REJ"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_USER_APR"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_KYC_A_APR"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_ADM_REJ"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_KYC_A_REJ"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_KYC_U_KOFF"
+          },
+          {
+            fieldName:"status",
+            fieldType:"List",
+            operator:"$or",
+            value:"REG_SOFT_APR"
+          },
+        ]
+        break;
+    }
+    //
+
+    this.setState({priorityFilter});
+  }
+
   render() {
    let actions= mlUserTypeTableConfig.actionConfiguration;
    let action = _.find(actions, {"actionName": "assign"});
@@ -51,15 +148,15 @@ export default class MlRequestedList extends Component {
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
         <div className="ml_inner_btn">
-          <a className="h_btn">All </a>
-          <a className="h_btn ml_red">3<sup>rd</sup> Priority </a>
-          <a className="h_btn ml_orange">1<sup>st</sup> Priority </a>
-          <a className="h_btn ml_green">2<sup>nd</sup> Priority</a>
-          <a className="h_btn">Others</a>
+          <a className="h_btn" onClick={e=>{this.onPriorityChange(e,'all')}}>All </a>
+          <a className="h_btn ml_red" onClick={e=>this.onPriorityChange(e,'priority-1')}>1<sup>st</sup> Priority </a>
+          <a className="h_btn ml_orange" onClick={e=>this.onPriorityChange(e,'priority-2')}>2<sup>nd</sup> Priority </a>
+          <a className="h_btn ml_green" onClick={e=>this.onPriorityChange(e,'priority-3')}>3<sup>rd</sup> Priority</a>
+          <a className="h_btn" onClick={e=>this.onPriorityChange(e,'others')}>Others</a>
           </div>
           <h2>Requested List</h2>
-          
-          <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
+
+          <MlTableViewContainer {...mlUserTypeTableConfig} priorityFilter={this.state.priorityFilter} forceFetch={false}/>
           {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} clusterId={this.state.clusterId} showPopUp={this.showPopUp.bind(this)}/>}
          </div>
       </div>

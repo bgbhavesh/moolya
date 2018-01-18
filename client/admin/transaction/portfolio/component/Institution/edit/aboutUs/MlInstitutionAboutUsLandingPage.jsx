@@ -25,6 +25,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
   getPortfolioInstitutionAboutUsDetails(details, tabName, privateKey, requiredFields) {
     this.props.getAboutus(details, tabName, privateKey, requiredFields);
   }
+  
   componentDidMount()
   {
     var className = this.props.isAdmin ? "admin_header" : "app_header";
@@ -52,7 +53,7 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
     let institutionDescription;
     let spDescription;
     let informationDescription;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchDetailsInstitutionActionHandler(portfoliodetailsId);
     if (response) {
       institutionDescription = createValueFromString(response.aboutUs ? response.aboutUs.institutionDescription : null);
@@ -60,13 +61,11 @@ export default class MlInstitutionAboutUsLandingPage extends Component{
       informationDescription = createValueFromString(response.information ? response.information.informationDescription : null);
       this.setState({loading: false, institutionAboutUs: response, institutionAboutUsList: response, institutionDescription, spDescription, informationDescription });
     }
-
   }
 
   getInstitutionState() {
     this.setState({aboutInstitution: false})
     this.props.backClickHandler();
-
   }
 
   render(){

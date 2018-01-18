@@ -9,7 +9,7 @@ import MlInstitutionEditAwards from './MlInstitutionEditAwards';
 import MlInstitutionEditLookingFor from './MlInstitutionEditLookingFor';
 import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
-import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
+import MlInstitutionAboutUsLandingPage from "./aboutUs/MlInstitutionAboutUsLandingPage";
 import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs";
 import MlInstitutionEditIntrapreneur from './MlInstitutionEditIntrapreneur';
 import MlInstitutionEditRD from './MlInstitutionEditR&D';
@@ -87,7 +87,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlInstitutionAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
+        component: <MlInstitutionAboutUsLandingPage key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}
                                          backClickHandler={this.backClickHandler.bind(this)}/>
       },
@@ -207,7 +207,7 @@ export default class MlInstitutionEditTab extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     this.props.getPortfolioDetails({institutionPortfolio: object}, privateKey, requiredFields);
   }
 
@@ -359,6 +359,7 @@ export default class MlInstitutionEditTab extends Component {
     return <MlTabComponent tabs={tabs} selectedTabKey={this.state.activeTab}  onChange={this.updateTab} type="tab" mkey="name"/>
   }
 }
+
 MlInstitutionEditTab.childContextTypes = {
   institutionPortfolio: PropTypes.object,
   portfolioKeys: PropTypes.object

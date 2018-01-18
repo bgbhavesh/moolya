@@ -359,70 +359,6 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
   return response;
 }
 
-
-// export async function findStartupManagementActionHandler(portfoliodetailsId) {
-//
-//   const result = await client.query({
-//     query: gql`
-//           query ($portfoliodetailsId: String!) {
-//             fetchStartupPortfolioManagement(portfoliodetailsId: $portfoliodetailsId) {
-//                title
-//                isTitlePrivate
-//                firstName
-//                isFirstNamePrivate
-//                lastName
-//                isLastNamePrivate
-//                middleName
-//                isMiddleNamePrivate
-//                qualification
-//                isQualificationPrivate
-//                certification
-//                isCertificationPrivate
-//                profilePic
-//                isProfilePicPrivate
-//                gender
-//                isGenderPrivate
-//                designation
-//                isDesignationPrivate
-//                yearsOfExperience
-//                isYOEPrivate
-//                joiningDate
-//                isJoiningDatePrivate
-//                firstJobJoiningDate
-//                isFJJDPrivate
-//                universities
-//                isUniversitiesPrivate
-//                awards
-//                isAwardsPrivate
-//                linkedInUrl
-//                isLinkedInUrlPrivate
-//                about
-//                isAboutPrivate
-//                 logo{
-//                   fileName
-//                   fileUrl
-//                 }
-//                 index
-//             }
-//           }
-//
-//       `,
-//     variables: {
-//       portfoliodetailsId: portfoliodetailsId
-//     },
-//     fetchPolicy: 'network-only'
-//   })
-//   console.log(result)
-//   const id = result.data.fetchStartupPortfolioManagement;
-//   let managementArray = [];
-//   managementArray = _.map(id, function (row) {
-//     return _.omit(row, ['__typename'])
-//   });
-//   // let data = _.omit(id,'__typename')
-//   // return data
-//   return managementArray;
-// }
-
 export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
@@ -434,6 +370,12 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
                     fileName,
                     fileUrl
                   }
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                   isLogoPrivate,
                   isDescriptionPrivate,
                   annotatorId
@@ -442,8 +384,10 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
                   rating,
                   isRatingPrivate,
                   privateFields{
-                      keyName,
-                      booleanKey
+                    keyName
+                    booleanKey
+                    tabName
+                    index
                   }
                 }
                 clients{
@@ -455,16 +399,34 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                   makePrivate
                   index
                 }
                 serviceProducts{
                   spDescription
                   isDescriptionPrivate
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
                 information{
                   informationDescription
                   isDescriptionPrivate
+                  privateFields{
+                    keyName
+                    booleanKey
+                    tabName
+                    index
+                  }
                 }
             }
           }
@@ -486,7 +448,6 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
   aboutUsArray["serviceProducts"] = _.omit(data.serviceProducts, '__typename');
   aboutUsArray["information"] = _.omit(data.information, '__typename');
   aboutUsArray["rating"] = _.omit(data.rating, '__typename');
-
   return aboutUsArray
 }
 

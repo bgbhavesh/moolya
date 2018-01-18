@@ -148,7 +148,7 @@ export default class MlServiceProviderViewAwards extends React.Component {
                 </div>) : (
                 <div id="annotatorContent">
                   <h2>Awards</h2>
-                  <div className="col-lg-12">
+                  
                     <MlGenericAwardsView awardsList={awardsArray} isAdmin={this.props.isAdmin}
                                                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
 
@@ -165,7 +165,7 @@ export default class MlServiceProviderViewAwards extends React.Component {
                         {/*</div>)*/}
                       {/*})}*/}
                     {/*</div>*/}
-                  </div>
+                  
                 </div>
               )
               }

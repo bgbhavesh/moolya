@@ -1,20 +1,21 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import _ from "lodash";
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler';
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
 import Confirm from '../../../../../../../commons/utils/confirm';
-import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor"
+import MlTextEditor, {createValueFromString} from "../../../../../../../commons/components/textEditor/MlTextEditor";
+import MlLoader from '../../../../../../../commons/components/loader/loader';
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
 const KEY = 'aboutUs'
 
-export default class MlInstitutionAboutUs extends React.Component{
+export default class MlInstitutionAboutUs extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -28,8 +29,8 @@ export default class MlInstitutionAboutUs extends React.Component{
     this.fetchOnlyImages.bind(this);
     this.libraryAction.bind(this);
     return this;
-
   }
+
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
@@ -50,24 +51,45 @@ export default class MlInstitutionAboutUs extends React.Component{
     this.fetchOnlyImages()
     this.props.getInstitutionAboutUs(this.state.data)
   }
-  componentWillMount(){
+
+  componentWillMount() {
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.aboutUs)
     const editorValue = createValueFromString(this.context.institutionPortfolio && this.context.institutionPortfolio.aboutUs ? this.context.institutionPortfolio.aboutUs.institutionDescription : null);
-    if(!empty){
-      this.setState({loading: false, data: this.context.institutionPortfolio.aboutUs,editorValue});
+    if (!empty) {
+      this.setState({ loading: false, data: this.context.institutionPortfolio.aboutUs, editorValue }, () => {
+        this.lockPrivateKeys();
+      });
+    } else {
+      this.setState({ loading: false }, () => {
+        this.lockPrivateKeys();
+      })
     }
+  }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    const privateValues = this.state.data.privateFields;
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, { tabName: this.props.tabName })
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, { tabName: this.props.tabName })
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   handleBlur(value, keyName){
     let details =this.state.data;
-    // let name  = e.target.name;
     details=_.omit(details,[name]);
     details=_.extend(details,{[keyName]: value.toString('html')});
-    // details=_.extend(details,{[name]:e.target.value});
     this.setState({data:details,editorValue: value}, function () {
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
@@ -80,6 +102,7 @@ export default class MlInstitutionAboutUs extends React.Component{
     this.props.getInstitutionAboutUs(data, this.state.privateKey)
     this.fetchOnlyImages()
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -89,6 +112,7 @@ export default class MlInstitutionAboutUs extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{aboutUs:{logo:[{fileUrl:'', fileName : fileName}]}}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
+
   onFileUploadCallBack(name,file, resp){
     if(resp){
       let result = JSON.parse(resp)
@@ -114,12 +138,13 @@ export default class MlInstitutionAboutUs extends React.Component{
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
-    if(resp.code === 404) {
+    if (resp.code === 404) {
       toastr.error(resp.result)
     } else {
       toastr.success(resp.result)
       return resp;
-    }  }
+    }
+  }
 
   async fetchOnlyImages() {
     let that = this;
@@ -129,32 +154,23 @@ export default class MlInstitutionAboutUs extends React.Component{
       let dataDetails = this.state.data
       dataDetails['logo'] = response.aboutUs.logo
       this.setState({data: dataDetails});
-      setTimeout(function () {
-        _.each(response.aboutUs.privateFields, function (pf) {
-          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        })
-      }, 10)
+      // setTimeout(function () {
+      //   _.each(response.aboutUs.privateFields, function (pf) {
+      //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      //   })
+      // }, 10)
     }
-
     this.setState({loading:false})
   }
-  onLockChange(fieldName, field, e){
-    var isPrivate = false;
-    let details = this.state.data||{};
-    let key = e.target.id;
-    details=_.omit(details,[key]);
+
+  onLockChange(fieldName, field, e) {
+    let isPrivate = false;
     let className = e.target.className;
-    if(className.indexOf("fa-lock") != -1){
-      details=_.extend(details,{[key]:true});
+    if (className.indexOf("fa-lock") != -1) {
       isPrivate = true
-    }else{
-      details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    var privateKey = { keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: KEY }
+    this.setState({ privateKey: privateKey }, function () {
       this.sendDataToParent()
     })
   }
@@ -168,10 +184,11 @@ export default class MlInstitutionAboutUs extends React.Component{
         </div>
       )
     }));
-
+    const showLoader = this.state.loading;
     return(
       <div className="requested_input">
       <h2> About Us </h2>
+      {showLoader === true ? (<MlLoader />) : (
         <div className="main_wrap_scroll">
         <div className="col-lg-12">
           <div className="row">
@@ -203,14 +220,15 @@ export default class MlInstitutionAboutUs extends React.Component{
                 {aboutUsImages}
               </div>
             </div>
-
-          </div> </div>
-        
-      </div>
-      </div>
+          </div>
+        </div>
+      </div>)}
+    </div>
     )
   }
 }
+
 MlInstitutionAboutUs.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys : PropTypes.object
 };

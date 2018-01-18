@@ -20,7 +20,7 @@ export default class MapDetails extends Component {
     const mapDataList = mapDataArr.map(function (m) {
       let title = ""
       if(m.key == "backendUsers"){
-        title = "Backend Users"
+        title = "Backend U"
       }else if (m.key == "ideators"){
         title = "Ideators"
       }else if (m.key == "funders"){
@@ -32,7 +32,7 @@ export default class MapDetails extends Component {
       }else if (m.key == "institutions"){
         title = "Institutions"
       }else if (m.key == "serviceproviders"){
-        title = "Service Providers"
+        title = "Service P"
       }else {
 
         switch(m.key){

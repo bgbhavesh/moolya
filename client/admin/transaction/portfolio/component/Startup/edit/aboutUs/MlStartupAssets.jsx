@@ -13,8 +13,9 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = 'assets';
 import Confirm from '../../../../../../../commons/utils/confirm';
+
+const KEY = 'assets';
 
 class MlStartupAssets extends Component{
   constructor(props, context){
@@ -30,6 +31,7 @@ class MlStartupAssets extends Component{
       selectedAssetType:null,
       selectedObject:"default"
     }
+    this.startupAssetsServer = this.props.assetsDetails || []
     this.tabName = this.props.tabName || ""
     this.handleBlur.bind(this);
     // this.imagesDisplay.bind(this);
@@ -92,12 +94,29 @@ class MlStartupAssets extends Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.assetTypeId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({
+      selectedIndex: index, data: details, selectedObject: index,
+      popoverOpen: !(this.state.popoverOpen), "selectedVal": details.assetTypeId
+    }, () => {
+      this.lockPrivateKeys(index)
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  lockPrivateKeys(selIndex) {
+    const privateValues = this.startupAssetsServer && this.startupAssetsServer[selIndex]?this.startupAssetsServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e){
@@ -122,9 +141,7 @@ class MlStartupAssets extends Component{
     } else {
       updatedData=_.extend(updatedData,{[key]:false});
     }
-    this.setState({data:updatedData}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data:updatedData})
   }
 
   handleBlur(e){
@@ -132,9 +149,7 @@ class MlStartupAssets extends Component{
     let name  = e.target.name;
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
-    this.setState({data:details}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data:details})
   }
 
   assetTypeOptionSelected(selectedId, callback, selObject){
@@ -142,9 +157,7 @@ class MlStartupAssets extends Component{
     details=_.omit(details,["assetTypeId"]);
     details=_.omit(details,["assetTypeName"]);
     details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
-    this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label}, function () {
-      // this.sendDataToParent()
-    })
+    this.setState({data: details, "selectedVal": selectedId, assetTypeName: selObject.label})
   }
 
   getFieldValidations() {
@@ -178,39 +191,6 @@ class MlStartupAssets extends Component{
 
   }
 
-  // onLogoFileUpload(e){
-  //   if(e.target.files[0].length ==  0)
-  //     return;
-  //   let file = e.target.files[0];
-  //   let name = e.target.name;
-  //   let fileName = e.target.files[0].name;
-  //   let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-  //   let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
-  // }
-  // onFileUploadCallBack(file,resp) {
-  //   if (resp) {
-  //     let result = JSON.parse(resp);
-  //
-  //     Confirm('', "Do you want to add the file into the library", 'Ok', 'Cancel',(ifConfirm)=>{
-  //       if(ifConfirm){
-  //         let fileObjectStructure = {
-  //           fileName: file.name,
-  //           fileType: file.type,
-  //           fileUrl: result.result,
-  //           libraryType: "image"
-  //         }
-  //         this.libraryAction(fileObjectStructure)
-  //         if (result.success) {
-  //           this.setState({loading: true})
-  //           this.fetchOnlyImages();
-  //           this.imagesDisplay();
-  //         }
-  //       }
-  //     });
-  //
-  //   }
-  // }
-
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
     const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
@@ -221,41 +201,6 @@ class MlStartupAssets extends Component{
       return resp;
     }
   }
-
-
-  // async fetchOnlyImages(){
-  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-  //   if (response && response.assets) {
-  //     let thisState=this.state.selectedIndex;
-  //     let dataDetails =this.state.startupAssets
-  //     let cloneBackUp = _.cloneDeep(dataDetails);
-  //     let specificData = cloneBackUp[thisState];
-  //     if(specificData){
-  //       let curUpload=response.assets[thisState]
-  //       specificData['logo']= curUpload['logo']
-  //       this.setState({loading: false, startupAssets:cloneBackUp });
-  //     }else {
-  //       this.setState({loading: false})
-  //     }
-  //   }
-  // }
-
-  // async imagesDisplay(){
-  //   const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-  //   if (response && response.assets) {
-  //     let detailsArray = response&&response.assets?response.assets:[]
-  //     let dataDetails =this.state.startupAssets
-  //     let cloneBackUp = _.cloneDeep(dataDetails);
-  //     _.each(detailsArray, function (obj,key) {
-  //       cloneBackUp[key]["logo"] = obj.logo;
-  //       cloneBackUp[key]["privateFields"] = obj.privateFields;
-  //     })
-  //     let listDetails = this.state.startupAssetsList || [];
-  //     listDetails = cloneBackUp
-  //     let cloneBackUpList = _.cloneDeep(listDetails);
-  //     this.setState({loading: false, startupAssets:cloneBackUp,startupAssetsList:cloneBackUpList});
-  //   }
-  // }
 
   emptyClick(e) {
     if (this.state.popoverOpen)
@@ -374,6 +319,7 @@ class MlStartupAssets extends Component{
 }
 MlStartupAssets.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 // const mapStateToProps = (state, ownProps) => {

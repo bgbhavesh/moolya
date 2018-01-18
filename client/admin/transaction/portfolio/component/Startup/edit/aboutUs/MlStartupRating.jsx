@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { connect } from 'react-redux';
 // import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Rating = require('react-rating');
+const Rating = require('react-rating');
 import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import MlLoader from '../../../../../../../commons/components/loader/loader';

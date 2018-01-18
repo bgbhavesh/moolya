@@ -7,6 +7,7 @@ import { fetchAllOfficeMembers } from '../../investment/actions/fetchAllTeamMemb
 import {fetchActivitiesActionHandler} from '../../calendar/manageScheduler/activity/actions/activityActionHandler';
 import ScrollArea from 'react-scrollbar';
 import {fetchOfficeMember} from '../../profile/office/actions/findOfficeMember';
+import {fetchOfficeById} from '../../profile/office/actions/findOfficeById';
 
 export default class VerticalBreadCrum extends Component {
   constructor(props) {
@@ -88,11 +89,19 @@ export default class VerticalBreadCrum extends Component {
         this.setState(object);
       } else this.setDefaultName('taskId');
     } else if (FlowRouter.getParam('officeId')) {
-      var response = await getTeamUsersActionHandler(FlowRouter.getParam('officeId'));
-      if (response) {
-        object['officeId'] = response.name;
+      // var response = await getTeamUsersActionHandler(FlowRouter.getParam('officeId'));
+      // if (response) {
+      //   object['officeId'] = response.name;
+      //   this.setState(object);
+      // } else this.setDefaultName('officeId');
+
+      let response = await fetchOfficeById(FlowRouter.getParam('officeId'));
+      if (response && response.officeName) {
+        object['officeName'] = response.officeName;
         this.setState(object);
-      } else this.setDefaultName('officeId');
+      }else{
+        this.setDefaultName('officeName');
+      }
     } else if (FlowRouter.getParam('memberId')) {
       const id = FlowRouter.getParam('memberId');
 
@@ -289,7 +298,10 @@ export default class VerticalBreadCrum extends Component {
             link: `${path.split(routePathHierarchy[index])[0]}myOffice`,
           });
           list.push({
-            name: (routePathHierarchy[index] === 'editOffice')?'Enter Office':properName(routePathHierarchy[index]),
+            name: (routePathHierarchy[index] === 'editOffice')?
+              (this.state.officeName && this.state.officeName!=='officeName')?`Office: ${this.state.officeName}`:'Enter Office'
+              :
+              properName(routePathHierarchy[index]),
             link: path.split(routePathHierarchy[index])[0] + routePathHierarchy[index],
           });
         } else {

@@ -13,8 +13,10 @@ import MlLoader from "../../../../../../../commons/components/loader/loader";
 import { connect } from 'react-redux';
 import {mlFieldValidations} from "../../../../../../../commons/validations/mlfieldValidation";
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-const KEY = "technologies"
 import Confirm from '../../../../../../../commons/utils/confirm';
+
+const KEY = "technologies"
+
 class MlStartupTechnology extends Component{
   constructor(props, context){
     super(props);
@@ -29,6 +31,7 @@ class MlStartupTechnology extends Component{
       selectedVal:null,
       selectedObject:"default"
     }
+    this.startupTechnologyServer = this.props.technologyDetails || [];
     this.tabName = this.props.tabName || ""
     this.curSelectLogo = {};
     this.handleBlur = this.handleBlur.bind(this);
@@ -92,13 +95,30 @@ class MlStartupTechnology extends Component{
     //let details = cloneArray[index]
     let details = _.find(cloneArray,{index:index});
     details = _.omit(details, "__typename");
-    this.setState({selectedIndex:index, data:details,selectedObject : uiIndex,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({
+      selectedIndex: index, data: details,
+      selectedObject: uiIndex, popoverOpen: !(this.state.popoverOpen), "selectedVal": details.technologyId
+    }, () => {
+      this.lockPrivateKeys(index);
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
     this.curSelectLogo = details.logo;
+  }
+
+  lockPrivateKeys(selIndex) {
+    const privateValues = this.startupTechnologyServer && this.startupTechnologyServer[selIndex]?this.startupTechnologyServer[selIndex].privateFields : []
+    const filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    const filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    const finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    const keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onLockChange(fieldName, field, e){
@@ -225,8 +245,6 @@ class MlStartupTechnology extends Component{
           fileName: file && file.name ? file.name : "",
           fileUrl: result.result
         };
-        //this.setState({loading: true})
-        //this.fetchOnlyImages();
       }
     }
   }
@@ -239,24 +257,6 @@ class MlStartupTechnology extends Component{
     } else {
       toastr.success(resp.result)
       return resp;
-    }
-  }
-
-
-  async fetchOnlyImages(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.technologies) {
-      let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.startupTechnologies
-      let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
-      if(specificData){
-        let curUpload=response.technologies[thisState]
-        specificData['logo']= curUpload['logo']
-        this.setState({loading: false, startupTechnologies:cloneBackUp });
-      }else {
-        this.setState({loading: false})
-      }
     }
   }
 
@@ -367,6 +367,7 @@ class MlStartupTechnology extends Component{
 }
 MlStartupTechnology.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };
 
 // const mapStateToProps = (state, ownProps) => {

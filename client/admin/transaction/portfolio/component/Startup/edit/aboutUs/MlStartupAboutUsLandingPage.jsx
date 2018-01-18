@@ -8,7 +8,7 @@ import { setTimeout } from "timers";
 import MlStartupAboutUsTabs from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 import generateAbsolutePath from '../../../../../../../../lib/mlGenerateAbsolutePath';
-
+import MlTextEditor, { createValueFromString } from "../../../../../../../commons/components/textEditor/MlTextEditor";
 export default class MlStartupAboutUsLandingPage extends Component{
   constructor(props){
     super(props)
@@ -50,10 +50,16 @@ export default class MlStartupAboutUsLandingPage extends Component{
   }
 
   async fetchPortfolioDetails() {
+    let startupDescription;
+    let spDescription;
+    let informationDescription;
     const portfoliodetailsId=this.props.portfolioDetailsId;
     const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
+      startupDescription = createValueFromString(response.aboutUs ? response.aboutUs.startupDescription : null);
+      spDescription = createValueFromString(response.serviceProducts ? response.serviceProducts.spDescription : null);
+      informationDescription = createValueFromString(response.information ? response.information.informationDescription : null);
+      this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response, startupDescription, spDescription, informationDescription});
     }
   }
 
@@ -65,6 +71,7 @@ export default class MlStartupAboutUsLandingPage extends Component{
   render(){
     let aboutUsImages=null;
     let startupAboutUs=this.state.startupAboutUs;
+    const { startupDescription, spDescription, informationDescription } = this.state;
     if(startupAboutUs){
       let clients=startupAboutUs.clients;
       if(clients){
@@ -98,7 +105,12 @@ export default class MlStartupAboutUsLandingPage extends Component{
                   smoothScrolling={true}
                   default={true}
                 >
-                <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
+                 {(<div>{this.state.startupAboutUs.aboutUs && this.state.startupAboutUs.aboutUs.startupDescription ?
+                        <MlTextEditor
+                          value={startupDescription}
+                          isReadOnly={true}
+                        /> : (<p></p>)}</div>)}
+                {/* <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p> */}
                 </ScrollArea>
             </div>
             </div>
@@ -146,7 +158,15 @@ export default class MlStartupAboutUsLandingPage extends Component{
                     smoothScrolling={true}
                     default={true}
                   >
-                <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p>
+                  {this.state.startupAboutUs.serviceProducts && this.state.startupAboutUs.serviceProducts.spDescription ?
+                          <MlTextEditor
+                            value={spDescription}
+                            isReadOnly={true}
+                          /> :
+                          <div className="portfolio-main-wrap">
+                           <p></p>
+                          </div>}
+                {/* <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p> */}
                   </ScrollArea>
                 </div>
               </div>
@@ -163,7 +183,15 @@ export default class MlStartupAboutUsLandingPage extends Component{
                   default={true}
                 >
               <ul className="list-info">
-                <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li>
+              {this.state.startupAboutUs.information && this.state.startupAboutUs.information.informationDescription ?
+                          <MlTextEditor
+                            value={informationDescription}
+                            isReadOnly={true}
+                          /> :
+                          <div className="portfolio-main-wrap">
+                         <p></p>
+                          </div>}
+                {/* <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li> */}
               </ul>
                 </ScrollArea>
               </div>

@@ -1,5 +1,6 @@
 import React from "react";
-import ScrollArea from "react-scrollbar";
+// import ScrollArea from "react-scrollbar";
+import {Scrollbars} from 'react-custom-scrollbars';
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
@@ -273,7 +274,7 @@ class MlAddBackendUser extends React.Component {
           <h2>Create Backend User</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
-              <ScrollArea
+              <Scrollbars
                 speed={0.8}
                 className="left_wrap"
                 smoothScrolling={true}
@@ -314,13 +315,13 @@ class MlAddBackendUser extends React.Component {
                     <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>
                 </form>
-              </ScrollArea>
+              </Scrollbars>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <div className="left_wrap">
-                <ScrollArea
+                <Scrollbars
                   speed={0.8}
                   className="left_wrap"
                   smoothScrolling={true}
@@ -406,7 +407,7 @@ class MlAddBackendUser extends React.Component {
                       </div>
                     </div>*/}
                   </form>
-                </ScrollArea>
+                </Scrollbars>
               </div>
             </div>
           </div>

@@ -45,6 +45,7 @@ export default class MlGenericAwardsView extends React.Component {
 
   showDetails(id) {
     $("#details-div").show();
+    setTimeout(function(){
     var $frame = $('#forcecentered');
     var $wrap = $frame.parent();
 
@@ -67,7 +68,8 @@ export default class MlGenericAwardsView extends React.Component {
       dynamicHandle: 1,
       clickBar: 1,
 
-    });
+    });  
+  },100);  
     $("#show").hide();
     this.viewDetails(id)
   }
@@ -96,7 +98,7 @@ export default class MlGenericAwardsView extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-          <div className="col-md-12">
+          <div className="col-md-12 nopadding">
             <div className="requested_input main_wrap_scroll" id="show">
               
                 <div className="col-lg-12 nopadding">

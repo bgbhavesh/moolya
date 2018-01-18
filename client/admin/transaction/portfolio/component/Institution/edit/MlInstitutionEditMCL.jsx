@@ -1,15 +1,16 @@
 import React, {Component, PropTypes}  from "react";
+import _ from 'lodash';
 import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
-import _ from 'lodash';
 import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
+
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlInstitutionEditMCL extends React.Component {
+export default class MlInstitutionEditMCL extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
@@ -192,9 +193,7 @@ export default class MlInstitutionEditMCL extends React.Component {
       isPrivate: isPrivate,
       tabName: tabName
     }
-    this.setState({privateKey: privateKey})
-
-    this.setState({data: details}, function () {
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -225,7 +224,6 @@ export default class MlInstitutionEditMCL extends React.Component {
 
     if (data['compliances'])
       data['compliances'] = _.omit(data['compliances'], ["privateFields"])
-
 
     this.props.getInstitutionMCL(data, this.state.privateKey)
   }
@@ -259,7 +257,7 @@ export default class MlInstitutionEditMCL extends React.Component {
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">Membership</div>
                 <div className="panel-body ">
-                  <div className="form-group nomargin-bottom">
+                  <div className="form-group nomargin-bottom panel_input">
                   <MlTextEditor
                         value={membershipDescription}
                         handleOnChange={(value) => this.handleBlur(value, "membershipDescription", "memberships")}
@@ -268,7 +266,7 @@ export default class MlInstitutionEditMCL extends React.Component {
                               id="cl_about"
                               defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ""}
                               onBlur={this.handleBlur.bind(this, "memberships")}></textarea> */}
-                    <FontAwesome name='unlock' className="input_icon un_lock" id="isMDPrivate"
+                    <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMDPrivate"
                                  onClick={this.onLockChange.bind(this, "membershipDescription", "isMDPrivate", MEMBERKEY)}/>
                   </div>
                 </div>
@@ -276,12 +274,11 @@ export default class MlInstitutionEditMCL extends React.Component {
               <div className="clearfix"></div>
             </div>
 
-
             <div className="col-md-6 col-sm-6 nopadding-right">
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">Compliances</div>
                 <div className="panel-body ">
-                  <div className="form-group nomargin-bottom">
+                  <div className="form-group nomargin-bottom panel_input">
                   <MlTextEditor
                         value={complianceDescription}
                         handleOnChange={(value) => this.handleBlur(value, "complianceDescription", "compliances")}
@@ -290,7 +287,7 @@ export default class MlInstitutionEditMCL extends React.Component {
                               id="cl_about"
                               defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.complianceDescription ? this.state.data.compliances.complianceDescription : ""}
                               onBlur={this.handleBlur.bind(this, "compliances")}></textarea> */}
-                    <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isCDPrivate"
+                    <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCDPrivate"
                                  onClick={this.onLockChange.bind(this, "complianceDescription", "isCDPrivate", COMPLIANCEKEY)}/>
                   </div>
                 </div>
@@ -299,7 +296,7 @@ export default class MlInstitutionEditMCL extends React.Component {
               <div className="panel panel-default panel-form-view">
                 <div className="panel-heading">Licenses</div>
                 <div className="panel-body ">
-                  <div className="form-group nomargin-bottom">
+                  <div className="form-group nomargin-bottom panel_input">
                   <MlTextEditor
                         value={licenseDescription}
                         handleOnChange={(value) => this.handleBlur(value, "licenseDescription", "licenses")}
@@ -307,7 +304,7 @@ export default class MlInstitutionEditMCL extends React.Component {
                     {/* <textarea placeholder="Describe..." name="licenseDescription" className="form-control" id="cl_about"
                               defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licenseDescription ? this.state.data.licenses.licenseDescription : ""}
                               onBlur={this.handleBlur.bind(this, "licenses")}></textarea> */}
-                    <FontAwesome name='unlock' className="input_icon fa-unlock un_lock" id="isLDPrivate"
+                    <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLDPrivate"
                                  onClick={this.onLockChange.bind(this, "licenseDescription", "isLDPrivate", LICENSEKEY)}/>
                   </div>
                 </div>

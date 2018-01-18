@@ -23,7 +23,7 @@ export default class MlInfiniteScrollView extends Component {
 
   componentDidMount() {
     var WinHeight = $(window).height();
-    $('.infinite_scroll').height(WinHeight - (20 + $('.app_header').outerHeight(true)));
+    $('.infinite_scroll').height(WinHeight - (120 + $('.app_header').outerHeight(true)));
   }
 
   render() {

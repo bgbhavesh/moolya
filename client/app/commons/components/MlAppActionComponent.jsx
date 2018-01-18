@@ -13,6 +13,13 @@ export default class MlAppActionComponent extends React.Component {
     return this;
   }
 
+  componentDidMount(){
+    $(".action_buttons").mCustomScrollbar({
+      axis:"x",
+      autoHideScrollbar:true
+      });
+  }
+
   render() {
     let config = [
       {
@@ -286,7 +293,7 @@ export default class MlAppActionComponent extends React.Component {
       }
     })
     return (
-        <div className="action_buttons">
+        <div className="action_buttons" style={{'max-width':'1000px','margin':'0px auto'}}>
                 <ul>
                   {actionView}
                 </ul>

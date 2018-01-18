@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 import MlLoader from "../../../../../../commons/components/loader/loader";
@@ -11,7 +10,7 @@ import {
 } from "../../../actions/findPortfolioServiceProviderDetails";
 import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
 
-export default class MlServiceProviderMCL extends React.Component {
+export default class MlServiceProviderMCL extends Component {
   constructor(props, context) {
     super(props);
     this.state = {

@@ -31,21 +31,21 @@ MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     return country?country:null;
 }
 MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) =>{
-    // return MlCountries.find({}).fetch();
     return mlDBController.find('MlCountries', {}, context).fetch();
 }
 
-
+/**
+ * @Note [mlAuthorization] moved to generic layer
+ */
 MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
     let cluster = args.cluster;
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-    if (!isValidAuth) {
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Not Authorized", code);
-      return response;
-    }
+    // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    // if (!isValidAuth) {
+    //   let code = 401;
+    //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    //   return response;
+    // }
 
-    // let country = MlCountries.findOne({_id: args.countryId});
     let country = mlDBController.findOne('MlCountries', {_id: args.countryId}, context)
     if(country){
         for( key in args.country){
@@ -54,7 +54,6 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
         // let resp = MlCountries.update({_id:args.countryId}, {$set:country}, {upsert:true})
       let resp = mlDBController.update('MlCountries', args.countryId, country, {$set:true}, context)
       if(resp){
-          // let cluster = MlClusters.findOne({"countryId":args.countryId});
         let cluster = mlDBController.findOne('MlClusters', {"countryId":args.countryId}, context)
         if(cluster){
             let status = {};

@@ -1,17 +1,16 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
-import MlTextEditor, {createValueFromString} from "../../../../../../commons/components/textEditor/MlTextEditor";
+import MlTextEditor, { createValueFromString } from "../../../../../../commons/components/textEditor/MlTextEditor";
+
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlCompanyMCL extends React.Component{
+export default class MlCompanyMCL extends Component{
 
   constructor(props, context){
     super(props);
@@ -29,9 +28,12 @@ export default class MlCompanyMCL extends React.Component{
     this.fetchPortfolioDetails.bind(this);
     this.updateprivateFields.bind(this)
   }
+
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
+
   updateprivateFields(){
     var that = this
     setTimeout(function () {
@@ -45,6 +47,7 @@ export default class MlCompanyMCL extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};
@@ -56,11 +59,6 @@ export default class MlCompanyMCL extends React.Component{
     // let compliancesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.compliances)
     // let licensesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.licenses)
     if(that.context.companyPortfolio && (that.context.companyPortfolio.memberships || that.context.companyPortfolio.compliances || that.context.companyPortfolio.licenses)){
-      // this.setState({
-      //   memberships: that.context.companyPortfolio.memberships,
-      //   compliances: that.context.companyPortfolio.compliances,
-      //   licenses: that.context.companyPortfolio.licenses
-      // });
       data = {
         memberships:that.context.companyPortfolio.memberships,
         licenses: that.context.companyPortfolio.compliances,
@@ -79,6 +77,7 @@ export default class MlCompanyMCL extends React.Component{
         this.setState({privateFields:object.privateFields});
         membershipsDescription = createValueFromString(data.memberships ? data.memberships.membershipsDescription : null);
       }
+
       var responseC = await fetchCompanyDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
@@ -92,6 +91,7 @@ export default class MlCompanyMCL extends React.Component{
         }
         compliancesDescription = createValueFromString(data.compliances ? data.compliances.compliancesDescription : null);
       }
+
       var responseL = await fetchCompanyDetailsHandler(portfoliodetailsId, LICENSEKEY);
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
@@ -105,12 +105,6 @@ export default class MlCompanyMCL extends React.Component{
         }
         licensesDescription = createValueFromString(data.licenses ? data.licenses.licensesDescription : null);
       }
-
-      // data = {
-      //   memberships:this.state.memberships,
-      //   licenses: this.state.licenses,
-      //   compliances:this.state.compliances
-      // }
     }
 
     this.setState({loading: false,data:data, membershipsDescription, compliancesDescription,licensesDescription})
@@ -130,6 +124,7 @@ export default class MlCompanyMCL extends React.Component{
       }
     }, 200);
   }
+
   handleBlur(value, keyName, object){
     let details = this.state.data;
     let mcl = details[object];
@@ -149,6 +144,7 @@ export default class MlCompanyMCL extends React.Component{
       this.sendDataToParent()
     })
   }
+
   onLockChange(fieldName, type, tabName, e){
     var isPrivate = false;
     let details = this.state.data||{};
@@ -179,12 +175,11 @@ export default class MlCompanyMCL extends React.Component{
       isPrivate: isPrivate,
       tabName: tabName
     }
-    this.setState({privateKey: privateKey})
-
-    this.setState({data:details}, function () {
+    this.setState({data:details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data.compliances) {
@@ -212,9 +207,9 @@ export default class MlCompanyMCL extends React.Component{
     if(data['compliances'])
       data['compliances'] = _.omit(data['compliances'], ["privateFields"])
 
-
-    this.props.getMCL(data)
+    this.props.getMCL(data, this.state.privateKey)
   }
+
   render(){
     const showLoader = this.state.loading;
     const { membershipsDescription, compliancesDescription, licensesDescription } = this.state;
@@ -228,7 +223,7 @@ export default class MlCompanyMCL extends React.Component{
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership </div>
                   <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
+                    <div className="form-group nomargin-bottom panel_input">
                       <MlTextEditor
                         value={membershipsDescription}
                         handleOnChange={(value) => this.handleBlur(value, "membershipsDescription", "memberships")}
@@ -244,7 +239,7 @@ export default class MlCompanyMCL extends React.Component{
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
+                    <div className="form-group nomargin-bottom panel_input">
                       <MlTextEditor
                         value={compliancesDescription}
                         handleOnChange={(value) => this.handleBlur(value, "compliancesDescription", "compliances")}
@@ -258,7 +253,7 @@ export default class MlCompanyMCL extends React.Component{
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
-                    <div className="form-group nomargin-bottom">
+                    <div className="form-group nomargin-bottom panel_input">
                       <MlTextEditor
                         value={licensesDescription}
                         handleOnChange={(value) => this.handleBlur(value, "licensesDescription", "licenses")}
@@ -270,8 +265,8 @@ export default class MlCompanyMCL extends React.Component{
                 </div>
               </div>
               </div>
-        </div>
-)}     
+          </div>
+        )}
       </div>
     )
   }

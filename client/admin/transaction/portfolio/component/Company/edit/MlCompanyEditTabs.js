@@ -50,12 +50,10 @@ export default class MlCompanyEditTabs extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys: privateKeys,
-      removePrivateKeys: removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj});
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
   }
 
   componentWillReceiveProps(newProps) {
@@ -321,6 +319,7 @@ export default class MlCompanyEditTabs extends Component {
     }
     this.setState({tabs: getTabs() || []});
   }
+  
   updateTab(index){
     let tab =  this.state.tabs[index].title;
     FlowRouter.setQueryParams({ tab: tab });

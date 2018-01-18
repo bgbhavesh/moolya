@@ -1,6 +1,9 @@
+/**
+ * Updated by: vishwadeep.kapoor
+ * @Note: config added for the menu to be shown on the UI or not 
+ * value [isMenu]: boolean
+ */
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import _ from 'lodash';
 import dynamicLinkHandler from './actions/dynamicRoutesHandler.js';
 export default class MlTabView extends Component {
@@ -78,110 +81,6 @@ export default class MlTabView extends Component {
       }
     }
 
-    /*function dynamicLinkHandler(path,params,queryParams){
-      const menuLinkHandlerConfig={
-        "editCluster":function(params,queryParams){
-              return '/admin/cluster/'+params.cluserId;
-        },
-        "dashboard_chapters":function(params,queryParams){
-             let dynamicParams=params||{};
-              if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")){
-                return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters`;
-              }else if(_.has(dynamicParams,"clusterId")){
-                return `/admin/dashboard/${dynamicParams.clusterId}/chapters`;
-              }else{
-                return '/admin/dashboard/chapters';
-              }
-          return '';
-        },
-
-        "cluster_clusterDetails":function (params,queryParams) {
-            let dynamicParams=params||{};
-            if(_.has(dynamicParams,"clusterId")){
-                return `/admin/clusters/${dynamicParams.clusterId}/clusterDetails`;
-            }
-        },
-        "cluster_chapters":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/chapters`;
-          }
-        },
-        "cluster_chapter_subChapterDetails":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/subChapterDetails`;
-          }
-        },
-        "cluster_chapter_communities":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/communities`;
-          }
-        },
-        "cluster_chapter_assignusers":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/assignusers`;
-          }
-        },
-
-        "cluster_communities":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/communities`;
-          }
-        },
-        "cluster_assignusers":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"clusterId")){
-            return `/admin/clusters/${dynamicParams.clusterId}/assignusers`;
-          }
-        },
-
-        "chapter_subChapterDetails":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"subChapterId")){
-            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/subChapterDetails`;
-          }
-        },
-
-        "chapter_communities":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"subChapterId")){
-            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/communities`;
-          }
-        },
-
-        "chapter_assignusers":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"subChapterId")){
-            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/assignusers`;
-          }
-        },
-
-        "community_Community_Details":function (params,queryParams) {
-          let dynamicParams=params||{};
-          if(_.has(dynamicParams,"communityId")){
-            return `/admin/community/${dynamicParams.communityId}/communityDetails`;
-          }
-        },
-
-        // "community_assignusers":function (params,queryParams) {
-        //   let dynamicParams=params||{};
-        //   if(_.has(dynamicParams,"communityId")){
-        //     return `/admin/community/${dynamicParams.communityId}/assignusers`;
-        //   }
-        // }
-      }
-      let menuLinkHandler=menuLinkHandlerConfig[path];
-          if(menuLinkHandler){
-            let link=menuLinkHandler(params,queryParams);
-            return link;
-          }
-      return "";
-    }*/
-
     if (menu != undefined) {
       let subMenuHide=menu.hideSubMenu;
       //if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
@@ -198,6 +97,7 @@ export default class MlTabView extends Component {
 
 
       tabOptions = tabMenu.map(function (option,index) {
+        const isShowMenu = option.isMenu === false ? false : true;
         let activeClass="";
         let disabledClass = "";
         if(option.uniqueId===path){
@@ -219,10 +119,14 @@ export default class MlTabView extends Component {
           menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
         }
         return (
-          <li key={index} className={`swiper-slide ${disabledClass}`}>
-            <div className={`moolya_btn ${activeClass} `}
-                 onClick={this.subMenuClick}><a href={menuLink}
-                                                className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+          <li className={`swiper-slide ${disabledClass}`} key={index}>
+            {
+              isShowMenu ?
+                <div className={`moolya_btn ${activeClass} `}
+                  onClick={this.subMenuClick}><a href={menuLink}
+                    className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+                : <span></span>
+            }
           </li>
         )
       });
@@ -234,10 +138,16 @@ export default class MlTabView extends Component {
         {tabOptions}
       </ul>
       </div>
-
-
     )
   }
-
 }
 
+
+
+
+
+{/* <li key={index} className={`swiper-slide ${disabledClass}`}>
+                <div className={`moolya_btn ${activeClass} `}
+                  onClick={this.subMenuClick}><a href={menuLink}
+                    className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
+              </li> */}

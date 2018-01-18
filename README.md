@@ -14,7 +14,12 @@ Based on :
 To pass a different settings file other than settingss-development.json, use `meteor settings --settings-file.json`
 
 
+To publish npm packages to Nexus manager
+
+`npm publish` 
+
 ## Tests ##
 Run tests with `meteor npm test`
 
 visit http://localhost:5000 to see test results
+

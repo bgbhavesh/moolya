@@ -4,7 +4,7 @@ import _ from "lodash";
 import omitDeep from 'omit-deep-lodash';
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlStartupManagement from "./MlStartupManagement";
-import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
+import MlStartupAboutUsLandingPage from "./aboutUs/MlStartupAboutUsLandingPage";
 import MlStartupInvestor from "./MlStartupInvestor";
 import MlStartupData from "./MlStartupData";
 import MlStartupAwards from "./MlStartupAwards";
@@ -59,7 +59,7 @@ class MlStartupEditTemplate extends Component {
         panelClassName: 'panel',
         title: "About",
         name: "About",
-        component: <MlStartupAboutUs key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
+        component: <MlStartupAboutUsLandingPage key="1" isAdmin={true} getAboutus={this.getAboutus.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}
                                      backClickHandler={this.backClickHandler.bind(this)}/>
       },
@@ -137,7 +137,7 @@ class MlStartupEditTemplate extends Component {
   getAboutus(details, tabName, privateKey, requiredFields) {
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    var object = omitDeep(data, 'logo');
+    const object = omitDeep(data, ['logo', 'privateFields']);
     // this.props.getPortfolioDetails({startupPortfolio: data}, privateKey, requiredFields);
     this.props.getPortfolioDetails({startupPortfolio: object}, privateKey, requiredFields);
   }
@@ -217,18 +217,13 @@ class MlStartupEditTemplate extends Component {
   }
 
   getAllPrivateKeys(privateKeys, removePrivateKeys) {
-    let obj = {
-      privateKeys:privateKeys,
-      removePrivateKeys:removePrivateKeys
-    }
-    this.setState({portfolioKeys: obj}, () => {
-      this.props.onChangePrivateKeys(obj)
-    });
-    return obj
+    let privateObject = this.state.portfolioKeys;
+    privateObject['privateKeys'] = privateKeys;
+    privateObject['removePrivateKeys'] = removePrivateKeys;
+    this.setState({ portfolioKeys: privateObject });
   }
 
   componentWillReceiveProps(newProps) {
-    // console.log('newProps', newProps);
     if (newProps) {
       const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp
@@ -268,19 +263,20 @@ MlStartupEditTemplate.childContextTypes = {
   portfolioKeys: PropTypes.object
 };
 
-const mapStateToProps = (state) => {
-  return {
-    mlStartupEditTemplate: state,
-  };
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     mlStartupEditTemplate: state,
+//   };
+// }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onChangePrivateKeys: (keys) => dispatch({
-      type: 'CHANGE_PRIVATE_KEYS',
-      payload: keys,
-    }),
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onChangePrivateKeys: (keys) => dispatch({
+//       type: 'CHANGE_PRIVATE_KEYS',
+//       payload: keys,
+//     }),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);
+// export default connect(mapStateToProps, mapDispatchToProps)(MlStartupEditTemplate);
+export default MlStartupEditTemplate;
